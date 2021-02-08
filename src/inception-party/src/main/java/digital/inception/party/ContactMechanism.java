@@ -60,10 +60,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Schema(description = "A mechanism that can be used to contact a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "purpose", "value"})
-@XmlRootElement(name = "ContactMechanism", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "ContactMechanism", namespace = "http://inception.digital/party")
 @XmlType(
     name = "ContactMechanism",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"type", "purpose", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

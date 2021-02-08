@@ -18,8 +18,8 @@ package demo.model;
 
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.validation.InvalidArgumentException;
-import digital.inception.core.validation.ValidationError;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ValidationError;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

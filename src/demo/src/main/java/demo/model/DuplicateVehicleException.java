@@ -16,6 +16,7 @@
 
 package demo.model;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,13 +33,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT, reason = "The vehicle already exists")
+@Problem(
+    type = "http://demo/problems/duplicate-vehicle-exception",
+    title = "The vehicle already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateVehicleException",
     targetNamespace = "http://demo",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class DuplicateVehicleException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -49,6 +52,6 @@ public class DuplicateVehicleException extends ServiceException {
    * @param id the Universally Unique Identifier (UUID) for the vehicle
    */
   public DuplicateVehicleException(UUID id) {
-    super("DuplicateVehicleError", "The vehicle with the ID (" + id + ") already exists");
+    super("The vehicle with the ID (" + id + ") already exists");
   }
 }

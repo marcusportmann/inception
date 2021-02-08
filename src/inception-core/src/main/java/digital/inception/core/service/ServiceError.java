@@ -17,8 +17,6 @@
 package digital.inception.core.service;
 
 import digital.inception.core.xml.LocalDateTimeAdapter;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -34,31 +32,23 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author Marcus Portmann
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "ServiceError", namespace = "http://core.inception.digital")
+@XmlRootElement(name = "ServiceError", namespace = "http://inception.digital/core")
 @XmlType(
     name = "ServiceError",
-    namespace = "http://core.inception.digital",
-    propOrder = {"when", "code", "message", "detail"})
+    namespace = "http://inception.digital/core",
+    propOrder = {"timestamp", "message"})
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ServiceError {
-
-  /** The code for the service error. */
-  @XmlElement(name = "Code", required = true)
-  private String code;
-
-  /** The detail for the service error */
-  @XmlElement(name = "Detail", required = true)
-  private String detail;
 
   /** The message for the service error. */
   @XmlElement(name = "Message", required = true)
   private String message;
 
   /** The date and time the service error occurred. */
-  @XmlElement(name = "When", required = true)
+  @XmlElement(name = "Timestamp", required = true)
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
-  private LocalDateTime when;
+  private LocalDateTime timestamp;
 
   /** Constructs a new <b>ServiceError</b>. */
   public ServiceError() {}
@@ -66,45 +56,11 @@ public class ServiceError {
   /**
    * Constructs a new <b>ServiceError</b>.
    *
-   * @param code the code for the service error
-   * @param cause the cause of the service error
+   * @param message the message for the service error
    */
-  public ServiceError(String code, Throwable cause) {
-    this.code = code;
-    this.when = LocalDateTime.now();
-    this.message =
-        (cause.getMessage() != null) ? cause.getMessage() : cause.getClass().getSimpleName();
-
-    try {
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      PrintWriter pw = new PrintWriter(baos);
-
-      pw.println(message);
-      pw.println();
-      cause.printStackTrace(pw);
-      pw.flush();
-      this.detail = baos.toString();
-    } catch (Throwable e) {
-      this.detail = "Failed to dump the stack for the exception (" + cause + "): " + e.getMessage();
-    }
-  }
-
-  /**
-   * Returns the code for the service error.
-   *
-   * @return the code for the service error
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the detail for the service error.
-   *
-   * @return the detail for the service error
-   */
-  public String getDetail() {
-    return detail;
+  public ServiceError(String message) {
+    this.timestamp = LocalDateTime.now();
+    this.message = message;
   }
 
   /**
@@ -121,7 +77,7 @@ public class ServiceError {
    *
    * @return the date and time the service error occurred
    */
-  public LocalDateTime getWhen() {
-    return when;
+  public LocalDateTime getTimestamp() {
+    return timestamp;
   }
 }

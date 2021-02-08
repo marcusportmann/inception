@@ -43,10 +43,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "An honorific prefixing a person's name")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "abbreviation", "description"})
-@XmlRootElement(name = "Title", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "Title", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Title",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"code", "localeId", "sortIndex", "name", "abbreviation", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

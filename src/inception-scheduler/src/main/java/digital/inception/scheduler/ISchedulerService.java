@@ -17,7 +17,7 @@
 package digital.inception.scheduler;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.service.InvalidArgumentException;
 import java.util.List;
 
 /**

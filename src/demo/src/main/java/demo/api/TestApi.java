@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package demo.rs;
+package demo.api;
 
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.sms.smsportal.AuthenticationResponse;

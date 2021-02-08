@@ -48,10 +48,10 @@ import javax.xml.bind.annotation.XmlType;
   "pageIndex",
   "pageSize"
 })
-@XmlRootElement(name = "GroupMembers", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "GroupMembers", namespace = "http://inception.digital/security")
 @XmlType(
     name = "GroupMembers",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {
       "userDirectoryId",
       "groupName",

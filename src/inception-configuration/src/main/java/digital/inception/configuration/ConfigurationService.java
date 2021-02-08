@@ -18,8 +18,8 @@ package digital.inception.configuration;
 
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.Base64Util;
-import digital.inception.core.validation.InvalidArgumentException;
-import digital.inception.core.validation.ValidationError;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ValidationError;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

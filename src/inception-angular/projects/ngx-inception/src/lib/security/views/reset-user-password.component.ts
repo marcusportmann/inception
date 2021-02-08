@@ -29,6 +29,7 @@ import {User} from '../services/user';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Error} from '../../core/errors/error';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The ResetUserPasswordComponent class implements the reset user password component.
@@ -111,9 +112,9 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
   get backNavigation(): BackNavigation {
     return new BackNavigation($localize`:@@security_reset_user_password_back_navigation:Users`,
       ['../../..'], {
-      relativeTo: this.activatedRoute,
-      state: {userDirectoryId: this.userDirectoryId}
-    });
+        relativeTo: this.activatedRoute,
+        state: {userDirectoryId: this.userDirectoryId}
+      });
   }
 
   get title(): string {
@@ -155,7 +156,8 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -191,7 +193,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
         });
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

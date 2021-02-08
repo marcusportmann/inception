@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.party.constraints.ValidPerson;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
@@ -44,8 +45,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.util.StringUtils;
 
 /**
@@ -112,10 +115,10 @@ import org.springframework.util.StringUtils;
   "taxNumbers",
   "roles"
 })
-@XmlRootElement(name = "Person", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "Person", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Person",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {
       "id",
       "tenantId",
@@ -552,6 +555,8 @@ public class Person extends PartyBase implements Serializable {
   @Schema(description = "The optional date of birth for the person")
   @JsonProperty
   @XmlElement(name = "DateOfBirth")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
   public LocalDate getDateOfBirth() {
     return dateOfBirth;
   }
@@ -564,6 +569,8 @@ public class Person extends PartyBase implements Serializable {
   @Schema(description = "The optional date of death for the person")
   @JsonProperty
   @XmlElement(name = "DateOfDeath")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
   public LocalDate getDateOfDeath() {
     return dateOfDeath;
   }

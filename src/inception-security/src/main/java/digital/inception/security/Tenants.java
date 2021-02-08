@@ -38,10 +38,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "The results of a request to retrieve a list of tenants")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"tenants", "total", "filter", "sortDirection", "pageIndex", "pageSize"})
-@XmlRootElement(name = "Tenants", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "Tenants", namespace = "http://inception.digital/security")
 @XmlType(
     name = "Tenants",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {"tenants", "total", "filter", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})

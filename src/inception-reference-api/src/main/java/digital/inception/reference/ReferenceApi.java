@@ -16,7 +16,7 @@
 
 package digital.inception.reference;
 
-import digital.inception.api.ApiError;
+import digital.inception.api.ProblemDetails;
 import digital.inception.api.SecureApi;
 import digital.inception.core.service.ServiceUnavailableException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -76,8 +76,8 @@ public class ReferenceApi extends SecureApi {
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(value = "/countries", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -111,8 +111,8 @@ public class ReferenceApi extends SecureApi {
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(value = "/languages", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -146,8 +146,8 @@ public class ReferenceApi extends SecureApi {
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(value = "/regions", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -183,8 +183,8 @@ public class ReferenceApi extends SecureApi {
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/verification-methods",
@@ -223,8 +223,8 @@ public class ReferenceApi extends SecureApi {
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/verification-statuses",

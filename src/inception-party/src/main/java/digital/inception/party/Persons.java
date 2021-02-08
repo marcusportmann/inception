@@ -46,10 +46,10 @@ import javax.xml.bind.annotation.XmlType;
   "pageIndex",
   "pageSize"
 })
-@XmlRootElement(name = "Persons", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "Persons", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Persons",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"persons", "total", "filter", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})

@@ -16,7 +16,7 @@
 
 import {Error} from './error';
 import {HttpErrorResponse} from '@angular/common/http';
-import {ApiError} from './api-error';
+import {ProblemDetails} from './problem-details';
 
 /**
  * The AccessDeniedError class holds the information for an access denied error.
@@ -46,18 +46,13 @@ export class AccessDeniedError extends Error {
    * @param httpErrorResponse The HTTP error response containing the error information.
    */
   constructor(httpErrorResponse: HttpErrorResponse) {
-
-    super('Access is denied. You do not have sufficient privileges to perform the requested operation.');
+    super($localize`:@@core_access_denied_error:Access is denied. You do not have sufficient privileges to perform the requested operation.`, httpErrorResponse);
 
     this.status = httpErrorResponse.status;
     this.statusText = httpErrorResponse.statusText;
 
     if (httpErrorResponse.url) {
       this.url = httpErrorResponse.url;
-    }
-
-    if (ApiError.isApiError(httpErrorResponse)) {
-
     }
   }
 

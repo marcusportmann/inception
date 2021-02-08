@@ -17,6 +17,6 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 
 

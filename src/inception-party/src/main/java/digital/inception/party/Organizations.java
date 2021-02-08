@@ -39,10 +39,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "The results of a request to retrieve a list of organizations")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"organizations", "total", "filter", "sortDirection", "pageIndex", "pageSize"})
-@XmlRootElement(name = "Organizations", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "Organizations", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Organizations",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"organizations", "total", "filter", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})

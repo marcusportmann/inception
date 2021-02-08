@@ -45,10 +45,10 @@ import javax.xml.bind.annotation.XmlType;
   "resetPasswordHistory",
   "securityCode"
 })
-@XmlRootElement(name = "PasswordChange", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "PasswordChange", namespace = "http://inception.digital/security")
 @XmlType(
     name = "PasswordChange",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {
       "expirePassword",
       "lockUser",

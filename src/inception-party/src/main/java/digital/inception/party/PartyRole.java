@@ -53,10 +53,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Schema(description = "A role assigned to a party independent of a party association")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "purpose"})
-@XmlRootElement(name = "PartyRole", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "PartyRole", namespace = "http://inception.digital/party")
 @XmlType(
     name = "PartyRole",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"type", "purpose"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

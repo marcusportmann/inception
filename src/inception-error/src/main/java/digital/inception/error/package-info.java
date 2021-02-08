@@ -15,17 +15,14 @@
  */
 
 @javax.xml.bind.annotation.XmlSchema(
-    namespace = "http://errror.inception.digital",
+    namespace = "http://inception.digital/error",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
       @javax.xml.bind.annotation.XmlNs(
           prefix = "core",
-          namespaceURI = "http://core.inception.digital"),
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "validation",
-          namespaceURI = "http://validation.inception.digital"),
+          namespaceURI = "http://inception.digital/core"),
       @javax.xml.bind.annotation.XmlNs(
           prefix = "error",
-          namespaceURI = "http://error.inception.digital"),
+          namespaceURI = "http://inception.digital/error"),
     })
 package digital.inception.error;

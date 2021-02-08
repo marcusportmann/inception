@@ -16,10 +16,10 @@
 
 package digital.inception.banking.customer;
 
-import digital.inception.api.ApiError;
+import digital.inception.api.ProblemDetails;
 import digital.inception.api.SecureApi;
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -76,23 +76,23 @@ public class CustomerApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "A individual customer with the specified ID already exists",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/individuals",

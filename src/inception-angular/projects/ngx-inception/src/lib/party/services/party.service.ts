@@ -18,7 +18,7 @@ import {Inject, Injectable} from '@angular/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 import {CommunicationError} from '../../core/errors/communication-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';

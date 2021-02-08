@@ -60,10 +60,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Schema(description = "A person or organization")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "tenantId", "type", "name"})
-@XmlRootElement(name = "Party", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "Party", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Party",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"id", "tenantId", "type", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

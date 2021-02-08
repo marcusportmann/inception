@@ -17,7 +17,7 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 
 /**
  * The DuplicateMailTemplateError class holds the information for a duplicate mail template
@@ -27,12 +27,14 @@ import {ApiError} from '../../core/errors/api-error';
  */
 export class DuplicateMailTemplateError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/mail/duplicate-mail-template';
+
   /**
    * Constructs a new DuplicateMailTemplateError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@mail_duplicate_mail_template_error:The mail template already exists.`, cause);
   }
 }
@@ -45,12 +47,14 @@ export class DuplicateMailTemplateError extends Error {
  */
 export class MailTemplateNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/mail/mail-template-not-found';
+
   /**
    * Constructs a new MailTemplateNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@mail_mail_template_not_found_error:The mail template could not be found.`, cause);
   }
 }

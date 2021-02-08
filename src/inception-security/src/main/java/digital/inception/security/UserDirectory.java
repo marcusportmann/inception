@@ -69,10 +69,10 @@ import org.xml.sax.InputSource;
 @Schema(description = "A user directory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "type", "name", "parameters"})
-@XmlRootElement(name = "UserDirectory", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "UserDirectory", namespace = "http://inception.digital/security")
 @XmlType(
     name = "UserDirectory",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {"id", "type", "name", "parameters"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

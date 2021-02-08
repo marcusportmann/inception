@@ -20,7 +20,7 @@ import {Router} from '@angular/router';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Code} from "../../../../../ngx-inception/src/lib/codes/services/code";
 import {catchError, first, map} from "rxjs/operators";
-import {ApiError} from "../../../../../ngx-inception/src/lib/core/errors/api-error";
+import {ProblemDetails} from "../../../../../ngx-inception/src/lib/core/errors/problem-details";
 import {throwError} from "rxjs";
 import {CodeNotFoundError} from "../../../../../ngx-inception/src/lib/codes/services/codes.service.errors";
 import {ServiceUnavailableError} from "../../../../../ngx-inception/src/lib/core/errors/service-unavailable-error";
@@ -82,35 +82,5 @@ export class Menu21Component {
       (error: any) => {console.log('error: ', error)},
       () => console.log('complete')
     );
-
-    // this.httpClient.get('', {reportProgress: true}).pipe(map((value : Object) => {
-    //
-    // }), catchError((httpErrorResponse: HttpErrorResponse) => {
-    //   if (ApiError.isApiError(httpErrorResponse)) {
-    //
-    //     }
-    //
-    //   throw 'error in source. Details: ' + httpErrorResponse;
-    // }));
-
-
-    // this.httpClient.get(
-    //   'http://localhost:8080/api/test/test-exception-handling', {reportProgress: true}).pipe(map((response: Response) => {
-    //   return code;
-    // }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      // if (ApiError.isApiError(httpErrorResponse)) {
-      //   const apiError: ApiError = new ApiError(httpErrorResponse);
-      //
-      //   if (apiError.code === 'CodeNotFoundError') {
-      //     return throwError(new CodeNotFoundError(apiError));
-      //   } else {
-      //     return throwError(new ServiceUnavailableError('Failed to retrieve the code.', apiError));
-      //   }
-      // } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-      //   return throwError(new CommunicationError(httpErrorResponse));
-      // } else {
-      //   return throwError(new ServiceUnavailableError('Failed to retrieve the code.', httpErrorResponse));
-      // }
-    // }));
   }
 }

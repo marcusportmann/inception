@@ -23,6 +23,14 @@
       <artifactId>inception-reference</artifactId>
     </dependency>
 
+    <!-- Provided Inception Dependencies -->
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-api</artifactId>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+
     <!-- Test Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>

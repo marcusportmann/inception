@@ -29,6 +29,7 @@ import {ServiceUnavailableError} from '../../core/errors/service-unavailable-err
 import {User} from '../services/user';
 import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
 import {UserStatus} from '../services/user-status';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The NewUserComponent class implements the new user component.
@@ -154,7 +155,8 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
       // tslint:disable-next-line:max-line-length
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -194,7 +196,8 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
         });
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

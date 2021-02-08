@@ -16,12 +16,12 @@
 
 package digital.inception.mail;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>MailTemplateNotFoundException</b> exception is thrown to indicate an error condition as a
@@ -31,10 +31,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The mail template could not be found")
+@Problem(
+    type = "http://inception.digital/problems/mail/mail-template-not-found",
+    title = "The mail template could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "MailTemplateNotFoundException",
-    targetNamespace = "http://mail.inception.digital",
+    targetNamespace = "http://inception.digital/mail",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class MailTemplateNotFoundException extends ServiceException {
@@ -47,8 +50,6 @@ public class MailTemplateNotFoundException extends ServiceException {
    * @param mailTemplateId the ID for the mail template
    */
   public MailTemplateNotFoundException(String mailTemplateId) {
-    super(
-        "MailTemplateNotFoundError",
-        "The mail template with ID (" + mailTemplateId + ") could not be found");
+    super("The mail template with ID (" + mailTemplateId + ") could not be found");
   }
 }

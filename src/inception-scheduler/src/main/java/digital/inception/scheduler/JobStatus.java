@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The job status")
 @XmlEnum
-@XmlType(name = "JobStatus", namespace = "http://scheduler.inception.digital")
+@XmlType(name = "JobStatus", namespace = "http://inception.digital/scheduler")
 public enum JobStatus {
   @XmlEnumValue("Unscheduled")
   UNSCHEDULED("unscheduled", "Unscheduled"),

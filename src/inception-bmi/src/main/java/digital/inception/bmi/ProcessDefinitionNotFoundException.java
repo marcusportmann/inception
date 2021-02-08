@@ -16,12 +16,12 @@
 
 package digital.inception.bmi;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>ProcessDefinitionNotFoundException</b> exception is thrown to indicate an error condition
@@ -31,10 +31,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The process definition could not be found")
+@Problem(
+    type = "http://inception.digital/problems/bmi/process-definition-not-found",
+    title = "The process definition could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "ProcessDefinitionNotFoundException",
-    targetNamespace = "http://bmi.inception.digital",
+    targetNamespace = "http://inception.digital/bmi",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class ProcessDefinitionNotFoundException extends ServiceException {
@@ -47,8 +50,6 @@ public class ProcessDefinitionNotFoundException extends ServiceException {
    * @param processDefinitionId the ID for the process definition
    */
   public ProcessDefinitionNotFoundException(String processDefinitionId) {
-    super(
-        "ProcessDefinitionNotFoundError",
-        "The process definition with ID (" + processDefinitionId + ") could not be found");
+    super("The process definition with ID (" + processDefinitionId + ") could not be found");
   }
 }

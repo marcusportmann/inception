@@ -16,12 +16,12 @@
 
 package digital.inception.reporting;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>DuplicateReportDefinitionException</b> exception is thrown to indicate an error condition
@@ -32,12 +32,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(
-    value = HttpStatus.CONFLICT,
-    reason = "A report definition with the specified ID already exists")
+@Problem(
+    type = "http://inception.digital/problems/reporting/duplicate-report-definition",
+    title = "A report definition with the specified ID already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateReportDefinitionException",
-    targetNamespace = "http://reporting.inception.digital",
+    targetNamespace = "http://inception.digital/reporting",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateReportDefinitionException extends ServiceException {
@@ -50,8 +51,6 @@ public class DuplicateReportDefinitionException extends ServiceException {
    * @param reportDefinitionId the ID for the report definition
    */
   public DuplicateReportDefinitionException(String reportDefinitionId) {
-    super(
-        "DuplicateReportDefinitionError",
-        "The report definition with ID (" + reportDefinitionId + ") already exists");
+    super("The report definition with ID (" + reportDefinitionId + ") already exists");
   }
 }

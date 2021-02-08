@@ -16,6 +16,7 @@
 
 package digital.inception.messaging;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,13 +33,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The message could not be found")
+@Problem(
+    type = "http://inception.digital/problems/messaging/message-not-found",
+    title = "The message could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "MessageNotFoundException",
-    targetNamespace = "http://messaging.inception.digital",
+    targetNamespace = "http://inception.digital/messaging",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused"})
 public class MessageNotFoundException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -49,6 +52,6 @@ public class MessageNotFoundException extends ServiceException {
    * @param messageId the Universally Unique Identifier (UUID) for the message
    */
   public MessageNotFoundException(UUID messageId) {
-    super("MessageNotFoundError", "The message with ID (" + messageId + ") could not be found");
+    super("The message with ID (" + messageId + ") could not be found");
   }
 }

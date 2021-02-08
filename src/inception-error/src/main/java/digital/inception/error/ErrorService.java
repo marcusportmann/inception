@@ -16,15 +16,19 @@
 
 package digital.inception.error;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
-import digital.inception.core.validation.ValidationError;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ValidationError;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -41,27 +45,40 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings({"unused"})
 public class ErrorService implements IErrorService {
 
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(ErrorService.class);
+
   /** The Error Report Repository. */
   private final ErrorReportRepository errorReportRepository;
 
   /** The Error Report Summary Repository. */
   private final ErrorReportSummaryRepository errorReportSummaryRepository;
 
+  /** The Jackson ObjectMapper. */
+  private final ObjectMapper objectMapper;
+
   /** The JSR-303 validator. */
   private final Validator validator;
+
+  /* Is debugging enabled for the Inception Framework? */
+  @Value("${inception.debug:#{false}}")
+  private boolean debug;
 
   /**
    * Constructs a new <b>ErrorService</b>.
    *
    * @param validator the JSR-303 validator
+   * @param objectMapper the Jackson ObjectMapper
    * @param errorReportRepository the Error Report Repository
    * @param errorReportSummaryRepository the Error Report Summary Repository
    */
   public ErrorService(
       Validator validator,
+      ObjectMapper objectMapper,
       ErrorReportRepository errorReportRepository,
       ErrorReportSummaryRepository errorReportSummaryRepository) {
     this.validator = validator;
+    this.objectMapper = objectMapper;
     this.errorReportRepository = errorReportRepository;
     this.errorReportSummaryRepository = errorReportSummaryRepository;
   }
@@ -128,6 +145,12 @@ public class ErrorService implements IErrorService {
       errorReport.setFeedback(feedback);
 
       errorReportRepository.saveAndFlush(errorReport);
+
+      if (debug) {
+        logger.info(
+            "Error Report: "
+                + objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(errorReport));
+      }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to create the error report (" + errorReport.getId() + ")", e);

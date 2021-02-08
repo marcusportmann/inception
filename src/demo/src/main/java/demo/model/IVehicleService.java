@@ -18,7 +18,7 @@ package demo.model;
 
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.service.InvalidArgumentException;
 
 /**
  * The <b>IVehicleService</b> interface defines the functionality that must be provided by a Vehicle

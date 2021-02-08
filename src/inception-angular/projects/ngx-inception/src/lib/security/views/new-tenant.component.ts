@@ -29,6 +29,7 @@ import {ServiceUnavailableError} from '../../core/errors/service-unavailable-err
 import {Tenant} from '../services/tenant';
 import {v4 as uuid} from 'uuid';
 import {TenantStatus} from '../services/tenant-status';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The NewTenantComponent class implements the new tenant component.
@@ -95,7 +96,8 @@ export class NewTenantComponent extends AdminContainerView implements AfterViewI
         this.router.navigate(['..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

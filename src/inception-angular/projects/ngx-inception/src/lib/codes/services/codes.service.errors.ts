@@ -17,7 +17,7 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 
 /**
  * The CodeCategoryNotFoundError class holds the information for a code category not found error.
@@ -26,12 +26,14 @@ import {ApiError} from '../../core/errors/api-error';
  */
 export class CodeCategoryNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/codes/code-category-not-found';
+
   /**
    * Constructs a new CodeCategoryNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@codes_code_category_not_found_error:The code category could not be found.`, cause);
   }
 }
@@ -43,12 +45,14 @@ export class CodeCategoryNotFoundError extends Error {
  */
 export class CodeNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/codes/code-not-found';
+
   /**
    * Constructs a new CodeNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@codes_code_not_found_error:The code could not be found.`, cause);
   }
 }
@@ -60,12 +64,14 @@ export class CodeNotFoundError extends Error {
  */
 export class DuplicateCodeCategoryError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/codes/duplicate-code-category';
+
   /**
    * Constructs a new DuplicateCodeCategoryError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@codes_duplicate_code_category_error:The code category already exists.`, cause);
   }
 }
@@ -77,12 +83,14 @@ export class DuplicateCodeCategoryError extends Error {
  */
 export class DuplicateCodeError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/codes/duplicate-code';
+
   /**
    * Constructs a new DuplicateCodeError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@codes_duplicate_code_error:The code already exists.`, cause);
   }
 }

@@ -17,7 +17,7 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 
 /**
  * The DuplicateJobError class holds the information for a duplicate job error.
@@ -26,12 +26,14 @@ import {ApiError} from '../../core/errors/api-error';
  */
 export class DuplicateJobError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/scheduler/duplicate-job';
+
   /**
    * Constructs a new DuplicateJobError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@scheduler_duplicate_job_error:The job already exists.`, cause);
   }
 }
@@ -43,12 +45,14 @@ export class DuplicateJobError extends Error {
  */
 export class JobNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/scheduler/job-not-found';
+
   /**
    * Constructs a new JobNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@scheduler_job_not_found_error:The job could not be found.`, cause);
   }
 }

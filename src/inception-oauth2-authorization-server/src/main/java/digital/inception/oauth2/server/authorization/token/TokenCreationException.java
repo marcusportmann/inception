@@ -16,6 +16,7 @@
 
 package digital.inception.oauth2.server.authorization.token;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,10 +29,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(
-    value = HttpStatus.INTERNAL_SERVER_ERROR,
-    reason = "The OAuth2 token could not be created")
-@SuppressWarnings({"unused"})
+@Problem(
+    type = "http://inception.digital/problems/oauth2/token-creation",
+    title = "The OAuth2 token could not be created.",
+    status = HttpStatus.INTERNAL_SERVER_ERROR)
 public class TokenCreationException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -42,7 +43,7 @@ public class TokenCreationException extends ServiceException {
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public TokenCreationException(String message) {
-    super("TokenCreationError", message);
+    super(message);
   }
 
   /**
@@ -53,6 +54,6 @@ public class TokenCreationException extends ServiceException {
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public TokenCreationException(String message, Throwable cause) {
-    super("TokenCreationError", message, cause);
+    super(message, cause);
   }
 }

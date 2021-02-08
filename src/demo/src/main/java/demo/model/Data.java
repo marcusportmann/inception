@@ -32,6 +32,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -62,21 +63,23 @@ public class Data implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The timestamp value for the data. */
-  @Schema(description = "The timestamp value for the data")
-  @JsonProperty
-  @XmlElement(name = "TimestampValue")
+  @Schema(description = "The timestamp value for the data", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TimestampValue", required = true)
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
+  @NotNull
   @Column(name = "timestamp_value")
   public LocalDateTime timestampValue;
 
   /** The date value for the data. */
-  @Schema(description = "The date value for the data")
-  @JsonProperty
+  @Schema(description = "The date value for the data", required = true)
+  @JsonProperty(required = true)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateValue")
+  @XmlElement(name = "DateValue", required = true)
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
+  @NotNull
   @Column(name = "date_value")
   private LocalDate dateValue;
 
@@ -90,16 +93,19 @@ public class Data implements Serializable {
   private long id;
 
   /** The integer value for the data. */
-  @Schema(description = "The integer value for the data")
-  @JsonProperty
-  @XmlElement(name = "IntegerValue")
+  @Schema(description = "The integer value for the data", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "IntegerValue", required = true)
+  @NotNull
   @Column(name = "integer_value")
   private Integer integerValue;
 
   /** The string string value for the data. */
-  @Schema(description = "The string string value for the data")
-  @JsonProperty
+  @Schema(description = "The string string value for the data", required = true)
+  @JsonProperty(required = true)
   @XmlElement(name = "StringValue")
+  @NotNull
+  @Size(min = 1, max = 4000)
   @Column(name = "string_value")
   private String stringValue;
 

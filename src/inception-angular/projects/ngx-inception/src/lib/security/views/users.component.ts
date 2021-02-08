@@ -37,6 +37,7 @@ import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {UserSortBy} from '../services/user-sort-by';
 import {Session} from '../services/session';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The UsersComponent class implements the users component.
@@ -110,7 +111,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
           this.loadUsers();
         }, (error: Error) => {
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {
@@ -184,7 +185,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
           this.loadUsers();
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {
@@ -202,7 +203,8 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -264,7 +266,8 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
           }
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+            (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

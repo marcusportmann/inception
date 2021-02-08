@@ -55,10 +55,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
   "who",
   "deviceId"
 })
-@XmlRootElement(name = "ErrorReportSummary", namespace = "http://error.inception.digital")
+@XmlRootElement(name = "ErrorReportSummary", namespace = "http://inception.digital/error")
 @XmlType(
     name = "ErrorReport",
-    namespace = "http://error.inception.digital",
+    namespace = "http://inception.digital/error",
     propOrder = {
       "id",
       "applicationId",

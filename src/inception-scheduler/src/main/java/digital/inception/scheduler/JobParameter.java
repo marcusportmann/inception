@@ -52,10 +52,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Schema(description = "A parameter for a scheduled job")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
-@XmlRootElement(name = "JobParameter", namespace = "http://scheduler.inception.digital")
+@XmlRootElement(name = "JobParameter", namespace = "http://inception.digital/scheduler")
 @XmlType(
     name = "JobParameter",
-    namespace = "http://scheduler.inception.digital",
+    namespace = "http://inception.digital/scheduler",
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

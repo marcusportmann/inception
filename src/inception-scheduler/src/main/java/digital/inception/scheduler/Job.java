@@ -70,10 +70,10 @@ import org.hibernate.annotations.UpdateTimestamp;
   "nextExecution",
   "parameters"
 })
-@XmlRootElement(name = "Job", namespace = "http://scheduler.inception.digital")
+@XmlRootElement(name = "Job", namespace = "http://inception.digital/scheduler")
 @XmlType(
     name = "Job",
-    namespace = "http://scheduler.inception.digital",
+    namespace = "http://inception.digital/scheduler",
     propOrder = {
       "id",
       "name",

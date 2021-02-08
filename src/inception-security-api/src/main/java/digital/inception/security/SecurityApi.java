@@ -16,13 +16,13 @@
 
 package digital.inception.security;
 
-import digital.inception.api.ApiError;
 import digital.inception.api.ApiUtil;
+import digital.inception.api.ProblemDetails;
 import digital.inception.api.SecureApi;
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.validation.InvalidArgumentException;
-import digital.inception.core.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -106,30 +106,30 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or group or user could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "The group member already exists",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
@@ -205,30 +205,30 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or group or role could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "The group role already exists",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles",
@@ -316,30 +316,30 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The tenant or user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "The tenant user directory already exists",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/tenants/{tenantId}/user-directories",
@@ -411,23 +411,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or user could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}/password",
@@ -508,45 +508,45 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "401",
             description = "Authentication failed or invalid security code",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "403",
             description =
                 "The user has exceeded the maximum number of failed password attempts and has been locked",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or user could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "The new password for the user has been used recently and is not valid",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/users/{username}/password",
@@ -646,30 +646,30 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "A group with the specified name already exists",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups",
@@ -723,23 +723,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "An tenant with the specified ID or name already exists",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(value = "/tenants", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -777,30 +777,30 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "A user with the specified username already exists",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users",
@@ -864,23 +864,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "A user directory with the specified ID or name already exists",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories",
@@ -915,31 +915,31 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or group could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description =
                 "The group could not be deleted since it is still associated with 1 or more user(s)",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}",
@@ -982,23 +982,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The tenant could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/tenants/{tenantId}",
@@ -1033,23 +1033,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or user could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}",
@@ -1094,23 +1094,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}",
@@ -1146,23 +1146,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or group could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}",
@@ -1206,23 +1206,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/group-names",
@@ -1265,23 +1265,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or user could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}/group-names",
@@ -1329,23 +1329,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups",
@@ -1410,23 +1410,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or group could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
@@ -1495,23 +1495,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or group could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/role-codes",
@@ -1555,8 +1555,8 @@ public class SecurityApi extends SecureApi {
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1584,23 +1584,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or group could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles",
@@ -1644,23 +1644,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The tenant could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/tenants/{tenantId}",
@@ -1697,23 +1697,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The tenant could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/tenants/{tenantId}/name",
@@ -1751,16 +1751,16 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(value = "/tenants", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1809,23 +1809,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/tenants",
@@ -1866,23 +1866,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or user could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}",
@@ -1938,16 +1938,16 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories",
@@ -2001,23 +2001,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The tenant could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/tenants/{tenantId}/user-directories",
@@ -2067,23 +2067,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}",
@@ -2120,23 +2120,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/capabilities",
@@ -2178,23 +2178,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/name",
@@ -2234,16 +2234,16 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directory-summaries",
@@ -2297,23 +2297,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The tenant could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/tenants/{tenantId}/user-directory-summaries",
@@ -2365,23 +2365,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or user directory type could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/user-directory-type",
@@ -2424,8 +2424,8 @@ public class SecurityApi extends SecureApi {
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directory-types",
@@ -2456,23 +2456,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or user could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}/name",
@@ -2521,23 +2521,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users",
@@ -2610,23 +2610,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or group or group member could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value =
@@ -2682,23 +2682,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or group or group role could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles/{roleCode}",
@@ -2761,23 +2761,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The tenant or tenant user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/tenants/{tenantId}/user-directories/{userDirectoryId}",
@@ -2823,23 +2823,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/users/{username}/reset-password",
@@ -2873,23 +2873,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or group could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}",
@@ -2950,23 +2950,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The tenant could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/tenants/{tenantId}",
@@ -3021,23 +3021,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory or user could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/users/{username}",
@@ -3107,23 +3107,23 @@ public class SecurityApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The user directory could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}",

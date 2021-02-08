@@ -29,6 +29,7 @@ import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Base64} from '../../core/util/base64';
 import {Error} from '../../core/errors/error';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The EditReportDefinitionComponent class implements the edit report definition component.
@@ -104,24 +105,25 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
     this.spinnerService.showSpinner();
 
     this.reportingService.getReportDefinition(this.reportDefinitionId)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((reportDefinition: ReportDefinition) => {
-        this.reportDefinition = reportDefinition;
-        this.idFormControl.setValue(reportDefinition.id);
-        this.nameFormControl.setValue(reportDefinition.name);
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error).afterClosed()
-          .pipe(first())
-          .subscribe(() => {
-            this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-          });
-        }
-      });
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((reportDefinition: ReportDefinition) => {
+      this.reportDefinition = reportDefinition;
+      this.idFormControl.setValue(reportDefinition.id);
+      this.nameFormControl.setValue(reportDefinition.name);
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error).afterClosed()
+        .pipe(first())
+        .subscribe(() => {
+          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+        });
+      }
+    });
   }
 
   ok(): void {
@@ -142,19 +144,20 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
           this.spinnerService.showSpinner();
 
           this.reportingService.updateReportDefinition(this.reportDefinition)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
+          .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+          .subscribe(() => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+          }, (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+              (error instanceof ServiceUnavailableError)) {
               // noinspection JSIgnoredPromiseFromCall
-              this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
+              this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          });
         } else {
           console.log('Failed to read the template file for the report definition (' + fileReader.result + ')');
         }

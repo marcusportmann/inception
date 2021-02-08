@@ -33,6 +33,7 @@ import {ServiceUnavailableError} from '../../core/errors/service-unavailable-err
 import {Error} from '../../core/errors/error';
 import {UserDirectorySummaries} from '../services/user-directory-summaries';
 import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-dialog.component';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The TenantUserDirectoriesComponent class implements the tenant user directories
@@ -120,7 +121,8 @@ export class TenantUserDirectoriesComponent extends AdminContainerView implement
         this.newUserDirectoryFormControl.setValue('');
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -170,7 +172,8 @@ export class TenantUserDirectoriesComponent extends AdminContainerView implement
       this.availableUserDirectories$.next(availableUserDirectories);
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -193,7 +196,8 @@ export class TenantUserDirectoriesComponent extends AdminContainerView implement
       this.loadUserDirectoriesForTenant();
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -224,7 +228,8 @@ export class TenantUserDirectoriesComponent extends AdminContainerView implement
           this.newUserDirectoryFormControl.setValue('');
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+            (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

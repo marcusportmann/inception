@@ -17,7 +17,7 @@
 package digital.inception.configuration;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.service.InvalidArgumentException;
 import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(
     serviceName = "ConfigurationService",
     name = "IConfigurationService",
-    targetNamespace = "http://configuration.inception.digital")
+    targetNamespace = "http://inception.digital/configuration")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ConfigurationWebService {

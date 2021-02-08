@@ -17,7 +17,7 @@
 package digital.inception.banking.customer;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.service.InvalidArgumentException;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.ConstraintViolation;

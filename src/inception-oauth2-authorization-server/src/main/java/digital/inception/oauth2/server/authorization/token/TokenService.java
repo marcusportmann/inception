@@ -19,6 +19,7 @@ package digital.inception.oauth2.server.authorization.token;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.User;
 import java.security.interfaces.RSAPrivateKey;
@@ -83,11 +84,11 @@ public class TokenService implements ITokenService {
    * @return the OAuth2 access token
    */
   public OAuth2AccessToken issueOAuth2AccessToken(String username, Set<String> scopes)
-      throws TokenServiceException {
+      throws ServiceUnavailableException {
     try {
       return createOAuth2AccessToken(username, scopes);
     } catch (Throwable e) {
-      throw new TokenServiceException(
+      throw new ServiceUnavailableException(
           "Failed to issue the OAuth2 access token for the user (" + username + ")", e);
     }
   }
@@ -100,11 +101,11 @@ public class TokenService implements ITokenService {
    * @return the OAuth2 refresh token
    */
   public OAuth2RefreshToken issueOAuth2RefreshToken(String username, Set<String> scopes)
-      throws TokenServiceException {
+      throws ServiceUnavailableException {
     try {
       return createOAuth2RefreshToken(username, scopes);
     } catch (Throwable e) {
-      throw new TokenServiceException(
+      throw new ServiceUnavailableException(
           "Failed to issue the OAuth2 refresh token for the user (" + username + ")", e);
     }
   }
@@ -116,7 +117,7 @@ public class TokenService implements ITokenService {
    * @return the refreshed tokens
    */
   public RefreshedOAuth2Tokens refreshOAuth2Tokens(String encodedOAuth2RefreshToken)
-      throws InvalidOAuth2RefreshTokenException, TokenServiceException {
+      throws InvalidOAuth2RefreshTokenException, ServiceUnavailableException {
     try {
       SignedJWT signedJWT = SignedJWT.parse(encodedOAuth2RefreshToken);
 
@@ -153,7 +154,7 @@ public class TokenService implements ITokenService {
     } catch (InvalidOAuth2RefreshTokenException e) {
       throw e;
     } catch (Throwable e) {
-      throw new TokenServiceException("Failed to refresh the OAuth tokens", e);
+      throw new ServiceUnavailableException("Failed to refresh the OAuth tokens", e);
     }
   }
 

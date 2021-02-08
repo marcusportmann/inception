@@ -16,6 +16,7 @@
 
 package digital.inception.bmi;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,10 +32,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The case definition could not be found")
+@Problem(
+    type = "http://inception.digital/problems/bmi/case-definition-not-found",
+    title = "The case definition could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "CaseDefinitionNotFoundException",
-    targetNamespace = "http://bmi.inception.digital",
+    targetNamespace = "http://inception.digital/bmi",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class CaseDefinitionNotFoundException extends ServiceException {
@@ -47,8 +51,6 @@ public class CaseDefinitionNotFoundException extends ServiceException {
    * @param caseDefinitionId the ID for the case definition
    */
   public CaseDefinitionNotFoundException(String caseDefinitionId) {
-    super(
-        "CaseDefinitionNotFoundError",
-        "The case definition with ID (" + caseDefinitionId + ") could not be found");
+    super("The case definition with ID (" + caseDefinitionId + ") could not be found");
   }
 }

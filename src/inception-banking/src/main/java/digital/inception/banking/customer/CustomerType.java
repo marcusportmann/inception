@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The customer type")
 @XmlEnum
-@XmlType(name = "CustomerType", namespace = "http://customer.banking.inception.digital")
+@XmlType(name = "CustomerType", namespace = "http://inception.digital/banking/customer")
 public enum CustomerType {
   @XmlEnumValue("Business")
   BUSINESS("business", "Business"),

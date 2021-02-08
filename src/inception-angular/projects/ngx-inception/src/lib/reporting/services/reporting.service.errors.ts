@@ -17,7 +17,7 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 
 /**
  * The DuplicateReportDefinitionError class holds the information for a duplicate report definition
@@ -27,12 +27,14 @@ import {ApiError} from '../../core/errors/api-error';
  */
 export class DuplicateReportDefinitionError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/reporting/duplicate-report-definition';
+
   /**
    * Constructs a new DuplicateReportDefinitionError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@reporting_duplicate_report_definition_error:The report definition already exists.`, cause);
   }
 }
@@ -45,12 +47,14 @@ export class DuplicateReportDefinitionError extends Error {
  */
 export class ReportDefinitionNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/reporting/report-definition-not-found';
+
   /**
    * Constructs a new ReportDefinitionNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@reporting_report_definition_not_found_error:The report definition could not be found.`, cause);
   }
 }

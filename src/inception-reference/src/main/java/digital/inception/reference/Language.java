@@ -44,10 +44,10 @@ import javax.xml.bind.annotation.XmlType;
     description = "A systematic use of sounds, characters, symbols or signs to communicate meaning")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "shortName", "description"})
-@XmlRootElement(name = "Language", namespace = "http://reference.inception.digital")
+@XmlRootElement(name = "Language", namespace = "http://inception.digital/reference")
 @XmlType(
     name = "Language",
-    namespace = "http://reference.inception.digital",
+    namespace = "http://inception.digital/reference",
     propOrder = {"code", "localeId", "sortIndex", "name", "shortName", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

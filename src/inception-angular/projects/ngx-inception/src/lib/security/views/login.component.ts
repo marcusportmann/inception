@@ -29,6 +29,7 @@ import {Session} from '../services/session';
 import {Tenants} from '../services/tenants';
 import {PasswordExpiredError} from '../services/security.service.errors';
 import {Tenant} from '../services/tenant';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The LoginComponent class implements the login component.
@@ -113,7 +114,8 @@ export class LoginComponent implements OnInit {
               }
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+              if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+                (error instanceof ServiceUnavailableError)) {
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigateByUrl('/error/send-error-report', {state: {error}});
               } else {
@@ -137,7 +139,8 @@ export class LoginComponent implements OnInit {
               }
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+              if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+                (error instanceof ServiceUnavailableError)) {
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigateByUrl('/error/send-error-report', {state: {error}});
               } else {
@@ -155,7 +158,8 @@ export class LoginComponent implements OnInit {
         this.spinnerService.hideSpinner();
 
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else if (error instanceof PasswordExpiredError) {

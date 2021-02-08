@@ -50,10 +50,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "A user directory summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "type", "name"})
-@XmlRootElement(name = "UserDirectorySummary", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "UserDirectorySummary", namespace = "http://inception.digital/security")
 @XmlType(
     name = "UserDirectorySummary",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {"id", "type", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

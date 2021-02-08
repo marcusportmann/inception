@@ -60,10 +60,10 @@ import org.hibernate.annotations.UpdateTimestamp;
   "lockName",
   "lastProcessed"
 })
-@XmlRootElement(name = "Job", namespace = "http://sms.inception.digital")
+@XmlRootElement(name = "Job", namespace = "http://inception.digital/sms")
 @XmlType(
     name = "Job",
-    namespace = "http://sms.inception.digital",
+    namespace = "http://inception.digital/sms",
     propOrder = {
       "id",
       "mobileNumber",

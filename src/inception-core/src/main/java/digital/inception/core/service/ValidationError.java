@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.core.validation;
+package digital.inception.core.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -35,17 +35,16 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ValidationError</b> class represents a validation error that occurred while validating an
- * entity.
+ * The <b>ValidationError</b> class represents a validation error.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A validation error that occurred while validating an entity")
+@Schema(description = "A validation error")
 @JsonPropertyOrder({"property", "message", "attributes"})
-@XmlRootElement(name = "ValidationError", namespace = "http://validation.inception.digital")
+@XmlRootElement(name = "ValidationError", namespace = "http://inception.digital/core")
 @XmlType(
     name = "ValidationError",
-    namespace = "http://validation.inception.digital",
+    namespace = "http://inception.digital/core",
     propOrder = {"property", "message", "attributes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})

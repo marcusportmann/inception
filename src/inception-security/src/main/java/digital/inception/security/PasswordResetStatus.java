@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The password reset status")
 @XmlEnum
-@XmlType(name = "PasswordResetStatus", namespace = "http://security.inception.digital")
+@XmlType(name = "PasswordResetStatus", namespace = "http://inception.digital/security")
 public enum PasswordResetStatus {
   @XmlEnumValue("Requested")
   REQUESTED("requested", "Requested"),

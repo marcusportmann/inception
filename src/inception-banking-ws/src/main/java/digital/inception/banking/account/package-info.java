@@ -15,23 +15,20 @@
  */
 
 @javax.xml.bind.annotation.XmlSchema(
-    namespace = "http://account.banking.inception.digital",
+    namespace = "http://inception.digital/banking/account",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
       @javax.xml.bind.annotation.XmlNs(
           prefix = "core",
-          namespaceURI = "http://core.inception.digital"),
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "validation",
-          namespaceURI = "http://validation.inception.digital"),
+          namespaceURI = "http://inception.digital/core"),
       @javax.xml.bind.annotation.XmlNs(
           prefix = "party",
-          namespaceURI = "http://party.inception.digital"),
+          namespaceURI = "http://inception.digital/party"),
       @javax.xml.bind.annotation.XmlNs(
           prefix = "customer",
-          namespaceURI = "http://customer.banking.inception.digital"),
+          namespaceURI = "http://inception.digital/banking/customer"),
       @javax.xml.bind.annotation.XmlNs(
           prefix = "account",
-          namespaceURI = "http://account.banking.inception.digital")
+          namespaceURI = "http://inception.digital/banking/account")
     })
 package digital.inception.banking.account;

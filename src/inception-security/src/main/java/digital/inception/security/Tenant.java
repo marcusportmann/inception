@@ -56,10 +56,10 @@ import org.hibernate.annotations.UpdateTimestamp;
         "A group of users who share common access with specific privileges to a particular subset of the information managed by a multi-tenant application")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "status"})
-@XmlRootElement(name = "Tenant", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "Tenant", namespace = "http://inception.digital/security")
 @XmlType(
     name = "Tenant",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {"id", "name", "status"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

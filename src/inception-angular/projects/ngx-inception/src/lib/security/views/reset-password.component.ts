@@ -26,6 +26,7 @@ import {InformationDialogComponent} from '../../dialog/components/information-di
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Error} from '../../core/errors/error';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The ResetPasswordComponent class implements the reset password component.
@@ -117,7 +118,8 @@ export class ResetPasswordComponent implements OnInit {
         });
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

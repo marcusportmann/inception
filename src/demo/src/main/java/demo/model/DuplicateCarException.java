@@ -16,13 +16,13 @@
 
 package demo.model;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>DuplicateCarException</b> exception is thrown to indicate an error condition as a result
@@ -32,13 +32,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT, reason = "The car already exists")
+@Problem(
+    type = "http://demo/problems/duplicate-car-exception",
+    title = "The car already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateCarException",
     targetNamespace = "http://demo",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class DuplicateCarException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -49,6 +51,6 @@ public class DuplicateCarException extends ServiceException {
    * @param id the Universally Unique Identifier (UUID) for the car
    */
   public DuplicateCarException(UUID id) {
-    super("DuplicateCarError", "The car with the ID (" + id + ") already exists");
+    super("The car with the ID (" + id + ") already exists");
   }
 }

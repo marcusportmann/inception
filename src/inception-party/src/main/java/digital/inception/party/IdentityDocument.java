@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -40,8 +41,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -55,10 +58,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Schema(description = "A legal document which may be used to verify aspects of a party's identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
-@XmlRootElement(name = "IdentityDocument", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "IdentityDocument", namespace = "http://inception.digital/party")
 @XmlType(
     name = "IdentityDocument",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -92,6 +95,8 @@ public class IdentityDocument implements Serializable {
   @Schema(description = "The optional date of expiry for the identity document")
   @JsonProperty
   @XmlElement(name = "DateOfExpiry")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
   @Column(name = "date_of_expiry")
   private LocalDate dateOfExpiry;
 
@@ -99,6 +104,8 @@ public class IdentityDocument implements Serializable {
   @Schema(description = "The date of issue for the identity document", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "DateOfIssue", required = true)
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
   @NotNull
   @Id
   @Column(name = "date_of_issue", nullable = false)

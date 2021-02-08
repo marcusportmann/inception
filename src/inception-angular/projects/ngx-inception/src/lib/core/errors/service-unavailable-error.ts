@@ -16,7 +16,7 @@
 
 import {Error} from './error';
 import {HttpErrorResponse} from '@angular/common/http';
-import {ApiError} from "./api-error";
+import {ProblemDetails} from "./problem-details";
 import {HttpError} from "./http-error";
 
 /**
@@ -32,7 +32,7 @@ export class ServiceUnavailableError extends Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     //$localize`:@@core_service_unavailable_error:An error has occurred and your request could not be processed at this time.`
     super(message, cause);
   }

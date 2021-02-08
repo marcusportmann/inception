@@ -16,12 +16,12 @@
 
 package digital.inception.bmi;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>DuplicateProcessDefinitionException</b> exception is thrown to indicate an error condition
@@ -32,12 +32,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(
-    value = HttpStatus.CONFLICT,
-    reason = "A process definition with the specified ID already exists")
+@Problem(
+    type = "http://inception.digital/problems/bmi/duplicate-process-definition",
+    title = "A process definition with the specified ID already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateProcessDefinitionException",
-    targetNamespace = "http://bmi.inception.digital",
+    targetNamespace = "http://inception.digital/bmi",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateProcessDefinitionException extends ServiceException {
@@ -50,8 +51,6 @@ public class DuplicateProcessDefinitionException extends ServiceException {
    * @param processDefinitionId the ID for the process definition
    */
   public DuplicateProcessDefinitionException(String processDefinitionId) {
-    super(
-        "DuplicateProcessDefinitionError",
-        "The process definition with ID (" + processDefinitionId + ") already exists");
+    super("The process definition with ID (" + processDefinitionId + ") already exists");
   }
 }

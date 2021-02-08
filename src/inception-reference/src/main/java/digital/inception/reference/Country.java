@@ -52,10 +52,10 @@ import javax.xml.bind.annotation.XmlType;
   "sovereignState",
   "nationality"
 })
-@XmlRootElement(name = "Country", namespace = "http://reference.inception.digital")
+@XmlRootElement(name = "Country", namespace = "http://inception.digital/reference")
 @XmlType(
     name = "Country",
-    namespace = "http://reference.inception.digital",
+    namespace = "http://inception.digital/reference",
     propOrder = {
       "code",
       "localeId",

@@ -18,14 +18,18 @@ import {Inject, Injectable} from '@angular/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 import {
-  DuplicateReportDefinitionError, ReportDefinitionNotFoundError} from './reporting.service.errors';
+  DuplicateReportDefinitionError,
+  ReportDefinitionNotFoundError
+} from './reporting.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {ReportDefinition} from './report-definition';
 import {ReportDefinitionSummary} from './report-definition-summary';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
+import {AccessDeniedError} from "../../core/errors/access-denied-error";
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The Reporting Service implementation.
@@ -59,25 +63,21 @@ export class ReportingService {
   createReportDefinition(reportDefinition: ReportDefinition): Observable<boolean> {
     return this.httpClient.post<boolean>(this.config.reportingApiUrlPrefix + '/report-definitions', reportDefinition,
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateReportDefinitionError.TYPE)) {
+        return throwError(new DuplicateReportDefinitionError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
 
-          if (apiError.code === 'ReportDefinitionNotFoundError') {
-            return throwError(new ReportDefinitionNotFoundError(apiError));
-          } else if (apiError.code === 'DuplicateReportDefinitionError') {
-            return throwError(new DuplicateReportDefinitionError(apiError));
-          } else {
-            return throwError(new ServiceUnavailableError('Failed to create the report definition.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to create the report definition.', httpErrorResponse));
-        }
-      }));
+      return throwError(new ServiceUnavailableError('Failed to create the report definition.', httpErrorResponse));
+    }));
   }
 
   /**
@@ -91,23 +91,21 @@ export class ReportingService {
     return this.httpClient.delete<boolean>(
       this.config.reportingApiUrlPrefix + '/report-definitions/' + encodeURIComponent(reportDefinitionId),
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, ReportDefinitionNotFoundError.TYPE)) {
+        return throwError(new ReportDefinitionNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
 
-          if (apiError.code === 'ReportDefinitionNotFoundError') {
-            return throwError(new ReportDefinitionNotFoundError(apiError));
-          } else {
-            return throwError(new ServiceUnavailableError('Failed to delete the report definition.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to delete the report definition.', httpErrorResponse));
-        }
-      }));
+      return throwError(new ServiceUnavailableError('Failed to delete the report definition.', httpErrorResponse));
+    }));
   }
 
   /**
@@ -121,23 +119,21 @@ export class ReportingService {
     return this.httpClient.get<ReportDefinition>(
       this.config.reportingApiUrlPrefix + '/report-definitions/' + encodeURIComponent(reportDefinitionId),
       {reportProgress: true})
-      .pipe(map((reportDefinition: ReportDefinition) => {
-        return reportDefinition;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((reportDefinition: ReportDefinition) => {
+      return reportDefinition;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, ReportDefinitionNotFoundError.TYPE)) {
+        return throwError(new ReportDefinitionNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
 
-          if (apiError.code === 'ReportDefinitionNotFoundError') {
-            return throwError(new ReportDefinitionNotFoundError(apiError));
-          } else {
-            return throwError(new ServiceUnavailableError('Failed to retrieve the report definition.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the report definition.', httpErrorResponse));
-        }
-      }));
+      return throwError(new ServiceUnavailableError('Failed to retrieve the report definition.', httpErrorResponse));
+    }));
   }
 
   /**
@@ -154,19 +150,17 @@ export class ReportingService {
       }).pipe(map((reportDefinitionName: string) => {
       return reportDefinitionName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'ReportDefinitionNotFoundError') {
-          return throwError(new ReportDefinitionNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the report definition name.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, ReportDefinitionNotFoundError.TYPE)) {
+        return throwError(new ReportDefinitionNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the report definition name.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the report definition name.', httpErrorResponse));
     }));
   }
 
@@ -178,20 +172,17 @@ export class ReportingService {
   getReportDefinitionSummaries(): Observable<ReportDefinitionSummary[]> {
     return this.httpClient.get<ReportDefinitionSummary[]>(this.config.reportingApiUrlPrefix + '/report-definitions',
       {reportProgress: true})
-      .pipe(map((reportDefinitionSummaries: ReportDefinitionSummary[]) => {
-        return reportDefinitionSummaries;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((reportDefinitionSummaries: ReportDefinitionSummary[]) => {
+      return reportDefinitionSummaries;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      }
 
-          return throwError(
-            new ServiceUnavailableError('Failed to retrieve the summaries for the report definitions.', apiError));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the report definitions.', httpErrorResponse));
-        }
-      }));
+      return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the report definitions.', httpErrorResponse));
+    }));
   }
 
   /**
@@ -202,19 +193,17 @@ export class ReportingService {
   getReportDefinitions(): Observable<ReportDefinition[]> {
     return this.httpClient.get<ReportDefinition[]>(this.config.reportingApiUrlPrefix + '/report-definitions',
       {reportProgress: true})
-      .pipe(map((reportDefinitions: ReportDefinition[]) => {
-        return reportDefinitions;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((reportDefinitions: ReportDefinition[]) => {
+      return reportDefinitions;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      }
 
-          return throwError(new ServiceUnavailableError('Failed to retrieve the report definitions.', apiError));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the report definitions.', httpErrorResponse));
-        }
-      }));
+      return throwError(new ServiceUnavailableError('Failed to retrieve the report definitions.', httpErrorResponse));
+    }));
   }
 
   /**
@@ -228,22 +217,20 @@ export class ReportingService {
     return this.httpClient.put<boolean>(
       this.config.reportingApiUrlPrefix + '/report-definitions/' + encodeURIComponent(reportDefinition.id),
       reportDefinition, {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, ReportDefinitionNotFoundError.TYPE)) {
+        return throwError(new ReportDefinitionNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
 
-          if (apiError.code === 'ReportDefinitionNotFoundError') {
-            return throwError(new ReportDefinitionNotFoundError(apiError));
-          } else {
-            return throwError(new ServiceUnavailableError('Failed to update the report definition.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to update the report definition.', httpErrorResponse));
-        }
-      }));
+      return throwError(new ServiceUnavailableError('Failed to update the report definition.', httpErrorResponse));
+    }));
   }
 }

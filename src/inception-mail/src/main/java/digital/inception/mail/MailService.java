@@ -17,8 +17,8 @@
 package digital.inception.mail;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
-import digital.inception.core.validation.ValidationError;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ValidationError;
 import freemarker.cache.TemplateLookupContext;
 import freemarker.cache.TemplateLookupResult;
 import freemarker.cache.TemplateLookupStrategy;

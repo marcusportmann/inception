@@ -58,10 +58,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
   "feedback",
   "data"
 })
-@XmlRootElement(name = "ErrorReport", namespace = "http://error.inception.digital")
+@XmlRootElement(name = "ErrorReport", namespace = "http://inception.digital/error")
 @XmlType(
     name = "ErrorReport",
-    namespace = "http://error.inception.digital",
+    namespace = "http://inception.digital/error",
     propOrder = {
       "id",
       "applicationId",

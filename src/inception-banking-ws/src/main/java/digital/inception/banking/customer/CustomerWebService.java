@@ -17,7 +17,7 @@
 package digital.inception.banking.customer;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.service.InvalidArgumentException;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(
     serviceName = "CustomerService",
     name = "ICustomerService",
-    targetNamespace = "http://customer.banking.inception.digital")
+    targetNamespace = "http://inception.digital/banking/customer")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class CustomerWebService {

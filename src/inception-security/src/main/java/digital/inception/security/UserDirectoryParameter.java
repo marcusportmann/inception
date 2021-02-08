@@ -43,10 +43,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "A name-value pair parameter for a user directory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
-@XmlRootElement(name = "UserDirectoryParameter", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "UserDirectoryParameter", namespace = "http://inception.digital/security")
 @XmlType(
     name = "UserDirectoryParameter",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})

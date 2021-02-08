@@ -30,6 +30,7 @@ import {ServiceUnavailableError} from '../../core/errors/service-unavailable-err
 import {Error} from '../../core/errors/error';
 import {Base64} from '../../core/util/base64';
 import {MailTemplateContentType} from '../services/mail-template-content-type';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The NewMailTemplateComponent class implements the new mail template component.
@@ -125,7 +126,8 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
             this.router.navigate(['..'], {relativeTo: this.activatedRoute});
           }, (error: Error) => {
             // noinspection SuspiciousTypeOfGuard
-            if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+            if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError)
+              || (error instanceof ServiceUnavailableError)) {
               // noinspection JSIgnoredPromiseFromCall
               this.router.navigateByUrl('/error/send-error-report', {state: {error}});
             } else {

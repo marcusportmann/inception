@@ -18,8 +18,8 @@ package digital.inception.security;
 
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.validation.InvalidArgumentException;
-import digital.inception.core.validation.ValidationError;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ValidationError;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -45,7 +45,7 @@ import org.springframework.util.StringUtils;
 @WebService(
     serviceName = "SecurityService",
     name = "ISecurityService",
-    targetNamespace = "http://security.inception.digital")
+    targetNamespace = "http://inception.digital/security")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class SecurityWebService {

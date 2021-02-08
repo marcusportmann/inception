@@ -49,10 +49,10 @@ import javax.xml.bind.annotation.XmlType;
         "A discrete unit of functionality for an application that can be assigned to a role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "name", "description"})
-@XmlRootElement(name = "Function", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "Function", namespace = "http://inception.digital/security")
 @XmlType(
     name = "Function",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {"code", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

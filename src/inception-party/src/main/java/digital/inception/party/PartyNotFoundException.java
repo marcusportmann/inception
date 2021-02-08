@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,13 +33,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The party could not be found")
+@Problem(
+    type = "http://inception.digital/problems/party/party-not-found",
+    title = "The party could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "PartyNotFoundException",
-    targetNamespace = "http://party.inception.digital",
+    targetNamespace = "http://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class PartyNotFoundException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -49,6 +52,6 @@ public class PartyNotFoundException extends ServiceException {
    * @param partyId the Universally Unique Identifier (UUID) for the party
    */
   public PartyNotFoundException(UUID partyId) {
-    super("PartyNotFoundError", "The party (" + partyId + ") could not be found");
+    super("The party (" + partyId + ") could not be found");
   }
 }

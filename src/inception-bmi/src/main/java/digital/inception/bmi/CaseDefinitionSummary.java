@@ -38,10 +38,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "A case definition summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name"})
-@XmlRootElement(name = "CaseDefinitionSummary", namespace = "http://bmi.inception.digital")
+@XmlRootElement(name = "CaseDefinitionSummary", namespace = "http://inception.digital/bmi")
 @XmlType(
     name = "CaseDefinitionSummary",
-    namespace = "http://bmi.inception.digital",
+    namespace = "http://inception.digital/bmi",
     propOrder = {"id", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})

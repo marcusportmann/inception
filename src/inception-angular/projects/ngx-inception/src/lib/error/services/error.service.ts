@@ -19,13 +19,14 @@ import {Inject, Injectable} from '@angular/core';
 import {Error} from '../../core/errors/error';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
-import {ApiError} from '../../core/errors/api-error';
 import {Observable, throwError} from 'rxjs';
 import {CommunicationError} from '../../core/errors/communication-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {ErrorReport} from './error-report';
 import {v4 as uuid} from 'uuid';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
+import {AccessDeniedError} from "../../core/errors/access-denied-error";
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The Error Service implementation that provides the capability to capture and process application
@@ -64,15 +65,15 @@ export class ErrorService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to send the error report.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to send the error report.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to send the error report.', httpErrorResponse));
     }));
   }
 }

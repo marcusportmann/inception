@@ -18,7 +18,7 @@ package digital.inception.party;
 
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.service.InvalidArgumentException;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(
     serviceName = "PartyService",
     name = "IPartyService",
-    targetNamespace = "http://party.inception.digital")
+    targetNamespace = "http://inception.digital/party")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class PartyWebService {

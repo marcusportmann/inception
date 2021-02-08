@@ -41,10 +41,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "A user attribute in the form of a name-value pair")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
-@XmlRootElement(name = "Attribute", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "Attribute", namespace = "http://inception.digital/security")
 @XmlType(
     name = "UserAttribute",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})

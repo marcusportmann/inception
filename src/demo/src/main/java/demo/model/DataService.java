@@ -17,10 +17,10 @@
 package demo.model;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.ValidationError;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ValidationError;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
@@ -138,17 +138,17 @@ public class DataService implements IDataService {
    * @return the validation errors
    */
   @Override
-  public List<ValidationError> validateData(Data data) throws ServiceUnavailableException {
+  public void validateData(Data data) throws InvalidArgumentException, ServiceUnavailableException {
     try {
       Set<ConstraintViolation<Data>> constraintViolations = validator.validate(data);
 
-      List<ValidationError> errors = new ArrayList<>();
-
-      for (ConstraintViolation<Data> constraintViolation : constraintViolations) {
-        errors.add(new ValidationError(constraintViolation));
+      if (!constraintViolations.isEmpty()) {
+        throw new InvalidArgumentException(
+            "data", ValidationError.toValidationErrors(constraintViolations));
       }
 
-      return errors;
+    } catch (InvalidArgumentException e) {
+      throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to validate the data", e);
     }

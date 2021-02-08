@@ -16,12 +16,12 @@
 
 package digital.inception.configuration;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>ConfigurationNotFoundException</b> exception is thrown to indicate that the required
@@ -31,13 +31,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The configuration could not be found")
+@Problem(
+    type = "http://inception.digital/problems/configuration/configuration-not-found",
+    title = "The configuration could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "ConfigurationNotFoundException",
-    targetNamespace = "http://configuration.inception.digital",
+    targetNamespace = "http://inception.digital/configuration",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused"})
 public class ConfigurationNotFoundException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -48,6 +50,6 @@ public class ConfigurationNotFoundException extends ServiceException {
    * @param key the key for the configuration
    */
   public ConfigurationNotFoundException(String key) {
-    super("ConfigurationNotFoundError", "The configuration (" + key + ") could not be found");
+    super("The configuration (" + key + ") could not be found");
   }
 }

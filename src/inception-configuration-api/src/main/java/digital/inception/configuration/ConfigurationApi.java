@@ -16,11 +16,11 @@
 
 package digital.inception.configuration;
 
-import digital.inception.api.ApiError;
 import digital.inception.api.ApiUtil;
+import digital.inception.api.ProblemDetails;
 import digital.inception.api.SecureApi;
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -79,23 +79,23 @@ public class ConfigurationApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The configuration could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/configurations/{key}",
@@ -127,23 +127,23 @@ public class ConfigurationApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The configuration could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/configurations/{key}",
@@ -176,23 +176,23 @@ public class ConfigurationApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The configuration could not be found",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/configurations/{key}/value",
@@ -225,8 +225,8 @@ public class ConfigurationApi extends SecureApi {
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/configurations",
@@ -252,16 +252,16 @@ public class ConfigurationApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/configurations",

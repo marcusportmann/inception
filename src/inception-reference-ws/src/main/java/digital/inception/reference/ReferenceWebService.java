@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(
     serviceName = "ReferenceService",
     name = "IReferenceService",
-    targetNamespace = "http://reference.inception.digital")
+    targetNamespace = "http://inception.digital/reference")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ReferenceWebService {

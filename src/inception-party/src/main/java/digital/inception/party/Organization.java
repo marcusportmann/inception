@@ -72,10 +72,10 @@ import org.springframework.util.StringUtils;
   "taxNumbers",
   "roles"
 })
-@XmlRootElement(name = "Organization", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "Organization", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Organization",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {
       "id",
       "tenantId",

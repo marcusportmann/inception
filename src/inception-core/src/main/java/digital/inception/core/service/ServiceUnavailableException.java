@@ -30,7 +30,7 @@ import javax.xml.ws.WebFault;
  */
 @WebFault(
     name = "ServiceUnavailableException",
-    targetNamespace = "http://core.inception.digital",
+    targetNamespace = "http://inception.digital/core",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -44,7 +44,7 @@ public class ServiceUnavailableException extends ServiceException {
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public ServiceUnavailableException(String message) {
-    super("ServiceUnavailableError", message);
+    super(message);
   }
 
   /**
@@ -55,6 +55,6 @@ public class ServiceUnavailableException extends ServiceException {
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public ServiceUnavailableException(String message, Throwable cause) {
-    super("ServiceUnavailableError", message, cause);
+    super(message, cause);
   }
 }

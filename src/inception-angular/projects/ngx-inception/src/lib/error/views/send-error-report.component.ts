@@ -22,7 +22,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {ErrorService} from '../services/error.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {DialogService} from '../../dialog/services/dialog.service';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 import {Error} from '../../core/errors/error';
 import {InformationDialogComponent} from '../../dialog/components/information-dialog.component';
 
@@ -77,8 +77,8 @@ export class SendErrorReportComponent implements OnInit {
           if (this.error.cause) {
             console.log('Cause: ', this.error.cause);
 
-            if ((this.error.cause as ApiError).stackTrace) {
-              console.log('StackTrace: ', (this.error.cause as ApiError).stackTrace);
+            if ((this.error.cause as ProblemDetails).stackTrace) {
+              console.log('StackTrace: ', (this.error.cause as ProblemDetails).stackTrace);
             }
           }
         }

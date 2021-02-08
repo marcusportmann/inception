@@ -54,10 +54,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Schema(description = "A group of users")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"userDirectoryId", "name", "description"})
-@XmlRootElement(name = "Group", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "Group", namespace = "http://inception.digital/security")
 @XmlType(
     name = "Group",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {"userDirectoryId", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

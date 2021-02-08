@@ -27,6 +27,7 @@ import {Error} from '../../core/errors/error';
 import {Code} from '../services/code';
 import {BackNavigation} from '../../layout/components/back-navigation';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The NewCodeComponent class implements the new code component.
@@ -111,7 +112,8 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
         this.router.navigate(['..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

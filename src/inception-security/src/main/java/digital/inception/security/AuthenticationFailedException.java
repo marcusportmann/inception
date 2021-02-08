@@ -16,12 +16,12 @@
 
 package digital.inception.security;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * An <b>AuthenticationFailedException</b> is thrown to indicate that a security operation failed as
@@ -31,13 +31,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Authentication failed")
+@Problem(
+    type = "http://inception.digital/problems/security/authentication-failed",
+    title = "Authentication failed.",
+    status = HttpStatus.UNAUTHORIZED)
 @WebFault(
     name = "AuthenticationFailedException",
-    targetNamespace = "http://security.inception.digital",
+    targetNamespace = "http://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class AuthenticationFailedException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -48,7 +50,7 @@ public class AuthenticationFailedException extends ServiceException {
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public AuthenticationFailedException(String message) {
-    super("AuthenticationFailedError", message);
+    super(message);
   }
 
   /**
@@ -59,6 +61,6 @@ public class AuthenticationFailedException extends ServiceException {
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public AuthenticationFailedException(String message, Throwable cause) {
-    super("AuthenticationFailedError", message, cause);
+    super(message, cause);
   }
 }

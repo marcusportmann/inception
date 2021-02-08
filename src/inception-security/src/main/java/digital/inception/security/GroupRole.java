@@ -38,10 +38,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "A group role association")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"userDirectoryId", "groupName", "roleCode"})
-@XmlRootElement(name = "GroupRole", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "GroupRole", namespace = "http://inception.digital/security")
 @XmlType(
     name = "GroupRole",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {"userDirectoryId", "groupName", "roleCode"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})

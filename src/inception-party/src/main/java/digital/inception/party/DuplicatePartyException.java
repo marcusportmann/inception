@@ -16,13 +16,13 @@
 
 package digital.inception.party;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>DuplicatePartyException</b> exception is thrown to indicate an error condition as a result
@@ -32,13 +32,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT, reason = "The party already exists")
+@Problem(
+    type = "http://inception.digital/problems/party/duplicate-party",
+    title = "The party already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicatePartyException",
-    targetNamespace = "http://party.inception.digital",
+    targetNamespace = "http://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class DuplicatePartyException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -49,6 +51,6 @@ public class DuplicatePartyException extends ServiceException {
    * @param id the Universally Unique Identifier (UUID) for the party
    */
   public DuplicatePartyException(UUID id) {
-    super("DuplicatePartyError", "The party with the ID (" + id + ") already exists");
+    super("The party with the ID (" + id + ") already exists");
   }
 }

@@ -29,6 +29,7 @@ import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Base64} from '../../core/util/base64';
 import {Error} from '../../core/errors/error';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The NewReportDefinitionComponent class implements the new report definition component.
@@ -108,19 +109,20 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
           this.spinnerService.showSpinner();
 
           this.reportingService.createReportDefinition(this.reportDefinition)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
+          .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+          .subscribe(() => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+          }, (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+              (error instanceof ServiceUnavailableError)) {
               // noinspection JSIgnoredPromiseFromCall
-              this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
+              this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          });
         } else {
           console.log('Failed to read the template file for the report definition (' + fileReader.result + ')');
         }

@@ -27,6 +27,7 @@ import {BackNavigation} from '../../layout/components/back-navigation';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Tenant} from '../services/tenant';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The EditTenantComponent class implements the edit tenant component.
@@ -95,7 +96,8 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
       this.nameFormControl.setValue(tenant.name);
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -121,7 +123,8 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
         this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

@@ -59,10 +59,10 @@ import org.springframework.util.StringUtils;
   "countryOfIssue",
   "partyTypes"
 })
-@XmlRootElement(name = "IdentityDocumentType", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "IdentityDocumentType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "IdentityDocumentType",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {
       "code",
       "localeId",

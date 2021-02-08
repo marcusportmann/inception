@@ -47,10 +47,10 @@ import javax.xml.bind.annotation.XmlType;
         "A type of official document giving a foreign national authorization to reside in a country")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "countryOfIssue"})
-@XmlRootElement(name = "ResidencePermitType", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "ResidencePermitType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "ResidencePermitType",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"code", "localeId", "sortIndex", "name", "description", "countryOfIssue"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

@@ -31,6 +31,7 @@ import {ServiceUnavailableError} from '../../core/errors/service-unavailable-err
 import {Error} from '../../core/errors/error';
 import {Code} from '../services/code';
 import {BackNavigation} from '../../layout/components/back-navigation';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The CodesComponent class implements the codes component.
@@ -105,7 +106,8 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
           this.loadCodes();
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+            (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {
@@ -130,7 +132,8 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
       this.dataSource.data = codes;
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {

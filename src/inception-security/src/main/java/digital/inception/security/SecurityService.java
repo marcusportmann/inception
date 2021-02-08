@@ -16,13 +16,13 @@
 
 package digital.inception.security;
 
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.PasswordUtil;
 import digital.inception.core.util.RandomStringGenerator;
 import digital.inception.core.util.ResourceUtil;
-import digital.inception.core.validation.InvalidArgumentException;
-import digital.inception.core.validation.ValidationError;
 import digital.inception.mail.IMailService;
 import digital.inception.mail.MailTemplate;
 import digital.inception.mail.MailTemplateContentType;
@@ -2287,7 +2287,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
         }
 
         try {
-          Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(userDirectoryType.getUserDirectoryClassName());
+          Class<?> clazz =
+              Thread.currentThread()
+                  .getContextClassLoader()
+                  .loadClass(userDirectoryType.getUserDirectoryClassName());
 
           if (!IUserDirectory.class.isAssignableFrom(clazz)) {
             throw new ServiceUnavailableException(
@@ -2742,9 +2745,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
             + "</userDirectory>";
 
     try {
-    userDirectory.setConfiguration(buffer);
+      userDirectory.setConfiguration(buffer);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to set the configuration for the user directory", e);
+      throw new ServiceUnavailableException(
+          "Failed to set the configuration for the user directory", e);
     }
 
     return userDirectory;

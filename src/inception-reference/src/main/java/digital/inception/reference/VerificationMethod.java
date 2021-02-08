@@ -43,10 +43,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "A method used to verify an item of information")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "VerificationMethod", namespace = "http://reference.inception.digital")
+@XmlRootElement(name = "VerificationMethod", namespace = "http://inception.digital/reference")
 @XmlType(
     name = "VerificationMethod",
-    namespace = "http://reference.inception.digital",
+    namespace = "http://inception.digital/reference",
     propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

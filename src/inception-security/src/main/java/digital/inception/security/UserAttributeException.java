@@ -16,12 +16,12 @@
 
 package digital.inception.security;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * An <b>UserAttributeException</b> is thrown to indicate an invalid operation was performed on a
@@ -31,15 +31,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(
-    value = HttpStatus.INTERNAL_SERVER_ERROR,
-    reason = "An error has occurred and the request could not be processed at this time")
+@Problem(
+    type = "http://inception.digital/problems/security/user-attribute",
+    title = "An error has occurred and the request could not be processed at this time.",
+    status = HttpStatus.INTERNAL_SERVER_ERROR)
 @WebFault(
     name = "UserAttributeException",
-    targetNamespace = "http://security.inception.digital",
+    targetNamespace = "http://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class UserAttributeException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -50,6 +50,6 @@ public class UserAttributeException extends ServiceException {
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public UserAttributeException(String message) {
-    super("UserAttributeError", message);
+    super(message);
   }
 }

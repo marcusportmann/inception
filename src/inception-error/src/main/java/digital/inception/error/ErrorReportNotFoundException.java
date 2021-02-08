@@ -16,13 +16,13 @@
 
 package digital.inception.error;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>ErrorReportNotFoundException</b> exception is thrown to indicate that the required error
@@ -32,13 +32,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The error report could not be found")
+@Problem(
+    type = "http://inception.digital/problems/error/error-report-not-found",
+    title = "The error report could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "ErrorReportNotFoundException",
-    targetNamespace = "http://error.inception.digital",
+    targetNamespace = "http://inception.digital/error",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused"})
 public class ErrorReportNotFoundException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -49,7 +51,6 @@ public class ErrorReportNotFoundException extends ServiceException {
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
    */
   public ErrorReportNotFoundException(UUID errorReportId) {
-    super(
-        "ErrorReportNotFoundError", "The error report (" + errorReportId + ") could not be found");
+    super("The error report (" + errorReportId + ") could not be found");
   }
 }

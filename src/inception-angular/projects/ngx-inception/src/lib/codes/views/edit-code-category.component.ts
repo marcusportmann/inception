@@ -27,6 +27,7 @@ import {Error} from '../../core/errors/error';
 import {BackNavigation} from '../../layout/components/back-navigation';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CodeCategory} from '../services/code-category';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The EditCodeCategoryComponent class implements the edit code category component.
@@ -107,7 +108,8 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
       this.dataFormControl.setValue(codeCategory.data);
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -136,7 +138,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
         this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) ||  (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

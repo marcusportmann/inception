@@ -19,10 +19,12 @@
       <artifactId>inception-persistence</artifactId>
     </dependency>
 
-    <!-- Dependencies -->
+    <!-- Provided Inception Dependencies -->
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-api</artifactId>
+      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
 
     <!-- Test Dependencies -->

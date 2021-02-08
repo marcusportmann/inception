@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The mail template content type")
 @XmlEnum
-@XmlType(name = "MailTemplateContentType", namespace = "http://mail.inception.digital")
+@XmlType(name = "MailTemplateContentType", namespace = "http://inception.digital/mail")
 public enum MailTemplateContentType {
   @XmlEnumValue("Text")
   TEXT("text", "Text"),

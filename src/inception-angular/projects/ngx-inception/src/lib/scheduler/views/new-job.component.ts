@@ -18,7 +18,10 @@ import {AfterViewInit, Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {finalize, first} from 'rxjs/operators';
-import {JobParameterDialogComponent, JobParameterDialogData} from './job-parameter-dialog.component';
+import {
+  JobParameterDialogComponent,
+  JobParameterDialogData
+} from './job-parameter-dialog.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Error} from '../../core/errors/error';
 import {AdminContainerView} from '../../layout/components/admin-container-view';
@@ -31,6 +34,7 @@ import {BackNavigation} from '../../layout/components/back-navigation';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {JobStatus} from '../services/job-status';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The NewJobComponent class implements the new job component.
@@ -133,17 +137,17 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
       });
 
     dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((jobParameter: JobParameter | undefined) => {
-        if (jobParameter) {
-          for (const aJobParameter of this.jobParameters) {
-            if (aJobParameter.name === jobParameter.name) {
-              aJobParameter.value = jobParameter.value;
-              return;
-            }
+    .pipe(first())
+    .subscribe((jobParameter: JobParameter | undefined) => {
+      if (jobParameter) {
+        for (const aJobParameter of this.jobParameters) {
+          if (aJobParameter.name === jobParameter.name) {
+            aJobParameter.value = jobParameter.value;
+            return;
           }
         }
-      });
+      }
+    });
   }
 
   newJobParameter(): void {
@@ -159,30 +163,30 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
       });
 
     dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((jobParameter: JobParameter | undefined) => {
-        if (jobParameter) {
-          for (const aJobParameter of this.jobParameters) {
-            if (aJobParameter.name === jobParameter.name) {
-              this.dialogService.showErrorDialog(new Error('The job parameter already exists.'));
+    .pipe(first())
+    .subscribe((jobParameter: JobParameter | undefined) => {
+      if (jobParameter) {
+        for (const aJobParameter of this.jobParameters) {
+          if (aJobParameter.name === jobParameter.name) {
+            this.dialogService.showErrorDialog(new Error('The job parameter already exists.'));
 
-              return;
-            }
+            return;
           }
-
-          this.jobParameters.push(jobParameter);
-
-          this.jobParameters.sort((a: JobParameter, b: JobParameter) => {
-            if ((a.name ? a.name.toLowerCase() : '') < (b.name ? b.name.toLowerCase() : '')) {
-              return -1;
-            }
-            if ((a.name ? a.name.toLowerCase() : '') > (b.name ? b.name.toLowerCase() : '')) {
-              return 1;
-            }
-            return 0;
-          });
         }
-      });
+
+        this.jobParameters.push(jobParameter);
+
+        this.jobParameters.sort((a: JobParameter, b: JobParameter) => {
+          if ((a.name ? a.name.toLowerCase() : '') < (b.name ? b.name.toLowerCase() : '')) {
+            return -1;
+          }
+          if ((a.name ? a.name.toLowerCase() : '') > (b.name ? b.name.toLowerCase() : '')) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -202,19 +206,20 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
       this.spinnerService.showSpinner();
 
       this.schedulerService.createJob(this.job)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 }

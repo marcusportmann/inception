@@ -36,6 +36,7 @@ import {SortDirection} from '../../core/sorting/sort-direction';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Session} from '../services/session';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The GroupsComponent class implements the groups component.
@@ -108,7 +109,8 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
           this.loadGroups();
         }, (error: Error) => {
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+            (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {
@@ -181,7 +183,8 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
           this.loadGroups();
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+            (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {
@@ -199,7 +202,8 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -261,7 +265,8 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
           }
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+            (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

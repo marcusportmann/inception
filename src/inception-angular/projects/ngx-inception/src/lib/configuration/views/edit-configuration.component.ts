@@ -27,6 +27,7 @@ import {ServiceUnavailableError} from '../../core/errors/service-unavailable-err
 import {Error} from '../../core/errors/error';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {BackNavigation} from '../../layout/components/back-navigation';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The EditConfigurationComponent class implements the edit configuration component.
@@ -100,27 +101,27 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
     this.spinnerService.showSpinner();
 
     this.configurationService.getConfiguration(this.key)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((configuration: Configuration) => {
-        this.configuration = configuration;
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((configuration: Configuration) => {
+      this.configuration = configuration;
 
-        this.keyFormControl.setValue(configuration.key);
-        this.valueFormControl.setValue(configuration.value);
-        this.descriptionFormControl.setValue(configuration.description);
-      }, (error: Error) => {
-        this.spinnerService.hideSpinner();
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) ||  (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error).afterClosed()
-          .pipe(first())
-          .subscribe(() => {
-            this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-          });
-        }
-      });
+      this.keyFormControl.setValue(configuration.key);
+      this.valueFormControl.setValue(configuration.value);
+      this.descriptionFormControl.setValue(configuration.description);
+    }, (error: Error) => {
+      this.spinnerService.hideSpinner();
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error).afterClosed()
+        .pipe(first())
+        .subscribe(() => {
+          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+        });
+      }
+    });
   }
 
   ok(): void {
@@ -131,19 +132,20 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
       this.spinnerService.showSpinner();
 
       this.configurationService.saveConfiguration(this.configuration)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 }

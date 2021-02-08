@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The SMS status")
 @XmlEnum
-@XmlType(name = "SMSStatus", namespace = "http://sms.inception.digital")
+@XmlType(name = "SMSStatus", namespace = "http://inception.digital/sms")
 public enum SMSStatus {
   @XmlEnumValue("Unknown")
   UNKNOWN("unknown", "Unknown"),

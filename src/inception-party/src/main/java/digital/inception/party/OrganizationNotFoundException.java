@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,13 +33,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The organization could not be found")
+@Problem(
+    type = "http://inception.digital/problems/party/organization-not-found",
+    title = "The organization could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "OrganizationNotFoundException",
-    targetNamespace = "http://party.inception.digital",
+    targetNamespace = "http://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class OrganizationNotFoundException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -49,8 +52,6 @@ public class OrganizationNotFoundException extends ServiceException {
    * @param organizationId the Universally Unique Identifier (UUID) for the organization
    */
   public OrganizationNotFoundException(UUID organizationId) {
-    super(
-        "OrganizationNotFoundError",
-        "The organization (" + organizationId + ") could not be found");
+    super("The organization (" + organizationId + ") could not be found");
   }
 }

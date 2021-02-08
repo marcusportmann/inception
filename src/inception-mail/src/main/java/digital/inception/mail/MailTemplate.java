@@ -47,10 +47,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Schema(description = "A template for an e-mail sent by an application")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "contentType", "template"})
-@XmlRootElement(name = "MailTemplate", namespace = "http://mail.inception.digital")
+@XmlRootElement(name = "MailTemplate", namespace = "http://inception.digital/mail")
 @XmlType(
     name = "MailTemplate",
-    namespace = "http://mail.inception.digital",
+    namespace = "http://inception.digital/mail",
     propOrder = {"id", "name", "contentType", "template"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

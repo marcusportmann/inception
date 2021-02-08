@@ -30,6 +30,7 @@ import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Error} from '../../core/errors/error';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The ReportDefinitionsComponent class implements the Report Definitions component.
@@ -88,7 +89,8 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
               this.loadReportDefinitions();
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+              if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+                (error instanceof ServiceUnavailableError)) {
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigateByUrl('/error/send-error-report', {state: {error}});
               } else {

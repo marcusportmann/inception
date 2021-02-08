@@ -47,10 +47,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Schema(description = "A collection of related codes")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "data"})
-@XmlRootElement(name = "CodeCategory", namespace = "http://codes.inception.digital")
+@XmlRootElement(name = "CodeCategory", namespace = "http://inception.digital/codes")
 @XmlType(
     name = "CodeCategory",
-    namespace = "http://codes.inception.digital",
+    namespace = "http://inception.digital/codes",
     propOrder = {"id", "name", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

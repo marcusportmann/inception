@@ -16,12 +16,12 @@
 
 package digital.inception.security;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * A <b>DuplicateGroupException</b> is thrown to indicate that a security operation failed as a
@@ -29,15 +29,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(
-    value = HttpStatus.CONFLICT,
-    reason = "A group with the specified name already exists")
+@Problem(
+    type = "http://inception.digital/problems/security/duplicate-group",
+    title = "A group with the specified name already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateGroupException",
-    targetNamespace = "http://security.inception.digital",
+    targetNamespace = "http://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class DuplicateGroupException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -48,6 +48,6 @@ public class DuplicateGroupException extends ServiceException {
    * @param groupName the name of the group
    */
   public DuplicateGroupException(String groupName) {
-    super("DuplicateGroupError", "A group with the name (" + groupName + ") already exists");
+    super("A group with the name (" + groupName + ") already exists");
   }
 }

@@ -16,12 +16,12 @@
 
 package digital.inception.security;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * A <b>DuplicateUserException</b> is thrown to indicate that a security operation failed as a
@@ -31,15 +31,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(
-    value = HttpStatus.CONFLICT,
-    reason = "A user with the specified username already exists")
+@Problem(
+    type = "http://inception.digital/problems/security/duplicate-user",
+    title = "A user with the specified username already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateUserException",
-    targetNamespace = "http://security.inception.digital",
+    targetNamespace = "http://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class DuplicateUserException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -50,6 +50,6 @@ public class DuplicateUserException extends ServiceException {
    * @param username the username for the user
    */
   public DuplicateUserException(String username) {
-    super("DuplicateUserError", "A user with the username (" + username + ") already exists");
+    super("A user with the username (" + username + ") already exists");
   }
 }

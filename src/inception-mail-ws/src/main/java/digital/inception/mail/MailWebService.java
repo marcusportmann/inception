@@ -17,7 +17,7 @@
 package digital.inception.mail;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.service.InvalidArgumentException;
 import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(
     serviceName = "MailService",
     name = "IMailService",
-    targetNamespace = "http://mail.inception.digital")
+    targetNamespace = "http://inception.digital/mail")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class MailWebService {

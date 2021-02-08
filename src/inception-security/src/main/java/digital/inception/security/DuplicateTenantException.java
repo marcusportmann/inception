@@ -16,13 +16,13 @@
 
 package digital.inception.security;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * A <b>DuplicateTenantException</b> is thrown to indicate that a security operation failed as a
@@ -32,15 +32,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(
-    value = HttpStatus.CONFLICT,
-    reason = "An tenant with the specified ID or name already exists")
+@Problem(
+    type = "http://inception.digital/problems/security/duplicate-tenant",
+    title = "A tenant with the specified ID or name already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateTenantException",
-    targetNamespace = "http://security.inception.digital",
+    targetNamespace = "http://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused"})
 public class DuplicateTenantException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -51,7 +51,7 @@ public class DuplicateTenantException extends ServiceException {
    * @param name the name of the tenant
    */
   public DuplicateTenantException(String name) {
-    super("DuplicateTenantError", "An tenant with the name (" + name + ") already exists");
+    super("An tenant with the name (" + name + ") already exists");
   }
 
   /**
@@ -60,6 +60,6 @@ public class DuplicateTenantException extends ServiceException {
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    */
   public DuplicateTenantException(UUID tenantId) {
-    super("DuplicateTenantError", "An tenant with the ID (" + tenantId + ") already exists");
+    super("An tenant with the ID (" + tenantId + ") already exists");
   }
 }

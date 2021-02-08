@@ -17,7 +17,7 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 
 /**
  * The ConfigurationNotFoundError class holds the information for a configuration not found error.
@@ -26,12 +26,14 @@ import {ApiError} from '../../core/errors/api-error';
  */
 export class ConfigurationNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/configuration/configuration-not-found';
+
   /**
    * Constructs a new ConfigurationNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@configuration_configuration_not_found_error:The configuration could not be found.`, cause);
   }
 }

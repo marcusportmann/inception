@@ -70,10 +70,10 @@ import org.springframework.util.StringUtils;
   "encryptionIV",
   "dataHash"
 })
-@XmlRootElement(name = "Message", namespace = "http://messaging.inception.digital")
+@XmlRootElement(name = "Message", namespace = "http://inception.digital/messaging")
 @XmlType(
     name = "Message",
-    namespace = "http://messaging.inception.digital",
+    namespace = "http://inception.digital/messaging",
     propOrder = {
       "id",
       "username",

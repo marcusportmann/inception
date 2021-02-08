@@ -16,6 +16,7 @@
 
 package digital.inception.codes;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,10 +32,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The code could not be found")
+@Problem(
+    type = "http://inception.digital/problems/codes/code-not-found",
+    title = "The code could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "CodeNotFoundException",
-    targetNamespace = "http://codes.inception.digital",
+    targetNamespace = "http://inception.digital/codes",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class CodeNotFoundException extends ServiceException {
@@ -49,7 +53,6 @@ public class CodeNotFoundException extends ServiceException {
    */
   public CodeNotFoundException(String codeCategoryId, String codeId) {
     super(
-        "CodeNotFoundError",
         "The code with ID ("
             + codeId
             + ") for the code category with ID ("

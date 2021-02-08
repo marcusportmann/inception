@@ -561,6 +561,7 @@
     <!-- Demo Modules -->
     <module>demo</module>
     <module>demo-client</module>
+    <module>demo-web</module>
 
   </modules>
 

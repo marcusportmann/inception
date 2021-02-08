@@ -16,10 +16,10 @@
 
 package digital.inception.error;
 
-import digital.inception.api.ApiError;
+import digital.inception.api.ProblemDetails;
 import digital.inception.api.SecureApi;
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -76,16 +76,16 @@ public class ErrorApi extends SecureApi {
             description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class))),
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiError.class)))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/error-reports",
@@ -106,7 +106,7 @@ public class ErrorApi extends SecureApi {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (authentication != null) {
-      errorReport.setWho(authentication.getPrincipal().toString());
+      errorReport.setWho(authentication.getName());
     }
 
     errorService.createErrorReport(errorReport);

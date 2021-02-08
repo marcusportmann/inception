@@ -17,7 +17,7 @@
 package digital.inception.messaging;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.service.InvalidArgumentException;
 import java.util.List;
 import java.util.UUID;
 

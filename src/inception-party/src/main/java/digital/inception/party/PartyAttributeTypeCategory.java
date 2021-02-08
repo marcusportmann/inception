@@ -44,10 +44,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "A collection of related party attribute types")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "PartyAttributeTypeCategory", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "PartyAttributeTypeCategory", namespace = "http://inception.digital/party")
 @XmlType(
     name = "PartyAttributeTypeCategory",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

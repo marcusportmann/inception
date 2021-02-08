@@ -15,9 +15,72 @@
  */
 
 /**
+ * The ValidationErrorAttribute class holds the information for an attribute associated with the
+ * validation error.
+ *
+ * @author Marcus Portmann
+ */
+export class ValidationErrorAttribute {
+
+  /**
+   * The name for the validation error attribute.
+   */
+  name: string;
+
+  /**
+   * The value for the validation error attribute.
+   */
+  value: string;
+
+  /**
+   * Constructs a new ValidationErrorAttribute.
+   *
+   * @param name  The name for the validation error attribute.
+   * @param value The value for the validation error attribute.
+   */
+  constructor(name: string, value: string) {
+    this.name = name;
+    this.value = value;
+  }
+}
+
+/**
  * The ValidationError class holds the information for a validation error.
  *
  * @author Marcus Portmann
  */
 export class ValidationError {
+
+  /**
+   * The attributes associated with the validation error.
+   */
+  attributes: ValidationErrorAttribute[];
+
+  /**
+   * The path for the property that resulted in the validation error.
+   */
+  property: string;
+
+  /**
+   * The error message for the validation error.
+   */
+  message: string;
+
+  /**
+   * Constructs a new ValidationError.
+   *
+   * @param property   The path for the property that resulted in the validation error.
+   * @param message    The error message for the validation error.
+   * @param attributes The attributes associated with the validation error.
+   */
+  constructor(property: string, message: string, attributes?: ValidationErrorAttribute[]) {
+    this.property = property;
+    this.message = message;
+
+    if (attributes == null) {
+      this.attributes = [];
+    } else {
+      this.attributes = attributes;
+    }
+  }
 }

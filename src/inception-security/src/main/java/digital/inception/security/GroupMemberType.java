@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The group member type")
 @XmlEnum
-@XmlType(name = "GroupMemberType", namespace = "http://security.inception.digital")
+@XmlType(name = "GroupMemberType", namespace = "http://inception.digital/security")
 public enum GroupMemberType {
   @XmlEnumValue("User")
   USER("user", "User"),

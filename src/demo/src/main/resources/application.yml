@@ -33,6 +33,8 @@ server:
 
 
 inception:
+  debug: true
+
   application:
     data-source:
       class-name: org.h2.jdbcx.JdbcDataSource
@@ -104,9 +106,6 @@ inception:
 
   persistence:
     entity-packages: demo
-
-  rs:
-    debug: true
 
   sms:
     maximum-send-attempts: 100

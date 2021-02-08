@@ -86,10 +86,10 @@ import org.springframework.util.StringUtils;
   "longitude",
   "purposes"
 })
-@XmlRootElement(name = "PhysicalAddress", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "PhysicalAddress", namespace = "http://inception.digital/party")
 @XmlType(
     name = "PhysicalAddress",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {
       "id",
       "type",

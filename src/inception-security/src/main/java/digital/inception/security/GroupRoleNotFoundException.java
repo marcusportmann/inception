@@ -16,12 +16,12 @@
 
 package digital.inception.security;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * A <b>GroupRoleNotFoundException</b> is thrown to indicate that a security operation failed as a
@@ -31,13 +31,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The group role could not be found")
+@Problem(
+    type = "http://inception.digital/problems/security/group-role-not-found",
+    title = "The group role could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "GroupRoleNotFoundException",
-    targetNamespace = "http://security.inception.digital",
+    targetNamespace = "http://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused"})
 public class GroupRoleNotFoundException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -48,7 +50,6 @@ public class GroupRoleNotFoundException extends ServiceException {
    * @param roleCode the code for the role
    */
   public GroupRoleNotFoundException(String roleCode) {
-    super(
-        "GroupRoleNotFoundError", "The group role with code (" + roleCode + ") could not be found");
+    super("The group role with code (" + roleCode + ") could not be found");
   }
 }

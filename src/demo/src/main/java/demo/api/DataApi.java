@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package demo.rs;
+package demo.api;
 
 import demo.model.Data;
 import demo.model.IDataService;
+import digital.inception.api.ProblemDetails;
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -91,22 +91,31 @@ public class DataApi {
   @Operation(summary = "Validate the data", description = "Validate the data")
   @ApiResponses(
       value = {
+        @ApiResponse(responseCode = "204", description = "The data was validated successfully"),
         @ApiResponse(
-            responseCode = "200",
-            description = "OK",
+            responseCode = "400",
+            description = "Invalid argument",
             content =
                 @Content(
-                    mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = ValidationError.class))))
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(value = "/validate", method = RequestMethod.POST, produces = "application/json")
-  public List<ValidationError> validate(
+  public void validate(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The data to validate",
               required = true)
           @RequestBody
           Data data)
-      throws ServiceUnavailableException {
-    return dataService.validateData(data);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    dataService.validateData(data);
   }
 }

@@ -56,10 +56,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
   "archived",
   "data"
 })
-@XmlRootElement(name = "ArchivedMessage", namespace = "http://messaging.inception.digital")
+@XmlRootElement(name = "ArchivedMessage", namespace = "http://inception.digital/messaging")
 @XmlType(
     name = "ArchivedMessage",
-    namespace = "http://messaging.inception.digital",
+    namespace = "http://inception.digital/messaging",
     propOrder = {
       "id",
       "username",

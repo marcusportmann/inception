@@ -19,7 +19,7 @@ package demo.ws;
 import demo.model.Data;
 import demo.model.IDataService;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.ValidationError;
+import digital.inception.core.service.InvalidArgumentException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -126,10 +126,9 @@ public class DataWebService {
 
   /** Validate the data. */
   @WebMethod(operationName = "ValidateData")
-  @WebResult(name = "ValidationError")
-  public List<ValidationError> validateData(
+  public void validateData(
       @WebParam(name = "Data") @XmlElement(required = true) Data data)
-      throws ServiceUnavailableException {
-    return dataService.validateData(data);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    dataService.validateData(data);
   }
 }

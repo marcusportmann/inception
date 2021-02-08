@@ -35,6 +35,7 @@ import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {GroupMember} from '../services/group-member';
 import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-dialog.component';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The GroupMembersComponent class implements the group members component.
@@ -132,7 +133,8 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -182,7 +184,8 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
           this.loadGroupMembers();
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+            (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

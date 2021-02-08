@@ -29,6 +29,7 @@ import {ServiceUnavailableError} from '../../core/errors/service-unavailable-err
 import {User} from '../services/user';
 import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
 import {combineLatest} from 'rxjs';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The EditUserComponent class implements the edit user component.
@@ -115,9 +116,9 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   get backNavigation(): BackNavigation {
     return new BackNavigation($localize`:@@security_edit_user_back_navigation:Users`,
       ['../../..'], {
-      relativeTo: this.activatedRoute,
-      state: {userDirectoryId: this.userDirectoryId}
-    });
+        relativeTo: this.activatedRoute,
+        state: {userDirectoryId: this.userDirectoryId}
+      });
   }
 
   get title(): string {
@@ -161,7 +162,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -194,7 +196,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
         });
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

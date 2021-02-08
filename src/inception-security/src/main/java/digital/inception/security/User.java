@@ -67,10 +67,10 @@ import org.hibernate.annotations.UpdateTimestamp;
   "passwordAttempts",
   "passwordExpiry"
 })
-@XmlRootElement(name = "User", namespace = "http://security.inception.digital")
+@XmlRootElement(name = "User", namespace = "http://inception.digital/security")
 @XmlType(
     name = "User",
-    namespace = "http://security.inception.digital",
+    namespace = "http://inception.digital/security",
     propOrder = {
       "userDirectoryId",
       "username",

@@ -28,22 +28,23 @@ import {
   ExistingGroupMemberError,
   ExistingGroupMembersError,
   ExistingGroupRoleError,
-  ExistingTenantUserDirectoryError,
   ExistingPasswordError,
+  ExistingTenantUserDirectoryError,
   GroupMemberNotFoundError,
   GroupNotFoundError,
   GroupRoleNotFoundError,
   InvalidSecurityCodeError,
   LoginError,
+  PasswordExpiredError,
+  RoleNotFoundError,
   TenantNotFoundError,
   TenantUserDirectoryNotFoundError,
-  PasswordExpiredError,
   UserDirectoryNotFoundError,
   UserLockedError,
   UserNotFoundError
 } from './security.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {SortDirection} from '../../core/sorting/sort-direction';
 import {Tenants} from './tenants';
@@ -69,6 +70,8 @@ import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 import {Session} from './session';
 import {TokenResponse} from './token-response';
 import {JwtHelperService} from '@auth0/angular-jwt';
+import {AccessDeniedError} from "../../core/errors/access-denied-error";
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The Security Service implementation.
@@ -103,6 +106,25 @@ export class SecurityService {
     });
   }
 
+  private static createSessionFromAccessToken(accessToken: string, refreshToken: string | undefined): Session {
+    const helper = new JwtHelperService();
+
+    // tslint:disable-next-line
+    const token: any = helper.decodeToken(accessToken);
+
+    const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(accessToken);
+
+    return new Session((!!token.sub) ? token.sub : '',
+      (!!token.user_directory_id) ? token.user_directory_id : '',
+      (!!token.name) ? token.name : '',
+      (!!token.scope) ? token.scope.split(' ') : [],
+      (!!token.roles) ? token.roles : [],
+      (!!token.functions) ? token.functions : [],
+      (!!token.tenants) ? token.tenants : [],
+      accessToken,
+      (!!accessTokenExpiry) ? accessTokenExpiry : undefined, refreshToken);
+  }
+
   /**
    * Add the group member to the group.
    *
@@ -123,25 +145,23 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(apiError));
-        } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(apiError));
-        } else if (apiError.code === 'ExistingGroupMemberError') {
-          return throwError(new ExistingGroupMemberError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to add the group member to the group.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
+        return throwError(new GroupNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
+        return throwError(new UserNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, ExistingGroupMemberError.TYPE)) {
+        return throwError(new ExistingGroupMemberError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to add the group member to the group.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to add the group member to the group.', httpErrorResponse));
     }));
   }
 
@@ -163,25 +183,23 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(apiError));
-        } else if (apiError.code === 'RoleNotFoundError') {
-          return throwError(new UserNotFoundError(apiError));
-        } else if (apiError.code === 'ExistingGroupRoleError') {
-          return throwError(new ExistingGroupRoleError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to add the role to the group.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
+        return throwError(new GroupNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, RoleNotFoundError.TYPE)) {
+        return throwError(new RoleNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, ExistingGroupRoleError.TYPE)) {
+        return throwError(new ExistingGroupRoleError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to add the role to the group.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to add the role to the group.', httpErrorResponse));
     }));
   }
 
@@ -203,24 +221,21 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'TenantNotFoundError') {
-          return throwError(new TenantNotFoundError(apiError));
-        } else if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'ExistingTenantUserDirectoryError') {
-          return throwError(new ExistingTenantUserDirectoryError(apiError));
-        } else {
-          return throwError(
-            new ServiceUnavailableError('Failed to add the user directory to the tenant.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
+        return throwError(new TenantNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, ExistingTenantUserDirectoryError.TYPE)) {
+        return throwError(new ExistingTenantUserDirectoryError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to add the user directory to the tenant.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to add the user directory to the tenant.', httpErrorResponse));
     }));
   }
 
@@ -248,22 +263,19 @@ export class SecurityService {
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(apiError));
-        } else {
-          return throwError(
-            new ServiceUnavailableError('Failed to administratively change the password for the user.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
+        return throwError(new UserNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to administratively change the password for the user.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to administratively change the password for the user.', httpErrorResponse));
     }));
   }
 
@@ -285,27 +297,27 @@ export class SecurityService {
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(apiError));
-        } else if (apiError.code === 'AuthenticationFailedError') {
-          return throwError(new AuthenticationFailedError(apiError));
-        } else if (apiError.code === 'ExistingPasswordError') {
-          return throwError(new ExistingPasswordError(apiError));
-        } else if (apiError.code === 'UserLockedError') {
-          return throwError(new UserLockedError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to change the password for the user.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
+        return throwError(new UserNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, AuthenticationFailedError.TYPE)) {
+        return throwError(new AuthenticationFailedError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, InvalidSecurityCodeError.TYPE)) {
+        return throwError(new InvalidSecurityCodeError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, ExistingPasswordError.TYPE)) {
+        return throwError(new ExistingPasswordError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserLockedError.TYPE)) {
+        return throwError(new UserLockedError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to change the password for the user.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to change the password for the user.', httpErrorResponse));
     }));
   }
 
@@ -323,21 +335,19 @@ export class SecurityService {
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'DuplicateGroupError') {
-          return throwError(new DuplicateGroupError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to create the group.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateGroupError.TYPE)) {
+        return throwError(new DuplicateGroupError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to create the group.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to create the group.', httpErrorResponse));
     }));
   }
 
@@ -361,19 +371,17 @@ export class SecurityService {
     }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'DuplicateTenantError') {
-          return throwError(new DuplicateTenantError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to create the tenant.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateTenantError.TYPE)) {
+        return throwError(new DuplicateTenantError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to create the tenant.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to create the tenant.', httpErrorResponse));
     }));
   }
 
@@ -399,21 +407,19 @@ export class SecurityService {
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'DuplicateUserError') {
-          return throwError(new DuplicateUserError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to create the user.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateUserError.TYPE)) {
+        return throwError(new DuplicateUserError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to create the user.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to create the user.', httpErrorResponse));
     }));
   }
 
@@ -430,19 +436,17 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'DuplicateUserDirectoryError') {
-          return throwError(new DuplicateUserDirectoryError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to create the user directory.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateUserDirectoryError.TYPE)) {
+        return throwError(new DuplicateUserDirectoryError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to create the user directory.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to create the user directory.', httpErrorResponse));
     }));
   }
 
@@ -461,23 +465,21 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(apiError));
-        } else if (apiError.code === 'ExistingGroupMembersError') {
-          return throwError(new ExistingGroupMembersError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to delete the group.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
+        return throwError(new GroupNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, ExistingGroupMembersError.TYPE)) {
+        return throwError(new ExistingGroupMembersError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to delete the group.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to delete the group.', httpErrorResponse));
     }));
   }
 
@@ -494,19 +496,17 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'TenantNotFoundError') {
-          return throwError(new TenantNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to delete the tenant.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
+        return throwError(new TenantNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to delete the tenant.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to delete the tenant.', httpErrorResponse));
     }));
   }
 
@@ -525,21 +525,19 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to delete the user.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
+        return throwError(new UserNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to delete the user.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to delete the user.', httpErrorResponse));
     }));
   }
 
@@ -556,19 +554,17 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to delete the user directory.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to delete the user directory.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to delete the user directory.', httpErrorResponse));
     }));
   }
 
@@ -586,21 +582,19 @@ export class SecurityService {
       encodeURIComponent(groupName), {reportProgress: true}).pipe(map((group: Group) => {
       return group;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the group.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
+        return throwError(new GroupNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the group.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the group.', httpErrorResponse));
     }));
   }
 
@@ -618,19 +612,17 @@ export class SecurityService {
       }).pipe(map((groupNames: string[]) => {
       return groupNames;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the group names.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the group names.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the group names.', httpErrorResponse));
     }));
   }
 
@@ -649,21 +641,19 @@ export class SecurityService {
     .pipe(map((groupNames: string[]) => {
       return groupNames;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the group names for the user.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
+        return throwError(new UserNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the group names for the user.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the group names for the user.', httpErrorResponse));
     }));
   }
 
@@ -706,19 +696,17 @@ export class SecurityService {
       }).pipe(map((groups: Groups) => {
       return groups;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the groups.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the groups.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the groups.', httpErrorResponse));
     }));
   }
 
@@ -735,19 +723,17 @@ export class SecurityService {
     .pipe(map((tenant: Tenant) => {
       return tenant;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'TenantNotFoundError') {
-          return throwError(new TenantNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the tenant.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
+        return throwError(new TenantNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the tenant.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the tenant.', httpErrorResponse));
     }));
   }
 
@@ -792,21 +778,19 @@ export class SecurityService {
       }).pipe(map((groupMembers: GroupMembers) => {
       return groupMembers;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the members for the group.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
+        return throwError(new GroupNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the members for the group.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the members for the group.', httpErrorResponse));
     }));
   }
 
@@ -826,21 +810,19 @@ export class SecurityService {
       }).pipe(map((roleCodes: string[]) => {
       return roleCodes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the role codes for the group.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
+        return throwError(new GroupNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the role codes for the group.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the role codes for the group.', httpErrorResponse));
     }));
   }
 
@@ -855,15 +837,15 @@ export class SecurityService {
     }).pipe(map((roles: Role[]) => {
       return roles;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the roles.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the roles.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the roles.', httpErrorResponse));
     }));
   }
 
@@ -883,21 +865,19 @@ export class SecurityService {
       }).pipe(map((groupRoles: GroupRole[]) => {
       return groupRoles;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the roles for the group.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
+        return throwError(new GroupNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the roles for the group.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the roles for the group.', httpErrorResponse));
     }));
   }
 
@@ -913,19 +893,17 @@ export class SecurityService {
       {reportProgress: true}).pipe(map((tenantName: string) => {
       return tenantName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'TenantNotFoundError') {
-          return throwError(new TenantNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the tenant name.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
+        return throwError(new TenantNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the tenant name.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the tenant name.', httpErrorResponse));
     }));
   }
 
@@ -966,15 +944,17 @@ export class SecurityService {
     }).pipe(map((tenants: Tenants) => {
       return tenants;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the tenants.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the tenants.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the tenants.', httpErrorResponse));
     }));
   }
 
@@ -992,21 +972,17 @@ export class SecurityService {
     .pipe(map((tenants: Tenant[]) => {
       return tenants;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(
-            new ServiceUnavailableError('Failed to retrieve the tenants associated with the user directory.',
-              apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the tenants associated with the user directory.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the tenants associated with the user directory.', httpErrorResponse));
     }));
   }
 
@@ -1024,21 +1000,19 @@ export class SecurityService {
       encodeURIComponent(username), {reportProgress: true}).pipe(map((user: User) => {
       return user;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the user.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
+        return throwError(new UserNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the user.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the user.', httpErrorResponse));
     }));
   }
 
@@ -1055,19 +1029,17 @@ export class SecurityService {
     .pipe(map((userDirectory: UserDirectory) => {
       return userDirectory;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the user directory.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the user directory.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the user directory.', httpErrorResponse));
     }));
   }
 
@@ -1085,20 +1057,17 @@ export class SecurityService {
     .pipe(map((capabilities: UserDirectoryCapabilities) => {
       return capabilities;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(
-            new ServiceUnavailableError('Failed to retrieve the capabilities for the user directory.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the capabilities for the user directory.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the capabilities for the user directory.', httpErrorResponse));
     }));
   }
 
@@ -1115,19 +1084,17 @@ export class SecurityService {
     .pipe(map((userDirectoryName: string) => {
       return userDirectoryName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the user directory name.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the user directory name.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the user directory name.', httpErrorResponse));
     }));
   }
 
@@ -1145,20 +1112,17 @@ export class SecurityService {
     .pipe(map((codeCategories: UserDirectorySummary[]) => {
       return codeCategories;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'TenantNotFoundError') {
-          return throwError(new TenantNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError(
-            'Failed to retrieve the summaries for the user directories associated with the tenant.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
+        return throwError(new TenantNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the user directories associated with the tenant.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the user directories associated with the tenant.', httpErrorResponse));
     }));
   }
 
@@ -1176,20 +1140,17 @@ export class SecurityService {
     .pipe(map((userDirectoryType: UserDirectoryType) => {
       return userDirectoryType;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(
-            new ServiceUnavailableError('Failed to retrieve the user directory type for the user directory.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the user directory type for the user directory.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the user directory type for the user directory.', httpErrorResponse));
     }));
   }
 
@@ -1204,15 +1165,17 @@ export class SecurityService {
     .pipe(map((userDirectoryTypes: UserDirectoryType[]) => {
       return userDirectoryTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the user directory types.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the user directory types.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the user directory types.', httpErrorResponse));
     }));
   }
 
@@ -1231,21 +1194,19 @@ export class SecurityService {
     .pipe(map((userName: string) => {
       return userName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the name of the user.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
+        return throwError(new UserNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the name of the user.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the name of the user.', httpErrorResponse));
     }));
   }
 
@@ -1293,19 +1254,17 @@ export class SecurityService {
       }).pipe(map((users: Users) => {
       return users;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the users.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the users.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the users.', httpErrorResponse));
     }));
   }
 
@@ -1346,15 +1305,17 @@ export class SecurityService {
     }).pipe(map((userDirectorySummaries: UserDirectorySummaries) => {
       return userDirectorySummaries;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the user directory summaries.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the user directory summaries.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the user directory summaries.', httpErrorResponse));
     }));
   }
 
@@ -1377,19 +1338,17 @@ export class SecurityService {
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to initiate the password reset.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
+        return throwError(new UserNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to initiate the password reset.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to initiate the password reset.', httpErrorResponse));
     }));
   }
 
@@ -1421,7 +1380,6 @@ export class SecurityService {
 
       return this.session$;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
       if (httpErrorResponse.status === 400) {
         if (httpErrorResponse.error && (httpErrorResponse.error.error === 'invalid_grant') &&
           httpErrorResponse.error.error_description) {
@@ -1435,11 +1393,15 @@ export class SecurityService {
         }
 
         return throwError(new LoginError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to login', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to login', httpErrorResponse));
     }));
   }
 
@@ -1469,23 +1431,21 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(apiError));
-        } else if (apiError.code === 'GroupMemberNotFoundError') {
-          return throwError(new GroupMemberNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to remove the group member from the group.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
+        return throwError(new GroupNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupMemberNotFoundError.TYPE)) {
+        return throwError(new GroupMemberNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to remove the group member from the group.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to remove the group member from the group.', httpErrorResponse));
     }));
   }
 
@@ -1505,23 +1465,21 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(apiError));
-        } else if (apiError.code === 'GroupRoleNotFoundError') {
-          return throwError(new GroupRoleNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to remove the role from the group.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
+        return throwError(new GroupNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupRoleNotFoundError.TYPE)) {
+        return throwError(new GroupRoleNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to remove the role from the group.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to remove the role from the group.', httpErrorResponse));
     }));
   }
 
@@ -1541,22 +1499,19 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'TenantNotFoundError') {
-          return throwError(new TenantNotFoundError(apiError));
-        } else if (apiError.code === 'TenantUserDirectoryNotFoundError') {
-          return throwError(new TenantUserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(
-            new ServiceUnavailableError('Failed to remove the user directory from the tenant.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
+        return throwError(new TenantNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantUserDirectoryNotFoundError.TYPE)) {
+        return throwError(new TenantUserDirectoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to remove the user directory from the tenant.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to remove the user directory from the tenant.', httpErrorResponse));
     }));
   }
 
@@ -1578,23 +1533,21 @@ export class SecurityService {
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(apiError));
-        } else if (apiError.code === 'InvalidSecurityCodeError') {
-          return throwError(new InvalidSecurityCodeError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to reset the password for the user.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
+        return throwError(new UserNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, InvalidSecurityCodeError.TYPE)) {
+        return throwError(new InvalidSecurityCodeError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to reset the password for the user.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to reset the password for the user.', httpErrorResponse));
     }));
   }
 
@@ -1613,21 +1566,19 @@ export class SecurityService {
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to update the group.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, GroupNotFoundError.TYPE)) {
+        return throwError(new GroupNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to update the group.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to update the group.', httpErrorResponse));
     }));
   }
 
@@ -1644,19 +1595,17 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'TenantNotFoundError') {
-          return throwError(new TenantNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to update the tenant.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, TenantNotFoundError.TYPE)) {
+        return throwError(new TenantNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to update the tenant.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to update the tenant.', httpErrorResponse));
     }));
   }
 
@@ -1683,21 +1632,19 @@ export class SecurityService {
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to update the user.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, UserNotFoundError.TYPE)) {
+        return throwError(new UserNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to update the user.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to update the user.', httpErrorResponse));
     }));
   }
 
@@ -1714,39 +1661,18 @@ export class SecurityService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to update the user directory.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, UserDirectoryNotFoundError.TYPE)) {
+        return throwError(new UserDirectoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to update the user directory.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to update the user directory.', httpErrorResponse));
     }));
-  }
-
-  private static createSessionFromAccessToken(accessToken: string, refreshToken: string | undefined): Session {
-    const helper = new JwtHelperService();
-
-    // tslint:disable-next-line
-    const token: any = helper.decodeToken(accessToken);
-
-    const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(accessToken);
-
-    return new Session((!!token.sub) ? token.sub : '',
-      (!!token.user_directory_id) ? token.user_directory_id : '',
-      (!!token.name) ? token.name : '',
-      (!!token.scope) ? token.scope.split(' ') : [],
-      (!!token.roles) ? token.roles : [],
-      (!!token.functions) ? token.functions : [],
-      (!!token.tenants) ? token.tenants : [],
-      accessToken,
-      (!!accessTokenExpiry) ? accessTokenExpiry : undefined, refreshToken);
   }
 
   private refreshSession(): Observable<Session | null> {

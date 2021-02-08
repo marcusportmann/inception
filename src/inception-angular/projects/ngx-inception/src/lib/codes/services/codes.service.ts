@@ -27,11 +27,12 @@ import {
   DuplicateCodeError
 } from './codes.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {CodeCategorySummary} from './code-category-summary';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The Codes Service implementation.
@@ -67,21 +68,19 @@ export class CodesService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'CodeCategoryNotFoundError') {
-          return throwError(new CodeCategoryNotFoundError(apiError));
-        } else if (apiError.code === 'DuplicateCodeError') {
-          return throwError(new DuplicateCodeError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to create the code.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
+        return throwError(new CodeCategoryNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateCodeError.TYPE)) {
+        return throwError(new DuplicateCodeError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to create the code.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to create the code.', httpErrorResponse));
     }));
   }
 
@@ -98,19 +97,17 @@ export class CodesService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'DuplicateCodeCategoryError') {
-          return throwError(new DuplicateCodeCategoryError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to create the code category.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateCodeCategoryError.TYPE)) {
+        return throwError(new DuplicateCodeCategoryError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to create the code category.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to create the code category.', httpErrorResponse));
     }));
   }
 
@@ -129,19 +126,17 @@ export class CodesService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'CodeNotFoundError') {
-          return throwError(new CodeNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to delete the code.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeNotFoundError.TYPE)) {
+        return throwError(new CodeNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to delete the code.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to delete the code.', httpErrorResponse));
     }));
   }
 
@@ -158,19 +153,17 @@ export class CodesService {
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'CodeCategoryNotFoundError') {
-          return throwError(new CodeCategoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to delete the code category.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
+        return throwError(new CodeCategoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to delete the code category.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to delete the code category.', httpErrorResponse));
     }));
   }
 
@@ -188,10 +181,14 @@ export class CodesService {
       encodeURIComponent(codeId), {reportProgress: true}).pipe(map((code: Code) => {
       return code;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse, 'CodeNotFoundError')) {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeNotFoundError.TYPE)) {
         return throwError(new CodeNotFoundError(httpErrorResponse))
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
 
       return throwError(new ServiceUnavailableError('Failed to retrieve the code.', httpErrorResponse));
@@ -209,15 +206,13 @@ export class CodesService {
     .pipe(map((codeCategories: CodeCategory[]) => {
       return codeCategories;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the code categories.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the code categories.',httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the code categories.', httpErrorResponse));
     }));
   }
 
@@ -234,19 +229,17 @@ export class CodesService {
     .pipe(map((codeCategory: CodeCategory) => {
       return codeCategory;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'CodeCategoryNotFoundError') {
-          return throwError(new CodeCategoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the code category.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
+        return throwError(new CodeCategoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the code category.',httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the code category.', httpErrorResponse));
     }));
   }
 
@@ -264,19 +257,17 @@ export class CodesService {
       }).pipe(map((codeCategoryName: string) => {
       return codeCategoryName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'CodeCategoryNotFoundError') {
-          return throwError(new CodeCategoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the code category name.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
+        return throwError(new CodeCategoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the code category name.',httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the code category name.', httpErrorResponse));
     }));
   }
 
@@ -296,19 +287,17 @@ export class CodesService {
       }).pipe(map((codeName: string) => {
       return codeName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'CodeNotFoundError') {
-          return throwError(new CodeNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the code name.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeNotFoundError.TYPE)) {
+        return throwError(new CodeNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the code name.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the code name.', httpErrorResponse));
     }));
   }
 
@@ -325,19 +314,17 @@ export class CodesService {
       {reportProgress: true}).pipe(map((codes: Code[]) => {
       return codes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'CodeCategoryNotFoundError') {
-          return throwError(new CodeCategoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to retrieve the codes.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
+        return throwError(new CodeCategoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the codes.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the codes.', httpErrorResponse));
     }));
   }
 
@@ -354,16 +341,11 @@ export class CodesService {
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
         return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(
-          new ServiceUnavailableError('Failed to retrieve the summaries for the code categories.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the code categories.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the code categories.', httpErrorResponse));
     }));
   }
 
@@ -380,19 +362,17 @@ export class CodesService {
       encodeURIComponent(code.id), code, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'CodeNotFoundError') {
-          return throwError(new CodeNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to update the code.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeNotFoundError.TYPE)) {
+        return throwError(new CodeNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to update the code.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to update the code.', httpErrorResponse));
     }));
   }
 
@@ -409,19 +389,17 @@ export class CodesService {
       {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'CodeCategoryNotFoundError') {
-          return throwError(new CodeCategoryNotFoundError(apiError));
-        } else {
-          return throwError(new ServiceUnavailableError('Failed to update the code category.', apiError));
-        }
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, CodeCategoryNotFoundError.TYPE)) {
+        return throwError(new CodeCategoryNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to update the code category.', httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to update the code category.', httpErrorResponse));
     }));
   }
 }

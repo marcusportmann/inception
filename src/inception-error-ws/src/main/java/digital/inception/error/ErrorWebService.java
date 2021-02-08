@@ -17,7 +17,7 @@
 package digital.inception.error;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.service.InvalidArgumentException;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(
     serviceName = "ErrorService",
     name = "IErrorService",
-    targetNamespace = "http://error.inception.digital")
+    targetNamespace = "http://inception.digital/error")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ErrorWebService {

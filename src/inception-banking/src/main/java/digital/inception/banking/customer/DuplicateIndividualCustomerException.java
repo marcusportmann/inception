@@ -16,13 +16,13 @@
 
 package digital.inception.banking.customer;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>DuplicateIndividualCustomerException</b> exception is thrown to indicate an error
@@ -32,13 +32,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT, reason = "The individual customer already exists")
+@Problem(
+    type = "http://inception.digital/problems/banking/customer/duplicate-individual-customer",
+    title = "The individual customer already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateIndividualCustomerException",
-    targetNamespace = "http://customer.banking.inception.digital",
+    targetNamespace = "http://inception.digital/banking/customer",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class DuplicateIndividualCustomerException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -49,8 +51,6 @@ public class DuplicateIndividualCustomerException extends ServiceException {
    * @param customerId the Universally Unique Identifier (UUID) for the individual customer
    */
   public DuplicateIndividualCustomerException(UUID customerId) {
-    super(
-        "DuplicateIndividualCustomerError",
-        "The individual customer with the ID (" + customerId + ") already exists");
+    super("The individual customer with the ID (" + customerId + ") already exists");
   }
 }

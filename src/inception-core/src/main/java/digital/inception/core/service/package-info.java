@@ -15,11 +15,11 @@
  */
 
 @javax.xml.bind.annotation.XmlSchema(
-    namespace = "http://core.inception.digital",
+    namespace = "http://inception.digital/core",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
       @javax.xml.bind.annotation.XmlNs(
           prefix = "core",
-          namespaceURI = "http://core.inception.digital"),
+          namespaceURI = "http://inception.digital/core"),
     })
 package digital.inception.core.service;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {ApiError} from './api-error';
+import {ProblemDetails} from './problem-details';
 import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from './http-error';
 
@@ -28,7 +28,7 @@ export class Error {
   /**
    * The optional cause of the error.
    */
-  cause?: ApiError | HttpErrorResponse | HttpError;
+  cause?: ProblemDetails | HttpErrorResponse | HttpError;
 
   /**
    * The error message.
@@ -46,15 +46,15 @@ export class Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError) {
 
     this.message = message;
     this.timestamp = new Date();
 
     if (cause) {
       if (cause instanceof HttpErrorResponse) {
-        if (ApiError.isApiError(cause)) {
-          const apiError: ApiError = new ApiError(cause);
+        if (ProblemDetails.isProblemDetails(cause)) {
+          const apiError: ProblemDetails = new ProblemDetails(cause);
           this.timestamp = apiError.timestamp;
           this.cause = apiError;
         } else {
@@ -67,7 +67,7 @@ export class Error {
           }
         }
       }
-      else if (cause instanceof ApiError) {
+      else if (cause instanceof ProblemDetails) {
         this.timestamp = cause.timestamp;
         this.cause = cause;
       } else {
@@ -83,13 +83,13 @@ export class Error {
   //  * @param message The error message.
   //  * @param cause   The optional cause of the error.
   //  */
-  // constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+  // constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError) {
   //
   //   this.message = message;
   //   this.timestamp = new Date();
   //
   //   if (cause) {
-  //     if (cause instanceof ApiError) {
+  //     if (cause instanceof ProblemDetails) {
   //       this.timestamp = cause.timestamp;
   //       this.cause = cause;
   //     } else if (cause instanceof HttpErrorResponse) {

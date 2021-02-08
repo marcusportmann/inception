@@ -16,6 +16,7 @@
 
 package digital.inception.bmi;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,12 +33,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(
-    value = HttpStatus.CONFLICT,
-    reason = "A case definition with the specified ID already exists")
+@Problem(
+    type = "http://inception.digital/problems/bmi/duplicate-case-definition",
+    title = "A case definition with the specified ID already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateCaseDefinitionException",
-    targetNamespace = "http://bmi.inception.digital",
+    targetNamespace = "http://inception.digital/bmi",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateCaseDefinitionException extends ServiceException {
@@ -50,8 +52,6 @@ public class DuplicateCaseDefinitionException extends ServiceException {
    * @param caseDefinitionId the ID for the case definition
    */
   public DuplicateCaseDefinitionException(String caseDefinitionId) {
-    super(
-        "DuplicateCaseDefinitionError",
-        "The case definition with ID (" + caseDefinitionId + ") already exists");
+    super("The case definition with ID (" + caseDefinitionId + ") already exists");
   }
 }

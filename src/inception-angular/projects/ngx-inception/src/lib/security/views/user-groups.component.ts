@@ -31,6 +31,7 @@ import {GroupMemberType} from '../services/group-member-type';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-dialog.component';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The UserGroupsComponent class implements the user groups component.
@@ -78,9 +79,9 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
   get backNavigation(): BackNavigation {
     return new BackNavigation($localize`:@@security_user_groups_back_navigation:Back`,
       ['../../..'], {
-      relativeTo: this.activatedRoute,
-      state: {userDirectoryId: this.userDirectoryId}
-    });
+        relativeTo: this.activatedRoute,
+        state: {userDirectoryId: this.userDirectoryId}
+      });
   }
 
   get title(): string {
@@ -99,7 +100,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
         this.selectedGroupName = '';
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -120,7 +121,8 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
       this.availableGroupNames$.next(this.calculateAvailableGroupNames(this.allGroupNames, this.dataSource.data));
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -143,7 +145,8 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
       this.loadGroupNamesForUser();
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -175,7 +178,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
           this.selectedGroupName = '';
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

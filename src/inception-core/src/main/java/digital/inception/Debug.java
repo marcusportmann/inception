@@ -69,9 +69,9 @@ public class Debug {
    *     otherwise
    */
   public static boolean inDebugMode() {
-    if (System.getProperty("digital.inception.debugMode") != null) {
+    if (System.getProperty("inception.debug") != null) {
       try {
-        return Boolean.parseBoolean(System.getProperty("digital.inception.debugMode"));
+        return Boolean.parseBoolean(System.getProperty("inception.debug"));
       } catch (Throwable ignored) {
       }
     }

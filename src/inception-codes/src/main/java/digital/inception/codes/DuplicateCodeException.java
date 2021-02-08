@@ -16,6 +16,7 @@
 
 package digital.inception.codes;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,12 +33,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(
-    value = HttpStatus.CONFLICT,
-    reason = "A code with the specified ID already exists for the code category")
+@Problem(
+    type = "http://inception.digital/problems/codes/duplicate-code",
+    title = "A code with the specified ID already exists for the code category.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateCodeException",
-    targetNamespace = "http://codes.inception.digital",
+    targetNamespace = "http://inception.digital/codes",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateCodeException extends ServiceException {
@@ -52,7 +54,6 @@ public class DuplicateCodeException extends ServiceException {
    */
   public DuplicateCodeException(String codeCategoryId, String codeId) {
     super(
-        "DuplicateCodeError",
         "The code with ID ("
             + codeId
             + ") already exists for the code category with ID ("

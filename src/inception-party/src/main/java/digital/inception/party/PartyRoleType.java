@@ -48,10 +48,10 @@ import org.springframework.util.StringUtils;
 @Schema(description = "A type of party role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
-@XmlRootElement(name = "PartyRoleType", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "PartyRoleType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "PartyRoleType",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

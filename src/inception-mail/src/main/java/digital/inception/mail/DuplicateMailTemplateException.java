@@ -16,6 +16,7 @@
 
 package digital.inception.mail;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,12 +33,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(
-    value = HttpStatus.CONFLICT,
-    reason = "A mail template with the specified ID already exists")
+@Problem(
+    type = "http://inception.digital/problems/mail/duplicate-mail-template",
+    title = "A mail template with the specified ID already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateMailTemplateException",
-    targetNamespace = "http://mail.inception.digital",
+    targetNamespace = "http://inception.digital/mail",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateMailTemplateException extends ServiceException {
@@ -50,8 +52,6 @@ public class DuplicateMailTemplateException extends ServiceException {
    * @param mailTemplateId the ID for the mail template
    */
   public DuplicateMailTemplateException(String mailTemplateId) {
-    super(
-        "DuplicateMailTemplateError",
-        "The mail template with ID (" + mailTemplateId + ") already exists");
+    super("The mail template with ID (" + mailTemplateId + ") already exists");
   }
 }

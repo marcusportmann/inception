@@ -31,6 +31,14 @@
       <artifactId>inception-security</artifactId>
     </dependency>
 
+    <!-- Provided Inception Dependencies -->
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-api</artifactId>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+
     <!-- Dependencies -->
     <dependency>
       <groupId>org.springframework</groupId>

@@ -49,10 +49,10 @@ import org.springframework.util.StringUtils;
 @Schema(description = "A physical address purpose")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
-@XmlRootElement(name = "PhysicalAddressPurpose", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "PhysicalAddressPurpose", namespace = "http://inception.digital/party")
 @XmlType(
     name = "PhysicalAddressPurpose",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"code", "localeId", "partyTypes", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

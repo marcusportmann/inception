@@ -1,37 +1,10 @@
-<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://codes.inception.digital" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://validation.inception.digital" name="CodesService" targetNamespace="http://codes.inception.digital">
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://codes.inception.digital" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://core.inception.digital" name="CodesService" targetNamespace="http://codes.inception.digital">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://validation.inception.digital" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://validation.inception.digital" version="1.0">
-  <xs:element name="InvalidArgumentError" type="tns:InvalidArgumentError"/>
-  <xs:element name="ValidationError" type="tns:ValidationError"/>
-  <xs:element name="ValidationErrorAttribute" type="tns:ValidationErrorAttribute"/>
-  <xs:complexType name="InvalidArgumentError">
-    <xs:sequence>
-      <xs:element name="When" type="xs:dateTime"/>
-      <xs:element name="Message" type="xs:string"/>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element name="Detail" type="xs:string"/>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationErrors" type="tns:ValidationError"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ValidationError">
-    <xs:sequence>
-      <xs:element name="Property" type="xs:string"/>
-      <xs:element name="Message" type="xs:string"/>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="Attributes" type="tns:ValidationErrorAttribute"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ValidationErrorAttribute">
-    <xs:sequence>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element minOccurs="0" name="Value" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="InvalidArgumentException" nillable="true" type="tns:InvalidArgumentError"/>
-</xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://core.inception.digital" xmlns:core="http://core.inception.digital" elementFormDefault="unqualified" targetNamespace="http://core.inception.digital" version="1.0">
-
-  <xs:element name="ServiceError" type="tns:ServiceError"/>
-
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://core.inception.digital" xmlns:core="http://core.inception.digital" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://core.inception.digital" version="1.0">
+  <xs:element name="InvalidArgumentError" type="core:InvalidArgumentError"/>
+  <xs:element name="ServiceError" type="core:ServiceError"/>
+  <xs:element name="ValidationError" type="core:ValidationError"/>
+  <xs:element name="ValidationErrorAttribute" type="core:ValidationErrorAttribute"/>
   <xs:complexType name="ServiceError">
     <xs:sequence>
       <xs:element name="When" type="xs:dateTime"/>
@@ -40,9 +13,32 @@
       <xs:element name="Detail" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
-
+  <xs:complexType name="InvalidArgumentError">
+    <xs:sequence>
+      <xs:element name="When" type="xs:dateTime"/>
+      <xs:element name="Message" type="xs:string"/>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element name="Detail" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationErrors" type="core:ValidationError"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ValidationError">
+    <xs:sequence>
+      <xs:element name="Property" type="xs:string"/>
+      <xs:element name="Message" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Attributes" type="core:ValidationErrorAttribute"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ValidationErrorAttribute">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element minOccurs="0" name="Value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ServiceUnavailableException" nillable="true" type="core:ServiceError"/>
+  <xs:element name="InvalidArgumentException" nillable="true" type="core:InvalidArgumentError"/>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:validation="http://validation.inception.digital" xmlns:tns="http://codes.inception.digital" xmlns:core="http://core.inception.digital" xmlns:codes="http://codes.inception.digital" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://codes.inception.digital" version="1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://codes.inception.digital" xmlns:core="http://core.inception.digital" xmlns:codes="http://codes.inception.digital" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://codes.inception.digital" version="1.0">
   <xs:element name="Code" type="codes:Code"/>
   <xs:element name="CodeCategory" type="codes:CodeCategory"/>
   <xs:element name="CodeCategorySummary" type="codes:CodeCategorySummary"/>
@@ -89,7 +85,6 @@
       <xs:element name="Id" type="xs:string"/>
       <xs:element name="Name" type="xs:string"/>
       <xs:element minOccurs="0" name="Data" type="xs:string"/>
-      <xs:element minOccurs="0" name="Updated" type="xs:dateTime"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="GetCode">
@@ -236,7 +231,6 @@
       <xs:element minOccurs="0" name="CodeCategoryUpdated" type="xs:dateTime"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="CodesServiceException" nillable="true" type="core:ServiceError"/>
   <xs:element name="CodeNotFoundException" nillable="true" type="core:ServiceError"/>
   <xs:element name="CodeCategoryNotFoundException" nillable="true" type="core:ServiceError"/>
   <xs:element name="DuplicateCodeException" nillable="true" type="core:ServiceError"/>
@@ -299,6 +293,10 @@
     <wsdl:part element="tns:GetCodes" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="ServiceUnavailableException">
+    <wsdl:part element="ns1:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="CodeCategoryNotFoundException">
     <wsdl:part element="tns:CodeCategoryNotFoundException" name="CodeCategoryNotFoundException">
     </wsdl:part>
@@ -359,10 +357,6 @@
     <wsdl:part element="tns:UpdateCodeResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="CodesServiceException">
-    <wsdl:part element="tns:CodesServiceException" name="CodesServiceException">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="GetCodeCategorySummaries">
     <wsdl:part element="tns:GetCodeCategorySummaries" name="parameters">
     </wsdl:part>
@@ -393,7 +387,7 @@
     </wsdl:input>
       <wsdl:output message="tns:GetCodeCategoriesResponse" name="GetCodeCategoriesResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCode">
@@ -405,7 +399,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeNotFoundException" name="CodeNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeCategoryData">
@@ -417,7 +411,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeCategoryNotFoundException" name="CodeCategoryNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="DeleteCodeCategory">
@@ -429,7 +423,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeCategoryNotFoundException" name="CodeCategoryNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeCategoryName">
@@ -441,7 +435,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeCategoryNotFoundException" name="CodeCategoryNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateCode">
@@ -453,7 +447,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeNotFoundException" name="CodeNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateCodeCategory">
@@ -465,7 +459,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeCategoryNotFoundException" name="CodeCategoryNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="CreateCode">
@@ -479,7 +473,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeCategoryNotFoundException" name="CodeCategoryNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="CreateCodeCategory">
@@ -491,7 +485,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:DuplicateCodeCategoryException" name="DuplicateCodeCategoryException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="DeleteCode">
@@ -503,7 +497,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeNotFoundException" name="CodeNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeCategory">
@@ -515,7 +509,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeCategoryNotFoundException" name="CodeCategoryNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodes">
@@ -527,7 +521,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeCategoryNotFoundException" name="CodeCategoryNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeCategorySummaries">
@@ -535,7 +529,7 @@
     </wsdl:input>
       <wsdl:output message="tns:GetCodeCategorySummariesResponse" name="GetCodeCategorySummariesResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeName">
@@ -547,7 +541,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeNotFoundException" name="CodeNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeCategoryUpdated">
@@ -559,7 +553,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:CodeCategoryNotFoundException" name="CodeCategoryNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:CodesServiceException" name="CodesServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
   </wsdl:portType>
@@ -573,8 +567,8 @@
       <wsdl:output name="GetCodeCategoriesResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCode">
@@ -591,8 +585,8 @@
       <wsdl:fault name="CodeNotFoundException">
         <soap:fault name="CodeNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeCategoryData">
@@ -609,8 +603,8 @@
       <wsdl:fault name="CodeCategoryNotFoundException">
         <soap:fault name="CodeCategoryNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="DeleteCodeCategory">
@@ -627,8 +621,8 @@
       <wsdl:fault name="CodeCategoryNotFoundException">
         <soap:fault name="CodeCategoryNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeCategoryName">
@@ -645,8 +639,8 @@
       <wsdl:fault name="CodeCategoryNotFoundException">
         <soap:fault name="CodeCategoryNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateCode">
@@ -663,8 +657,8 @@
       <wsdl:fault name="CodeNotFoundException">
         <soap:fault name="CodeNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateCodeCategory">
@@ -681,8 +675,8 @@
       <wsdl:fault name="CodeCategoryNotFoundException">
         <soap:fault name="CodeCategoryNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="CreateCode">
@@ -702,8 +696,8 @@
       <wsdl:fault name="CodeCategoryNotFoundException">
         <soap:fault name="CodeCategoryNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="CreateCodeCategory">
@@ -720,8 +714,8 @@
       <wsdl:fault name="DuplicateCodeCategoryException">
         <soap:fault name="DuplicateCodeCategoryException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="DeleteCode">
@@ -738,8 +732,8 @@
       <wsdl:fault name="CodeNotFoundException">
         <soap:fault name="CodeNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeCategory">
@@ -756,8 +750,8 @@
       <wsdl:fault name="CodeCategoryNotFoundException">
         <soap:fault name="CodeCategoryNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodes">
@@ -774,8 +768,8 @@
       <wsdl:fault name="CodeCategoryNotFoundException">
         <soap:fault name="CodeCategoryNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeCategorySummaries">
@@ -786,8 +780,8 @@
       <wsdl:output name="GetCodeCategorySummariesResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeName">
@@ -804,8 +798,8 @@
       <wsdl:fault name="CodeNotFoundException">
         <soap:fault name="CodeNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetCodeCategoryUpdated">
@@ -822,8 +816,8 @@
       <wsdl:fault name="CodeCategoryNotFoundException">
         <soap:fault name="CodeCategoryNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="CodesServiceException">
-        <soap:fault name="CodesServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>

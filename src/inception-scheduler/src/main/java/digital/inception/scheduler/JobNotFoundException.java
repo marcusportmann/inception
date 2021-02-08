@@ -16,6 +16,7 @@
 
 package digital.inception.scheduler;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,10 +32,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The job could not be found")
+@Problem(
+    type = "http://inception.digital/problems/scheduler/job-not-found",
+    title = "The job could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "JobNotFoundException",
-    targetNamespace = "http://scheduler.inception.digital",
+    targetNamespace = "http://inception.digital/scheduler",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class JobNotFoundException extends ServiceException {
@@ -47,6 +51,6 @@ public class JobNotFoundException extends ServiceException {
    * @param jobId the ID for the job
    */
   public JobNotFoundException(String jobId) {
-    super("JobNotFoundError", "The job with ID (" + jobId + ") could not be found");
+    super("The job with ID (" + jobId + ") could not be found");
   }
 }

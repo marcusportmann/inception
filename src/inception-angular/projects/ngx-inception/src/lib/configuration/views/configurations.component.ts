@@ -30,6 +30,7 @@ import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Error} from '../../core/errors/error';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The ConfigurationsComponent class implements the configurations component.
@@ -77,26 +78,27 @@ export class ConfigurationsComponent extends AdminContainerView implements After
     });
 
     dialogRef.afterClosed()
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
-          this.spinnerService.showSpinner();
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
 
-          this.configurationService.deleteConfiguration(key)
-            .pipe(first())
-            .subscribe(() => {
-              this.loadConfigurations();
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-        }
-      });
+        this.configurationService.deleteConfiguration(key)
+        .pipe(first())
+        .subscribe(() => {
+          this.loadConfigurations();
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+            (error instanceof ServiceUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });
   }
 
   editConfiguration(key: string): void {
@@ -108,18 +110,18 @@ export class ConfigurationsComponent extends AdminContainerView implements After
     this.spinnerService.showSpinner();
 
     this.configurationService.getConfigurations()
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((configurations: Configuration[]) => {
-        this.dataSource.data = configurations;
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((configurations: Configuration[]) => {
+      this.dataSource.data = configurations;
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   newConfiguration(): void {

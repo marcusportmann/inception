@@ -18,7 +18,6 @@ import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
-import {ApiError} from '../../core/errors/api-error';
 import {CommunicationError} from '../../core/errors/communication-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
@@ -44,6 +43,7 @@ import {VerificationStatus} from './verification-status';
 import {VerificationMethod} from './verification-method';
 import {ContactMechanismType} from "./contact-mechanism-type";
 import {ContactMechanismPurpose} from "./contact-mechanism-purpose";
+import {AccessDeniedError} from "../../core/errors/access-denied-error";
 
 /**
  * The Reference Service implementation.
@@ -82,15 +82,13 @@ export class ReferenceService {
     .pipe(map((contactMechanismPurposes: ContactMechanismPurpose[]) => {
       return contactMechanismPurposes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism purposes.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism purposes.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism purposes.', httpErrorResponse));
     }));
   }
 
@@ -109,15 +107,13 @@ export class ReferenceService {
     .pipe(map((contactMechanismTypes: ContactMechanismType[]) => {
       return contactMechanismTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism types.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism types.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism types.', httpErrorResponse));
     }));
   }
 
@@ -136,15 +132,13 @@ export class ReferenceService {
     .pipe(map((countries: Country[]) => {
       return countries;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the countries.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the countries.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the countries.', httpErrorResponse));
     }));
   }
 
@@ -163,15 +157,13 @@ export class ReferenceService {
     .pipe(map((employmentStatuses: EmploymentStatus[]) => {
       return employmentStatuses;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the employment statuses.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the employment statuses.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the employment statuses.', httpErrorResponse));
     }));
   }
 
@@ -190,15 +182,13 @@ export class ReferenceService {
     .pipe(map((employmentTypes: EmploymentType[]) => {
       return employmentTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the employment types.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the employment types.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the employment types.', httpErrorResponse));
     }));
   }
 
@@ -217,15 +207,13 @@ export class ReferenceService {
     .pipe(map((genders: Gender[]) => {
       return genders;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the genders.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the genders.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the genders.', httpErrorResponse));
     }));
   }
 
@@ -244,15 +232,13 @@ export class ReferenceService {
     .pipe(map((identityDocumentTypes: IdentityDocumentType[]) => {
       return identityDocumentTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the identity document types.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the identity document types.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the identity document types.', httpErrorResponse));
     }));
   }
 
@@ -271,15 +257,13 @@ export class ReferenceService {
     .pipe(map((languages: Language[]) => {
       return languages;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the languages.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the languages.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the languages.', httpErrorResponse));
     }));
   }
 
@@ -298,15 +282,13 @@ export class ReferenceService {
     .pipe(map((maritalStatuses: MaritalStatus[]) => {
       return maritalStatuses;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the marital statuses.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the marital statuses.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the marital statuses.', httpErrorResponse));
     }));
   }
 
@@ -325,15 +307,13 @@ export class ReferenceService {
     .pipe(map((marriageTypes: MarriageType[]) => {
       return marriageTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the marriage types.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the marriage types.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the marriage types.', httpErrorResponse));
     }));
   }
 
@@ -352,15 +332,13 @@ export class ReferenceService {
     .pipe(map((nextOfKinTypes: NextOfKinType[]) => {
       return nextOfKinTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the next of kin types.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the next of kin types.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the next of kin types.', httpErrorResponse));
     }));
   }
 
@@ -379,15 +357,13 @@ export class ReferenceService {
     .pipe(map((occupations: Occupation[]) => {
       return occupations;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the occupations.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the occupations.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the occupations.', httpErrorResponse));
     }));
   }
 
@@ -406,15 +382,13 @@ export class ReferenceService {
     .pipe(map((races: Race[]) => {
       return races;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the races.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the races.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the races.', httpErrorResponse));
     }));
   }
 
@@ -433,15 +407,13 @@ export class ReferenceService {
     .pipe(map((regions: Region[]) => {
       return regions;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the regions.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the regions.',httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the regions.', httpErrorResponse));
     }));
   }
 
@@ -460,15 +432,13 @@ export class ReferenceService {
     .pipe(map((residencePermitTypes: ResidencePermitType[]) => {
       return residencePermitTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the residence permit types.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the residence permit types.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the residence permit types.', httpErrorResponse));
     }));
   }
 
@@ -487,15 +457,13 @@ export class ReferenceService {
     .pipe(map((residencyStatuses: ResidencyStatus[]) => {
       return residencyStatuses;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the residency statuses.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the residency statuses.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the residency statuses.', httpErrorResponse));
     }));
   }
 
@@ -514,15 +482,13 @@ export class ReferenceService {
     .pipe(map((residentialTypes: ResidentialType[]) => {
       return residentialTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the residential types.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the residential types.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the residential types.', httpErrorResponse));
     }));
   }
 
@@ -541,15 +507,13 @@ export class ReferenceService {
     .pipe(map((sourcesOfFunds: SourceOfFunds[]) => {
       return sourcesOfFunds;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the sources of funds.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the sources of funds.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the sources of funds.', httpErrorResponse));
     }));
   }
 
@@ -568,15 +532,13 @@ export class ReferenceService {
     .pipe(map((taxNumberTypes: TaxNumberType[]) => {
       return taxNumberTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the tax number types.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the tax number types.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the tax number types.', httpErrorResponse));
     }));
   }
 
@@ -595,15 +557,13 @@ export class ReferenceService {
     .pipe(map((titles: Title[]) => {
       return titles;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the titles.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the titles.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the titles.', httpErrorResponse));
     }));
   }
 
@@ -622,15 +582,13 @@ export class ReferenceService {
     .pipe(map((verificationMethods: VerificationMethod[]) => {
       return verificationMethods;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the verification methods.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the verification methods.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the verification methods.', httpErrorResponse));
     }));
   }
 
@@ -649,15 +607,13 @@ export class ReferenceService {
     .pipe(map((verificationStatuses: VerificationStatus[]) => {
       return verificationStatuses;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ServiceUnavailableError('Failed to retrieve the verification statuses.', apiError));
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new ServiceUnavailableError('Failed to retrieve the verification statuses.', httpErrorResponse));
       }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the verification statuses.', httpErrorResponse));
     }));
   }
 }

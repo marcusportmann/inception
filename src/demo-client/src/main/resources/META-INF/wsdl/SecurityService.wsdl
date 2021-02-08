@@ -1,56 +1,29 @@
-<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://security.inception.digital" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://validation.inception.digital" name="SecurityService" targetNamespace="http://security.inception.digital">
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://security.inception.digital" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://core.inception.digital" name="SecurityService" targetNamespace="http://security.inception.digital">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://validation.inception.digital" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://validation.inception.digital" version="1.0">
-  <xs:element name="InvalidArgumentError" type="tns:InvalidArgumentError"/>
-  <xs:element name="ValidationError" type="tns:ValidationError"/>
-  <xs:element name="ValidationErrorAttribute" type="tns:ValidationErrorAttribute"/>
-  <xs:complexType name="InvalidArgumentError">
-    <xs:sequence>
-      <xs:element name="When" type="xs:dateTime"/>
-      <xs:element name="Message" type="xs:string"/>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element name="Detail" type="xs:string"/>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationErrors" type="tns:ValidationError"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ValidationError">
-    <xs:sequence>
-      <xs:element name="Property" type="xs:string"/>
-      <xs:element name="Message" type="xs:string"/>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="Attributes" type="tns:ValidationErrorAttribute"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ValidationErrorAttribute">
-    <xs:sequence>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element minOccurs="0" name="Value" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="InvalidArgumentException" nillable="true" type="tns:InvalidArgumentError"/>
-</xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:validation="http://validation.inception.digital" xmlns:tns="http://security.inception.digital" xmlns:security="http://security.inception.digital" xmlns:core="http://core.inception.digital" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://security.inception.digital" version="1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://security.inception.digital" xmlns:security="http://security.inception.digital" xmlns:core="http://core.inception.digital" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://security.inception.digital" version="1.0">
+  <xs:import namespace="http://core.inception.digital"/>
   <xs:element name="AddMemberToGroup" type="security:AddMemberToGroup"/>
   <xs:element name="AddMemberToGroupResponse" type="security:AddMemberToGroupResponse"/>
   <xs:element name="AddRoleToGroup" type="security:AddRoleToGroup"/>
   <xs:element name="AddRoleToGroupResponse" type="security:AddRoleToGroupResponse"/>
-  <xs:element name="AddUserDirectoryToOrganization" type="security:AddUserDirectoryToOrganization"/>
-  <xs:element name="AddUserDirectoryToOrganizationResponse" type="security:AddUserDirectoryToOrganizationResponse"/>
+  <xs:element name="AddUserDirectoryToTenant" type="security:AddUserDirectoryToTenant"/>
+  <xs:element name="AddUserDirectoryToTenantResponse" type="security:AddUserDirectoryToTenantResponse"/>
   <xs:element name="AdminChangePassword" type="security:AdminChangePassword"/>
   <xs:element name="AdminChangePasswordResponse" type="security:AdminChangePasswordResponse"/>
   <xs:element name="ChangePassword" type="security:ChangePassword"/>
   <xs:element name="ChangePasswordResponse" type="security:ChangePasswordResponse"/>
   <xs:element name="CreateGroup" type="security:CreateGroup"/>
   <xs:element name="CreateGroupResponse" type="security:CreateGroupResponse"/>
-  <xs:element name="CreateOrganization" type="security:CreateOrganization"/>
-  <xs:element name="CreateOrganizationResponse" type="security:CreateOrganizationResponse"/>
+  <xs:element name="CreateTenant" type="security:CreateTenant"/>
+  <xs:element name="CreateTenantResponse" type="security:CreateTenantResponse"/>
   <xs:element name="CreateUser" type="security:CreateUser"/>
   <xs:element name="CreateUserDirectory" type="security:CreateUserDirectory"/>
   <xs:element name="CreateUserDirectoryResponse" type="security:CreateUserDirectoryResponse"/>
   <xs:element name="CreateUserResponse" type="security:CreateUserResponse"/>
   <xs:element name="DeleteGroup" type="security:DeleteGroup"/>
   <xs:element name="DeleteGroupResponse" type="security:DeleteGroupResponse"/>
-  <xs:element name="DeleteOrganization" type="security:DeleteOrganization"/>
-  <xs:element name="DeleteOrganizationResponse" type="security:DeleteOrganizationResponse"/>
+  <xs:element name="DeleteTenant" type="security:DeleteTenant"/>
+  <xs:element name="DeleteTenantResponse" type="security:DeleteTenantResponse"/>
   <xs:element name="DeleteUser" type="security:DeleteUser"/>
   <xs:element name="DeleteUserDirectory" type="security:DeleteUserDirectory"/>
   <xs:element name="DeleteUserDirectoryResponse" type="security:DeleteUserDirectoryResponse"/>
@@ -65,24 +38,24 @@
   <xs:element name="GetGroupsResponse" type="security:GetGroupsResponse"/>
   <xs:element name="GetMembersForGroup" type="security:GetMembersForGroup"/>
   <xs:element name="GetMembersForGroupResponse" type="security:GetMembersForGroupResponse"/>
-  <xs:element name="GetOrganization" type="security:GetOrganization"/>
-  <xs:element name="GetOrganizationName" type="security:GetOrganizationName"/>
-  <xs:element name="GetOrganizationNameResponse" type="security:GetOrganizationNameResponse"/>
-  <xs:element name="GetOrganizationResponse" type="security:GetOrganizationResponse"/>
-  <xs:element name="GetOrganizations" type="security:GetOrganizations"/>
-  <xs:element name="GetOrganizationsForUserDirectory" type="security:GetOrganizationsForUserDirectory"/>
-  <xs:element name="GetOrganizationsForUserDirectoryResponse" type="security:GetOrganizationsForUserDirectoryResponse"/>
-  <xs:element name="GetOrganizationsResponse" type="security:GetOrganizationsResponse"/>
   <xs:element name="GetRoleCodesForGroup" type="security:GetRoleCodesForGroup"/>
   <xs:element name="GetRoleCodesForGroupResponse" type="security:GetRoleCodesForGroupResponse"/>
   <xs:element name="GetRoles" type="security:GetRoles"/>
   <xs:element name="GetRolesForGroup" type="security:GetRolesForGroup"/>
   <xs:element name="GetRolesForGroupResponse" type="security:GetRolesForGroupResponse"/>
   <xs:element name="GetRolesResponse" type="security:GetRolesResponse"/>
+  <xs:element name="GetTenant" type="security:GetTenant"/>
+  <xs:element name="GetTenantName" type="security:GetTenantName"/>
+  <xs:element name="GetTenantNameResponse" type="security:GetTenantNameResponse"/>
+  <xs:element name="GetTenantResponse" type="security:GetTenantResponse"/>
+  <xs:element name="GetTenants" type="security:GetTenants"/>
+  <xs:element name="GetTenantsForUserDirectory" type="security:GetTenantsForUserDirectory"/>
+  <xs:element name="GetTenantsForUserDirectoryResponse" type="security:GetTenantsForUserDirectoryResponse"/>
+  <xs:element name="GetTenantsResponse" type="security:GetTenantsResponse"/>
   <xs:element name="GetUser" type="security:GetUser"/>
   <xs:element name="GetUserDirectories" type="security:GetUserDirectories"/>
-  <xs:element name="GetUserDirectoriesForOrganization" type="security:GetUserDirectoriesForOrganization"/>
-  <xs:element name="GetUserDirectoriesForOrganizationResponse" type="security:GetUserDirectoriesForOrganizationResponse"/>
+  <xs:element name="GetUserDirectoriesForTenant" type="security:GetUserDirectoriesForTenant"/>
+  <xs:element name="GetUserDirectoriesForTenantResponse" type="security:GetUserDirectoriesForTenantResponse"/>
   <xs:element name="GetUserDirectoriesResponse" type="security:GetUserDirectoriesResponse"/>
   <xs:element name="GetUserDirectory" type="security:GetUserDirectory"/>
   <xs:element name="GetUserDirectoryCapabilities" type="security:GetUserDirectoryCapabilities"/>
@@ -91,8 +64,8 @@
   <xs:element name="GetUserDirectoryNameResponse" type="security:GetUserDirectoryNameResponse"/>
   <xs:element name="GetUserDirectoryResponse" type="security:GetUserDirectoryResponse"/>
   <xs:element name="GetUserDirectorySummaries" type="security:GetUserDirectorySummaries"/>
-  <xs:element name="GetUserDirectorySummariesForOrganization" type="security:GetUserDirectorySummariesForOrganization"/>
-  <xs:element name="GetUserDirectorySummariesForOrganizationResponse" type="security:GetUserDirectorySummariesForOrganizationResponse"/>
+  <xs:element name="GetUserDirectorySummariesForTenant" type="security:GetUserDirectorySummariesForTenant"/>
+  <xs:element name="GetUserDirectorySummariesForTenantResponse" type="security:GetUserDirectorySummariesForTenantResponse"/>
   <xs:element name="GetUserDirectorySummariesResponse" type="security:GetUserDirectorySummariesResponse"/>
   <xs:element name="GetUserDirectoryTypeForUserDirectory" type="security:GetUserDirectoryTypeForUserDirectory"/>
   <xs:element name="GetUserDirectoryTypeForUserDirectoryResponse" type="security:GetUserDirectoryTypeForUserDirectoryResponse"/>
@@ -108,22 +81,22 @@
   <xs:element name="GroupMembers" type="security:GroupMembers"/>
   <xs:element name="GroupRole" type="security:GroupRole"/>
   <xs:element name="Groups" type="security:Groups"/>
-  <xs:element name="Tenant" type="security:Tenant"/>
-  <xs:element name="Tenants" type="security:Tenants"/>
   <xs:element name="PasswordChange" type="security:PasswordChange"/>
   <xs:element name="RemoveMemberFromGroup" type="security:RemoveMemberFromGroup"/>
   <xs:element name="RemoveMemberFromGroupResponse" type="security:RemoveMemberFromGroupResponse"/>
   <xs:element name="RemoveRoleFromGroup" type="security:RemoveRoleFromGroup"/>
   <xs:element name="RemoveRoleFromGroupResponse" type="security:RemoveRoleFromGroupResponse"/>
-  <xs:element name="RemoveUserDirectoryFromOrganization" type="security:RemoveUserDirectoryFromOrganization"/>
-  <xs:element name="RemoveUserDirectoryFromOrganizationResponse" type="security:RemoveUserDirectoryFromOrganizationResponse"/>
+  <xs:element name="RemoveUserDirectoryFromTenant" type="security:RemoveUserDirectoryFromTenant"/>
+  <xs:element name="RemoveUserDirectoryFromTenantResponse" type="security:RemoveUserDirectoryFromTenantResponse"/>
   <xs:element name="ResetPassword" type="security:ResetPassword"/>
   <xs:element name="ResetPasswordResponse" type="security:ResetPasswordResponse"/>
   <xs:element name="Role" type="security:Role"/>
+  <xs:element name="Tenant" type="security:Tenant"/>
+  <xs:element name="Tenants" type="security:Tenants"/>
   <xs:element name="UpdateGroup" type="security:UpdateGroup"/>
   <xs:element name="UpdateGroupResponse" type="security:UpdateGroupResponse"/>
-  <xs:element name="UpdateOrganization" type="security:UpdateOrganization"/>
-  <xs:element name="UpdateOrganizationResponse" type="security:UpdateOrganizationResponse"/>
+  <xs:element name="UpdateTenant" type="security:UpdateTenant"/>
+  <xs:element name="UpdateTenantResponse" type="security:UpdateTenantResponse"/>
   <xs:element name="UpdateUser" type="security:UpdateUser"/>
   <xs:element name="UpdateUserDirectory" type="security:UpdateUserDirectory"/>
   <xs:element name="UpdateUserDirectoryResponse" type="security:UpdateUserDirectoryResponse"/>
@@ -137,21 +110,6 @@
   <xs:element name="UserDirectorySummary" type="security:UserDirectorySummary"/>
   <xs:element name="UserDirectoryType" type="security:UserDirectoryType"/>
   <xs:element name="Users" type="security:Users"/>
-  <xs:complexType name="UpdateOrganization">
-    <xs:sequence>
-      <xs:element name="Tenant" type="security:Tenant"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="Tenant">
-    <xs:sequence>
-      <xs:element name="Id" type="xs:string"/>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element name="Status" type="security:TenantStatus"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="UpdateOrganizationResponse">
-    <xs:sequence/>
-  </xs:complexType>
   <xs:complexType name="GetUser">
     <xs:sequence>
       <xs:element name="UserDirectoryId" type="xs:string"/>
@@ -167,25 +125,16 @@
     <xs:sequence>
       <xs:element name="UserDirectoryId" type="xs:string"/>
       <xs:element name="Username" type="xs:string"/>
-      <xs:element name="FirstName" type="xs:string"/>
-      <xs:element name="LastName" type="xs:string"/>
-      <xs:element name="MobileNumber" type="xs:string"/>
-      <xs:element name="PhoneNumber" type="xs:string"/>
-      <xs:element name="Email" type="xs:string"/>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element minOccurs="0" name="PreferredName" type="xs:string"/>
+      <xs:element minOccurs="0" name="MobileNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="PhoneNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="Email" type="xs:string"/>
       <xs:element name="Status" type="security:UserStatus"/>
       <xs:element minOccurs="0" name="Password" type="xs:string"/>
       <xs:element minOccurs="0" name="PasswordAttempts" type="xs:int"/>
       <xs:element minOccurs="0" name="PasswordExpiry" type="xs:dateTime"/>
     </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="RemoveUserDirectoryFromOrganization">
-    <xs:sequence>
-      <xs:element name="OrganizationId" type="xs:string"/>
-      <xs:element name="UserDirectoryId" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="RemoveUserDirectoryFromOrganizationResponse">
-    <xs:sequence/>
   </xs:complexType>
   <xs:complexType name="GetUserDirectory">
     <xs:sequence>
@@ -277,6 +226,33 @@
       <xs:element name="UserDirectoryClassName" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="CreateTenant">
+    <xs:sequence>
+      <xs:element name="Tenant" type="security:Tenant"/>
+      <xs:element name="CreateUserDirectory" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Tenant">
+    <xs:sequence>
+      <xs:element name="Id" type="xs:string"/>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element name="Status" type="security:TenantStatus"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CreateTenantResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="GetUserName">
+    <xs:sequence>
+      <xs:element name="UserDirectoryId" type="xs:string"/>
+      <xs:element name="Username" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetUserNameResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="UserName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="RemoveMemberFromGroup">
     <xs:sequence>
       <xs:element name="UserDirectoryId" type="xs:string"/>
@@ -302,7 +278,7 @@
       <xs:element name="UserDirectoryId" type="xs:string"/>
       <xs:element name="GroupName" type="xs:string"/>
       <xs:element minOccurs="0" name="Filter" type="xs:string"/>
-      <xs:element minOccurs="0" name="SortDirection" type="security:SortDirection"/>
+      <xs:element minOccurs="0" name="SortDirection" type="core:SortDirection"/>
       <xs:element minOccurs="0" name="PageIndex" type="xs:int"/>
       <xs:element minOccurs="0" name="PageSize" type="xs:int"/>
     </xs:sequence>
@@ -314,12 +290,18 @@
   </xs:complexType>
   <xs:complexType name="GroupMembers">
     <xs:sequence>
-      <xs:element name="Total" type="xs:string"/>
+      <xs:element name="UserDirectoryId" type="xs:string"/>
       <xs:element name="GroupName" type="xs:string"/>
-      <xs:element maxOccurs="unbounded" name="GroupMembers" type="security:GroupMember"/>
+      <xs:element name="GroupMembers">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="GroupMember" type="security:GroupMember"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="Total" type="xs:long"/>
       <xs:element minOccurs="0" name="Filter" type="xs:string"/>
-      <xs:element minOccurs="0" name="SortDirection" type="security:SortDirection"/>
+      <xs:element minOccurs="0" name="SortDirection" type="core:SortDirection"/>
       <xs:element minOccurs="0" name="PageIndex" type="xs:int"/>
       <xs:element minOccurs="0" name="PageSize" type="xs:int"/>
     </xs:sequence>
@@ -362,6 +344,14 @@
       <xs:element minOccurs="0" name="UserDirectoryType" type="security:UserDirectoryType"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="DeleteTenant">
+    <xs:sequence>
+      <xs:element name="TenantId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeleteTenantResponse">
+    <xs:sequence/>
+  </xs:complexType>
   <xs:complexType name="GetRoleCodesForGroup">
     <xs:sequence>
       <xs:element name="UserDirectoryId" type="xs:string"/>
@@ -373,14 +363,14 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="RoleCode" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="GetOrganizationsForUserDirectory">
+  <xs:complexType name="GetTenantName">
     <xs:sequence>
-      <xs:element name="UserDirectoryId" type="xs:string"/>
+      <xs:element name="TenantId" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="GetOrganizationsForUserDirectoryResponse">
+  <xs:complexType name="GetTenantNameResponse">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="Tenant" type="security:Tenant"/>
+      <xs:element minOccurs="0" name="TenantName" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="GetGroupNames">
@@ -392,6 +382,15 @@
     <xs:sequence>
       <xs:element maxOccurs="unbounded" minOccurs="0" name="GroupName" type="xs:string"/>
     </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AddUserDirectoryToTenant">
+    <xs:sequence>
+      <xs:element name="TenantId" type="xs:string"/>
+      <xs:element name="UserDirectoryId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AddUserDirectoryToTenantResponse">
+    <xs:sequence/>
   </xs:complexType>
   <xs:complexType name="ChangePassword">
     <xs:sequence>
@@ -413,6 +412,16 @@
   <xs:complexType name="ChangePasswordResponse">
     <xs:sequence/>
   </xs:complexType>
+  <xs:complexType name="GetUserDirectoriesForTenant">
+    <xs:sequence>
+      <xs:element name="TenantId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetUserDirectoriesForTenantResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="UserDirectory" type="security:UserDirectory"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="ResetPassword">
     <xs:sequence>
       <xs:element name="Username" type="xs:string"/>
@@ -432,20 +441,10 @@
   <xs:complexType name="AdminChangePasswordResponse">
     <xs:sequence/>
   </xs:complexType>
-  <xs:complexType name="GetOrganization">
-    <xs:sequence>
-      <xs:element name="OrganizationId" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="GetOrganizationResponse">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Tenant" type="security:Tenant"/>
-    </xs:sequence>
-  </xs:complexType>
   <xs:complexType name="GetUserDirectories">
     <xs:sequence>
       <xs:element name="Filter" type="xs:string"/>
-      <xs:element name="SortDirection" type="security:SortDirection"/>
+      <xs:element name="SortDirection" type="core:SortDirection"/>
       <xs:element name="PageIndex" type="xs:int"/>
       <xs:element name="PageSize" type="xs:int"/>
     </xs:sequence>
@@ -457,10 +456,16 @@
   </xs:complexType>
   <xs:complexType name="UserDirectories">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" name="UserDirectories" type="security:UserDirectory"/>
+      <xs:element name="UserDirectories">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="UserDirectory" type="security:UserDirectory"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="Total" type="xs:long"/>
       <xs:element minOccurs="0" name="Filter" type="xs:string"/>
-      <xs:element minOccurs="0" name="SortDirection" type="security:SortDirection"/>
+      <xs:element minOccurs="0" name="SortDirection" type="core:SortDirection"/>
       <xs:element minOccurs="0" name="PageIndex" type="xs:int"/>
       <xs:element minOccurs="0" name="PageSize" type="xs:int"/>
     </xs:sequence>
@@ -483,6 +488,23 @@
       <xs:element name="RoleCode" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="GetUserDirectorySummariesForTenant">
+    <xs:sequence>
+      <xs:element name="TenantId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetUserDirectorySummariesForTenantResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="UserDirectorySummary" type="security:UserDirectorySummary"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="UserDirectorySummary">
+    <xs:sequence>
+      <xs:element name="Id" type="xs:string"/>
+      <xs:element name="Type" type="xs:string"/>
+      <xs:element name="Name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="AddMemberToGroup">
     <xs:sequence>
       <xs:element name="UserDirectoryId" type="xs:string"/>
@@ -494,22 +516,15 @@
   <xs:complexType name="AddMemberToGroupResponse">
     <xs:sequence/>
   </xs:complexType>
-  <xs:complexType name="AddUserDirectoryToOrganization">
+  <xs:complexType name="GetTenant">
     <xs:sequence>
-      <xs:element name="OrganizationId" type="xs:string"/>
-      <xs:element name="UserDirectoryId" type="xs:string"/>
+      <xs:element name="TenantId" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="AddUserDirectoryToOrganizationResponse">
-    <xs:sequence/>
-  </xs:complexType>
-  <xs:complexType name="DeleteOrganization">
+  <xs:complexType name="GetTenantResponse">
     <xs:sequence>
-      <xs:element name="OrganizationId" type="xs:string"/>
+      <xs:element minOccurs="0" name="Tenant" type="security:Tenant"/>
     </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeleteOrganizationResponse">
-    <xs:sequence/>
   </xs:complexType>
   <xs:complexType name="UpdateGroup">
     <xs:sequence>
@@ -534,6 +549,16 @@
   <xs:complexType name="UpdateUserDirectoryResponse">
     <xs:sequence/>
   </xs:complexType>
+  <xs:complexType name="GetTenantsForUserDirectory">
+    <xs:sequence>
+      <xs:element name="UserDirectoryId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetTenantsForUserDirectoryResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Tenant" type="security:Tenant"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="UpdateUser">
     <xs:sequence>
       <xs:element name="User" type="security:User"/>
@@ -544,25 +569,31 @@
   <xs:complexType name="UpdateUserResponse">
     <xs:sequence/>
   </xs:complexType>
-  <xs:complexType name="GetOrganizations">
+  <xs:complexType name="GetTenants">
     <xs:sequence>
       <xs:element minOccurs="0" name="Filter" type="xs:string"/>
-      <xs:element minOccurs="0" name="SortDirection" type="security:SortDirection"/>
+      <xs:element minOccurs="0" name="SortDirection" type="core:SortDirection"/>
       <xs:element minOccurs="0" name="PageIndex" type="xs:int"/>
       <xs:element minOccurs="0" name="PageSize" type="xs:int"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="GetOrganizationsResponse">
+  <xs:complexType name="GetTenantsResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="Tenant" type="security:Tenants"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="Tenants">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" name="Tenants" type="security:Tenant"/>
+      <xs:element name="Tenants">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="Tenant" type="security:Tenant"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="Total" type="xs:long"/>
       <xs:element minOccurs="0" name="Filter" type="xs:string"/>
-      <xs:element minOccurs="0" name="SortDirection" type="security:SortDirection"/>
+      <xs:element minOccurs="0" name="SortDirection" type="core:SortDirection"/>
       <xs:element minOccurs="0" name="PageIndex" type="xs:int"/>
       <xs:element minOccurs="0" name="PageSize" type="xs:int"/>
     </xs:sequence>
@@ -586,20 +617,10 @@
   <xs:complexType name="CreateUserDirectoryResponse">
     <xs:sequence/>
   </xs:complexType>
-  <xs:complexType name="GetOrganizationName">
-    <xs:sequence>
-      <xs:element name="OrganizationId" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="GetOrganizationNameResponse">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="OrganizationName" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
   <xs:complexType name="GetUserDirectorySummaries">
     <xs:sequence>
       <xs:element name="Filter" type="xs:string"/>
-      <xs:element name="SortDirection" type="security:SortDirection"/>
+      <xs:element name="SortDirection" type="core:SortDirection"/>
       <xs:element name="PageIndex" type="xs:int"/>
       <xs:element name="PageSize" type="xs:int"/>
     </xs:sequence>
@@ -611,26 +632,25 @@
   </xs:complexType>
   <xs:complexType name="UserDirectorySummaries">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" name="UserDirectorySummaries" type="security:UserDirectorySummary"/>
+      <xs:element name="UserDirectorySummaries">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="UserDirectorySummary" type="security:UserDirectorySummary"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="Total" type="xs:long"/>
       <xs:element minOccurs="0" name="Filter" type="xs:string"/>
-      <xs:element minOccurs="0" name="SortDirection" type="security:SortDirection"/>
+      <xs:element minOccurs="0" name="SortDirection" type="core:SortDirection"/>
       <xs:element minOccurs="0" name="PageIndex" type="xs:int"/>
       <xs:element minOccurs="0" name="PageSize" type="xs:int"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="UserDirectorySummary">
-    <xs:sequence>
-      <xs:element name="Id" type="xs:string"/>
-      <xs:element name="Type" type="xs:string"/>
-      <xs:element name="Name" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="GetGroups">
     <xs:sequence>
       <xs:element name="UserDirectoryId" type="xs:string"/>
       <xs:element minOccurs="0" name="Filter" type="xs:string"/>
-      <xs:element minOccurs="0" name="SortDirection" type="security:SortDirection"/>
+      <xs:element minOccurs="0" name="SortDirection" type="core:SortDirection"/>
       <xs:element minOccurs="0" name="PageIndex" type="xs:int"/>
       <xs:element minOccurs="0" name="PageSize" type="xs:int"/>
     </xs:sequence>
@@ -642,23 +662,19 @@
   </xs:complexType>
   <xs:complexType name="Groups">
     <xs:sequence>
-      <xs:element name="Total" type="xs:string"/>
-      <xs:element maxOccurs="unbounded" name="Groups" type="security:Group"/>
+      <xs:element name="UserDirectoryId" type="xs:string"/>
+      <xs:element name="Groups">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="Group" type="security:Group"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="Total" type="xs:long"/>
       <xs:element minOccurs="0" name="Filter" type="xs:string"/>
-      <xs:element minOccurs="0" name="SortDirection" type="security:SortDirection"/>
+      <xs:element minOccurs="0" name="SortDirection" type="core:SortDirection"/>
       <xs:element minOccurs="0" name="PageIndex" type="xs:int"/>
       <xs:element minOccurs="0" name="PageSize" type="xs:int"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="GetUserDirectorySummariesForOrganization">
-    <xs:sequence>
-      <xs:element name="OrganizationId" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="GetUserDirectorySummariesForOrganizationResponse">
-    <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="UserDirectorySummary" type="security:UserDirectorySummary"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="GetUsers">
@@ -666,7 +682,7 @@
       <xs:element name="UserDirectoryId" type="xs:string"/>
       <xs:element minOccurs="0" name="Filter" type="xs:string"/>
       <xs:element minOccurs="0" name="SortBy" type="security:UserSortBy"/>
-      <xs:element minOccurs="0" name="SortDirection" type="security:SortDirection"/>
+      <xs:element minOccurs="0" name="SortDirection" type="core:SortDirection"/>
       <xs:element minOccurs="0" name="PageIndex" type="xs:int"/>
       <xs:element minOccurs="0" name="PageSize" type="xs:int"/>
     </xs:sequence>
@@ -678,14 +694,38 @@
   </xs:complexType>
   <xs:complexType name="Users">
     <xs:sequence>
-      <xs:element name="Total" type="xs:string"/>
-      <xs:element maxOccurs="unbounded" name="Users" type="security:User"/>
+      <xs:element name="UserDirectoryId" type="xs:string"/>
+      <xs:element name="Users">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="User" type="security:User"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="Total" type="xs:long"/>
       <xs:element minOccurs="0" name="Filter" type="xs:string"/>
-      <xs:element minOccurs="0" name="SortDirection" type="security:SortDirection"/>
+      <xs:element minOccurs="0" name="SortBy" type="security:UserSortBy"/>
+      <xs:element minOccurs="0" name="SortDirection" type="core:SortDirection"/>
       <xs:element minOccurs="0" name="PageIndex" type="xs:int"/>
       <xs:element minOccurs="0" name="PageSize" type="xs:int"/>
     </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="UpdateTenant">
+    <xs:sequence>
+      <xs:element name="Tenant" type="security:Tenant"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="UpdateTenantResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="RemoveUserDirectoryFromTenant">
+    <xs:sequence>
+      <xs:element name="TenantId" type="xs:string"/>
+      <xs:element name="UserDirectoryId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RemoveUserDirectoryFromTenantResponse">
+    <xs:sequence/>
   </xs:complexType>
   <xs:complexType name="CreateUser">
     <xs:sequence>
@@ -697,16 +737,13 @@
   <xs:complexType name="CreateUserResponse">
     <xs:sequence/>
   </xs:complexType>
-  <xs:complexType name="GetUserName">
+  <xs:complexType name="CreateGroup">
     <xs:sequence>
-      <xs:element name="UserDirectoryId" type="xs:string"/>
-      <xs:element name="Username" type="xs:string"/>
+      <xs:element name="Group" type="security:Group"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="GetUserNameResponse">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="UserName" type="xs:string"/>
-    </xs:sequence>
+  <xs:complexType name="CreateGroupResponse">
+    <xs:sequence/>
   </xs:complexType>
   <xs:complexType name="AddRoleToGroup">
     <xs:sequence>
@@ -716,23 +753,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="AddRoleToGroupResponse">
-    <xs:sequence/>
-  </xs:complexType>
-  <xs:complexType name="CreateGroup">
-    <xs:sequence>
-      <xs:element name="Group" type="security:Group"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="CreateGroupResponse">
-    <xs:sequence/>
-  </xs:complexType>
-  <xs:complexType name="CreateOrganization">
-    <xs:sequence>
-      <xs:element name="Tenant" type="security:Tenant"/>
-      <xs:element name="CreateUserDirectory" type="xs:boolean"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="CreateOrganizationResponse">
     <xs:sequence/>
   </xs:complexType>
   <xs:complexType name="GetUserDirectoryName">
@@ -745,16 +765,6 @@
       <xs:element minOccurs="0" name="UserDirectoryName" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="GetUserDirectoriesForOrganization">
-    <xs:sequence>
-      <xs:element name="OrganizationId" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="GetUserDirectoriesForOrganizationResponse">
-    <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="UserDirectory" type="security:UserDirectory"/>
-    </xs:sequence>
-  </xs:complexType>
   <xs:complexType name="RemoveRoleFromGroup">
     <xs:sequence>
       <xs:element name="UserDirectoryId" type="xs:string"/>
@@ -765,12 +775,6 @@
   <xs:complexType name="RemoveRoleFromGroupResponse">
     <xs:sequence/>
   </xs:complexType>
-  <xs:simpleType name="TenantStatus">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Inactive"/>
-      <xs:enumeration value="Active"/>
-    </xs:restriction>
-  </xs:simpleType>
   <xs:simpleType name="UserStatus">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Inactive"/>
@@ -779,16 +783,16 @@
       <xs:enumeration value="Expired"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="TenantStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Inactive"/>
+      <xs:enumeration value="Active"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="GroupMemberType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="User"/>
       <xs:enumeration value="Group"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="SortDirection">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Ascending"/>
-      <xs:enumeration value="Descending"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="PasswordChangeReason">
@@ -800,38 +804,38 @@
   </xs:simpleType>
   <xs:simpleType name="UserSortBy">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="FirstName"/>
-      <xs:enumeration value="LastName"/>
+      <xs:enumeration value="Name"/>
+      <xs:enumeration value="PreferredName"/>
       <xs:enumeration value="Username"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:element name="OrganizationNotFoundException" nillable="true" type="core:ServiceError"/>
-  <xs:element name="SecurityServiceException" nillable="true" type="core:ServiceError"/>
   <xs:element name="UserNotFoundException" nillable="true" type="core:ServiceError"/>
   <xs:element name="UserDirectoryNotFoundException" nillable="true" type="core:ServiceError"/>
-  <xs:element name="OrganizationUserDirectoryNotFoundException" nillable="true" type="core:ServiceError"/>
+  <xs:element name="DuplicateTenantException" nillable="true" type="core:ServiceError"/>
   <xs:element name="GroupMemberNotFoundException" nillable="true" type="core:ServiceError"/>
   <xs:element name="GroupNotFoundException" nillable="true" type="core:ServiceError"/>
   <xs:element name="ExistingGroupMembersException" nillable="true" type="core:ServiceError"/>
   <xs:element name="UserDirectoryTypeNotFoundException" nillable="true" type="core:ServiceError"/>
+  <xs:element name="TenantNotFoundException" nillable="true" type="core:ServiceError"/>
+  <xs:element name="ExistingTenantUserDirectoryException" nillable="true" type="core:ServiceError"/>
   <xs:element name="InvalidSecurityCodeException" nillable="true" type="core:ServiceError"/>
   <xs:element name="ExistingPasswordException" nillable="true" type="core:ServiceError"/>
   <xs:element name="AuthenticationFailedException" nillable="true" type="core:ServiceError"/>
   <xs:element name="UserLockedException" nillable="true" type="core:ServiceError"/>
   <xs:element name="ExistingGroupMemberException" nillable="true" type="core:ServiceError"/>
-  <xs:element name="ExistingOrganizationUserDirectoryException" nillable="true" type="core:ServiceError"/>
   <xs:element name="DuplicateUserDirectoryException" nillable="true" type="core:ServiceError"/>
+  <xs:element name="TenantUserDirectoryNotFoundException" nillable="true" type="core:ServiceError"/>
   <xs:element name="DuplicateUserException" nillable="true" type="core:ServiceError"/>
+  <xs:element name="DuplicateGroupException" nillable="true" type="core:ServiceError"/>
   <xs:element name="RoleNotFoundException" nillable="true" type="core:ServiceError"/>
   <xs:element name="ExistingGroupRoleException" nillable="true" type="core:ServiceError"/>
-  <xs:element name="DuplicateGroupException" nillable="true" type="core:ServiceError"/>
-  <xs:element name="DuplicateOrganizationException" nillable="true" type="core:ServiceError"/>
   <xs:element name="GroupRoleNotFoundException" nillable="true" type="core:ServiceError"/>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://core.inception.digital" xmlns:core="http://core.inception.digital" elementFormDefault="unqualified" targetNamespace="http://core.inception.digital" version="1.0">
-
-  <xs:element name="ServiceError" type="tns:ServiceError"/>
-
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://core.inception.digital" xmlns:core="http://core.inception.digital" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://core.inception.digital" version="1.0">
+  <xs:element name="InvalidArgumentError" type="core:InvalidArgumentError"/>
+  <xs:element name="ServiceError" type="core:ServiceError"/>
+  <xs:element name="ValidationError" type="core:ValidationError"/>
+  <xs:element name="ValidationErrorAttribute" type="core:ValidationErrorAttribute"/>
   <xs:complexType name="ServiceError">
     <xs:sequence>
       <xs:element name="When" type="xs:dateTime"/>
@@ -840,15 +844,48 @@
       <xs:element name="Detail" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
-
+  <xs:complexType name="InvalidArgumentError">
+    <xs:sequence>
+      <xs:element name="When" type="xs:dateTime"/>
+      <xs:element name="Message" type="xs:string"/>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element name="Detail" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationErrors" type="core:ValidationError"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ValidationError">
+    <xs:sequence>
+      <xs:element name="Property" type="xs:string"/>
+      <xs:element name="Message" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Attributes" type="core:ValidationErrorAttribute"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ValidationErrorAttribute">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element minOccurs="0" name="Value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="SortDirection">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Ascending"/>
+      <xs:enumeration value="Descending"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="InvalidArgumentException" nillable="true" type="core:InvalidArgumentError"/>
+  <xs:element name="ServiceUnavailableException" nillable="true" type="core:ServiceError"/>
 </xs:schema>
   </wsdl:types>
   <wsdl:message name="CreateUserResponse">
     <wsdl:part element="tns:CreateUserResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="AddUserDirectoryToOrganizationResponse">
-    <wsdl:part element="tns:AddUserDirectoryToOrganizationResponse" name="parameters">
+  <wsdl:message name="GetTenantsForUserDirectoryResponse">
+    <wsdl:part element="tns:GetTenantsForUserDirectoryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetUserName">
+    <wsdl:part element="tns:GetUserName" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GroupMemberNotFoundException">
@@ -867,28 +904,32 @@
     <wsdl:part element="tns:GetUserDirectoryTypeForUserDirectoryResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="DeleteOrganizationResponse">
-    <wsdl:part element="tns:DeleteOrganizationResponse" name="parameters">
+  <wsdl:message name="DeleteTenant">
+    <wsdl:part element="tns:DeleteTenant" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetOrganizationsResponse">
-    <wsdl:part element="tns:GetOrganizationsResponse" name="parameters">
+  <wsdl:message name="TenantUserDirectoryNotFoundException">
+    <wsdl:part element="tns:TenantUserDirectoryNotFoundException" name="TenantUserDirectoryNotFoundException">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetUserDirectoryTypesResponse">
     <wsdl:part element="tns:GetUserDirectoryTypesResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="AddUserDirectoryToTenant">
+    <wsdl:part element="tns:AddUserDirectoryToTenant" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="UserLockedException">
     <wsdl:part element="tns:UserLockedException" name="UserLockedException">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="AdminChangePassword">
-    <wsdl:part element="tns:AdminChangePassword" name="parameters">
+  <wsdl:message name="GetUserDirectoriesForTenant">
+    <wsdl:part element="tns:GetUserDirectoriesForTenant" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetOrganizationResponse">
-    <wsdl:part element="tns:GetOrganizationResponse" name="parameters">
+  <wsdl:message name="AdminChangePassword">
+    <wsdl:part element="tns:AdminChangePassword" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="AddMemberToGroupResponse">
@@ -899,16 +940,12 @@
     <wsdl:part element="tns:UpdateUserDirectory" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="AddUserDirectoryToTenantResponse">
+    <wsdl:part element="tns:AddUserDirectoryToTenantResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="CreateUserDirectory">
     <wsdl:part element="tns:CreateUserDirectory" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="GetOrganizationName">
-    <wsdl:part element="tns:GetOrganizationName" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="GetUserDirectorySummariesForOrganization">
-    <wsdl:part element="tns:GetUserDirectorySummariesForOrganization" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetRoleCodesForGroupResponse">
@@ -923,16 +960,16 @@
     <wsdl:part element="tns:GetRolesForGroupResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="CreateTenantResponse">
+    <wsdl:part element="tns:CreateTenantResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="CreateUserDirectoryResponse">
     <wsdl:part element="tns:CreateUserDirectoryResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetUserDirectorySummariesResponse">
     <wsdl:part element="tns:GetUserDirectorySummariesResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="RemoveUserDirectoryFromOrganization">
-    <wsdl:part element="tns:RemoveUserDirectoryFromOrganization" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="DeleteUserResponse">
@@ -955,6 +992,10 @@
     <wsdl:part element="tns:CreateGroupResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="GetTenantResponse">
+    <wsdl:part element="tns:GetTenantResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="DuplicateUserException">
     <wsdl:part element="tns:DuplicateUserException" name="DuplicateUserException">
     </wsdl:part>
@@ -975,36 +1016,32 @@
     <wsdl:part element="tns:GetRoleCodesForGroup" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetOrganizationsForUserDirectory">
-    <wsdl:part element="tns:GetOrganizationsForUserDirectory" name="parameters">
+  <wsdl:message name="GetTenantName">
+    <wsdl:part element="tns:GetTenantName" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="ChangePassword">
     <wsdl:part element="tns:ChangePassword" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="AddRoleToGroupResponse">
-    <wsdl:part element="tns:AddRoleToGroupResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="DuplicateGroupException">
     <wsdl:part element="tns:DuplicateGroupException" name="DuplicateGroupException">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetOrganization">
-    <wsdl:part element="tns:GetOrganization" name="parameters">
+  <wsdl:message name="AddRoleToGroupResponse">
+    <wsdl:part element="tns:AddRoleToGroupResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="DeleteUserDirectoryResponse">
     <wsdl:part element="tns:DeleteUserDirectoryResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="AddMemberToGroup">
-    <wsdl:part element="tns:AddMemberToGroup" name="parameters">
+  <wsdl:message name="GetUserDirectorySummariesForTenant">
+    <wsdl:part element="tns:GetUserDirectorySummariesForTenant" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="AddUserDirectoryToOrganization">
-    <wsdl:part element="tns:AddUserDirectoryToOrganization" name="parameters">
+  <wsdl:message name="AddMemberToGroup">
+    <wsdl:part element="tns:AddMemberToGroup" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="UpdateUserResponse">
@@ -1019,6 +1056,10 @@
     <wsdl:part element="tns:GetMembersForGroupResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="GetTenantsForUserDirectory">
+    <wsdl:part element="tns:GetTenantsForUserDirectory" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="UpdateUser">
     <wsdl:part element="tns:UpdateUser" name="parameters">
     </wsdl:part>
@@ -1027,8 +1068,8 @@
     <wsdl:part element="tns:DeleteGroupResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetOrganizations">
-    <wsdl:part element="tns:GetOrganizations" name="parameters">
+  <wsdl:message name="GetTenants">
+    <wsdl:part element="tns:GetTenants" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetUserDirectorySummaries">
@@ -1039,16 +1080,20 @@
     <wsdl:part element="tns:GetGroups" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="CreateOrganizationResponse">
-    <wsdl:part element="tns:CreateOrganizationResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="GetUsers">
     <wsdl:part element="tns:GetUsers" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="UpdateTenant">
+    <wsdl:part element="tns:UpdateTenant" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="CreateUser">
     <wsdl:part element="tns:CreateUser" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RemoveUserDirectoryFromTenantResponse">
+    <wsdl:part element="tns:RemoveUserDirectoryFromTenantResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="CreateGroup">
@@ -1065,10 +1110,6 @@
   </wsdl:message>
   <wsdl:message name="RemoveRoleFromGroup">
     <wsdl:part element="tns:RemoveRoleFromGroup" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="UpdateOrganization">
-    <wsdl:part element="tns:UpdateOrganization" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetUser">
@@ -1095,6 +1136,10 @@
     <wsdl:part element="ns1:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="GetUserNameResponse">
+    <wsdl:part element="tns:GetUserNameResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="RemoveMemberFromGroup">
     <wsdl:part element="tns:RemoveMemberFromGroup" name="parameters">
     </wsdl:part>
@@ -1111,10 +1156,6 @@
     <wsdl:part element="tns:UserNotFoundException" name="UserNotFoundException">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="SecurityServiceException">
-    <wsdl:part element="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="GetUserDirectories">
     <wsdl:part element="tns:GetUserDirectories" name="parameters">
     </wsdl:part>
@@ -1123,44 +1164,40 @@
     <wsdl:part element="tns:GetRolesForGroup" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="UpdateOrganizationResponse">
-    <wsdl:part element="tns:UpdateOrganizationResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="DeleteOrganization">
-    <wsdl:part element="tns:DeleteOrganization" name="parameters">
+  <wsdl:message name="GetTenant">
+    <wsdl:part element="tns:GetTenant" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="ChangePasswordResponse">
     <wsdl:part element="tns:ChangePasswordResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="UpdateTenantResponse">
+    <wsdl:part element="tns:UpdateTenantResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="UserDirectoryTypeNotFoundException">
     <wsdl:part element="tns:UserDirectoryTypeNotFoundException" name="UserDirectoryTypeNotFoundException">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="GetUserNameResponse">
-    <wsdl:part element="tns:GetUserNameResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="GetOrganizationsForUserDirectoryResponse">
-    <wsdl:part element="tns:GetOrganizationsForUserDirectoryResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetGroup">
     <wsdl:part element="tns:GetGroup" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="DeleteTenantResponse">
+    <wsdl:part element="tns:DeleteTenantResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="UpdateUserDirectoryResponse">
     <wsdl:part element="tns:UpdateUserDirectoryResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="ExistingOrganizationUserDirectoryException">
-    <wsdl:part element="tns:ExistingOrganizationUserDirectoryException" name="ExistingOrganizationUserDirectoryException">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="InvalidSecurityCodeException">
     <wsdl:part element="tns:InvalidSecurityCodeException" name="InvalidSecurityCodeException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RemoveUserDirectoryFromTenant">
+    <wsdl:part element="tns:RemoveUserDirectoryFromTenant" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetUserDirectoryNameResponse">
@@ -1171,16 +1208,12 @@
     <wsdl:part element="tns:GroupRoleNotFoundException" name="GroupRoleNotFoundException">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="CreateOrganization">
-    <wsdl:part element="tns:CreateOrganization" name="parameters">
+  <wsdl:message name="GetTenantsResponse">
+    <wsdl:part element="tns:GetTenantsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetUserDirectoriesForOrganization">
-    <wsdl:part element="tns:GetUserDirectoriesForOrganization" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="RemoveUserDirectoryFromOrganizationResponse">
-    <wsdl:part element="tns:RemoveUserDirectoryFromOrganizationResponse" name="parameters">
+  <wsdl:message name="TenantNotFoundException">
+    <wsdl:part element="tns:TenantNotFoundException" name="TenantNotFoundException">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GroupNotFoundException">
@@ -1191,16 +1224,8 @@
     <wsdl:part element="tns:GetRoles" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="DuplicateOrganizationException">
-    <wsdl:part element="tns:DuplicateOrganizationException" name="DuplicateOrganizationException">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="UpdateGroupResponse">
     <wsdl:part element="tns:UpdateGroupResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="OrganizationUserDirectoryNotFoundException">
-    <wsdl:part element="tns:OrganizationUserDirectoryNotFoundException" name="OrganizationUserDirectoryNotFoundException">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetUserDirectoryTypes">
@@ -1209,6 +1234,10 @@
   </wsdl:message>
   <wsdl:message name="RemoveMemberFromGroupResponse">
     <wsdl:part element="tns:RemoveMemberFromGroupResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateTenant">
+    <wsdl:part element="tns:CreateTenant" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetRolesResponse">
@@ -1227,12 +1256,16 @@
     <wsdl:part element="tns:GetUserDirectoryTypeForUserDirectory" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="ExistingTenantUserDirectoryException">
+    <wsdl:part element="tns:ExistingTenantUserDirectoryException" name="ExistingTenantUserDirectoryException">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="RoleNotFoundException">
     <wsdl:part element="tns:RoleNotFoundException" name="RoleNotFoundException">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetUserDirectoriesForOrganizationResponse">
-    <wsdl:part element="tns:GetUserDirectoriesForOrganizationResponse" name="parameters">
+  <wsdl:message name="ServiceUnavailableException">
+    <wsdl:part element="ns1:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="AuthenticationFailedException">
@@ -1243,6 +1276,10 @@
     <wsdl:part element="tns:ResetPassword" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="DuplicateTenantException">
+    <wsdl:part element="tns:DuplicateTenantException" name="DuplicateTenantException">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="GetUsersResponse">
     <wsdl:part element="tns:GetUsersResponse" name="parameters">
     </wsdl:part>
@@ -1251,20 +1288,20 @@
     <wsdl:part element="tns:UpdateGroup" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetOrganizationNameResponse">
-    <wsdl:part element="tns:GetOrganizationNameResponse" name="parameters">
+  <wsdl:message name="GetTenantNameResponse">
+    <wsdl:part element="tns:GetTenantNameResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetUserResponse">
     <wsdl:part element="tns:GetUserResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetUserDirectorySummariesForOrganizationResponse">
-    <wsdl:part element="tns:GetUserDirectorySummariesForOrganizationResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="ExistingGroupMembersException">
     <wsdl:part element="tns:ExistingGroupMembersException" name="ExistingGroupMembersException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetUserDirectoriesForTenantResponse">
+    <wsdl:part element="tns:GetUserDirectoriesForTenantResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetUserDirectoryResponse">
@@ -1273,10 +1310,6 @@
   </wsdl:message>
   <wsdl:message name="GetUserDirectoriesResponse">
     <wsdl:part element="tns:GetUserDirectoriesResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="GetUserName">
-    <wsdl:part element="tns:GetUserName" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="AddRoleToGroup">
@@ -1291,23 +1324,11 @@
     <wsdl:part element="tns:GetGroupsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="OrganizationNotFoundException">
-    <wsdl:part element="tns:OrganizationNotFoundException" name="OrganizationNotFoundException">
+  <wsdl:message name="GetUserDirectorySummariesForTenantResponse">
+    <wsdl:part element="tns:GetUserDirectorySummariesForTenantResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:portType name="ISecurityService">
-    <wsdl:operation name="UpdateOrganization">
-      <wsdl:input message="tns:UpdateOrganization" name="UpdateOrganization">
-    </wsdl:input>
-      <wsdl:output message="tns:UpdateOrganizationResponse" name="UpdateOrganizationResponse">
-    </wsdl:output>
-      <wsdl:fault message="tns:OrganizationNotFoundException" name="OrganizationNotFoundException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
-    </wsdl:fault>
-    </wsdl:operation>
     <wsdl:operation name="GetUser">
       <wsdl:input message="tns:GetUser" name="GetUser">
     </wsdl:input>
@@ -1315,25 +1336,11 @@
     </wsdl:output>
       <wsdl:fault message="tns:UserNotFoundException" name="UserNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
     </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="RemoveUserDirectoryFromOrganization">
-      <wsdl:input message="tns:RemoveUserDirectoryFromOrganization" name="RemoveUserDirectoryFromOrganization">
-    </wsdl:input>
-      <wsdl:output message="tns:RemoveUserDirectoryFromOrganizationResponse" name="RemoveUserDirectoryFromOrganizationResponse">
-    </wsdl:output>
-      <wsdl:fault message="tns:OrganizationNotFoundException" name="OrganizationNotFoundException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:OrganizationUserDirectoryNotFoundException" name="OrganizationUserDirectoryNotFoundException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectory">
@@ -1341,11 +1348,11 @@
     </wsdl:input>
       <wsdl:output message="tns:GetUserDirectoryResponse" name="GetUserDirectoryResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectoryCapabilities">
@@ -1353,11 +1360,11 @@
     </wsdl:input>
       <wsdl:output message="tns:GetUserDirectoryCapabilitiesResponse" name="GetUserDirectoryCapabilitiesResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="DeleteUserDirectory">
@@ -1365,11 +1372,11 @@
     </wsdl:input>
       <wsdl:output message="tns:DeleteUserDirectoryResponse" name="DeleteUserDirectoryResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetRoles">
@@ -1377,7 +1384,7 @@
     </wsdl:input>
       <wsdl:output message="tns:GetRolesResponse" name="GetRolesResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectoryTypes">
@@ -1385,7 +1392,33 @@
     </wsdl:input>
       <wsdl:output message="tns:GetUserDirectoryTypesResponse" name="GetUserDirectoryTypesResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateTenant">
+      <wsdl:input message="tns:CreateTenant" name="CreateTenant">
+    </wsdl:input>
+      <wsdl:output message="tns:CreateTenantResponse" name="CreateTenantResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DuplicateTenantException" name="DuplicateTenantException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserName">
+      <wsdl:input message="tns:GetUserName" name="GetUserName">
+    </wsdl:input>
+      <wsdl:output message="tns:GetUserNameResponse" name="GetUserNameResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:UserNotFoundException" name="UserNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="RemoveMemberFromGroup">
@@ -1393,13 +1426,13 @@
     </wsdl:input>
       <wsdl:output message="tns:RemoveMemberFromGroupResponse" name="RemoveMemberFromGroupResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:GroupNotFoundException" name="GroupNotFoundException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
       <wsdl:fault message="tns:GroupMemberNotFoundException" name="GroupMemberNotFoundException">
     </wsdl:fault>
@@ -1409,8 +1442,6 @@
     </wsdl:input>
       <wsdl:output message="tns:DeleteGroupResponse" name="DeleteGroupResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:ExistingGroupMembersException" name="ExistingGroupMembersException">
@@ -1419,19 +1450,21 @@
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
     </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetMembersForGroup">
       <wsdl:input message="tns:GetMembersForGroup" name="GetMembersForGroup">
     </wsdl:input>
       <wsdl:output message="tns:GetMembersForGroupResponse" name="GetMembersForGroupResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:GroupNotFoundException" name="GroupNotFoundException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetGroupNamesForUser">
@@ -1441,11 +1474,11 @@
     </wsdl:output>
       <wsdl:fault message="tns:UserNotFoundException" name="UserNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="DeleteUser">
@@ -1455,11 +1488,11 @@
     </wsdl:output>
       <wsdl:fault message="tns:UserNotFoundException" name="UserNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectoryTypeForUserDirectory">
@@ -1467,13 +1500,25 @@
     </wsdl:input>
       <wsdl:output message="tns:GetUserDirectoryTypeForUserDirectoryResponse" name="GetUserDirectoryTypeForUserDirectoryResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryTypeNotFoundException" name="UserDirectoryTypeNotFoundException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTenant">
+      <wsdl:input message="tns:DeleteTenant" name="DeleteTenant">
+    </wsdl:input>
+      <wsdl:output message="tns:DeleteTenantResponse" name="DeleteTenantResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:TenantNotFoundException" name="TenantNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetRoleCodesForGroup">
@@ -1481,25 +1526,25 @@
     </wsdl:input>
       <wsdl:output message="tns:GetRoleCodesForGroupResponse" name="GetRoleCodesForGroupResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:GroupNotFoundException" name="GroupNotFoundException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
     </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetOrganizationsForUserDirectory">
-      <wsdl:input message="tns:GetOrganizationsForUserDirectory" name="GetOrganizationsForUserDirectory">
-    </wsdl:input>
-      <wsdl:output message="tns:GetOrganizationsForUserDirectoryResponse" name="GetOrganizationsForUserDirectoryResponse">
-    </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetTenantName">
+      <wsdl:input message="tns:GetTenantName" name="GetTenantName">
+    </wsdl:input>
+      <wsdl:output message="tns:GetTenantNameResponse" name="GetTenantNameResponse">
+    </wsdl:output>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
-      <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+      <wsdl:fault message="tns:TenantNotFoundException" name="TenantNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetGroupNames">
@@ -1507,11 +1552,27 @@
     </wsdl:input>
       <wsdl:output message="tns:GetGroupNamesResponse" name="GetGroupNamesResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AddUserDirectoryToTenant">
+      <wsdl:input message="tns:AddUserDirectoryToTenant" name="AddUserDirectoryToTenant">
+    </wsdl:input>
+      <wsdl:output message="tns:AddUserDirectoryToTenantResponse" name="AddUserDirectoryToTenantResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:TenantNotFoundException" name="TenantNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ExistingTenantUserDirectoryException" name="ExistingTenantUserDirectoryException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="ChangePassword">
@@ -1523,17 +1584,29 @@
     </wsdl:fault>
       <wsdl:fault message="tns:UserLockedException" name="UserLockedException">
     </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:AuthenticationFailedException" name="AuthenticationFailedException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
     </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
       <wsdl:fault message="tns:ExistingPasswordException" name="ExistingPasswordException">
     </wsdl:fault>
       <wsdl:fault message="tns:InvalidSecurityCodeException" name="InvalidSecurityCodeException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserDirectoriesForTenant">
+      <wsdl:input message="tns:GetUserDirectoriesForTenant" name="GetUserDirectoriesForTenant">
+    </wsdl:input>
+      <wsdl:output message="tns:GetUserDirectoriesForTenantResponse" name="GetUserDirectoriesForTenantResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:TenantNotFoundException" name="TenantNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="ResetPassword">
@@ -1543,9 +1616,9 @@
     </wsdl:output>
       <wsdl:fault message="tns:UserNotFoundException" name="UserNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="AdminChangePassword">
@@ -1555,23 +1628,11 @@
     </wsdl:output>
       <wsdl:fault message="tns:UserNotFoundException" name="UserNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
     </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetOrganization">
-      <wsdl:input message="tns:GetOrganization" name="GetOrganization">
-    </wsdl:input>
-      <wsdl:output message="tns:GetOrganizationResponse" name="GetOrganizationResponse">
-    </wsdl:output>
-      <wsdl:fault message="tns:OrganizationNotFoundException" name="OrganizationNotFoundException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectories">
@@ -1579,7 +1640,9 @@
     </wsdl:input>
       <wsdl:output message="tns:GetUserDirectoriesResponse" name="GetUserDirectoriesResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetRolesForGroup">
@@ -1587,13 +1650,25 @@
     </wsdl:input>
       <wsdl:output message="tns:GetRolesForGroupResponse" name="GetRolesForGroupResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:GroupNotFoundException" name="GroupNotFoundException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserDirectorySummariesForTenant">
+      <wsdl:input message="tns:GetUserDirectorySummariesForTenant" name="GetUserDirectorySummariesForTenant">
+    </wsdl:input>
+      <wsdl:output message="tns:GetUserDirectorySummariesForTenantResponse" name="GetUserDirectorySummariesForTenantResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:TenantNotFoundException" name="TenantNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="AddMemberToGroup">
@@ -1603,43 +1678,27 @@
     </wsdl:output>
       <wsdl:fault message="tns:UserNotFoundException" name="UserNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:GroupNotFoundException" name="GroupNotFoundException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
     </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
       <wsdl:fault message="tns:ExistingGroupMemberException" name="ExistingGroupMemberException">
     </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="AddUserDirectoryToOrganization">
-      <wsdl:input message="tns:AddUserDirectoryToOrganization" name="AddUserDirectoryToOrganization">
+    <wsdl:operation name="GetTenant">
+      <wsdl:input message="tns:GetTenant" name="GetTenant">
     </wsdl:input>
-      <wsdl:output message="tns:AddUserDirectoryToOrganizationResponse" name="AddUserDirectoryToOrganizationResponse">
+      <wsdl:output message="tns:GetTenantResponse" name="GetTenantResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:OrganizationNotFoundException" name="OrganizationNotFoundException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
-      <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+      <wsdl:fault message="tns:TenantNotFoundException" name="TenantNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:ExistingOrganizationUserDirectoryException" name="ExistingOrganizationUserDirectoryException">
-    </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="DeleteOrganization">
-      <wsdl:input message="tns:DeleteOrganization" name="DeleteOrganization">
-    </wsdl:input>
-      <wsdl:output message="tns:DeleteOrganizationResponse" name="DeleteOrganizationResponse">
-    </wsdl:output>
-      <wsdl:fault message="tns:OrganizationNotFoundException" name="OrganizationNotFoundException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateGroup">
@@ -1647,13 +1706,13 @@
     </wsdl:input>
       <wsdl:output message="tns:UpdateGroupResponse" name="UpdateGroupResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:GroupNotFoundException" name="GroupNotFoundException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateUserDirectory">
@@ -1661,11 +1720,23 @@
     </wsdl:input>
       <wsdl:output message="tns:UpdateUserDirectoryResponse" name="UpdateUserDirectoryResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetTenantsForUserDirectory">
+      <wsdl:input message="tns:GetTenantsForUserDirectory" name="GetTenantsForUserDirectory">
+    </wsdl:input>
+      <wsdl:output message="tns:GetTenantsForUserDirectoryResponse" name="GetTenantsForUserDirectoryResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateUser">
@@ -1675,19 +1746,21 @@
     </wsdl:output>
       <wsdl:fault message="tns:UserNotFoundException" name="UserNotFoundException">
     </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
     </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="GetOrganizations">
-      <wsdl:input message="tns:GetOrganizations" name="GetOrganizations">
+    <wsdl:operation name="GetTenants">
+      <wsdl:input message="tns:GetTenants" name="GetTenants">
     </wsdl:input>
-      <wsdl:output message="tns:GetOrganizationsResponse" name="GetOrganizationsResponse">
+      <wsdl:output message="tns:GetTenantsResponse" name="GetTenantsResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetGroup">
@@ -1695,13 +1768,13 @@
     </wsdl:input>
       <wsdl:output message="tns:GetGroupResponse" name="GetGroupResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:GroupNotFoundException" name="GroupNotFoundException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="CreateUserDirectory">
@@ -1709,23 +1782,11 @@
     </wsdl:input>
       <wsdl:output message="tns:CreateUserDirectoryResponse" name="CreateUserDirectoryResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:DuplicateUserDirectoryException" name="DuplicateUserDirectoryException">
     </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetOrganizationName">
-      <wsdl:input message="tns:GetOrganizationName" name="GetOrganizationName">
-    </wsdl:input>
-      <wsdl:output message="tns:GetOrganizationNameResponse" name="GetOrganizationNameResponse">
-    </wsdl:output>
-      <wsdl:fault message="tns:OrganizationNotFoundException" name="OrganizationNotFoundException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectorySummaries">
@@ -1733,7 +1794,9 @@
     </wsdl:input>
       <wsdl:output message="tns:GetUserDirectorySummariesResponse" name="GetUserDirectorySummariesResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetGroups">
@@ -1741,23 +1804,11 @@
     </wsdl:input>
       <wsdl:output message="tns:GetGroupsResponse" name="GetGroupsResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
     </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetUserDirectorySummariesForOrganization">
-      <wsdl:input message="tns:GetUserDirectorySummariesForOrganization" name="GetUserDirectorySummariesForOrganization">
-    </wsdl:input>
-      <wsdl:output message="tns:GetUserDirectorySummariesForOrganizationResponse" name="GetUserDirectorySummariesForOrganizationResponse">
-    </wsdl:output>
-      <wsdl:fault message="tns:OrganizationNotFoundException" name="OrganizationNotFoundException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUsers">
@@ -1765,11 +1816,37 @@
     </wsdl:input>
       <wsdl:output message="tns:GetUsersResponse" name="GetUsersResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTenant">
+      <wsdl:input message="tns:UpdateTenant" name="UpdateTenant">
+    </wsdl:input>
+      <wsdl:output message="tns:UpdateTenantResponse" name="UpdateTenantResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:TenantNotFoundException" name="TenantNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveUserDirectoryFromTenant">
+      <wsdl:input message="tns:RemoveUserDirectoryFromTenant" name="RemoveUserDirectoryFromTenant">
+    </wsdl:input>
+      <wsdl:output message="tns:RemoveUserDirectoryFromTenantResponse" name="RemoveUserDirectoryFromTenantResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:TenantNotFoundException" name="TenantNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:TenantUserDirectoryNotFoundException" name="TenantUserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="CreateUser">
@@ -1777,27 +1854,27 @@
     </wsdl:input>
       <wsdl:output message="tns:CreateUserResponse" name="CreateUserResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
       <wsdl:fault message="tns:DuplicateUserException" name="DuplicateUserException">
     </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="GetUserName">
-      <wsdl:input message="tns:GetUserName" name="GetUserName">
+    <wsdl:operation name="CreateGroup">
+      <wsdl:input message="tns:CreateGroup" name="CreateGroup">
     </wsdl:input>
-      <wsdl:output message="tns:GetUserNameResponse" name="GetUserNameResponse">
+      <wsdl:output message="tns:CreateGroupResponse" name="CreateGroupResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:UserNotFoundException" name="UserNotFoundException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
+      <wsdl:fault message="tns:DuplicateGroupException" name="DuplicateGroupException">
     </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="AddRoleToGroup">
@@ -1805,8 +1882,6 @@
     </wsdl:input>
       <wsdl:output message="tns:AddRoleToGroupResponse" name="AddRoleToGroupResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:RoleNotFoundException" name="RoleNotFoundException">
@@ -1817,31 +1892,7 @@
     </wsdl:fault>
       <wsdl:fault message="tns:ExistingGroupRoleException" name="ExistingGroupRoleException">
     </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="CreateGroup">
-      <wsdl:input message="tns:CreateGroup" name="CreateGroup">
-    </wsdl:input>
-      <wsdl:output message="tns:CreateGroupResponse" name="CreateGroupResponse">
-    </wsdl:output>
-      <wsdl:fault message="tns:DuplicateGroupException" name="DuplicateGroupException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
-    </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="CreateOrganization">
-      <wsdl:input message="tns:CreateOrganization" name="CreateOrganization">
-    </wsdl:input>
-      <wsdl:output message="tns:CreateOrganizationResponse" name="CreateOrganizationResponse">
-    </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:DuplicateOrganizationException" name="DuplicateOrganizationException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectoryName">
@@ -1849,21 +1900,11 @@
     </wsdl:input>
       <wsdl:output message="tns:GetUserDirectoryNameResponse" name="GetUserDirectoryNameResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
     </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetUserDirectoriesForOrganization">
-      <wsdl:input message="tns:GetUserDirectoriesForOrganization" name="GetUserDirectoriesForOrganization">
-    </wsdl:input>
-      <wsdl:output message="tns:GetUserDirectoriesForOrganizationResponse" name="GetUserDirectoriesForOrganizationResponse">
-    </wsdl:output>
-      <wsdl:fault message="tns:OrganizationNotFoundException" name="OrganizationNotFoundException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="RemoveRoleFromGroup">
@@ -1871,13 +1912,13 @@
     </wsdl:input>
       <wsdl:output message="tns:RemoveRoleFromGroupResponse" name="RemoveRoleFromGroupResponse">
     </wsdl:output>
-      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException">
-    </wsdl:fault>
       <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
     </wsdl:fault>
       <wsdl:fault message="tns:GroupNotFoundException" name="GroupNotFoundException">
     </wsdl:fault>
       <wsdl:fault message="tns:UserDirectoryNotFoundException" name="UserDirectoryNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceUnavailableException" name="ServiceUnavailableException">
     </wsdl:fault>
       <wsdl:fault message="tns:GroupRoleNotFoundException" name="GroupRoleNotFoundException">
     </wsdl:fault>
@@ -1885,24 +1926,6 @@
   </wsdl:portType>
   <wsdl:binding name="SecurityServiceSoapBinding" type="tns:ISecurityService">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="UpdateOrganization">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="UpdateOrganization">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="UpdateOrganizationResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="OrganizationNotFoundException">
-        <soap:fault name="OrganizationNotFoundException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="InvalidArgumentException">
-        <soap:fault name="InvalidArgumentException" use="literal"/>
-      </wsdl:fault>
-    </wsdl:operation>
     <wsdl:operation name="GetUser">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="GetUser">
@@ -1914,35 +1937,14 @@
       <wsdl:fault name="UserNotFoundException">
         <soap:fault name="UserNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
       </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="RemoveUserDirectoryFromOrganization">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="RemoveUserDirectoryFromOrganization">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="RemoveUserDirectoryFromOrganizationResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="OrganizationNotFoundException">
-        <soap:fault name="OrganizationNotFoundException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="InvalidArgumentException">
-        <soap:fault name="InvalidArgumentException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="OrganizationUserDirectoryNotFoundException">
-        <soap:fault name="OrganizationUserDirectoryNotFoundException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectory">
@@ -1953,14 +1955,14 @@
       <wsdl:output name="GetUserDirectoryResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectoryCapabilities">
@@ -1971,14 +1973,14 @@
       <wsdl:output name="GetUserDirectoryCapabilitiesResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="DeleteUserDirectory">
@@ -1989,14 +1991,14 @@
       <wsdl:output name="DeleteUserDirectoryResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetRoles">
@@ -2007,8 +2009,8 @@
       <wsdl:output name="GetRolesResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectoryTypes">
@@ -2019,8 +2021,47 @@
       <wsdl:output name="GetUserDirectoryTypesResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateTenant">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="CreateTenant">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CreateTenantResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DuplicateTenantException">
+        <soap:fault name="DuplicateTenantException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserName">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetUserName">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetUserNameResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UserNotFoundException">
+        <soap:fault name="UserNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserDirectoryNotFoundException">
+        <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="RemoveMemberFromGroup">
@@ -2031,9 +2072,6 @@
       <wsdl:output name="RemoveMemberFromGroupResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2042,6 +2080,9 @@
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="GroupMemberNotFoundException">
         <soap:fault name="GroupMemberNotFoundException" use="literal"/>
@@ -2055,9 +2096,6 @@
       <wsdl:output name="DeleteGroupResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2070,6 +2108,9 @@
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
       </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetMembersForGroup">
       <soap:operation soapAction="" style="document"/>
@@ -2079,9 +2120,6 @@
       <wsdl:output name="GetMembersForGroupResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2090,6 +2128,9 @@
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetGroupNamesForUser">
@@ -2103,14 +2144,14 @@
       <wsdl:fault name="UserNotFoundException">
         <soap:fault name="UserNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="DeleteUser">
@@ -2124,14 +2165,14 @@
       <wsdl:fault name="UserNotFoundException">
         <soap:fault name="UserNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectoryTypeForUserDirectory">
@@ -2142,9 +2183,6 @@
       <wsdl:output name="GetUserDirectoryTypeForUserDirectoryResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2153,6 +2191,27 @@
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTenant">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="DeleteTenant">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="DeleteTenantResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="TenantNotFoundException">
+        <soap:fault name="TenantNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetRoleCodesForGroup">
@@ -2163,9 +2222,6 @@
       <wsdl:output name="GetRoleCodesForGroupResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2175,23 +2231,26 @@
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
       </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="GetOrganizationsForUserDirectory">
+    <wsdl:operation name="GetTenantName">
       <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="GetOrganizationsForUserDirectory">
+      <wsdl:input name="GetTenantName">
         <soap:body use="literal"/>
       </wsdl:input>
-      <wsdl:output name="GetOrganizationsForUserDirectoryResponse">
+      <wsdl:output name="GetTenantNameResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="UserDirectoryNotFoundException">
-        <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      <wsdl:fault name="TenantNotFoundException">
+        <soap:fault name="TenantNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetGroupNames">
@@ -2202,14 +2261,38 @@
       <wsdl:output name="GetGroupNamesResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AddUserDirectoryToTenant">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="AddUserDirectoryToTenant">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="AddUserDirectoryToTenantResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="TenantNotFoundException">
+        <soap:fault name="TenantNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExistingTenantUserDirectoryException">
+        <soap:fault name="ExistingTenantUserDirectoryException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserDirectoryNotFoundException">
+        <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="ChangePassword">
@@ -2226,9 +2309,6 @@
       <wsdl:fault name="UserLockedException">
         <soap:fault name="UserLockedException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2238,11 +2318,32 @@
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
       </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
       <wsdl:fault name="ExistingPasswordException">
         <soap:fault name="ExistingPasswordException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="InvalidSecurityCodeException">
         <soap:fault name="InvalidSecurityCodeException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserDirectoriesForTenant">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetUserDirectoriesForTenant">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetUserDirectoriesForTenantResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="TenantNotFoundException">
+        <soap:fault name="TenantNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="ResetPassword">
@@ -2256,11 +2357,11 @@
       <wsdl:fault name="UserNotFoundException">
         <soap:fault name="UserNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="AdminChangePassword">
@@ -2274,32 +2375,14 @@
       <wsdl:fault name="UserNotFoundException">
         <soap:fault name="UserNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
       </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetOrganization">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="GetOrganization">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="GetOrganizationResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="OrganizationNotFoundException">
-        <soap:fault name="OrganizationNotFoundException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="InvalidArgumentException">
-        <soap:fault name="InvalidArgumentException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectories">
@@ -2310,8 +2393,11 @@
       <wsdl:output name="GetUserDirectoriesResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetRolesForGroup">
@@ -2322,9 +2408,6 @@
       <wsdl:output name="GetRolesForGroupResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2333,6 +2416,27 @@
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserDirectorySummariesForTenant">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetUserDirectorySummariesForTenant">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetUserDirectorySummariesForTenantResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="TenantNotFoundException">
+        <soap:fault name="TenantNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="AddMemberToGroup">
@@ -2346,9 +2450,6 @@
       <wsdl:fault name="UserNotFoundException">
         <soap:fault name="UserNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2358,50 +2459,29 @@
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
       </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
       <wsdl:fault name="ExistingGroupMemberException">
         <soap:fault name="ExistingGroupMemberException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="AddUserDirectoryToOrganization">
+    <wsdl:operation name="GetTenant">
       <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="AddUserDirectoryToOrganization">
+      <wsdl:input name="GetTenant">
         <soap:body use="literal"/>
       </wsdl:input>
-      <wsdl:output name="AddUserDirectoryToOrganizationResponse">
+      <wsdl:output name="GetTenantResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="OrganizationNotFoundException">
-        <soap:fault name="OrganizationNotFoundException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="UserDirectoryNotFoundException">
-        <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      <wsdl:fault name="TenantNotFoundException">
+        <soap:fault name="TenantNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="ExistingOrganizationUserDirectoryException">
-        <soap:fault name="ExistingOrganizationUserDirectoryException" use="literal"/>
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="DeleteOrganization">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="DeleteOrganization">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="DeleteOrganizationResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="OrganizationNotFoundException">
-        <soap:fault name="OrganizationNotFoundException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="InvalidArgumentException">
-        <soap:fault name="InvalidArgumentException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateGroup">
@@ -2412,9 +2492,6 @@
       <wsdl:output name="UpdateGroupResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2423,6 +2500,9 @@
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateUserDirectory">
@@ -2433,14 +2513,32 @@
       <wsdl:output name="UpdateUserDirectoryResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetTenantsForUserDirectory">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetTenantsForUserDirectory">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetTenantsForUserDirectoryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserDirectoryNotFoundException">
+        <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateUser">
@@ -2454,26 +2552,29 @@
       <wsdl:fault name="UserNotFoundException">
         <soap:fault name="UserNotFoundException" use="literal"/>
       </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
       </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="GetOrganizations">
+    <wsdl:operation name="GetTenants">
       <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="GetOrganizations">
+      <wsdl:input name="GetTenants">
         <soap:body use="literal"/>
       </wsdl:input>
-      <wsdl:output name="GetOrganizationsResponse">
+      <wsdl:output name="GetTenantsResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetGroup">
@@ -2484,9 +2585,6 @@
       <wsdl:output name="GetGroupResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2495,6 +2593,9 @@
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="CreateUserDirectory">
@@ -2505,32 +2606,14 @@
       <wsdl:output name="CreateUserDirectoryResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="DuplicateUserDirectoryException">
         <soap:fault name="DuplicateUserDirectoryException" use="literal"/>
       </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetOrganizationName">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="GetOrganizationName">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="GetOrganizationNameResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="OrganizationNotFoundException">
-        <soap:fault name="OrganizationNotFoundException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="InvalidArgumentException">
-        <soap:fault name="InvalidArgumentException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectorySummaries">
@@ -2541,8 +2624,11 @@
       <wsdl:output name="GetUserDirectorySummariesResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetGroups">
@@ -2553,32 +2639,14 @@
       <wsdl:output name="GetGroupsResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
       </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetUserDirectorySummariesForOrganization">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="GetUserDirectorySummariesForOrganization">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="GetUserDirectorySummariesForOrganizationResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="OrganizationNotFoundException">
-        <soap:fault name="OrganizationNotFoundException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="InvalidArgumentException">
-        <soap:fault name="InvalidArgumentException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUsers">
@@ -2589,14 +2657,53 @@
       <wsdl:output name="GetUsersResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTenant">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="UpdateTenant">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="UpdateTenantResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="TenantNotFoundException">
+        <soap:fault name="TenantNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveUserDirectoryFromTenant">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="RemoveUserDirectoryFromTenant">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="RemoveUserDirectoryFromTenantResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="TenantNotFoundException">
+        <soap:fault name="TenantNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="TenantUserDirectoryNotFoundException">
+        <soap:fault name="TenantUserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="CreateUser">
@@ -2607,38 +2714,38 @@
       <wsdl:output name="CreateUserResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="DuplicateUserException">
         <soap:fault name="DuplicateUserException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="GetUserName">
+    <wsdl:operation name="CreateGroup">
       <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="GetUserName">
+      <wsdl:input name="CreateGroup">
         <soap:body use="literal"/>
       </wsdl:input>
-      <wsdl:output name="GetUserNameResponse">
+      <wsdl:output name="CreateGroupResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="UserNotFoundException">
-        <soap:fault name="UserNotFoundException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
+      <wsdl:fault name="DuplicateGroupException">
+        <soap:fault name="DuplicateGroupException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="AddRoleToGroup">
@@ -2649,9 +2756,6 @@
       <wsdl:output name="AddRoleToGroupResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2667,44 +2771,8 @@
       <wsdl:fault name="ExistingGroupRoleException">
         <soap:fault name="ExistingGroupRoleException" use="literal"/>
       </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="CreateGroup">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="CreateGroup">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="CreateGroupResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="DuplicateGroupException">
-        <soap:fault name="DuplicateGroupException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="InvalidArgumentException">
-        <soap:fault name="InvalidArgumentException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="UserDirectoryNotFoundException">
-        <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="CreateOrganization">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="CreateOrganization">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="CreateOrganizationResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="InvalidArgumentException">
-        <soap:fault name="InvalidArgumentException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="DuplicateOrganizationException">
-        <soap:fault name="DuplicateOrganizationException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetUserDirectoryName">
@@ -2715,29 +2783,14 @@
       <wsdl:output name="GetUserDirectoryNameResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
       </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetUserDirectoriesForOrganization">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="GetUserDirectoriesForOrganization">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="GetUserDirectoriesForOrganizationResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="OrganizationNotFoundException">
-        <soap:fault name="OrganizationNotFoundException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="RemoveRoleFromGroup">
@@ -2748,9 +2801,6 @@
       <wsdl:output name="RemoveRoleFromGroupResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SecurityServiceException">
-        <soap:fault name="SecurityServiceException" use="literal"/>
-      </wsdl:fault>
       <wsdl:fault name="InvalidArgumentException">
         <soap:fault name="InvalidArgumentException" use="literal"/>
       </wsdl:fault>
@@ -2759,6 +2809,9 @@
       </wsdl:fault>
       <wsdl:fault name="UserDirectoryNotFoundException">
         <soap:fault name="UserDirectoryNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceUnavailableException">
+        <soap:fault name="ServiceUnavailableException" use="literal"/>
       </wsdl:fault>
       <wsdl:fault name="GroupRoleNotFoundException">
         <soap:fault name="GroupRoleNotFoundException" use="literal"/>

@@ -45,10 +45,10 @@ import javax.xml.bind.annotation.XmlType;
         "A subdivision of the human species on the basis of inherited physical and behavioral differences")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "Race", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "Race", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Race",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

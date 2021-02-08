@@ -18,8 +18,8 @@ package digital.inception.scheduler;
 
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.ServiceUtil;
-import digital.inception.core.validation.InvalidArgumentException;
-import digital.inception.core.validation.ValidationError;
+import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ValidationError;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;

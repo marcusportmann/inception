@@ -37,10 +37,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "A parameter associated with a report")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
-@XmlRootElement(name = "ReportParameter", namespace = "http://reporting.inception.digital")
+@XmlRootElement(name = "ReportParameter", namespace = "http://inception.digital/reporting")
 @XmlType(
     name = "ReportParameter",
-    namespace = "http://reporting.inception.digital",
+    namespace = "http://inception.digital/reporting",
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})

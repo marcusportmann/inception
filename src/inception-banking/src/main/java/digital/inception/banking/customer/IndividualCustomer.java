@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.banking.customer.constraints.ValidIndividualCustomer;
+import digital.inception.core.xml.LocalDateAdapter;
+import digital.inception.core.xml.LocalDateTimeAdapter;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyRole;
@@ -54,8 +56,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.util.StringUtils;
 
 /**
@@ -126,10 +130,10 @@ import org.springframework.util.StringUtils;
 })
 @XmlRootElement(
     name = "IndividualCustomer",
-    namespace = "http://customer.banking.inception.digital")
+    namespace = "http://inception.digital/banking/customer")
 @XmlType(
     name = "IndividualCustomer",
-    namespace = "http://customer.banking.inception.digital",
+    namespace = "http://inception.digital/banking/customer",
     propOrder = {
       "id",
       "tenantId",
@@ -589,6 +593,8 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   @Schema(description = "The date of birth for the individual customer", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "DateOfBirth", required = true)
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
   public LocalDate getDateOfBirth() {
     return dateOfBirth;
   }
@@ -601,6 +607,8 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   @Schema(description = "The optional date of death for the individual customer")
   @JsonProperty
   @XmlElement(name = "DateOfDeath")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
   public LocalDate getDateOfDeath() {
     return dateOfDeath;
   }

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 /** The enumeration giving the possible statuses for a message. */
 @Schema(description = "The message status")
 @XmlEnum
-@XmlType(name = "MessageStatus", namespace = "http://messaging.inception.digital")
+@XmlType(name = "MessageStatus", namespace = "http://inception.digital/messaging")
 public enum MessageStatus {
   @XmlEnumValue("Initialized")
   INITIALIZED("initialized", "Initialized"),

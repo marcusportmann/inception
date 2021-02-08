@@ -32,6 +32,7 @@ import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
 import {UserDirectory} from '../services/user-directory';
 import {UserDirectoryType} from '../services/user-directory-type';
 import {v4 as uuid} from 'uuid';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The NewUserDirectoryComponent class implements the new user directory component.
@@ -99,7 +100,8 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
       this.userDirectory = new UserDirectory(uuid(), '', '', []);
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -130,7 +132,8 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
         this.router.navigate(['..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

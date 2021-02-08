@@ -18,10 +18,10 @@ package digital.inception.sms;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.Debug;
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.service.ValidationError;
 import digital.inception.core.util.ServiceUtil;
-import digital.inception.core.validation.InvalidArgumentException;
-import digital.inception.core.validation.ValidationError;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 import java.io.StringReader;

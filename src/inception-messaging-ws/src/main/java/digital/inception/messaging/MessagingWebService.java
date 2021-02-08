@@ -27,7 +27,7 @@ import javax.jws.soap.SOAPBinding;
 @WebService(
     serviceName = "MessagingService",
     name = "IMessagingService",
-    targetNamespace = "http://messaging.inception.digital")
+    targetNamespace = "http://inception.digital/messaging")
 @SOAPBinding
 @SuppressWarnings({"unused", "WeakerAccess", "ValidExternallyBoundObject"})
 public class MessagingWebService {

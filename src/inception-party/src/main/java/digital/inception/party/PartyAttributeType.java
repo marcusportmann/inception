@@ -56,10 +56,10 @@ import org.springframework.util.StringUtils;
   "description",
   "partyTypes"
 })
-@XmlRootElement(name = "PartyAttributeType", namespace = "http://party.inception.digital")
+@XmlRootElement(name = "PartyAttributeType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "PartyAttributeType",
-    namespace = "http://party.inception.digital",
+    namespace = "http://inception.digital/party",
     propOrder = {"code", "category", "localeId", "sortIndex", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

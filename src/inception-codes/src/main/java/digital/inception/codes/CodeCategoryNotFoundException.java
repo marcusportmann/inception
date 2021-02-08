@@ -16,12 +16,12 @@
 
 package digital.inception.codes;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>CodeCategoryNotFoundException</b> exception is thrown to indicate an error condition as a
@@ -31,10 +31,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The code category could not be found")
+@Problem(
+    type = "http://inception.digital/problems/codes/code-category-not-found",
+    title = "The code category could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "CodeCategoryNotFoundException",
-    targetNamespace = "http://codes.inception.digital",
+    targetNamespace = "http://inception.digital/codes",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class CodeCategoryNotFoundException extends ServiceException {
@@ -47,8 +50,6 @@ public class CodeCategoryNotFoundException extends ServiceException {
    * @param codeCategoryId the ID for the code category
    */
   public CodeCategoryNotFoundException(String codeCategoryId) {
-    super(
-        "CodeCategoryNotFoundError",
-        "The code category with ID (" + codeCategoryId + ") could not be found");
+    super("The code category with ID (" + codeCategoryId + ") could not be found");
   }
 }

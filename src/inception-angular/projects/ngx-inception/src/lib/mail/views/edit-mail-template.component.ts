@@ -30,6 +30,7 @@ import {ServiceUnavailableError} from '../../core/errors/service-unavailable-err
 import {Error} from '../../core/errors/error';
 import {Base64} from '../../core/util/base64';
 import {MailTemplateContentType} from '../services/mail-template-content-type';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The EditMailTemplateComponent class implements the edit mail template component.
@@ -123,7 +124,8 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
       this.contentTypeFormControl.setValue(mailTemplate.contentType);
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+        (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -161,7 +163,8 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
             this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
           }, (error: Error) => {
             // noinspection SuspiciousTypeOfGuard
-            if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+            if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+              (error instanceof ServiceUnavailableError)) {
               // noinspection JSIgnoredPromiseFromCall
               this.router.navigateByUrl('/error/send-error-report', {state: {error}});
             } else {

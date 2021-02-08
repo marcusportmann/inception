@@ -17,7 +17,7 @@
 package digital.inception.reporting;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.service.InvalidArgumentException;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +40,7 @@ import org.springframework.util.StringUtils;
 @WebService(
     serviceName = "ReportingService",
     name = "IReportingService",
-    targetNamespace = "http://reporting.inception.digital")
+    targetNamespace = "http://inception.digital/reporting")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ReportingWebService {

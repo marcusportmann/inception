@@ -16,6 +16,7 @@
 
 package digital.inception.oauth2.server.authorization.token;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import java.util.Set;
 
 /**
@@ -34,7 +35,7 @@ public interface ITokenService {
    * @return the OAuth2 access token
    */
   OAuth2AccessToken issueOAuth2AccessToken(String username, Set<String> scopes)
-      throws TokenServiceException;
+      throws ServiceUnavailableException;
 
   /**
    * Issue an OAuth2 refresh token for the specified user.
@@ -44,7 +45,7 @@ public interface ITokenService {
    * @return the OAuth2 refresh token
    */
   OAuth2RefreshToken issueOAuth2RefreshToken(String username, Set<String> scopes)
-      throws TokenServiceException;
+      throws ServiceUnavailableException;
 
   /**
    * Refresh an OAuth2 access token and if required the OAuth2 refresh token.
@@ -53,5 +54,5 @@ public interface ITokenService {
    * @return the refreshed tokens
    */
   RefreshedOAuth2Tokens refreshOAuth2Tokens(String encodedOAuth2RefreshToken)
-      throws InvalidOAuth2RefreshTokenException, TokenServiceException;
+      throws InvalidOAuth2RefreshTokenException, ServiceUnavailableException;
 }

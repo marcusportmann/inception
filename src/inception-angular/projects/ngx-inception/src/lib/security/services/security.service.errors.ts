@@ -17,7 +17,7 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
-import {ApiError} from '../../core/errors/api-error';
+import {ProblemDetails} from '../../core/errors/problem-details';
 
 /**
  * The AuthenticationFailedError class holds the information for an authentication failed error.
@@ -26,12 +26,14 @@ import {ApiError} from '../../core/errors/api-error';
  */
 export class AuthenticationFailedError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/authentication-failed';
+
   /**
    * Constructs a new AuthenticationFailedError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_authentication_failed_error:Authentication failed.`, cause);
   }
 }
@@ -43,12 +45,14 @@ export class AuthenticationFailedError extends Error {
  */
 export class DuplicateGroupError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/duplicate-group';
+
   /**
    * Constructs a new DuplicateGroupError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_duplicate_group_error:A group with the specified name already exists.`, cause);
   }
 }
@@ -60,12 +64,14 @@ export class DuplicateGroupError extends Error {
  */
 export class DuplicateTenantError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/duplicate-tenant';
+
   /**
    * Constructs a new DuplicateTenantError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_duplicate_tenant_error:An tenant with the specified ID or name already exists.`, cause);
   }
 }
@@ -77,12 +83,14 @@ export class DuplicateTenantError extends Error {
  */
 export class DuplicateUserDirectoryError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/duplicate-user-directory';
+
   /**
    * Constructs a new DuplicateUserDirectoryError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_duplicate_user_directory_error:A user directory with the specified ID or name already exists.`, cause);
   }
 }
@@ -94,12 +102,14 @@ export class DuplicateUserDirectoryError extends Error {
  */
 export class DuplicateUserError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/duplicate-user';
+
   /**
    * Constructs a new DuplicateUserError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_duplicate_user_error:A user with the specified username already exists.`, cause);
   }
 }
@@ -111,12 +121,14 @@ export class DuplicateUserError extends Error {
  */
 export class ExistingGroupMemberError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/existing-group-member';
+
   /**
    * Constructs a new ExistingGroupMemberError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_existing_group_member_error:The group member already exists.`, cause);
   }
 }
@@ -128,12 +140,14 @@ export class ExistingGroupMemberError extends Error {
  */
 export class ExistingGroupMembersError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/existing-group-members';
+
   /**
    * Constructs a new ExistingGroupMembersError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_existing_group_members_error:The group has existing members.`, cause);
   }
 }
@@ -145,12 +159,14 @@ export class ExistingGroupMembersError extends Error {
  */
 export class ExistingGroupRoleError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/existing-group-role';
+
   /**
    * Constructs a new ExistingGroupRoleError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_existing_group_role_error:The group role already exists.`, cause);
   }
 }
@@ -163,12 +179,14 @@ export class ExistingGroupRoleError extends Error {
  */
 export class ExistingTenantUserDirectoryError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/existing-tenant-user-directory';
+
   /**
    * Constructs a new ExistingTenantUserDirectoryError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_existing_tenant_user_directory_error:The tenant user directory already exists.`, cause);
   }
 }
@@ -180,12 +198,14 @@ export class ExistingTenantUserDirectoryError extends Error {
  */
 export class ExistingPasswordError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/existing-password';
+
   /**
    * Constructs a new ExistingPasswordError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_existing_password_error:The new password has been used recently and is not valid.`, cause);
   }
 }
@@ -197,12 +217,14 @@ export class ExistingPasswordError extends Error {
  */
 export class GroupMemberNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/group-member-not-found';
+
   /**
    * Constructs a new GroupMemberNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_group_member_not_found_error:The group member could not be found.`, cause);
   }
 }
@@ -214,12 +236,14 @@ export class GroupMemberNotFoundError extends Error {
  */
 export class GroupNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/group-not-found';
+
   /**
    * Constructs a new GroupNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_group_not_found_error:The group could not be found.`, cause);
   }
 }
@@ -231,12 +255,14 @@ export class GroupNotFoundError extends Error {
  */
 export class GroupRoleNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/group-role-not-found';
+
   /**
    * Constructs a new GroupRoleNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_group_role_not_found_error:The group role could not be found.`, cause);
   }
 }
@@ -248,12 +274,14 @@ export class GroupRoleNotFoundError extends Error {
  */
 export class InvalidSecurityCodeError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/invalid-security-code';
+
   /**
    * Constructs a new InvalidSecurityCodeError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_invalid_security_code_error:The security code is invalid.`, cause);
   }
 }
@@ -270,7 +298,7 @@ export class LoginError extends Error {
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_login_error:Incorrect username or password.`, cause);
   }
 }
@@ -287,8 +315,27 @@ export class PasswordExpiredError extends Error {
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_password_expired_error:The password has expired.`, cause);
+  }
+}
+
+/**
+ * The RoleNotFoundError class holds the information for a role not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class RoleNotFoundError extends Error {
+
+  static readonly TYPE = 'http://inception.digital/problems/security/role-not-found';
+
+  /**
+   * Constructs a new RoleNotFoundError.
+   *
+   * @param cause The optional cause of the error.
+   */
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
+    super($localize`:@@security_role_not_found_error:The role could not be found.`, cause);
   }
 }
 
@@ -305,7 +352,7 @@ export class SessionError extends Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 }
@@ -317,12 +364,14 @@ export class SessionError extends Error {
  */
 export class TenantNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/tenant-not-found';
+
   /**
    * Constructs a new TenantNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_tenant_not_found_error:The tenant could not be found.`, cause);
   }
 }
@@ -335,12 +384,14 @@ export class TenantNotFoundError extends Error {
  */
 export class TenantUserDirectoryNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/tenant-user-directory-not-found';
+
   /**
    * Constructs a new TenantUserDirectoryNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_tenant_user_directory_not_found_error:The tenant user directory could not be found.`, cause);
   }
 }
@@ -352,12 +403,14 @@ export class TenantUserDirectoryNotFoundError extends Error {
  */
 export class UserDirectoryNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/user-directory-not-found';
+
   /**
    * Constructs a new UserDirectoryNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_user_directory_not_found_error:The user directory could not be found.`, cause);
   }
 }
@@ -369,12 +422,14 @@ export class UserDirectoryNotFoundError extends Error {
  */
 export class UserLockedError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/user-locked';
+
   /**
    * Constructs a new UserLockedError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_user_locked_error:The user has exceeded the maximum number of failed password attempts and has been locked.`, cause);
   }
 }
@@ -386,12 +441,14 @@ export class UserLockedError extends Error {
  */
 export class UserNotFoundError extends Error {
 
+  static readonly TYPE = 'http://inception.digital/problems/security/user-not-found';
+
   /**
    * Constructs a new UserNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@security_user_not_found_error:The user could not be found.`, cause);
   }
 }

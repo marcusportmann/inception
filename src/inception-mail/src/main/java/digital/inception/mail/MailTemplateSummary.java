@@ -42,10 +42,10 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "A mail template summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "contentType"})
-@XmlRootElement(name = "MailTemplateSummary", namespace = "http://mail.inception.digital")
+@XmlRootElement(name = "MailTemplateSummary", namespace = "http://inception.digital/mail")
 @XmlType(
     name = "MailTemplateSummary",
-    namespace = "http://mail.inception.digital",
+    namespace = "http://inception.digital/mail",
     propOrder = {"id", "name", "contentType"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

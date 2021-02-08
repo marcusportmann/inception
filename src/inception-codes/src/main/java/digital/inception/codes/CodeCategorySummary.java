@@ -46,10 +46,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Schema(description = "A code category summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "updated"})
-@XmlRootElement(name = "CodeCategorySummary", namespace = "http://codes.inception.digital")
+@XmlRootElement(name = "CodeCategorySummary", namespace = "http://inception.digital/codes")
 @XmlType(
     name = "CodeCategorySummary",
-    namespace = "http://codes.inception.digital",
+    namespace = "http://inception.digital/codes",
     propOrder = {"id", "name", "updated"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

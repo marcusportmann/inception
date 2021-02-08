@@ -17,7 +17,7 @@
 package digital.inception.codes;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.service.InvalidArgumentException;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +37,7 @@ import org.springframework.util.StringUtils;
 @WebService(
     serviceName = "CodesService",
     name = "ICodesService",
-    targetNamespace = "http://codes.inception.digital")
+    targetNamespace = "http://inception.digital/codes")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class CodesWebService {

@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,13 +33,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT, reason = "The organization already exists")
+@Problem(
+    type = "http://inception.digital/problems/party/duplicate-organization",
+    title = "The organization already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
     name = "DuplicateOrganizationException",
-    targetNamespace = "http://party.inception.digital",
+    targetNamespace = "http://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class DuplicateOrganizationException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -49,6 +52,6 @@ public class DuplicateOrganizationException extends ServiceException {
    * @param id the Universally Unique Identifier (UUID) for the organization
    */
   public DuplicateOrganizationException(UUID id) {
-    super("DuplicateOrganizationError", "The organization with the ID (" + id + ") already exists");
+    super("The organization with the ID (" + id + ") already exists");
   }
 }

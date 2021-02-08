@@ -42,8 +42,8 @@
 // @Schema(description = "ProcessDefinition")
 // @JsonInclude(JsonInclude.Include.NON_NULL)
 // @JsonPropertyOrder({ "id", "name", "version", "data" })
-// @XmlRootElement(name = "ProcessDefinition", namespace = "http://bmi.inception.digital")
-// @XmlType(name = "ProcessDefinition", namespace = "http://bmi.inception.digital",
+// @XmlRootElement(name = "ProcessDefinition", namespace = "http://inception.digital/bmi")
+// @XmlType(name = "ProcessDefinition", namespace = "http://inception.digital/bmi",
 //    propOrder = { "id", "name", "version", "data" })
 // @XmlAccessorType(XmlAccessType.FIELD)
 // @SuppressWarnings({ "unused", "WeakerAccess" })

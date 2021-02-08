@@ -1,4 +1,8 @@
 #!/bin/sh
+
+# Execute the following command to allow the script to be executed on MacOS:
+#   xattr -d com.apple.quarantine download_wsdls.sh
+
 curl "http://localhost:8080/service/CodesService?wsdl" -o CodesService.wsdl
 curl "http://localhost:8080/service/ConfigurationService?wsdl" -o ConfigurationService.wsdl
 curl "http://localhost:8080/service/DemoService?wsdl" -o DemoService.wsdl

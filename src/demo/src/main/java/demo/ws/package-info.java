@@ -20,10 +20,7 @@
     xmlns = {
       @javax.xml.bind.annotation.XmlNs(
           prefix = "core",
-          namespaceURI = "http://core.inception.digital"),
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "validation",
-          namespaceURI = "http://validation.inception.digital"),
+          namespaceURI = "http://inception.digital/core"),
       @javax.xml.bind.annotation.XmlNs(prefix = "demo", namespaceURI = "http://demo"),
     })
 @javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({

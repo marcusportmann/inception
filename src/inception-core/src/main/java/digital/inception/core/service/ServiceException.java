@@ -16,6 +16,8 @@
 
 package digital.inception.core.service;
 
+import java.time.LocalDateTime;
+
 /**
  * The <b>ServiceException</b> exception is the base class that all service exceptions should be
  * derived from.
@@ -33,42 +35,23 @@ public abstract class ServiceException extends Exception {
   /**
    * Constructs a new <b>ServiceException</b> with the specified message.
    *
-   * @param code The code for the error.
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
-  public ServiceException(String code, String message) {
-    super(message);
-
-    this.serviceError = new ServiceError(code, this);
-  }
-
-  /**
-   * Constructs a new <b>ServiceException</b> with the specified cause and a message of <b>
-   * (cause==null ? null : cause.toString())</b> (which typically contains the class and message of
-   * cause).
-   *
-   * @param code The code for the service error.
-   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
-   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
-   */
-  public ServiceException(String code, Throwable cause) {
-    super(cause);
-
-    this.serviceError = new ServiceError(code, this);
+  public ServiceException(String message) {
+    this(message, null);
   }
 
   /**
    * Constructs a new <b>ServiceException</b> with the specified message and cause.
    *
-   * @param code The code for the service error.
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
-  public ServiceException(String code, String message, Throwable cause) {
+  public ServiceException(String message, Throwable cause) {
     super(message, cause);
 
-    this.serviceError = new ServiceError(code, this);
+    this.serviceError = new ServiceError(message);
   }
 
   /**
@@ -81,11 +64,11 @@ public abstract class ServiceException extends Exception {
   }
 
   /**
-   * Returns the service error info.
+   * Returns the date and time the service exception occurred.
    *
-   * @return the service error info
+   * @return the date and time the service exception occurred
    */
-  public ServiceError getServiceError() {
-    return serviceError;
+  public LocalDateTime getTimestamp() {
+    return serviceError.getTimestamp();
   }
 }

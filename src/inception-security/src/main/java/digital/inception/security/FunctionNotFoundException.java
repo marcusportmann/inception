@@ -16,12 +16,12 @@
 
 package digital.inception.security;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * A <b>FunctionNotFoundException</b> is thrown to indicate that a security operation failed as a
@@ -31,13 +31,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The function could not be found")
+@Problem(
+    type = "http://inception.digital/problems/security/function-not-found",
+    title = "The function could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "FunctionNotFoundException",
-    targetNamespace = "http://security.inception.digital",
+    targetNamespace = "http://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class FunctionNotFoundException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -48,8 +50,6 @@ public class FunctionNotFoundException extends ServiceException {
    * @param functionCode the code for the function
    */
   public FunctionNotFoundException(String functionCode) {
-    super(
-        "FunctionNotFoundError",
-        "A function with the code (" + functionCode + ") could not be found");
+    super("A function with the code (" + functionCode + ") could not be found");
   }
 }

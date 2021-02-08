@@ -16,13 +16,13 @@
 
 package digital.inception.security;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * An <b>TenantNotFoundException</b> is thrown to indicate that a security operation failed as a
@@ -32,13 +32,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The tenant could not be found")
+@Problem(
+    type = "http://inception.digital/problems/security/tenant-not-found",
+    title = "The tenant could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "TenantNotFoundException",
-    targetNamespace = "http://security.inception.digital",
+    targetNamespace = "http://inception.digital/security",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class TenantNotFoundException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
@@ -49,6 +51,6 @@ public class TenantNotFoundException extends ServiceException {
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    */
   public TenantNotFoundException(UUID tenantId) {
-    super("TenantNotFoundError", "The tenant (" + tenantId + ") could not be found");
+    super("The tenant (" + tenantId + ") could not be found");
   }
 }

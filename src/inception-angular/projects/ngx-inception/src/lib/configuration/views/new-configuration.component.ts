@@ -27,6 +27,7 @@ import {ServiceUnavailableError} from '../../core/errors/service-unavailable-err
 import {Error} from '../../core/errors/error';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {BackNavigation} from '../../layout/components/back-navigation';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The NewConfigurationComponent class implements the new configuration component.
@@ -94,22 +95,23 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
       this.spinnerService.showSpinner();
 
       this.configurationService.saveConfiguration(this.configuration)
-        .pipe(first())
-        .subscribe(() => {
-          this.spinnerService.hideSpinner();
+      .pipe(first())
+      .subscribe(() => {
+        this.spinnerService.hideSpinner();
 
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+      }, (error: Error) => {
+        this.spinnerService.hideSpinner();
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-        }, (error: Error) => {
-          this.spinnerService.hideSpinner();
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 }

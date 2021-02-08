@@ -31,6 +31,7 @@ import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Error} from '../../core/errors/error';
 import {JobStatus} from '../services/job-status';
+import {InvalidArgumentError} from "../../core/errors/invalid-argument-error";
 
 /**
  * The JobsComponent class implements the jobs component.
@@ -93,7 +94,8 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
               this.loadJobs();
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
+              if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
+                (error instanceof ServiceUnavailableError)) {
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigateByUrl('/error/send-error-report', {state: {error}});
               } else {

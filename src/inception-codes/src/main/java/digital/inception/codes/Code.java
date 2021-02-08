@@ -50,10 +50,10 @@ import org.hibernate.annotations.UpdateTimestamp;
         "Reference data in the form of a key-value pair that is used to classify or categorize other data")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "codeCategoryId", "name", "value"})
-@XmlRootElement(name = "Code", namespace = "http://codes.inception.digital")
+@XmlRootElement(name = "Code", namespace = "http://inception.digital/codes")
 @XmlType(
     name = "Code",
-    namespace = "http://codes.inception.digital",
+    namespace = "http://inception.digital/codes",
     propOrder = {"id", "codeCategoryId", "name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

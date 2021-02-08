@@ -17,7 +17,7 @@
 package demo.model;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.validation.ValidationError;
+import digital.inception.core.service.InvalidArgumentException;
 import java.util.List;
 
 /**
@@ -59,5 +59,5 @@ public interface IDataService {
    *
    * @return the validation errors
    */
-  List<ValidationError> validateData(Data data) throws ServiceUnavailableException;
+  void validateData(Data data) throws InvalidArgumentException, ServiceUnavailableException;
 }

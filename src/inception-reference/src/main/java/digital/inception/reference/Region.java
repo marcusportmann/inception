@@ -45,10 +45,10 @@ import javax.xml.bind.annotation.XmlType;
         "An area, especially part of a country or the world having definable characteristics but not always fixed boundaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"country", "code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "Region", namespace = "http://reference.inception.digital")
+@XmlRootElement(name = "Region", namespace = "http://inception.digital/reference")
 @XmlType(
     name = "Region",
-    namespace = "http://reference.inception.digital",
+    namespace = "http://inception.digital/reference",
     propOrder = {"country", "code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

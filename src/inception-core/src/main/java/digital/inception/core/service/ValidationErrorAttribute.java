@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.core.validation;
+package digital.inception.core.service;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,10 +35,10 @@ import javax.xml.bind.annotation.XmlType;
 @JsonPropertyOrder({"name", "value"})
 @XmlRootElement(
     name = "ValidationErrorAttribute",
-    namespace = "http://validation.inception.digital")
+    namespace = "http://inception.digital/core")
 @XmlType(
     name = "ValidationErrorAttribute",
-    namespace = "http://validation.inception.digital",
+    namespace = "http://inception.digital/core",
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})

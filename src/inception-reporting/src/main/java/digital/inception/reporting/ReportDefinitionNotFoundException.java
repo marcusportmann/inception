@@ -16,6 +16,7 @@
 
 package digital.inception.reporting;
 
+import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,10 +32,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The report definition could not be found")
+@Problem(
+    type = "http://inception.digital/problems/reporting/report-definition-not-found",
+    title = "The report definition could not be found.",
+    status = HttpStatus.NOT_FOUND)
 @WebFault(
     name = "ReportDefinitionNotFoundException",
-    targetNamespace = "http://reporting.inception.digital",
+    targetNamespace = "http://inception.digital/reporting",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class ReportDefinitionNotFoundException extends ServiceException {
@@ -47,8 +51,6 @@ public class ReportDefinitionNotFoundException extends ServiceException {
    * @param reportDefinitionId the ID for the report definition
    */
   public ReportDefinitionNotFoundException(String reportDefinitionId) {
-    super(
-        "ReportDefinitionNotFoundError",
-        "The report definition with ID (" + reportDefinitionId + ") could not be found");
+    super("The report definition with ID (" + reportDefinitionId + ") could not be found");
   }
 }
