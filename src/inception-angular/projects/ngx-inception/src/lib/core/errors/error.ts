@@ -54,9 +54,9 @@ export class Error {
     if (cause) {
       if (cause instanceof HttpErrorResponse) {
         if (ProblemDetails.isProblemDetails(cause)) {
-          const apiError: ProblemDetails = new ProblemDetails(cause);
-          this.timestamp = apiError.timestamp;
-          this.cause = apiError;
+          const problemDetails: ProblemDetails = new ProblemDetails(cause);
+          this.timestamp = problemDetails.timestamp;
+          this.cause = problemDetails;
         } else {
           if (cause.error) {
             this.cause = new HttpError(cause.error.error ? cause.error.error : '',
