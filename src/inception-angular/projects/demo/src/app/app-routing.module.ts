@@ -102,7 +102,7 @@ export const routes: Routes = [{
   imports: [
 
     // Angular modules
-    RouterModule.forRoot(routes, {enableTracing: false})
+    RouterModule.forRoot(routes, { enableTracing: false, relativeLinkResolution: 'legacy' })
   ],
   exports: [RouterModule],
   providers: [AdministrationTitleResolver]
