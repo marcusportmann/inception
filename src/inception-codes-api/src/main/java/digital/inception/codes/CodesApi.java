@@ -82,6 +82,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "A code with the specified ID already exists",
@@ -154,6 +161,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "A code category with the specified ID already exists",
@@ -203,6 +217,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The code could not be found",
@@ -257,6 +278,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The code category could not be found",
@@ -308,6 +336,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The code could not be found",
@@ -389,6 +424,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The code category could not be found",
@@ -441,6 +483,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The code category could not be found",
@@ -495,6 +544,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The code category could not be found",
@@ -577,6 +633,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The code category could not be found",
@@ -631,6 +694,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The code could not be found",
@@ -686,6 +756,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The code category could not be found",
@@ -737,6 +814,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The code could not be found",
@@ -817,6 +901,13 @@ public class CodesApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "403",
+              description = "Access denied",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The code category could not be found",

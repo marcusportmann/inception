@@ -113,7 +113,7 @@ public class ProblemHandler {
 
     problemDetails.setTimestamp(LocalDateTime.now());
     problemDetails.setType("http://inception.digital/problems/access-denied");
-    problemDetails.setTitle("Access is denied.");
+    problemDetails.setTitle("Access denied.");
     problemDetails.setStatus(HttpStatus.FORBIDDEN.value());
     problemDetails.setDetail(accessDeniedException.getMessage());
 
