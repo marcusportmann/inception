@@ -225,13 +225,13 @@ public class Person extends PartyBase implements Serializable {
   private String countriesOfTaxResidence;
 
   /** The optional ISO 3166-1 alpha-2 code for the country of birth for the person. */
-  @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "country_of_birth", length = 30)
+  @Size(min = 2, max = 2)
+  @Column(table = "persons", name = "country_of_birth", length = 2)
   private String countryOfBirth;
 
   /** The optional ISO 3166-1 alpha-2 code for the country of residence for the person. */
-  @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "country_of_residence", length = 30)
+  @Size(min = 2, max = 2)
+  @Column(table = "persons", name = "country_of_residence", length = 2)
   private String countryOfResidence;
 
   /** The optional date of birth for the person. */

@@ -81,7 +81,7 @@ public class IdentityDocument implements Serializable {
   @NotNull
   @Size(min = 2, max = 2)
   @Id
-  @Column(name = "country_of_issue", length = 30, nullable = false)
+  @Column(name = "country_of_issue", length = 2, nullable = false)
   private String countryOfIssue;
 
   /** The date and time the identity document was created. */

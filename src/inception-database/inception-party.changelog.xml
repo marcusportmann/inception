@@ -59,8 +59,8 @@
     <addNotNullConstraint schemaName="party" tableName="contact_mechanism_purposes" columnName="name"/>
     <addNotNullConstraint schemaName="party" tableName="contact_mechanism_purposes" columnName="description"/>
     <addNotNullConstraint schemaName="party" tableName="contact_mechanism_purposes" columnName="party_types"/>
-    <addForeignKeyConstraint constraintName="contact_mechanism_purposes_contact_mechanism_type_fk" baseTableSchemaName="reference"
-      baseTableName="contact_mechanism_purposes" baseColumnNames="type,locale_id" referencedTableSchemaName="reference"
+    <addForeignKeyConstraint constraintName="contact_mechanism_purposes_contact_mechanism_type_fk" baseTableSchemaName="party"
+      baseTableName="contact_mechanism_purposes" baseColumnNames="type,locale_id" referencedTableSchemaName="party"
       referencedTableName="contact_mechanism_types" referencedColumnNames="code,locale_id" deleteCascade="true"/>
     <addDefaultValue schemaName="party" tableName="contact_mechanism_purposes" columnName="description" defaultValue=""/>
     <createIndex indexName="contact_mechanism_purposes_type_ix" schemaName="party" tableName="contact_mechanism_purposes">
@@ -70,21 +70,274 @@
       <column name="locale_id"/>
     </createIndex>
 
-    <createTable schemaName="party" tableName="physical_address_types" remarks="Physical Address Types">
-      <column name="code" type="nvarchar(30)" remarks="The code for the physical address type"/>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the physical address type"/>
-      <column name="sort_index" type="int" remarks="The sort index for the physical address type"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the physical address type"/>
-      <column name="description" type="nvarchar(200)" remarks="The description for the physical address"/>
+    <createTable schemaName="party" tableName="employment_statuses" remarks="Employment Statuses">
+      <column name="code" type="nvarchar(30)" remarks="The code for the employment status"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the employment status"/>
+      <column name="sort_index" type="int" remarks="The sort index for the employment status"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the employment status"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the employment status"/>
     </createTable>
-    <addPrimaryKey schemaName="party" tableName="physical_address_types" columnNames="code,locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="code"/>
-    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="sort_index"/>
-    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="name"/>
-    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="description"/>
-    <addDefaultValue schemaName="party" tableName="physical_address_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="physical_address_types_locale_id_ix" schemaName="party" tableName="physical_address_types">
+    <addPrimaryKey schemaName="party" tableName="employment_statuses" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="employment_statuses" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="employment_statuses" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="employment_statuses" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="employment_statuses" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="employment_statuses" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="employment_statuses" columnName="description" defaultValue=""/>
+    <createIndex indexName="employment_statuses_locale_id_ix" schemaName="party" tableName="employment_statuses">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="employment_types" remarks="Employment Types">
+      <column name="employment_status" type="nvarchar(30)" remarks="The code for the employment status the employment type is associated with"/>
+      <column name="code" type="nvarchar(30)" remarks="The code for the employment type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the employment type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the employment type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the employment type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the employment type"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="employment_types" columnNames="employment_status,code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="employment_types" columnName="employment_status"/>
+    <addNotNullConstraint schemaName="party" tableName="employment_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="employment_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="employment_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="employment_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="employment_types" columnName="description"/>
+    <addForeignKeyConstraint constraintName="employment_types_employment_status_fk" baseTableSchemaName="party"
+      baseTableName="employment_types" baseColumnNames="employment_status,locale_id" referencedTableSchemaName="party"
+      referencedTableName="employment_statuses" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+    <addDefaultValue schemaName="party" tableName="employment_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="employment_types_employment_status_ix" schemaName="party" tableName="employment_types">
+      <column name="employment_status"/>
+    </createIndex>
+    <createIndex indexName="employment_types_locale_id_ix" schemaName="party" tableName="employment_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="genders" remarks="Genders">
+      <column name="code" type="nvarchar(30)" remarks="The code for the gender"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the gender"/>
+      <column name="sort_index" type="int" remarks="The sort index for the gender"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the gender"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the gender"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="genders" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="genders" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="genders" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="genders" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="genders" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="genders" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="genders" columnName="description" defaultValue=""/>
+    <createIndex indexName="genders_locale_id_ix" schemaName="party" tableName="genders">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="identity_document_types" remarks="Identity Document Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the identity document type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the identity document type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the identity document type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the identity document type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the identity document type"/>
+      <column name="country_of_issue" type="nchar(2)" remarks="The optional ISO 3166-1 alpha-2 code for the country of issue for the identity document type"/>
+      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the identity document type is associated with"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="identity_document_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="identity_document_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="identity_document_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="identity_document_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="identity_document_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="identity_document_types" columnName="description"/>
+    <addNotNullConstraint schemaName="party" tableName="identity_document_types" columnName="party_types"/>
+    <addForeignKeyConstraint constraintName="identity_document_types_country_fk" baseTableSchemaName="party"
+      baseTableName="identity_document_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
+      referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+    <addDefaultValue schemaName="party" tableName="identity_document_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="identity_document_types_locale_id_ix" schemaName="party" tableName="identity_document_types">
+      <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="identity_document_types_country_of_issue_ix" schemaName="party" tableName="identity_document_types">
+      <column name="country_of_issue"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="marital_statuses" remarks="Marital Statuses">
+      <column name="code" type="nvarchar(30)" remarks="The code for the marital status"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the marital status"/>
+      <column name="sort_index" type="int" remarks="The sort index for the marital status"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the marital status"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the marital status"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="marital_statuses" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="marital_statuses" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="marital_statuses" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="marital_statuses" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="marital_statuses" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="marital_statuses" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="marital_statuses" columnName="description" defaultValue=""/>
+    <createIndex indexName="marital_statuses_locale_id_ix" schemaName="party" tableName="marital_statuses">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="marriage_types" remarks="Marriage Types">
+      <column name="marital_status" type="nvarchar(30)" remarks="The code for the marital status the marriage type is associated with"/>
+      <column name="code" type="nvarchar(30)" remarks="The code for the marriage type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the marriage type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the marriage type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the marriage type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the marriage type"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="marriage_types" columnNames="marital_status,code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="marriage_types" columnName="marital_status"/>
+    <addNotNullConstraint schemaName="party" tableName="marriage_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="marriage_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="marriage_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="marriage_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="marriage_types" columnName="description"/>
+    <addForeignKeyConstraint constraintName="marriage_types_marital_status_fk" baseTableSchemaName="party"
+      baseTableName="marriage_types" baseColumnNames="marital_status,locale_id" referencedTableSchemaName="party"
+      referencedTableName="marital_statuses" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+    <addDefaultValue schemaName="party" tableName="marriage_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="marriage_types_marital_status_ix" schemaName="party" tableName="marriage_types">
+      <column name="marital_status"/>
+    </createIndex>
+    <createIndex indexName="marriage_types_locale_id_ix" schemaName="party" tableName="marriage_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="minor_types" remarks="Minor Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the minor type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the minor type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the minor type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the minor type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the minor type"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="minor_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="minor_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="minor_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="minor_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="minor_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="minor_types" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="minor_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="minor_types_locale_id_ix" schemaName="party" tableName="minor_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="next_of_kin_types" remarks="Next of Kin Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the next of kin type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the next of kin type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the next of kin type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the next of kin type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the next of kin type"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="next_of_kin_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="next_of_kin_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="next_of_kin_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="next_of_kin_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="next_of_kin_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="next_of_kin_types" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="next_of_kin_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="next_of_kin_types_locale_id_ix" schemaName="party" tableName="next_of_kin_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="occupations" remarks="Occupations">
+      <column name="code" type="nvarchar(30)" remarks="The code for the occupation"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the occupation"/>
+      <column name="sort_index" type="int" remarks="The sort index for the occupation"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the occupation"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the occupation"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="occupations" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="occupations" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="occupations" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="occupations" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="occupations" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="occupations" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="occupations" columnName="description" defaultValue=""/>
+    <createIndex indexName="occupations_locale_id_ix" schemaName="party" tableName="occupations">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="party_attribute_type_categories" remarks="Party Attribute Type Categories">
+      <column name="code" type="nvarchar(30)" remarks="The code for the party attribute type category"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the party attribute type category"/>
+      <column name="sort_index" type="int" remarks="The sort index for the party attribute type category"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the party attribute type category"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the party attribute type category"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="party_attribute_type_categories" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_type_categories" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_type_categories" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_type_categories" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_type_categories" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_type_categories" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="party_attribute_type_categories" columnName="description" defaultValue=""/>
+    <createIndex indexName="party_attribute_type_categories_locale_id_ix" schemaName="party" tableName="party_attribute_type_categories">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="party_attribute_types" remarks="Party Attribute Types">
+      <column name="category" type="nvarchar(30)" remarks="The code for the party attribute type category the party attribute type is associated with"/>
+      <column name="code" type="nvarchar(30)" remarks="The code for the party attribute type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the party attribute type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the party attribute type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the party attribute type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the party attribute type"/>
+      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the party attribute type is associated with"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="party_attribute_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_types" columnName="category"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_types" columnName="description"/>
+    <addNotNullConstraint schemaName="party" tableName="party_attribute_types" columnName="party_types"/>
+    <addForeignKeyConstraint constraintName="party_attribute_types_party_attribute_type_category_fk" baseTableSchemaName="party"
+      baseTableName="party_attribute_types" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
+      referencedTableName="party_attribute_type_categories" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+    <addDefaultValue schemaName="party" tableName="party_attribute_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="party_attribute_types_category_ix" schemaName="party" tableName="party_attribute_types">
+      <column name="category"/>
+    </createIndex>
+    <createIndex indexName="party_attribute_types_locale_id_ix" schemaName="party" tableName="party_attribute_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="party_role_purposes" remarks="Party Role Purposes">
+      <column name="code" type="nvarchar(30)" remarks="The code for the party role purpose"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the party role purpose"/>
+      <column name="sort_index" type="int" remarks="The sort index for the party role purpose"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the party role purpose"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the party role purpose"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="party_role_purposes" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="party_role_purposes" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="party_role_purposes" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="party_role_purposes" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="party_role_purposes" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="party_role_purposes" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="party_role_purposes" columnName="description" defaultValue=""/>
+    <createIndex indexName="party_role_purposes_locale_id_ix" schemaName="party" tableName="party_role_purposes">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="party_role_types" remarks="Party Role Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the party role type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the party role type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the party role type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the party role type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the party role type"/>
+      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the party role type is associated with"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="party_role_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="party_role_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="party_role_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="party_role_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="party_role_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="party_role_types" columnName="description"/>
+    <addNotNullConstraint schemaName="party" tableName="party_role_types" columnName="party_types"/>
+    <addDefaultValue schemaName="party" tableName="party_role_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="party_role_types_locale_id_ix" schemaName="party" tableName="party_role_types">
       <column name="locale_id"/>
     </createIndex>
 
@@ -107,6 +360,244 @@
     <createIndex indexName="physical_address_purposes_locale_id_ix" schemaName="party" tableName="physical_address_purposes">
       <column name="locale_id"/>
     </createIndex>
+
+    <createTable schemaName="party" tableName="physical_address_types" remarks="Physical Address Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the physical address type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the physical address type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the physical address type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the physical address type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the physical address"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="physical_address_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="physical_address_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="physical_address_types_locale_id_ix" schemaName="party" tableName="physical_address_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="preference_type_categories" remarks="Preference Type Categories">
+      <column name="code" type="nvarchar(30)" remarks="The code for the preference type category"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the preference type category"/>
+      <column name="sort_index" type="int" remarks="The sort index for the preference type category"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the preference type category"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the preference type category"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="preference_type_categories" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_type_categories" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_type_categories" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_type_categories" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_type_categories" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_type_categories" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="preference_type_categories" columnName="description" defaultValue=""/>
+    <createIndex indexName="preference_type_categories_locale_id_ix" schemaName="party" tableName="preference_type_categories">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="preference_types" remarks="Preference Types">
+      <column name="category" type="nvarchar(30)" remarks="The code for the preference type category the preference type is associated with"/>
+      <column name="code" type="nvarchar(30)" remarks="The code for the preference type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the preference type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the preference type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the preference type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the preference type"/>
+      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the preference type is associated with"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="preference_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="category"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="description"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="party_types"/>
+    <addForeignKeyConstraint constraintName="preference_types_preference_type_category_fk" baseTableSchemaName="party"
+      baseTableName="preference_types" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
+      referencedTableName="preference_type_categories" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+    <addDefaultValue schemaName="party" tableName="preference_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="preference_types_category_ix" schemaName="party" tableName="preference_types">
+      <column name="category"/>
+    </createIndex>
+    <createIndex indexName="preference_types_locale_id_ix" schemaName="party" tableName="preference_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="races" remarks="Races">
+      <column name="code" type="nvarchar(30)" remarks="The code for the race"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the race"/>
+      <column name="sort_index" type="int" remarks="The sort index for the race"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the race"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the race"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="races" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="races" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="races" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="races" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="races" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="races" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="races" columnName="description" defaultValue=""/>
+    <createIndex indexName="races_locale_id_ix" schemaName="party" tableName="races">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="residence_permit_types" remarks="Residence Permit Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the residence permit type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the residence permit type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the residence permit type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the residence permit type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the residence permit type"/>
+      <column name="country_of_issue" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country of issue for the residence permit type"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="residence_permit_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="residence_permit_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="residence_permit_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="residence_permit_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="residence_permit_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="residence_permit_types" columnName="description"/>
+    <addNotNullConstraint schemaName="party" tableName="residence_permit_types" columnName="country_of_issue"/>
+    <addForeignKeyConstraint constraintName="residence_permit_types_country_fk" baseTableSchemaName="party"
+      baseTableName="residence_permit_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
+      referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+    <addDefaultValue schemaName="party" tableName="residence_permit_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="residence_permit_types_locale_id_ix" schemaName="party" tableName="residence_permit_types">
+      <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="residence_permit_types_country_of_issue_ix" schemaName="party" tableName="residence_permit_types">
+      <column name="country_of_issue"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="residency_statuses" remarks="Residency Statuses">
+      <column name="code" type="nvarchar(30)" remarks="The code for the residency status"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the residency status"/>
+      <column name="sort_index" type="int" remarks="The sort index for the residency status"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the residency status"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the residency status"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="residency_statuses" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="residency_statuses" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="residency_statuses" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="residency_statuses" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="residency_statuses" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="residency_statuses" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="residency_statuses" columnName="description" defaultValue=""/>
+    <createIndex indexName="residency_statuses_locale_id_ix" schemaName="party" tableName="residency_statuses">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="residential_types" remarks="Residential Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the residential type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the residential type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the residential type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the residential type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the residential type"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="residential_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="residential_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="residential_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="residential_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="residential_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="residential_types" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="residential_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="residential_types_locale_id_ix" schemaName="party" tableName="residential_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="sources_of_funds" remarks="Sources Of Funds">
+      <column name="code" type="nvarchar(30)" remarks="The code for the source of funds"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the source of funds"/>
+      <column name="sort_index" type="int" remarks="The sort index for the source of funds"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the source of funds"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the source of funds"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="sources_of_funds" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="sources_of_funds" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="sources_of_funds" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="sources_of_funds" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="sources_of_funds" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="sources_of_funds" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="sources_of_funds" columnName="description" defaultValue=""/>
+    <createIndex indexName="sources_of_funds_locale_id_ix" schemaName="party" tableName="sources_of_funds">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="tax_number_types" remarks="Tax Number Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the tax number type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the tax number type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the tax number type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the tax number type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the tax number type"/>
+      <column name="country_of_issue" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country of issue for the tax number type"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="tax_number_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="tax_number_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="tax_number_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="tax_number_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="tax_number_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="tax_number_types" columnName="description"/>
+    <addNotNullConstraint schemaName="party" tableName="tax_number_types" columnName="country_of_issue"/>
+    <addForeignKeyConstraint constraintName="tax_number_types_country_fk" baseTableSchemaName="party"
+      baseTableName="tax_number_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
+      referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+    <addDefaultValue schemaName="party" tableName="tax_number_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="tax_number_types_locale_id_ix" schemaName="party" tableName="tax_number_types">
+      <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="tax_number_types_country_of_issue_ix" schemaName="party" tableName="tax_number_types">
+      <column name="country_of_issue"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="times_to_contact" remarks="Times To Contact">
+      <column name="code" type="nvarchar(30)" remarks="The code for the time to contact"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the time to contact"/>
+      <column name="sort_index" type="int" remarks="The sort index for the time to contact"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the time to contact"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the time to contact"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="times_to_contact" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="times_to_contact" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="times_to_contact" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="times_to_contact" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="times_to_contact" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="times_to_contact" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="times_to_contact" columnName="description" defaultValue=""/>
+    <createIndex indexName="times_to_contact_locale_id_ix" schemaName="party" tableName="times_to_contact">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="titles" remarks="Titles">
+      <column name="code" type="nvarchar(30)" remarks="The code for the title"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the title"/>
+      <column name="sort_index" type="int" remarks="The sort index for the title"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the title"/>
+      <column name="abbreviation" type="nvarchar(20)" remarks="The abbreviation for the title"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the title"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="titles" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="titles" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="titles" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="titles" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="titles" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="titles" columnName="abbreviation"/>
+    <addNotNullConstraint schemaName="party" tableName="titles" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="titles" columnName="description" defaultValue=""/>
+    <createIndex indexName="titles_locale_id_ix" schemaName="party" tableName="titles">
+      <column name="locale_id"/>
+    </createIndex>
+
+
+
+
+    <!-- TODO: Add Persons and Organizations tables -->
+
+
+
+
+
+
+
 
     <createTable schemaName="party" tableName="party" remarks="Parties">
       <column name="id" type="uuid"
@@ -350,6 +841,667 @@
       <column name="party_types" value="person"/>
     </insert>
 
+    <insert schemaName="party" tableName="employment_statuses">
+      <column name="code" value="employed"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Employed"/>
+      <column name="description" value="Employed"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_statuses">
+      <column name="code" value="other"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Other"/>
+      <column name="description" value="Other"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_statuses">
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="employed"/>
+      <column name="code" value="full_time"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Full-time"/>
+      <column name="description" value="Full-time"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="employed"/>
+      <column name="code" value="part_time"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Part-time"/>
+      <column name="description" value="Part-time"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="employed"/>
+      <column name="code" value="contractor"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Contractor"/>
+      <column name="description" value="Contractor"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="employed"/>
+      <column name="code" value="self_employed"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Self-employed"/>
+      <column name="description" value="Self-employed"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="other"/>
+      <column name="code" value="retired_pensioner"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Retired/Pensioner"/>
+      <column name="description" value="Retired/Pensioner"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="other"/>
+      <column name="code" value="unemployed"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Unemployed"/>
+      <column name="description" value="Unemployed"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="other"/>
+      <column name="code" value="home_executive"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Home Executive"/>
+      <column name="description" value="Home Executive"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="other"/>
+      <column name="code" value="student"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Student"/>
+      <column name="description" value="Student"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="other"/>
+      <column name="code" value="minor"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Minor"/>
+      <column name="description" value="Minor"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="other"/>
+      <column name="code" value="not_specified"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="10"/>
+      <column name="name" value="Not Specified"/>
+      <column name="description" value="Not Specified"/>
+    </insert>
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="other"/>
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="genders">
+      <column name="code" value="male"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Male"/>
+      <column name="description" value="Male"/>
+    </insert>
+    <insert schemaName="party" tableName="genders">
+      <column name="code" value="female"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Female"/>
+      <column name="description" value="Female"/>
+    </insert>
+    <insert schemaName="party" tableName="genders">
+      <column name="code" value="transgender"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Transgender"/>
+      <column name="description" value="Transgender"/>
+    </insert>
+    <insert schemaName="party" tableName="genders">
+      <column name="code" value="non_binary"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Non-binary"/>
+      <column name="description" value="Non-binary"/>
+    </insert>
+    <insert schemaName="party" tableName="genders">
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="identity_document_types">
+      <column name="code" value="za_id_book"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="10001"/>
+      <column name="name" value="South African ID Book"/>
+      <column name="description" value="South African ID Book"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="identity_document_types">
+      <column name="code" value="za_id_card"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="10002"/>
+      <column name="name" value="South African ID Card"/>
+      <column name="description" value="South African ID Card"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="identity_document_types">
+      <column name="code" value="za_drivers_license"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="10003"/>
+      <column name="name" value="South African Driver's License"/>
+      <column name="description" value="South African Driver's License"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="identity_document_types">
+      <column name="code" value="passport"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99999"/>
+      <column name="name" value="Passport"/>
+      <column name="description" value="Passport"/>
+      <column name="country_of_issue" value="null"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="marital_statuses">
+      <column name="code" value="single"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Single"/>
+      <column name="description" value="Single"/>
+    </insert>
+    <insert schemaName="party" tableName="marital_statuses">
+      <column name="code" value="married"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Married"/>
+      <column name="description" value="Married"/>
+    </insert>
+    <insert schemaName="party" tableName="marital_statuses">
+      <column name="code" value="common_law"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Common Law"/>
+      <column name="description" value="Common Law"/>
+    </insert>
+    <insert schemaName="party" tableName="marital_statuses">
+      <column name="code" value="divorced"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Divorced"/>
+      <column name="description" value="Divorced"/>
+    </insert>
+    <insert schemaName="party" tableName="marital_statuses">
+      <column name="code" value="widowed"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Widowed"/>
+      <column name="description" value="Widowed"/>
+    </insert>
+    <insert schemaName="party" tableName="marital_statuses">
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="marriage_types">
+      <column name="marital_status" value="married"/>
+      <column name="code" value="in_community_of_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="In Community Of Property"/>
+      <column name="description" value="In Community Of Property"/>
+    </insert>
+    <insert schemaName="party" tableName="marriage_types">
+      <column name="marital_status" value="married"/>
+      <column name="code" value="anc_without_accrual"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="ANC Without Accrual"/>
+      <column name="description" value="ANC Without Accrual"/>
+    </insert>
+    <insert schemaName="party" tableName="marriage_types">
+      <column name="marital_status" value="married"/>
+      <column name="code" value="anc_with_accrual"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="ANC With Accrual"/>
+      <column name="description" value="ANC With Accrual"/>
+    </insert>
+    <insert schemaName="party" tableName="marriage_types">
+      <column name="marital_status" value="unknown"/>
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="aunt"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Aunt"/>
+      <column name="description" value="Aunt"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="brother"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Brother"/>
+      <column name="description" value="Brother"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="cousin"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Cousin"/>
+      <column name="description" value="Cousin"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="father"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Father"/>
+      <column name="description" value="Father"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="friend"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Friend"/>
+      <column name="description" value="Friend"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="grandfather"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Grandfather"/>
+      <column name="description" value="Grandfather"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="grandmother"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Grandmother"/>
+      <column name="description" value="Grandmother"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="husband"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Husband"/>
+      <column name="description" value="Husband"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="life_partner"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Life Partner"/>
+      <column name="description" value="Life Partner"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="mother"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Mother"/>
+      <column name="description" value="Mother"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="nephew"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Nephew"/>
+      <column name="description" value="Nephew"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="niece"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Niece"/>
+      <column name="description" value="Niece"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="sister"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Sister"/>
+      <column name="description" value="Sister"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="uncle"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Uncle"/>
+      <column name="description" value="Uncle"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="wife"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Wife"/>
+      <column name="description" value="Wife"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="other"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Other"/>
+      <column name="description" value="Other"/>
+    </insert>
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="creative"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Creative"/>
+      <column name="description" value="Creative"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="driver"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Driver"/>
+      <column name="description" value="Driver"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="executive"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Executive"/>
+      <column name="description" value="Executive"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="farmer"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Farmer"/>
+      <column name="description" value="Farmer"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="government"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Government Official"/>
+      <column name="description" value="Government Official"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="guard"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Guard"/>
+      <column name="description" value="Guard"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="labourer"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Labourer"/>
+      <column name="description" value="Labourer"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="military_or_police"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Military / Police"/>
+      <column name="description" value="Military / Police"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="manager"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Manager"/>
+      <column name="description" value="Manager"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="office_staff"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="10"/>
+      <column name="name" value="Office Staff"/>
+      <column name="description" value="Office Staff"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="pensioner_retired"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="11"/>
+      <column name="name" value="Pensioner / Retired"/>
+      <column name="description" value="Pensioner / Retired"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="plant_or_machine_operator"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="12"/>
+      <column name="name" value="Plant or Machine Operator or Assembler"/>
+      <column name="description" value="Plant or Machine Operator or Assembler"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="professional_business"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="13"/>
+      <column name="name" value="Professional: Business"/>
+      <column name="description" value="Professional: Business"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="professional_education"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="14"/>
+      <column name="name" value="Professional: Education"/>
+      <column name="description" value="Professional: Education"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="professional_engineering"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="15"/>
+      <column name="name" value="Professional: Engineering"/>
+      <column name="description" value="Professional: Engineering"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="professional_government"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="16"/>
+      <column name="name" value="Professional: Government"/>
+      <column name="description" value="Professional: Government"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="professional_legal"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="17"/>
+      <column name="name" value="Professional: Legal"/>
+      <column name="description" value="Professional: Legal"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="professional_medical"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="18"/>
+      <column name="name" value="Professional: Medical"/>
+      <column name="description" value="Professional: Medical"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="professional_scientific"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="19"/>
+      <column name="name" value="Professional: Scientific"/>
+      <column name="description" value="Professional: Scientific"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="professional_transport"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="20"/>
+      <column name="name" value="Professional: Transport"/>
+      <column name="description" value="Professional: Transport"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="religious_charity"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="21"/>
+      <column name="name" value="Religious / Charitable"/>
+      <column name="description" value="Religious / Charitable"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="sales"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="22"/>
+      <column name="name" value="Sales"/>
+      <column name="description" value="Sales"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="semi_skilled_worker"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="23"/>
+      <column name="name" value="Semi-skilled Worker"/>
+      <column name="description" value="Semi-skilled Worker"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="service"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="24"/>
+      <column name="name" value="Service"/>
+      <column name="description" value="Service"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="skilled_worker"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="25"/>
+      <column name="name" value="Skilled Worker"/>
+      <column name="description" value="Skilled Worker"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="technician"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="26"/>
+      <column name="name" value="Technician"/>
+      <column name="description" value="Technician"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="trade_worker"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="27"/>
+      <column name="name" value="Trade Worker"/>
+      <column name="description" value="Trade Worker"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="unemployed"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="50"/>
+      <column name="name" value="Unemployed"/>
+      <column name="description" value="Unemployed"/>
+    </insert>
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="party_attribute_type_categories">
+      <column name="code" value="anthropometric_measurements"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="0"/>
+      <column name="name" value="Anthropometric Measurements"/>
+      <column name="description" value="Anthropometric Measurements"/>
+    </insert>
+
+    <insert schemaName="party" tableName="party_attribute_types">
+      <column name="category" value="anthropometric_measurements"/>
+      <column name="code" value="bmi"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="0"/>
+      <column name="name" value="Body Mass Index"/>
+      <column name="description" value="Body Mass Index"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="party_attribute_types">
+      <column name="category" value="anthropometric_measurements"/>
+      <column name="code" value="height"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="0"/>
+      <column name="name" value="Height"/>
+      <column name="description" value="Height"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="party_attribute_types">
+      <column name="category" value="anthropometric_measurements"/>
+      <column name="code" value="weight"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="0"/>
+      <column name="name" value="Weight"/>
+      <column name="description" value="Weight"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="party_role_purposes">
+      <column name="code" value="test"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Test"/>
+      <column name="description" value="Test"/>
+    </insert>
+
+    <insert schemaName="party" tableName="party_role_types">
+      <column name="code" value="employer"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Employer"/>
+      <column name="description" value="Employer"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="party_role_types">
+      <column name="code" value="employee"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Employee"/>
+      <column name="description" value="Employee"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="party_role_types">
+      <column name="code" value="supplier"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Supplier"/>
+      <column name="description" value="Supplier"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="party_role_types">
+      <column name="code" value="vendor"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Vendor"/>
+      <column name="description" value="Vendor"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>    
+    
     <insert schemaName="party" tableName="physical_address_purposes">
       <column name="code" value="billing"/>
       <column name="locale_id" value="en-US"/>
@@ -511,6 +1663,560 @@
       <column name="name" value="Unstructured"/>
       <column name="description" value="Unstructured"/>
     </insert>
+
+    <insert schemaName="party" tableName="preference_type_categories">
+      <column name="code" value="correspondence"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="0"/>
+      <column name="name" value="Correspondence"/>
+      <column name="description" value="Correspondence"/>
+    </insert>
+
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="correspondence"/>
+      <column name="code" value="correspondence_language"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="0"/>
+      <column name="name" value="Correspondence Language"/>
+      <column name="description" value="Correspondence Language"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="correspondence"/>
+      <column name="code" value="time_to_contact"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="0"/>
+      <column name="name" value="Time To Contact"/>
+      <column name="description" value="Suitable Time To Contact"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="races">
+      <column name="code" value="black"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Black"/>
+      <column name="description" value="Black"/>
+    </insert>
+    <insert schemaName="party" tableName="races">
+      <column name="code" value="coloured"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Coloured"/>
+      <column name="description" value="Coloured"/>
+    </insert>
+    <insert schemaName="party" tableName="races">
+      <column name="code" value="indian"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Indian"/>
+      <column name="description" value="Indian"/>
+    </insert>
+    <insert schemaName="party" tableName="races">
+      <column name="code" value="asian"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Asian"/>
+      <column name="description" value="Asian"/>
+    </insert>
+    <insert schemaName="party" tableName="races">
+      <column name="code" value="white"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="White"/>
+      <column name="description" value="White"/>
+    </insert>
+    <insert schemaName="party" tableName="races">
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="residence_permit_types">
+      <column name="code" value="za_business_visa"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Business Visa"/>
+      <column name="description" value="Business Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="party" tableName="residence_permit_types">
+      <column name="code" value="za_general_work_visa"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="General Work Visa"/>
+      <column name="description" value="General Work Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="party" tableName="residence_permit_types">
+      <column name="code" value="za_critical_skills_visa"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Critical Skills Work Visa"/>
+      <column name="description" value="Critical Skills Work Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="party" tableName="residence_permit_types">
+      <column name="code" value="za_intra_company_transfer_visa"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Intra-company Transfer Work Visa"/>
+      <column name="description" value="Intra-company Transfer Work Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="party" tableName="residence_permit_types">
+      <column name="code" value="za_study_visa"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Study Visa"/>
+      <column name="description" value="Study Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="party" tableName="residence_permit_types">
+      <column name="code" value="za_exchange_visa"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Exchange Visa"/>
+      <column name="description" value="Exchange Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="party" tableName="residence_permit_types">
+      <column name="code" value="za_retired_persons_visa"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Retired Persons Visa"/>
+      <column name="description" value="Retired Persons Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="party" tableName="residence_permit_types">
+      <column name="code" value="za_relatives_visa"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Relatives Visa"/>
+      <column name="description" value="Relatives Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="party" tableName="residence_permit_types">
+      <column name="code" value="za_medical_treatment_visa"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Medical Treatment Visa"/>
+      <column name="description" value="Medical Treatment Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+
+    <insert schemaName="party" tableName="residency_statuses">
+      <column name="code" value="citizen"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Citizen"/>
+      <column name="description" value="Citizen"/>
+    </insert>
+    <insert schemaName="party" tableName="residency_statuses">
+      <column name="code" value="permanent_resident"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Permanent Resident"/>
+      <column name="description" value="Permanent Resident"/>
+    </insert>
+    <insert schemaName="party" tableName="residency_statuses">
+      <column name="code" value="foreign_national"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Foreign National"/>
+      <column name="description" value="Foreign National"/>
+    </insert>
+    <insert schemaName="party" tableName="residency_statuses">
+      <column name="code" value="refugee"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Refugee"/>
+      <column name="description" value="Refugee"/>
+    </insert>
+    <insert schemaName="party" tableName="residency_statuses">
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="residential_types">
+      <column name="code" value="owner"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Owner"/>
+      <column name="description" value="Owner"/>
+    </insert>
+    <insert schemaName="party" tableName="residential_types">
+      <column name="code" value="renter"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Renter"/>
+      <column name="description" value="Renter"/>
+    </insert>
+    <insert schemaName="party" tableName="residential_types">
+      <column name="code" value="cohabitant"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Co-Habitant"/>
+      <column name="description" value="Co-Habitant"/>
+    </insert>
+    <insert schemaName="party" tableName="residential_types">
+      <column name="code" value="boarder"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Boarder"/>
+      <column name="description" value="Boarder"/>
+    </insert>
+    <insert schemaName="party" tableName="residential_types">
+      <column name="code" value="living_with_parents"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Living with Parents"/>
+      <column name="description" value="Living with Parents"/>
+    </insert>
+    <insert schemaName="party" tableName="residential_types">
+      <column name="code" value="not_specified"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Not Specified"/>
+      <column name="description" value="Not Specified"/>
+    </insert>
+    <insert schemaName="party" tableName="residential_types">
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="salary"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Salary"/>
+      <column name="description" value="Salary"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="commission"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Commission"/>
+      <column name="description" value="Commission"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="rental_income"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Rental Income"/>
+      <column name="description" value="Rental Income"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="investments"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Investments"/>
+      <column name="description" value="Investments"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="retirement_annuity"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Retirement Annuity"/>
+      <column name="description" value="Retirement Annuity"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="social_grant"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Social Grant"/>
+      <column name="description" value="Social Grant"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="inheritance"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Inheritance"/>
+      <column name="description" value="Inheritance"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="maintenance"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Maintenance"/>
+      <column name="description" value="Maintenance"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="pension"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Pension"/>
+      <column name="description" value="Pension"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="donations"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="10"/>
+      <column name="name" value="Donations"/>
+      <column name="description" value="Donations"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="allowance"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="11"/>
+      <column name="name" value="Allowance"/>
+      <column name="description" value="Allowance"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="winnings"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="12"/>
+      <column name="name" value="Winnings"/>
+      <column name="description" value="Winnings"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="owner_draws"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="13"/>
+      <column name="name" value="Owner Draws"/>
+      <column name="description" value="Owner Draws"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="bonus_incentive"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="14"/>
+      <column name="name" value="Bonus/Incentive"/>
+      <column name="description" value="Bonus/Incentive"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="bursary"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="15"/>
+      <column name="name" value="Bursary"/>
+      <column name="description" value="Bursary"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="settlement"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="16"/>
+      <column name="name" value="Settlement"/>
+      <column name="description" value="Settlement"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="trust"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="17"/>
+      <column name="name" value="Trust"/>
+      <column name="description" value="Trust"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="other"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="18"/>
+      <column name="name" value="Other"/>
+      <column name="description" value="Other"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="tax_number_types">
+      <column name="code" value="za_income_tax_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Income Tax Number"/>
+      <column name="description" value="South African Income Tax Number"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="party" tableName="tax_number_types">
+      <column name="code" value="uk_tax_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="UK Tax Number"/>
+      <column name="description" value="UK Tax Number"/>
+      <column name="country_of_issue" value="GB"/>
+    </insert>
+    <insert schemaName="party" tableName="tax_number_types">
+      <column name="code" value="us_taxpayer_id_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="US Taxpayer Identification Number"/>
+      <column name="description" value="US Taxpayer Identification Number"/>
+      <column name="country_of_issue" value="US"/>
+    </insert>
+    <insert schemaName="party" tableName="tax_number_types">
+      <column name="code" value="za_vat_tax_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="VAT Tax Number"/>
+      <column name="description" value="South African VAT Tax Number"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="party" tableName="tax_number_types">
+      <column name="code" value="uk_other_tax_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="UK Other Tax Number"/>
+      <column name="description" value="UK Other Tax Number"/>
+      <column name="country_of_issue" value="GB"/>
+    </insert>
+    <insert schemaName="party" tableName="tax_number_types">
+      <column name="code" value="us_other_tax_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="US Other Tax Number"/>
+      <column name="description" value="US Other Tax Number"/>
+      <column name="country_of_issue" value="US"/>
+    </insert>
+    <insert schemaName="party" tableName="tax_number_types">
+      <column name="code" value="za_other_tax_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Other Tax Number"/>
+      <column name="description" value="Other South African Tax Number"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+
+    <insert schemaName="party" tableName="times_to_contact">
+      <column name="code" value="anytime"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Anytime"/>
+      <column name="description" value="Anytime"/>
+    </insert>
+    <insert schemaName="party" tableName="times_to_contact">
+      <column name="code" value="long_hours"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Long Hours"/>
+      <column name="description" value="Long Hours"/>
+    </insert>
+    <insert schemaName="party" tableName="times_to_contact">
+      <column name="code" value="office_hours"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Office Hours"/>
+      <column name="description" value="Office Hours"/>
+    </insert>
+    <insert schemaName="party" tableName="times_to_contact">
+      <column name="code" value="do_not_contact"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Do Not Contact"/>
+      <column name="description" value="Do Not Contact"/>
+    </insert>
+    <insert schemaName="party" tableName="times_to_contact">
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="mr"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Mr"/>
+      <column name="abbreviation" value="Mr."/>
+      <column name="description" value="Mr"/>
+    </insert>
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="ms"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Ms"/>
+      <column name="abbreviation" value="Ms."/>
+      <column name="description" value="Ms"/>
+    </insert>
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="miss"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Miss"/>
+      <column name="abbreviation" value="Miss"/>
+      <column name="description" value="Miss"/>
+    </insert>
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="mrs"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Mrs"/>
+      <column name="abbreviation" value="Mrs."/>
+      <column name="description" value="Mrs"/>
+    </insert>
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="doctor"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Doctor"/>
+      <column name="abbreviation" value="Dr."/>
+      <column name="description" value="Doctor"/>
+    </insert>
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="the_honorable"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="The Honorable"/>
+      <column name="abbreviation" value="The Hon."/>
+      <column name="description" value="The Honorable"/>
+    </insert>
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="reverend"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Reverend"/>
+      <column name="abbreviation" value="Rev."/>
+      <column name="description" value="Reverend"/>
+    </insert>
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="father"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Father"/>
+      <column name="abbreviation" value="Fr."/>
+      <column name="description" value="Father"/>
+    </insert>
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="rabbi"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Rabbi"/>
+      <column name="abbreviation" value="Rabbi"/>
+      <column name="description" value="Rabbi"/>
+    </insert>
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="professor"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Professor"/>
+      <column name="abbreviation" value="Prof."/>
+      <column name="description" value="Professor"/>
+    </insert>
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="advocate"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Advocate"/>
+      <column name="abbreviation" value="Adv."/>
+      <column name="description" value="Advocate"/>
+    </insert>
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="unknown"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="abbreviation" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+    
 
   </changeSet>
 </databaseChangeLog>

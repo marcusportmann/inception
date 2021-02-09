@@ -347,7 +347,7 @@ public class PhysicalAddress implements Serializable {
   /** The optional comma-delimited codes for the physical address purposes. */
   @JsonIgnore
   @XmlTransient
-  @Column(name = "purposes", length = 300)
+  @Column(name = "purposes", length = 310)
   private String purposes;
 
   /** The optional ISO 3166-2 subdivision code for the region for the physical address. */

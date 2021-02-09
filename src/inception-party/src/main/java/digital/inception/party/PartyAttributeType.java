@@ -125,8 +125,8 @@ public class PartyAttributeType implements Serializable {
   @JsonIgnore
   @XmlTransient
   @NotNull
-  @Size(min = 1, max = 300)
-  @Column(name = "party_types", length = 300, nullable = false)
+  @Size(min = 1, max = 310)
+  @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
 
   /** The sort index for the party attribute type. */

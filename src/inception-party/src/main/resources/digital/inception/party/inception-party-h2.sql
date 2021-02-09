@@ -40,7 +40,7 @@ CREATE TABLE party.contact_mechanism_purposes (
   sort_index   INTEGER      NOT NULL,
   name         VARCHAR(50)  NOT NULL,
   description  VARCHAR(200) NOT NULL DEFAULT '',
-  party_types  VARCHAR(300) NOT NULL,
+  party_types  VARCHAR(310) NOT NULL,
 
   PRIMARY KEY (type, code, locale_id),
   CONSTRAINT contact_mechanism_purposes_contact_mechanism_type_fk FOREIGN KEY (type, locale_id) REFERENCES party.contact_mechanism_types(code, locale_id) ON DELETE CASCADE
@@ -149,7 +149,7 @@ CREATE TABLE party.identity_document_types (
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
   country_of_issue CHAR(2),
-  party_types      VARCHAR(300) NOT NULL,
+  party_types      VARCHAR(310) NOT NULL,
 
   PRIMARY KEY (code, locale_id)
 );
@@ -324,7 +324,7 @@ CREATE TABLE party.party_attribute_types (
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
-  party_types VARCHAR(300) NOT NULL,
+  party_types VARCHAR(310) NOT NULL,
 
   PRIMARY KEY (code, locale_id),
   CONSTRAINT party_attribute_types_party_attribute_type_category_fk FOREIGN KEY (category, locale_id) REFERENCES party.party_attribute_type_categories(code, locale_id) ON DELETE CASCADE
@@ -355,7 +355,7 @@ CREATE TABLE party.party_role_types (
   sort_index   INTEGER      NOT NULL,
   name         VARCHAR(50)  NOT NULL,
   description  VARCHAR(200) NOT NULL DEFAULT '',
-  party_types  VARCHAR(300) NOT NULL,
+  party_types  VARCHAR(310) NOT NULL,
 
   PRIMARY KEY (code, locale_id)
 );
@@ -427,7 +427,7 @@ CREATE TABLE party.physical_address_purposes (
   sort_index   INTEGER      NOT NULL,
   name         VARCHAR(50)  NOT NULL,
   description  VARCHAR(200) NOT NULL DEFAULT '',
-  party_types  VARCHAR(300) NOT NULL,
+  party_types  VARCHAR(310) NOT NULL,
 
   PRIMARY KEY (code, locale_id)
 );
@@ -477,7 +477,7 @@ CREATE TABLE party.preference_types (
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
-  party_types VARCHAR(300) NOT NULL,
+  party_types VARCHAR(310) NOT NULL,
 
   PRIMARY KEY (code, locale_id),
   CONSTRAINT preference_types_preference_type_category_fk FOREIGN KEY (category, locale_id) REFERENCES party.preference_type_categories(code, locale_id) ON DELETE CASCADE
@@ -754,8 +754,8 @@ COMMENT ON COLUMN party.organizations.id IS 'The Universally Unique Identifier (
 
 CREATE TABLE party.persons (
   countries_of_tax_residence VARCHAR(100),
-  country_of_birth           VARCHAR(30),
-  country_of_residence       VARCHAR(30),
+  country_of_birth           CHAR(2),
+  country_of_residence       CHAR(2),
   date_of_birth              DATE,
   date_of_death              DATE,
   employment_status          VARCHAR(30),
@@ -836,8 +836,6 @@ COMMENT ON COLUMN party.persons.tax_number_type IS 'The optional code for the ta
 COMMENT ON COLUMN party.persons.title IS 'The optional code for the title for the person';
 
 
-
-
 CREATE TABLE party.contact_mechanisms (
   created  TIMESTAMP    NOT NULL,
   party_id UUID         NOT NULL,
@@ -866,7 +864,7 @@ COMMENT ON COLUMN party.contact_mechanisms.value IS 'The value for the contact m
 
 
 CREATE TABLE party.identity_documents (
-  country_of_issue VARCHAR(30) NOT NULL,
+  country_of_issue VARCHAR(2) NOT NULL,
   created          TIMESTAMP   NOT NULL,
   date_of_expiry   DATE,
   date_of_issue    DATE        NOT NULL,
@@ -881,7 +879,7 @@ CREATE TABLE party.identity_documents (
 
 CREATE INDEX identity_documents_party_id_ix ON party.identity_documents(party_id);
 
-COMMENT ON COLUMN party.identity_documents.country_of_issue IS 'The code for the country of issue for the identity document';
+COMMENT ON COLUMN party.identity_documents.country_of_issue IS 'The ISO 3166-1 alpha-2 code for the country of issue for the identity document';
 
 COMMENT ON COLUMN party.identity_documents.created IS 'The date and time the identity document was created';
 
@@ -944,7 +942,7 @@ CREATE TABLE party.physical_addresses (
   longitude           VARCHAR(50),
   party_id            UUID          NOT NULL,
   postal_code         VARCHAR(30)   NOT NULL,
-  purposes            VARCHAR(300),
+  purposes            VARCHAR(310),
   region              VARCHAR(3),
   site_block          VARCHAR(50),
   site_number         VARCHAR(50),

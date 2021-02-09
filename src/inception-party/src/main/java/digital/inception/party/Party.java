@@ -77,14 +77,7 @@ public class Party implements Serializable {
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
-  protected LocalDateTime created;
-
-  /** The date and time the party was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @UpdateTimestamp
-  @Column(name = "updated", insertable = false)
-  protected LocalDateTime updated;
+  private LocalDateTime created;
 
   /** The Universally Unique Identifier (UUID) for the party. */
   @Schema(description = "The Universally Unique Identifier (UUID) for the party", required = true)
@@ -125,6 +118,13 @@ public class Party implements Serializable {
   @NotNull
   @Column(name = "type", length = 30, nullable = false)
   private PartyType type;
+
+  /** The date and time the party was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
 
   /** Constructs a new <b>Party</b>. */
   public Party() {}
