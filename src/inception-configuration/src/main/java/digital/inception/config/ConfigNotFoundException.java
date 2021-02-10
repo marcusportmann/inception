@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.configuration;
+package digital.inception.config;
 
 import digital.inception.api.Problem;
 import digital.inception.core.service.ServiceException;
@@ -24,32 +24,32 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <b>ConfigurationNotFoundException</b> exception is thrown to indicate that the required
- * configuration could not be found when working with the Configuration Service.
+ * The <b>ConfigNotFoundException</b> exception is thrown to indicate that the required
+ * config could not be found when working with the Config Service.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/configuration/configuration-not-found",
-    title = "The configuration could not be found.",
+    type = "http://inception.digital/problems/config/config-not-found",
+    title = "The config could not be found.",
     status = HttpStatus.NOT_FOUND)
 @WebFault(
-    name = "ConfigurationNotFoundException",
-    targetNamespace = "http://inception.digital/configuration",
+    name = "ConfigNotFoundException",
+    targetNamespace = "http://inception.digital/config",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class ConfigurationNotFoundException extends ServiceException {
+public class ConfigNotFoundException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>ConfigurationNotFoundException</b>.
+   * Constructs a new <b>ConfigNotFoundException</b>.
    *
-   * @param key the key for the configuration
+   * @param key the key for the config
    */
-  public ConfigurationNotFoundException(String key) {
-    super("The configuration (" + key + ") could not be found");
+  public ConfigNotFoundException(String key) {
+    super("The config (" + key + ") could not be found");
   }
 }

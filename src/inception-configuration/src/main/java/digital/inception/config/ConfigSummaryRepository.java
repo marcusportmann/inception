@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-@javax.xml.bind.annotation.XmlSchema(
-    namespace = "http://inception.digital/configuration",
-    elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
-    xmlns = {
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "core",
-          namespaceURI = "http://inception.digital/core"),
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "configuration",
-          namespaceURI = "http://inception.digital/configuration"),
-    })
-package digital.inception.configuration;
+package digital.inception.config;
+
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+/**
+ * The <b>ConfigSummaryRepository</b> interface declares the repository for the <b>
+ * ConfigSummary</b> domain type.
+ *
+ * @author Marcus Portmann
+ */
+public interface ConfigSummaryRepository extends JpaRepository<ConfigSummary, String> {
+
+  List<ConfigSummary> findAllByOrderByKeyDesc();
+
+  List<ConfigSummary> findByKeyIgnoreCaseContaining(String filter);
+}

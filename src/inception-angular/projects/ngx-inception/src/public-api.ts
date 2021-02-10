@@ -17,11 +17,11 @@ export * from './lib/codes/views/code-categories-title-resolver';
 export * from './lib/codes/views/codes-views.module';
 
 // Configuration
-export * from './lib/configuration/services/configuration.service.errors';
-export * from './lib/configuration/services/configuration.service';
-export * from './lib/configuration/services/configuration';
-export * from './lib/configuration/views/configurations-title-resolver';
-export * from './lib/configuration/views/configuration-views.module';
+export * from './lib/config/services/configuration.service.errors';
+export * from './lib/config/services/configuration.service';
+export * from './lib/config/services/configuration';
+export * from './lib/config/views/configurations-title-resolver';
+export * from './lib/config/views/configuration-views.module';
 
 // Core
 export * from './lib/core/core.module';

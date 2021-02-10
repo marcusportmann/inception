@@ -28,7 +28,7 @@ import {SecurityDirectivesModule} from "./security/directives/security-directive
 import {SecurityRoutingModule} from "./security/routing/security-routing.module";
 import {SecurityServicesModule} from "./security/services/security-services.module";
 import {CodesServicesModule} from "./codes/services/codes-services.module";
-import {ConfigurationServicesModule} from "./configuration/services/configuration-services.module";
+import {ConfigurationServicesModule} from "./config/services/configuration-services.module";
 import {ErrorServicesModule} from "./error/services/error-services.module";
 import {MailServicesModule} from "./mail/services/mail-services.module";
 import {ReportingServicesModule} from "./reporting/services/reporting-services.module";

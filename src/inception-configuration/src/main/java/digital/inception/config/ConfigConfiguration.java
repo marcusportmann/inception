@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-@javax.xml.bind.annotation.XmlSchema(
-    namespace = "http://inception.digital/configuration",
-    elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
-    xmlns = {
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "core",
-          namespaceURI = "http://inception.digital/core"),
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "configuration",
-          namespaceURI = "http://inception.digital/configuration"),
-    })
-package digital.inception.configuration;
+package digital.inception.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+/**
+ * The <b>ConfigConfig</b> class provides the Spring configuration for the Config module.
+ *
+ * @author Marcus Portmann
+ */
+@Configuration
+@EnableJpaRepositories(
+    entityManagerFactoryRef = "applicationPersistenceUnit",
+    basePackages = {"digital.inception.config"})
+public class ConfigConfiguration {}

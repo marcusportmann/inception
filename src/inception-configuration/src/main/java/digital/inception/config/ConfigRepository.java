@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.configuration;
+package digital.inception.config;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,23 +23,23 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>ConfigurationRepository</b> interface declares the repository for the <b>
- * Configuration</b> domain type.
+ * The <b>ConfigRepository</b> interface declares the repository for the <b>
+ * Config</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface ConfigurationRepository extends JpaRepository<Configuration, String> {
+public interface ConfigRepository extends JpaRepository<Config, String> {
 
   void deleteByKeyIgnoreCase(String key);
 
   boolean existsByKeyIgnoreCase(String key);
 
-  List<Configuration> findAllByOrderByKeyDesc();
+  List<Config> findAllByOrderByKeyDesc();
 
-  Optional<Configuration> findByKeyIgnoreCase(String key);
+  Optional<Config> findByKeyIgnoreCase(String key);
 
-  List<Configuration> findByKeyIgnoreCaseContaining(String filter);
+  List<Config> findByKeyIgnoreCaseContaining(String filter);
 
-  @Query("select c.value from Configuration c where lower(c.key) = lower(:key)")
+  @Query("select c.value from Config c where lower(c.key) = lower(:key)")
   Optional<String> getValueByKeyIgnoreCase(@Param("key") String key);
 }

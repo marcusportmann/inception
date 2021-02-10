@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.configuration;
+package digital.inception.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,27 +35,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Configuration</b> class stores the summary for a configuration.
+ * The <b>Config</b> class stores the summary for a config.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A configuration summary")
+@Schema(description = "A config summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"key", "description"})
-@XmlRootElement(name = "ConfigurationSummary", namespace = "http://inception.digital/configuration")
+@XmlRootElement(name = "ConfigSummary", namespace = "http://inception.digital/config")
 @XmlType(
-    name = "ConfigurationSummary",
-    namespace = "http://inception.digital/configuration",
+    name = "ConfigSummary",
+    namespace = "http://inception.digital/config",
     propOrder = {"key", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "configuration", name = "configuration")
-public class ConfigurationSummary implements Serializable {
+@Table(schema = "config", name = "config")
+public class ConfigSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The description for the configuration. */
-  @Schema(description = "The description for the configuration", required = true)
+  /** The description for the config. */
+  @Schema(description = "The description for the config", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -63,8 +63,8 @@ public class ConfigurationSummary implements Serializable {
   @Column(name = "description", length = 100, nullable = false)
   private String description;
 
-  /** The key for the configuration. */
-  @Schema(description = "The key for the configuration", required = true)
+  /** The key for the config. */
+  @Schema(description = "The key for the config", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Key", required = true)
   @NotNull
@@ -73,16 +73,16 @@ public class ConfigurationSummary implements Serializable {
   @Column(name = "key", length = 100, nullable = false)
   private String key;
 
-  /** Constructs a new <b>ConfigurationSummary</b>. */
-  public ConfigurationSummary() {}
+  /** Constructs a new <b>ConfigSummary</b>. */
+  public ConfigSummary() {}
 
   /**
-   * Constructs a new <b>ConfigurationSummary</b>.
+   * Constructs a new <b>ConfigSummary</b>.
    *
-   * @param key the key for the configuration
-   * @param description the description for the configuration
+   * @param key the key for the config
+   * @param description the description for the config
    */
-  ConfigurationSummary(String key, String description) {
+  ConfigSummary(String key, String description) {
     this.key = key;
     this.description = description;
   }
@@ -107,24 +107,24 @@ public class ConfigurationSummary implements Serializable {
       return false;
     }
 
-    ConfigurationSummary other = (ConfigurationSummary) object;
+    ConfigSummary other = (ConfigSummary) object;
 
     return Objects.equals(key, other.key);
   }
 
   /**
-   * Returns the description for the configuration.
+   * Returns the description for the config.
    *
-   * @return the description for the configuration
+   * @return the description for the config
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the key for the configuration.
+   * Returns the key for the config.
    *
-   * @return the key for the configuration
+   * @return the key for the config
    */
   public String getKey() {
     return key;

@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.configuration;
-
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-/**
- * The <b>ConfigurationSummaryRepository</b> interface declares the repository for the <b>
- * ConfigurationSummary</b> domain type.
- *
- * @author Marcus Portmann
- */
-public interface ConfigurationSummaryRepository
-    extends JpaRepository<ConfigurationSummary, String> {
-
-  List<ConfigurationSummary> findAllByOrderByKeyDesc();
-
-  List<ConfigurationSummary> findByKeyIgnoreCaseContaining(String filter);
-}
+@javax.xml.bind.annotation.XmlSchema(
+    namespace = "http://inception.digital/config",
+    elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
+    xmlns = {
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "core",
+          namespaceURI = "http://inception.digital/core"),
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "config",
+          namespaceURI = "http://inception.digital/config"),
+    })
+package digital.inception.config;

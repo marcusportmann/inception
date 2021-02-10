@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.configuration;
+package digital.inception.config;
 
 import digital.inception.api.ApiUtil;
 import digital.inception.api.ProblemDetails;
@@ -40,40 +40,38 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>ConfigurationApi</b> class.
+ * The <b>ConfigApi</b> class. x
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Configuration")
+@Tag(name = "Config")
 @RestController
-@RequestMapping(value = "/api/configuration")
+@RequestMapping(value = "/api/config")
 @CrossOrigin
 @SuppressWarnings({"unused"})
-public class ConfigurationApi extends SecureApi {
+public class ConfigApi extends SecureApi {
 
-  /** The Configuration Service. */
-  private final IConfigurationService configurationService;
+  /** The Config Service. */
+  private final IConfigService configService;
 
   /**
-   * Constructs a new <b>ConfigurationRestController</b>.
+   * Constructs a new <b>ConfigApi</b>.
    *
-   * @param configurationService the Configuration Service
+   * @param configService the Config Service
    */
-  public ConfigurationApi(IConfigurationService configurationService) {
-    this.configurationService = configurationService;
+  public ConfigApi(IConfigService configService) {
+    this.configService = configService;
   }
 
   /**
-   * Delete the configuration.
+   * Delete the config.
    *
-   * @param key the key for the configuration
+   * @param key the key for the config
    */
-  @Operation(summary = "Delete the configuration", description = "Delete the configuration")
+  @Operation(summary = "Delete the config", description = "Delete the config")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The configuration was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The config was deleted successfully"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -81,16 +79,16 @@ public class ConfigurationApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The configuration could not be found",
+            description = "The config could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -105,27 +103,26 @@ public class ConfigurationApi extends SecureApi {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/configurations/{key}",
+      value = "/configs/{key}",
       method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
-  public void deleteConfiguration(
-      @Parameter(name = "key", description = "The key for the configuration", required = true)
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
+  public void deleteConfig(
+      @Parameter(name = "key", description = "The key for the config", required = true)
           @PathVariable
           String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
-    configurationService.deleteConfiguration(key);
+      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
+    configService.deleteConfig(key);
   }
 
   /**
-   * Retrieve the configuration.
+   * Retrieve the config.
    *
-   * @param key the key for the configuration
-   * @return the configuration
+   * @param key the key for the config
+   * @return the config
    */
-  @Operation(summary = "Retrieve the configuration", description = "Retrieve the configuration")
+  @Operation(summary = "Retrieve the config", description = "Retrieve the config")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -136,16 +133,16 @@ public class ConfigurationApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The configuration could not be found",
+            description = "The config could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -160,28 +157,25 @@ public class ConfigurationApi extends SecureApi {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/configurations/{key}",
+      value = "/configs/{key}",
       method = RequestMethod.GET,
       produces = "application/json")
-  @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
-  public Configuration getConfiguration(
-      @Parameter(name = "key", description = "The key for the configuration", required = true)
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
+  public Config getConfig(
+      @Parameter(name = "key", description = "The key for the config", required = true)
           @PathVariable
           String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
-    return configurationService.getConfiguration(key);
+      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
+    return configService.getConfig(key);
   }
 
   /**
-   * Retrieve the configuration value.
+   * Retrieve the config value.
    *
-   * @param key the key for the configuration
-   * @return the configuration value
+   * @param key the key for the config
+   * @return the config value
    */
-  @Operation(
-      summary = "Retrieve the configuration value",
-      description = "Retrieve the configuration value")
+  @Operation(summary = "Retrieve the config value", description = "Retrieve the config value")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -192,16 +186,16 @@ public class ConfigurationApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The configuration could not be found",
+            description = "The config could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -216,27 +210,24 @@ public class ConfigurationApi extends SecureApi {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/configurations/{key}/value",
+      value = "/configs/{key}/value",
       method = RequestMethod.GET,
       produces = "application/json")
-  @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
-  public String getConfigurationValue(
-      @Parameter(name = "key", description = "The key for the configuration", required = true)
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
+  public String getConfigValue(
+      @Parameter(name = "key", description = "The key for the config", required = true)
           @PathVariable
           String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
-    return ApiUtil.quote(configurationService.getString(key));
+      throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
+    return ApiUtil.quote(configService.getString(key));
   }
 
   /**
-   * Retrieve all the configurations.
+   * Retrieve all the configs.
    *
-   * @return all the configurations
+   * @return all the configs
    */
-  @Operation(
-      summary = "Retrieve all the configurations",
-      description = "Retrieve all the configurations")
+  @Operation(summary = "Retrieve all the configs", description = "Retrieve all the configs")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -249,25 +240,21 @@ public class ConfigurationApi extends SecureApi {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(
-      value = "/configurations",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
-  public List<Configuration> getConfigurations() throws ServiceUnavailableException {
-    return configurationService.getConfigurations();
+  @RequestMapping(value = "/configs", method = RequestMethod.GET, produces = "application/json")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
+  public List<Config> getConfigs() throws ServiceUnavailableException {
+    return configService.getConfigs();
   }
 
   /**
-   * Set the configuration.
+   * Set the config.
    *
-   * @param configuration the configuration
+   * @param config the config
    */
-  @Operation(summary = "Set the configuration", description = "Set the configuration")
+  @Operation(summary = "Set the config", description = "Set the config")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The configuration was set successfully"),
+        @ApiResponse(responseCode = "204", description = "The config was set successfully"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -275,13 +262,13 @@ public class ConfigurationApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -291,20 +278,16 @@ public class ConfigurationApi extends SecureApi {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(
-      value = "/configurations",
-      method = RequestMethod.POST,
-      produces = "application/json")
+  @RequestMapping(value = "/configs", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
-  public void setConfiguration(
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
+  public void setConfig(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
-              description = "The configuration",
+              description = "The config",
               required = true)
           @RequestBody
-          Configuration configuration)
+          Config config)
       throws InvalidArgumentException, ServiceUnavailableException {
-    configurationService.setConfiguration(configuration);
+    configService.setConfig(config);
   }
 }

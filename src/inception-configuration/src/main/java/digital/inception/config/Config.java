@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.configuration;
+package digital.inception.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,34 +40,34 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>Configuration</b> class stores the key, value and description for the configuration.
+ * The <b>Config</b> class stores the key, value and description for the config.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A configuration value")
+@Schema(description = "A config")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"key", "value", "description"})
-@XmlRootElement(name = "Configuration", namespace = "http://inception.digital/configuration")
+@XmlRootElement(name = "Config", namespace = "http://inception.digital/config")
 @XmlType(
-    name = "Configuration",
-    namespace = "http://inception.digital/configuration",
+    name = "Config",
+    namespace = "http://inception.digital/config",
     propOrder = {"key", "value", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "configuration", name = "configuration")
-public class Configuration implements Serializable {
+@Table(schema = "config", name = "config")
+public class Config implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the configuration was created. */
+  /** The date and time the config was created. */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The description for the configuration. */
-  @Schema(description = "The description for the configuration", required = true)
+  /** The description for the config. */
+  @Schema(description = "The description for the config", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -75,8 +75,8 @@ public class Configuration implements Serializable {
   @Column(name = "description", length = 100, nullable = false)
   private String description;
 
-  /** The key for the configuration. */
-  @Schema(description = "The key for the configuration", required = true)
+  /** The key for the config. */
+  @Schema(description = "The key for the config", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Key", required = true)
   @NotNull
@@ -85,15 +85,15 @@ public class Configuration implements Serializable {
   @Column(name = "key", length = 100, nullable = false)
   private String key;
 
-  /** The date and time the configuration was last updated. */
+  /** The date and time the config was last updated. */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** The value for the configuration. */
-  @Schema(description = "The value for the configuration", required = true)
+  /** The value for the config. */
+  @Schema(description = "The value for the config", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
   @NotNull
@@ -101,17 +101,17 @@ public class Configuration implements Serializable {
   @Column(name = "value", length = 4000, nullable = false)
   private String value;
 
-  /** Constructs a new <b>Configuration</b>. */
-  public Configuration() {}
+  /** Constructs a new <b>Config</b>. */
+  public Config() {}
 
   /**
-   * Constructs a new <b>Configuration</b>.
+   * Constructs a new <b>Config</b>.
    *
-   * @param key the key for the configuration
-   * @param value the value for the configuration
-   * @param description the description for the configuration
+   * @param key the key for the config
+   * @param value the value for the config
+   * @param description the description for the config
    */
-  Configuration(String key, String value, String description) {
+  Config(String key, String value, String description) {
     this.key = key;
     this.value = value;
     this.description = description;
@@ -137,51 +137,51 @@ public class Configuration implements Serializable {
       return false;
     }
 
-    Configuration other = (Configuration) object;
+    Config other = (Config) object;
 
     return Objects.equals(key, other.key);
   }
 
   /**
-   * Returns the date and time the configuration was created.
+   * Returns the date and time the config was created.
    *
-   * @return the date and time the configuration was created
+   * @return the date and time the config was created
    */
   public LocalDateTime getCreated() {
     return created;
   }
 
   /**
-   * Returns the description for the configuration.
+   * Returns the description for the config.
    *
-   * @return the description for the configuration
+   * @return the description for the config
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the key for the configuration.
+   * Returns the key for the config.
    *
-   * @return the key for the configuration
+   * @return the key for the config
    */
   public String getKey() {
     return key;
   }
 
   /**
-   * Returns the date and time the configuration was last updated.
+   * Returns the date and time the config was last updated.
    *
-   * @return the date and time the configuration was last updated
+   * @return the date and time the config was last updated
    */
   public LocalDateTime getUpdated() {
     return updated;
   }
 
   /**
-   * Returns the value for the configuration.
+   * Returns the value for the config.
    *
-   * @return the value for the configuration
+   * @return the value for the config
    */
   public String getValue() {
     return value;
@@ -198,27 +198,27 @@ public class Configuration implements Serializable {
   }
 
   /**
-   * Set the description for the configuration.
+   * Set the description for the config.
    *
-   * @param description the description for the configuration
+   * @param description the description for the config
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the key for the configuration.
+   * Set the key for the config.
    *
-   * @param key the key for the configuration
+   * @param key the key for the config
    */
   public void setKey(String key) {
     this.key = key;
   }
 
   /**
-   * Set the value for the configuration.
+   * Set the value for the config.
    *
-   * @param value the value for the configuration
+   * @param value the value for the config
    */
   public void setValue(String value) {
     this.value = value;
