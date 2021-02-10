@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Reference API")
+@Tag(name = "Reference")
 @RestController
 @RequestMapping(value = "/api/reference")
 @CrossOrigin

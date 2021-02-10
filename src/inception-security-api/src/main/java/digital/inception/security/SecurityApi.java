@@ -59,7 +59,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Security API")
+@Tag(name = "Security")
 @RestController
 @RequestMapping(value = "/api/security")
 @CrossOrigin

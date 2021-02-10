@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Codes API")
+@Tag(name = "Codes")
 @RestController
 @RequestMapping(value = "/api/codes")
 @CrossOrigin

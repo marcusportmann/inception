@@ -38,7 +38,7 @@ import reactor.core.publisher.Mono;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Test API")
+@Tag(name = "Test")
 @RestController
 @RequestMapping(value = "/api/test")
 @CrossOrigin

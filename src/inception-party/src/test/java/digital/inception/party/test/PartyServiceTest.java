@@ -38,6 +38,7 @@ import digital.inception.party.Organization;
 import digital.inception.party.Organizations;
 import digital.inception.party.Parties;
 import digital.inception.party.Party;
+import digital.inception.party.PartyAttribute;
 import digital.inception.party.PartyAttributeType;
 import digital.inception.party.PartyAttributeTypeCategory;
 import digital.inception.party.PartyRole;
@@ -202,6 +203,8 @@ public class PartyServiceTest {
     person.addPhysicalAddress(correspondenceAddress);
 
     person.addPreference(new Preference("correspondence_language", "EN"));
+
+    person.addAttribute(new PartyAttribute("weight", "80kg"));
 
     person.addRole(new PartyRole("employee"));
 
@@ -368,7 +371,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid building address",
-        12,
+        13,
         constraintViolations.size());
   }
 
@@ -416,7 +419,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid complex address",
-        13,
+        14,
         constraintViolations.size());
   }
 
@@ -464,7 +467,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid farm address",
-        12,
+        13,
         constraintViolations.size());
   }
 
@@ -512,7 +515,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid international address",
-        15,
+        16,
         constraintViolations.size());
   }
 
@@ -600,7 +603,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid site address",
-        13,
+        14,
         constraintViolations.size());
   }
 
@@ -648,7 +651,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid street address",
-        15,
+        16,
         constraintViolations.size());
   }
 
@@ -696,7 +699,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid unstructured address",
-        15,
+        16,
         constraintViolations.size());
   }
 
@@ -1116,10 +1119,28 @@ public class PartyServiceTest {
     person.addContactMechanism(
         new ContactMechanism("phone_number", "home_phone_number", "0115551234"));
 
+    person.removePreference("correspondence_language");
+
+    person.addPreference(new Preference("time_to_contact", "anytime"));
+
+    person.removeAttribute("weight");
+
+    person.addAttribute(new PartyAttribute("height", "180cm"));
+
     partyService.updatePerson(person);
 
     filteredPersons =
         partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The correct number of filtered persons was not retrieved",
+        1,
+        filteredPersons.getPersons().size());
+
+    comparePersons(person, filteredPersons.getPersons().get(0));
+
+    filteredPersons =
+        partyService.getPersons("Updated", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         "The correct number of filtered persons was not retrieved",
@@ -1372,6 +1393,17 @@ public class PartyServiceTest {
     partyService.isValidTitle("mrs");
   }
 
+  private void compareAttributes(PartyAttribute attribute1, PartyAttribute attribute2) {
+    assertEquals(
+        "The type values for the two attributes do not match",
+        attribute1.getType(),
+        attribute2.getType());
+    assertEquals(
+        "The string value values for the two attributes do not match",
+        attribute1.getStringValue(),
+        attribute2.getStringValue());
+  }
+
   private void compareOrganizations(Organization organization1, Organization organization2) {
     assertEquals(
         "The countries of tax residence values for the two organizations do not match",
@@ -1389,6 +1421,30 @@ public class PartyServiceTest {
         "The tenant ID values for the two organizations do not match",
         organization1.getTenantId(),
         organization2.getTenantId());
+
+    assertEquals(
+        "The number of attributes for the two organizations do not match",
+        organization1.getAttributes().size(),
+        organization2.getAttributes().size());
+
+    for (PartyAttribute organization1Attribute : organization1.getAttributes()) {
+      boolean foundAttribute = false;
+
+      for (PartyAttribute organization2Attribute : organization2.getAttributes()) {
+
+        if (Objects.equals(organization1Attribute.getParty(), organization2Attribute.getParty())
+            && Objects.equals(organization1Attribute.getType(), organization2Attribute.getType())) {
+
+          compareAttributes(organization1Attribute, organization2Attribute);
+
+          foundAttribute = true;
+        }
+      }
+
+      if (!foundAttribute) {
+        fail("Failed to find the attribute (" + organization1Attribute.getType() + ")");
+      }
+    }
 
     assertEquals(
         "The number of contact mechanisms for the two persons do not match",
@@ -1649,6 +1705,30 @@ public class PartyServiceTest {
 
       if (!foundTaxNumber) {
         fail("Failed to find the tax number (" + person1TaxNumber.getType() + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of attributes for the two persons do not match",
+        person1.getAttributes().size(),
+        person2.getAttributes().size());
+
+    for (PartyAttribute person1Attribute : person1.getAttributes()) {
+      boolean foundAttribute = false;
+
+      for (PartyAttribute person2Attribute : person2.getAttributes()) {
+
+        if (Objects.equals(person1Attribute.getParty(), person2Attribute.getParty())
+            && Objects.equals(person1Attribute.getType(), person2Attribute.getType())) {
+
+          compareAttributes(person1Attribute, person2Attribute);
+
+          foundAttribute = true;
+        }
+      }
+
+      if (!foundAttribute) {
+        fail("Failed to find the attribute (" + person1Attribute.getType() + ")");
       }
     }
 

@@ -107,6 +107,7 @@ import org.springframework.util.StringUtils;
   "residentialType",
   "surname",
   "title",
+  "attributes",
   "contactMechanisms",
   "identityDocuments",
   "physicalAddresses",
@@ -144,6 +145,7 @@ import org.springframework.util.StringUtils;
       "residentialType",
       "surname",
       "title",
+      "attributes",
       "contactMechanisms",
       "identityDocuments",
       "physicalAddresses",
@@ -159,6 +161,15 @@ import org.springframework.util.StringUtils;
 public class Person extends PartyBase implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The attributes for the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<PartyAttribute> attributes = new HashSet<>();
 
   /** The contact mechanisms for the person. */
   @Valid
@@ -349,6 +360,20 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Add the attribute for the person.
+   *
+   * @param attribute the attribute
+   */
+  public void addAttribute(PartyAttribute attribute) {
+    attributes.removeIf(
+        existingAttribute -> Objects.equals(existingAttribute.getType(), attribute.getType()));
+
+    attribute.setParty(this);
+
+    attributes.add(attribute);
+  }
+
+  /**
    * Add the contact mechanism for the person.
    *
    * @param contactMechanism the contact mechanism
@@ -459,6 +484,34 @@ public class Person extends PartyBase implements Serializable {
     Person other = (Person) object;
 
     return Objects.equals(getId(), other.getId());
+  }
+
+  /**
+   * Retrieve the attribute with the specified type for the person.
+   *
+   * @param type the code for the attribute type
+   * @return the attribute with the specified type for the person or <b>null</b> if the attribute
+   *     could not be found
+   */
+  public PartyAttribute getAttribute(String type) {
+    return attributes.stream()
+        .filter(attribute -> Objects.equals(attribute.getType(), type))
+        .findFirst()
+        .get();
+  }
+
+  /**
+   * Returns the attributes for the person.
+   *
+   * @return the attributes for the person
+   */
+  @Schema(description = "The attributes for the person")
+  @JsonProperty
+  @JsonManagedReference("attributeReference")
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
+  public Set<PartyAttribute> getAttributes() {
+    return attributes;
   }
 
   /**
@@ -799,6 +852,20 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Retrieve the preference with the specified type for the person.
+   *
+   * @param type the code for the preference type
+   * @return the preference with the specified type for the person or <b>null</b> if the preference
+   *     could not be found
+   */
+  public Preference getPreference(String type) {
+    return preferences.stream()
+        .filter(preference -> Objects.equals(preference.getType(), type))
+        .findFirst()
+        .get();
+  }
+
+  /**
    * Returns the preferences for the person.
    *
    * @return the preferences for the person
@@ -977,6 +1044,16 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Remove the attribute with the specified type for the person.
+   *
+   * @param type the code for the attribute type
+   */
+  public void removeAttribute(String type) {
+    attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getType(), type));
+  }
+  //
+
+  /**
    * Remove the contact mechanism with the specified type and purpose for the person.
    *
    * @param type the code for the contact mechanism type
@@ -988,7 +1065,6 @@ public class Person extends PartyBase implements Serializable {
             Objects.equals(existingContactMechanism.getType(), type)
                 && Objects.equals(existingContactMechanism.getPurpose(), purpose));
   }
-  //
 
   /**
    * Remove the identity document with the specified type for the person.
@@ -1035,6 +1111,16 @@ public class Person extends PartyBase implements Serializable {
    */
   public void removeTaxNumber(String type) {
     taxNumbers.removeIf(existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), type));
+  }
+
+  /**
+   * Set the attributes for the person.
+   *
+   * @param attributes the attributes for the person
+   */
+  public void setAttributes(Set<PartyAttribute> attributes) {
+    this.attributes.clear();
+    this.attributes.addAll(attributes);
   }
 
   /**

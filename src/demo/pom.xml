@@ -42,11 +42,11 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-banking-api</artifactId>
+      <artifactId>inception-banking-customer-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-banking-ws</artifactId>
+      <artifactId>inception-banking-customer-ws</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>

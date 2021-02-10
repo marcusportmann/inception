@@ -49,7 +49,7 @@
       <column name="sort_index" type="int" remarks="The sort index for the contact mechanism purpose"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the contact mechanism purpose"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the contact mechanism purpose"/>
-      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the contact mechanism purpose is associated with"/>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the contact mechanism purpose is associated with"/>
     </createTable>
     <addPrimaryKey schemaName="party" tableName="contact_mechanism_purposes" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="party" tableName="contact_mechanism_purposes" columnName="type"/>
@@ -139,7 +139,7 @@
       <column name="name" type="nvarchar(50)" remarks="The name of the identity document type"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the identity document type"/>
       <column name="country_of_issue" type="nchar(2)" remarks="The optional ISO 3166-1 alpha-2 code for the country of issue for the identity document type"/>
-      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the identity document type is associated with"/>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the identity document type is associated with"/>
     </createTable>
     <addPrimaryKey schemaName="party" tableName="identity_document_types" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="party" tableName="identity_document_types" columnName="code"/>
@@ -282,7 +282,7 @@
       <column name="sort_index" type="int" remarks="The sort index for the party attribute type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the party attribute type"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the party attribute type"/>
-      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the party attribute type is associated with"/>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the party attribute type is associated with"/>
     </createTable>
     <addPrimaryKey schemaName="party" tableName="party_attribute_types" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="party" tableName="party_attribute_types" columnName="category"/>
@@ -327,7 +327,7 @@
       <column name="sort_index" type="int" remarks="The sort index for the party role type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the party role type"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the party role type"/>
-      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the party role type is associated with"/>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the party role type is associated with"/>
     </createTable>
     <addPrimaryKey schemaName="party" tableName="party_role_types" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="party" tableName="party_role_types" columnName="code"/>
@@ -347,7 +347,7 @@
       <column name="sort_index" type="int" remarks="The sort index for the physical address purpose"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the physical address purpose"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the physical address purpose"/>
-      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the physical address purpose is associated with"/>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the physical address purpose is associated with"/>
     </createTable>
     <addPrimaryKey schemaName="party" tableName="physical_address_purposes" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="party" tableName="physical_address_purposes" columnName="code"/>
@@ -404,7 +404,7 @@
       <column name="sort_index" type="int" remarks="The sort index for the preference type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the preference type"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the preference type"/>
-      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the preference type is associated with"/>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the preference type is associated with"/>
     </createTable>
     <addPrimaryKey schemaName="party" tableName="preference_types" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="category"/>
@@ -530,6 +530,7 @@
       <column name="name" type="nvarchar(50)" remarks="The name of the tax number type"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the tax number type"/>
       <column name="country_of_issue" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country of issue for the tax number type"/>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the tax number type is associated with"/>
     </createTable>
     <addPrimaryKey schemaName="party" tableName="tax_number_types" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="party" tableName="tax_number_types" columnName="code"/>
@@ -538,6 +539,7 @@
     <addNotNullConstraint schemaName="party" tableName="tax_number_types" columnName="name"/>
     <addNotNullConstraint schemaName="party" tableName="tax_number_types" columnName="description"/>
     <addNotNullConstraint schemaName="party" tableName="tax_number_types" columnName="country_of_issue"/>
+    <addNotNullConstraint schemaName="party" tableName="tax_number_types" columnName="party_types"/>
     <addForeignKeyConstraint constraintName="tax_number_types_country_fk" baseTableSchemaName="party"
       baseTableName="tax_number_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
       referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>

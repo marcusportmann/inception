@@ -65,6 +65,7 @@ import org.springframework.util.StringUtils;
   "id",
   "tenantId",
   "name",
+  "attributes",
   "contactMechanisms",
   "physicalAddresses",
   "preferences",
@@ -80,6 +81,7 @@ import org.springframework.util.StringUtils;
       "id",
       "tenantId",
       "name",
+      "attributes",
       "contactMechanisms",
       "physicalAddresses",
       "preferences",
@@ -94,6 +96,15 @@ import org.springframework.util.StringUtils;
 public class Organization extends PartyBase implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The attributes for the organization. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<PartyAttribute> attributes = new HashSet<>();
 
   /** The contact mechanisms for the organization. */
   @Valid
@@ -164,6 +175,20 @@ public class Organization extends PartyBase implements Serializable {
    */
   public Organization(UUID tenantId, String name) {
     super(tenantId, PartyType.ORGANIZATION, name);
+  }
+
+  /**
+   * Add the attribute for the organization.
+   *
+   * @param attribute the attribute
+   */
+  public void addAttribute(PartyAttribute attribute) {
+    attributes.removeIf(
+        existingAttribute -> Objects.equals(existingAttribute.getType(), attribute.getType()));
+
+    attribute.setParty(this);
+
+    attributes.add(attribute);
   }
 
   /**
@@ -264,7 +289,33 @@ public class Organization extends PartyBase implements Serializable {
     return Objects.equals(getId(), other.getId());
   }
 
-  // TODO: Add identity documents -- MARCUS
+  /**
+   * Retrieve the attribute with the specified type for the organization.
+   *
+   * @param type the code for the attribute type
+   * @return the attribute with the specified type for the organization or <b>null</b> if the
+   *     attribute could not be found
+   */
+  public PartyAttribute getAttribute(String type) {
+    return attributes.stream()
+        .filter(attribute -> Objects.equals(attribute.getType(), type))
+        .findFirst()
+        .get();
+  }
+
+  /**
+   * Returns the attributes for the organization.
+   *
+   * @return the attributes for the organization
+   */
+  @Schema(description = "The attributes for the organization")
+  @JsonProperty
+  @JsonManagedReference("attributeReference")
+  @XmlElementWrapper(name = "Attributes")
+  @XmlElement(name = "Attribute")
+  public Set<PartyAttribute> getAttributes() {
+    return attributes;
+  }
 
   /**
    * Retrieve the contact mechanism with the specified type and purpose for the organization.
@@ -314,6 +365,8 @@ public class Organization extends PartyBase implements Serializable {
   public Set<String> getCountriesOfTaxResidence() {
     return Set.of(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence));
   }
+
+  // TODO: Add identity documents -- MARCUS
 
   /**
    * Returns the date and time the organization was created.
@@ -392,6 +445,20 @@ public class Organization extends PartyBase implements Serializable {
   @XmlElement(name = "PhysicalAddress")
   public Set<PhysicalAddress> getPhysicalAddresses() {
     return physicalAddresses;
+  }
+
+  /**
+   * Retrieve the preference with the specified type for the organization.
+   *
+   * @param type the code for the preference type
+   * @return the preference with the specified type for the organization or <b>null</b> if the
+   *     preference could not be found
+   */
+  public Preference getPreference(String type) {
+    return preferences.stream()
+        .filter(preference -> Objects.equals(preference.getType(), type))
+        .findFirst()
+        .get();
   }
 
   /**
@@ -501,6 +568,15 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
+   * Remove the attribute with the specified type for the organization.
+   *
+   * @param type the code for the attribute type
+   */
+  public void removeAttribute(String type) {
+    attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getType(), type));
+  }
+
+  /**
    * Remove the contact mechanism with the specified type and purpose for the organization.
    *
    * @param type the code for the contact mechanism type
@@ -539,6 +615,16 @@ public class Organization extends PartyBase implements Serializable {
    */
   public void removeTaxNumber(String type) {
     taxNumbers.removeIf(existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), type));
+  }
+
+  /**
+   * Set the attributes for the organization.
+   *
+   * @param attributes the attributes for the organization
+   */
+  public void setAttributes(Set<PartyAttribute> attributes) {
+    this.attributes.clear();
+    this.attributes.addAll(attributes);
   }
 
   /**

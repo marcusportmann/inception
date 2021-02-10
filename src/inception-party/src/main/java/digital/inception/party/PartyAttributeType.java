@@ -45,7 +45,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A type of party attribute for a party")
+@Schema(description = "A type of party attribute")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "code",

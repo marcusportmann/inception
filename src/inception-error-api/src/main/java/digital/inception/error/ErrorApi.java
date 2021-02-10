@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Error API")
+@Tag(name = "Error")
 @RestController
 @RequestMapping(value = "/api/error")
 @CrossOrigin

@@ -45,7 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Scheduler API")
+@Tag(name = "Scheduler")
 @RestController
 @RequestMapping(value = "/api/scheduler")
 @CrossOrigin

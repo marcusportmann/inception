@@ -629,6 +629,7 @@ CREATE TABLE party.tax_number_types (
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
   country_of_issue CHAR(2)      NOT NULL,
+  party_types      VARCHAR(310) NOT NULL,
 
   PRIMARY KEY (code, locale_id)
 );
@@ -648,6 +649,8 @@ COMMENT ON COLUMN party.tax_number_types.name IS 'The name of the tax number typ
 COMMENT ON COLUMN party.tax_number_types.description IS 'The description for the tax number type';
 
 COMMENT ON COLUMN party.tax_number_types.country_of_issue IS 'The ISO 3166-1 alpha-2 code for the country of issue for the tax number type';
+
+COMMENT ON COLUMN party.tax_number_types.party_types IS 'The comma-delimited list of codes for the party types the tax number type is associated with';
 
 
 CREATE TABLE party.times_to_contact (
@@ -896,6 +899,28 @@ COMMENT ON COLUMN party.identity_documents.type IS 'The code for the identity do
 COMMENT ON COLUMN party.identity_documents.updated IS 'The date and time the identity document was last updated';
 
 
+CREATE TABLE party.party_attributes (
+   created      TIMESTAMP    NOT NULL,
+   party_id     UUID         NOT NULL,
+   type         VARCHAR(30)  NOT NULL,
+   updated      TIMESTAMP,
+   string_value VARCHAR(200) NOT NULL,
+
+   PRIMARY KEY (party_id, type),
+   CONSTRAINT party_attributes_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX party_attributes_party_id_ix ON party.party_attributes(party_id);
+
+COMMENT ON COLUMN party.party_attributes.created IS 'The date and time the party attribute was created';
+
+COMMENT ON COLUMN party.party_attributes.party_id IS 'The Universally Unique Identifier (UUID) for the party the party attribute is associated with';
+
+COMMENT ON COLUMN party.party_attributes.type IS 'The code for the party attribute type';
+
+COMMENT ON COLUMN party.party_attributes.updated IS 'The date and time the party attribute was last updated';
+
+COMMENT ON COLUMN party.party_attributes.string_value IS 'The string value for the party attribute';
 
 
 CREATE TABLE party.party_roles (
@@ -1028,7 +1053,7 @@ CREATE TABLE party.preferences (
 
 CREATE INDEX preferences_party_id_ix ON party.preferences(party_id);
 
-COMMENT ON COLUMN party.preferences.created IS 'The date and time the preferences was created';
+COMMENT ON COLUMN party.preferences.created IS 'The date and time the preference was created';
 
 COMMENT ON COLUMN party.preferences.party_id IS 'The Universally Unique Identifier (UUID) for the party the preference is associated with';
 
@@ -1923,35 +1948,35 @@ INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, descripti
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('za_income_tax_number', 'en-US', 1, 'Income Tax Number', 'South African Income Tax Number', 'ZA');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('za_vat_tax_number', 'en-US', 2, 'VAT Tax Number', 'South African VAT Tax Number', 'ZA');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('za_other_tax_number', 'en-US', 3, 'Other Tax Number', 'Other South African Tax Number', 'ZA');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('uk_tax_number', 'en-US', 1, 'UK Tax Number', 'UK Tax Number', 'GB');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('uk_other_tax_number', 'en-US', 2, 'UK Other Tax Number', 'UK Other Tax Number', 'GB');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('us_taxpayer_id_number', 'en-US', 1, 'US Taxpayer Identification Number', 'US Taxpayer Identification Number', 'US');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('us_other_tax_number', 'en-US', 2, 'US Other Tax Number', 'US Other Tax Number', 'US');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('za_income_tax_number', 'en-US', 1, 'Income Tax Number', 'South African Income Tax Reference Number', 'ZA', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('za_vat_tax_number', 'en-US', 2, 'VAT Tax Number', 'South African VAT Tax Number', 'ZA', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('za_other_tax_number', 'en-US', 3, 'Other Tax Number', 'Other South African Tax Number', 'ZA', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('uk_tax_number', 'en-US', 1, 'UK Tax Number', 'UK Tax Number', 'GB', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('uk_other_tax_number', 'en-US', 2, 'UK Other Tax Number', 'UK Other Tax Number', 'GB', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('us_taxpayer_id_number', 'en-US', 1, 'US Taxpayer Identification Number', 'US Taxpayer Identification Number', 'US', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('us_other_tax_number', 'en-US', 2, 'US Other Tax Number', 'US Other Tax Number', 'US', 'organization,person');
 
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('za_income_tax_number', 'en-ZA', 1, 'Income Tax Number', 'South African Income Tax Number', 'ZA');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('za_vat_tax_number', 'en-ZA', 2, 'VAT Tax Number', 'South African VAT Tax Number', 'ZA');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('za_other_tax_number', 'en-ZA', 3, 'Other Tax Number', 'Other South African Tax Number', 'ZA');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('uk_tax_number', 'en-ZA', 1, 'UK Tax Number', 'UK Tax Number', 'GB');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('uk_other_tax_number', 'en-ZA', 2, 'UK Other Tax Number', 'UK Other Tax Number', 'GB');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('us_taxpayer_id_number', 'en-ZA', 1, 'US Taxpayer Identification Number', 'US Taxpayer Identification Number', 'US');
-INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('us_other_tax_number', 'en-ZA', 2, 'US Other Tax Number', 'US Other Tax Number', 'US');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('za_income_tax_number', 'en-ZA', 1, 'Income Tax Number', 'South African Income Tax Reference Number', 'ZA', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('za_vat_tax_number', 'en-ZA', 2, 'VAT Tax Number', 'South African VAT Tax Number', 'ZA', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('za_other_tax_number', 'en-ZA', 3, 'Other Tax Number', 'Other South African Tax Number', 'ZA', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('uk_tax_number', 'en-ZA', 1, 'UK Tax Number', 'UK Tax Number', 'GB', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('uk_other_tax_number', 'en-ZA', 2, 'UK Other Tax Number', 'UK Other Tax Number', 'GB', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('us_taxpayer_id_number', 'en-ZA', 1, 'US Taxpayer Identification Number', 'US Taxpayer Identification Number', 'US', 'organization,person');
+INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('us_other_tax_number', 'en-ZA', 2, 'US Other Tax Number', 'US Other Tax Number', 'US', 'organization,person');
 
 
 INSERT INTO party.times_to_contact (code, locale_id, sort_index, name, description)

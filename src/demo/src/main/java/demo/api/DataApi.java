@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Data API")
+@Tag(name = "Data")
 @RestController
 @RequestMapping(value = "/api/data")
 @CrossOrigin

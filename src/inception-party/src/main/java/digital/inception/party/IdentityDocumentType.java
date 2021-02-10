@@ -48,7 +48,7 @@ import org.springframework.util.StringUtils;
  */
 @Schema(
     description =
-        "A type of legal document which may be used to verify aspects of a person's identity")
+        "A type of legal document which may be used to verify aspects of a party's identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "code",

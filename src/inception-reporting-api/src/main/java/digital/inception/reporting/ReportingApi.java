@@ -57,7 +57,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Reporting API")
+@Tag(name = "Reporting")
 @RestController
 @RequestMapping(value = "/api/reporting")
 @CrossOrigin

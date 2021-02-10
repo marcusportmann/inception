@@ -99,7 +99,7 @@ public class MailTemplate implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Template", required = true)
   @NotNull
-  @Size(min = 1)
+  @Size(min = 1, max = 10485760)
   @Column(name = "template", nullable = false)
   private byte[] template;
 
