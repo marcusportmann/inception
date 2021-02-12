@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>TaxNumberType</b> class holds the information for a possible tax number type.
+ * The <b>TaxNumberType</b> class holds the information for a tax number type.
  *
  * @author Marcus Portmann
  */

@@ -28,7 +28,7 @@ import {SecurityDirectivesModule} from "./security/directives/security-directive
 import {SecurityRoutingModule} from "./security/routing/security-routing.module";
 import {SecurityServicesModule} from "./security/services/security-services.module";
 import {CodesServicesModule} from "./codes/services/codes-services.module";
-import {ConfigurationServicesModule} from "./config/services/configuration-services.module";
+import {ConfigServicesModule} from "./config/services/config-services.module";
 import {ErrorServicesModule} from "./error/services/error-services.module";
 import {MailServicesModule} from "./mail/services/mail-services.module";
 import {ReportingServicesModule} from "./reporting/services/reporting-services.module";
@@ -76,7 +76,7 @@ export const INCEPTION_DATE_FORMATS = {
      * services are singletons. These modules should NEVER be imported by any other Inception
      * framework module or application module.
      */
-    CodesServicesModule.forRoot(), ConfigurationServicesModule.forRoot(),
+    CodesServicesModule.forRoot(), ConfigServicesModule.forRoot(),
     ErrorServicesModule.forRoot(), MailServicesModule.forRoot(), PartyServicesModule.forRoot(),
     ReferenceServicesModule.forRoot(), ReportingServicesModule.forRoot(),
     SchedulerServicesModule.forRoot(), SecurityServicesModule.forRoot()
@@ -89,7 +89,7 @@ export const INCEPTION_DATE_FORMATS = {
     CoreModule, DialogModule, LayoutModule, SecurityDirectivesModule, SecurityRoutingModule,
 
     // Inception services modules
-    CodesServicesModule, ConfigurationServicesModule, ErrorServicesModule, MailServicesModule,
+    CodesServicesModule, ConfigServicesModule, ErrorServicesModule, MailServicesModule,
     PartyServicesModule, ReferenceServicesModule, ReportingServicesModule, SchedulerServicesModule,
     SecurityServicesModule,
 

@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Gender</b> class holds the information for a possible gender.
+ * The <b>Gender</b> class holds the information for a gender.
  *
  * @author Marcus Portmann
  */

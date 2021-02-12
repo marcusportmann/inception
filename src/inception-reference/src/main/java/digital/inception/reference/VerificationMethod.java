@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>VerificationMethod</b> class holds the information for a possible verification method.
+ * The <b>VerificationMethod</b> class holds the information for a verification method.
  *
  * @author Marcus Portmann
  */

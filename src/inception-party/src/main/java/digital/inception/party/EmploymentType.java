@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>EmploymentType</b> class holds the information for a possible employment type.
+ * The <b>EmploymentType</b> class holds the information for an employment type.
  *
  * @author Marcus Portmann
  */

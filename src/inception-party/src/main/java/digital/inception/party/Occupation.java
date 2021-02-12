@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Occupation</b> class holds the information for a possible occupation.
+ * The <b>Occupation</b> class holds the information for an occupation.
  *
  * @author Marcus Portmann
  */

@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>PhysicalAddressType</b> class holds the information for a possible physical address type.
+ * The <b>PhysicalAddressType</b> class holds the information for a physical address type.
  *
  * @author Marcus Portmann
  */

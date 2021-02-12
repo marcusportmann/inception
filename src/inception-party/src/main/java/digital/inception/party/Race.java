@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Race</b> class holds the information for a possible race.
+ * The <b>Race</b> class holds the information for a race.
  *
  * @author Marcus Portmann
  */

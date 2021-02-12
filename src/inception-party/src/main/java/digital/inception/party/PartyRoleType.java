@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PartyRoleType</b> class holds the information for a possible party role type.
+ * The <b>PartyRoleType</b> class holds the information for a party role type.
  *
  * @author Marcus Portmann
  */

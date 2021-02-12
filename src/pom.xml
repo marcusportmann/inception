@@ -100,6 +100,7 @@
     <spring-shell.version>2.0.0</spring-shell.version>
     <springdoc-openapi-ui.version>1.5.2</springdoc-openapi-ui.version>
     <sun-activation.version>1.2.0</sun-activation.version>
+    <swagger-codegen-maven-plugin.version>3.0.24</swagger-codegen-maven-plugin.version>
     <swagger.version>2.1.6</swagger.version>
     <uuid-creator.version>3.4.1</uuid-creator.version>
     <wss4j-ws-security-common.version>2.2.5</wss4j-ws-security-common.version>
@@ -304,17 +305,17 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-configuration</artifactId>
+        <artifactId>inception-config</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-configuration-api</artifactId>
+        <artifactId>inception-config-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-configuration-ws</artifactId>
+        <artifactId>inception-config-ws</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -517,9 +518,9 @@
     <module>inception-codes</module>
     <module>inception-codes-api</module>
     <module>inception-codes-ws</module>
-    <module>inception-configuration</module>
-    <module>inception-configuration-api</module>
-    <module>inception-configuration-ws</module>
+    <module>inception-config</module>
+    <module>inception-config-api</module>
+    <module>inception-config-ws</module>
     <module>inception-error</module>
     <module>inception-error-api</module>
     <module>inception-error-ws</module>
@@ -598,5 +599,6 @@
       </plugin>
     </plugins>
   </build>
+
 </project>
 

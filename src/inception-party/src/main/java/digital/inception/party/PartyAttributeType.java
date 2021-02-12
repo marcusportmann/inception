@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PartyAttributeType</b> class holds the information for a possible party attribute type.
+ * The <b>PartyAttributeType</b> class holds the information for a party attribute type.
  *
  * @author Marcus Portmann
  */

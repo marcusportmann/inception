@@ -16,6 +16,9 @@
 
 package demo;
 
+import io.swagger.v3.oas.models.info.Info;
+import org.springdoc.core.GroupedOpenApi;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -30,4 +33,23 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(
     entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"demo"})
-public class DemoConfiguration {}
+public class DemoConfiguration {
+
+  /**
+   * Returns the grouped Open API for the demo application.
+   *
+   * @return the grouped Open API for the demo application
+   */
+  @Bean
+  public GroupedOpenApi demoOpenApi() {
+    return GroupedOpenApi.builder()
+        .group("demo")
+        .packagesToScan("demo")
+        .addOpenApiCustomiser(
+            openApi ->
+                openApi.info(new Info().title("Demo API").version(Version.PROJECT_VERSION)))
+        .build();
+  }
+
+
+}

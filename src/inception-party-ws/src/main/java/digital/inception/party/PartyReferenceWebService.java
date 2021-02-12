@@ -266,7 +266,7 @@ public class PartyReferenceWebService {
    * @return the preference type categories
    */
   @WebMethod(operationName = "GetPreferenceTypeCategories")
-  public List<PreferenceTypeCategory> getPreferenceTypeCategories(
+  public List<PartyPreferenceTypeCategory> getPreferenceTypeCategories(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
     return partyService.getPreferenceTypeCategories(localeId);
   }
@@ -279,7 +279,7 @@ public class PartyReferenceWebService {
    * @return the preference types
    */
   @WebMethod(operationName = "GetPreferenceTypes")
-  public List<PreferenceType> getPreferenceTypes(
+  public List<PartyPreferenceType> getPreferenceTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
     return partyService.getPreferenceTypes(localeId);
   }

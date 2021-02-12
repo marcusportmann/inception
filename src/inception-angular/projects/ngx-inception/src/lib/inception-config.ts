@@ -17,7 +17,7 @@
 import {InjectionToken} from '@angular/core';
 
 /**
- * The InceptionConfig interface defines the configuration that can be passed to the InceptionModule
+ * The InceptionConfig interface defines the config that can be passed to the InceptionModule
  * module.
  *
  * @author Marcus Portmann
@@ -40,9 +40,9 @@ export interface InceptionConfig {
   codesApiUrlPrefix: string;
 
   /**
-   * The Configuration API URL prefix.
+   * The Config API URL prefix.
    */
-  configurationApiUrlPrefix: string;
+  configApiUrlPrefix: string;
 
   /**
    * The Error API URL prefix.

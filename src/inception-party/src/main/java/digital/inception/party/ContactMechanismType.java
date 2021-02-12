@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>ContactMechanismType</b> class holds the information for a possible contact mechanism
+ * The <b>ContactMechanismType</b> class holds the information for a contact mechanism
  * type.
  *
  * @author Marcus Portmann

@@ -150,3 +150,6 @@ spring:
 
 springdoc:
   writer-with-order-by-keys: true
+  api-docs:
+    groups:
+      enabled: true

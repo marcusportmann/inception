@@ -51,9 +51,9 @@ import digital.inception.party.Persons;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressType;
-import digital.inception.party.Preference;
-import digital.inception.party.PreferenceType;
-import digital.inception.party.PreferenceTypeCategory;
+import digital.inception.party.PartyPreference;
+import digital.inception.party.PartyPreferenceType;
+import digital.inception.party.PartyPreferenceTypeCategory;
 import digital.inception.party.Race;
 import digital.inception.party.ResidencePermitType;
 import digital.inception.party.ResidencyStatus;
@@ -202,7 +202,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(correspondenceAddress);
 
-    person.addPreference(new Preference("correspondence_language", "EN"));
+    person.addPreference(new PartyPreference("correspondence_language", "EN"));
 
     person.addAttribute(new PartyAttribute("weight", "80kg"));
 
@@ -239,7 +239,7 @@ public class PartyServiceTest {
 
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
-    person.addPreference(new Preference("correspondence_language", "EN"));
+    person.addPreference(new PartyPreference("correspondence_language", "EN"));
 
     partyService.createPerson(person);
   }
@@ -803,7 +803,7 @@ public class PartyServiceTest {
 
     organization.addPhysicalAddress(mainAddress);
 
-    organization.addPreference(new Preference("correspondence_language", "EN"));
+    organization.addPreference(new PartyPreference("correspondence_language", "EN"));
 
     partyService.updateOrganization(organization);
 
@@ -1121,7 +1121,7 @@ public class PartyServiceTest {
 
     person.removePreference("correspondence_language");
 
-    person.addPreference(new Preference("time_to_contact", "anytime"));
+    person.addPreference(new PartyPreference("time_to_contact", "anytime"));
 
     person.removeAttribute("weight");
 
@@ -1184,7 +1184,7 @@ public class PartyServiceTest {
   /** Test the preference type category functionality. */
   @Test
   public void preferenceTypeCategoryTest() throws Exception {
-    List<PreferenceTypeCategory> retrievedPreferenceTypeCategories =
+    List<PartyPreferenceTypeCategory> retrievedPreferenceTypeCategories =
         partyService.getPreferenceTypeCategories();
 
     retrievedPreferenceTypeCategories = partyService.getPreferenceTypeCategories("en-US");
@@ -1193,9 +1193,9 @@ public class PartyServiceTest {
   /** Test the preference type functionality. */
   @Test
   public void preferenceTypeTest() throws Exception {
-    List<PreferenceType> retrievedPreferenceTypes = partyService.getPreferenceTypes();
+    List<PartyPreferenceType> retrievedPartyPreferenceTypes = partyService.getPreferenceTypes();
 
-    retrievedPreferenceTypes = partyService.getPreferenceTypes("en-US");
+    retrievedPartyPreferenceTypes = partyService.getPreferenceTypes("en-US");
   }
 
   /** Test the race reference functionality. */
@@ -1395,11 +1395,11 @@ public class PartyServiceTest {
 
   private void compareAttributes(PartyAttribute attribute1, PartyAttribute attribute2) {
     assertEquals(
-        "The type values for the two attributes do not match",
+        "The type values for the two party attributes do not match",
         attribute1.getType(),
         attribute2.getType());
     assertEquals(
-        "The string value values for the two attributes do not match",
+        "The string value values for the two party attributes do not match",
         attribute1.getStringValue(),
         attribute2.getStringValue());
   }
@@ -1508,10 +1508,10 @@ public class PartyServiceTest {
         organization1.getPreferences().size(),
         organization2.getPreferences().size());
 
-    for (Preference organization1Preference : organization1.getPreferences()) {
+    for (PartyPreference organization1Preference : organization1.getPreferences()) {
       boolean foundPreference = false;
 
-      for (Preference organization2Preference : organization2.getPreferences()) {
+      for (PartyPreference organization2Preference : organization2.getPreferences()) {
 
         if (Objects.equals(organization1Preference.getParty(), organization2Preference.getParty())
             && Objects.equals(
@@ -1794,10 +1794,10 @@ public class PartyServiceTest {
         person1.getPreferences().size(),
         person2.getPreferences().size());
 
-    for (Preference person1Preference : person1.getPreferences()) {
+    for (PartyPreference person1Preference : person1.getPreferences()) {
       boolean foundPreference = false;
 
-      for (Preference person2Preference : person2.getPreferences()) {
+      for (PartyPreference person2Preference : person2.getPreferences()) {
 
         if (Objects.equals(person1Preference.getParty(), person2Preference.getParty())
             && Objects.equals(person1Preference.getType(), person2Preference.getType())) {
@@ -1898,13 +1898,13 @@ public class PartyServiceTest {
         physicalAddress2.getType());
   }
 
-  private void comparePreferences(Preference preference1, Preference preference2) {
+  private void comparePreferences(PartyPreference preference1, PartyPreference preference2) {
     assertEquals(
-        "The type values for the two preferences do not match",
+        "The type values for the two party preferences do not match",
         preference1.getType(),
         preference2.getType());
     assertEquals(
-        "The value values for the two preferences do not match",
+        "The value values for the two party preferences do not match",
         preference1.getValue(),
         preference2.getValue());
   }

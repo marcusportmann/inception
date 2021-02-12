@@ -20,7 +20,7 @@ import {RouterModule, Routes} from '@angular/router';
 
 import {
   CodeCategoriesTitleResolver,
-  ConfigurationsTitleResolver,
+  ConfigsTitleResolver,
   MailTitleResolver,
   ReportingTitleResolver,
   SchedulerTitleResolver,
@@ -56,12 +56,11 @@ const routes: Routes = [{
     },
     loadChildren: () => import('../wrappers/codes-views-wrapper.module').then(m => m.CodesViewsWrapperModule)
   }, {
-    path: 'configuration',
+    path: 'config',
     resolve: {
-      title: ConfigurationsTitleResolver
+      title: ConfigsTitleResolver
     },
-    loadChildren: () => import('../wrappers/configuration-views-wrapper.module').then(
-      m => m.ConfigurationViewsWrapperModule)
+    loadChildren: () => import('../wrappers/config-views-wrapper.module').then(m => m.ConfigViewsWrapperModule)
   }, {
     path: 'mail',
     resolve: {
@@ -94,7 +93,7 @@ const routes: Routes = [{
   providers: [
 
     // Resolvers
-    CodeCategoriesTitleResolver, ConfigurationsTitleResolver, MailTitleResolver,
+    CodeCategoriesTitleResolver, ConfigsTitleResolver, MailTitleResolver,
     ReportingTitleResolver, SchedulerTitleResolver, SecurityTitleResolver, SystemTitleResolver
   ]
 })

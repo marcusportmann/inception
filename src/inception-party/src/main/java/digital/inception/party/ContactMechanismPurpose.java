@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ContactMechanismPurpose</b> class holds the information for a possible contact mechanism
+ * The <b>ContactMechanismPurpose</b> class holds the information for a contact mechanism
  * purpose.
  *
  * @author Marcus Portmann

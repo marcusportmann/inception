@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>ResidencyStatus</b> class holds the information for a possible residency status.
+ * The <b>ResidencyStatus</b> class holds the information for a residency status.
  *
  * @author Marcus Portmann
  */

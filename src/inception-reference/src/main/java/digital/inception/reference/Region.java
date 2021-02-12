@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Region</b> class holds the information for a possible region.
+ * The <b>Region</b> class holds the information for a region.
  *
  * @author Marcus Portmann
  */

@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Language</b> class holds the information for a possible language.
+ * The <b>Language</b> class holds the information for a language.
  *
  * @author Marcus Portmann
  */

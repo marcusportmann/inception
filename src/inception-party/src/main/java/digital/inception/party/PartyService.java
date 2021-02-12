@@ -122,10 +122,10 @@ public class PartyService implements IPartyService {
   private final PhysicalAddressTypeRepository physicalAddressTypeRepository;
 
   /** The Preference Type Category Repository. */
-  private final PreferenceTypeCategoryRepository preferenceTypeCategoryRepository;
+  private final PartyPreferenceTypeCategoryRepository partyPreferenceTypeCategoryRepository;
 
   /** The Preference Type Repository */
-  private final PreferenceTypeRepository preferenceTypeRepository;
+  private final PartyPreferenceTypeRepository partyPreferenceTypeRepository;
 
   /** The Race Repository. */
   private final RaceRepository raceRepository;
@@ -175,14 +175,14 @@ public class PartyService implements IPartyService {
    * @param organizationRepository the Organization Repository
    * @param partyAttributeTypeCategoryRepository the Party Attribute Type Category Repository
    * @param partyAttributeTypeRepository the Party Attribute Type Repository
+   * @param partyPreferenceTypeCategoryRepository the Preference Type Category Repository
+   * @param partyPreferenceTypeRepository the Preference Type Repository
    * @param partyRepository the Party Repository
    * @param partyRolePurposeRepository the Party Role Purpose Repository
    * @param partyRoleTypeRepository the Party Role Type Repository
    * @param personRepository the Person Repository
    * @param physicalAddressPurposeRepository the Physical Address Purpose Repository
    * @param physicalAddressTypeRepository the Physical Address Type Repository
-   * @param preferenceTypeCategoryRepository the Preference Type Category Repository
-   * @param preferenceTypeRepository the Preference Type Repository
    * @param raceRepository the Race Repository
    * @param residencePermitTypeRepository the Residence Permit Type Repository*
    * @param residencyStatusRepository the Residency Status Repository
@@ -208,14 +208,14 @@ public class PartyService implements IPartyService {
       OrganizationRepository organizationRepository,
       PartyAttributeTypeCategoryRepository partyAttributeTypeCategoryRepository,
       PartyAttributeTypeRepository partyAttributeTypeRepository,
+      PartyPreferenceTypeCategoryRepository partyPreferenceTypeCategoryRepository,
+      PartyPreferenceTypeRepository partyPreferenceTypeRepository,
       PartyRepository partyRepository,
       PartyRolePurposeRepository partyRolePurposeRepository,
       PartyRoleTypeRepository partyRoleTypeRepository,
       PersonRepository personRepository,
       PhysicalAddressPurposeRepository physicalAddressPurposeRepository,
       PhysicalAddressTypeRepository physicalAddressTypeRepository,
-      PreferenceTypeCategoryRepository preferenceTypeCategoryRepository,
-      PreferenceTypeRepository preferenceTypeRepository,
       RaceRepository raceRepository,
       ResidencePermitTypeRepository residencePermitTypeRepository,
       ResidencyStatusRepository residencyStatusRepository,
@@ -240,13 +240,13 @@ public class PartyService implements IPartyService {
     this.partyAttributeTypeCategoryRepository = partyAttributeTypeCategoryRepository;
     this.partyAttributeTypeRepository = partyAttributeTypeRepository;
     this.partyRepository = partyRepository;
+    this.partyPreferenceTypeCategoryRepository = partyPreferenceTypeCategoryRepository;
+    this.partyPreferenceTypeRepository = partyPreferenceTypeRepository;
     this.partyRolePurposeRepository = partyRolePurposeRepository;
     this.partyRoleTypeRepository = partyRoleTypeRepository;
     this.personRepository = personRepository;
     this.physicalAddressPurposeRepository = physicalAddressPurposeRepository;
     this.physicalAddressTypeRepository = physicalAddressTypeRepository;
-    this.preferenceTypeCategoryRepository = preferenceTypeCategoryRepository;
-    this.preferenceTypeRepository = preferenceTypeRepository;
     this.raceRepository = raceRepository;
     this.residencePermitTypeRepository = residencePermitTypeRepository;
     this.residencyStatusRepository = residencyStatusRepository;
@@ -1243,7 +1243,7 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Cacheable(value = "reference", key = "'preferenceTypeCategories.ALL'")
-  public List<PreferenceTypeCategory> getPreferenceTypeCategories()
+  public List<PartyPreferenceTypeCategory> getPreferenceTypeCategories()
       throws ServiceUnavailableException {
     return getPreferenceTypeCategories(null);
   }
@@ -1257,14 +1257,14 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Cacheable(value = "reference", key = "'preferenceTypeCategories.' + #localeId")
-  public List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
+  public List<PartyPreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
       throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
-        return preferenceTypeCategoryRepository.findAll(
+        return partyPreferenceTypeCategoryRepository.findAll(
             Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return preferenceTypeCategoryRepository.findByLocaleIdIgnoreCase(
+        return partyPreferenceTypeCategoryRepository.findByLocaleIdIgnoreCase(
             localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
@@ -1279,7 +1279,7 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Cacheable(value = "reference", key = "'preferenceTypes.ALL'")
-  public List<PreferenceType> getPreferenceTypes() throws ServiceUnavailableException {
+  public List<PartyPreferenceType> getPreferenceTypes() throws ServiceUnavailableException {
     return getPreferenceTypes(null);
   }
 
@@ -1292,13 +1292,13 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Cacheable(value = "reference", key = "'preferenceTypes.' + #localeId")
-  public List<PreferenceType> getPreferenceTypes(String localeId)
+  public List<PartyPreferenceType> getPreferenceTypes(String localeId)
       throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
-        return preferenceTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+        return partyPreferenceTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return preferenceTypeRepository.findByLocaleIdIgnoreCase(
+        return partyPreferenceTypeRepository.findByLocaleIdIgnoreCase(
             localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {

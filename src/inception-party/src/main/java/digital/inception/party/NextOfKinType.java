@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>NextOfKinType</b> class holds the information for a possible next of kin type.
+ * The <b>NextOfKinType</b> class holds the information for a next of kin type.
  *
  * @author Marcus Portmann
  */

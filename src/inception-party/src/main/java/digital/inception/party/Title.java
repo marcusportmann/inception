@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Title</b> class holds the information for a possible title.
+ * The <b>Title</b> class holds the information for a title.
  *
  * @author Marcus Portmann
  */

@@ -32,7 +32,7 @@ import digital.inception.party.PartyAttribute;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressType;
-import digital.inception.party.Preference;
+import digital.inception.party.PartyPreference;
 import digital.inception.party.TaxNumber;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
@@ -152,7 +152,7 @@ public class CustomerServiceTest {
 
     individualCustomer.addPhysicalAddress(correspondenceAddress);
 
-    individualCustomer.addPreference(new Preference("correspondence_language", "EN"));
+    individualCustomer.addPreference(new PartyPreference("correspondence_language", "EN"));
 
     individualCustomer.addAttribute(new PartyAttribute("weight", "80kg"));
 
@@ -217,7 +217,7 @@ public class CustomerServiceTest {
 
     individualCustomer.removePreference("correspondence_language");
 
-    individualCustomer.addPreference(new Preference("time_to_contact", "anytime"));
+    individualCustomer.addPreference(new PartyPreference("time_to_contact", "anytime"));
 
     individualCustomer.removeAttribute("weight");
 
@@ -263,11 +263,11 @@ public class CustomerServiceTest {
 
   private void compareAttributes(PartyAttribute attribute1, PartyAttribute attribute2) {
     assertEquals(
-        "The type values for the two attributes do not match",
+        "The type values for the two party attributes do not match",
         attribute1.getType(),
         attribute2.getType());
     assertEquals(
-        "The string value values for the two attributes do not match",
+        "The string value values for the two party attributes do not match",
         attribute1.getStringValue(),
         attribute2.getStringValue());
   }
@@ -539,7 +539,7 @@ public class CustomerServiceTest {
                 individualCustomer1PhysicalAddress.getId(),
                 individualCustomer2PhysicalAddress.getId())) {
 
-          comparePhysicalAddresses(
+          comparePartyPhysicalAddresses(
               individualCustomer1PhysicalAddress, individualCustomer2PhysicalAddress);
 
           foundPhysicalAddress = true;
@@ -559,10 +559,10 @@ public class CustomerServiceTest {
         individualCustomer1.getPreferences().size(),
         individualCustomer2.getPreferences().size());
 
-    for (Preference individualCustomer1Preference : individualCustomer1.getPreferences()) {
+    for (PartyPreference individualCustomer1Preference : individualCustomer1.getPreferences()) {
       boolean foundPreference = false;
 
-      for (Preference individualCustomer2Preference : individualCustomer2.getPreferences()) {
+      for (PartyPreference individualCustomer2Preference : individualCustomer2.getPreferences()) {
 
         if (Objects.equals(
                 individualCustomer1Preference.getParty(), individualCustomer2Preference.getParty())
@@ -581,97 +581,97 @@ public class CustomerServiceTest {
     }
   }
 
-  private void comparePhysicalAddresses(
-      PhysicalAddress physicalAddress1, PhysicalAddress physicalAddress2) {
+  private void comparePartyPhysicalAddresses(
+      PhysicalAddress partyPhysicalAddress1, PhysicalAddress partyPhysicalAddress2) {
     assertEquals(
-        "The building floor values for the two physical addresses do not match",
-        physicalAddress1.getBuildingFloor(),
-        physicalAddress2.getBuildingFloor());
+        "The building floor values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getBuildingFloor(),
+        partyPhysicalAddress2.getBuildingFloor());
     assertEquals(
-        "The building name values for the two physical addresses do not match",
-        physicalAddress1.getBuildingName(),
-        physicalAddress2.getBuildingName());
+        "The building name values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getBuildingName(),
+        partyPhysicalAddress2.getBuildingName());
     assertEquals(
-        "The building room values for the two physical addresses do not match",
-        physicalAddress1.getBuildingRoom(),
-        physicalAddress2.getBuildingRoom());
+        "The building room values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getBuildingRoom(),
+        partyPhysicalAddress2.getBuildingRoom());
     assertEquals(
-        "The city values for the two physical addresses do not match",
-        physicalAddress1.getCity(),
-        physicalAddress2.getCity());
+        "The city values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getCity(),
+        partyPhysicalAddress2.getCity());
     assertEquals(
-        "The complex name values for the two physical addresses do not match",
-        physicalAddress1.getComplexName(),
-        physicalAddress2.getComplexName());
+        "The complex name values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getComplexName(),
+        partyPhysicalAddress2.getComplexName());
     assertEquals(
-        "The complex unit number values for the two physical addresses do not match",
-        physicalAddress1.getComplexUnitNumber(),
-        physicalAddress2.getComplexUnitNumber());
+        "The complex unit number values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getComplexUnitNumber(),
+        partyPhysicalAddress2.getComplexUnitNumber());
     assertEquals(
-        "The farm description values for the two physical addresses do not match",
-        physicalAddress1.getFarmDescription(),
-        physicalAddress2.getFarmDescription());
+        "The farm description values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getFarmDescription(),
+        partyPhysicalAddress2.getFarmDescription());
     assertEquals(
-        "The farm name values for the two physical addresses do not match",
-        physicalAddress1.getFarmName(),
-        physicalAddress2.getFarmName());
+        "The farm name values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getFarmName(),
+        partyPhysicalAddress2.getFarmName());
     assertEquals(
-        "The farm number values for the two physical addresses do not match",
-        physicalAddress1.getFarmNumber(),
-        physicalAddress2.getFarmNumber());
+        "The farm number values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getFarmNumber(),
+        partyPhysicalAddress2.getFarmNumber());
     assertEquals(
-        "The line 1 values for the two physical addresses do not match",
-        physicalAddress1.getLine1(),
-        physicalAddress2.getLine1());
+        "The line 1 values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getLine1(),
+        partyPhysicalAddress2.getLine1());
     assertEquals(
-        "The line 2 values for the two physical addresses do not match",
-        physicalAddress1.getLine2(),
-        physicalAddress2.getLine2());
+        "The line 2 values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getLine2(),
+        partyPhysicalAddress2.getLine2());
     assertEquals(
-        "The line 3 values for the two physical addresses do not match",
-        physicalAddress1.getLine3(),
-        physicalAddress2.getLine3());
+        "The line 3 values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getLine3(),
+        partyPhysicalAddress2.getLine3());
     assertEquals(
-        "The purpose values for the two physical addresses do not match",
-        physicalAddress1.getPurposes(),
-        physicalAddress2.getPurposes());
+        "The purpose values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getPurposes(),
+        partyPhysicalAddress2.getPurposes());
     assertEquals(
-        "The region values for the two physical addresses do not match",
-        physicalAddress1.getRegion(),
-        physicalAddress2.getRegion());
+        "The region values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getRegion(),
+        partyPhysicalAddress2.getRegion());
     assertEquals(
-        "The site block values for the two physical addresses do not match",
-        physicalAddress1.getSiteBlock(),
-        physicalAddress2.getSiteBlock());
+        "The site block values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getSiteBlock(),
+        partyPhysicalAddress2.getSiteBlock());
     assertEquals(
-        "The site number values for the two physical addresses do not match",
-        physicalAddress1.getSiteNumber(),
-        physicalAddress2.getSiteNumber());
+        "The site number values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getSiteNumber(),
+        partyPhysicalAddress2.getSiteNumber());
     assertEquals(
-        "The street name values for the two physical addresses do not match",
-        physicalAddress1.getStreetName(),
-        physicalAddress2.getStreetName());
+        "The street name values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getStreetName(),
+        partyPhysicalAddress2.getStreetName());
     assertEquals(
-        "The street number values for the two physical addresses do not match",
-        physicalAddress1.getStreetNumber(),
-        physicalAddress2.getStreetNumber());
+        "The street number values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getStreetNumber(),
+        partyPhysicalAddress2.getStreetNumber());
     assertEquals(
-        "The suburb values for the two physical addresses do not match",
-        physicalAddress1.getSuburb(),
-        physicalAddress2.getSuburb());
+        "The suburb values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getSuburb(),
+        partyPhysicalAddress2.getSuburb());
     assertEquals(
-        "The type values for the two physical addresses do not match",
-        physicalAddress1.getType(),
-        physicalAddress2.getType());
+        "The type values for the two party physical addresses do not match",
+        partyPhysicalAddress1.getType(),
+        partyPhysicalAddress2.getType());
   }
 
-  private void comparePreferences(Preference preference1, Preference preference2) {
+  private void comparePreferences(PartyPreference preference1, PartyPreference preference2) {
     assertEquals(
-        "The type values for the two preferences do not match",
+        "The type values for the two party preferences do not match",
         preference1.getType(),
         preference2.getType());
     assertEquals(
-        "The value values for the two preferences do not match",
+        "The value values for the two party preferences do not match",
         preference1.getValue(),
         preference2.getValue());
   }

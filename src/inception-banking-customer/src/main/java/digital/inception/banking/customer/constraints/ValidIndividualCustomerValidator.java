@@ -23,7 +23,7 @@ import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyRole;
 import digital.inception.party.PartyType;
 import digital.inception.party.PhysicalAddress;
-import digital.inception.party.Preference;
+import digital.inception.party.PartyPreference;
 import digital.inception.party.TaxNumber;
 import digital.inception.reference.IReferenceService;
 import javax.validation.ConstraintValidator;
@@ -277,7 +277,7 @@ public class ValidIndividualCustomerValidator
       }
 
       // Validate preferences
-      for (Preference preference : individualCustomer.getPreferences()) {
+      for (PartyPreference preference : individualCustomer.getPreferences()) {
         if (!partyService.isValidPreferenceType(PartyType.PERSON.code(), preference.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", preference.getType())

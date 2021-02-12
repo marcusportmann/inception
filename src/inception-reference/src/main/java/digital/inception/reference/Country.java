@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Country</b> class holds the information for a possible country.
+ * The <b>Country</b> class holds the information for a country.
  *
  * @author Marcus Portmann
  */

@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PhysicalAddressPurpose</b> class holds the information for a possible physical address
+ * The <b>PhysicalAddressPurpose</b> class holds the information for a physical address
  * purpose.
  *
  * @author Marcus Portmann

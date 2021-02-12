@@ -30,7 +30,7 @@ import digital.inception.party.PartyRole;
 import digital.inception.party.PartyType;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
-import digital.inception.party.Preference;
+import digital.inception.party.PartyPreference;
 import digital.inception.party.TaxNumber;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
@@ -225,7 +225,7 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<Preference> preferences = new HashSet<>();
+  private final Set<PartyPreference> preferences = new HashSet<>();
 
   /** The party roles for the individual customer independent of a party association. */
   @Valid
@@ -459,7 +459,7 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
    *
    * @param preference the preference
    */
-  public void addPreference(Preference preference) {
+  public void addPreference(PartyPreference preference) {
     preferences.removeIf(
         existingPreference -> Objects.equals(existingPreference.getType(), preference.getType()));
 
@@ -927,7 +927,7 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
    * @return the preference with the specified type for the individual customer or <b>null</b> if
    *     the preference could not be found
    */
-  public Preference getPreference(String type) {
+  public PartyPreference getPreference(String type) {
     return preferences.stream()
         .filter(preference -> Objects.equals(preference.getType(), type))
         .findFirst()
@@ -944,7 +944,7 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   @JsonManagedReference("preferenceReference")
   @XmlElementWrapper(name = "Preferences")
   @XmlElement(name = "Preference")
-  public Set<Preference> getPreferences() {
+  public Set<PartyPreference> getPreferences() {
     return preferences;
   }
 
@@ -1438,7 +1438,7 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
    *
    * @param preferences the preferences for the individual customer
    */
-  public void setPreferences(Set<Preference> preferences) {
+  public void setPreferences(Set<PartyPreference> preferences) {
     this.preferences.clear();
     this.preferences.addAll(preferences);
   }

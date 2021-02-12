@@ -20,21 +20,21 @@ import {Error} from '../../core/errors/error';
 import {ProblemDetails} from '../../core/errors/problem-details';
 
 /**
- * The ConfigurationNotFoundError class holds the information for a configuration not found error.
+ * The ConfigNotFoundError class holds the information for a config not found error.
  *
  * @author Marcus Portmann
  */
-export class ConfigurationNotFoundError extends Error {
+export class ConfigNotFoundError extends Error {
 
-  static readonly TYPE = 'http://inception.digital/problems/configuration/configuration-not-found';
+  static readonly TYPE = 'http://inception.digital/problems/config/config-not-found';
 
   /**
-   * Constructs a new ConfigurationNotFoundError.
+   * Constructs a new ConfigNotFoundError.
    *
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@configuration_configuration_not_found_error:The configuration could not be found.`, cause);
+    super($localize`:@@config_config_not_found_error:The config could not be found.`, cause);
   }
 }
 

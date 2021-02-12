@@ -66,7 +66,7 @@ public class ApplicationDataSourceConfiguration {
     "digital/inception/bmi/inception-bmi-h2.sql",
     "digital/inception/bmi/inception-camunda-h2.sql",
     "digital/inception/codes/inception-codes-h2.sql",
-    "digital/inception/configuration/inception-configuration-h2.sql",
+    "digital/inception/config /inception-config-h2.sql",
     "digital/inception/error/inception-error-h2.sql",
     "digital/inception/mail/inception-mail-h2.sql",
     "digital/inception/messaging/inception-messaging-h2.sql",

@@ -414,7 +414,7 @@ public interface IPartyService {
    *
    * @return the preference type categories
    */
-  List<PreferenceTypeCategory> getPreferenceTypeCategories() throws ServiceUnavailableException;
+  List<PartyPreferenceTypeCategory> getPreferenceTypeCategories() throws ServiceUnavailableException;
 
   /**
    * Retrieve the preference type categories.
@@ -423,7 +423,7 @@ public interface IPartyService {
    *     categories for or <b>null</b> to retrieve the preference type categories for all locales
    * @return the preference type categories
    */
-  List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
+  List<PartyPreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
       throws ServiceUnavailableException;
 
   /**
@@ -431,7 +431,7 @@ public interface IPartyService {
    *
    * @return the preference types
    */
-  List<PreferenceType> getPreferenceTypes() throws ServiceUnavailableException;
+  List<PartyPreferenceType> getPreferenceTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the preference types.
@@ -440,7 +440,7 @@ public interface IPartyService {
    *     for or <b>null</b> to retrieve the preference types for all locales
    * @return the preference types
    */
-  List<PreferenceType> getPreferenceTypes(String localeId) throws ServiceUnavailableException;
+  List<PartyPreferenceType> getPreferenceTypes(String localeId) throws ServiceUnavailableException;
 
   /**
    * Retrieve all the races.

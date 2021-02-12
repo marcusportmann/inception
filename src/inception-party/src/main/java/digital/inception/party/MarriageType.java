@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>MarriageType</b> class holds the information for a possible marriage type.
+ * The <b>MarriageType</b> class holds the information for a marriage type.
  *
  * @author Marcus Portmann
  */

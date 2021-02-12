@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>PartyRolePurpose</b> class holds the information for a possible purpose for a party role.
+ * The <b>PartyRolePurpose</b> class holds the information for a purpose for a party role.
  *
  * @author Marcus Portmann
  */

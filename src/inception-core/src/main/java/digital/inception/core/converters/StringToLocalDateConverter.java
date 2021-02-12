@@ -44,7 +44,7 @@ public final class StringToLocalDateConverter implements Converter<String, Local
     try {
       return ISO8601Util.toLocalDate(source);
     } catch (Throwable e) {
-      throw new RuntimeException("Failed to parse the ISO8601Util date value (" + source + ")", e);
+      throw new RuntimeException("Failed to parse the ISO8601 date value (" + source + ")", e);
     }
   }
 }

@@ -43,7 +43,7 @@ const ngxInceptionConfig: InceptionConfig = {
 
   // Inception API URLs
   codesApiUrlPrefix: 'http://localhost:8080/api/codes',
-  configurationApiUrlPrefix: 'http://localhost:8080/api/configuration',
+  configApiUrlPrefix: 'http://localhost:8080/api/config',
   errorApiUrlPrefix: 'http://localhost:8080/api/error',
   mailApiUrlPrefix: 'http://localhost:8080/api/mail',
   referenceApiUrlPrefix: 'http://localhost:8080/api/reference',
@@ -122,7 +122,7 @@ export class AppModule extends InceptionAppModule {
     ]));
 
     navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration',
-      ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Configuration.ConfigurationAdministration',
+      ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Config.ConfigAdministration',
         'FUNCTION_Security.GroupAdministration', 'FUNCTION_Security.TenantAdministration',
         'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration',
         'FUNCTION_Security.UserDirectoryAdministration', 'FUNCTION_Security.UserGroups',
@@ -143,13 +143,13 @@ export class AppModule extends InceptionAppModule {
             ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration'])
         ]), new NavigationItem('fa fa-cog', 'System', '/administration/system',
         ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration',
-          'FUNCTION_Configuration.ConfigurationAdministration', 'FUNCTION_Mail.MailAdministration',
+          'FUNCTION_Config.ConfigAdministration', 'FUNCTION_Mail.MailAdministration',
           'FUNCTION_Mail.MailTemplateAdministration', 'FUNCTION_Scheduler.SchedulerAdministration',
           'FUNCTION_Scheduler.JobAdministration'
         ], [new NavigationItem('fa fa-list', 'Codes', '/administration/system/code-categories',
           ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']),
-          new NavigationItem('fa fa-list', 'Configuration', '/administration/system/configuration',
-            ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']),
+          new NavigationItem('fa fa-list', 'Config', '/administration/system/config',
+            ['ROLE_Administrator', 'FUNCTION_Config.ConfigAdministration']),
           new NavigationItem('fas fa-envelope', 'Mail', '/administration/system/mail',
             ['ROLE_Administrator', 'FUNCTION_Mail.MailAdministration', 'FUNCTION_Mail.MailTemplateAdministration'
             ], [new NavigationItem('fas fa-envelope-open-text', 'Mail Templates',

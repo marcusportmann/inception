@@ -16,13 +16,24 @@
 
 package demo;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import demo.api.TestApi;
 import digital.inception.codes.CodeCategory;
 import digital.inception.codes.CodesService;
 import digital.inception.codes.ICodesService;
 import digital.inception.core.util.CryptoUtil;
+import digital.inception.reference.api.ReferenceApi;
+import digital.inception.reference.model.Language;
 import digital.inception.ws.security.WebServiceClientSecurityHelper;
 import java.security.KeyStore;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
+import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 
 /**
  * The <b>SimpleDemoClient</b> class.
@@ -32,7 +43,7 @@ import java.util.List;
 public class SimpleDemoClient {
 
   /** The Codes Service endpoint. */
-  public static final String CODES_SERVICE_ENDPOINT = "http://localhost:20000/service/CodesService";
+  public static final String CODES_SERVICE_ENDPOINT = "http://localhost:8080/service/CodesService";
 
   /** The path to the classpath resource containing the WSDL for the Codes Service. */
   public static final String CODES_SERVICE_WSDL = "META-INF/wsdl/CodesService.wsdl";
@@ -58,6 +69,61 @@ public class SimpleDemoClient {
    * @param args the command-line arguments
    */
   public static void main(String[] args) {
+    invokeCodesService();
+
+    invokeReferenceApi();
+
+    invokeTestApi();
+  }
+
+  private static void invokeTestApi() {
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+
+      TestApi testApi =
+          JAXRSClientFactory.create(
+              "http://localhost:20000",
+              TestApi.class,
+              Collections.singletonList(new JacksonJsonProvider(objectMapper)));
+
+      OffsetDateTime offsetDateTime =
+          testApi.testLocalDateTime(
+              LocalDateTime.now().atZone(ZoneId.systemDefault()).toOffsetDateTime());
+
+      System.out.println(
+          "Found time = "
+              + offsetDateTime.atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime());
+    } catch (Throwable e) {
+      System.err.println("[ERROR] " + e.getMessage());
+      e.printStackTrace(System.err);
+    }
+  }
+
+  private static void invokeReferenceApi() {
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+
+      ReferenceApi referenceApi =
+          JAXRSClientFactory.create(
+              "http://localhost:20000",
+              ReferenceApi.class,
+              Collections.singletonList(new JacksonJsonProvider(objectMapper)));
+
+      List<Language> languages = referenceApi.getLanguages("en-US");
+
+      for (Language language : languages) {
+        System.out.println("Found language: " + language.getName());
+      }
+
+    } catch (Throwable e) {
+      System.err.println("[ERROR] " + e.getMessage());
+      e.printStackTrace(System.err);
+    }
+  }
+
+  private static void invokeCodesService() {
     try {
       KeyStore keyStore =
           CryptoUtil.loadKeyStore(
@@ -91,7 +157,7 @@ public class SimpleDemoClient {
       List<CodeCategory> codeCategories = codesService.getCodeCategories();
 
       for (CodeCategory codeCategory : codeCategories) {
-        System.out.println(codeCategory.getName());
+        System.out.println("Found code category: " + codeCategory.getName());
       }
     } catch (Throwable e) {
       System.err.println("[ERROR] " + e.getMessage());

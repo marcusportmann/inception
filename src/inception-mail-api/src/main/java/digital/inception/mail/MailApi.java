@@ -363,75 +363,75 @@ public class MailApi extends SecureApi {
     return mailService.getMailTemplates();
   }
 
-  /** Send a test mail. */
-  @Operation(summary = "Send a test mail", description = "Send a test mail")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "204", description = "The mail was sent successfully"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The mail template could not be found",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "409",
-            description = "A mail template with the specified ID already exists",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/send-test-mail",
-      method = RequestMethod.POST,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
-  public void sendMailTest()
-      throws InvalidArgumentException, DuplicateMailTemplateException,
-          MailTemplateNotFoundException, ServiceUnavailableException {
-    MailTemplate mailTemplate = new MailTemplate();
-    mailTemplate.setId("TestMailTemplate");
-    mailTemplate.setName("Test Mail Template");
-    mailTemplate.setContentType(MailTemplateContentType.HTML);
-    mailTemplate.setTemplate("Hello World!".getBytes());
-
-    mailService.createMailTemplate(mailTemplate);
-
-    MailTemplate retrievedMailTemplate = mailService.getMailTemplate(mailTemplate.getId());
-
-    logger.info(
-        "Retrieved mail template ("
-            + retrievedMailTemplate.getName()
-            + ") with ID ("
-            + retrievedMailTemplate.getId()
-            + ")");
-  }
+//  /** Send a test mail. */
+//  @Operation(summary = "Send a test mail", description = "Send a test mail")
+//  @ApiResponses(
+//      value = {
+//        @ApiResponse(responseCode = "204", description = "The mail was sent successfully"),
+//        @ApiResponse(
+//            responseCode = "400",
+//            description = "Invalid argument",
+//            content =
+//                @Content(
+//                    mediaType = "application/problem+json",
+//                    schema = @Schema(implementation = ProblemDetails.class))),
+//          @ApiResponse(
+//              responseCode = "403",
+//              description = "Access denied",
+//              content =
+//              @Content(
+//                  mediaType = "application/problem+json",
+//                  schema = @Schema(implementation = ProblemDetails.class))),
+//        @ApiResponse(
+//            responseCode = "404",
+//            description = "The mail template could not be found",
+//            content =
+//                @Content(
+//                    mediaType = "application/problem+json",
+//                    schema = @Schema(implementation = ProblemDetails.class))),
+//        @ApiResponse(
+//            responseCode = "409",
+//            description = "A mail template with the specified ID already exists",
+//            content =
+//                @Content(
+//                    mediaType = "application/problem+json",
+//                    schema = @Schema(implementation = ProblemDetails.class))),
+//        @ApiResponse(
+//            responseCode = "500",
+//            description =
+//                "An error has occurred and the request could not be processed at this time",
+//            content =
+//                @Content(
+//                    mediaType = "application/problem+json",
+//                    schema = @Schema(implementation = ProblemDetails.class)))
+//      })
+//  @RequestMapping(
+//      value = "/send-test-mail",
+//      method = RequestMethod.POST,
+//      produces = "application/json")
+//  @ResponseStatus(HttpStatus.NO_CONTENT)
+//  @PreAuthorize(
+//      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
+//  public void sendMailTest()
+//      throws InvalidArgumentException, DuplicateMailTemplateException,
+//          MailTemplateNotFoundException, ServiceUnavailableException {
+//    MailTemplate mailTemplate = new MailTemplate();
+//    mailTemplate.setId("TestMailTemplate");
+//    mailTemplate.setName("Test Mail Template");
+//    mailTemplate.setContentType(MailTemplateContentType.HTML);
+//    mailTemplate.setTemplate("Hello World!".getBytes());
+//
+//    mailService.createMailTemplate(mailTemplate);
+//
+//    MailTemplate retrievedMailTemplate = mailService.getMailTemplate(mailTemplate.getId());
+//
+//    logger.info(
+//        "Retrieved mail template ("
+//            + retrievedMailTemplate.getName()
+//            + ") with ID ("
+//            + retrievedMailTemplate.getId()
+//            + ")");
+//  }
 
   /**
    * Update the mail template.

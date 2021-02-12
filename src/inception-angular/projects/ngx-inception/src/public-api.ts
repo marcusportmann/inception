@@ -16,12 +16,12 @@ export * from './lib/codes/services/codes.service';
 export * from './lib/codes/views/code-categories-title-resolver';
 export * from './lib/codes/views/codes-views.module';
 
-// Configuration
-export * from './lib/config/services/configuration.service.errors';
-export * from './lib/config/services/configuration.service';
-export * from './lib/config/services/configuration';
-export * from './lib/config/views/configurations-title-resolver';
-export * from './lib/config/views/configuration-views.module';
+// Config
+export * from './lib/config/services/config.service.errors';
+export * from './lib/config/services/config.service';
+export * from './lib/config/services/config';
+export * from './lib/config/views/configs-title-resolver';
+export * from './lib/config/views/config-views.module';
 
 // Core
 export * from './lib/core/core.module';

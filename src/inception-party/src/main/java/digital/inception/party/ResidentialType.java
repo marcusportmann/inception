@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>ResidentialType</b> class holds the information for a possible residential type.
+ * The <b>ResidentialType</b> class holds the information for a residential type.
  *
  * @author Marcus Portmann
  */

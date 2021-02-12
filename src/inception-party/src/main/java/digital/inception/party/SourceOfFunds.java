@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>SourceOfFunds</b> class holds the information for a possible source of funds for a person.
+ * The <b>SourceOfFunds</b> class holds the information for a source of funds for a person.
  *
  * @author Marcus Portmann
  */

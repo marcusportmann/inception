@@ -41,8 +41,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>IdentityDocumentType</b> class holds the information for a possible identity document
- * type.
+ * The <b>IdentityDocumentType</b> class holds the information for an identity document type.
  *
  * @author Marcus Portmann
  */

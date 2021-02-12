@@ -36,8 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>PartyAttributeTypeCategory</b> class holds the information for a possible party attribute
- * type category.
+ * The <b>PartyAttributeTypeCategory</b> class holds the information for a party attribute type
+ * category.
  *
  * @author Marcus Portmann
  */

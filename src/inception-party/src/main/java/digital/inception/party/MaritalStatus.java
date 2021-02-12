@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>MaritalStatus</b> class holds the information for a possible marital status.
+ * The <b>MaritalStatus</b> class holds the information for a marital status.
  *
  * @author Marcus Portmann
  */

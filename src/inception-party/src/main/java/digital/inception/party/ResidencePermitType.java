@@ -36,9 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>ResidencePermitType</b> class holds the information for a possible residence permit type,
- * which is a type of official document giving a foreign national authorization to reside in a
- * country.
+ * The <b>ResidencePermitType</b> class holds the information for a residence permit type, which is
+ * a type of official document giving a foreign national authorization to reside in a country.
  *
  * @author Marcus Portmann
  */

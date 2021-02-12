@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>EmploymentStatus</b> class holds the information for a possible employment status.
+ * The <b>EmploymentStatus</b> class holds the information for an employment status.
  *
  * @author Marcus Portmann
  */
