@@ -29,19 +29,27 @@ public class PartyAttributeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The Universally Unique Identifier (UUID) for the party the party attribute is associated with. */
+  /**
+   * The Universally Unique Identifier (UUID) for the party the party attribute is associated with.
+   */
   private UUID party;
 
-  /** The code for the party attribute type. */
+  /**
+   * The code for the party attribute type.
+   */
   private String type;
 
-  /** Constructs a new <b>PartyAttributeId</b>. */
-  public PartyAttributeId() {}
+  /**
+   * Constructs a new <b>PartyAttributeId</b>.
+   */
+  public PartyAttributeId() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

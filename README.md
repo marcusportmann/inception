@@ -61,10 +61,10 @@ Complete the following steps to setup a development environment on MacOS.
     ```
     brew install npm
     ```
-12. Install the Angular CLI 10 globally by executing the following command in a Terminal
+12. Install the Angular CLI 11 globally by executing the following command in a Terminal
     window.
     ```
-    npm install -g @angular/cli@10
+    npm install -g @angular/cli@11
     ```
 13. Execute the following command to change to the more conservative tilde (~) patch
     update approach for dependencies for npm.
@@ -156,10 +156,10 @@ Complete the following steps to checkout and build the Inception Framework on Ma
    it.
 
    **NOTE:** Set the proxy for NPM if required.
-5. Install the Angular CLI 10 globally by executing the following command in a Git Bash
+5. Install the Angular CLI 11 globally by executing the following command in a Git Bash
    window.
    ```
-   npm install -g @angular/cli@10
+   npm install -g @angular/cli@11
    ```
 6. Execute the following command to change to the more conservative tilde (~) patch
    update approach for dependencies for npm.
@@ -259,23 +259,27 @@ Complete the following steps to create a new application based on the Inception 
           <!-- Inception Dependencies -->
           <dependency>
             <groupId>digital.inception</groupId>
+            <artifactId>inception-api</artifactId>
+          </dependency>          
+          <dependency>
+            <groupId>digital.inception</groupId>
             <artifactId>inception-application</artifactId>
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
-            <artifactId>inception-codes-rs</artifactId>
+            <artifactId>inception-codes-api</artifactId>
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
-            <artifactId>inception-configuration-rs</artifactId>
+            <artifactId>inception-config-api</artifactId>
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
-            <artifactId>inception-error-rs</artifactId>
+            <artifactId>inception-error-api</artifactId>
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
-            <artifactId>inception-mail-rs</artifactId>
+            <artifactId>inception-mail-api</artifactId>
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
@@ -291,19 +295,15 @@ Complete the following steps to create a new application based on the Inception 
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
-            <artifactId>inception-reporting-rs</artifactId>
+            <artifactId>inception-reporting-api</artifactId>
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
-            <artifactId>inception-rs</artifactId>
+            <artifactId>inception-scheduler-api</artifactId>
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
-            <artifactId>inception-scheduler-rs</artifactId>
-          </dependency>
-          <dependency>
-            <groupId>digital.inception</groupId>
-            <artifactId>inception-security-rs</artifactId>
+            <artifactId>inception-security-api</artifactId>
           </dependency>
 
           <!-- Dependencies -->
@@ -540,10 +540,10 @@ Complete the following steps to create a new application based on the Inception 
    4. Execute the following commands under the *src/main/frontend* directory to install the
       dependencies for the *ngx-inception* library.
       ```
-      npm install --save @angular/cdk@10
-      npm install --save @angular/localize@10
-      npm install --save @angular/material@10
-      npm install --save @angular/material-moment-adapter@10
+      npm install --save @angular/cdk@11
+      npm install --save @angular/localize@11
+      npm install --save @angular/material@11
+      npm install --save @angular/material-moment-adapter@11
       npm install --save @auth0/angular-jwt@5
       npm install --save @fortawesome/fontawesome-free@5
       npm install --save bootstrap@4
@@ -601,7 +601,7 @@ Complete the following steps to create a new application based on the Inception 
 
         // Inception API URLs
         codesApiUrlPrefix: 'http://localhost:8080/api/codes',
-        configurationApiUrlPrefix: 'http://localhost:8080/api/configuration',
+        configApiUrlPrefix: 'http://localhost:8080/api/config',
         errorApiUrlPrefix: 'http://localhost:8080/api/error',
         mailApiUrlPrefix: 'http://localhost:8080/api/mail',
         referenceApiUrlPrefix: 'http://localhost:8080/api/reference',
@@ -655,7 +655,7 @@ Complete the following steps to create a new application based on the Inception 
              ['ROLE_Administrator', 'FUNCTION_Dashboard.Dashboard'], undefined, undefined, undefined));
 
            navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration',
-             ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Configuration.ConfigurationAdministration',
+             ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Config.ConfigAdministration',
                'FUNCTION_Security.GroupAdministration', 'FUNCTION_Security.TenantAdministration',
                'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration',
                'FUNCTION_Security.UserDirectoryAdministration', 'FUNCTION_Security.UserGroups',
@@ -681,8 +681,8 @@ Complete the following steps to create a new application based on the Inception 
                  'FUNCTION_Scheduler.JobAdministration'
                ], [new NavigationItem('fa fa-list', 'Codes', '/administration/system/code-categories',
                  ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']),
-                 new NavigationItem('fa fa-list', 'Configuration', '/administration/system/configuration',
-                   ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']),
+                 new NavigationItem('fa fa-list', 'Config', '/administration/system/config',
+                   ['ROLE_Administrator', 'FUNCTION_Config.ConfigAdministration']),
                  new NavigationItem('fas fa-envelope', 'Mail', '/administration/system/mail',
                    ['ROLE_Administrator', 'FUNCTION_Mail.MailAdministration', 'FUNCTION_Mail.MailTemplateAdministration'
                    ], [new NavigationItem('fas fa-envelope-open-text', 'Mail Templates',
@@ -751,17 +751,17 @@ Complete the following steps to create a new application based on the Inception 
           export class CodesViewsWrapperModule {
           }
           ```
-       3. Create the *src/main/frontend/src/app/views/wrappers/configuration-views-wrapper.module.ts* file with the
+       3. Create the *src/main/frontend/src/app/views/wrappers/config-views-wrapper.module.ts* file with the
           following contents.
           ```
           import {NgModule} from '@angular/core';
 
-          import {ConfigurationViewsModule} from 'ngx-inception';
+          import {ConfigViewsModule} from 'ngx-inception';
 
           @NgModule({
-            imports: [ConfigurationViewsModule]
+            imports: [ConfigViewsModule]
           })
-          export class ConfigurationViewsWrapperModule {
+          export class ConfigViewsWrapperModule {
           }
           ```
        4. Create the *src/main/frontend/src/app/views/wrappers/error-views-wrapper.module.ts* file with the
@@ -851,7 +851,7 @@ Complete the following steps to create a new application based on the Inception 
 
        import {
          CodeCategoriesTitleResolver,
-         ConfigurationsTitleResolver,
+         ConfigsTitleResolver,
          MailTitleResolver,
          ReportingTitleResolver,
          SchedulerTitleResolver,
@@ -887,12 +887,12 @@ Complete the following steps to create a new application based on the Inception 
            },
            loadChildren: () => import('../wrappers/codes-views-wrapper.module').then(m => m.CodesViewsWrapperModule)
          }, {
-           path: 'configuration',
+           path: 'config',
            resolve: {
-             title: ConfigurationsTitleResolver
+             title: ConfigsTitleResolver
            },
-           loadChildren: () => import('../wrappers/configuration-views-wrapper.module').then(
-             m => m.ConfigurationViewsWrapperModule)
+           loadChildren: () => import('../wrappers/config-views-wrapper.module').then(
+             m => m.ConfigViewsWrapperModule)
          }, {
            path: 'mail',
            resolve: {

@@ -722,7 +722,7 @@ public class PartyReferenceApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   // @PreAuthorize("isAuthenticated()")
-  public List<PartyPreferenceTypeCategory> getPreferenceTypeCategories(
+  public List<PreferenceTypeCategory> getPreferenceTypeCategories(
       @Parameter(
               name = "localeId",
               description =
@@ -762,7 +762,7 @@ public class PartyReferenceApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   // @PreAuthorize("isAuthenticated()")
-  public List<PartyPreferenceType> getPreferenceTypes(
+  public List<PreferenceType> getPreferenceTypes(
       @Parameter(
               name = "localeId",
               description =

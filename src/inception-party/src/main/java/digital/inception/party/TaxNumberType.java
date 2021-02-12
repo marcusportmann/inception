@@ -46,12 +46,14 @@ import org.springframework.util.StringUtils;
  */
 @Schema(description = "A type of tax number")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "countryOfIssue", "partyTypes"})
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "countryOfIssue",
+    "partyTypes"})
 @XmlRootElement(name = "TaxNumberType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "TaxNumberType",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "sortIndex", "name", "description", "countryOfIssue", "partyTypes"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "description", "countryOfIssue",
+        "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "tax_number_types")
@@ -60,7 +62,9 @@ public class TaxNumberType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the tax number type. */
+  /**
+   * The code for the tax number type.
+   */
   @Schema(description = "The code for the tax number type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -70,7 +74,9 @@ public class TaxNumberType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The ISO 3166-1 alpha-2 code for the country of issue for the tax number type. */
+  /**
+   * The ISO 3166-1 alpha-2 code for the country of issue for the tax number type.
+   */
   @Schema(
       description = "The ISO 3166-1 alpha-2 code for the country of issue for the tax number type",
       required = true)
@@ -81,7 +87,9 @@ public class TaxNumberType implements Serializable {
   @Column(name = "country_of_issue", length = 2, nullable = false)
   private String countryOfIssue;
 
-  /** The description for the tax number type. */
+  /**
+   * The description for the tax number type.
+   */
   @Schema(description = "The description for the tax number type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -90,7 +98,9 @@ public class TaxNumberType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the tax number type. */
+  /**
+   * The Unicode locale identifier for the tax number type.
+   */
   @Schema(description = "The Unicode locale identifier for the tax number type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
@@ -100,7 +110,9 @@ public class TaxNumberType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the tax number type. */
+  /**
+   * The name of the tax number type.
+   */
   @Schema(description = "The name of the tax number type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -109,7 +121,9 @@ public class TaxNumberType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The comma-delimited codes for the party types the tax number type is associated with. */
+  /**
+   * The comma-delimited codes for the party types the tax number type is associated with.
+   */
   @JsonIgnore
   @XmlTransient
   @NotNull
@@ -117,7 +131,9 @@ public class TaxNumberType implements Serializable {
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
 
-  /** The sort index for the tax number type. */
+  /**
+   * The sort index for the tax number type.
+   */
   @Schema(description = "The sort index for the tax number type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -125,13 +141,17 @@ public class TaxNumberType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>TaxNumberType</b>. */
-  public TaxNumberType() {}
+  /**
+   * Constructs a new <b>TaxNumberType</b>.
+   */
+  public TaxNumberType() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -244,7 +264,7 @@ public class TaxNumberType implements Serializable {
    * Set the ISO 3166-1 alpha-2 code for the country of issue for the tax number type.
    *
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
-   *     type
+   *                       type
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;

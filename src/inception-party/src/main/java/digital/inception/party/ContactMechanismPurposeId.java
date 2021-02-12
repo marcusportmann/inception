@@ -30,24 +30,33 @@ public class ContactMechanismPurposeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the contact mechanism purpose. */
+  /**
+   * The code for the contact mechanism purpose.
+   */
   private String code;
 
-  /** The Unicode locale identifier for the contact mechanism purpose. */
+  /**
+   * The Unicode locale identifier for the contact mechanism purpose.
+   */
   private String localeId;
 
-  /** The code for the contact mechanism type the contact mechanism purpose is associated with. */
+  /**
+   * The code for the contact mechanism type the contact mechanism purpose is associated with.
+   */
   private String type;
 
-  /** Constructs a new <b>ContactMechanismPurposeId</b>. */
-  public ContactMechanismPurposeId() {}
+  /**
+   * Constructs a new <b>ContactMechanismPurposeId</b>.
+   */
+  public ContactMechanismPurposeId() {
+  }
 
   /**
    * Constructs a new <b>ContactMechanismPurposeId</b>.
    *
-   * @param type the code for the contact mechanism type the contact mechanism purpose is associated
-   *     with
-   * @param code the code for the contact mechanism purpose
+   * @param type     the code for the contact mechanism type the contact mechanism purpose is
+   *                 associated with
+   * @param code     the code for the contact mechanism purpose
    * @param localeId the Unicode locale identifier for the contact mechanism purpose
    */
   public ContactMechanismPurposeId(String type, String code, String localeId) {
@@ -60,6 +69,7 @@ public class ContactMechanismPurposeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

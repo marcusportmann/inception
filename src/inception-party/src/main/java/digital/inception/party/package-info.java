@@ -18,11 +18,11 @@
     namespace = "http://inception.digital/party",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "core",
-          namespaceURI = "http://inception.digital/core"),
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "party",
-          namespaceURI = "http://inception.digital/party"),
+        @javax.xml.bind.annotation.XmlNs(
+            prefix = "core",
+            namespaceURI = "http://inception.digital/core"),
+        @javax.xml.bind.annotation.XmlNs(
+            prefix = "party",
+            namespaceURI = "http://inception.digital/party"),
     })
 package digital.inception.party;

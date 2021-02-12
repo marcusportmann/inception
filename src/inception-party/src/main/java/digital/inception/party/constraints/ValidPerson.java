@@ -35,6 +35,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = ValidPersonValidator.class)
 @Documented
 public @interface ValidPerson {
+
   Class<?>[] groups() default {};
 
   String message() default "{digital.inception.party.constraints.ValidPerson.message}";

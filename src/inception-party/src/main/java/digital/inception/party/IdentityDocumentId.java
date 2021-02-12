@@ -31,10 +31,14 @@ public class IdentityDocumentId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ISO 3166-1 alpha-2 code for the country of issue for the identity document. */
+  /**
+   * The ISO 3166-1 alpha-2 code for the country of issue for the identity document.
+   */
   private String countryOfIssue;
 
-  /** The date of issue for the identity document. */
+  /**
+   * The date of issue for the identity document.
+   */
   private LocalDate dateOfIssue;
 
   /**
@@ -43,16 +47,22 @@ public class IdentityDocumentId implements Serializable {
    */
   private UUID party;
 
-  /** The code for the identity document type. */
+  /**
+   * The code for the identity document type.
+   */
   private String type;
 
-  /** Constructs a new <b>IdentityDocumentId</b>. */
-  public IdentityDocumentId() {}
+  /**
+   * Constructs a new <b>IdentityDocumentId</b>.
+   */
+  public IdentityDocumentId() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

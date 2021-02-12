@@ -35,6 +35,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = ValidPhysicalAddressValidator.class)
 @Documented
 public @interface ValidPhysicalAddress {
+
   Class<?>[] groups() default {};
 
   String message() default "{digital.inception.party.constraints.ValidPhysicalAddress.message}";

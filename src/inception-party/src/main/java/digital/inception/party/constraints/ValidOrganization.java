@@ -35,6 +35,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = ValidOrganizationValidator.class)
 @Documented
 public @interface ValidOrganization {
+
   Class<?>[] groups() default {};
 
   String message() default "{digital.inception.party.constraints.ValidOrganization.message}";

@@ -29,19 +29,26 @@ public class PartyRoleTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the party role type. */
+  /**
+   * The code for the party role type.
+   */
   private String code;
 
-  /** The Unicode locale identifier for the party role type. */
+  /**
+   * The Unicode locale identifier for the party role type.
+   */
   private String localeId;
 
-  /** Constructs a new <b>PartyRoleTypeId</b>. */
-  public PartyRoleTypeId() {}
+  /**
+   * Constructs a new <b>PartyRoleTypeId</b>.
+   */
+  public PartyRoleTypeId() {
+  }
 
   /**
    * Constructs a new <b>PartyRoleTypeId</b>.
    *
-   * @param code the code for the party role type
+   * @param code     the code for the party role type
    * @param localeId the Unicode locale identifier for the party role type
    */
   public PartyRoleTypeId(String code, String localeId) {
@@ -53,6 +60,7 @@ public class PartyRoleTypeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

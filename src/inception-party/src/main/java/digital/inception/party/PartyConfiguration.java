@@ -28,4 +28,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(
     entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"digital.inception.party"})
-public class PartyConfiguration {}
+public class PartyConfiguration {
+
+}

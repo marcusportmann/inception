@@ -23,7 +23,7 @@ import digital.inception.party.PartyRole;
 import digital.inception.party.PartyType;
 import digital.inception.party.Person;
 import digital.inception.party.PhysicalAddress;
-import digital.inception.party.PartyPreference;
+import digital.inception.party.Preference;
 import digital.inception.party.TaxNumber;
 import digital.inception.reference.IReferenceService;
 import javax.validation.ConstraintValidator;
@@ -52,7 +52,8 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
   }
 
   @Override
-  public void initialize(ValidPerson constraintAnnotation) {}
+  public void initialize(ValidPerson constraintAnnotation) {
+  }
 
   @Override
   public boolean isValid(Person person, ConstraintValidatorContext constraintValidatorContext) {
@@ -146,7 +147,7 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
       // Validate employment type
       if (StringUtils.hasText(person.getEmploymentType())
           && (!partyService.isValidEmploymentType(
-              person.getEmploymentStatus(), person.getEmploymentType()))) {
+          person.getEmploymentStatus(), person.getEmploymentType()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("employmentType", person.getEmploymentType())
             .buildConstraintViolationWithTemplate(
@@ -271,7 +272,7 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
       }
 
       // Validate preferences
-      for (PartyPreference preference : person.getPreferences()) {
+      for (Preference preference : person.getPreferences()) {
         if (!partyService.isValidPreferenceType(PartyType.PERSON.code(), preference.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", preference.getType())

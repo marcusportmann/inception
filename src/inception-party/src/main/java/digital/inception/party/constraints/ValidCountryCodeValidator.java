@@ -30,10 +30,12 @@ import org.springframework.util.StringUtils;
 public class ValidCountryCodeValidator implements ConstraintValidator<ValidCountryCode, String> {
 
   @Autowired
-  public ValidCountryCodeValidator() {}
+  public ValidCountryCodeValidator() {
+  }
 
   @Override
-  public void initialize(ValidCountryCode constraintAnnotation) {}
+  public void initialize(ValidCountryCode constraintAnnotation) {
+  }
 
   @Override
   public boolean isValid(String code, ConstraintValidatorContext constraintValidatorContext) {

@@ -41,8 +41,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ContactMechanismPurpose</b> class holds the information for a contact mechanism
- * purpose.
+ * The <b>ContactMechanismPurpose</b> class holds the information for a contact mechanism purpose.
  *
  * @author Marcus Portmann
  */
@@ -60,72 +59,116 @@ import org.springframework.util.StringUtils;
 @IdClass(ContactMechanismPurposeId.class)
 public class ContactMechanismPurpose implements Serializable {
 
-  /** The contact mechanism purpose code for a home fax number. */
+  /**
+   * The contact mechanism purpose code for a home fax number.
+   */
   public static final String HOME_FAX_NUMBER = "home_fax_number";
 
-  /** The contact mechanism purpose code for a home phone number. */
+  /**
+   * The contact mechanism purpose code for a home phone number.
+   */
   public static final String HOME_PHONE_NUMBER = "home_phone_number";
 
-  /** The contact mechanism purpose code for a main e-mail address. */
+  /**
+   * The contact mechanism purpose code for a main e-mail address.
+   */
   public static final String MAIN_EMAIL_ADDRESS = "main_email_address";
 
-  /** The contact mechanism purpose code for a main fax number. */
+  /**
+   * The contact mechanism purpose code for a main fax number.
+   */
   public static final String MAIN_FAX_NUMBER = "main_fax_number";
 
-  /** The contact mechanism purpose code for a main mobile number. */
+  /**
+   * The contact mechanism purpose code for a main mobile number.
+   */
   public static final String MAIN_MOBILE_NUMBER = "main_mobile_number";
 
-  /** The contact mechanism purpose code for a main phone number. */
+  /**
+   * The contact mechanism purpose code for a main phone number.
+   */
   public static final String MAIN_PHONE_NUMBER = "main_phone_number";
 
-  /** The contact mechanism purpose code for an other e-mail address. */
+  /**
+   * The contact mechanism purpose code for an other e-mail address.
+   */
   public static final String OTHER_EMAIL_ADDRESS = "other_email_address";
 
-  /** The contact mechanism purpose code for a other fax number. */
+  /**
+   * The contact mechanism purpose code for a other fax number.
+   */
   public static final String OTHER_FAX_NUMBER = "other_fax_number";
 
-  /** The contact mechanism purpose code for an other mobile number. */
+  /**
+   * The contact mechanism purpose code for an other mobile number.
+   */
   public static final String OTHER_MOBILE_NUMBER = "other_mobile_number";
 
-  /** The contact mechanism purpose code for an other phone number. */
+  /**
+   * The contact mechanism purpose code for an other phone number.
+   */
   public static final String OTHER_PHONE_NUMBER = "other_phone_number";
 
-  /** The contact mechanism purpose code for a pager phone number. */
+  /**
+   * The contact mechanism purpose code for a pager phone number.
+   */
   public static final String PAGER_PHONE_NUMBER = "pager_phone_number";
 
-  /** The contact mechanism purpose code for a personal e-mail address. */
+  /**
+   * The contact mechanism purpose code for a personal e-mail address.
+   */
   public static final String PERSONAL_EMAIL_ADDRESS = "personal_email_address";
 
-  /** The contact mechanism purpose code for personal mobile number. */
+  /**
+   * The contact mechanism purpose code for personal mobile number.
+   */
   public static final String PERSONAL_MOBILE_NUMBER = "personal_mobile_number";
 
-  /** The contact mechanism purpose code for a school e-mail address. */
+  /**
+   * The contact mechanism purpose code for a school e-mail address.
+   */
   public static final String SCHOOL_EMAIL_ADDRESS = "school_email_address";
 
-  /** The contact mechanism purpose code for a school phone number. */
+  /**
+   * The contact mechanism purpose code for a school phone number.
+   */
   public static final String SCHOOL_PHONE_NUMBER = "school_phone_number";
 
-  /** The contact mechanism purpose code for a Twitter ID. */
+  /**
+   * The contact mechanism purpose code for a Twitter ID.
+   */
   public static final String TWITTER_ID = "twitter_id";
 
-  /** The contact mechanism purpose code for a WhatsApp User ID. */
+  /**
+   * The contact mechanism purpose code for a WhatsApp User ID.
+   */
   public static final String WHATSAPP_USER_ID = "whatsapp_user_id";
 
-  /** The contact mechanism purpose code for a work e-mail address. */
+  /**
+   * The contact mechanism purpose code for a work e-mail address.
+   */
   public static final String WORK_EMAIL_ADDRESS = "work_email_address";
 
-  /** The contact mechanism purpose code for a work fax number. */
+  /**
+   * The contact mechanism purpose code for a work fax number.
+   */
   public static final String WORK_FAX_NUMBER = "work_fax_number";
 
-  /** The contact mechanism purpose code for work mobile number. */
+  /**
+   * The contact mechanism purpose code for work mobile number.
+   */
   public static final String WORK_MOBILE_NUMBER = "work_mobile_number";
 
-  /** The contact mechanism purpose code for a work phone number. */
+  /**
+   * The contact mechanism purpose code for a work phone number.
+   */
   public static final String WORK_PHONE_NUMBER = "work_phone_number";
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the contact mechanism purpose. */
+  /**
+   * The code for the contact mechanism purpose.
+   */
   @Schema(description = "The code for the contact mechanism purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -135,7 +178,9 @@ public class ContactMechanismPurpose implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the contact mechanism purpose. */
+  /**
+   * The description for the contact mechanism purpose.
+   */
   @Schema(description = "The description for the contact mechanism purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -144,7 +189,9 @@ public class ContactMechanismPurpose implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the contact mechanism purpose. */
+  /**
+   * The Unicode locale identifier for the contact mechanism purpose.
+   */
   @Schema(
       description = "The Unicode locale identifier for the contact mechanism purpose",
       required = true)
@@ -156,7 +203,9 @@ public class ContactMechanismPurpose implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the contact mechanism purpose. */
+  /**
+   * The name of the contact mechanism purpose.
+   */
   @Schema(description = "The name of the contact mechanism purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -166,7 +215,8 @@ public class ContactMechanismPurpose implements Serializable {
   private String name;
 
   /**
-   * The comma-delimited codes for the party types the contact mechanism purpose is associated with.
+   * The comma-delimited codes for the party types the contact mechanism purpose is associated
+   * with.
    */
   @JsonIgnore
   @XmlTransient
@@ -175,7 +225,9 @@ public class ContactMechanismPurpose implements Serializable {
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
 
-  /** The sort index for the contact mechanism purpose. */
+  /**
+   * The sort index for the contact mechanism purpose.
+   */
   @Schema(description = "The sort index for the contact mechanism purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -183,7 +235,9 @@ public class ContactMechanismPurpose implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** The code for the contact mechanism type the contact mechanism purpose is associated with. */
+  /**
+   * The code for the contact mechanism type the contact mechanism purpose is associated with.
+   */
   @Schema(
       description =
           "The code for the contact mechanism type the contact mechanism purpose is associated with",
@@ -196,13 +250,17 @@ public class ContactMechanismPurpose implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** Constructs a new <b>ContactMechanismPurpose</b>. */
-  public ContactMechanismPurpose() {}
+  /**
+   * Constructs a new <b>ContactMechanismPurpose</b>.
+   */
+  public ContactMechanismPurpose() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -291,7 +349,7 @@ public class ContactMechanismPurpose implements Serializable {
    * with.
    *
    * @return the code for the contact mechanism type the contact mechanism purpose is associated
-   *     with
+   * with
    */
   public String getType() {
     return type;
@@ -313,8 +371,9 @@ public class ContactMechanismPurpose implements Serializable {
    * Returns whether the contact mechanism purpose is valid for the party type.
    *
    * @param partyTypeCode the party type code
+   *
    * @return <b>true</b> if the contact mechanism purpose is valid for the party type or
-   *     <b>false</b> otherwise
+   * <b>false</b> otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     return Arrays.stream(getPartyTypes())
@@ -361,7 +420,7 @@ public class ContactMechanismPurpose implements Serializable {
    * Set the codes for the party types the contact mechanism purpose is associated with.
    *
    * @param partyTypes the codes for the party types the contact mechanism purpose is associated
-   *     with
+   *                   with
    */
   public void setPartyTypes(String[] partyTypes) {
     this.partyTypes = StringUtils.arrayToCommaDelimitedString(partyTypes);
@@ -371,7 +430,7 @@ public class ContactMechanismPurpose implements Serializable {
    * Set the codes for the party types the contact mechanism purpose is associated with.
    *
    * @param partyTypes the codes for the party types the contact mechanism purpose is associated
-   *     with
+   *                   with
    */
   @JsonIgnore
   public void setPartyTypes(Collection<String> partyTypes) {
@@ -391,7 +450,7 @@ public class ContactMechanismPurpose implements Serializable {
    * Set the code for the contact mechanism type the contact mechanism purpose is associated with.
    *
    * @param type the code for the contact mechanism type the contact mechanism purpose is associated
-   *     with
+   *             with
    */
   public void setType(String type) {
     this.type = type;

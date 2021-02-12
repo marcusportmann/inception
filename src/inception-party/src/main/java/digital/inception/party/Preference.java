@@ -45,34 +45,38 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>PartyPreference</b> class holds the information for a preference for a party.
+ * The <b>Preference</b> class holds the information for a preference for a party.
  *
  * @author Marcus Portmann
  */
 @Schema(description = "A preference for a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "value"})
-@XmlRootElement(name = "PartyPreference", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "Preference", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "PartyPreference",
+    name = "Preference",
     namespace = "http://inception.digital/party",
     propOrder = {"type", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "party_preferences")
-@IdClass(PartyPreferenceId.class)
-public class PartyPreference implements Serializable {
+@Table(schema = "party", name = "preferences")
+@IdClass(PreferenceId.class)
+public class Preference implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the party preference was created. */
+  /**
+   * The date and time the preference was created.
+   */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The party the party preference is associated with. */
+  /**
+   * The party the preference is associated with.
+   */
   @Schema(hidden = true)
   @JsonBackReference("preferenceReference")
   @XmlTransient
@@ -81,8 +85,10 @@ public class PartyPreference implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /** The code for the party preference type. */
-  @Schema(description = "The code for the party preference type", required = true)
+  /**
+   * The code for the preference type.
+   */
+  @Schema(description = "The code for the preference type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -91,15 +97,19 @@ public class PartyPreference implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** The date and time the party preference was last updated. */
+  /**
+   * The date and time the preference was last updated.
+   */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** The value for the party preference. */
-  @Schema(description = "The value for the party preference", required = true)
+  /**
+   * The value for the preference.
+   */
+  @Schema(description = "The value for the preference", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
   @NotNull
@@ -107,16 +117,19 @@ public class PartyPreference implements Serializable {
   @Column(name = "value", length = 200, nullable = false)
   private String value;
 
-  /** Constructs a new <b>PartyPreference</b>. */
-  public PartyPreference() {}
+  /**
+   * Constructs a new <b>Preference</b>.
+   */
+  public Preference() {
+  }
 
   /**
-   * Constructs a new <b>PartyPreference</b>.
+   * Constructs a new <b>Preference</b>.
    *
-   * @param type the party preference type
-   * @param value the value for the party preference
+   * @param type  the preference type
+   * @param value the value for the preference
    */
-  public PartyPreference(String type, String value) {
+  public Preference(String type, String value) {
     this.type = type;
     this.value = value;
   }
@@ -125,6 +138,7 @@ public class PartyPreference implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -141,24 +155,24 @@ public class PartyPreference implements Serializable {
       return false;
     }
 
-    PartyPreference other = (PartyPreference) object;
+    Preference other = (Preference) object;
 
     return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
-   * Returns the date and time the party preference was created.
+   * Returns the date and time the preference was created.
    *
-   * @return the date and time the party preference was created
+   * @return the date and time the preference was created
    */
   public LocalDateTime getCreated() {
     return created;
   }
 
   /**
-   * Returns the party the party preference is associated with.
+   * Returns the party the preference is associated with.
    *
-   * @return the party the party preference is associated with
+   * @return the party the preference is associated with
    */
   @Schema(hidden = true)
   public PartyBase getParty() {
@@ -166,27 +180,27 @@ public class PartyPreference implements Serializable {
   }
 
   /**
-   * Returns the code for the party preference type.
+   * Returns the code for the preference type.
    *
-   * @return the code for the party preference type
+   * @return the code for the preference type
    */
   public String getType() {
     return type;
   }
 
   /**
-   * Returns the date and time the party preference was last updated.
+   * Returns the date and time the preference was last updated.
    *
-   * @return the date and time the party preference was last updated
+   * @return the date and time the preference was last updated
    */
   public LocalDateTime getUpdated() {
     return updated;
   }
 
   /**
-   * Returns the value for the party preference.
+   * Returns the value for the preference.
    *
-   * @return the value for the party preference
+   * @return the value for the preference
    */
   public String getValue() {
     return value;
@@ -204,9 +218,9 @@ public class PartyPreference implements Serializable {
   }
 
   /**
-   * Set the party the party preference is associated with.
+   * Set the party the preference is associated with.
    *
-   * @param party the party the party preference is associated with
+   * @param party the party the preference is associated with
    */
   @Schema(hidden = true)
   public void setParty(PartyBase party) {
@@ -214,18 +228,18 @@ public class PartyPreference implements Serializable {
   }
 
   /**
-   * Set the code for the party preference type.
+   * Set the code for the preference type.
    *
-   * @param type the code for the party preference type
+   * @param type the code for the preference type
    */
   public void setType(String type) {
     this.type = type;
   }
 
   /**
-   * Set the value for the party preference.
+   * Set the value for the preference.
    *
-   * @param value the value for the party preference
+   * @param value the value for the preference
    */
   public void setValue(String value) {
     this.value = value;

@@ -61,7 +61,9 @@ public class PartyRoleType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the party role type. */
+  /**
+   * The code for the party role type.
+   */
   @Schema(description = "The code for the party role type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -71,7 +73,9 @@ public class PartyRoleType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the party role type. */
+  /**
+   * The description for the party role type.
+   */
   @Schema(description = "The description for the party role type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -80,7 +84,9 @@ public class PartyRoleType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the party role type. */
+  /**
+   * The Unicode locale identifier for the party role type.
+   */
   @Schema(description = "The Unicode locale identifier for the party role type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
@@ -90,7 +96,9 @@ public class PartyRoleType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the party role type. */
+  /**
+   * The name of the party role type.
+   */
   @Schema(description = "The name of the party role type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -99,7 +107,9 @@ public class PartyRoleType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The comma-delimited codes for the party types the party role type is associated with. */
+  /**
+   * The comma-delimited codes for the party types the party role type is associated with.
+   */
   @JsonIgnore
   @XmlTransient
   @NotNull
@@ -107,7 +117,9 @@ public class PartyRoleType implements Serializable {
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
 
-  /** The sort index for the party role type. */
+  /**
+   * The sort index for the party role type.
+   */
   @Schema(description = "The sort index for the party role type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -115,13 +127,17 @@ public class PartyRoleType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>PartyRoleType</b>. */
-  public PartyRoleType() {}
+  /**
+   * Constructs a new <b>PartyRoleType</b>.
+   */
+  public PartyRoleType() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -216,8 +232,9 @@ public class PartyRoleType implements Serializable {
    * Returns whether the party role type is valid for the party type.
    *
    * @param partyTypeCode the party type code
+   *
    * @return <b>true</b> if the party role type is valid for the party type or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     return Arrays.stream(getPartyTypes())

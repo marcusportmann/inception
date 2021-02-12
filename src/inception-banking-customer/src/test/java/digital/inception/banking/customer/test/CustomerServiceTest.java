@@ -29,11 +29,11 @@ import digital.inception.party.ContactMechanism;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyAttribute;
+import digital.inception.party.Preference;
+import digital.inception.party.TaxNumber;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressType;
-import digital.inception.party.PartyPreference;
-import digital.inception.party.TaxNumber;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
@@ -64,19 +64,25 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
     initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 public class CustomerServiceTest {
 
   private static int individualCustomerCount;
 
-  /** The Customer Service. */
-  @Autowired private ICustomerService customerService;
+  /**
+   * The Customer Service.
+   */
+  @Autowired
+  private ICustomerService customerService;
 
-  /** The JSR-303 validator. */
-  @Autowired private Validator validator;
+  /**
+   * The JSR-303 validator.
+   */
+  @Autowired
+  private Validator validator;
 
   private static synchronized IndividualCustomer getTestCompleteIndividualCustomerDetails() {
     individualCustomerCount++;
@@ -152,14 +158,16 @@ public class CustomerServiceTest {
 
     individualCustomer.addPhysicalAddress(correspondenceAddress);
 
-    individualCustomer.addPreference(new PartyPreference("correspondence_language", "EN"));
+    individualCustomer.addPreference(new Preference("correspondence_language", "EN"));
 
     individualCustomer.addAttribute(new PartyAttribute("weight", "80kg"));
 
     return individualCustomer;
   }
 
-  /** Test the individual customer functionality. */
+  /**
+   * Test the individual customer functionality.
+   */
   @Test
   public void individualCustomerTest() throws Exception {
     IndividualCustomer individualCustomer = getTestCompleteIndividualCustomerDetails();
@@ -217,7 +225,7 @@ public class CustomerServiceTest {
 
     individualCustomer.removePreference("correspondence_language");
 
-    individualCustomer.addPreference(new PartyPreference("time_to_contact", "anytime"));
+    individualCustomer.addPreference(new Preference("time_to_contact", "anytime"));
 
     individualCustomer.removeAttribute("weight");
 
@@ -252,7 +260,9 @@ public class CustomerServiceTest {
     customerService.deleteIndividualCustomer(individualCustomer.getId());
   }
 
-  /** Test the individual customer validation functionality. */
+  /**
+   * Test the individual customer validation functionality.
+   */
   @Test
   public void validateIndividualCustomerTest() throws Exception {
     IndividualCustomer individualCustomer = getTestCompleteIndividualCustomerDetails();
@@ -391,14 +401,14 @@ public class CustomerServiceTest {
       for (IdentityDocument individualCustomer2IdentityDocument :
           individualCustomer2.getIdentityDocuments()) {
         if (individualCustomer1IdentityDocument
-                .getType()
-                .equals(individualCustomer2IdentityDocument.getType())
+            .getType()
+            .equals(individualCustomer2IdentityDocument.getType())
             && individualCustomer1IdentityDocument
-                .getCountryOfIssue()
-                .equals(individualCustomer2IdentityDocument.getCountryOfIssue())
+            .getCountryOfIssue()
+            .equals(individualCustomer2IdentityDocument.getCountryOfIssue())
             && individualCustomer1IdentityDocument
-                .getDateOfIssue()
-                .equals(individualCustomer2IdentityDocument.getDateOfIssue())) {
+            .getDateOfIssue()
+            .equals(individualCustomer2IdentityDocument.getDateOfIssue())) {
 
           assertEquals(
               "The date of expiry for the two identity documents do not match",
@@ -465,9 +475,9 @@ public class CustomerServiceTest {
       for (PartyAttribute individualCustomer2Attribute : individualCustomer2.getAttributes()) {
 
         if (Objects.equals(
-                individualCustomer1Attribute.getParty(), individualCustomer2Attribute.getParty())
+            individualCustomer1Attribute.getParty(), individualCustomer2Attribute.getParty())
             && Objects.equals(
-                individualCustomer1Attribute.getType(), individualCustomer2Attribute.getType())) {
+            individualCustomer1Attribute.getType(), individualCustomer2Attribute.getType())) {
 
           compareAttributes(individualCustomer1Attribute, individualCustomer2Attribute);
 
@@ -493,14 +503,14 @@ public class CustomerServiceTest {
           individualCustomer2.getContactMechanisms()) {
 
         if (Objects.equals(
-                individualCustomer1ContactMechanism.getParty(),
-                individualCustomer2ContactMechanism.getParty())
+            individualCustomer1ContactMechanism.getParty(),
+            individualCustomer2ContactMechanism.getParty())
             && Objects.equals(
-                individualCustomer1ContactMechanism.getType(),
-                individualCustomer2ContactMechanism.getType())
+            individualCustomer1ContactMechanism.getType(),
+            individualCustomer2ContactMechanism.getType())
             && Objects.equals(
-                individualCustomer1ContactMechanism.getPurpose(),
-                individualCustomer2ContactMechanism.getPurpose())) {
+            individualCustomer1ContactMechanism.getPurpose(),
+            individualCustomer2ContactMechanism.getPurpose())) {
           assertEquals(
               "The values for the two contact mechanisms do not match",
               individualCustomer1ContactMechanism.getValue(),
@@ -533,13 +543,13 @@ public class CustomerServiceTest {
           individualCustomer2.getPhysicalAddresses()) {
 
         if (Objects.equals(
-                individualCustomer1PhysicalAddress.getParty(),
-                individualCustomer2PhysicalAddress.getParty())
+            individualCustomer1PhysicalAddress.getParty(),
+            individualCustomer2PhysicalAddress.getParty())
             && Objects.equals(
-                individualCustomer1PhysicalAddress.getId(),
-                individualCustomer2PhysicalAddress.getId())) {
+            individualCustomer1PhysicalAddress.getId(),
+            individualCustomer2PhysicalAddress.getId())) {
 
-          comparePartyPhysicalAddresses(
+          comparePhysicalAddresses(
               individualCustomer1PhysicalAddress, individualCustomer2PhysicalAddress);
 
           foundPhysicalAddress = true;
@@ -559,15 +569,15 @@ public class CustomerServiceTest {
         individualCustomer1.getPreferences().size(),
         individualCustomer2.getPreferences().size());
 
-    for (PartyPreference individualCustomer1Preference : individualCustomer1.getPreferences()) {
+    for (Preference individualCustomer1Preference : individualCustomer1.getPreferences()) {
       boolean foundPreference = false;
 
-      for (PartyPreference individualCustomer2Preference : individualCustomer2.getPreferences()) {
+      for (Preference individualCustomer2Preference : individualCustomer2.getPreferences()) {
 
         if (Objects.equals(
-                individualCustomer1Preference.getParty(), individualCustomer2Preference.getParty())
+            individualCustomer1Preference.getParty(), individualCustomer2Preference.getParty())
             && Objects.equals(
-                individualCustomer1Preference.getType(), individualCustomer2Preference.getType())) {
+            individualCustomer1Preference.getType(), individualCustomer2Preference.getType())) {
 
           comparePreferences(individualCustomer1Preference, individualCustomer2Preference);
 
@@ -581,97 +591,97 @@ public class CustomerServiceTest {
     }
   }
 
-  private void comparePartyPhysicalAddresses(
-      PhysicalAddress partyPhysicalAddress1, PhysicalAddress partyPhysicalAddress2) {
+  private void comparePhysicalAddresses(
+      PhysicalAddress physicalAddress1, PhysicalAddress physicalAddress2) {
     assertEquals(
         "The building floor values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getBuildingFloor(),
-        partyPhysicalAddress2.getBuildingFloor());
+        physicalAddress1.getBuildingFloor(),
+        physicalAddress2.getBuildingFloor());
     assertEquals(
         "The building name values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getBuildingName(),
-        partyPhysicalAddress2.getBuildingName());
+        physicalAddress1.getBuildingName(),
+        physicalAddress2.getBuildingName());
     assertEquals(
         "The building room values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getBuildingRoom(),
-        partyPhysicalAddress2.getBuildingRoom());
+        physicalAddress1.getBuildingRoom(),
+        physicalAddress2.getBuildingRoom());
     assertEquals(
         "The city values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getCity(),
-        partyPhysicalAddress2.getCity());
+        physicalAddress1.getCity(),
+        physicalAddress2.getCity());
     assertEquals(
         "The complex name values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getComplexName(),
-        partyPhysicalAddress2.getComplexName());
+        physicalAddress1.getComplexName(),
+        physicalAddress2.getComplexName());
     assertEquals(
         "The complex unit number values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getComplexUnitNumber(),
-        partyPhysicalAddress2.getComplexUnitNumber());
+        physicalAddress1.getComplexUnitNumber(),
+        physicalAddress2.getComplexUnitNumber());
     assertEquals(
         "The farm description values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getFarmDescription(),
-        partyPhysicalAddress2.getFarmDescription());
+        physicalAddress1.getFarmDescription(),
+        physicalAddress2.getFarmDescription());
     assertEquals(
         "The farm name values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getFarmName(),
-        partyPhysicalAddress2.getFarmName());
+        physicalAddress1.getFarmName(),
+        physicalAddress2.getFarmName());
     assertEquals(
         "The farm number values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getFarmNumber(),
-        partyPhysicalAddress2.getFarmNumber());
+        physicalAddress1.getFarmNumber(),
+        physicalAddress2.getFarmNumber());
     assertEquals(
         "The line 1 values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getLine1(),
-        partyPhysicalAddress2.getLine1());
+        physicalAddress1.getLine1(),
+        physicalAddress2.getLine1());
     assertEquals(
         "The line 2 values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getLine2(),
-        partyPhysicalAddress2.getLine2());
+        physicalAddress1.getLine2(),
+        physicalAddress2.getLine2());
     assertEquals(
         "The line 3 values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getLine3(),
-        partyPhysicalAddress2.getLine3());
+        physicalAddress1.getLine3(),
+        physicalAddress2.getLine3());
     assertEquals(
         "The purpose values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getPurposes(),
-        partyPhysicalAddress2.getPurposes());
+        physicalAddress1.getPurposes(),
+        physicalAddress2.getPurposes());
     assertEquals(
         "The region values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getRegion(),
-        partyPhysicalAddress2.getRegion());
+        physicalAddress1.getRegion(),
+        physicalAddress2.getRegion());
     assertEquals(
         "The site block values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getSiteBlock(),
-        partyPhysicalAddress2.getSiteBlock());
+        physicalAddress1.getSiteBlock(),
+        physicalAddress2.getSiteBlock());
     assertEquals(
         "The site number values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getSiteNumber(),
-        partyPhysicalAddress2.getSiteNumber());
+        physicalAddress1.getSiteNumber(),
+        physicalAddress2.getSiteNumber());
     assertEquals(
         "The street name values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getStreetName(),
-        partyPhysicalAddress2.getStreetName());
+        physicalAddress1.getStreetName(),
+        physicalAddress2.getStreetName());
     assertEquals(
         "The street number values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getStreetNumber(),
-        partyPhysicalAddress2.getStreetNumber());
+        physicalAddress1.getStreetNumber(),
+        physicalAddress2.getStreetNumber());
     assertEquals(
         "The suburb values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getSuburb(),
-        partyPhysicalAddress2.getSuburb());
+        physicalAddress1.getSuburb(),
+        physicalAddress2.getSuburb());
     assertEquals(
         "The type values for the two party physical addresses do not match",
-        partyPhysicalAddress1.getType(),
-        partyPhysicalAddress2.getType());
+        physicalAddress1.getType(),
+        physicalAddress2.getType());
   }
 
-  private void comparePreferences(PartyPreference preference1, PartyPreference preference2) {
+  private void comparePreferences(Preference preference1, Preference preference2) {
     assertEquals(
-        "The type values for the two party preferences do not match",
+        "The type values for the two preferences do not match",
         preference1.getType(),
         preference2.getType());
     assertEquals(
-        "The value values for the two party preferences do not match",
+        "The value values for the two preferences do not match",
         preference1.getValue(),
         preference2.getValue());
   }

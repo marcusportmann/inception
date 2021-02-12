@@ -49,7 +49,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(name="PartyAttribute", description = "An attribute for a party")
+@Schema(name = "PartyAttribute", description = "An attribute for a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "stringValue"})
 @XmlRootElement(name = "PartyAttribute", namespace = "http://inception.digital/party")
@@ -65,14 +65,18 @@ public class PartyAttribute implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the party attribute was created. */
+  /**
+   * The date and time the party attribute was created.
+   */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The party the party attribute is associated with. */
+  /**
+   * The party the party attribute is associated with.
+   */
   @Schema(hidden = true)
   @JsonBackReference("partyAttributeReference")
   @XmlTransient
@@ -81,16 +85,19 @@ public class PartyAttribute implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /** The string value for the party attribute. */
-  @Schema(description = "The string value for the party attribute", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "StringValue", required = true)
-  @NotNull
+  /**
+   * The string value for the party attribute.
+   */
+  @Schema(description = "The string value for the party attribute")
+  @JsonProperty
+  @XmlElement(name = "StringValue")
   @Size(min = 1, max = 200)
-  @Column(name = "string_value", length = 200, nullable = false)
+  @Column(name = "string_value", length = 200)
   private String stringValue;
 
-  /** The code for the party attribute type. */
+  /**
+   * The code for the party attribute type.
+   */
   @Schema(description = "The code for the party attribute type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
@@ -100,20 +107,25 @@ public class PartyAttribute implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** The date and time the party attribute was last updated. */
+  /**
+   * The date and time the party attribute was last updated.
+   */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <b>PartyAttribute</b>. */
-  public PartyAttribute() {}
+  /**
+   * Constructs a new <b>PartyAttribute</b>.
+   */
+  public PartyAttribute() {
+  }
 
   /**
    * Constructs a new <b>PartyAttribute</b>.
    *
-   * @param type the party attribute type
+   * @param type        the party attribute type
    * @param stringValue the string value for the party attribute
    */
   public PartyAttribute(String type, String stringValue) {
@@ -125,6 +137,7 @@ public class PartyAttribute implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

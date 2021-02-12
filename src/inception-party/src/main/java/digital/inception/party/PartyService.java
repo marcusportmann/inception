@@ -16,10 +16,10 @@
 
 package digital.inception.party;
 
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
+import digital.inception.core.sorting.SortDirection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -49,148 +49,219 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public class PartyService implements IPartyService {
 
-  /** The maximum number of filtered organizations. */
+  /**
+   * The maximum number of filtered organizations.
+   */
   private static final int MAX_FILTERED_ORGANISATIONS = 100;
 
-  /** The maximum number of filtered parties. */
+  /**
+   * The maximum number of filtered parties.
+   */
   private static final int MAX_FILTERED_PARTIES = 100;
 
-  /** The maximum number of filtered persons. */
+  /**
+   * The maximum number of filtered persons.
+   */
   private static final int MAX_FILTERED_PERSONS = 100;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(PartyService.class);
 
-  /** The Spring application context. */
+  /**
+   * The Spring application context.
+   */
   private final ApplicationContext applicationContext;
 
-  /** The Contact Mechanism Purpose Repository. */
+  /**
+   * The Contact Mechanism Purpose Repository.
+   */
   private final ContactMechanismPurposeRepository contactMechanismPurposeRepository;
 
-  /** The Contact Mechanism Type Repository. */
+  /**
+   * The Contact Mechanism Type Repository.
+   */
   private final ContactMechanismTypeRepository contactMechanismTypeRepository;
 
-  /** The Employment Status Repository */
+  /**
+   * The Employment Status Repository
+   */
   private final EmploymentStatusRepository employmentStatusRepository;
 
-  /** The Employment Type Repository. */
+  /**
+   * The Employment Type Repository.
+   */
   private final EmploymentTypeRepository employmentTypeRepository;
 
-  /** The Gender Repository. */
+  /**
+   * The Gender Repository.
+   */
   private final GenderRepository genderRepository;
 
-  /** The Identity Document Type Repository. */
+  /**
+   * The Identity Document Type Repository.
+   */
   private final IdentityDocumentTypeRepository identityDocumentTypeRepository;
 
-  /** The Marital Status Repository. */
+  /**
+   * The Marital Status Repository.
+   */
   private final MaritalStatusRepository maritalStatusRepository;
 
-  /** The Marriage Type Repository. */
+  /**
+   * The Marriage Type Repository.
+   */
   private final MarriageTypeRepository marriageTypeRepository;
 
-  /** The Next Of Kin Type Repository. */
+  /**
+   * The Next Of Kin Type Repository.
+   */
   private final NextOfKinTypeRepository nextOfKinTypeRepository;
 
-  /** The Occupation Repository. */
+  /**
+   * The Occupation Repository.
+   */
   private final OccupationRepository occupationRepository;
 
-  /** The Organization Repository. */
+  /**
+   * The Organization Repository.
+   */
   private final OrganizationRepository organizationRepository;
 
-  /** The Party Attribute Type Category Repository. */
+  /**
+   * The Party Attribute Type Category Repository.
+   */
   private final PartyAttributeTypeCategoryRepository partyAttributeTypeCategoryRepository;
 
-  /** The Party Attribute Type Repository. */
+  /**
+   * The Party Attribute Type Repository.
+   */
   private final PartyAttributeTypeRepository partyAttributeTypeRepository;
 
-  /** The Party Repository. */
+  /**
+   * The Preference Type Category Repository.
+   */
+  private final PreferenceTypeCategoryRepository partyPreferenceTypeCategoryRepository;
+
+  /**
+   * The Preference Type Repository
+   */
+  private final PreferenceTypeRepository partyPreferenceTypeRepository;
+
+  /**
+   * The Party Repository.
+   */
   private final PartyRepository partyRepository;
 
-  /** The Party Role Purpose Repository. */
+  /**
+   * The Party Role Purpose Repository.
+   */
   private final PartyRolePurposeRepository partyRolePurposeRepository;
 
-  /** The Party Role Type Repository. */
+  /**
+   * The Party Role Type Repository.
+   */
   private final PartyRoleTypeRepository partyRoleTypeRepository;
 
-  /** The Person Repository. */
+  /**
+   * The Person Repository.
+   */
   private final PersonRepository personRepository;
 
-  /** The Physical Address Purpose Repository. */
+  /**
+   * The Physical Address Purpose Repository.
+   */
   private final PhysicalAddressPurposeRepository physicalAddressPurposeRepository;
 
-  /** The Physical Address Type Repository. */
+  /**
+   * The Physical Address Type Repository.
+   */
   private final PhysicalAddressTypeRepository physicalAddressTypeRepository;
 
-  /** The Preference Type Category Repository. */
-  private final PartyPreferenceTypeCategoryRepository partyPreferenceTypeCategoryRepository;
-
-  /** The Preference Type Repository */
-  private final PartyPreferenceTypeRepository partyPreferenceTypeRepository;
-
-  /** The Race Repository. */
+  /**
+   * The Race Repository.
+   */
   private final RaceRepository raceRepository;
 
-  /** The Residence Permit Type Repository. */
+  /**
+   * The Residence Permit Type Repository.
+   */
   private final ResidencePermitTypeRepository residencePermitTypeRepository;
 
-  /** The Residency Status Repository. */
+  /**
+   * The Residency Status Repository.
+   */
   private final ResidencyStatusRepository residencyStatusRepository;
 
-  /** The Residential Type Repository. */
+  /**
+   * The Residential Type Repository.
+   */
   private final ResidentialTypeRepository residentialTypeRepository;
 
-  /** The Sources of Funds Repository. */
+  /**
+   * The Sources of Funds Repository.
+   */
   private final SourceOfFundsRepository sourceOfFundsRepository;
 
-  /** The Tax Number Type Repository. */
+  /**
+   * The Tax Number Type Repository.
+   */
   private final TaxNumberTypeRepository taxNumberTypeRepository;
 
-  /** The Time To Contact Repository. */
+  /**
+   * The Time To Contact Repository.
+   */
   private final TimeToContactRepository timeToContactRepository;
 
-  /** The Title Repository. */
+  /**
+   * The Title Repository.
+   */
   private final TitleRepository titleRepository;
 
-  /** The JSR-303 validator. */
+  /**
+   * The JSR-303 validator.
+   */
   private final Validator validator;
 
-  /** The internal reference to the Party Service to enable caching. */
-  @Resource private IPartyService self;
+  /**
+   * The internal reference to the Party Service to enable caching.
+   */
+  @Resource
+  private IPartyService self;
 
   /**
    * Constructs a new <b>PartyService</b>.
    *
-   * @param applicationContext the Spring application context
-   * @param validator the JSR-303 validator
-   * @param contactMechanismPurposeRepository the Contact Mechanism Purpose Repository
-   * @param contactMechanismTypeRepository the Contact Mechanism Type Repository
-   * @param employmentStatusRepository the Employment Status Repository
-   * @param employmentTypeRepository the Employment Type Repository
-   * @param genderRepository the Gender Repository
-   * @param identityDocumentTypeRepository the Identity Document Type Repository
-   * @param maritalStatusRepository the Marital Status Repository
-   * @param marriageTypeRepository the Marriage Type Repository
-   * @param nextOfKinTypeRepository the Next Of Kin Repository
-   * @param occupationRepository the Occupation Repository
-   * @param organizationRepository the Organization Repository
-   * @param partyAttributeTypeCategoryRepository the Party Attribute Type Category Repository
-   * @param partyAttributeTypeRepository the Party Attribute Type Repository
+   * @param applicationContext                    the Spring application context
+   * @param validator                             the JSR-303 validator
+   * @param contactMechanismPurposeRepository     the Contact Mechanism Purpose Repository
+   * @param contactMechanismTypeRepository        the Contact Mechanism Type Repository
+   * @param employmentStatusRepository            the Employment Status Repository
+   * @param employmentTypeRepository              the Employment Type Repository
+   * @param genderRepository                      the Gender Repository
+   * @param identityDocumentTypeRepository        the Identity Document Type Repository
+   * @param maritalStatusRepository               the Marital Status Repository
+   * @param marriageTypeRepository                the Marriage Type Repository
+   * @param nextOfKinTypeRepository               the Next Of Kin Repository
+   * @param occupationRepository                  the Occupation Repository
+   * @param organizationRepository                the Organization Repository
+   * @param partyAttributeTypeCategoryRepository  the Party Attribute Type Category Repository
+   * @param partyAttributeTypeRepository          the Party Attribute Type Repository
    * @param partyPreferenceTypeCategoryRepository the Preference Type Category Repository
-   * @param partyPreferenceTypeRepository the Preference Type Repository
-   * @param partyRepository the Party Repository
-   * @param partyRolePurposeRepository the Party Role Purpose Repository
-   * @param partyRoleTypeRepository the Party Role Type Repository
-   * @param personRepository the Person Repository
-   * @param physicalAddressPurposeRepository the Physical Address Purpose Repository
-   * @param physicalAddressTypeRepository the Physical Address Type Repository
-   * @param raceRepository the Race Repository
-   * @param residencePermitTypeRepository the Residence Permit Type Repository*
-   * @param residencyStatusRepository the Residency Status Repository
-   * @param residentialTypeRepository the Residential Type Repository
-   * @param sourceOfFundsRepository the Source Of Funds Repository
-   * @param taxNumberTypeRepository the Tax Number Type Repository
-   * @param timeToContactRepository the Time To Contact Repository
-   * @param titleRepository the Title Repository
+   * @param partyPreferenceTypeRepository         the Preference Type Repository
+   * @param partyRepository                       the Party Repository
+   * @param partyRolePurposeRepository            the Party Role Purpose Repository
+   * @param partyRoleTypeRepository               the Party Role Type Repository
+   * @param personRepository                      the Person Repository
+   * @param physicalAddressPurposeRepository      the Physical Address Purpose Repository
+   * @param physicalAddressTypeRepository         the Physical Address Type Repository
+   * @param raceRepository                        the Race Repository
+   * @param residencePermitTypeRepository         the Residence Permit Type Repository*
+   * @param residencyStatusRepository             the Residency Status Repository
+   * @param residentialTypeRepository             the Residential Type Repository
+   * @param sourceOfFundsRepository               the Source Of Funds Repository
+   * @param taxNumberTypeRepository               the Tax Number Type Repository
+   * @param timeToContactRepository               the Time To Contact Repository
+   * @param titleRepository                       the Title Repository
    */
   public PartyService(
       ApplicationContext applicationContext,
@@ -208,8 +279,8 @@ public class PartyService implements IPartyService {
       OrganizationRepository organizationRepository,
       PartyAttributeTypeCategoryRepository partyAttributeTypeCategoryRepository,
       PartyAttributeTypeRepository partyAttributeTypeRepository,
-      PartyPreferenceTypeCategoryRepository partyPreferenceTypeCategoryRepository,
-      PartyPreferenceTypeRepository partyPreferenceTypeRepository,
+      PreferenceTypeCategoryRepository partyPreferenceTypeCategoryRepository,
+      PreferenceTypeRepository partyPreferenceTypeRepository,
       PartyRepository partyRepository,
       PartyRolePurposeRepository partyRolePurposeRepository,
       PartyRoleTypeRepository partyRoleTypeRepository,
@@ -423,7 +494,9 @@ public class PartyService implements IPartyService {
    * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <b>null</b> to retrieve the contact mechanism purposes for all locales
+   *                 purposes for or <b>null</b> to retrieve the contact mechanism purposes for all
+   *                 locales
+   *
    * @return the contact mechanism purposes
    */
   @Override
@@ -458,7 +531,9 @@ public class PartyService implements IPartyService {
    * Retrieve the contact mechanism types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     types for or <b>null</b> to retrieve the contact mechanism types for all locales
+   *                 types for or <b>null</b> to retrieve the contact mechanism types for all
+   *                 locales
+   *
    * @return the contact mechanism types
    */
   @Override
@@ -493,7 +568,9 @@ public class PartyService implements IPartyService {
    * Retrieve the employment statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment
-   *     statuses for or <b>null</b> to retrieve the employment statuses for all locales
+   *                 statuses for or <b>null</b> to retrieve the employment statuses for all
+   *                 locales
+   *
    * @return the employment statuses
    */
   @Override
@@ -527,7 +604,8 @@ public class PartyService implements IPartyService {
    * Retrieve the employment types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment types
-   *     for or <b>null</b> to retrieve the employment types for all locales
+   *                 for or <b>null</b> to retrieve the employment types for all locales
+   *
    * @return the employment types
    */
   @Override
@@ -561,7 +639,8 @@ public class PartyService implements IPartyService {
    * Retrieve the genders.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
-   *     <b>null</b> to retrieve the genders for all locales
+   *                 <b>null</b> to retrieve the genders for all locales
+   *
    * @return the genders
    */
   @Override
@@ -594,7 +673,9 @@ public class PartyService implements IPartyService {
    * Retrieve the identity document types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
-   *     types for or <b>null</b> to retrieve the identity document types for all locales
+   *                 types for or <b>null</b> to retrieve the identity document types for all
+   *                 locales
+   *
    * @return the identity document types
    */
   @Override
@@ -629,7 +710,8 @@ public class PartyService implements IPartyService {
    * Retrieve the marital statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
-   *     for or <b>null</b> to retrieve the marital statuses for all locales
+   *                 for or <b>null</b> to retrieve the marital statuses for all locales
+   *
    * @return the marital statuses
    */
   @Override
@@ -663,7 +745,8 @@ public class PartyService implements IPartyService {
    * Retrieve the marriage types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marriage types for
-   *     or <b>null</b> to retrieve the marriage types for all locales
+   *                 or <b>null</b> to retrieve the marriage types for all locales
+   *
    * @return the marriage types
    */
   @Override
@@ -696,7 +779,8 @@ public class PartyService implements IPartyService {
    * Retrieve the next of kin types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin types
-   *     for or <b>null</b> to retrieve the next of kin types for all locales
+   *                 for or <b>null</b> to retrieve the next of kin types for all locales
+   *
    * @return the next of kin types
    */
   @Override
@@ -728,8 +812,10 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the occupations.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for or
-   *     <b>null</b> to retrieve the occupations for all locales
+   * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for
+   *                 or
+   *                 <b>null</b> to retrieve the occupations for all locales
+   *
    * @return the occupations
    */
   @Override
@@ -751,6 +837,7 @@ public class PartyService implements IPartyService {
    * Retrieve the organization.
    *
    * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   *
    * @return the organization
    */
   @Override
@@ -779,10 +866,11 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the organizations.
    *
-   * @param filter the optional filter to apply to the organizations
+   * @param filter        the optional filter to apply to the organizations
    * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
    * @return the organizations
    */
   @Override
@@ -831,10 +919,11 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the parties.
    *
-   * @param filter the optional filter to apply to the parties
+   * @param filter        the optional filter to apply to the parties
    * @param sortDirection the optional sort direction to apply to the parties
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
    * @return the parties
    */
   @Override
@@ -884,6 +973,7 @@ public class PartyService implements IPartyService {
    * Retrieve the party.
    *
    * @param partyId the Universally Unique Identifier (UUID) for the party
+   *
    * @return the party
    */
   @Override
@@ -924,8 +1014,9 @@ public class PartyService implements IPartyService {
    * Retrieve the party attribute type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
-   *     type categories for or <b>null</b> to retrieve the party attribute type categories for all
-   *     locales
+   *                 type categories for or <b>null</b> to retrieve the party attribute type
+   *                 categories for all locales
+   *
    * @return the party attribute type categories
    */
   @Override
@@ -961,7 +1052,8 @@ public class PartyService implements IPartyService {
    * Retrieve the party attribute types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
-   *     types for or <b>null</b> to retrieve the party attribute types for all locales
+   *                 types for or <b>null</b> to retrieve the party attribute types for all locales
+   *
    * @return the party attribute types
    */
   @Override
@@ -996,7 +1088,9 @@ public class PartyService implements IPartyService {
    * Retrieve the party role purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the party role
-   *     purposes for or <b>null</b> to retrieve the party role purposes for all locales
+   *                 purposes for or <b>null</b> to retrieve the party role purposes for all
+   *                 locales
+   *
    * @return the party role purposes
    */
   @Override
@@ -1030,7 +1124,8 @@ public class PartyService implements IPartyService {
    * Retrieve the party role types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
-   *     for or <b>null</b> to retrieve the party role types for all locales
+   *                 for or <b>null</b> to retrieve the party role types for all locales
+   *
    * @return the party role types
    */
   @Override
@@ -1052,6 +1147,7 @@ public class PartyService implements IPartyService {
    * Retrieve the person.
    *
    * @param personId the Universally Unique Identifier (UUID) for the person
+   *
    * @return the person
    */
   @Override
@@ -1080,11 +1176,12 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the persons.
    *
-   * @param filter the optional filter to apply to the persons
-   * @param sortBy the optional method used to sort the persons e.g. by name
+   * @param filter        the optional filter to apply to the persons
+   * @param sortBy        the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
    * @return the persons
    */
   @Override
@@ -1181,7 +1278,9 @@ public class PartyService implements IPartyService {
    * Retrieve the physical address purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     purposes for or <b>null</b> to retrieve the physical address purposes for all locales
+   *                 purposes for or <b>null</b> to retrieve the physical address purposes for all
+   *                 locales
+   *
    * @return the physical address purposes
    */
   @Override
@@ -1216,7 +1315,9 @@ public class PartyService implements IPartyService {
    * Retrieve the physical address types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     types for or <b>null</b> to retrieve the physical address types for all locales
+   *                 types for or <b>null</b> to retrieve the physical address types for all
+   *                 locales
+   *
    * @return the physical address types
    */
   @Override
@@ -1243,7 +1344,7 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Cacheable(value = "reference", key = "'preferenceTypeCategories.ALL'")
-  public List<PartyPreferenceTypeCategory> getPreferenceTypeCategories()
+  public List<PreferenceTypeCategory> getPreferenceTypeCategories()
       throws ServiceUnavailableException {
     return getPreferenceTypeCategories(null);
   }
@@ -1252,12 +1353,14 @@ public class PartyService implements IPartyService {
    * Retrieve the preference type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     categories for or <b>null</b> to retrieve the preference type categories for all locales
+   *                 categories for or <b>null</b> to retrieve the preference type categories for
+   *                 all locales
+   *
    * @return the preference type categories
    */
   @Override
   @Cacheable(value = "reference", key = "'preferenceTypeCategories.' + #localeId")
-  public List<PartyPreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
+  public List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
       throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -1279,7 +1382,7 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Cacheable(value = "reference", key = "'preferenceTypes.ALL'")
-  public List<PartyPreferenceType> getPreferenceTypes() throws ServiceUnavailableException {
+  public List<PreferenceType> getPreferenceTypes() throws ServiceUnavailableException {
     return getPreferenceTypes(null);
   }
 
@@ -1287,16 +1390,18 @@ public class PartyService implements IPartyService {
    * Retrieve the preference types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference types
-   *     for or <b>null</b> to retrieve the preference types for all locales
+   *                 for or <b>null</b> to retrieve the preference types for all locales
+   *
    * @return the preference types
    */
   @Override
   @Cacheable(value = "reference", key = "'preferenceTypes.' + #localeId")
-  public List<PartyPreferenceType> getPreferenceTypes(String localeId)
+  public List<PreferenceType> getPreferenceTypes(String localeId)
       throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
-        return partyPreferenceTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+        return partyPreferenceTypeRepository
+            .findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return partyPreferenceTypeRepository.findByLocaleIdIgnoreCase(
             localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
@@ -1321,7 +1426,8 @@ public class PartyService implements IPartyService {
    * Retrieve the races.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the races for or
-   *     <b>null</b> to retrieve the races for all locales
+   *                 <b>null</b> to retrieve the races for all locales
+   *
    * @return the races
    */
   @Override
@@ -1354,7 +1460,9 @@ public class PartyService implements IPartyService {
    * Retrieve the residence permit types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
-   *     types for or <b>null</b> to retrieve the residence permit types for all locales
+   *                 types for or <b>null</b> to retrieve the residence permit types for all
+   *                 locales
+   *
    * @return the residence permit types
    */
   @Override
@@ -1389,7 +1497,8 @@ public class PartyService implements IPartyService {
    * Retrieve the residency statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residency statuses
-   *     for or <b>null</b> to retrieve the residency statuses for all locales
+   *                 for or <b>null</b> to retrieve the residency statuses for all locales
+   *
    * @return the residency statuses
    */
   @Override
@@ -1423,7 +1532,8 @@ public class PartyService implements IPartyService {
    * Retrieve the residential types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residential types
-   *     for or <b>null</b> to retrieve the residential types for all locales
+   *                 for or <b>null</b> to retrieve the residential types for all locales
+   *
    * @return the residential types
    */
   @Override
@@ -1457,7 +1567,8 @@ public class PartyService implements IPartyService {
    * Retrieve the sources of funds.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the sources of funds
-   *     for or <b>null</b> to retrieve the sources of funds for all locales
+   *                 for or <b>null</b> to retrieve the sources of funds for all locales
+   *
    * @return the sources of funds
    */
   @Override
@@ -1490,7 +1601,8 @@ public class PartyService implements IPartyService {
    * Retrieve the tax number types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the tax number types
-   *     for or <b>null</b> to retrieve the tax number types for all locales
+   *                 for or <b>null</b> to retrieve the tax number types for all locales
+   *
    * @return the tax number types
    */
   @Override
@@ -1523,7 +1635,8 @@ public class PartyService implements IPartyService {
    * Retrieve the times to contact.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
-   *     for or <b>null</b> to retrieve the times to contact for all locales
+   *                 for or <b>null</b> to retrieve the times to contact for all locales
+   *
    * @return the times to contact
    */
   @Override
@@ -1556,7 +1669,8 @@ public class PartyService implements IPartyService {
    * Retrieve the titles.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the titles for or
-   *     <b>null</b> to retrieve the titles for all locales
+   *                 <b>null</b> to retrieve the titles for all locales
+   *
    * @return the titles
    */
   @Override
@@ -1577,11 +1691,12 @@ public class PartyService implements IPartyService {
   /**
    * Check whether the code is a valid code for a contact mechanism purpose for the party type.
    *
-   * @param partyTypeCode the party type code
-   * @param contactMechanismTypeCode the code for the contact mechanism type
+   * @param partyTypeCode               the party type code
+   * @param contactMechanismTypeCode    the code for the contact mechanism type
    * @param contactMechanismPurposeCode the code for the contact mechanism purpose
+   *
    * @return <b>true</b> if the code is a valid code for a contact mechanism purpose or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidContactMechanismPurpose(
@@ -1603,8 +1718,9 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a contact mechanism type.
    *
    * @param contactMechanismTypeCode the code for the contact mechanism type
+   *
    * @return <b>true</b> if the code is a valid code for a contact mechanism type or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidContactMechanismType(String contactMechanismTypeCode)
@@ -1623,8 +1739,9 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for an employment status.
    *
    * @param employmentStatusCode the code for the employment status
+   *
    * @return <b>true</b> if the code is a valid code for an employment status or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidEmploymentStatus(String employmentStatusCode)
@@ -1641,9 +1758,10 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for an employment type.
    *
    * @param employmentStatusCode the code for the employment status
-   * @param employmentTypeCode the code for the employment type
+   * @param employmentTypeCode   the code for the employment type
+   *
    * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidEmploymentType(String employmentStatusCode, String employmentTypeCode)
@@ -1663,6 +1781,7 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a gender.
    *
    * @param genderCode the code for the gender
+   *
    * @return <b>true</b> if the code is a valid code for a gender or <b>false</b> otherwise
    */
   @Override
@@ -1677,10 +1796,11 @@ public class PartyService implements IPartyService {
   /**
    * Check whether the code is a valid code for an identity document type for the party type
    *
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode            the party type code
    * @param identityDocumentTypeCode the code for the identity document type
+   *
    * @return <b>true</b> if the code is a valid code for an identity document type or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidIdentityDocumentType(String partyTypeCode, String identityDocumentTypeCode)
@@ -1700,6 +1820,7 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a marital status.
    *
    * @param maritalStatusCode the code for the marital status
+   *
    * @return <b>true</b> if the code is a valid code for a marital status or <b>false</b> otherwise
    */
   @Override
@@ -1716,7 +1837,8 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a marriage type.
    *
    * @param maritalStatusCode the code for the marital status
-   * @param marriageTypeCode the code for the marriage type
+   * @param marriageTypeCode  the code for the marriage type
+   *
    * @return <b>true</b> if the code is a valid code for a marriage type or <b>false</b> otherwise
    */
   @Override
@@ -1748,8 +1870,9 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a next of kin type.
    *
    * @param nextOfKinTypeCode the code for the next of kin type
+   *
    * @return <b>true</b> if the code is a valid code for a next of kin type or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidNextOfKinType(String nextOfKinTypeCode) throws ServiceUnavailableException {
@@ -1765,6 +1888,7 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a occupation.
    *
    * @param occupationCode the code for the occupation
+   *
    * @return <b>true</b> if the code is a valid code for a occupation or <b>false</b> otherwise
    */
   @Override
@@ -1780,10 +1904,11 @@ public class PartyService implements IPartyService {
   /**
    * Check whether the code is a valid code for a party attribute type for the party type.
    *
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode          the party type code
    * @param partyAttributeTypeCode the code for the party attribute type
+   *
    * @return <b>true</b> if the code is a valid code for a party attribute type or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidPartyAttributeType(String partyTypeCode, String partyAttributeTypeCode)
@@ -1803,8 +1928,9 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a party attribute type category.
    *
    * @param partyAttributeTypeCategoryCode the code for the party attribute type category
+   *
    * @return <b>true</b> if the code is a valid code for a party attribute type category or
-   *     <b>false</b> otherwise
+   * <b>false</b> otherwise
    */
   @Override
   public boolean isValidPartyAttributeTypeCategory(String partyAttributeTypeCategoryCode)
@@ -1823,8 +1949,9 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a party role purpose.
    *
    * @param partyRolePurposeCode the code for the party role purpose
+   *
    * @return <b>true</b> if the code is a valid code for a party role purpose or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidPartyRolePurpose(String partyRolePurposeCode)
@@ -1840,8 +1967,9 @@ public class PartyService implements IPartyService {
   /**
    * Check whether the code is a valid code for a party role type for the party type.
    *
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode     the party type code
    * @param partyRoleTypeCode the code for the party role type
+   *
    * @return <b>true</b> if the code is a valid code for a party role type or <b>false</b> otherwise
    */
   @Override
@@ -1861,10 +1989,11 @@ public class PartyService implements IPartyService {
   /**
    * Check whether the code is a valid code for a physical address purpose for the party type.
    *
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode              the party type code
    * @param physicalAddressPurposeCode the code for the physical address purpose
+   *
    * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidPhysicalAddressPurpose(
@@ -1884,8 +2013,9 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a physical address type.
    *
    * @param physicalAddressTypeCode the code for the physical address type
+   *
    * @return <b>true</b> if the code is a valid code for a physical address type or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidPhysicalAddressType(String physicalAddressTypeCode)
@@ -1902,8 +2032,9 @@ public class PartyService implements IPartyService {
   /**
    * Check whether the code is a valid code for a preference type for the party type.
    *
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode      the party type code
    * @param preferenceTypeCode the code for the preference type
+   *
    * @return <b>true</b> if the code is a valid code for a preference type or <b>false</b> otherwise
    */
   @Override
@@ -1924,8 +2055,9 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a preference type category.
    *
    * @param preferenceTypeCategoryCode the code for the preference type category
+   *
    * @return <b>true</b> if the code is a valid code for a preference type category or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidPreferenceTypeCategory(String preferenceTypeCategoryCode)
@@ -1944,6 +2076,7 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a race.
    *
    * @param raceCode the code for the race
+   *
    * @return <b>true</b> if the code is a valid code for a race or <b>false</b> otherwise
    */
   @Override
@@ -1959,8 +2092,9 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a residence permit type.
    *
    * @param residencePermitTypeCode the code for the residence permit type
+   *
    * @return <b>true</b> if the code is a valid code for a residence permit type or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidResidencePermitType(String residencePermitTypeCode)
@@ -1978,8 +2112,9 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a residency status.
    *
    * @param residencyStatusCode the code for the residency status
+   *
    * @return <b>true</b> if the code is a valid code for a residency status or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidResidencyStatus(String residencyStatusCode)
@@ -1996,8 +2131,9 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a residential type.
    *
    * @param residentialTypeCode the code for the residential type
+   *
    * @return <b>true</b> if the code is a valid code for a residential type or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isValidResidentialType(String residentialTypeCode)
@@ -2014,6 +2150,7 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a source of funds.
    *
    * @param sourceOfFundsCode the code for the source of funds
+   *
    * @return <b>true</b> if the code is a valid code for a source of funds or <b>false</b> otherwise
    */
   @Override
@@ -2030,6 +2167,7 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a tax number type.
    *
    * @param taxNumberTypeCode the code for the tax number type
+   *
    * @return <b>true</b> if the code is a valid code for a tax number type or <b>false</b> otherwise
    */
   @Override
@@ -2046,6 +2184,7 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a time to contact.
    *
    * @param timeToContactCode the code for the time to contact
+   *
    * @return <b>true</b> if the code is a valid code for a time to contact or <b>false</b> otherwise
    */
   @Override
@@ -2062,6 +2201,7 @@ public class PartyService implements IPartyService {
    * Check whether the code is a valid code for a title.
    *
    * @param titleCode the code for the title
+   *
    * @return <b>true</b> if the code is a valid code for a title or <b>false</b> otherwise
    */
   @Override
@@ -2146,6 +2286,7 @@ public class PartyService implements IPartyService {
    * Validate the organization.
    *
    * @param organization the organization
+   *
    * @return the constraint violations for the organization
    */
   @Override
@@ -2157,6 +2298,7 @@ public class PartyService implements IPartyService {
    * Validate the party.
    *
    * @param party the party
+   *
    * @return the constraint violations for the party
    */
   @Override
@@ -2168,6 +2310,7 @@ public class PartyService implements IPartyService {
    * Validate the person.
    *
    * @param person the person
+   *
    * @return the constraint violations for the person
    */
   @Override
@@ -2179,6 +2322,7 @@ public class PartyService implements IPartyService {
    * Validate the physical address.
    *
    * @param physicalAddress the physical address
+   *
    * @return the constraint violations for the physical address
    */
   @Override

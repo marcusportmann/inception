@@ -31,10 +31,12 @@ public class ValidOrganizationValidator
     implements ConstraintValidator<ValidOrganization, Organization> {
 
   @Autowired
-  public ValidOrganizationValidator() {}
+  public ValidOrganizationValidator() {
+  }
 
   @Override
-  public void initialize(ValidOrganization constraintAnnotation) {}
+  public void initialize(ValidOrganization constraintAnnotation) {
+  }
 
   @Override
   public boolean isValid(

@@ -66,14 +66,18 @@ public class PartyRole implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the party role was created. */
+  /**
+   * The date and time the party role was created.
+   */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The party the party role is associated with. */
+  /**
+   * The party the party role is associated with.
+   */
   @Schema(hidden = true)
   @JsonBackReference("partyRoleReference")
   @XmlTransient
@@ -82,7 +86,9 @@ public class PartyRole implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /** The optional code for the party role purpose. */
+  /**
+   * The optional code for the party role purpose.
+   */
   @Schema(description = "The optional code for the party role purpose")
   @JsonProperty
   @XmlElement(name = "Purpose")
@@ -90,7 +96,9 @@ public class PartyRole implements Serializable {
   @Column(name = "purpose", length = 30)
   private String purpose;
 
-  /** The code for the party role type. */
+  /**
+   * The code for the party role type.
+   */
   @Schema(description = "The code for the party role type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
@@ -100,15 +108,20 @@ public class PartyRole implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** The date and time the party role was last updated. */
+  /**
+   * The date and time the party role was last updated.
+   */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <b>PartyRole</b>. */
-  public PartyRole() {}
+  /**
+   * Constructs a new <b>PartyRole</b>.
+   */
+  public PartyRole() {
+  }
 
   /**
    * Constructs a new <b>PartyRole</b>.
@@ -123,6 +136,7 @@ public class PartyRole implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

@@ -35,6 +35,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = ValidCountryCodeValidator.class)
 @Documented
 public @interface ValidCountryCode {
+
   Class<?>[] groups() default {};
 
   String message() default "{digital.inception.party.constraints.ValidCountryCode.message}";

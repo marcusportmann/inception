@@ -29,19 +29,26 @@ public class OccupationId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the occupation. */
+  /**
+   * The code for the occupation.
+   */
   private String code;
 
-  /** The Unicode locale identifier for the occupation. */
+  /**
+   * The Unicode locale identifier for the occupation.
+   */
   private String localeId;
 
-  /** Constructs a new <b>OccupationId</b>. */
-  public OccupationId() {}
+  /**
+   * Constructs a new <b>OccupationId</b>.
+   */
+  public OccupationId() {
+  }
 
   /**
    * Constructs a new <b>OccupationId</b>.
    *
-   * @param code the code for the occupation
+   * @param code     the code for the occupation
    * @param localeId the Unicode locale identifier for the occupation
    */
   public OccupationId(String code, String localeId) {
@@ -53,6 +60,7 @@ public class OccupationId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

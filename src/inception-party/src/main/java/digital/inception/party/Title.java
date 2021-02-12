@@ -56,7 +56,9 @@ public class Title implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The abbreviation for the title. */
+  /**
+   * The abbreviation for the title.
+   */
   @Schema(description = "The abbreviation for the title", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Abbreviation", required = true)
@@ -65,7 +67,9 @@ public class Title implements Serializable {
   @Column(name = "abbreviation", length = 20, nullable = false)
   private String abbreviation;
 
-  /** The code for the title. */
+  /**
+   * The code for the title.
+   */
   @Schema(description = "The code for the title", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -75,7 +79,9 @@ public class Title implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the title. */
+  /**
+   * The description for the title.
+   */
   @Schema(description = "The description for the title", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -84,7 +90,9 @@ public class Title implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the title. */
+  /**
+   * The Unicode locale identifier for the title.
+   */
   @Schema(description = "The Unicode locale identifier for the title", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
@@ -94,7 +102,9 @@ public class Title implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the title. */
+  /**
+   * The name of the title.
+   */
   @Schema(description = "The name of the title", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -103,7 +113,9 @@ public class Title implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the title. */
+  /**
+   * The sort index for the title.
+   */
   @Schema(description = "The sort index for the title", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -111,13 +123,17 @@ public class Title implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>Title</b>. */
-  public Title() {}
+  /**
+   * Constructs a new <b>Title</b>.
+   */
+  public Title() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

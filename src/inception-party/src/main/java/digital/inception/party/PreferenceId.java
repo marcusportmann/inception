@@ -18,42 +18,38 @@ package digital.inception.party;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
- * The <b>PartyPreferenceTypeCategoryId</b> class implements the ID class for the <b>
- * PartyPreferenceTypeCategory</b> class.
+ * The <b>PreferenceId</b> class implements the ID class for the <b>Preference</b> class.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
-public class PartyPreferenceTypeCategoryId implements Serializable {
+public class PreferenceId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the party preference type category. */
-  private String code;
-
-  /** The Unicode locale identifier for the party preference type category. */
-  private String localeId;
-
-  /** Constructs a new <b>PartyPreferenceTypeCategoryId</b>. */
-  public PartyPreferenceTypeCategoryId() {}
+  /**
+   * The Universally Unique Identifier (UUID) for the party the preference is associated with.
+   */
+  private UUID party;
 
   /**
-   * Constructs a new <b>PartyPreferenceTypeCategoryId</b>.
-   *
-   * @param code the code for the party preference type category
-   * @param localeId the Unicode locale identifier for the party preference type category
+   * The code for the preference type.
    */
-  public PartyPreferenceTypeCategoryId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
+  private String type;
+
+  /**
+   * Constructs a new <b>PreferenceId</b>.
+   */
+  public PreferenceId() {
   }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -70,9 +66,9 @@ public class PartyPreferenceTypeCategoryId implements Serializable {
       return false;
     }
 
-    PartyPreferenceTypeCategoryId other = (PartyPreferenceTypeCategoryId) object;
+    PreferenceId other = (PreferenceId) object;
 
-    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
+    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
@@ -82,6 +78,6 @@ public class PartyPreferenceTypeCategoryId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
+    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 }

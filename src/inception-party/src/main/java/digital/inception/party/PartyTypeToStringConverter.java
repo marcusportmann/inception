@@ -30,8 +30,11 @@ import org.springframework.stereotype.Component;
 @WritingConverter
 public class PartyTypeToStringConverter implements Converter<PartyType, String> {
 
-  /** Constructs a new <b>PartyTypeToStringConverter</b>. */
-  public PartyTypeToStringConverter() {}
+  /**
+   * Constructs a new <b>PartyTypeToStringConverter</b>.
+   */
+  public PartyTypeToStringConverter() {
+  }
 
   @Override
   public String convert(PartyType source) {

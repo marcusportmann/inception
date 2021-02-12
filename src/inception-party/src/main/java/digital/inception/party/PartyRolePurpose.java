@@ -56,7 +56,9 @@ public class PartyRolePurpose implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the party role purpose. */
+  /**
+   * The code for the party role purpose.
+   */
   @Schema(description = "The code for the party role purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -66,7 +68,9 @@ public class PartyRolePurpose implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the party role purpose. */
+  /**
+   * The description for the party role purpose.
+   */
   @Schema(description = "The description for the party role purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -75,7 +79,9 @@ public class PartyRolePurpose implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the party role purpose. */
+  /**
+   * The Unicode locale identifier for the party role purpose.
+   */
   @Schema(description = "The Unicode locale identifier for the party role purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
@@ -85,7 +91,9 @@ public class PartyRolePurpose implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the party role purpose. */
+  /**
+   * The name of the party role purpose.
+   */
   @Schema(description = "The name of the party role purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -94,7 +102,9 @@ public class PartyRolePurpose implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the party role purpose. */
+  /**
+   * The sort index for the party role purpose.
+   */
   @Schema(description = "The sort index for the party role purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -102,13 +112,17 @@ public class PartyRolePurpose implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>PartyRolePurpose</b>. */
-  public PartyRolePurpose() {}
+  /**
+   * Constructs a new <b>PartyRolePurpose</b>.
+   */
+  public PartyRolePurpose() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

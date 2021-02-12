@@ -303,52 +303,6 @@
       <column name="locale_id"/>
     </createIndex>
 
-    <createTable schemaName="party" tableName="party_preference_type_categories" remarks="Party Preference Type Categories">
-      <column name="code" type="nvarchar(30)" remarks="The code for the party preference type category"/>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the party preference type category"/>
-      <column name="sort_index" type="int" remarks="The sort index for the party preference type category"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the party preference type category"/>
-      <column name="description" type="nvarchar(200)" remarks="The description for the party preference type category"/>
-    </createTable>
-    <addPrimaryKey schemaName="party" tableName="party_preference_type_categories" columnNames="code,locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_type_categories" columnName="code"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_type_categories" columnName="locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_type_categories" columnName="sort_index"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_type_categories" columnName="name"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_type_categories" columnName="description"/>
-    <addDefaultValue schemaName="party" tableName="party_preference_type_categories" columnName="description" defaultValue=""/>
-    <createIndex indexName="party_preference_type_categories_locale_id_ix" schemaName="party" tableName="party_preference_type_categories">
-      <column name="locale_id"/>
-    </createIndex>
-
-    <createTable schemaName="party" tableName="party_preference_types" remarks="Party Preference Types">
-      <column name="category" type="nvarchar(30)" remarks="The code for the party preference type category the party preference type is associated with"/>
-      <column name="code" type="nvarchar(30)" remarks="The code for the party preference type"/>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the party preference type"/>
-      <column name="sort_index" type="int" remarks="The sort index for the party preference type"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the party preference type"/>
-      <column name="description" type="nvarchar(200)" remarks="The description for the party preference type"/>
-      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the party preference type is associated with"/>
-    </createTable>
-    <addPrimaryKey schemaName="party" tableName="party_preference_types" columnNames="code,locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="category"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="code"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="sort_index"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="name"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="description"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="party_types"/>
-    <addForeignKeyConstraint constraintName="party_preference_types_preference_type_category_fk" baseTableSchemaName="party"
-      baseTableName="party_preference_types" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
-      referencedTableName="party_preference_type_categories" referencedColumnNames="code,locale_id" deleteCascade="true"/>
-    <addDefaultValue schemaName="party" tableName="party_preference_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="party_preference_types_category_ix" schemaName="party" tableName="party_preference_types">
-      <column name="category"/>
-    </createIndex>
-    <createIndex indexName="party_preference_types_locale_id_ix" schemaName="party" tableName="party_preference_types">
-      <column name="locale_id"/>
-    </createIndex>
-
     <createTable schemaName="party" tableName="party_role_purposes" remarks="Party Role Purposes">
       <column name="code" type="nvarchar(30)" remarks="The code for the party role purpose"/>
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the party role purpose"/>
@@ -422,6 +376,52 @@
     <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="description"/>
     <addDefaultValue schemaName="party" tableName="physical_address_types" columnName="description" defaultValue=""/>
     <createIndex indexName="physical_address_types_locale_id_ix" schemaName="party" tableName="physical_address_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="preference_type_categories" remarks="Preference Type Categories">
+      <column name="code" type="nvarchar(30)" remarks="The code for the preference type category"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the preference type category"/>
+      <column name="sort_index" type="int" remarks="The sort index for the preference type category"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the preference type category"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the preference type category"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="preference_type_categories" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_type_categories" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_type_categories" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_type_categories" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_type_categories" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_type_categories" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="preference_type_categories" columnName="description" defaultValue=""/>
+    <createIndex indexName="preference_type_categories_locale_id_ix" schemaName="party" tableName="preference_type_categories">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="preference_types" remarks="Preference Types">
+      <column name="category" type="nvarchar(30)" remarks="The code for the preference type category the preference type is associated with"/>
+      <column name="code" type="nvarchar(30)" remarks="The code for the preference type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the preference type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the preference type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the preference type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the preference type"/>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the preference type is associated with"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="preference_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="category"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="description"/>
+    <addNotNullConstraint schemaName="party" tableName="preference_types" columnName="party_types"/>
+    <addForeignKeyConstraint constraintName="preference_types_preference_type_category_fk" baseTableSchemaName="party"
+      baseTableName="preference_types" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
+      referencedTableName="preference_type_categories" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+    <addDefaultValue schemaName="party" tableName="preference_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="preference_types_category_ix" schemaName="party" tableName="preference_types">
+      <column name="category"/>
+    </createIndex>
+    <createIndex indexName="preference_types_locale_id_ix" schemaName="party" tableName="preference_types">
       <column name="locale_id"/>
     </createIndex>
 
@@ -614,53 +614,6 @@
 
 
 
-
-
-    <createTable schemaName="party" tableName="party_preference_type_categories" remarks="Preference Type Categories">
-      <column name="code" type="nvarchar(30)" remarks="The code for the preference type category"/>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the preference type category"/>
-      <column name="sort_index" type="int" remarks="The sort index for the preference type category"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the preference type category"/>
-      <column name="description" type="nvarchar(200)" remarks="The description for the preference type category"/>
-    </createTable>
-    <addPrimaryKey schemaName="party" tableName="party_preference_type_categories" columnNames="code,locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_type_categories" columnName="code"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_type_categories" columnName="locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_type_categories" columnName="sort_index"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_type_categories" columnName="name"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_type_categories" columnName="description"/>
-    <addDefaultValue schemaName="party" tableName="party_preference_type_categories" columnName="description" defaultValue=""/>
-    <createIndex indexName="party_preference_type_categories_locale_id_ix" schemaName="party" tableName="party_preference_type_categories">
-      <column name="locale_id"/>
-    </createIndex>
-
-    <createTable schemaName="party" tableName="party_preference_types" remarks="Preference Types">
-      <column name="category" type="nvarchar(30)" remarks="The code for the preference type category the preference type is associated with"/>
-      <column name="code" type="nvarchar(30)" remarks="The code for the preference type"/>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the preference type"/>
-      <column name="sort_index" type="int" remarks="The sort index for the preference type"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the preference type"/>
-      <column name="description" type="nvarchar(200)" remarks="The description for the preference type"/>
-      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the preference type is associated with"/>
-    </createTable>
-    <addPrimaryKey schemaName="party" tableName="party_preference_types" columnNames="code,locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="category"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="code"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="sort_index"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="name"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="description"/>
-    <addNotNullConstraint schemaName="party" tableName="party_preference_types" columnName="party_types"/>
-    <addForeignKeyConstraint constraintName="party_preference_types_preference_type_category_fk" baseTableSchemaName="party"
-      baseTableName="party_preference_types" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
-      referencedTableName="party_preference_type_categories" referencedColumnNames="code,locale_id" deleteCascade="true"/>
-    <addDefaultValue schemaName="party" tableName="party_preference_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="party_preference_types_category_ix" schemaName="party" tableName="party_preference_types">
-      <column name="category"/>
-    </createIndex>
-    <createIndex indexName="party_preference_types_locale_id_ix" schemaName="party" tableName="party_preference_types">
-      <column name="locale_id"/>
-    </createIndex>
 
 
 
@@ -1517,33 +1470,6 @@
       <column name="party_types" value="person"/>
     </insert>
 
-    <insert schemaName="party" tableName="party_preference_type_categories">
-      <column name="code" value="correspondence"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="0"/>
-      <column name="name" value="Correspondence"/>
-      <column name="description" value="Correspondence"/>
-    </insert>
-
-    <insert schemaName="party" tableName="party_preference_types">
-      <column name="category" value="correspondence"/>
-      <column name="code" value="correspondence_language"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="0"/>
-      <column name="name" value="Correspondence Language"/>
-      <column name="description" value="Correspondence Language"/>
-      <column name="party_types" value="organization,person"/>
-    </insert>
-    <insert schemaName="party" tableName="party_preference_types">
-      <column name="category" value="correspondence"/>
-      <column name="code" value="time_to_contact"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="0"/>
-      <column name="name" value="Time To Contact"/>
-      <column name="description" value="Suitable Time To Contact"/>
-      <column name="party_types" value="person"/>
-    </insert>
-
     <insert schemaName="party" tableName="party_role_purposes">
       <column name="code" value="test"/>
       <column name="locale_id" value="en-US"/>
@@ -1745,6 +1671,33 @@
       <column name="sort_index" value="99"/>
       <column name="name" value="Unstructured"/>
       <column name="description" value="Unstructured"/>
+    </insert>
+
+    <insert schemaName="party" tableName="preference_type_categories">
+      <column name="code" value="correspondence"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="0"/>
+      <column name="name" value="Correspondence"/>
+      <column name="description" value="Correspondence"/>
+    </insert>
+
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="correspondence"/>
+      <column name="code" value="correspondence_language"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="0"/>
+      <column name="name" value="Correspondence Language"/>
+      <column name="description" value="Correspondence Language"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="correspondence"/>
+      <column name="code" value="time_to_contact"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="0"/>
+      <column name="name" value="Time To Contact"/>
+      <column name="description" value="Suitable Time To Contact"/>
+      <column name="party_types" value="person"/>
     </insert>
 
     <insert schemaName="party" tableName="races">
@@ -2090,6 +2043,7 @@
       <column name="name" value="Income Tax Number"/>
       <column name="description" value="South African Income Tax Number"/>
       <column name="country_of_issue" value="ZA"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">
       <column name="code" value="uk_tax_number"/>
@@ -2098,6 +2052,7 @@
       <column name="name" value="UK Tax Number"/>
       <column name="description" value="UK Tax Number"/>
       <column name="country_of_issue" value="GB"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">
       <column name="code" value="us_taxpayer_id_number"/>
@@ -2106,6 +2061,7 @@
       <column name="name" value="US Taxpayer Identification Number"/>
       <column name="description" value="US Taxpayer Identification Number"/>
       <column name="country_of_issue" value="US"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">
       <column name="code" value="za_vat_tax_number"/>
@@ -2114,6 +2070,7 @@
       <column name="name" value="VAT Tax Number"/>
       <column name="description" value="South African VAT Tax Number"/>
       <column name="country_of_issue" value="ZA"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">
       <column name="code" value="uk_other_tax_number"/>
@@ -2122,6 +2079,7 @@
       <column name="name" value="UK Other Tax Number"/>
       <column name="description" value="UK Other Tax Number"/>
       <column name="country_of_issue" value="GB"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">
       <column name="code" value="us_other_tax_number"/>
@@ -2130,6 +2088,7 @@
       <column name="name" value="US Other Tax Number"/>
       <column name="description" value="US Other Tax Number"/>
       <column name="country_of_issue" value="US"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">
       <column name="code" value="za_other_tax_number"/>
@@ -2138,6 +2097,7 @@
       <column name="name" value="Other Tax Number"/>
       <column name="description" value="Other South African Tax Number"/>
       <column name="country_of_issue" value="ZA"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
     <insert schemaName="party" tableName="times_to_contact">

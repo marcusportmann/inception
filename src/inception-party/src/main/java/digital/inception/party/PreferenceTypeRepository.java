@@ -21,13 +21,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>PartyPreferenceTypeCategoryRepository</b> interface declares the repository for the <b>
- * PartyPreferenceTypeCategory</b> domain type.
+ * The <b>PreferenceTypeRepository</b> interface declares the repository for the <b>
+ * PreferenceType</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface PartyPreferenceTypeCategoryRepository
-    extends JpaRepository<PartyPreferenceTypeCategory, PartyPreferenceTypeCategoryId> {
+public interface PreferenceTypeRepository extends JpaRepository<PreferenceType, PreferenceTypeId> {
 
-  List<PartyPreferenceTypeCategory> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  List<PreferenceType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

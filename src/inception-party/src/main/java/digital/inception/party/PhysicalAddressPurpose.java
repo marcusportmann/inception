@@ -41,8 +41,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PhysicalAddressPurpose</b> class holds the information for a physical address
- * purpose.
+ * The <b>PhysicalAddressPurpose</b> class holds the information for a physical address purpose.
  *
  * @author Marcus Portmann
  */
@@ -60,48 +59,76 @@ import org.springframework.util.StringUtils;
 @IdClass(PhysicalAddressPurposeId.class)
 public class PhysicalAddressPurpose implements Serializable {
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String BILLING = "billing";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String BUSINESS = "business";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String CORRESPONDENCE = "correspondence";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String DELIVERY = "delivery";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String HOME = "home";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String MAIN = "main";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String PERMANENT = "permanent";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String REGISTERED_OFFICE = "registered_office";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String RESIDENTIAL = "residential";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String SERVICE = "service";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String SOLE_TRADER = "sole_trader";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String TEMPORARY = "temporary";
 
-  /** The physical address type code for . */
+  /**
+   * The physical address type code for .
+   */
   public static final String WORK = "work";
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the physical address purpose. */
+  /**
+   * The code for the physical address purpose.
+   */
   @Schema(description = "The code for the physical address purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -111,7 +138,9 @@ public class PhysicalAddressPurpose implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the physical address purpose. */
+  /**
+   * The description for the physical address purpose.
+   */
   @Schema(description = "The description for the physical address purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -120,7 +149,9 @@ public class PhysicalAddressPurpose implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the physical address purpose. */
+  /**
+   * The Unicode locale identifier for the physical address purpose.
+   */
   @Schema(
       description = "The Unicode locale identifier for the physical address purpose",
       required = true)
@@ -132,7 +163,9 @@ public class PhysicalAddressPurpose implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the physical address purpose. */
+  /**
+   * The name of the physical address purpose.
+   */
   @Schema(description = "The name of the physical address purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -151,7 +184,9 @@ public class PhysicalAddressPurpose implements Serializable {
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
 
-  /** The sort index for the physical address purpose. */
+  /**
+   * The sort index for the physical address purpose.
+   */
   @Schema(description = "The sort index for the physical address purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -159,13 +194,17 @@ public class PhysicalAddressPurpose implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>PhysicalAddressPurpose</b>. */
-  public PhysicalAddressPurpose() {}
+  /**
+   * Constructs a new <b>PhysicalAddressPurpose</b>.
+   */
+  public PhysicalAddressPurpose() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -260,8 +299,9 @@ public class PhysicalAddressPurpose implements Serializable {
    * Returns whether the physical address purpose is valid for the party type.
    *
    * @param partyTypeCode the party type code
+   *
    * @return <b>true</b> if the physical address purpose is valid for the party type or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     return Arrays.stream(getPartyTypes())
@@ -307,7 +347,8 @@ public class PhysicalAddressPurpose implements Serializable {
   /**
    * Set the codes for the party types the physical address purpose is associated with.
    *
-   * @param partyTypes the codes for the party types the physical address purpose is associated with
+   * @param partyTypes the codes for the party types the physical address purpose is associated
+   *                   with
    */
   public void setPartyTypes(String[] partyTypes) {
     this.partyTypes = StringUtils.arrayToCommaDelimitedString(partyTypes);
@@ -316,7 +357,8 @@ public class PhysicalAddressPurpose implements Serializable {
   /**
    * Set the codes for the party types the physical address purpose is associated with.
    *
-   * @param partyTypes the codes for the party types the physical address purpose is associated with
+   * @param partyTypes the codes for the party types the physical address purpose is associated
+   *                   with
    */
   @JsonIgnore
   public void setPartyTypes(Collection<String> partyTypes) {

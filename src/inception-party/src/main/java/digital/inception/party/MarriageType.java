@@ -56,7 +56,9 @@ public class MarriageType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the marriage type. */
+  /**
+   * The code for the marriage type.
+   */
   @Schema(description = "The code for the marriage type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -66,7 +68,9 @@ public class MarriageType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the marriage type. */
+  /**
+   * The description for the marriage type.
+   */
   @Schema(description = "The description for the marriage type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -75,7 +79,9 @@ public class MarriageType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the marriage type. */
+  /**
+   * The Unicode locale identifier for the marriage type.
+   */
   @Schema(description = "The Unicode locale identifier for the marriage type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
@@ -85,7 +91,9 @@ public class MarriageType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The code for the marital status the marriage type is associated with. */
+  /**
+   * The code for the marital status the marriage type is associated with.
+   */
   @Schema(
       description = "The code for the marital status the marriage type is associated with",
       required = true)
@@ -97,7 +105,9 @@ public class MarriageType implements Serializable {
   @Column(name = "marital_status", length = 30, nullable = false)
   private String maritalStatus;
 
-  /** The name of the marriage type. */
+  /**
+   * The name of the marriage type.
+   */
   @Schema(description = "The name of the marriage type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -106,7 +116,9 @@ public class MarriageType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the marriage type. */
+  /**
+   * The sort index for the marriage type.
+   */
   @Schema(description = "The sort index for the marriage type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -114,13 +126,17 @@ public class MarriageType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>MarriageType</b>. */
-  public MarriageType() {}
+  /**
+   * Constructs a new <b>MarriageType</b>.
+   */
+  public MarriageType() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

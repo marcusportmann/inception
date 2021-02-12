@@ -45,7 +45,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>TaxNumber</b> class holds the information for a tax number.
+ * The <b>TaxNumber</b> class holds the information for a tax number for a party.
  *
  * <p>Even though the country of issue is specified as part of the reference data for a tax number
  * type, it is included here to eliminate the additional join. The additional join will also be
@@ -69,7 +69,9 @@ public class TaxNumber implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ISO 3166-1 alpha-2 code for the country of issue for the tax number. */
+  /**
+   * The ISO 3166-1 alpha-2 code for the country of issue for the tax number.
+   */
   @Schema(
       description = "The ISO 3166-1 alpha-2 code for the country of issue for the tax number",
       required = true)
@@ -80,14 +82,18 @@ public class TaxNumber implements Serializable {
   @Column(name = "country_of_issue", length = 2, nullable = false)
   private String countryOfIssue;
 
-  /** The date and time the tax number was created. */
+  /**
+   * The date and time the tax number was created.
+   */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The tax number. */
+  /**
+   * The tax number.
+   */
   @Schema(description = "The tax number", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Number", required = true)
@@ -96,7 +102,9 @@ public class TaxNumber implements Serializable {
   @Column(name = "number", length = 30, nullable = false)
   private String number;
 
-  /** The party the tax number is associated with. */
+  /**
+   * The party the tax number is associated with.
+   */
   @Schema(hidden = true)
   @JsonBackReference("taxNumberReference")
   @XmlTransient
@@ -105,7 +113,9 @@ public class TaxNumber implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /** The code for the tax number type. */
+  /**
+   * The code for the tax number type.
+   */
   @Schema(description = "The code for the tax number type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
@@ -115,22 +125,27 @@ public class TaxNumber implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** The date and time the tax number was last updated. */
+  /**
+   * The date and time the tax number was last updated.
+   */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <b>TaxNumber</b>. */
-  public TaxNumber() {}
+  /**
+   * Constructs a new <b>TaxNumber</b>.
+   */
+  public TaxNumber() {
+  }
 
   /**
    * Constructs a new <b>TaxNumber</b>.
    *
-   * @param type the code for the tax number type
+   * @param type           the code for the tax number type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
-   * @param number the tax number
+   * @param number         the tax number
    */
   public TaxNumber(String type, String countryOfIssue, String number) {
     this.type = type;
@@ -142,6 +157,7 @@ public class TaxNumber implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

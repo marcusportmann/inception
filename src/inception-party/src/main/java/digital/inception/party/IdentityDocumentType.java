@@ -50,26 +50,26 @@ import org.springframework.util.StringUtils;
         "A type of legal document which may be used to verify aspects of a party's identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "code",
-  "localeId",
-  "sortIndex",
-  "name",
-  "description",
-  "countryOfIssue",
-  "partyTypes"
+    "code",
+    "localeId",
+    "sortIndex",
+    "name",
+    "description",
+    "countryOfIssue",
+    "partyTypes"
 })
 @XmlRootElement(name = "IdentityDocumentType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "IdentityDocumentType",
     namespace = "http://inception.digital/party",
     propOrder = {
-      "code",
-      "localeId",
-      "sortIndex",
-      "name",
-      "description",
-      "countryOfIssue",
-      "partyTypes"
+        "code",
+        "localeId",
+        "sortIndex",
+        "name",
+        "description",
+        "countryOfIssue",
+        "partyTypes"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -79,7 +79,9 @@ public class IdentityDocumentType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the identity document type. */
+  /**
+   * The code for the identity document type.
+   */
   @Schema(description = "The code for the identity document type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -89,7 +91,9 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The optional code for the country of issue for the identity document type. */
+  /**
+   * The optional code for the country of issue for the identity document type.
+   */
   @Schema(
       description = "The optional code for the country of issue for the identity document type",
       required = true)
@@ -100,7 +104,9 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "country_of_issue", length = 30, nullable = false)
   private String countryOfIssue;
 
-  /** The description for the identity document type. */
+  /**
+   * The description for the identity document type.
+   */
   @Schema(description = "The description for the identity document type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -109,7 +115,9 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the identity document type. */
+  /**
+   * The Unicode locale identifier for the identity document type.
+   */
   @Schema(
       description = "The Unicode locale identifier for the identity document type",
       required = true)
@@ -121,7 +129,9 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the identity document type. */
+  /**
+   * The name of the identity document type.
+   */
   @Schema(description = "The name of the identity document type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -140,7 +150,9 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
 
-  /** The sort index for the identity document type. */
+  /**
+   * The sort index for the identity document type.
+   */
   @Schema(description = "The sort index for the identity document type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -148,13 +160,17 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>IdentityDocumentType</b>. */
-  public IdentityDocumentType() {}
+  /**
+   * Constructs a new <b>IdentityDocumentType</b>.
+   */
+  public IdentityDocumentType() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -258,8 +274,9 @@ public class IdentityDocumentType implements Serializable {
    * Returns whether the identity document type is valid for the party type.
    *
    * @param partyTypeCode the party type code
+   *
    * @return <b>true</b> if the identity document type is valid for the party type or <b>false</b>
-   *     otherwise
+   * otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     return Arrays.stream(getPartyTypes())
@@ -278,7 +295,8 @@ public class IdentityDocumentType implements Serializable {
   /**
    * Set the optional code for the country of issue for the identity document type.
    *
-   * @param countryOfIssue the optional code for the country of issue for the identity document type
+   * @param countryOfIssue the optional code for the country of issue for the identity document
+   *                       type
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;
