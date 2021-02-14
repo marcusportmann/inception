@@ -30,26 +30,19 @@ public class PartyAttributeTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the party attribute type.
-   */
+  /** The code for the party attribute type. */
   private String code;
 
-  /**
-   * The Unicode locale identifier for the party attribute type.
-   */
+  /** The Unicode locale identifier for the party attribute type. */
   private String localeId;
 
-  /**
-   * Constructs a new <b>PartyAttributeTypeId</b>.
-   */
-  public PartyAttributeTypeId() {
-  }
+  /** Constructs a new <b>PartyAttributeTypeId</b>. */
+  public PartyAttributeTypeId() {}
 
   /**
    * Constructs a new <b>PartyAttributeTypeId</b>.
    *
-   * @param code     the code for the party attribute type
+   * @param code the code for the party attribute type
    * @param localeId the Unicode locale identifier for the party attribute type
    */
   public PartyAttributeTypeId(String code, String localeId) {
@@ -61,7 +54,6 @@ public class PartyAttributeTypeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

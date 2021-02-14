@@ -54,8 +54,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  * (a.k.a. Accessors and Mutators) convert to and from the Enum types. A consequence of this is that
  * the attributes are marked as @JsonIgnore and @XmlTransient and the Getters are annotated with
  *
- * @author Marcus Portmann
- * @JsonProperty and @XmlElement.
+ * @author Marcus Portmann @JsonProperty and @XmlElement.
  */
 @Schema(description = "A mechanism that can be used to contact a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -73,18 +72,14 @@ public class ContactMechanism implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The date and time the contact mechanism was created.
-   */
+  /** The date and time the contact mechanism was created. */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /**
-   * The party the contact mechanism is associated with.
-   */
+  /** The party the contact mechanism is associated with. */
   @Schema(hidden = true)
   @JsonBackReference("contactMechanismReference")
   @XmlTransient
@@ -93,34 +88,32 @@ public class ContactMechanism implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /**
-   * The code for the contact mechanism purpose.
-   */
+  /** The code for the contact mechanism purpose. */
   @Schema(
       description = "The code for the contact mechanism purpose",
       required = true,
       allowableValues = {
-          "personal_mobile_number",
-          "work_mobile_number",
-          "other_mobile_number",
-          "main_mobile_number",
-          "home_phone_number",
-          "work_phone_number",
-          "school_phone_number",
-          "pager_phone_number",
-          "other_phone_number",
-          "main_phone_number",
-          "home_fax_number",
-          "work_fax_number",
-          "other_fax_number",
-          "main_fax_number",
-          "personal_email_address",
-          "work_email_address",
-          "school_email_address",
-          "other_email_address",
-          "main_email_address",
-          "whatsapp_user_id",
-          "twitter_id"
+        "personal_mobile_number",
+        "work_mobile_number",
+        "other_mobile_number",
+        "main_mobile_number",
+        "home_phone_number",
+        "work_phone_number",
+        "school_phone_number",
+        "pager_phone_number",
+        "other_phone_number",
+        "main_phone_number",
+        "home_fax_number",
+        "work_fax_number",
+        "other_fax_number",
+        "main_fax_number",
+        "personal_email_address",
+        "work_email_address",
+        "school_email_address",
+        "other_email_address",
+        "main_email_address",
+        "whatsapp_user_id",
+        "twitter_id"
       })
   @JsonProperty(required = true)
   @XmlElement(name = "Purpose", required = true)
@@ -139,18 +132,16 @@ public class ContactMechanism implements Serializable {
   @Column(name = "purpose", length = 30, nullable = false)
   private String purpose;
 
-  /**
-   * The code for the contact mechanism type.
-   */
+  /** The code for the contact mechanism type. */
   @Schema(
       description = "The code for the contact mechanism type",
       required = true,
       allowableValues = {
-          "mobile_number",
-          "phone_number",
-          "fax_number",
-          "email_address",
-          "social_media"
+        "mobile_number",
+        "phone_number",
+        "fax_number",
+        "email_address",
+        "social_media"
       })
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
@@ -163,18 +154,14 @@ public class ContactMechanism implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /**
-   * The date and time the contact mechanism was last updated.
-   */
+  /** The date and time the contact mechanism was last updated. */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /**
-   * The value for the contact mechanism.
-   */
+  /** The value for the contact mechanism. */
   @Schema(description = "The value for the contact mechanism", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
@@ -183,18 +170,15 @@ public class ContactMechanism implements Serializable {
   @Column(name = "value", length = 200, nullable = false)
   private String value;
 
-  /**
-   * Constructs a new <b>ContactMechanism</b>.
-   */
-  public ContactMechanism() {
-  }
+  /** Constructs a new <b>ContactMechanism</b>. */
+  public ContactMechanism() {}
 
   /**
    * Constructs a new <b>ContactMechanism</b>.
    *
-   * @param type    the code for the contact mechanism type
+   * @param type the code for the contact mechanism type
    * @param purpose the code for the contact mechanism purpose
-   * @param value   the value for the contact mechanism
+   * @param value the value for the contact mechanism
    */
   public ContactMechanism(String type, String purpose, String value) {
     this.type = type;
@@ -206,7 +190,6 @@ public class ContactMechanism implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

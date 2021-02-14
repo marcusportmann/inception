@@ -29,27 +29,19 @@ public class TaxNumberId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the party the tax number is associated with.
-   */
+  /** The Universally Unique Identifier (UUID) for the party the tax number is associated with. */
   private UUID party;
 
-  /**
-   * The code for the tax number type.
-   */
+  /** The code for the tax number type. */
   private String type;
 
-  /**
-   * Constructs a new <b>TaxNumberId</b>.
-   */
-  public TaxNumberId() {
-  }
+  /** Constructs a new <b>TaxNumberId</b>. */
+  public TaxNumberId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

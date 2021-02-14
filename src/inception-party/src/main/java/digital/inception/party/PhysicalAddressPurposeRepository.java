@@ -21,8 +21,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>PhysicalAddressSubTypeRepository</b> interface declares the repository for the
- * <b>PhysicalAddressSubType</b> domain type.
+ * The <b>PhysicalAddressPurposeRepository</b> interface declares the repository for the
+ * <b>PhysicalAddressPurpose</b> domain type.
  *
  * @author Marcus Portmann
  */

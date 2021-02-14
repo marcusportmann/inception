@@ -49,70 +49,55 @@ public class Parties implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The optional filter that was applied to the parties.
-   */
+  /** The optional filter that was applied to the parties. */
   @Schema(description = "The optional filter that was applied to the parties")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
 
-  /**
-   * The optional page index.
-   */
+  /** The optional page index. */
   @Schema(description = "The optional page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /**
-   * The optional page size.
-   */
+  /** The optional page size. */
   @Schema(description = "The optional page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /**
-   * The parties.
-   */
+  /** The parties. */
   @Schema(description = "The parties", required = true)
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Parties", required = true)
   @XmlElement(name = "Party", required = true)
   private List<Party> parties;
 
-  /**
-   * The optional sort direction that was applied to the parties.
-   */
+  /** The optional sort direction that was applied to the parties. */
   @Schema(description = "The optional sort direction that was applied to the parties")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /**
-   * The total number of parties.
-   */
+  /** The total number of parties. */
   @Schema(description = "The total number of parties", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /**
-   * Constructs a new <b>Parties</b>.
-   */
-  public Parties() {
-  }
+  /** Constructs a new <b>Parties</b>. */
+  public Parties() {}
 
   /**
    * Constructs a new <b>Parties</b>.
    *
-   * @param parties       the parties
-   * @param total         the total number of parties
-   * @param filter        the optional filter that was applied to the parties
+   * @param parties the parties
+   * @param total the total number of parties
+   * @param filter the optional filter that was applied to the parties
    * @param sortDirection the optional sort direction that was applied to the parties
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    */
   public Parties(
       List<Party> parties,

@@ -29,6 +29,7 @@ import digital.inception.party.ContactMechanism;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyAttribute;
+import digital.inception.party.PhysicalAddressRole;
 import digital.inception.party.Preference;
 import digital.inception.party.TaxNumber;
 import digital.inception.party.PhysicalAddress;
@@ -37,6 +38,7 @@ import digital.inception.party.PhysicalAddressType;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -135,26 +137,26 @@ public class CustomerServiceTest {
             ContactMechanismType.EMAIL_ADDRESS, "personal_email_address", "test@test.com"));
 
     PhysicalAddress residentialAddress =
-        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL);
-    residentialAddress.setStreetNumber("1");
-    residentialAddress.setStreetName("Discovery Place");
-    residentialAddress.setSuburb("Sandhurst");
-    residentialAddress.setCity("Sandton");
+        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressRole.RESIDENTIAL, Set.of(new String[] {PhysicalAddressPurpose.CORRESPONDENCE, PhysicalAddressPurpose.BILLING}));
+    residentialAddress.setStreetNumber("13");
+    residentialAddress.setStreetName("Kraalbessie Avenue");
+    residentialAddress.setSuburb("Weltevreden Park");
+    residentialAddress.setCity("Johannesburg");
     residentialAddress.setRegion("GP");
     residentialAddress.setCountry("ZA");
-    residentialAddress.setPostalCode("2194");
+    residentialAddress.setPostalCode("1709");
 
     individualCustomer.addPhysicalAddress(residentialAddress);
 
     PhysicalAddress correspondenceAddress =
         new PhysicalAddress(
-            PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.CORRESPONDENCE);
+            PhysicalAddressType.UNSTRUCTURED, PhysicalAddressRole.WORK);
 
-    correspondenceAddress.setLine1("1 Apple Park Way");
-    correspondenceAddress.setCity("Cupertino");
-    correspondenceAddress.setRegion("CA");
-    correspondenceAddress.setCountry("US");
-    correspondenceAddress.setPostalCode("CA 95014");
+    correspondenceAddress.setLine1("15 Troy Street");
+    correspondenceAddress.setCity("Johannesburg");
+    correspondenceAddress.setRegion("GP");
+    correspondenceAddress.setCountry("ZA");
+    correspondenceAddress.setPostalCode("2000");
 
     individualCustomer.addPhysicalAddress(correspondenceAddress);
 

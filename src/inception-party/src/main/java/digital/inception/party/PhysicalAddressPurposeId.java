@@ -30,26 +30,19 @@ public class PhysicalAddressPurposeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the physical address purpose.
-   */
+  /** The code for the physical address purpose. */
   private String code;
 
-  /**
-   * The Unicode locale identifier for the physical address purpose.
-   */
+  /** The Unicode locale identifier for the physical address purpose. */
   private String localeId;
 
-  /**
-   * Constructs a new <b>PhysicalAddressPurposeId</b>.
-   */
-  public PhysicalAddressPurposeId() {
-  }
+  /** Constructs a new <b>PhysicalAddressPurposeId</b>. */
+  public PhysicalAddressPurposeId() {}
 
   /**
    * Constructs a new <b>PhysicalAddressPurposeId</b>.
    *
-   * @param code     the code for the physical address purpose
+   * @param code the code for the physical address purpose
    * @param localeId the Unicode locale identifier for the physical address purpose
    */
   public PhysicalAddressPurposeId(String code, String localeId) {
@@ -61,7 +54,6 @@ public class PhysicalAddressPurposeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

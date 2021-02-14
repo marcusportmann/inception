@@ -62,32 +62,34 @@ import org.springframework.util.StringUtils;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"created", "type", "updated"})
 @JsonPropertyOrder({
-    "id",
-    "tenantId",
-    "name",
-    "attributes",
-    "contactMechanisms",
-    "physicalAddresses",
-    "preferences",
-    "countriesOfTaxResidence",
-    "taxNumbers",
-    "roles"
+  "id",
+  "tenantId",
+  "name",
+  "attributes",
+  "contactMechanisms",
+  "identityDocuments",
+  "physicalAddresses",
+  "preferences",
+  "countriesOfTaxResidence",
+  "taxNumbers",
+  "roles"
 })
 @XmlRootElement(name = "Organization", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Organization",
     namespace = "http://inception.digital/party",
     propOrder = {
-        "id",
-        "tenantId",
-        "name",
-        "attributes",
-        "contactMechanisms",
-        "physicalAddresses",
-        "preferences",
-        "countriesOfTaxResidence",
-        "taxNumbers",
-        "roles"
+      "id",
+      "tenantId",
+      "name",
+      "attributes",
+      "contactMechanisms",
+      "physicalAddresses",
+      "identityDocuments",
+      "preferences",
+      "countriesOfTaxResidence",
+      "taxNumbers",
+      "roles"
     })
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @ValidOrganization
@@ -97,9 +99,7 @@ public class Organization extends PartyBase implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The attributes for the organization.
-   */
+  /** The attributes for the organization. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -108,9 +108,7 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<PartyAttribute> attributes = new HashSet<>();
 
-  /**
-   * The contact mechanisms for the organization.
-   */
+  /** The contact mechanisms for the organization. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -119,9 +117,16 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
 
-  /**
-   * The physical addresses for the organization.
-   */
+  /** The identity documents for the organization. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<IdentityDocument> identityDocuments = new HashSet<>();
+
+  /** The physical addresses for the organization. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -130,9 +135,7 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
 
-  /**
-   * The preferences for the organization.
-   */
+  /** The preferences for the organization. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -141,9 +144,7 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<Preference> preferences = new HashSet<>();
 
-  /**
-   * The party roles for the organization independent of a party association.
-   */
+  /** The party roles for the organization independent of a party association. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -152,9 +153,7 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<PartyRole> roles = new HashSet<>();
 
-  /**
-   * The tax numbers for the organization.
-   */
+  /** The tax numbers for the organization. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -173,9 +172,7 @@ public class Organization extends PartyBase implements Serializable {
   @Column(table = "organizations", name = "countries_of_tax_residence", length = 100)
   private String countriesOfTaxResidence;
 
-  /**
-   * Constructs a new <b>Organization</b>.
-   */
+  /** Constructs a new <b>Organization</b>. */
   public Organization() {
     super(PartyType.ORGANIZATION);
   }
@@ -184,8 +181,8 @@ public class Organization extends PartyBase implements Serializable {
    * Constructs a new <b>Organization</b>.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organization is
-   *                 associated with
-   * @param name     the name of the organization
+   *     associated with
+   * @param name the name of the organization
    */
   public Organization(UUID tenantId, String name) {
     super(tenantId, PartyType.ORGANIZATION, name);
@@ -215,11 +212,26 @@ public class Organization extends PartyBase implements Serializable {
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), contactMechanism.getType())
                 && Objects.equals(
-                existingContactMechanism.getPurpose(), contactMechanism.getPurpose()));
+                    existingContactMechanism.getPurpose(), contactMechanism.getPurpose()));
 
     contactMechanism.setParty(this);
 
     contactMechanisms.add(contactMechanism);
+  }
+
+  /**
+   * Add the identity document for the organization.
+   *
+   * @param identityDocument the identity document
+   */
+  public void addIdentityDocument(IdentityDocument identityDocument) {
+    identityDocuments.removeIf(
+        existingIdentityDocument ->
+            Objects.equals(existingIdentityDocument.getType(), identityDocument.getType()));
+
+    identityDocument.setParty(this);
+
+    identityDocuments.add(identityDocument);
   }
 
   /**
@@ -282,7 +294,6 @@ public class Organization extends PartyBase implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -308,9 +319,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the attribute with the specified type for the organization.
    *
    * @param type the code for the attribute type
-   *
    * @return the attribute with the specified type for the organization or <b>null</b> if the
-   * attribute could not be found
+   *     attribute could not be found
    */
   public PartyAttribute getAttribute(String type) {
     return attributes.stream()
@@ -336,11 +346,10 @@ public class Organization extends PartyBase implements Serializable {
   /**
    * Retrieve the contact mechanism with the specified type and purpose for the organization.
    *
-   * @param type    the code for the contact mechanism type
+   * @param type the code for the contact mechanism type
    * @param purpose the code for the contact mechanism purpose
-   *
    * @return the contact mechanism with the specified type and purpose for the organization or
-   * <b>null</b> if the contact mechanism could not be found
+   *     <b>null</b> if the contact mechanism could not be found
    */
   public ContactMechanism getContactMechanism(String type, String purpose) {
     return contactMechanisms.stream()
@@ -371,7 +380,7 @@ public class Organization extends PartyBase implements Serializable {
    * organization.
    *
    * @return the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
-   * organization
+   *     organization
    */
   @Schema(
       description =
@@ -382,8 +391,6 @@ public class Organization extends PartyBase implements Serializable {
   public Set<String> getCountriesOfTaxResidence() {
     return Set.of(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence));
   }
-
-  // TODO: Add identity documents -- MARCUS
 
   /**
    * Returns the date and time the organization was created.
@@ -410,6 +417,22 @@ public class Organization extends PartyBase implements Serializable {
   public UUID getId() {
     return super.getId();
   }
+
+  /**
+   * Returns the identity documents for the organization.
+   *
+   * @return the identity documents for the organization
+   */
+  @Schema(description = "The identity documents for the organization")
+  @JsonProperty
+  @JsonManagedReference("identityDocumentReference")
+  @XmlElementWrapper(name = "IdentityDocuments")
+  @XmlElement(name = "IdentityDocument")
+  public Set<IdentityDocument> getIdentityDocuments() {
+    return identityDocuments;
+  }
+
+  // TODO: Add identity documents -- MARCUS
 
   /**
    * Returns the name of the organization.
@@ -440,9 +463,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the first physical address with the specified purpose for the organization.
    *
    * @param purpose the physical address purpose
-   *
    * @return the first physical address with the specified purpose for the organization or <b>
-   * null</b> if the physical address could not be found
+   *     null</b> if the physical address could not be found
    */
   public PhysicalAddress getPhysicalAddress(PhysicalAddressPurpose purpose) {
     return physicalAddresses.stream()
@@ -469,9 +491,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the preference with the specified type for the organization.
    *
    * @param type the code for the preference type
-   *
    * @return the preference with the specified type for the organization or <b>null</b> if the
-   * preference could not be found
+   *     preference could not be found
    */
   public Preference getPreference(String type) {
     return preferences.stream()
@@ -499,9 +520,8 @@ public class Organization extends PartyBase implements Serializable {
    * association.
    *
    * @param type the code for the party role type
-   *
    * @return the role with the specified type for the organization independent of a party
-   * association or <b>null</b> if the role could not be found
+   *     association or <b>null</b> if the role could not be found
    */
   public PartyRole getRole(String type) {
     return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst().get();
@@ -525,9 +545,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the tax number with the specified type for the organization.
    *
    * @param type the tax number type
-   *
    * @return the tax number with the specified type for the organization or <b>null</b> if the tax
-   * number could not be found
+   *     number could not be found
    */
   public TaxNumber getTaxNumber(String type) {
     return taxNumbers.stream()
@@ -555,7 +574,7 @@ public class Organization extends PartyBase implements Serializable {
    * with.
    *
    * @return the Universally Unique Identifier (UUID) for the tenant the organization is associated
-   * with
+   *     with
    */
   @Schema(
       description =
@@ -600,7 +619,7 @@ public class Organization extends PartyBase implements Serializable {
   /**
    * Remove the contact mechanism with the specified type and purpose for the organization.
    *
-   * @param type    the code for the contact mechanism type
+   * @param type the code for the contact mechanism type
    * @param purpose the code for the contact mechanism purpose
    */
   public void removeContactMechanism(String type, String purpose) {
@@ -608,6 +627,16 @@ public class Organization extends PartyBase implements Serializable {
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), type)
                 && Objects.equals(existingContactMechanism.getPurpose(), purpose));
+  }
+
+  /**
+   * Remove the identity document with the specified type for the organization.
+   *
+   * @param type the code for the identity document type
+   */
+  public void removeIdentityDocumentByType(String type) {
+    identityDocuments.removeIf(
+        existingIdentityDocument -> Objects.equals(existingIdentityDocument.getType(), type));
   }
 
   /**
@@ -663,7 +692,7 @@ public class Organization extends PartyBase implements Serializable {
    * organization.
    *
    * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax
-   *                                residence for the organization
+   *     residence for the organization
    */
   public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
     this.countriesOfTaxResidence =
@@ -674,7 +703,7 @@ public class Organization extends PartyBase implements Serializable {
    * Set the optional code for the single country of tax residence for the organization.
    *
    * @param countryOfTaxResidence the optional code for the single country of tax residence for the
-   *                              organization
+   *     organization
    */
   @JsonIgnore
   public void setCountryOfTaxResidence(String countryOfTaxResidence) {
@@ -689,6 +718,16 @@ public class Organization extends PartyBase implements Serializable {
   @Override
   public void setId(UUID id) {
     super.setId(id);
+  }
+
+  /**
+   * Set the identity documents for the organization.
+   *
+   * @param identityDocuments the identity documents for the organization
+   */
+  public void setIdentityDocuments(Set<IdentityDocument> identityDocuments) {
+    this.identityDocuments.clear();
+    this.identityDocuments.addAll(identityDocuments);
   }
 
   /**
@@ -746,7 +785,7 @@ public class Organization extends PartyBase implements Serializable {
    * with.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organization is
-   *                 associated with
+   *     associated with
    */
   public void setTenantId(UUID tenantId) {
     super.setTenantId(tenantId);

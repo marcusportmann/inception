@@ -16,7 +16,7 @@
 
 package digital.inception.party.constraints;
 
-import digital.inception.party.IPartyService;
+import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressType;
 import digital.inception.reference.IReferenceService;
@@ -37,20 +37,19 @@ import org.springframework.util.StringUtils;
 public class ValidPhysicalAddressValidator
     implements ConstraintValidator<ValidPhysicalAddress, PhysicalAddress> {
 
-  private final IPartyService partyService;
+  private final IPartyReferenceService partyReferenceService;
 
   private final IReferenceService referenceService;
 
   @Autowired
   public ValidPhysicalAddressValidator(
-      IPartyService partyService, IReferenceService referenceService) {
-    this.partyService = partyService;
+      IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
+    this.partyReferenceService = partyReferenceService;
     this.referenceService = referenceService;
   }
 
   @Override
-  public void initialize(ValidPhysicalAddress constraintAnnotation) {
-  }
+  public void initialize(ValidPhysicalAddress constraintAnnotation) {}
 
   @Override
   public boolean isValid(
@@ -94,7 +93,7 @@ public class ValidPhysicalAddressValidator
         constraintValidatorContext.unwrap(HibernateConstraintValidatorContext.class);
 
     try {
-      if (!partyService.isValidPhysicalAddressType(physicalAddress.getType())) {
+      if (!partyReferenceService.isValidPhysicalAddressType(physicalAddress.getType())) {
         hibernateConstraintValidatorContext
             .addMessageParameter("type", physicalAddress.getType())
             .buildConstraintViolationWithTemplate(
@@ -104,7 +103,7 @@ public class ValidPhysicalAddressValidator
         isValid = false;
       } else {
         switch (physicalAddress.getType()) {
-          // Validate a building address
+            // Validate a building address
           case PhysicalAddressType.BUILDING:
             if (!StringUtils.hasText(physicalAddress.getBuildingName())) {
               hibernateConstraintValidatorContext
@@ -133,7 +132,7 @@ public class ValidPhysicalAddressValidator
               isValid = false;
             }
             break;
-          // Validate a complex address
+            // Validate a complex address
           case PhysicalAddressType.COMPLEX:
             if (!StringUtils.hasText(physicalAddress.getCity())) {
               hibernateConstraintValidatorContext
@@ -171,7 +170,7 @@ public class ValidPhysicalAddressValidator
               isValid = false;
             }
             break;
-          // Validate a farm address
+            // Validate a farm address
           case PhysicalAddressType.FARM:
             if (!StringUtils.hasText(physicalAddress.getFarmNumber())) {
               hibernateConstraintValidatorContext
@@ -182,7 +181,7 @@ public class ValidPhysicalAddressValidator
               isValid = false;
             }
             break;
-          // Validate an international address
+            // Validate an international address
           case PhysicalAddressType.INTERNATIONAL:
             if (!StringUtils.hasText(physicalAddress.getLine1())) {
               hibernateConstraintValidatorContext
@@ -220,7 +219,7 @@ public class ValidPhysicalAddressValidator
               isValid = false;
             }
             break;
-          // Validate a postal address
+            // Validate a postal address
           case PhysicalAddressType.POSTAL:
             if (!StringUtils.hasText(physicalAddress.getLine1())) {
               hibernateConstraintValidatorContext
@@ -249,7 +248,7 @@ public class ValidPhysicalAddressValidator
               isValid = false;
             }
             break;
-          // Validate a site address
+            // Validate a site address
           case PhysicalAddressType.SITE:
             if (!StringUtils.hasText(physicalAddress.getCity())) {
               hibernateConstraintValidatorContext
@@ -278,7 +277,7 @@ public class ValidPhysicalAddressValidator
               isValid = false;
             }
             break;
-          // Validate a street address
+            // Validate a street address
           case PhysicalAddressType.STREET:
             if (!StringUtils.hasText(physicalAddress.getCity())) {
               hibernateConstraintValidatorContext
@@ -307,7 +306,7 @@ public class ValidPhysicalAddressValidator
             //        isValid = false;
             //      }
             break;
-          // Validate an unstructured address
+            // Validate an unstructured address
           case PhysicalAddressType.UNSTRUCTURED:
             if (!StringUtils.hasText(physicalAddress.getLine1())) {
               hibernateConstraintValidatorContext
@@ -534,6 +533,27 @@ public class ValidPhysicalAddressValidator
 
           isValid = false;
         }
+      }
+      for (String purpose : physicalAddress.getPurposes()) {
+        if (!partyReferenceService.isValidPhysicalAddressPurpose(purpose)) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("purpose", physicalAddress.getType())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPhysicalAddress.invalidPurposeCode.message}")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+      }
+
+      if (!partyReferenceService.isValidPhysicalAddressRole(physicalAddress.getRole())) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("role", physicalAddress.getType())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.party.constraints.ValidPhysicalAddress.invalidRoleCode.message}")
+            .addConstraintViolation();
+
+        isValid = false;
       }
     } catch (Throwable e) {
       throw new ValidationException("Failed to validate the physical address", e);

@@ -41,46 +41,61 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>IdentityDocumentType</b> class holds the information for an identity document type.
+ * The <b>PhysicalAddressRole</b> class holds the information for a physical address role.
  *
  * @author Marcus Portmann
  */
-@Schema(
-    description =
-        "A type of legal document which may be used to verify aspects of a party's identity")
+@Schema(description = "A physical address role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "code",
-  "localeId",
-  "sortIndex",
-  "name",
-  "description",
-  "countryOfIssue",
-  "partyTypes"
-})
-@XmlRootElement(name = "IdentityDocumentType", namespace = "http://inception.digital/party")
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
+@XmlRootElement(name = "PhysicalAddressRole", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "IdentityDocumentType",
+    name = "PhysicalAddressRole",
     namespace = "http://inception.digital/party",
-    propOrder = {
-      "code",
-      "localeId",
-      "sortIndex",
-      "name",
-      "description",
-      "countryOfIssue",
-      "partyTypes"
-    })
+    propOrder = {"code", "localeId", "partyTypes", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "identity_document_types")
-@IdClass(IdentityDocumentTypeId.class)
-public class IdentityDocumentType implements Serializable {
+@Table(schema = "party", name = "physical_address_roles")
+@IdClass(PhysicalAddressRoleId.class)
+public class PhysicalAddressRole implements Serializable {
+
+  /** The physical address role code for a business address. */
+  public static final String BUSINESS = "business";
+
+  /** The physical address role code for a home address. */
+  public static final String HOME = "home";
+
+  /** The physical address role code for a main address. */
+  public static final String MAIN = "main";
+
+  /** The physical address role code for a permanent address. */
+  public static final String PERMANENT = "permanent";
+
+  /** The physical address role code for a postal address. */
+  public static final String POSTAL = "postal";
+
+  /** The physical address role code for a registered office address. */
+  public static final String REGISTERED_OFFICE = "registered_office";
+
+  /** The physical address role code for a residential address. */
+  public static final String RESIDENTIAL = "residential";
+
+  /** The physical address role code for a service address. */
+  public static final String SERVICE = "service";
+
+  /** The physical address role code for a sole trader address. */
+  public static final String SOLE_TRADER = "sole_trader";
+
+  /** The physical address role code for a temporary address. */
+  public static final String TEMPORARY = "temporary";
+
+  /** The physical address role code for a work address. */
+  public static final String WORK = "work";
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the identity document type. */
-  @Schema(description = "The code for the identity document type", required = true)
+  /** The code for the physical address role. */
+  @Schema(description = "The code for the physical address role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -89,19 +104,8 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The optional code for the country of issue for the identity document type. */
-  @Schema(
-      description = "The optional code for the country of issue for the identity document type",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "CountryOfIssue", required = true)
-  @NotNull
-  @Size(min = 1, max = 30)
-  @Column(name = "country_of_issue", length = 30, nullable = false)
-  private String countryOfIssue;
-
-  /** The description for the identity document type. */
-  @Schema(description = "The description for the identity document type", required = true)
+  /** The description for the physical address role. */
+  @Schema(description = "The description for the physical address role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -109,9 +113,9 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the identity document type. */
+  /** The Unicode locale identifier for the physical address role. */
   @Schema(
-      description = "The Unicode locale identifier for the identity document type",
+      description = "The Unicode locale identifier for the physical address role",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
@@ -121,8 +125,8 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the identity document type. */
-  @Schema(description = "The name of the identity document type", required = true)
+  /** The name of the physical address role. */
+  @Schema(description = "The name of the physical address role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -130,9 +134,7 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /**
-   * The comma-delimited codes for the party types the identity document type is associated with.
-   */
+  /** The comma-delimited codes for the party types the physical address role is associated with. */
   @JsonIgnore
   @XmlTransient
   @NotNull
@@ -140,16 +142,16 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
 
-  /** The sort index for the identity document type. */
-  @Schema(description = "The sort index for the identity document type", required = true)
+  /** The sort index for the physical address role. */
+  @Schema(description = "The sort index for the physical address role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>IdentityDocumentType</b>. */
-  public IdentityDocumentType() {}
+  /** Constructs a new <b>PhysicalAddressRole</b>. */
+  public PhysicalAddressRole() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -171,63 +173,54 @@ public class IdentityDocumentType implements Serializable {
       return false;
     }
 
-    IdentityDocumentType other = (IdentityDocumentType) object;
+    PhysicalAddressRole other = (PhysicalAddressRole) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the identity document type.
+   * Returns the code for the physical address role.
    *
-   * @return the code for the identity document type
+   * @return the code for the physical address role
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the optional code for the country of issue for the identity document type.
+   * Returns the description for the physical address role.
    *
-   * @return the optional code for the country of issue for the identity document type
-   */
-  public String getCountryOfIssue() {
-    return countryOfIssue;
-  }
-
-  /**
-   * Returns the description for the identity document type.
-   *
-   * @return the description for the identity document type
+   * @return the description for the physical address role
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the identity document type.
+   * Returns the Unicode locale identifier for the physical address role.
    *
-   * @return the Unicode locale identifier for the identity document type
+   * @return the Unicode locale identifier for the physical address role
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the identity document type.
+   * Returns the name of the physical address role.
    *
-   * @return the name of the identity document type
+   * @return the name of the physical address role
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the codes for the party types the identity document type is associated with.
+   * Returns the codes for the party types the physical address role is associated with.
    *
-   * @return the codes for the party types the identity document type is associated with
+   * @return the codes for the party types the physical address role is associated with
    */
   @Schema(
-      description = "The codes for the party types the identity document type is associated with",
+      description = "The codes for the party types the physical address role is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "PartyTypes", required = true)
@@ -236,9 +229,9 @@ public class IdentityDocumentType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the identity document type.
+   * Returns the sort index for the physical address role.
    *
-   * @return the sort index for the identity document type
+   * @return the sort index for the physical address role
    */
   public Integer getSortIndex() {
     return sortIndex;
@@ -255,10 +248,10 @@ public class IdentityDocumentType implements Serializable {
   }
 
   /**
-   * Returns whether the identity document type is valid for the party type.
+   * Returns whether the physical address role is valid for the party type.
    *
    * @param partyTypeCode the party type code
-   * @return <b>true</b> if the identity document type is valid for the party type or <b>false</b>
+   * @return <b>true</b> if the physical address role is valid for the party type or <b>false</b>
    *     otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
@@ -267,63 +260,54 @@ public class IdentityDocumentType implements Serializable {
   }
 
   /**
-   * Set the code for the identity document type.
+   * Set the code for the physical address role.
    *
-   * @param code the code for the identity document type
+   * @param code the code for the physical address role
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the optional code for the country of issue for the identity document type.
+   * Set the description for the physical address role.
    *
-   * @param countryOfIssue the optional code for the country of issue for the identity document type
-   */
-  public void setCountryOfIssue(String countryOfIssue) {
-    this.countryOfIssue = countryOfIssue;
-  }
-
-  /**
-   * Set the description for the identity document type.
-   *
-   * @param description the description for the identity document type
+   * @param description the description for the physical address role
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the identity document type.
+   * Set the Unicode locale identifier for the physical address role.
    *
-   * @param localeId the Unicode locale identifier for the identity document type
+   * @param localeId the Unicode locale identifier for the physical address role
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the identity document type.
+   * Set the name of the physical address role.
    *
-   * @param name the name of the identity document type
+   * @param name the name of the physical address role
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the codes for the party types the identity document type is associated with.
+   * Set the codes for the party types the physical address role is associated with.
    *
-   * @param partyTypes the codes for the party types the identity document type is associated with
+   * @param partyTypes the codes for the party types the physical address role is associated with
    */
   public void setPartyTypes(String[] partyTypes) {
     this.partyTypes = StringUtils.arrayToCommaDelimitedString(partyTypes);
   }
 
   /**
-   * Set the codes for the party types the identity document type is associated with.
+   * Set the codes for the party types the physical address role is associated with.
    *
-   * @param partyTypes the codes for the party types the identity document type is associated with
+   * @param partyTypes the codes for the party types the physical address role is associated with
    */
   @JsonIgnore
   public void setPartyTypes(Collection<String> partyTypes) {
@@ -331,9 +315,9 @@ public class IdentityDocumentType implements Serializable {
   }
 
   /**
-   * Set the sort index for the identity document type.
+   * Set the sort index for the physical address role.
    *
-   * @param sortIndex the sort index for the identity document type
+   * @param sortIndex the sort index for the physical address role
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

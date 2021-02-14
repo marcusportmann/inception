@@ -48,8 +48,8 @@ import org.springframework.web.bind.annotation.RestController;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class PartyReferenceApi extends SecureApi {
 
-  /** The Party Service. */
-  private final IPartyService partyService;
+  /** The Party Reference Service. */
+  private final IPartyReferenceService partyReferenceService;
 
   /** The Reference Service. */
   private final IReferenceService referenceService;
@@ -57,11 +57,12 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Constructs a new <b>PartyReferenceRestController</b>.
    *
-   * @param partyService the Party Service
+   * @param partyReferenceService the Party Reference Service
    * @param referenceService the Reference Service
    */
-  public PartyReferenceApi(IPartyService partyService, IReferenceService referenceService) {
-    this.partyService = partyService;
+  public PartyReferenceApi(
+      IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
+    this.partyReferenceService = partyReferenceService;
     this.referenceService = referenceService;
   }
 
@@ -102,7 +103,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getContactMechanismPurposes(localeId);
+    return partyReferenceService.getContactMechanismPurposes(localeId);
   }
 
   /**
@@ -142,7 +143,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getContactMechanismTypes(localeId);
+    return partyReferenceService.getContactMechanismTypes(localeId);
   }
 
   /**
@@ -182,7 +183,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getEmploymentStatuses(localeId);
+    return partyReferenceService.getEmploymentStatuses(localeId);
   }
 
   /**
@@ -222,7 +223,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getEmploymentTypes(localeId);
+    return partyReferenceService.getEmploymentTypes(localeId);
   }
 
   /**
@@ -257,7 +258,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getGenders(localeId);
+    return partyReferenceService.getGenders(localeId);
   }
 
   /**
@@ -297,7 +298,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getIdentityDocumentTypes(localeId);
+    return partyReferenceService.getIdentityDocumentTypes(localeId);
   }
 
   /**
@@ -337,7 +338,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getMaritalStatuses(localeId);
+    return partyReferenceService.getMaritalStatuses(localeId);
   }
 
   /**
@@ -375,7 +376,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getMarriageTypes(localeId);
+    return partyReferenceService.getMarriageTypes(localeId);
   }
 
   /**
@@ -415,7 +416,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getNextOfKinTypes(localeId);
+    return partyReferenceService.getNextOfKinTypes(localeId);
   }
 
   /**
@@ -450,7 +451,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getOccupations(localeId);
+    return partyReferenceService.getOccupations(localeId);
   }
 
   /**
@@ -491,7 +492,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getPartyAttributeTypeCategories(localeId);
+    return partyReferenceService.getPartyAttributeTypeCategories(localeId);
   }
 
   /**
@@ -531,7 +532,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getPartyAttributeTypes(localeId);
+    return partyReferenceService.getPartyAttributeTypes(localeId);
   }
 
   /**
@@ -571,7 +572,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getPartyRolePurposes(localeId);
+    return partyReferenceService.getPartyRolePurposes(localeId);
   }
 
   /**
@@ -611,13 +612,13 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getPartyRoleTypes(localeId);
+    return partyReferenceService.getPartyRoleTypes(localeId);
   }
 
   /**
    * Retrieve the physical address purposes.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     purposes for or <b>null</b> to retrieve the physical address purposes for all locales
    * @return the physical address purposes
    */
@@ -651,13 +652,53 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getPhysicalAddressPurposes(localeId);
+    return partyReferenceService.getPhysicalAddressPurposes(localeId);
+  }
+
+  /**
+   * Retrieve the physical address roles.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
+   *     roles for or <b>null</b> to retrieve the physical address roles for all locales
+   * @return the physical address roles
+   */
+  @Operation(
+      summary = "Retrieve the physical address roles",
+      description = "Retrieve the physical address roles")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/physical-address-roles",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<PhysicalAddressRole> getPhysicalAddressRoles(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the physical address roles for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getPhysicalAddressRoles(localeId);
   }
 
   /**
    * Retrieve the physical address types.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     types for or <b>null</b> to retrieve the physical address types for all locales
    * @return the physical address types
    */
@@ -691,7 +732,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getPhysicalAddressTypes(localeId);
+    return partyReferenceService.getPhysicalAddressTypes(localeId);
   }
 
   /**
@@ -731,7 +772,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getPreferenceTypeCategories(localeId);
+    return partyReferenceService.getPreferenceTypeCategories(localeId);
   }
 
   /**
@@ -771,7 +812,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getPreferenceTypes(localeId);
+    return partyReferenceService.getPreferenceTypes(localeId);
   }
 
   /**
@@ -806,7 +847,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getRaces(localeId);
+    return partyReferenceService.getRaces(localeId);
   }
 
   /**
@@ -846,7 +887,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getResidencePermitTypes(localeId);
+    return partyReferenceService.getResidencePermitTypes(localeId);
   }
 
   /**
@@ -886,7 +927,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getResidencyStatuses(localeId);
+    return partyReferenceService.getResidencyStatuses(localeId);
   }
 
   /**
@@ -926,7 +967,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getResidentialTypes(localeId);
+    return partyReferenceService.getResidentialTypes(localeId);
   }
 
   /**
@@ -966,7 +1007,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getSourcesOfFunds(localeId);
+    return partyReferenceService.getSourcesOfFunds(localeId);
   }
 
   /**
@@ -1006,7 +1047,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getTaxNumberTypes(localeId);
+    return partyReferenceService.getTaxNumberTypes(localeId);
   }
 
   /**
@@ -1046,7 +1087,7 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getTimesToContact(localeId);
+    return partyReferenceService.getTimesToContact(localeId);
   }
 
   /**
@@ -1081,6 +1122,6 @@ public class PartyReferenceApi extends SecureApi {
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyService.getTitles(localeId);
+    return partyReferenceService.getTitles(localeId);
   }
 }

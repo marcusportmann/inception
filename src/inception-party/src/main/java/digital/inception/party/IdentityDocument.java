@@ -71,9 +71,7 @@ public class IdentityDocument implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ISO 3166-1 alpha-2 code for the country of issue for the identity document.
-   */
+  /** The ISO 3166-1 alpha-2 code for the country of issue for the identity document. */
   @Schema(
       description =
           "The ISO 3166-1 alpha-2 code for the country of issue for the identity document",
@@ -86,18 +84,14 @@ public class IdentityDocument implements Serializable {
   @Column(name = "country_of_issue", length = 2, nullable = false)
   private String countryOfIssue;
 
-  /**
-   * The date and time the identity document was created.
-   */
+  /** The date and time the identity document was created. */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /**
-   * The optional date of expiry for the identity document.
-   */
+  /** The optional date of expiry for the identity document. */
   @Schema(description = "The optional date of expiry for the identity document")
   @JsonProperty
   @XmlElement(name = "DateOfExpiry")
@@ -106,9 +100,7 @@ public class IdentityDocument implements Serializable {
   @Column(name = "date_of_expiry")
   private LocalDate dateOfExpiry;
 
-  /**
-   * The date of issue for the identity document.
-   */
+  /** The date of issue for the identity document. */
   @Schema(description = "The date of issue for the identity document", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "DateOfIssue", required = true)
@@ -119,9 +111,7 @@ public class IdentityDocument implements Serializable {
   @Column(name = "date_of_issue", nullable = false)
   private LocalDate dateOfIssue;
 
-  /**
-   * The number for the identity document.
-   */
+  /** The number for the identity document. */
   @Schema(description = "The number for the identity document", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Number", required = true)
@@ -130,9 +120,7 @@ public class IdentityDocument implements Serializable {
   @Column(name = "number", length = 30, nullable = false)
   private String number;
 
-  /**
-   * The party the identity document is associated with.
-   */
+  /** The party the identity document is associated with. */
   @Schema(hidden = true)
   @JsonBackReference("identityDocumentReference")
   @XmlTransient
@@ -141,9 +129,7 @@ public class IdentityDocument implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /**
-   * The code for the identity document type.
-   */
+  /** The code for the identity document type. */
   @Schema(description = "The code for the identity document type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
@@ -153,29 +139,24 @@ public class IdentityDocument implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /**
-   * The date and time the identity document was last updated.
-   */
+  /** The date and time the identity document was last updated. */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /**
-   * Constructs a new <b>IdentityDocument</b>.
-   */
-  public IdentityDocument() {
-  }
+  /** Constructs a new <b>IdentityDocument</b>. */
+  public IdentityDocument() {}
 
   /**
    * Constructs a new <b>IdentityDocument</b>.
    *
-   * @param type           the code for the identity document type
+   * @param type the code for the identity document type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity
-   *                       document
-   * @param dateOfIssue    the date of issue for the identity document
-   * @param number         the number for the identity document
+   *     document
+   * @param dateOfIssue the date of issue for the identity document
+   * @param number the number for the identity document
    */
   public IdentityDocument(
       String type, String countryOfIssue, LocalDate dateOfIssue, String number) {
@@ -188,12 +169,12 @@ public class IdentityDocument implements Serializable {
   /**
    * Constructs a new <b>IdentityDocument</b>.
    *
-   * @param type           the code for the identity document type
+   * @param type the code for the identity document type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity
-   *                       document
-   * @param dateOfIssue    the date of issue for the identity document
-   * @param dateOfExpiry   the optional date of expiry for the identity document
-   * @param number         thge number for the identity document
+   *     document
+   * @param dateOfIssue the date of issue for the identity document
+   * @param dateOfExpiry the optional date of expiry for the identity document
+   * @param number thge number for the identity document
    */
   public IdentityDocument(
       String type,
@@ -212,7 +193,6 @@ public class IdentityDocument implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -327,7 +307,7 @@ public class IdentityDocument implements Serializable {
    * Set the ISO 3166-1 alpha-2 code for the country of issue for the identity document.
    *
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity
-   *                       document
+   *     document
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;

@@ -29,27 +29,19 @@ public class PreferenceId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the party the preference is associated with.
-   */
+  /** The Universally Unique Identifier (UUID) for the party the preference is associated with. */
   private UUID party;
 
-  /**
-   * The code for the preference type.
-   */
+  /** The code for the preference type. */
   private String type;
 
-  /**
-   * Constructs a new <b>PreferenceId</b>.
-   */
-  public PreferenceId() {
-  }
+  /** Constructs a new <b>PreferenceId</b>. */
+  public PreferenceId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

@@ -48,13 +48,13 @@ import org.springframework.util.StringUtils;
 @Schema(description = "A type of party attribute")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "code",
-    "category",
-    "localeId",
-    "sortIndex",
-    "name",
-    "description",
-    "partyTypes"
+  "code",
+  "category",
+  "localeId",
+  "sortIndex",
+  "name",
+  "description",
+  "partyTypes"
 })
 @XmlRootElement(name = "PartyAttributeType", namespace = "http://inception.digital/party")
 @XmlType(
@@ -69,9 +69,7 @@ public class PartyAttributeType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the party attribute type category the party attribute type is associated with.
-   */
+  /** The code for the party attribute type category the party attribute type is associated with. */
   @Schema(
       description =
           "The code for the party attribute type category the party attribute type is associated with",
@@ -83,9 +81,7 @@ public class PartyAttributeType implements Serializable {
   @Column(name = "category", length = 30, nullable = false)
   private String category;
 
-  /**
-   * The code for the party attribute type.
-   */
+  /** The code for the party attribute type. */
   @Schema(description = "The code for the party attribute type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -95,9 +91,7 @@ public class PartyAttributeType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /**
-   * The description for the party attribute type.
-   */
+  /** The description for the party attribute type. */
   @Schema(description = "The description for the party attribute type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -106,9 +100,7 @@ public class PartyAttributeType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /**
-   * The Unicode locale identifier for the party attribute type.
-   */
+  /** The Unicode locale identifier for the party attribute type. */
   @Schema(
       description = "The Unicode locale identifier for the party attribute type",
       required = true)
@@ -120,9 +112,7 @@ public class PartyAttributeType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /**
-   * The name of the party attribute type.
-   */
+  /** The name of the party attribute type. */
   @Schema(description = "The name of the party attribute type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -131,9 +121,7 @@ public class PartyAttributeType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /**
-   * The comma-delimited codes for the party types the party attribute type is associated with.
-   */
+  /** The comma-delimited codes for the party types the party attribute type is associated with. */
   @JsonIgnore
   @XmlTransient
   @NotNull
@@ -141,9 +129,7 @@ public class PartyAttributeType implements Serializable {
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
 
-  /**
-   * The sort index for the party attribute type.
-   */
+  /** The sort index for the party attribute type. */
   @Schema(description = "The sort index for the party attribute type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -151,17 +137,13 @@ public class PartyAttributeType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /**
-   * Constructs a new <b>PartyAttributeType</b>.
-   */
-  public PartyAttributeType() {
-  }
+  /** Constructs a new <b>PartyAttributeType</b>. */
+  public PartyAttributeType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -188,7 +170,7 @@ public class PartyAttributeType implements Serializable {
    * with.
    *
    * @return the code for the party attribute type category the party attribute type is associated
-   * with
+   *     with
    */
   public String getCategory() {
     return category;
@@ -267,9 +249,8 @@ public class PartyAttributeType implements Serializable {
    * Returns whether the party attribute type is valid for the party type.
    *
    * @param partyTypeCode the party type code
-   *
    * @return <b>true</b> if the party attribute type is valid for the party type or <b>false</b>
-   * otherwise
+   *     otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     return Arrays.stream(getPartyTypes())
@@ -277,11 +258,10 @@ public class PartyAttributeType implements Serializable {
   }
 
   /**
-   * Set the code for the party attribute type category the party attribute type is associated
-   * with.
+   * Set the code for the party attribute type category the party attribute type is associated with.
    *
    * @param category the code for the party attribute type category the party attribute type is
-   *                 associated with
+   *     associated with
    */
   public void setCategory(String category) {
     this.category = category;

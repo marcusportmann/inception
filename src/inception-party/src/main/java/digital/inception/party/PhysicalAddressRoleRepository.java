@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-@javax.xml.bind.annotation.XmlSchema(
-    namespace = "http://inception.digital/party",
-    elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
-    xmlns = {
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "core",
-          namespaceURI = "http://inception.digital/core"),
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "party",
-          namespaceURI = "http://inception.digital/party"),
-    })
 package digital.inception.party;
+
+import java.util.List;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+/**
+ * The <b>PhysicalAddressRoleRepository</b> interface declares the repository for the
+ * <b>PhysicalAddressRole</b> domain type.
+ *
+ * @author Marcus Portmann
+ */
+public interface PhysicalAddressRoleRepository
+    extends JpaRepository<PhysicalAddressRole, PhysicalAddressRoleId> {
+
+  List<PhysicalAddressRole> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+}

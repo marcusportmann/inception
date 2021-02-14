@@ -21,8 +21,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>ContactMechanismSubTypeRepository</b> interface declares the repository for the <b>
- * ContactMechanismSubType</b> domain type.
+ * The <b>ContactMechanismPurposeRepository</b> interface declares the repository for the <b>
+ * ContactMechanismPurpose</b> domain type.
  *
  * @author Marcus Portmann
  */

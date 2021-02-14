@@ -30,26 +30,19 @@ public class PreferenceTypeCategoryId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the preference type category.
-   */
+  /** The code for the preference type category. */
   private String code;
 
-  /**
-   * The Unicode locale identifier for the preference type category.
-   */
+  /** The Unicode locale identifier for the preference type category. */
   private String localeId;
 
-  /**
-   * Constructs a new <b>PreferenceTypeCategoryId</b>.
-   */
-  public PreferenceTypeCategoryId() {
-  }
+  /** Constructs a new <b>PreferenceTypeCategoryId</b>. */
+  public PreferenceTypeCategoryId() {}
 
   /**
    * Constructs a new <b>PreferenceTypeCategoryId</b>.
    *
-   * @param code     the code for the preference type category
+   * @param code the code for the preference type category
    * @param localeId the Unicode locale identifier for the preference type category
    */
   public PreferenceTypeCategoryId(String code, String localeId) {
@@ -61,7 +54,6 @@ public class PreferenceTypeCategoryId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

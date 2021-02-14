@@ -58,9 +58,7 @@ public class Race implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the race.
-   */
+  /** The code for the race. */
   @Schema(description = "The code for the race", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -70,9 +68,7 @@ public class Race implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /**
-   * The description for the race.
-   */
+  /** The description for the race. */
   @Schema(description = "The description for the race", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -81,9 +77,7 @@ public class Race implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /**
-   * The Unicode locale identifier for the race.
-   */
+  /** The Unicode locale identifier for the race. */
   @Schema(description = "The Unicode locale identifier for the race", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
@@ -93,9 +87,7 @@ public class Race implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /**
-   * The name of the race.
-   */
+  /** The name of the race. */
   @Schema(description = "The name of the race", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -104,9 +96,7 @@ public class Race implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /**
-   * The sort index for the race.
-   */
+  /** The sort index for the race. */
   @Schema(description = "The sort index for the race", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -114,17 +104,13 @@ public class Race implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /**
-   * Constructs a new <b>Race</b>.
-   */
-  public Race() {
-  }
+  /** Constructs a new <b>Race</b>. */
+  public Race() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

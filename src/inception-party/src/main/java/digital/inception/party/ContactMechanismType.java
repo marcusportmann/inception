@@ -54,36 +54,24 @@ import javax.xml.bind.annotation.XmlType;
 @IdClass(ContactMechanismTypeId.class)
 public class ContactMechanismType implements Serializable {
 
-  /**
-   * The contact mechanism type code for an e-mail address.
-   */
+  /** The contact mechanism type code for an e-mail address. */
   public static final String EMAIL_ADDRESS = "email_address";
 
-  /**
-   * The contact mechanism type code for a fax number.
-   */
+  /** The contact mechanism type code for a fax number. */
   public static final String FAX_NUMBER = "fax_number";
 
-  /**
-   * The contact mechanism type code for a mobile number.
-   */
+  /** The contact mechanism type code for a mobile number. */
   public static final String MOBILE_NUMBER = "mobile_number";
 
-  /**
-   * The contact mechanism type code for a phone number.
-   */
+  /** The contact mechanism type code for a phone number. */
   public static final String PHONE_NUMBER = "phone_number";
 
-  /**
-   * The contact mechanism type code for a social media identifier.
-   */
+  /** The contact mechanism type code for a social media identifier. */
   public static final String SOCIAL_MEDIA = "social_media";
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the contact mechanism type.
-   */
+  /** The code for the contact mechanism type. */
   @Schema(description = "The code for the contact mechanism type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -93,9 +81,7 @@ public class ContactMechanismType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /**
-   * The description for the contact mechanism type.
-   */
+  /** The description for the contact mechanism type. */
   @Schema(description = "The description for the contact mechanism type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -104,9 +90,7 @@ public class ContactMechanismType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /**
-   * The Unicode locale identifier for the contact mechanism type.
-   */
+  /** The Unicode locale identifier for the contact mechanism type. */
   @Schema(
       description = "The Unicode locale identifier for the contact mechanism type",
       required = true)
@@ -118,9 +102,7 @@ public class ContactMechanismType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /**
-   * The name of the contact mechanism type.
-   */
+  /** The name of the contact mechanism type. */
   @Schema(description = "The name of the contact mechanism type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -129,9 +111,7 @@ public class ContactMechanismType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /**
-   * The plural for the contact mechanism type.
-   */
+  /** The plural for the contact mechanism type. */
   @Schema(description = "The plural for the contact mechanism type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Plural", required = true)
@@ -140,9 +120,7 @@ public class ContactMechanismType implements Serializable {
   @Column(name = "plural", length = 50, nullable = false)
   private String plural;
 
-  /**
-   * The sort index for the contact mechanism type.
-   */
+  /** The sort index for the contact mechanism type. */
   @Schema(description = "The sort index for the contact mechanism type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -150,17 +128,13 @@ public class ContactMechanismType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /**
-   * Constructs a new <b>ContactMechanismType</b>.
-   */
-  public ContactMechanismType() {
-  }
+  /** Constructs a new <b>ContactMechanismType</b>. */
+  public ContactMechanismType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

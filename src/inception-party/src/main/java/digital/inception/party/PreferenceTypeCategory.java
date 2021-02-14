@@ -56,9 +56,7 @@ public class PreferenceTypeCategory implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the preference type category.
-   */
+  /** The code for the preference type category. */
   @Schema(description = "The code for the preference type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -68,9 +66,7 @@ public class PreferenceTypeCategory implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /**
-   * The description for the preference type category.
-   */
+  /** The description for the preference type category. */
   @Schema(description = "The description for the preference type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -79,9 +75,7 @@ public class PreferenceTypeCategory implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /**
-   * The Unicode locale identifier for the preference type category.
-   */
+  /** The Unicode locale identifier for the preference type category. */
   @Schema(
       description = "The Unicode locale identifier for the preference type category",
       required = true)
@@ -93,9 +87,7 @@ public class PreferenceTypeCategory implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /**
-   * The name of the preference type category.
-   */
+  /** The name of the preference type category. */
   @Schema(description = "The name of the preference type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -104,9 +96,7 @@ public class PreferenceTypeCategory implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /**
-   * The sort index for the preference type category.
-   */
+  /** The sort index for the preference type category. */
   @Schema(description = "The sort index for the preference type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -114,17 +104,13 @@ public class PreferenceTypeCategory implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /**
-   * Constructs a new <b>PreferenceTypeCategory</b>.
-   */
-  public PreferenceTypeCategory() {
-  }
+  /** Constructs a new <b>PreferenceTypeCategory</b>. */
+  public PreferenceTypeCategory() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

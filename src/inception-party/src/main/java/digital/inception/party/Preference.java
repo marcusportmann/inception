@@ -65,18 +65,14 @@ public class Preference implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The date and time the preference was created.
-   */
+  /** The date and time the preference was created. */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /**
-   * The party the preference is associated with.
-   */
+  /** The party the preference is associated with. */
   @Schema(hidden = true)
   @JsonBackReference("preferenceReference")
   @XmlTransient
@@ -85,9 +81,7 @@ public class Preference implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /**
-   * The code for the preference type.
-   */
+  /** The code for the preference type. */
   @Schema(description = "The code for the preference type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
@@ -97,18 +91,14 @@ public class Preference implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /**
-   * The date and time the preference was last updated.
-   */
+  /** The date and time the preference was last updated. */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /**
-   * The value for the preference.
-   */
+  /** The value for the preference. */
   @Schema(description = "The value for the preference", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
@@ -117,16 +107,13 @@ public class Preference implements Serializable {
   @Column(name = "value", length = 200, nullable = false)
   private String value;
 
-  /**
-   * Constructs a new <b>Preference</b>.
-   */
-  public Preference() {
-  }
+  /** Constructs a new <b>Preference</b>. */
+  public Preference() {}
 
   /**
    * Constructs a new <b>Preference</b>.
    *
-   * @param type  the preference type
+   * @param type the preference type
    * @param value the value for the preference
    */
   public Preference(String type, String value) {
@@ -138,7 +125,6 @@ public class Preference implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

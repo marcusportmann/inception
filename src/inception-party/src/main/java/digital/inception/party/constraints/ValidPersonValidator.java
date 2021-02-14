@@ -17,10 +17,9 @@
 package digital.inception.party.constraints;
 
 import digital.inception.party.ContactMechanism;
-import digital.inception.party.IPartyService;
+import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyRole;
-import digital.inception.party.PartyType;
 import digital.inception.party.Person;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.Preference;
@@ -41,19 +40,19 @@ import org.springframework.util.StringUtils;
  */
 public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Person> {
 
-  private final IPartyService partyService;
+  private final IPartyReferenceService partyService;
 
   private final IReferenceService referenceService;
 
   @Autowired
-  public ValidPersonValidator(IPartyService partyService, IReferenceService referenceService) {
-    this.partyService = partyService;
+  public ValidPersonValidator(
+      IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
+    this.partyService = partyReferenceService;
     this.referenceService = referenceService;
   }
 
   @Override
-  public void initialize(ValidPerson constraintAnnotation) {
-  }
+  public void initialize(ValidPerson constraintAnnotation) {}
 
   @Override
   public boolean isValid(Person person, ConstraintValidatorContext constraintValidatorContext) {
@@ -147,7 +146,7 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
       // Validate employment type
       if (StringUtils.hasText(person.getEmploymentType())
           && (!partyService.isValidEmploymentType(
-          person.getEmploymentStatus(), person.getEmploymentType()))) {
+              person.getEmploymentStatus(), person.getEmploymentType()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("employmentType", person.getEmploymentType())
             .buildConstraintViolationWithTemplate(
@@ -194,7 +193,7 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
         }
 
         if (!partyService.isValidIdentityDocumentType(
-            PartyType.PERSON.code(), identityDocument.getType())) {
+            person.getPartyType().code(), identityDocument.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", identityDocument.getType())
               .buildConstraintViolationWithTemplate(
@@ -243,7 +242,7 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
 
       // Validate party roles
       for (PartyRole partyRole : person.getRoles()) {
-        if (!partyService.isValidPartyRoleType(PartyType.PERSON.code(), partyRole.getType())) {
+        if (!partyService.isValidPartyRoleType(person.getPartyType().code(), partyRole.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", partyRole.getType())
               .buildConstraintViolationWithTemplate(
@@ -256,6 +255,18 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
 
       // Validate physical addresses
       for (PhysicalAddress physicalAddress : person.getPhysicalAddresses()) {
+        if (!partyService.isValidPhysicalAddressRole(
+            person.getPartyType().code(), physicalAddress.getRole())) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("physicalAddressRole", physicalAddress.getRole())
+              .addMessageParameter("partyType", person.getPartyType().code())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPerson.invalidPhysicalAddressRoleCodeForPartyType.message}")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+
         for (String physicalAddressPurpose : physicalAddress.getPurposes()) {
           if (!partyService.isValidPhysicalAddressPurpose(
               person.getPartyType().code(), physicalAddressPurpose)) {
@@ -273,7 +284,8 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
 
       // Validate preferences
       for (Preference preference : person.getPreferences()) {
-        if (!partyService.isValidPreferenceType(PartyType.PERSON.code(), preference.getType())) {
+        if (!partyService.isValidPreferenceType(
+            person.getPartyType().code(), preference.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", preference.getType())
               .buildConstraintViolationWithTemplate(

@@ -54,51 +54,33 @@ import javax.xml.bind.annotation.XmlType;
 @IdClass(PhysicalAddressTypeId.class)
 public class PhysicalAddressType implements Serializable {
 
-  /**
-   * The physical address type code for a building address.
-   */
+  /** The physical address type code for a building address. */
   public static final String BUILDING = "building";
 
-  /**
-   * The physical address type code for a complex address.
-   */
+  /** The physical address type code for a complex address. */
   public static final String COMPLEX = "complex";
 
-  /**
-   * The physical address type code for a farm address.
-   */
+  /** The physical address type code for a farm address. */
   public static final String FARM = "farm";
 
-  /**
-   * The physical address type code for an international address.
-   */
+  /** The physical address type code for an international address. */
   public static final String INTERNATIONAL = "international";
 
-  /**
-   * The physical address type code for a postal address.
-   */
+  /** The physical address type code for a postal address. */
   public static final String POSTAL = "postal";
 
-  /**
-   * The physical address type code for a site address.
-   */
+  /** The physical address type code for a site address. */
   public static final String SITE = "site";
 
-  /**
-   * The physical address type code for a street address.
-   */
+  /** The physical address type code for a street address. */
   public static final String STREET = "street";
 
-  /**
-   * The physical address type code for an unstructured address.
-   */
+  /** The physical address type code for an unstructured address. */
   public static final String UNSTRUCTURED = "unstructured";
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the physical address type.
-   */
+  /** The code for the physical address type. */
   @Schema(description = "The code for the physical address type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -108,9 +90,7 @@ public class PhysicalAddressType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /**
-   * The description for the physical address type.
-   */
+  /** The description for the physical address type. */
   @Schema(description = "The description for the physical address type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -119,9 +99,7 @@ public class PhysicalAddressType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /**
-   * The Unicode locale identifier for the physical address type.
-   */
+  /** The Unicode locale identifier for the physical address type. */
   @Schema(
       description = "The Unicode locale identifier for the physical address type",
       required = true)
@@ -133,9 +111,7 @@ public class PhysicalAddressType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /**
-   * The name of the physical address type.
-   */
+  /** The name of the physical address type. */
   @Schema(description = "The name of the physical address type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -144,9 +120,7 @@ public class PhysicalAddressType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /**
-   * The sort index for the physical address type.
-   */
+  /** The sort index for the physical address type. */
   @Schema(description = "The sort index for the physical address type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -154,17 +128,13 @@ public class PhysicalAddressType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /**
-   * Constructs a new <b>PhysicalAddressType</b>.
-   */
-  public PhysicalAddressType() {
-  }
+  /** Constructs a new <b>PhysicalAddressType</b>. */
+  public PhysicalAddressType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

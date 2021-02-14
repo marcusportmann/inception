@@ -18,10 +18,9 @@ package digital.inception.banking.customer.constraints;
 
 import digital.inception.banking.customer.IndividualCustomer;
 import digital.inception.party.ContactMechanism;
-import digital.inception.party.IPartyService;
+import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyRole;
-import digital.inception.party.PartyType;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.Preference;
 import digital.inception.party.TaxNumber;
@@ -42,14 +41,14 @@ import org.springframework.util.StringUtils;
 public class ValidIndividualCustomerValidator
     implements ConstraintValidator<ValidIndividualCustomer, IndividualCustomer> {
 
-  private final IPartyService partyService;
+  private final IPartyReferenceService partyReferenceService;
 
   private final IReferenceService referenceService;
 
   @Autowired
   public ValidIndividualCustomerValidator(
-      IPartyService partyService, IReferenceService referenceService) {
-    this.partyService = partyService;
+      IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
+    this.partyReferenceService = partyReferenceService;
     this.referenceService = referenceService;
   }
 
@@ -72,7 +71,7 @@ public class ValidIndividualCustomerValidator
     try {
       // Validate contact mechanisms
       for (ContactMechanism contactMechanism : individualCustomer.getContactMechanisms()) {
-        if (!partyService.isValidContactMechanismType(contactMechanism.getType())) {
+        if (!partyReferenceService.isValidContactMechanismType(contactMechanism.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("contactMechanismType", contactMechanism.getType())
               .addMessageParameter("contactMechanismPurpose", contactMechanism.getPurpose())
@@ -83,7 +82,7 @@ public class ValidIndividualCustomerValidator
           isValid = false;
         }
 
-        if (!partyService.isValidContactMechanismPurpose(
+        if (!partyReferenceService.isValidContactMechanismPurpose(
             individualCustomer.getPartyType().code(),
             contactMechanism.getType(),
             contactMechanism.getPurpose())) {
@@ -138,7 +137,8 @@ public class ValidIndividualCustomerValidator
 
       // Validate employment status
       if ((!StringUtils.hasText(individualCustomer.getEmploymentStatus()))
-          || (!partyService.isValidEmploymentStatus(individualCustomer.getEmploymentStatus()))) {
+          || (!partyReferenceService.isValidEmploymentStatus(
+              individualCustomer.getEmploymentStatus()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("employmentStatus", individualCustomer.getEmploymentStatus())
             .buildConstraintViolationWithTemplate(
@@ -150,7 +150,7 @@ public class ValidIndividualCustomerValidator
 
       // Validate employment type
       if ((!StringUtils.hasText(individualCustomer.getEmploymentType()))
-          || (!partyService.isValidEmploymentType(
+          || (!partyReferenceService.isValidEmploymentType(
               individualCustomer.getEmploymentStatus(), individualCustomer.getEmploymentType()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("employmentType", individualCustomer.getEmploymentType())
@@ -163,7 +163,7 @@ public class ValidIndividualCustomerValidator
 
       // Validate gender
       if ((!StringUtils.hasText(individualCustomer.getGender()))
-          || (!partyService.isValidGender(individualCustomer.getGender()))) {
+          || (!partyReferenceService.isValidGender(individualCustomer.getGender()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("gender", individualCustomer.getGender())
             .buildConstraintViolationWithTemplate(
@@ -197,8 +197,8 @@ public class ValidIndividualCustomerValidator
           isValid = false;
         }
 
-        if (!partyService.isValidIdentityDocumentType(
-            PartyType.PERSON.code(), identityDocument.getType())) {
+        if (!partyReferenceService.isValidIdentityDocumentType(
+            individualCustomer.getPartyType().code(), identityDocument.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", identityDocument.getType())
               .buildConstraintViolationWithTemplate(
@@ -211,7 +211,7 @@ public class ValidIndividualCustomerValidator
 
       // Validate marital status
       if ((!StringUtils.hasText(individualCustomer.getMaritalStatus()))
-          || (!partyService.isValidMaritalStatus(individualCustomer.getMaritalStatus()))) {
+          || (!partyReferenceService.isValidMaritalStatus(individualCustomer.getMaritalStatus()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("maritalStatus", individualCustomer.getMaritalStatus())
             .buildConstraintViolationWithTemplate(
@@ -222,7 +222,7 @@ public class ValidIndividualCustomerValidator
       }
 
       // Validate marriage type
-      if (!partyService.isValidMarriageType(
+      if (!partyReferenceService.isValidMarriageType(
           individualCustomer.getMaritalStatus(), individualCustomer.getMarriageType())) {
         hibernateConstraintValidatorContext
             .addMessageParameter("maritalStatus", individualCustomer.getMaritalStatus())
@@ -236,7 +236,7 @@ public class ValidIndividualCustomerValidator
 
       // Validate occupation
       if ((!StringUtils.hasText(individualCustomer.getOccupation()))
-          || (!partyService.isValidOccupation(individualCustomer.getOccupation()))) {
+          || (!partyReferenceService.isValidOccupation(individualCustomer.getOccupation()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("occupation", individualCustomer.getOccupation())
             .buildConstraintViolationWithTemplate(
@@ -248,7 +248,8 @@ public class ValidIndividualCustomerValidator
 
       // Validate party roles
       for (PartyRole partyRole : individualCustomer.getRoles()) {
-        if (!partyService.isValidPartyRoleType(PartyType.PERSON.code(), partyRole.getType())) {
+        if (!partyReferenceService.isValidPartyRoleType(
+            individualCustomer.getPartyType().code(), partyRole.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", partyRole.getType())
               .buildConstraintViolationWithTemplate(
@@ -261,8 +262,20 @@ public class ValidIndividualCustomerValidator
 
       // Validate physical addresses
       for (PhysicalAddress physicalAddress : individualCustomer.getPhysicalAddresses()) {
+        if (!partyReferenceService.isValidPhysicalAddressRole(
+            individualCustomer.getPartyType().code(), physicalAddress.getRole())) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("physicalAddressRole", physicalAddress.getRole())
+              .addMessageParameter("partyType", individualCustomer.getPartyType().code())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidPhysicalAddressRoleCodeForPartyType.message}")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+
         for (String physicalAddressPurpose : physicalAddress.getPurposes()) {
-          if (!partyService.isValidPhysicalAddressPurpose(
+          if (!partyReferenceService.isValidPhysicalAddressPurpose(
               individualCustomer.getPartyType().code(), physicalAddressPurpose)) {
             hibernateConstraintValidatorContext
                 .addMessageParameter("physicalAddressPurpose", physicalAddressPurpose)
@@ -278,7 +291,8 @@ public class ValidIndividualCustomerValidator
 
       // Validate preferences
       for (Preference preference : individualCustomer.getPreferences()) {
-        if (!partyService.isValidPreferenceType(PartyType.PERSON.code(), preference.getType())) {
+        if (!partyReferenceService.isValidPreferenceType(
+            individualCustomer.getPartyType().code(), preference.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", preference.getType())
               .buildConstraintViolationWithTemplate(
@@ -291,7 +305,7 @@ public class ValidIndividualCustomerValidator
 
       // Validate race
       if ((!StringUtils.hasText(individualCustomer.getRace()))
-          || (!partyService.isValidRace(individualCustomer.getRace()))) {
+          || (!partyReferenceService.isValidRace(individualCustomer.getRace()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("race", individualCustomer.getRace())
             .buildConstraintViolationWithTemplate(
@@ -303,7 +317,8 @@ public class ValidIndividualCustomerValidator
 
       //  Validate residency status
       if ((!StringUtils.hasText(individualCustomer.getResidencyStatus()))
-          || (!partyService.isValidResidencyStatus(individualCustomer.getResidencyStatus()))) {
+          || (!partyReferenceService.isValidResidencyStatus(
+              individualCustomer.getResidencyStatus()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("residencyStatus", individualCustomer.getResidencyStatus())
             .buildConstraintViolationWithTemplate(
@@ -315,7 +330,8 @@ public class ValidIndividualCustomerValidator
 
       // Validate residential type
       if ((!StringUtils.hasText(individualCustomer.getResidentialType()))
-          || (!partyService.isValidResidentialType(individualCustomer.getResidentialType()))) {
+          || (!partyReferenceService.isValidResidentialType(
+              individualCustomer.getResidentialType()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("residentialType", individualCustomer.getResidentialType())
             .buildConstraintViolationWithTemplate(
@@ -337,7 +353,7 @@ public class ValidIndividualCustomerValidator
           isValid = false;
         }
 
-        if (!partyService.isValidTaxNumberType(taxNumber.getType())) {
+        if (!partyReferenceService.isValidTaxNumberType(taxNumber.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", taxNumber.getType())
               .buildConstraintViolationWithTemplate(
@@ -350,7 +366,7 @@ public class ValidIndividualCustomerValidator
 
       // Validate title
       if ((!StringUtils.hasText(individualCustomer.getTitle()))
-          || (!partyService.isValidTitle(individualCustomer.getTitle()))) {
+          || (!partyReferenceService.isValidTitle(individualCustomer.getTitle()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("title", individualCustomer.getTitle())
             .buildConstraintViolationWithTemplate(

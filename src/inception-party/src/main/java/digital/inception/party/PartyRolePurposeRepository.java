@@ -21,8 +21,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>PartyRoleSubTypeRepository</b> interface declares the repository for the
- * <b>PartyRoleSubType</b> domain type.
+ * The <b>PartyRolePurposeRepository</b> interface declares the repository for the
+ * <b>PartyRolePurpose</b> domain type.
  *
  * @author Marcus Portmann
  */

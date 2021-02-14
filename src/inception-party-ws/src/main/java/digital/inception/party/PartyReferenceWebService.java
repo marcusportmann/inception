@@ -37,16 +37,16 @@ import javax.xml.bind.annotation.XmlElement;
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class PartyReferenceWebService {
 
-  /** The Party Service. */
-  private final IPartyService partyService;
+  /** The Party Reference Service. */
+  private final IPartyReferenceService partyReferenceService;
 
   /**
    * Constructs a new <b>PartyReferenceWebService</b>.
    *
-   * @param partyService the Party Service
+   * @param partyReferenceService the Party Reference Service
    */
-  public PartyReferenceWebService(IPartyService partyService) {
-    this.partyService = partyService;
+  public PartyReferenceWebService(IPartyReferenceService partyReferenceService) {
+    this.partyReferenceService = partyReferenceService;
   }
 
   /**
@@ -59,7 +59,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetContactMechanismPurposes")
   public List<ContactMechanismPurpose> getContactMechanismPurposes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getContactMechanismPurposes(localeId);
+    return partyReferenceService.getContactMechanismPurposes(localeId);
   }
 
   /**
@@ -72,7 +72,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetContactMechanismTypes")
   public List<ContactMechanismType> getContactMechanismTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getContactMechanismTypes(localeId);
+    return partyReferenceService.getContactMechanismTypes(localeId);
   }
 
   /**
@@ -85,7 +85,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetEmploymentStatuses")
   public List<EmploymentStatus> getEmploymentStatuses(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getEmploymentStatuses(localeId);
+    return partyReferenceService.getEmploymentStatuses(localeId);
   }
 
   /**
@@ -98,7 +98,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetEmploymentTypes")
   public List<EmploymentType> getEmploymentTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getEmploymentTypes(localeId);
+    return partyReferenceService.getEmploymentTypes(localeId);
   }
 
   /**
@@ -111,7 +111,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetGenders")
   public List<Gender> getGenders(@WebParam(name = "LocaleId") @XmlElement String localeId)
       throws ServiceUnavailableException {
-    return partyService.getGenders(localeId);
+    return partyReferenceService.getGenders(localeId);
   }
 
   /**
@@ -124,7 +124,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetIdentityDocumentTypes")
   public List<IdentityDocumentType> getIdentityDocumentTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getIdentityDocumentTypes(localeId);
+    return partyReferenceService.getIdentityDocumentTypes(localeId);
   }
 
   /**
@@ -137,7 +137,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetMaritalStatuses")
   public List<MaritalStatus> getMaritalStatuses(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getMaritalStatuses(localeId);
+    return partyReferenceService.getMaritalStatuses(localeId);
   }
 
   /**
@@ -150,7 +150,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetMarriageTypes")
   public List<MarriageType> getMarriageTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getMarriageTypes(localeId);
+    return partyReferenceService.getMarriageTypes(localeId);
   }
 
   /**
@@ -163,7 +163,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetNextOfKinTypes")
   public List<NextOfKinType> getNextOfKinTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getNextOfKinTypes(localeId);
+    return partyReferenceService.getNextOfKinTypes(localeId);
   }
 
   /**
@@ -176,7 +176,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetOccupations")
   public List<Occupation> getOccupations(@WebParam(name = "LocaleId") @XmlElement String localeId)
       throws ServiceUnavailableException {
-    return partyService.getOccupations(localeId);
+    return partyReferenceService.getOccupations(localeId);
   }
 
   /**
@@ -190,7 +190,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetPartyAttributeTypeCategories")
   public List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getPartyAttributeTypeCategories(localeId);
+    return partyReferenceService.getPartyAttributeTypeCategories(localeId);
   }
 
   /**
@@ -203,7 +203,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetPartyAttributeTypes")
   public List<PartyAttributeType> getPartyAttributeTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getPartyAttributeTypes(localeId);
+    return partyReferenceService.getPartyAttributeTypes(localeId);
   }
 
   /**
@@ -216,7 +216,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetPartyRolePurposes")
   public List<PartyRolePurpose> getPartyRolePurposes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getPartyRolePurposes(localeId);
+    return partyReferenceService.getPartyRolePurposes(localeId);
   }
 
   /**
@@ -229,7 +229,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetPartyRoleTypes")
   public List<PartyRoleType> getPartyRoleTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getPartyRoleTypes(localeId);
+    return partyReferenceService.getPartyRoleTypes(localeId);
   }
 
   /**
@@ -242,7 +242,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetPhysicalAddressPurposes")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getPhysicalAddressPurposes(localeId);
+    return partyReferenceService.getPhysicalAddressPurposes(localeId);
   }
 
   /**
@@ -255,7 +255,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetPhysicalAddressTypes")
   public List<PhysicalAddressType> getPhysicalAddressTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getPhysicalAddressTypes(localeId);
+    return partyReferenceService.getPhysicalAddressTypes(localeId);
   }
 
   /**
@@ -268,7 +268,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetPreferenceTypeCategories")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getPreferenceTypeCategories(localeId);
+    return partyReferenceService.getPreferenceTypeCategories(localeId);
   }
 
   /**
@@ -281,7 +281,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetPreferenceTypes")
   public List<PreferenceType> getPreferenceTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getPreferenceTypes(localeId);
+    return partyReferenceService.getPreferenceTypes(localeId);
   }
 
   /**
@@ -294,7 +294,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetRaces")
   public List<Race> getRaces(@WebParam(name = "LocaleId") @XmlElement String localeId)
       throws ServiceUnavailableException {
-    return partyService.getRaces(localeId);
+    return partyReferenceService.getRaces(localeId);
   }
 
   /**
@@ -307,7 +307,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetResidencePermitTypes")
   public List<ResidencePermitType> getResidencePermitTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getResidencePermitTypes(localeId);
+    return partyReferenceService.getResidencePermitTypes(localeId);
   }
 
   /**
@@ -320,7 +320,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetResidencyStatuses")
   public List<ResidencyStatus> getResidencyStatuses(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getResidencyStatuses(localeId);
+    return partyReferenceService.getResidencyStatuses(localeId);
   }
 
   /**
@@ -333,7 +333,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetResidentialTypes")
   public List<ResidentialType> getResidentialTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getResidentialTypes(localeId);
+    return partyReferenceService.getResidentialTypes(localeId);
   }
 
   /**
@@ -346,7 +346,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetSourcesOfFunds")
   public List<SourceOfFunds> getSourcesOfFunds(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getSourcesOfFunds(localeId);
+    return partyReferenceService.getSourcesOfFunds(localeId);
   }
 
   /**
@@ -359,7 +359,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetTaxNumberTypes")
   public List<TaxNumberType> getTaxNumberTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getTaxNumberTypes(localeId);
+    return partyReferenceService.getTaxNumberTypes(localeId);
   }
 
   /**
@@ -372,7 +372,7 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetTimesToContact")
   public List<TimeToContact> getTimesToContact(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyService.getTimesToContact(localeId);
+    return partyReferenceService.getTimesToContact(localeId);
   }
 
   /**
@@ -385,6 +385,6 @@ public class PartyReferenceWebService {
   @WebMethod(operationName = "GetTitles")
   public List<Title> getTitles(@WebParam(name = "LocaleId") @XmlElement String localeId)
       throws ServiceUnavailableException {
-    return partyService.getTitles(localeId);
+    return partyReferenceService.getTitles(localeId);
   }
 }

@@ -59,9 +59,7 @@ public class ResidencePermitType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the residence permit type.
-   */
+  /** The code for the residence permit type. */
   @Schema(description = "The code for the residence permit type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -71,9 +69,7 @@ public class ResidencePermitType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /**
-   * The ISO 3166-1 alpha-2 code for the country of issue for the residence permit type.
-   */
+  /** The ISO 3166-1 alpha-2 code for the country of issue for the residence permit type. */
   @Schema(
       description =
           "The ISO 3166-1 alpha-2 code for the country of issue for the residence permit type",
@@ -85,9 +81,7 @@ public class ResidencePermitType implements Serializable {
   @Column(name = "country_of_issue", length = 2, nullable = false)
   private String countryOfIssue;
 
-  /**
-   * The description for the residence permit type.
-   */
+  /** The description for the residence permit type. */
   @Schema(description = "The description for the residence permit type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -96,9 +90,7 @@ public class ResidencePermitType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /**
-   * The Unicode locale identifier for the residence permit type.
-   */
+  /** The Unicode locale identifier for the residence permit type. */
   @Schema(
       description = "The Unicode locale identifier for the residence permit type",
       required = true)
@@ -110,9 +102,7 @@ public class ResidencePermitType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /**
-   * The name of the residence permit type.
-   */
+  /** The name of the residence permit type. */
   @Schema(description = "The name of the residence permit type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -121,9 +111,7 @@ public class ResidencePermitType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /**
-   * The sort index for the residence permit type.
-   */
+  /** The sort index for the residence permit type. */
   @Schema(description = "The sort index for the residence permit type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
@@ -131,17 +119,13 @@ public class ResidencePermitType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /**
-   * Constructs a new <b>ResidencePermitType</b>.
-   */
-  public ResidencePermitType() {
-  }
+  /** Constructs a new <b>ResidencePermitType</b>. */
+  public ResidencePermitType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -240,7 +224,7 @@ public class ResidencePermitType implements Serializable {
    * Set the ISO 3166-1 alpha-2 code for the country of issue for the residence permit type.
    *
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity
-   *                       document type
+   *     document type
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;

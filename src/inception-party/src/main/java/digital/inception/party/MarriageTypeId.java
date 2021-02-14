@@ -29,33 +29,24 @@ public class MarriageTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the marital status.
-   */
+  /** The code for the marital status. */
   private String code;
 
-  /**
-   * The Unicode locale identifier for the marital status.
-   */
+  /** The Unicode locale identifier for the marital status. */
   private String localeId;
 
-  /**
-   * The code for the marital status the marriage type is associated with.
-   */
+  /** The code for the marital status the marriage type is associated with. */
   private String maritalStatus;
 
-  /**
-   * Constructs a new <b>MarriageTypeId</b>.
-   */
-  public MarriageTypeId() {
-  }
+  /** Constructs a new <b>MarriageTypeId</b>. */
+  public MarriageTypeId() {}
 
   /**
    * Constructs a new <b>MarriageTypeId</b>.
    *
    * @param maritalStatus the code for the marital status the marriage type is associated with
-   * @param code          the code for the marital status
-   * @param localeId      the Unicode locale identifier for the marital status
+   * @param code the code for the marital status
+   * @param localeId the Unicode locale identifier for the marital status
    */
   public MarriageTypeId(String maritalStatus, String code, String localeId) {
     this.maritalStatus = maritalStatus;
@@ -67,7 +58,6 @@ public class MarriageTypeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

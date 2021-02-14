@@ -29,26 +29,19 @@ public class SourceOfFundsId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the source of funds.
-   */
+  /** The code for the source of funds. */
   private String code;
 
-  /**
-   * The Unicode locale identifier for the source of funds.
-   */
+  /** The Unicode locale identifier for the source of funds. */
   private String localeId;
 
-  /**
-   * Constructs a new <b>SourceOfFundsId</b>.
-   */
-  public SourceOfFundsId() {
-  }
+  /** Constructs a new <b>SourceOfFundsId</b>. */
+  public SourceOfFundsId() {}
 
   /**
    * Constructs a new <b>SourceOfFundsId</b>.
    *
-   * @param code     the code for the source of funds
+   * @param code the code for the source of funds
    * @param localeId the Unicode locale identifier for the source of funds
    */
   public SourceOfFundsId(String code, String localeId) {
@@ -60,7 +53,6 @@ public class SourceOfFundsId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

@@ -29,34 +29,25 @@ public class EmploymentTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code for the employment status.
-   */
+  /** The code for the employment status. */
   private String code;
 
-  /**
-   * The code for the employment status the employment type is associated with.
-   */
+  /** The code for the employment status the employment type is associated with. */
   private String employmentStatus;
 
-  /**
-   * The Unicode locale identifier for the employment status.
-   */
+  /** The Unicode locale identifier for the employment status. */
   private String localeId;
 
-  /**
-   * Constructs a new <b>EmploymentTypeId</b>.
-   */
-  public EmploymentTypeId() {
-  }
+  /** Constructs a new <b>EmploymentTypeId</b>. */
+  public EmploymentTypeId() {}
 
   /**
    * Constructs a new <b>EmploymentTypeId</b>.
    *
    * @param employmentStatus the code for the employment status the employment type is associated
-   *                         with
-   * @param code             the code for the employment status
-   * @param localeId         the Unicode locale identifier for the employment status
+   *     with
+   * @param code the code for the employment status
+   * @param localeId the Unicode locale identifier for the employment status
    */
   public EmploymentTypeId(String employmentStatus, String code, String localeId) {
     this.employmentStatus = employmentStatus;
@@ -68,7 +59,6 @@ public class EmploymentTypeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override

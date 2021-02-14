@@ -30,11 +30,8 @@ import org.springframework.stereotype.Component;
 @ReadingConverter
 public class StringToPartyTypeConverter implements Converter<String, PartyType> {
 
-  /**
-   * Constructs a new <b>StringToPartyTypeConverter</b>.
-   */
-  public StringToPartyTypeConverter() {
-  }
+  /** Constructs a new <b>StringToPartyTypeConverter</b>. */
+  public StringToPartyTypeConverter() {}
 
   @Override
   public PartyType convert(String source) {

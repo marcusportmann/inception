@@ -502,6 +502,32 @@ COMMENT ON COLUMN party.physical_address_purposes.description IS 'The descriptio
 COMMENT ON COLUMN party.physical_address_purposes.party_types IS 'The comma-delimited list of codes for the party types the physical address purpose is associated with';
 
 
+CREATE TABLE party.physical_address_roles (
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  sort_index   INTEGER      NOT NULL,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+  party_types  VARCHAR(310) NOT NULL,
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX physical_address_roles_locale_id_ix ON party.physical_address_roles(locale_id);
+
+COMMENT ON COLUMN party.physical_address_roles.code IS 'The code for the physical address role';
+
+COMMENT ON COLUMN party.physical_address_roles.locale_id IS 'The Unicode locale identifier for the physical address role';
+
+COMMENT ON COLUMN party.physical_address_roles.sort_index IS 'The sort index for the physical address role';
+
+COMMENT ON COLUMN party.physical_address_roles.name IS 'The name of the physical address role';
+
+COMMENT ON COLUMN party.physical_address_roles.description IS 'The description for the physical address role';
+
+COMMENT ON COLUMN party.physical_address_roles.party_types IS 'The comma-delimited list of codes for the party types the physical address role is associated with';
+
+
 CREATE TABLE party.races (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
@@ -975,6 +1001,7 @@ CREATE TABLE party.physical_addresses (
   postal_code         VARCHAR(30)   NOT NULL,
   purposes            VARCHAR(310),
   region              VARCHAR(3),
+  role                VARCHAR(30)   NOT NULL,
   site_block          VARCHAR(50),
   site_number         VARCHAR(50),
   street_name         VARCHAR(100),
@@ -1030,6 +1057,8 @@ COMMENT ON COLUMN party.physical_addresses.postal_code IS 'The postal code for t
 COMMENT ON COLUMN party.physical_addresses.purposes IS 'The optional comma-delimited codes for the physical address purposes';
 
 COMMENT ON COLUMN party.physical_addresses.region IS 'The optional ISO 3166-2 subdivision code for the region for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.role IS 'The code for the physical address role';
 
 COMMENT ON COLUMN party.physical_addresses.site_block IS 'The site block for the physical address that is required for a site address';
 
@@ -1160,6 +1189,8 @@ INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index,
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('mobile_number', 'other_mobile_number', 'en-US', 102, 'Other Mobile Number', 'Other Mobile Number', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('mobile_number', 'alternate_mobile_number', 'en-US', 103, 'Alternate Mobile Number', 'Alternate Mobile Number', 'person');
+INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('mobile_number', 'main_mobile_number', 'en-US', 110, 'Main Mobile Number', 'Main Mobile Number', 'organization');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('phone_number', 'home_phone_number', 'en-US', 200, 'Home Phone Number', 'Home Phone Number', 'person');
@@ -1172,6 +1203,8 @@ INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index,
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('phone_number', 'other_phone_number', 'en-US', 204, 'Other Phone Number', 'Other Phone Number', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('phone_number', 'alternate_phone_number', 'en-US', 205, 'Alternate Phone Number', 'Alternate Phone Number', 'person');
+INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('phone_number', 'main_phone_number', 'en-US', 210, 'Main Phone Number', 'Main Phone Number', 'organization');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('fax_number', 'home_fax_number', 'en-US', 300, 'Home Fax Number', 'Home Fax Number', 'person');
@@ -1179,6 +1212,8 @@ INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index,
   VALUES ('fax_number', 'work_fax_number', 'en-US', 301, 'Work Fax Number', 'Work Fax Number', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('fax_number', 'other_fax_number', 'en-US', 302, 'Other Fax Number', 'Other Fax Number', 'person');
+INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('fax_number', 'alternate_fax_number', 'en-US', 303, 'Alternate Fax Number', 'Alternate Fax Number', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('fax_number', 'main_fax_number', 'en-US', 310, 'Main Fax Number', 'Main Fax Number', 'organization');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
@@ -1189,6 +1224,8 @@ INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index,
   VALUES ('email_address', 'school_email_address', 'en-US', 402, 'School E-mail Address', 'School E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('email_address', 'other_email_address', 'en-US', 403, 'Other E-mail Address', 'Other E-mail Address', 'person');
+INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('email_address', 'alternate_email_address', 'en-US', 404, 'Alternate E-mail Address', 'Alternate E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('email_address', 'main_email_address', 'en-US', 410, 'Main E-mail Address', 'Main E-mail Address', 'organization');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
@@ -1203,6 +1240,8 @@ INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index,
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('mobile_number', 'other_mobile_number', 'en-ZA', 102, 'Other Mobile Number', 'Other Mobile Number', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('mobile_number', 'alternate_mobile_number', 'en-ZA', 103, 'Alternate Mobile Number', 'Alternate Mobile Number', 'person');
+INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('mobile_number', 'main_mobile_number', 'en-ZA', 110, 'Main Mobile Number', 'Main Mobile Number', 'organization');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('phone_number', 'home_phone_number', 'en-ZA', 200, 'Home Phone Number', 'Home Phone Number', 'person');
@@ -1215,6 +1254,8 @@ INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index,
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('phone_number', 'other_phone_number', 'en-ZA', 204, 'Other Phone Number', 'Other Phone Number', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('phone_number', 'alternate_phone_number', 'en-ZA', 205, 'Alternate Phone Number', 'Alternate Phone Number', 'person');
+INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('phone_number', 'main_phone_number', 'en-ZA', 210, 'Main Phone Number', 'Main Phone Number', 'organization');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('fax_number', 'home_fax_number', 'en-ZA', 300, 'Home Fax Number', 'Home Fax Number', 'person');
@@ -1222,6 +1263,8 @@ INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index,
   VALUES ('fax_number', 'work_fax_number', 'en-ZA', 301, 'Work Fax Number', 'Work Fax Number', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('fax_number', 'other_fax_number', 'en-ZA', 302, 'Other Fax Number', 'Other Fax Number', 'person');
+INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('fax_number', 'alternate_fax_number', 'en-ZA', 303, 'Alternate Fax Number', 'Alternate Fax Number', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('fax_number', 'main_fax_number', 'en-ZA', 310, 'Main Fax Number', 'Main Fax Number', 'organization');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
@@ -1232,6 +1275,8 @@ INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index,
   VALUES ('email_address', 'school_email_address', 'en-ZA', 402, 'School E-mail Address', 'School E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('email_address', 'other_email_address', 'en-ZA', 403, 'Other E-mail Address', 'Other E-mail Address', 'person');
+INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('email_address', 'alternate_email_address', 'en-ZA', 404, 'Alternate E-mail Address', 'Alternate E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('email_address', 'main_email_address', 'en-ZA', 410, 'Main E-mail Address', 'Main E-mail Address', 'organization');
 INSERT INTO party.contact_mechanism_purposes (type, code, locale_id, sort_index, name, description, party_types)
@@ -1333,6 +1378,8 @@ INSERT INTO party.identity_document_types (code, locale_id, sort_index, name, de
   VALUES ('za_drivers_license', 'en-US', 10003, 'South African Driver''s License', 'South African Driver''s License', 'ZA', 'person');
 INSERT INTO party.identity_document_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('passport', 'en-US', 99999, 'Passport', 'Passport', 'person');
+INSERT INTO party.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('za_company_registration', 'en-US', 20001, 'South African Company Registration', 'South African Company Registration', 'ZA', 'organization');
 
 INSERT INTO party.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
   VALUES ('za_id_book', 'en-ZA', 10001, 'South African ID Book', 'South African ID Book', 'ZA', 'person');
@@ -1342,6 +1389,8 @@ INSERT INTO party.identity_document_types (code, locale_id, sort_index, name, de
   VALUES ('za_drivers_license', 'en-ZA', 10003, 'South African Driver''s License', 'South African Driver''s License', 'ZA', 'person');
 INSERT INTO party.identity_document_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('passport', 'en-ZA', 99999, 'Passport', 'Passport', 'person');
+INSERT INTO party.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
+  VALUES ('za_company_registration', 'en-ZA', 20001, 'South African Company Registration', 'South African Company Registration', 'ZA', 'organization');
 
 
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
@@ -1668,56 +1717,63 @@ INSERT INTO party.party_role_types (code, locale_id, sort_index, name, descripti
 INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
   VALUES ('billing', 'en-US', 1, 'Billing', 'Billing Address', 'organization,person');
 INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('business', 'en-US', 2, 'Business', 'Business Address', 'organization');
+  VALUES ('correspondence', 'en-US', 2, 'Correspondence', 'Correspondence Address', 'organization,person');
 INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'en-US', 3, 'Correspondence', 'Correspondence Address', 'organization,person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('delivery', 'en-US', 4, 'Delivery', 'Delivery Address', 'organization,person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('home', 'en-US', 5, 'Home', 'Home Address', 'person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('main', 'en-US', 6, 'Main', 'Main Address', 'organization');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('permanent', 'en-US', 7, 'Permanent', 'Permanent Address', 'person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('registered_office', 'en-US', 8, 'Registered Office', 'Registered Office Address', 'organization');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('residential', 'en-US', 9, 'Residential', 'Residential Address', 'person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('service', 'en-US', 10, 'Service', 'Service Address', 'organization,person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('sole_trader', 'en-US', 11, 'Sole Trader', 'Sole Trader Address', 'person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('temporary', 'en-US', 12, 'Temporary', 'Temporary Address', 'person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('work', 'en-US', 13, 'Work', 'Work Address', 'person');
+  VALUES ('delivery', 'en-US', 3, 'Delivery', 'Delivery Address', 'organization,person');
 
 INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
   VALUES ('billing', 'en-ZA', 1, 'Billing', 'Billing Address', 'organization,person');
 INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('business', 'en-ZA', 2, 'Business', 'Business Address', 'organization');
+  VALUES ('correspondence', 'en-ZA', 2, 'Correspondence', 'Correspondence Address', 'organization,person');
 INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'en-ZA', 3, 'Correspondence', 'Correspondence Address', 'organization,person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('delivery', 'en-ZA', 4, 'Delivery', 'Delivery Address', 'organization,person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('home', 'en-ZA', 5, 'Home', 'Home Address', 'person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('main', 'en-ZA', 6, 'Main', 'Main Address', 'organization');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('permanent', 'en-ZA', 7, 'Permanent', 'Permanent Address', 'person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('registered_office', 'en-ZA', 8, 'Registered Office', 'Registered Office Address', 'organization');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('residential', 'en-ZA', 9, 'Residential', 'Residential Address', 'person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('service', 'en-ZA', 10, 'Service', 'Service Address', 'organization,person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('sole_trader', 'en-ZA', 11, 'Sole Trader', 'Sole Trader Address', 'person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('temporary', 'en-ZA', 12, 'Temporary', 'Temporary Address', 'person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('work', 'en-ZA', 13, 'Work', 'Work Address', 'person');
+  VALUES ('delivery', 'en-ZA', 3, 'Delivery', 'Delivery Address', 'organization,person');
+
+
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('business', 'en-US', 1, 'Business', 'Business Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('home', 'en-US', 2, 'Home', 'Home Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('main', 'en-US', 3, 'Main', 'Main Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('permanent', 'en-US', 4, 'Permanent', 'Permanent Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('postal', 'en-US', 5, 'Postal', 'Postal Address', 'organization,person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('registered_office', 'en-US', 6, 'Registered Office', 'Registered Office Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('residential', 'en-US', 7, 'Residential', 'Residential Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('service', 'en-US', 8, 'Service', 'Service Address', 'organization,person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('sole_trader', 'en-US', 9, 'Sole Trader', 'Sole Trader Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('temporary', 'en-US', 10, 'Temporary', 'Temporary Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('work', 'en-US', 11, 'Work', 'Work Address', 'person');
+
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('business', 'en-ZA', 1, 'Business', 'Business Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('home', 'en-ZA', 2, 'Home', 'Home Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('main', 'en-ZA', 3, 'Main', 'Main Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('permanent', 'en-ZA', 4, 'Permanent', 'Permanent Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('postal', 'en-ZA', 5, 'Postal', 'Postal Address', 'organization,person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('registered_office', 'en-ZA', 6, 'Registered Office', 'Registered Office Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('residential', 'en-ZA', 7, 'Residential', 'Residential Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('service', 'en-ZA', 8, 'Service', 'Service Address', 'organization,person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('sole_trader', 'en-ZA', 9, 'Sole Trader', 'Sole Trader Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('temporary', 'en-ZA', 10, 'Temporary', 'Temporary Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('work', 'en-ZA', 11, 'Work', 'Work Address', 'person');
 
 
 INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)

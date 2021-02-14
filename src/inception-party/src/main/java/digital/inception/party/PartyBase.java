@@ -40,14 +40,14 @@ import org.hibernate.annotations.UpdateTimestamp;
  * class that the classes for the different party types are derived from, e.g. <b>Person</b>.
  *
  * <p>The <b>Party</b> and <b>PartyBase</b> classes are both JPA entity classes mapped to the same
- * <b>party.parties</b> table. The <b>PartyBase</b> class provides the common base class for all
- * JPA entity classes that form part of the party inheritance model, e.g. <b>Organization</b>,
+ * <b>party.parties</b> table. The <b>PartyBase</b> class provides the common base class for all JPA
+ * entity classes that form part of the party inheritance model, e.g. <b>Organization</b>,
  * <b>Person</b>, etc. This inheritance model is required to allow the same child classes to be
  * mapped to the different parent classes for the different party types, e.g. to support the
  * one-to-many mappings for both the <b>Organization</b> and <b>Person</b> classes to the
- * <b>PhysicalAddress</b> class. The <b>Party</b> class provides a mechanism to retrieve the
- * minimum amount of party information without executing the polymorphic query that would result
- * from retrieving the same entities using a query that specifies the <b>PartyBase</b> class as the
+ * <b>PhysicalAddress</b> class. The <b>Party</b> class provides a mechanism to retrieve the minimum
+ * amount of party information without executing the polymorphic query that would result from
+ * retrieving the same entities using a query that specifies the <b>PartyBase</b> class as the
  * result type.
  *
  * <p>This class and its subclasses expose the JSON and XML properties using a property-based
@@ -64,16 +64,12 @@ public class PartyBase implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The date and time the party was created.
-   */
+  /** The date and time the party was created. */
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the party.
-   */
+  /** The Universally Unique Identifier (UUID) for the party. */
   @NotNull
   @Id
   @Column(name = "id", nullable = false)
@@ -88,32 +84,23 @@ public class PartyBase implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /**
-   * The party type for the party.
-   */
+  /** The party type for the party. */
   @NotNull
   @Column(name = "type", length = 30, nullable = false)
   private PartyType partyType;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the tenant the party is associated with.
-   */
+  /** The Universally Unique Identifier (UUID) for the tenant the party is associated with. */
   @NotNull
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
 
-  /**
-   * The date and time the party was last updated.
-   */
+  /** The date and time the party was last updated. */
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /**
-   * Constructs a new <b>PartyBase</b>.
-   */
-  public PartyBase() {
-  }
+  /** Constructs a new <b>PartyBase</b>. */
+  public PartyBase() {}
 
   /**
    * Constructs a new <b>PartyBase</b>.
@@ -127,10 +114,10 @@ public class PartyBase implements Serializable {
   /**
    * Constructs a new <b>PartyBase</b>.
    *
-   * @param tenantId  the Universally Unique Identifier (UUID) for the tenant the party is
-   *                  associated with
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
+   *     with
    * @param partyType the party type for the party
-   * @param name      the name of the party
+   * @param name the name of the party
    */
   public PartyBase(UUID tenantId, PartyType partyType, String name) {
     this.id = UuidCreator.getShortPrefixComb();
@@ -143,7 +130,6 @@ public class PartyBase implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
@@ -266,7 +252,7 @@ public class PartyBase implements Serializable {
    * Set the Universally Unique Identifier (UUID) for the tenant the party is associated with.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
-   *                 with
+   *     with
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;

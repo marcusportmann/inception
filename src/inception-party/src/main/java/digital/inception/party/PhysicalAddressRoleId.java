@@ -17,37 +17,38 @@
 package digital.inception.party;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
- * The <b>IdentityDocumentId</b> class implements the ID class for the <b>IdentityDocument</b>
- * class.
+ * The <b>PhysicalAddressRoleId</b> class implements the ID class for the <b>
+ * PhysicalAddressRole</b> class.
  *
  * @author Marcus Portmann
  */
-public class IdentityDocumentId implements Serializable {
+@SuppressWarnings("unused")
+public class PhysicalAddressRoleId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ISO 3166-1 alpha-2 code for the country of issue for the identity document. */
-  private String countryOfIssue;
+  /** The code for the physical address role. */
+  private String code;
 
-  /** The date of issue for the identity document. */
-  private LocalDate dateOfIssue;
+  /** The Unicode locale identifier for the physical address role. */
+  private String localeId;
+
+  /** Constructs a new <b>PhysicalAddressRoleId</b>. */
+  public PhysicalAddressRoleId() {}
 
   /**
-   * The Universally Unique Identifier (UUID) for the party the identity document is associated
-   * with.
+   * Constructs a new <b>PhysicalAddressRoleId</b>.
+   *
+   * @param code the code for the physical address role
+   * @param localeId the Unicode locale identifier for the physical address role
    */
-  private UUID party;
-
-  /** The code for the identity document type. */
-  private String type;
-
-  /** Constructs a new <b>IdentityDocumentId</b>. */
-  public IdentityDocumentId() {}
+  public PhysicalAddressRoleId(String code, String localeId) {
+    this.code = code;
+    this.localeId = localeId;
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -69,12 +70,9 @@ public class IdentityDocumentId implements Serializable {
       return false;
     }
 
-    IdentityDocumentId other = (IdentityDocumentId) object;
+    PhysicalAddressRoleId other = (PhysicalAddressRoleId) object;
 
-    return Objects.equals(party, other.party)
-        && Objects.equals(type, other.type)
-        && Objects.equals(countryOfIssue, other.countryOfIssue)
-        && Objects.equals(dateOfIssue, other.dateOfIssue);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -84,9 +82,6 @@ public class IdentityDocumentId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode())
-        + ((type == null) ? 0 : type.hashCode())
-        + ((countryOfIssue == null) ? 0 : countryOfIssue.hashCode())
-        + ((dateOfIssue == null) ? 0 : dateOfIssue.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 }

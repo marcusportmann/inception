@@ -38,13 +38,13 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "The results of a request to retrieve a list of persons")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "persons",
-    "total",
-    "filter",
-    "sortBy",
-    "sortDirection",
-    "pageIndex",
-    "pageSize"
+  "persons",
+  "total",
+  "filter",
+  "sortBy",
+  "sortDirection",
+  "pageIndex",
+  "pageSize"
 })
 @XmlRootElement(name = "Persons", namespace = "http://inception.digital/party")
 @XmlType(
@@ -57,79 +57,62 @@ public class Persons implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The optional filter that was applied to the persons.
-   */
+  /** The optional filter that was applied to the persons. */
   @Schema(description = "The optional filter that was applied to the persons")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
 
-  /**
-   * The optional page index.
-   */
+  /** The optional page index. */
   @Schema(description = "The optional page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /**
-   * The optional page size.
-   */
+  /** The optional page size. */
   @Schema(description = "The optional page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /**
-   * The persons.
-   */
+  /** The persons. */
   @Schema(description = "The persons", required = true)
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Persons", required = true)
   @XmlElement(name = "Person", required = true)
   private List<Person> persons;
 
-  /**
-   * The optional method used to sort the persons e.g. by name.
-   */
+  /** The optional method used to sort the persons e.g. by name. */
   @Schema(description = "The optional method used to sort the persons e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private PersonSortBy sortBy;
 
-  /**
-   * The optional sort direction that was applied to the persons.
-   */
+  /** The optional sort direction that was applied to the persons. */
   @Schema(description = "The optional sort direction that was applied to the persons")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /**
-   * The total number of persons.
-   */
+  /** The total number of persons. */
   @Schema(description = "The total number of persons", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /**
-   * Constructs a new <b>Persons</b>.
-   */
-  public Persons() {
-  }
+  /** Constructs a new <b>Persons</b>. */
+  public Persons() {}
 
   /**
    * Constructs a new <b>Persons</b>.
    *
-   * @param persons       the persons
-   * @param total         the total number of persons
-   * @param filter        the optional filter that was applied to the persons
-   * @param sortBy        the optional method used to sort the persons e.g. by name
+   * @param persons the persons
+   * @param total the total number of persons
+   * @param filter the optional filter that was applied to the persons
+   * @param sortBy the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction that was applied to the persons
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    */
   public Persons(
       List<Person> persons,
