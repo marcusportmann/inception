@@ -75,6 +75,12 @@ public class Organizations implements Serializable {
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
+  /** The optional method used to sort the organizations e.g. by name. */
+  @Schema(description = "The optional method used to sort the organizations e.g. by name")
+  @JsonProperty
+  @XmlElement(name = "SortBy")
+  private OrganizationSortBy sortBy;
+
   /** The optional sort direction that was applied to the organizations. */
   @Schema(description = "The optional sort direction that was applied to the organizations")
   @JsonProperty
@@ -96,6 +102,7 @@ public class Organizations implements Serializable {
    * @param organizations the organizations
    * @param total the total number of organizations
    * @param filter the optional filter that was applied to the organizations
+   * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction that was applied to the organizations
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -104,12 +111,14 @@ public class Organizations implements Serializable {
       List<Organization> organizations,
       long total,
       String filter,
+      OrganizationSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
     this.organizations = organizations;
     this.total = total;
     this.filter = filter;
+    this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
@@ -149,6 +158,15 @@ public class Organizations implements Serializable {
    */
   public Integer getPageSize() {
     return pageSize;
+  }
+
+  /**
+   * Returns the optional method used to sort the organizations e.g. by name.
+   *
+   * @return the optional method used to sort the organizations
+   */
+  public OrganizationSortBy getSortBy() {
+    return sortBy;
   }
 
   /**

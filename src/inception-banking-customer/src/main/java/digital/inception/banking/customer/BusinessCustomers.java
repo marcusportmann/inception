@@ -31,55 +31,55 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>IndividualCustomers</b> class holds the results of a request to retrieve a list of
- * individual customers.
+ * The <b>BusinessCustomers</b> class holds the results of a request to retrieve a list of
+ * business customers.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The results of a request to retrieve a list of individual customers")
+@Schema(description = "The results of a request to retrieve a list of business customers")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "individualCustomers",
-  "total",
-  "filter",
-  "sortBy",
-  "sortDirection",
-  "pageIndex",
-  "pageSize"
+    "businessCustomers",
+    "total",
+    "filter",
+    "sortBy",
+    "sortDirection",
+    "pageIndex",
+    "pageSize"
 })
 @XmlRootElement(
-    name = "IndividualCustomers",
+    name = "BusinessCustomers",
     namespace = "http://inception.digital/banking/customer")
 @XmlType(
-    name = "IndividualCustomers",
+    name = "BusinessCustomers",
     namespace = "http://inception.digital/banking/customer",
     propOrder = {
-      "individualCustomers",
-      "total",
-      "filter",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize"
+        "businessCustomers",
+        "total",
+        "filter",
+        "sortBy",
+        "sortDirection",
+        "pageIndex",
+        "pageSize"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
-public class IndividualCustomers implements Serializable {
+public class BusinessCustomers implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the individual customers. */
-  @Schema(description = "The optional filter that was applied to the individual customers")
+  /** The optional filter that was applied to the business customers. */
+  @Schema(description = "The optional filter that was applied to the business customers")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
 
-  /** The individual customers. */
-  @Schema(description = "The individual customers", required = true)
+  /** The business customers. */
+  @Schema(description = "The business customers", required = true)
   @JsonProperty(required = true)
-  @XmlElementWrapper(name = "IndividualCustomers", required = true)
-  @XmlElement(name = "IndividualCustomer", required = true)
-  private List<IndividualCustomer> individualCustomers;
+  @XmlElementWrapper(name = "BusinessCustomers", required = true)
+  @XmlElement(name = "BusinessCustomer", required = true)
+  private List<BusinessCustomer> businessCustomers;
 
   /** The optional page index. */
   @Schema(description = "The optional page index")
@@ -93,47 +93,47 @@ public class IndividualCustomers implements Serializable {
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /** The optional method used to sort the individual customers e.g. by name. */
-  @Schema(description = "The optional method used to sort the individual customers e.g. by name")
+  /** The optional method used to sort the business customers e.g. by name. */
+  @Schema(description = "The optional method used to sort the business customers e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
-  private IndividualCustomerSortBy sortBy;
+  private BusinessCustomerSortBy sortBy;
 
-  /** The optional sort direction that was applied to the individual customers. */
-  @Schema(description = "The optional sort direction that was applied to the individual customers")
+  /** The optional sort direction that was applied to the business customers. */
+  @Schema(description = "The optional sort direction that was applied to the business customers")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The total number of individual customers. */
-  @Schema(description = "The total number of individual customers", required = true)
+  /** The total number of business customers. */
+  @Schema(description = "The total number of business customers", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>IndividualCustomers</b>. */
-  public IndividualCustomers() {}
+  /** Constructs a new <b>BusinessCustomers</b>. */
+  public BusinessCustomers() {}
 
   /**
-   * Constructs a new <b>IndividualCustomers</b>.
+   * Constructs a new <b>BusinessCustomers</b>.
    *
-   * @param individualCustomers the individual customers
-   * @param total the total number of individual customers
-   * @param filter the optional filter that was applied to the individual customers
-   * @param sortBy the optional method used to sort the individual customers e.g. by name
-   * @param sortDirection the optional sort direction that was applied to the individual customers
+   * @param businessCustomers the business customers
+   * @param total the total number of business customers
+   * @param filter the optional filter that was applied to the business customers
+   * @param sortBy the optional method used to sort the business customers e.g. by name
+   * @param sortDirection the optional sort direction that was applied to the business customers
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    */
-  public IndividualCustomers(
-      List<IndividualCustomer> individualCustomers,
+  public BusinessCustomers(
+      List<BusinessCustomer> businessCustomers,
       long total,
       String filter,
-      IndividualCustomerSortBy sortBy,
+      BusinessCustomerSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
-    this.individualCustomers = individualCustomers;
+    this.businessCustomers = businessCustomers;
     this.total = total;
     this.filter = filter;
     this.sortBy = sortBy;
@@ -143,21 +143,21 @@ public class IndividualCustomers implements Serializable {
   }
 
   /**
-   * Returns the optional filter that was applied to the individual customers.
+   * Returns the optional filter that was applied to the business customers.
    *
-   * @return the optional filter that was applied to the individual customers
+   * @return the optional filter that was applied to the business customers
    */
   public String getFilter() {
     return filter;
   }
 
   /**
-   * Returns the individual customers.
+   * Returns the business customers.
    *
-   * @return the individual customers
+   * @return the business customers
    */
-  public List<IndividualCustomer> getIndividualCustomers() {
-    return individualCustomers;
+  public List<BusinessCustomer> getBusinessCustomers() {
+    return businessCustomers;
   }
 
   /**
@@ -179,27 +179,27 @@ public class IndividualCustomers implements Serializable {
   }
 
   /**
-   * Returns the optional method used to sort the individual customers e.g. by name.
+   * Returns the optional method used to sort the business customers e.g. by name.
    *
-   * @return the optional method used to sort the individual customers e.g. by name
+   * @return the optional method used to sort the business customers e.g. by name
    */
-  public IndividualCustomerSortBy getSortBy() {
+  public BusinessCustomerSortBy getSortBy() {
     return sortBy;
   }
 
   /**
-   * Returns the optional sort direction that was applied to the individual customers.
+   * Returns the optional sort direction that was applied to the business customers.
    *
-   * @return the optional sort direction that was applied to the individual customers
+   * @return the optional sort direction that was applied to the business customers
    */
   public SortDirection getSortDirection() {
     return sortDirection;
   }
 
   /**
-   * Returns the total number of individual customers.
+   * Returns the total number of business customers.
    *
-   * @return the total number of individual customers
+   * @return the total number of business customers
    */
   public Long getTotal() {
     return total;

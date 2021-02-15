@@ -25,33 +25,32 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <b>IndividualCustomerNotFoundException</b> exception is thrown to indicate an error condition
- * as a result of an individual customer that could not be found.
+ * The <b>BusinessCustomerNotFoundException</b> exception is thrown to indicate an error condition
+ * as a result of an business customer that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/banking/customer/individual-customer-not-found",
-    title = "The individual customer could not be found.",
+    type = "http://inception.digital/problems/banking/customer/business-customer-not-found",
+    title = "The business customer could not be found.",
     status = HttpStatus.NOT_FOUND)
 @WebFault(
-    name = "IndividualCustomerNotFoundException",
+    name = "BusinessCustomerNotFoundException",
     targetNamespace = "http://inception.digital/banking/customer",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class IndividualCustomerNotFoundException extends ServiceException {
+public class BusinessCustomerNotFoundException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>IndividualCustomerNotFoundException</b>.
+   * Constructs a new <b>BusinessCustomerNotFoundException</b>.
    *
-   * @param individualCustomerId the Universally Unique Identifier (UUID) for the individual
-   *     customer
+   * @param businessCustomerId the Universally Unique Identifier (UUID) for the business customer
    */
-  public IndividualCustomerNotFoundException(UUID individualCustomerId) {
-    super("The individual customer (" + individualCustomerId + ") could not be found");
+  public BusinessCustomerNotFoundException(UUID businessCustomerId) {
+    super("The business customer (" + businessCustomerId + ") could not be found");
   }
 }

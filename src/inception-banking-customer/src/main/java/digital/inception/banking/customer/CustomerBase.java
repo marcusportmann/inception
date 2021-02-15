@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -53,35 +54,57 @@ public class CustomerBase extends PartyBase implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private CustomerType customerType;
 
+  /** The Universally Unique Identifier (UUID) for the customer. */
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
+
   /** Constructs a new <b>CustomerBase</b>. */
-  public CustomerBase() {}
+  protected CustomerBase() {}
+
+  //  /**
+  //   * Constructs a new <b>CustomerBase</b>.
+  //   *
+  //   * @param id the Universally Unique Identifier (UUID) for the customer
+  //   * @param partyType the party type for the customer
+  //   * @param customerType the customer type for the customer
+  //   */
+  //  public CustomerBase(UUID id, PartyType partyType, CustomerType customerType) {
+  //    super(id, partyType);
+  //
+  //    this.customerType = customerType;
+  //  }
 
   /**
    * Constructs a new <b>CustomerBase</b>.
    *
-   * @param partyType the party type for the customer
-   * @param customerType the customer type for the customer
-   */
-  protected CustomerBase(PartyType partyType, CustomerType customerType) {
-    super(partyType);
-
-    this.customerType = customerType;
-  }
-
-  /**
-   * Constructs a new <b>CustomerBase</b>.
-   *
+   * @param id the Universally Unique Identifier (UUID) for the customer
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the customer is
    *     associated with
    * @param partyType the party type for the customer
    * @param customerType the customer type for the customer
-   * @param name the name of the customer
    */
-  public CustomerBase(UUID tenantId, PartyType partyType, CustomerType customerType, String name) {
-    super(tenantId, partyType, name);
+  protected CustomerBase(UUID id, UUID tenantId, PartyType partyType, CustomerType customerType) {
+    super(id, tenantId, partyType);
 
+    this.id = id;
     this.customerType = customerType;
   }
+
+//  /**
+//   * Constructs a new <b>CustomerBase</b>.
+//   *
+//   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the customer is
+//   *     associated with
+//   * @param partyType the party type for the customer
+//   * @param customerType the customer type for the customer
+//   * @param name the name of the customer
+//   */
+//  public CustomerBase(UUID tenantId, PartyType partyType, CustomerType customerType, String name) {
+//    super(tenantId, partyType, name);
+//
+//    this.customerType = customerType;
+//  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -140,7 +163,7 @@ public class CustomerBase extends PartyBase implements Serializable {
   @XmlTransient
   @Override
   public UUID getId() {
-    return super.getId();
+    return id;
   }
 
   /**
@@ -209,6 +232,8 @@ public class CustomerBase extends PartyBase implements Serializable {
    */
   public void setId(UUID id) {
     super.setId(id);
+
+    this.id = id;
   }
 
   /**

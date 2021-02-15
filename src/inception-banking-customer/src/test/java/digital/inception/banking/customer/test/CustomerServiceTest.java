@@ -17,9 +17,13 @@
 package digital.inception.banking.customer.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.github.f4b6a3.uuid.UuidCreator;
+import digital.inception.banking.customer.BusinessCustomer;
+import digital.inception.banking.customer.BusinessCustomerSortBy;
+import digital.inception.banking.customer.BusinessCustomers;
 import digital.inception.banking.customer.ICustomerService;
 import digital.inception.banking.customer.IndividualCustomer;
 import digital.inception.banking.customer.IndividualCustomerSortBy;
@@ -29,16 +33,16 @@ import digital.inception.party.ContactMechanism;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyAttribute;
-import digital.inception.party.PhysicalAddressRole;
-import digital.inception.party.Preference;
-import digital.inception.party.TaxNumber;
+import digital.inception.party.PartyRole;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
+import digital.inception.party.PhysicalAddressRole;
 import digital.inception.party.PhysicalAddressType;
+import digital.inception.party.Preference;
+import digital.inception.party.TaxNumber;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -74,6 +78,8 @@ public class CustomerServiceTest {
 
   private static int individualCustomerCount;
 
+  private static int businessCustomerCount;
+
   /**
    * The Customer Service.
    */
@@ -86,13 +92,31 @@ public class CustomerServiceTest {
   @Autowired
   private Validator validator;
 
-  private static synchronized IndividualCustomer getTestCompleteIndividualCustomerDetails() {
+  private static synchronized BusinessCustomer getTestBusinessCustomerDetails() {
+    businessCustomerCount++;
+
+    BusinessCustomer businessCustomer =
+        new BusinessCustomer(
+            UUID.fromString("00000000-0000-0000-0000-000000000000"));
+
+    businessCustomer.setName("Organization Name " + businessCustomerCount);
+
+    businessCustomer.addIdentityDocument(
+        new IdentityDocument("za_company_registration", "ZA", LocalDate.of(2006, 4, 2), "2006/123456/23"));
+
+    businessCustomer.addRole(new PartyRole("employer"));
+
+    return businessCustomer;
+  }
+
+  private static synchronized IndividualCustomer getTestIndividualCustomerDetails() {
     individualCustomerCount++;
 
-    IndividualCustomer individualCustomer = new IndividualCustomer();
+    IndividualCustomer individualCustomer = new IndividualCustomer(UUID.fromString("00000000-0000-0000-0000-000000000000"));
 
     individualCustomer.setCountryOfBirth("US");
     individualCustomer.setCountryOfResidence("ZA");
+    individualCustomer.setCountryOfTaxResidence("ZA");
     individualCustomer.setDateOfBirth(LocalDate.of(1976, 3, 7));
     individualCustomer.setEmploymentStatus("other");
     individualCustomer.setEmploymentType("unemployed");
@@ -123,11 +147,7 @@ public class CustomerServiceTest {
     individualCustomer.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
     individualCustomer.setTitle("mrs");
 
-    individualCustomer.addIdentityDocument(
-        new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
-
-    individualCustomer.setCountryOfTaxResidence("ZA");
-    individualCustomer.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+    individualCustomer.addAttribute(new PartyAttribute("weight", "80kg"));
 
     individualCustomer.addContactMechanism(
         new ContactMechanism(
@@ -135,6 +155,9 @@ public class CustomerServiceTest {
     individualCustomer.addContactMechanism(
         new ContactMechanism(
             ContactMechanismType.EMAIL_ADDRESS, "personal_email_address", "test@test.com"));
+
+    individualCustomer.addIdentityDocument(
+        new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
     PhysicalAddress residentialAddress =
         new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressRole.RESIDENTIAL, Set.of(new String[] {PhysicalAddressPurpose.CORRESPONDENCE, PhysicalAddressPurpose.BILLING}));
@@ -162,7 +185,9 @@ public class CustomerServiceTest {
 
     individualCustomer.addPreference(new Preference("correspondence_language", "EN"));
 
-    individualCustomer.addAttribute(new PartyAttribute("weight", "80kg"));
+    individualCustomer.addRole(new PartyRole("employee"));
+
+    individualCustomer.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     return individualCustomer;
   }
@@ -172,7 +197,7 @@ public class CustomerServiceTest {
    */
   @Test
   public void individualCustomerTest() throws Exception {
-    IndividualCustomer individualCustomer = getTestCompleteIndividualCustomerDetails();
+    IndividualCustomer individualCustomer = getTestIndividualCustomerDetails();
 
     customerService.createIndividualCustomer(individualCustomer);
 
@@ -183,7 +208,7 @@ public class CustomerServiceTest {
 
     individualCustomer.setCountryOfBirth("GB");
     individualCustomer.setCountryOfResidence("ZA");
-    individualCustomer.setCountryOfTaxResidence("ZA");
+    individualCustomer.setCountryOfTaxResidence("GB");
     individualCustomer.setDateOfBirth(LocalDate.of(1985, 5, 1));
     individualCustomer.setDateOfDeath(LocalDate.of(2200, 1, 1));
     individualCustomer.setEmploymentStatus("employed");
@@ -205,16 +230,9 @@ public class CustomerServiceTest {
     individualCustomer.setSurname(individualCustomer.getSurname() + " Updated");
     individualCustomer.setTitle("ms");
 
-    individualCustomer.setCountryOfTaxResidence("GB");
-    individualCustomer.addTaxNumber(new TaxNumber("uk_tax_number", "GB", "987654321"));
+    individualCustomer.removeAttribute("weight");
 
-    individualCustomer.removeTaxNumber("za_income_tax_number");
-
-    individualCustomer.addIdentityDocument(
-        new IdentityDocument(
-            "passport", "ZA", LocalDate.of(2016, 10, 7), LocalDate.of(2025, 9, 1), "A1234567890"));
-
-    individualCustomer.removeIdentityDocumentByType("za_id_card");
+    individualCustomer.addAttribute(new PartyAttribute("height", "180cm"));
 
     individualCustomer.removeContactMechanism("fax_number", "main_fax_number");
 
@@ -225,13 +243,19 @@ public class CustomerServiceTest {
     individualCustomer.addContactMechanism(
         new ContactMechanism("phone_number", "home_phone_number", "0115551234"));
 
+    individualCustomer.addIdentityDocument(
+        new IdentityDocument(
+            "passport", "ZA", LocalDate.of(2016, 10, 7), LocalDate.of(2025, 9, 1), "A1234567890"));
+
+    individualCustomer.removeIdentityDocumentByType("za_id_card");
+
     individualCustomer.removePreference("correspondence_language");
 
     individualCustomer.addPreference(new Preference("time_to_contact", "anytime"));
 
-    individualCustomer.removeAttribute("weight");
+    individualCustomer.addTaxNumber(new TaxNumber("uk_tax_number", "GB", "987654321"));
 
-    individualCustomer.addAttribute(new PartyAttribute("height", "180cm"));
+    individualCustomer.removeTaxNumber("za_income_tax_number");
 
     customerService.updateIndividualCustomer(individualCustomer);
 
@@ -262,15 +286,231 @@ public class CustomerServiceTest {
     customerService.deleteIndividualCustomer(individualCustomer.getId());
   }
 
+
+
+
+
+  /** Test the business customer functionality. */
+  @Test
+  public void businessCustomerTest() throws Exception {
+    BusinessCustomer businessCustomer = getTestBusinessCustomerDetails();
+
+    customerService.createBusinessCustomer(businessCustomer);
+
+    BusinessCustomer retrievedBusinessCustomer =
+        customerService.getBusinessCustomer(businessCustomer.getId());
+
+    compareBusinessCustomers(businessCustomer, retrievedBusinessCustomer);
+
+    businessCustomer.setName(businessCustomer.getName() + " Updated");
+
+    businessCustomer.setCountriesOfTaxResidence(Set.of("GB", "ZA"));
+
+    businessCustomer.addContactMechanism(
+        new ContactMechanism("phone_number", "main_phone_number", "0115551234"));
+
+    PhysicalAddress mainAddress =
+        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressRole.MAIN);
+    mainAddress.setStreetNumber("1");
+    mainAddress.setStreetName("Discovery Place");
+    mainAddress.setSuburb("Sandhurst");
+    mainAddress.setCity("Sandton");
+    mainAddress.setRegion("GP");
+    mainAddress.setCountry("ZA");
+    mainAddress.setPostalCode("2194");
+
+    businessCustomer.addPhysicalAddress(mainAddress);
+
+    businessCustomer.addPreference(new Preference("correspondence_language", "EN"));
+
+    businessCustomer.removeRole("employer");
+
+    businessCustomer.addRole(new PartyRole("supplier"));
+
+    customerService.updateBusinessCustomer(businessCustomer);
+
+    BusinessCustomers filteredBusinessCustomers =
+        customerService.getBusinessCustomers(
+            "", BusinessCustomerSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The correct number of filtered business customers was not retrieved",
+        1,
+        filteredBusinessCustomers.getBusinessCustomers().size());
+
+    compareBusinessCustomers(
+        businessCustomer, filteredBusinessCustomers.getBusinessCustomers().get(0));
+
+    filteredBusinessCustomers =
+        customerService.getBusinessCustomers(
+            "Updated", BusinessCustomerSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The correct number of filtered business customers was not retrieved",
+        1,
+        filteredBusinessCustomers.getBusinessCustomers().size());
+
+    compareBusinessCustomers(
+        businessCustomer, filteredBusinessCustomers.getBusinessCustomers().get(0));
+
+    customerService.deleteBusinessCustomer(businessCustomer.getId());
+  }
+
+
+  private void compareBusinessCustomers(BusinessCustomer businessCustomer1, BusinessCustomer businessCustomer2) {
+    assertEquals(
+        "The countries of tax residence values for the two business customers do not match",
+        businessCustomer1.getCountriesOfTaxResidence(),
+        businessCustomer2.getCountriesOfTaxResidence());
+    assertEquals(
+        "The ID values for the two business customers do not match",
+        businessCustomer1.getId(),
+        businessCustomer2.getId());
+    assertEquals(
+        "The name values for the two business customers do not match",
+        businessCustomer1.getName(),
+        businessCustomer2.getName());
+    assertEquals(
+        "The tenant ID values for the two business customers do not match",
+        businessCustomer1.getTenantId(),
+        businessCustomer2.getTenantId());
+
+    assertEquals(
+        "The number of attributes for the two business customers do not match",
+        businessCustomer1.getAttributes().size(),
+        businessCustomer2.getAttributes().size());
+
+    for (PartyAttribute businessCustomer1Attribute : businessCustomer1.getAttributes()) {
+      boolean foundAttribute = false;
+
+      for (PartyAttribute businessCustomer2Attribute : businessCustomer2.getAttributes()) {
+
+        if (Objects.equals(businessCustomer1Attribute.getParty(), businessCustomer2Attribute.getParty())
+            && Objects.equals(businessCustomer1Attribute.getType(), businessCustomer2Attribute.getType())) {
+
+          compareAttributes(businessCustomer1Attribute, businessCustomer2Attribute);
+
+          foundAttribute = true;
+        }
+      }
+
+      if (!foundAttribute) {
+        fail("Failed to find the attribute (" + businessCustomer1Attribute.getType() + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of contact mechanisms for the two business customers do not match",
+        businessCustomer1.getContactMechanisms().size(),
+        businessCustomer2.getContactMechanisms().size());
+
+    for (ContactMechanism person1ContactMechanism : businessCustomer1.getContactMechanisms()) {
+      boolean foundContactMechanism = false;
+
+      for (ContactMechanism person2ContactMechanism : businessCustomer2.getContactMechanisms()) {
+
+        if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
+            && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
+            && Objects.equals(
+            person1ContactMechanism.getPurpose(), person2ContactMechanism.getPurpose())) {
+          assertEquals(
+              "The values for the two contact mechanisms do not match",
+              person1ContactMechanism.getValue(),
+              person2ContactMechanism.getValue());
+
+          foundContactMechanism = true;
+        }
+      }
+
+      if (!foundContactMechanism) {
+        fail(
+            "Failed to find the contact mechanism ("
+                + person1ContactMechanism.getType()
+                + ")("
+                + person1ContactMechanism.getPurpose()
+                + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of physical addresses for the two business customers do not match",
+        businessCustomer1.getPhysicalAddresses().size(),
+        businessCustomer2.getPhysicalAddresses().size());
+
+    for (PhysicalAddress person1PhysicalAddress : businessCustomer1.getPhysicalAddresses()) {
+      boolean foundPhysicalAddress = false;
+
+      for (PhysicalAddress person2PhysicalAddress : businessCustomer2.getPhysicalAddresses()) {
+
+        if (Objects.equals(person1PhysicalAddress.getParty(), person2PhysicalAddress.getParty())
+            && Objects.equals(person1PhysicalAddress.getId(), person2PhysicalAddress.getId())) {
+
+          comparePhysicalAddresses(person1PhysicalAddress, person2PhysicalAddress);
+
+          foundPhysicalAddress = true;
+        }
+      }
+
+      if (!foundPhysicalAddress) {
+        fail("Failed to find the physical address (" + person1PhysicalAddress.getId() + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of preferences for the two business customers do not match",
+        businessCustomer1.getPreferences().size(),
+        businessCustomer2.getPreferences().size());
+
+    for (Preference businessCustomer1Preference : businessCustomer1.getPreferences()) {
+      boolean foundPreference = false;
+
+      for (Preference businessCustomer2Preference : businessCustomer2.getPreferences()) {
+
+        if (Objects.equals(businessCustomer1Preference.getParty(), businessCustomer2Preference.getParty())
+            && Objects.equals(
+            businessCustomer1Preference.getType(), businessCustomer2Preference.getType())) {
+
+          comparePreferences(businessCustomer1Preference, businessCustomer2Preference);
+
+          foundPreference = true;
+        }
+      }
+
+      if (!foundPreference) {
+        fail("Failed to find the preference (" + businessCustomer1Preference.getType() + ")");
+      }
+    }
+  }
+
+
   /**
    * Test the individual customer validation functionality.
    */
   @Test
   public void validateIndividualCustomerTest() throws Exception {
-    IndividualCustomer individualCustomer = getTestCompleteIndividualCustomerDetails();
+    IndividualCustomer individualCustomer = getTestIndividualCustomerDetails();
 
     Set<ConstraintViolation<IndividualCustomer>> constraintViolations =
         customerService.validateIndividualCustomer(individualCustomer);
+
+    if (constraintViolations.size() > 0) {
+      fail("Failed to successfully validate the individual customer");
+    }
+  }
+
+  /**
+   * Test the business customer validation functionality.
+   */
+  @Test
+  public void validateBusinessCustomerTest() throws Exception {
+    BusinessCustomer businessCustomer = getTestBusinessCustomerDetails();
+
+    Set<ConstraintViolation<BusinessCustomer>> constraintViolations =
+        customerService.validateBusinessCustomer(businessCustomer);
+
+    if (constraintViolations.size() > 0) {
+      fail("Failed to successfully validate the business customer");
+    }
   }
 
   private void compareAttributes(PartyAttribute attribute1, PartyAttribute attribute2) {
@@ -392,6 +632,72 @@ public class CustomerServiceTest {
         individualCustomer2.getTitle());
 
     assertEquals(
+        "The number of party attributes for the two individual customers do not match",
+        individualCustomer1.getAttributes().size(),
+        individualCustomer2.getAttributes().size());
+
+    for (PartyAttribute individualCustomer1Attribute : individualCustomer1.getAttributes()) {
+      boolean foundAttribute = false;
+
+      for (PartyAttribute individualCustomer2Attribute : individualCustomer2.getAttributes()) {
+
+        if (Objects.equals(
+            individualCustomer1Attribute.getParty(), individualCustomer2Attribute.getParty())
+            && Objects.equals(
+            individualCustomer1Attribute.getType(), individualCustomer2Attribute.getType())) {
+
+          compareAttributes(individualCustomer1Attribute, individualCustomer2Attribute);
+
+          foundAttribute = true;
+        }
+      }
+
+      if (!foundAttribute) {
+        fail("Failed to find the party attribute (" + individualCustomer1Attribute.getType() + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of contact mechanisms for the two individual customers do not match",
+        individualCustomer1.getContactMechanisms().size(),
+        individualCustomer2.getContactMechanisms().size());
+
+    for (ContactMechanism individualCustomer1ContactMechanism :
+        individualCustomer1.getContactMechanisms()) {
+      boolean foundContactMechanism = false;
+
+      for (ContactMechanism individualCustomer2ContactMechanism :
+          individualCustomer2.getContactMechanisms()) {
+
+        if (Objects.equals(
+            individualCustomer1ContactMechanism.getParty(),
+            individualCustomer2ContactMechanism.getParty())
+            && Objects.equals(
+            individualCustomer1ContactMechanism.getType(),
+            individualCustomer2ContactMechanism.getType())
+            && Objects.equals(
+            individualCustomer1ContactMechanism.getPurpose(),
+            individualCustomer2ContactMechanism.getPurpose())) {
+          assertEquals(
+              "The values for the two contact mechanisms do not match",
+              individualCustomer1ContactMechanism.getValue(),
+              individualCustomer2ContactMechanism.getValue());
+
+          foundContactMechanism = true;
+        }
+      }
+
+      if (!foundContactMechanism) {
+        fail(
+            "Failed to find the contact mechanism ("
+                + individualCustomer1ContactMechanism.getType()
+                + ")("
+                + individualCustomer1ContactMechanism.getPurpose()
+                + ")");
+      }
+    }
+
+    assertEquals(
         "The number of identity documents for the two individual customers do not match",
         individualCustomer1.getIdentityDocuments().size(),
         individualCustomer2.getIdentityDocuments().size());
@@ -433,101 +739,6 @@ public class CustomerServiceTest {
                 + individualCustomer1IdentityDocument.getCountryOfIssue()
                 + ")("
                 + individualCustomer1IdentityDocument.getDateOfIssue()
-                + ")");
-      }
-    }
-
-    assertEquals(
-        "The number of tax numbers for the two individual customers do not match",
-        individualCustomer1.getTaxNumbers().size(),
-        individualCustomer2.getTaxNumbers().size());
-
-    for (TaxNumber individualCustomer1TaxNumber : individualCustomer1.getTaxNumbers()) {
-      boolean foundTaxNumber = false;
-
-      for (TaxNumber individualCustomer2TaxNumber : individualCustomer2.getTaxNumbers()) {
-        if (individualCustomer1TaxNumber.getType().equals(individualCustomer2TaxNumber.getType())) {
-
-          assertEquals(
-              "The country of issue for the two tax numbers do not match",
-              individualCustomer1TaxNumber.getCountryOfIssue(),
-              individualCustomer2TaxNumber.getCountryOfIssue());
-          assertEquals(
-              "The numbers for the two tax numbers do not match",
-              individualCustomer1TaxNumber.getNumber(),
-              individualCustomer2TaxNumber.getNumber());
-
-          foundTaxNumber = true;
-        }
-      }
-
-      if (!foundTaxNumber) {
-        fail("Failed to find the tax number (" + individualCustomer1TaxNumber.getType() + ")");
-      }
-    }
-
-    assertEquals(
-        "The number of attributes for the two individual customers do not match",
-        individualCustomer1.getAttributes().size(),
-        individualCustomer2.getAttributes().size());
-
-    for (PartyAttribute individualCustomer1Attribute : individualCustomer1.getAttributes()) {
-      boolean foundAttribute = false;
-
-      for (PartyAttribute individualCustomer2Attribute : individualCustomer2.getAttributes()) {
-
-        if (Objects.equals(
-            individualCustomer1Attribute.getParty(), individualCustomer2Attribute.getParty())
-            && Objects.equals(
-            individualCustomer1Attribute.getType(), individualCustomer2Attribute.getType())) {
-
-          compareAttributes(individualCustomer1Attribute, individualCustomer2Attribute);
-
-          foundAttribute = true;
-        }
-      }
-
-      if (!foundAttribute) {
-        fail("Failed to find the attribute (" + individualCustomer1Attribute.getType() + ")");
-      }
-    }
-
-    assertEquals(
-        "The number of contact mechanisms for the two individual customers do not match",
-        individualCustomer1.getContactMechanisms().size(),
-        individualCustomer2.getContactMechanisms().size());
-
-    for (ContactMechanism individualCustomer1ContactMechanism :
-        individualCustomer1.getContactMechanisms()) {
-      boolean foundContactMechanism = false;
-
-      for (ContactMechanism individualCustomer2ContactMechanism :
-          individualCustomer2.getContactMechanisms()) {
-
-        if (Objects.equals(
-            individualCustomer1ContactMechanism.getParty(),
-            individualCustomer2ContactMechanism.getParty())
-            && Objects.equals(
-            individualCustomer1ContactMechanism.getType(),
-            individualCustomer2ContactMechanism.getType())
-            && Objects.equals(
-            individualCustomer1ContactMechanism.getPurpose(),
-            individualCustomer2ContactMechanism.getPurpose())) {
-          assertEquals(
-              "The values for the two contact mechanisms do not match",
-              individualCustomer1ContactMechanism.getValue(),
-              individualCustomer2ContactMechanism.getValue());
-
-          foundContactMechanism = true;
-        }
-      }
-
-      if (!foundContactMechanism) {
-        fail(
-            "Failed to find the contact mechanism ("
-                + individualCustomer1ContactMechanism.getType()
-                + ")("
-                + individualCustomer1ContactMechanism.getPurpose()
                 + ")");
       }
     }
@@ -589,6 +800,60 @@ public class CustomerServiceTest {
 
       if (!foundPreference) {
         fail("Failed to find the preference (" + individualCustomer1Preference.getType() + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of party roles for the two individual customers do not match",
+        individualCustomer1.getRoles().size(),
+        individualCustomer2.getRoles().size());
+
+    for (PartyRole individualCustomer1Role : individualCustomer1.getRoles()) {
+      boolean foundPartyRole = false;
+
+      for (PartyRole individualCustomer2Role : individualCustomer2.getRoles()) {
+        if (individualCustomer1Role.getType().equals(individualCustomer2Role.getType())) {
+
+          assertEquals(
+              "The purpose for the two party roles do not match",
+              individualCustomer1Role.getPurpose(),
+              individualCustomer2Role.getPurpose());
+
+          foundPartyRole = true;
+        }
+      }
+
+      if (!foundPartyRole) {
+        fail("Failed to find the party role (" + individualCustomer1Role.getType() + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of tax numbers for the two individual customers do not match",
+        individualCustomer1.getTaxNumbers().size(),
+        individualCustomer2.getTaxNumbers().size());
+
+    for (TaxNumber individualCustomer1TaxNumber : individualCustomer1.getTaxNumbers()) {
+      boolean foundTaxNumber = false;
+
+      for (TaxNumber individualCustomer2TaxNumber : individualCustomer2.getTaxNumbers()) {
+        if (individualCustomer1TaxNumber.getType().equals(individualCustomer2TaxNumber.getType())) {
+
+          assertEquals(
+              "The country of issue for the two tax numbers do not match",
+              individualCustomer1TaxNumber.getCountryOfIssue(),
+              individualCustomer2TaxNumber.getCountryOfIssue());
+          assertEquals(
+              "The numbers for the two tax numbers do not match",
+              individualCustomer1TaxNumber.getNumber(),
+              individualCustomer2TaxNumber.getNumber());
+
+          foundTaxNumber = true;
+        }
+      }
+
+      if (!foundTaxNumber) {
+        fail("Failed to find the tax number (" + individualCustomer1TaxNumber.getType() + ")");
       }
     }
   }

@@ -54,6 +54,7 @@ public class PartyWebService {
    * Retrieve the organizations.
    *
    * @param filter the optional filter to apply to the organizations
+   * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -62,11 +63,12 @@ public class PartyWebService {
   @WebMethod(operationName = "GetOrganizations")
   public Organizations getOrganizations(
       @WebParam(name = "Filter") @XmlElement String filter,
+      @WebParam(name = "SortBy") @XmlElement OrganizationSortBy sortBy,
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return partyService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
+    return partyService.getOrganizations(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -92,6 +94,7 @@ public class PartyWebService {
    * Retrieve the persons.
    *
    * @param filter the optional filter to apply to the persons
+   * @param sortBy the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
    * @param pageIndex the optional page index
    * @param pageSize the optional page size

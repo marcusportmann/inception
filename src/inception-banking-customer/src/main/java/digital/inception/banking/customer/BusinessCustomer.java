@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 
-package digital.inception.party;
+package digital.inception.banking.customer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
-import digital.inception.party.constraints.ValidOrganization;
+import digital.inception.banking.customer.constraints.ValidBusinessCustomer;
+import digital.inception.party.ContactMechanism;
+import digital.inception.party.IdentityDocument;
+import digital.inception.party.Organization;
+import digital.inception.party.PartyAttribute;
+import digital.inception.party.PartyRole;
+import digital.inception.party.PartyType;
+import digital.inception.party.PhysicalAddress;
+import digital.inception.party.PhysicalAddressPurpose;
+import digital.inception.party.Preference;
+import digital.inception.party.TaxNumber;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -36,6 +45,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
@@ -49,36 +60,56 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>Organization</b> class holds the information for an organization, which is an organised
- * group of people with a particular purpose, such as a business or government department.
+ * The <b>BusinessCustomer</b> class holds the information for a business customer.
  *
  * <p>This class exposes the JSON and XML properties using a property-based approach rather than a
  * field-based approach to support the JPA inheritance model.
  *
+ * <p>The following steps must be completed when adding a new attribute to the individual customer
+ * entity:
+ *
+ * <ol>
+ *   <li>Add a new column for the new attribute to the definition of the <b>party.organizations</b>
+ *       table in the <b>inception-party-h2.sql</b> file, if the new attribute is common to all
+ *       organizations, or the definition of the <b>customer.business_customers</b> table in the
+ *       <b>inception-banking-customer-h2.sql</b> file.
+ *   <li>Add a description for the new column for the new attribute to the
+ *       <b>inception-party-h2.sql</b> file, if the new attribute is common to all organizations, or
+ *       to the <b>inception-banking-customer-h2.sql</b> file.
+ *   <li>Add a new property for the new attribute to the <b>Organization</b> class if required, if
+ *       the new attribute is common to all organizations.
+ *   <li>Add a new property for the new attribute to the <b>BusinessCustomer</b> class.
+ *   <li>Add the appropriate validation for the new attribute to the
+ *       <b>ValidOrganizationValidator</b> class if required, if the new attribute is common to all
+ *       organizations.
+ *   <li>Add the appropriate validation for the new attribute to the
+ *       <b>ValidBusinessCustomerValidator</b> class.
+ *   <li>Add a new column for the new attribute to the <b>inception-party.changelog.xml</b> file, if
+ *       the new attribute is common to all organizations, or the
+ *       <b>inception-banking-customer.changelog.xml</b>.
+ * </ol>
+ *
  * @author Marcus Portmann
  */
-@Schema(
-    description =
-        "An organised group of people with a particular purpose, such as a business or government department")
+@Schema(description = "A business customer")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties({"created", "type", "updated"})
 @JsonPropertyOrder({
   "id",
   "tenantId",
   "name",
   "attributes",
   "contactMechanisms",
-  "identityDocuments",
   "physicalAddresses",
+  "identityDocuments",
   "preferences",
   "countriesOfTaxResidence",
   "taxNumbers",
   "roles"
 })
-@XmlRootElement(name = "Organization", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "BusinessCustomer", namespace = "http://inception.digital/banking/customer")
 @XmlType(
-    name = "Organization",
-    namespace = "http://inception.digital/party",
+    name = "BusinessCustomer",
+    namespace = "http://inception.digital/banking/customer",
     propOrder = {
       "id",
       "tenantId",
@@ -93,14 +124,18 @@ import org.springframework.util.StringUtils;
       "roles"
     })
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@ValidOrganization
+@ValidBusinessCustomer
 @Entity
 @Table(schema = "party", name = "organizations")
-public class Organization extends PartyBase implements Serializable {
+@SecondaryTable(
+    schema = "customer",
+    name = "business_customers",
+    pkJoinColumns = @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id"))
+public class BusinessCustomer extends CustomerBase implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The attributes for the organization. */
+  /** The attributes for the business customer. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -109,7 +144,7 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<PartyAttribute> attributes = new HashSet<>();
 
-  /** The contact mechanisms for the organization. */
+  /** The contact mechanisms for the business customer. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -118,7 +153,7 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
 
-  /** The identity documents for the organization. */
+  /** The identity documents for the business customer. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -127,7 +162,7 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<IdentityDocument> identityDocuments = new HashSet<>();
 
-  /** The physical addresses for the organization. */
+  /** The physical addresses for the business customer. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -136,7 +171,7 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
 
-  /** The preferences for the organization. */
+  /** The preferences for the business customer. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -145,7 +180,7 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<Preference> preferences = new HashSet<>();
 
-  /** The party roles for the organization independent of a party association. */
+  /** The party roles for the business customer independent of a party association. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -154,7 +189,7 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<PartyRole> roles = new HashSet<>();
 
-  /** The tax numbers for the organization. */
+  /** The tax numbers for the business customer. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -165,7 +200,7 @@ public class Organization extends PartyBase implements Serializable {
 
   /**
    * The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for
-   * the organization.
+   * the business customer.
    */
   @JsonIgnore
   @XmlTransient
@@ -173,33 +208,22 @@ public class Organization extends PartyBase implements Serializable {
   @Column(table = "organizations", name = "countries_of_tax_residence", length = 100)
   private String countriesOfTaxResidence;
 
-  /** Constructs a new <b>Organization</b>. */
-  public Organization() {
-  }
-
-//  /**
-//   * Constructs a new <b>Organization</b>.
-//   *
-//   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organization is
-//   *     associated with
-//   */
-//  public Organization(UUID tenantId) {
-//    super(UuidCreator.getShortPrefixComb(), tenantId, PartyType.ORGANIZATION);
-//  }
+  /** Constructs a new <b>BusinessCustomer</b>. */
+  public BusinessCustomer() {}
 
   /**
-   * Constructs a new <b>Organization</b>.
+   * Constructs a new <b>BusinessCustomer</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organization is
-   *     associated with
-   * @param name the name of the organization
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the business customer
+   *     is associated with
    */
-  public Organization(UUID tenantId, String name) {
-    super(UuidCreator.getShortPrefixComb(), tenantId, PartyType.ORGANIZATION, name);
+  public BusinessCustomer(UUID tenantId) {
+    super(
+        UuidCreator.getShortPrefixComb(), tenantId, PartyType.ORGANIZATION, CustomerType.BUSINESS);
   }
 
   /**
-   * Add the attribute for the organization.
+   * Add the attribute for the business customer.
    *
    * @param attribute the attribute
    */
@@ -213,7 +237,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Add the contact mechanism for the organization.
+   * Add the contact mechanism for the business customer.
    *
    * @param contactMechanism the contact mechanism
    */
@@ -230,7 +254,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Add the identity document for the organization.
+   * Add the identity document for the business customer.
    *
    * @param identityDocument the identity document
    */
@@ -245,7 +269,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Add the physical address for the organization.
+   * Add the physical address for the business customer.
    *
    * @param physicalAddress the physical address
    */
@@ -260,7 +284,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Add the preference for the organization.
+   * Add the preference for the business customer.
    *
    * @param preference the preference
    */
@@ -274,7 +298,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Add the party role to the organization independent of a party association.
+   * Add the party role to the business customer independent of a party association.
    *
    * @param role the party role
    */
@@ -287,7 +311,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Add the tax number for the organization.
+   * Add the tax number for the business customer.
    *
    * @param taxNumber the tax number
    */
@@ -320,16 +344,16 @@ public class Organization extends PartyBase implements Serializable {
       return false;
     }
 
-    Organization other = (Organization) object;
+    BusinessCustomer other = (BusinessCustomer) object;
 
     return Objects.equals(getId(), other.getId());
   }
 
   /**
-   * Retrieve the attribute with the specified type for the organization.
+   * Retrieve the attribute with the specified type for the business customer.
    *
    * @param type the code for the attribute type
-   * @return the attribute with the specified type for the organization or <b>null</b> if the
+   * @return the attribute with the specified type for the business customer or <b>null</b> if the
    *     attribute could not be found
    */
   public PartyAttribute getAttribute(String type) {
@@ -340,11 +364,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the attributes for the organization.
+   * Returns the attributes for the business customer.
    *
-   * @return the attributes for the organization
+   * @return the attributes for the business customer
    */
-  @Schema(description = "The attributes for the organization")
+  @Schema(description = "The attributes for the business customer")
   @JsonProperty
   @JsonManagedReference("attributeReference")
   @XmlElementWrapper(name = "Attributes")
@@ -354,11 +378,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Retrieve the contact mechanism with the specified type and purpose for the organization.
+   * Retrieve the contact mechanism with the specified type and purpose for the business customer.
    *
    * @param type the code for the contact mechanism type
    * @param purpose the code for the contact mechanism purpose
-   * @return the contact mechanism with the specified type and purpose for the organization or
+   * @return the contact mechanism with the specified type and purpose for the business customer or
    *     <b>null</b> if the contact mechanism could not be found
    */
   public ContactMechanism getContactMechanism(String type, String purpose) {
@@ -372,11 +396,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the contact mechanisms for the organization.
+   * Returns the contact mechanisms for the business customer.
    *
-   * @return the contact mechanisms for the organization
+   * @return the contact mechanisms for the business customer
    */
-  @Schema(description = "The contact mechanisms for the organization")
+  @Schema(description = "The contact mechanisms for the business customer")
   @JsonProperty
   @JsonManagedReference("contactMechanismReference")
   @XmlElementWrapper(name = "ContactMechanisms")
@@ -387,14 +411,14 @@ public class Organization extends PartyBase implements Serializable {
 
   /**
    * Returns the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
-   * organization.
+   * business customer.
    *
    * @return the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
-   *     organization
+   *     business customer
    */
   @Schema(
       description =
-          "The optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization")
+          "The optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the business customer")
   @JsonProperty
   @XmlElementWrapper(name = "CountriesOfTaxResidence")
   @XmlElement(name = "CountryOfTaxResidence")
@@ -403,9 +427,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the date and time the organization was created.
+   * Returns the date and time the business customer was created.
    *
-   * @return the date and time the organization was created
+   * @return the date and time the business customer was created
    */
   @JsonIgnore
   @XmlTransient
@@ -414,12 +438,12 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the organization.
+   * Returns the Universally Unique Identifier (UUID) for the business customer.
    *
-   * @return the Universally Unique Identifier (UUID) for the organization
+   * @return the Universally Unique Identifier (UUID) for the business customer
    */
   @Schema(
-      description = "The Universally Unique Identifier (UUID) for the organization",
+      description = "The Universally Unique Identifier (UUID) for the business customer",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -429,11 +453,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the identity documents for the organization.
+   * Returns the identity documents for the business customer.
    *
-   * @return the identity documents for the organization
+   * @return the identity documents for the business customer
    */
-  @Schema(description = "The identity documents for the organization")
+  @Schema(description = "The identity documents for the business customer")
   @JsonProperty
   @JsonManagedReference("identityDocumentReference")
   @XmlElementWrapper(name = "IdentityDocuments")
@@ -445,11 +469,11 @@ public class Organization extends PartyBase implements Serializable {
   // TODO: Add identity documents -- MARCUS
 
   /**
-   * Returns the name of the organization.
+   * Returns the name of the business customer.
    *
-   * @return the name of the organization
+   * @return the name of the business customer
    */
-  @Schema(description = "The name of the organization")
+  @Schema(description = "The name of the business customer")
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @Override
@@ -458,9 +482,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the party type for the organization.
+   * Returns the party type for the business customer.
    *
-   * @return the party type for the organization
+   * @return the party type for the business customer
    */
   @JsonIgnore
   @XmlTransient
@@ -470,10 +494,10 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Retrieve the first physical address with the specified purpose for the organization.
+   * Retrieve the first physical address with the specified purpose for the business customer.
    *
    * @param purpose the physical address purpose
-   * @return the first physical address with the specified purpose for the organization or <b>
+   * @return the first physical address with the specified purpose for the business customer or <b>
    *     null</b> if the physical address could not be found
    */
   public PhysicalAddress getPhysicalAddress(PhysicalAddressPurpose purpose) {
@@ -484,11 +508,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the physical addresses for the organization.
+   * Returns the physical addresses for the business customer.
    *
-   * @return the physical addresses for the organization
+   * @return the physical addresses for the business customer
    */
-  @Schema(description = "The physical addresses for the organization")
+  @Schema(description = "The physical addresses for the business customer")
   @JsonProperty
   @JsonManagedReference("physicalAddressReference")
   @XmlElementWrapper(name = "PhysicalAddresses")
@@ -498,10 +522,10 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Retrieve the preference with the specified type for the organization.
+   * Retrieve the preference with the specified type for the business customer.
    *
    * @param type the code for the preference type
-   * @return the preference with the specified type for the organization or <b>null</b> if the
+   * @return the preference with the specified type for the business customer or <b>null</b> if the
    *     preference could not be found
    */
   public Preference getPreference(String type) {
@@ -512,11 +536,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the preferences for the organization.
+   * Returns the preferences for the business customer.
    *
-   * @return the preferences for the organization
+   * @return the preferences for the business customer
    */
-  @Schema(description = "The preferences for the organization")
+  @Schema(description = "The preferences for the business customer")
   @JsonProperty
   @JsonManagedReference("preferenceReference")
   @XmlElementWrapper(name = "Preferences")
@@ -526,11 +550,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Retrieve the role with the specified type for the organization independent of a party
+   * Retrieve the role with the specified type for the business customer independent of a party
    * association.
    *
    * @param type the code for the party role type
-   * @return the role with the specified type for the organization independent of a party
+   * @return the role with the specified type for the business customer independent of a party
    *     association or <b>null</b> if the role could not be found
    */
   public PartyRole getRole(String type) {
@@ -538,11 +562,12 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the party roles for the organization independent of a party association.
+   * Returns the party roles for the business customer independent of a party association.
    *
-   * @return the party roles for the organization independent of a party association
+   * @return the party roles for the business customer independent of a party association
    */
-  @Schema(description = "The party roles for the organization independent of a party association")
+  @Schema(
+      description = "The party roles for the business customer independent of a party association")
   @JsonProperty
   @JsonManagedReference("partyRoleReference")
   @XmlElementWrapper(name = "Roles")
@@ -552,11 +577,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Retrieve the tax number with the specified type for the organization.
+   * Retrieve the tax number with the specified type for the business customer.
    *
    * @param type the tax number type
-   * @return the tax number with the specified type for the organization or <b>null</b> if the tax
-   *     number could not be found
+   * @return the tax number with the specified type for the business customer or <b>null</b> if the
+   *     tax number could not be found
    */
   public TaxNumber getTaxNumber(String type) {
     return taxNumbers.stream()
@@ -566,11 +591,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the tax numbers for the organization.
+   * Returns the tax numbers for the business customer.
    *
-   * @return the tax numbers for the organization
+   * @return the tax numbers for the business customer
    */
-  @Schema(description = "The tax numbers for the organization")
+  @Schema(description = "The tax numbers for the business customer")
   @JsonProperty
   @JsonManagedReference("taxNumberReference")
   @XmlElementWrapper(name = "TaxNumbers")
@@ -580,15 +605,15 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the organization is associated
-   * with.
+   * Returns the Universally Unique Identifier (UUID) for the tenant the business customer is
+   * associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the organization is associated
-   *     with
+   * @return the Universally Unique Identifier (UUID) for the tenant the business customer is
+   *     associated with
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) for the tenant the organization is associated with",
+          "The Universally Unique Identifier (UUID) for the tenant the business customer is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
@@ -597,9 +622,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the date and time the organization was last updated.
+   * Returns the date and time the business customer was last updated.
    *
-   * @return the date and time the organization was last updated
+   * @return the date and time the business customer was last updated
    */
   @JsonIgnore
   @XmlTransient
@@ -618,7 +643,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Remove the attribute with the specified type for the organization.
+   * Remove the attribute with the specified type for the business customer.
    *
    * @param type the code for the attribute type
    */
@@ -627,7 +652,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Remove the contact mechanism with the specified type and purpose for the organization.
+   * Remove the contact mechanism with the specified type and purpose for the business customer.
    *
    * @param type the code for the contact mechanism type
    * @param purpose the code for the contact mechanism purpose
@@ -640,7 +665,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Remove the identity document with the specified type for the organization.
+   * Remove the identity document with the specified type for the business customer.
    *
    * @param type the code for the identity document type
    */
@@ -650,7 +675,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Remove any physical addresses with the specified purpose for the organization.
+   * Remove any physical addresses with the specified purpose for the business customer.
    *
    * @param purpose the physical address purpose
    */
@@ -660,7 +685,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Remove the preference with the specified type for the organization.
+   * Remove the preference with the specified type for the business customer.
    *
    * @param type the code for the preference type
    */
@@ -669,7 +694,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Remove the role with the specified type for the organization.
+   * Remove the role with the specified type for the business customer.
    *
    * @param type the code for party role type
    */
@@ -678,7 +703,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Remove the tax number with the specified type for the organization.
+   * Remove the tax number with the specified type for the business customer.
    *
    * @param type the tax number type
    */
@@ -687,9 +712,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the attributes for the organization.
+   * Set the attributes for the business customer.
    *
-   * @param attributes the attributes for the organization
+   * @param attributes the attributes for the business customer
    */
   public void setAttributes(Set<PartyAttribute> attributes) {
     this.attributes.clear();
@@ -697,9 +722,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the contact mechanisms for the organization.
+   * Set the contact mechanisms for the business customer.
    *
-   * @param contactMechanisms the contact mechanisms for the organization
+   * @param contactMechanisms the contact mechanisms for the business customer
    */
   public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
     this.contactMechanisms.clear();
@@ -707,11 +732,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
-   * organization.
+   * Set the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the business
+   * customer.
    *
    * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax
-   *     residence for the organization
+   *     residence for the business customer
    */
   public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
     this.countriesOfTaxResidence =
@@ -719,10 +744,10 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional code for the single country of tax residence for the organization.
+   * Set the optional code for the single country of tax residence for the business customer.
    *
    * @param countryOfTaxResidence the optional code for the single country of tax residence for the
-   *     organization
+   *     business customer
    */
   @JsonIgnore
   public void setCountryOfTaxResidence(String countryOfTaxResidence) {
@@ -730,9 +755,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the organization.
+   * Set the Universally Unique Identifier (UUID) for the business customer.
    *
-   * @param id the Universally Unique Identifier (UUID) for the organization
+   * @param id the Universally Unique Identifier (UUID) for the business customer
    */
   @Override
   public void setId(UUID id) {
@@ -740,9 +765,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the identity documents for the organization.
+   * Set the identity documents for the business customer.
    *
-   * @param identityDocuments the identity documents for the organization
+   * @param identityDocuments the identity documents for the business customer
    */
   public void setIdentityDocuments(Set<IdentityDocument> identityDocuments) {
     this.identityDocuments.clear();
@@ -750,9 +775,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the name of the organization.
+   * Set the name of the business customer.
    *
-   * @param name the name of the organization
+   * @param name the name of the business customer
    */
   @Override
   public void setName(String name) {
@@ -760,9 +785,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the physical addresses for the organization.
+   * Set the physical addresses for the business customer.
    *
-   * @param physicalAddresses the physical addresses for the organization
+   * @param physicalAddresses the physical addresses for the business customer
    */
   public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
     this.physicalAddresses.clear();
@@ -770,9 +795,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the preferences for the organization.
+   * Set the preferences for the business customer.
    *
-   * @param preferences the preferences for the organization
+   * @param preferences the preferences for the business customer
    */
   public void setPreferences(Set<Preference> preferences) {
     this.preferences.clear();
@@ -780,7 +805,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the party roles for the organization independent of a party association.
+   * Set the party roles for the business customer independent of a party association.
    *
    * @param roles the party roles
    */
@@ -790,9 +815,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the tax numbers for the organization.
+   * Set the tax numbers for the business customer.
    *
-   * @param taxNumbers the tax numbers for the organization
+   * @param taxNumbers the tax numbers for the business customer
    */
   public void setTaxNumbers(Set<TaxNumber> taxNumbers) {
     this.taxNumbers.clear();
@@ -800,11 +825,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the organization is associated
+   * Set the Universally Unique Identifier (UUID) for the tenant the business customer is associated
    * with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organization is
-   *     associated with
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the business customer
+   *     is associated with
    */
   public void setTenantId(UUID tenantId) {
     super.setTenantId(tenantId);

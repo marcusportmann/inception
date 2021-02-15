@@ -20,6 +20,16 @@ COMMENT ON COLUMN customer.customers.id IS 'The Universally Unique Identifier (U
 COMMENT ON COLUMN customer.customers.type IS 'The code for the customer type';
 
 
+CREATE TABLE customer.business_customers (
+  id                UUID         NOT NULL,
+
+  PRIMARY KEY (id),
+  CONSTRAINT business_customers_customer_fk FOREIGN KEY (id) REFERENCES customer.customers(id) ON DELETE CASCADE
+);
+
+COMMENT ON COLUMN customer.business_customers.id IS 'The Universally Unique Identifier (UUID) for the business customer';
+
+
 CREATE TABLE customer.individual_customers (
   emancipated_minor BOOLEAN,
   id                UUID         NOT NULL,

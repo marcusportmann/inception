@@ -280,6 +280,7 @@ public class PartyService implements IPartyService {
    * Retrieve the organizations.
    *
    * @param filter the optional filter to apply to the organizations
+   * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -287,7 +288,11 @@ public class PartyService implements IPartyService {
    */
   @Override
   public Organizations getOrganizations(
-      String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+      String filter,
+      OrganizationSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
@@ -297,18 +302,45 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("pageSize");
     }
 
-    PageRequest pageRequest;
+    if (sortBy == null) {
+      sortBy = OrganizationSortBy.NAME;
+    }
 
-    if ((pageIndex != null) && (pageSize != null)) {
-      pageRequest =
-          PageRequest.of(
-              pageIndex,
-              (pageSize > MAX_FILTERED_ORGANISATIONS) ? MAX_FILTERED_ORGANISATIONS : pageSize);
-    } else {
-      pageRequest = PageRequest.of(0, MAX_FILTERED_ORGANISATIONS);
+    if (sortDirection == null) {
+      sortDirection = SortDirection.ASCENDING;
     }
 
     try {
+      PageRequest pageRequest;
+
+      if (pageIndex == null) {
+        pageIndex = 0;
+      }
+
+      if (pageSize == null) {
+        pageSize = MAX_FILTERED_PERSONS;
+      }
+
+      if (sortBy == OrganizationSortBy.NAME) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                (pageSize > MAX_FILTERED_ORGANISATIONS) ? MAX_FILTERED_ORGANISATIONS : pageSize,
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "name");
+      } else {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                (pageSize > MAX_FILTERED_ORGANISATIONS) ? MAX_FILTERED_ORGANISATIONS : pageSize,
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "name");
+      }
+
       Page<Organization> organizationPage;
       if (StringUtils.hasText(filter)) {
         organizationPage = organizationRepository.findFiltered("%" + filter + "%", pageRequest);
@@ -320,10 +352,14 @@ public class PartyService implements IPartyService {
           organizationPage.toList(),
           organizationPage.getTotalElements(),
           filter,
+          sortBy,
           sortDirection,
           pageIndex,
           pageSize);
     } catch (Throwable e) {
+
+      logger.error("Failed to retrieve the filtered organizations", e);
+
       throw new ServiceUnavailableException("Failed to retrieve the filtered organizations", e);
     }
   }

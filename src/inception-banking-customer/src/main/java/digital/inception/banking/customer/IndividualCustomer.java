@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.banking.customer.constraints.ValidIndividualCustomer;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.party.ContactMechanism;
@@ -75,10 +76,10 @@ import org.springframework.util.StringUtils;
  *   <li>Add a new column for the new attribute to the definition of the <b>party.persons</b> table
  *       in the <b>inception-party-h2.sql</b> file, if the new attribute is common to all persons,
  *       or the definition of the <b>customer.individual_customers</b> table in the
- *       <b>inception-banking-h2.sql</b> file.
+ *       <b>inception-banking-customer-h2.sql</b> file.
  *   <li>Add a description for the new column for the new attribute to the
- *       <b>inception-party-h2.sql</b> file, if the new attribute is common to all persons, or
- *       <b>inception-banking-h2.sql</b> file.
+ *       <b>inception-party-h2.sql</b> file, if the new attribute is common to all persons, or to
+ *       the <b>inception-banking-customer-h2.sql</b> file.
  *   <li>Add a new property for the new attribute to the <b>Person</b> class if required, if the new
  *       attribute is common to all persons.
  *   <li>Add a new property for the new attribute to the <b>IndividualCustomer</b> class.
@@ -87,7 +88,8 @@ import org.springframework.util.StringUtils;
  *   <li>Add the appropriate validation for the new attribute to the
  *       <b>ValidIndividualCustomerValidator</b> class.
  *   <li>Add a new column for the new attribute to the <b>inception-party.changelog.xml</b> file, if
- *       the new attribute is common to all persons, or the <b>inception-banking.changelog.xml</b>.
+ *       the new attribute is common to all persons, or the
+ *       <b>inception-banking-customer.changelog.xml</b>.
  * </ol>
  *
  * @author Marcus Portmann
@@ -390,7 +392,16 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
 
   /** Constructs a new <b>IndividualCustomer</b>. */
   public IndividualCustomer() {
-    super(PartyType.PERSON, CustomerType.INDIVIDUAL);
+  }
+
+  /**
+   * Constructs a new <b>IndividualCustomer</b>.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the individual customer
+   *     is associated with
+   */
+  public IndividualCustomer(UUID tenantId) {
+    super(UuidCreator.getShortPrefixComb(), tenantId, PartyType.PERSON, CustomerType.INDIVIDUAL);
   }
 
   /**

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.party.constraints.ValidPerson;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -345,8 +346,18 @@ public class Person extends PartyBase implements Serializable {
 
   /** Constructs a new <b>Person</b>. */
   public Person() {
-    super(PartyType.PERSON);
   }
+
+//  /**
+//   * Constructs a new <b>Person</b>.
+//   *
+//   *
+//   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the person is
+//   *     associated with
+//   */
+//  public Person(UUID tenantId) {
+//    super(UuidCreator.getShortPrefixComb(), tenantId, PartyType.PERSON);
+//  }
 
   /**
    * Constructs a new <b>Person</b>.
@@ -356,7 +367,7 @@ public class Person extends PartyBase implements Serializable {
    * @param name the name of the person
    */
   public Person(UUID tenantId, String name) {
-    super(tenantId, PartyType.PERSON, name);
+    super(UuidCreator.getShortPrefixComb(), tenantId, PartyType.PERSON, name);
   }
 
   /**

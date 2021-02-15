@@ -78,7 +78,7 @@ public class ApplicationDataSourceConfiguration {
     "digital/inception/reference/inception-reference-h2.sql",
     "digital/inception/party/inception-party-h2.sql",
     // Banking Modules
-    "digital/inception/banking/inception-banking-h2.sql",
+    "digital/inception/banking/inception-banking-customer-h2.sql",
   };
 
   /* Logger */

@@ -239,6 +239,7 @@ public class PartyApi extends SecureApi {
    * Retrieve the organizations.
    *
    * @param filter the optional filter to apply to the organizations
+   * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -284,6 +285,11 @@ public class PartyApi extends SecureApi {
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
+          name = "sortBy",
+          description = "The optional method used to sort the organizations e.g. by name")
+      @RequestParam(value = "sortBy", required = false)
+          OrganizationSortBy sortBy,
+      @Parameter(
               name = "sortDirection",
               description = "The optional sort direction to apply to the organizations")
           @RequestParam(value = "sortDirection", required = false)
@@ -302,7 +308,7 @@ public class PartyApi extends SecureApi {
       pageSize = 10;
     }
 
-    return partyService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
+    return partyService.getOrganizations(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**

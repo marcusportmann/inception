@@ -32,12 +32,30 @@ import javax.validation.ConstraintViolation;
 public interface ICustomerService {
 
   /**
+   * Create the new business customer.
+   *
+   * @param businessCustomer the business customer
+   */
+  void createBusinessCustomer(BusinessCustomer businessCustomer)
+      throws InvalidArgumentException, DuplicateBusinessCustomerException,
+          ServiceUnavailableException;
+
+  /**
    * Create the new individual customer.
    *
    * @param individualCustomer the individual customer
    */
   void createIndividualCustomer(IndividualCustomer individualCustomer)
       throws InvalidArgumentException, DuplicateIndividualCustomerException,
+          ServiceUnavailableException;
+
+  /**
+   * Delete the business customer.
+   *
+   * @param businessCustomerId the Universally Unique Identifier (UUID) for the business customer
+   */
+  void deleteBusinessCustomer(UUID businessCustomerId)
+      throws InvalidArgumentException, BusinessCustomerNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -49,6 +67,34 @@ public interface ICustomerService {
   void deleteIndividualCustomer(UUID individualCustomerId)
       throws InvalidArgumentException, IndividualCustomerNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Retrieve the business customer.
+   *
+   * @param businessCustomerId the Universally Unique Identifier (UUID) for the business customer
+   * @return the business customer
+   */
+  BusinessCustomer getBusinessCustomer(UUID businessCustomerId)
+      throws InvalidArgumentException, BusinessCustomerNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the business customers.
+   *
+   * @param filter the optional filter to apply to the business customers
+   * @param sortBy the optional method used to sort the business customers e.g. by name
+   * @param sortDirection the optional sort direction to apply to the business customers
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the business customers
+   */
+  BusinessCustomers getBusinessCustomers(
+      String filter,
+      BusinessCustomerSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the individual customer.
@@ -80,6 +126,15 @@ public interface ICustomerService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Update the business customer.
+   *
+   * @param businessCustomer the business customer
+   */
+  void updateBusinessCustomer(BusinessCustomer businessCustomer)
+      throws InvalidArgumentException, BusinessCustomerNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Update the individual customer.
    *
    * @param individualCustomer the individual customer
@@ -87,6 +142,15 @@ public interface ICustomerService {
   void updateIndividualCustomer(IndividualCustomer individualCustomer)
       throws InvalidArgumentException, IndividualCustomerNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Validate the business customer.
+   *
+   * @param businessCustomer the business customer
+   * @return the constraint violations for the business customer
+   */
+  Set<ConstraintViolation<BusinessCustomer>> validateBusinessCustomer(
+      BusinessCustomer businessCustomer);
 
   /**
    * Validate the individual customer.

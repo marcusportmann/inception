@@ -85,13 +85,18 @@ public interface IPartyService {
    * Retrieve the organizations.
    *
    * @param filter the optional filter to apply to the organizations
+   * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the organizations
    */
   Organizations getOrganizations(
-      String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+      String filter,
+      OrganizationSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**

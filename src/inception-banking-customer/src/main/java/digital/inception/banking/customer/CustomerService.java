@@ -44,6 +44,9 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public class CustomerService implements ICustomerService {
 
+  /** The maximum number of filtered business customers. */
+  private static final int MAX_FILTERED_BUSINESS_CUSTOMERS = 100;
+
   /** The maximum number of filtered individual customers. */
   private static final int MAX_FILTERED_INDIVIDUAL_CUSTOMERS = 100;
 
@@ -52,6 +55,9 @@ public class CustomerService implements ICustomerService {
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
+
+  /** The Business Customer Repository. */
+  private final BusinessCustomerRepository businessCustomerRepository;
 
   /** The Individual Customer Repository. */
   private final IndividualCustomerRepository individualCustomerRepository;
@@ -64,15 +70,54 @@ public class CustomerService implements ICustomerService {
    *
    * @param applicationContext the Spring application context
    * @param validator the JSR-303 validator
+   * @param businessCustomerRepository the Business Customer Repository
    * @param individualCustomerRepository the Individual Customer Repository
    */
   public CustomerService(
       ApplicationContext applicationContext,
       Validator validator,
+      BusinessCustomerRepository businessCustomerRepository,
       IndividualCustomerRepository individualCustomerRepository) {
     this.applicationContext = applicationContext;
     this.validator = validator;
+    this.businessCustomerRepository = businessCustomerRepository;
     this.individualCustomerRepository = individualCustomerRepository;
+  }
+
+  /**
+   * Create the new business customer.
+   *
+   * @param businessCustomer the business customer
+   */
+  @Override
+  @Transactional
+  public void createBusinessCustomer(BusinessCustomer businessCustomer)
+      throws InvalidArgumentException, DuplicateBusinessCustomerException,
+          ServiceUnavailableException {
+    if (businessCustomer == null) {
+      throw new InvalidArgumentException("businessCustomer");
+    }
+
+    Set<ConstraintViolation<BusinessCustomer>> constraintViolations =
+        validator.validate(businessCustomer);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "businessCustomer", ValidationError.toValidationErrors(constraintViolations));
+    }
+
+    try {
+      if (businessCustomerRepository.existsById(businessCustomer.getId())) {
+        throw new DuplicateBusinessCustomerException(businessCustomer.getId());
+      }
+
+      businessCustomerRepository.saveAndFlush(businessCustomer);
+    } catch (DuplicateBusinessCustomerException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the business customer (" + businessCustomer.getId() + ")", e);
+    }
   }
 
   /**
@@ -112,6 +157,34 @@ public class CustomerService implements ICustomerService {
   }
 
   /**
+   * Delete the business customer.
+   *
+   * @param businessCustomerId the Universally Unique Identifier (UUID) for the business customer
+   */
+  @Override
+  @Transactional
+  public void deleteBusinessCustomer(UUID businessCustomerId)
+      throws InvalidArgumentException, BusinessCustomerNotFoundException,
+          ServiceUnavailableException {
+    if (businessCustomerId == null) {
+      throw new InvalidArgumentException("businessCustomerId");
+    }
+
+    try {
+      if (!businessCustomerRepository.existsById(businessCustomerId)) {
+        throw new BusinessCustomerNotFoundException(businessCustomerId);
+      }
+
+      businessCustomerRepository.deleteById(businessCustomerId);
+    } catch (BusinessCustomerNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the business customer (" + businessCustomerId + ")", e);
+    }
+  }
+
+  /**
    * Delete the individual customer.
    *
    * @param individualCustomerId the Universally Unique Identifier (UUID) for the individual
@@ -137,6 +210,131 @@ public class CustomerService implements ICustomerService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to delete the individual customer (" + individualCustomerId + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the business customer.
+   *
+   * @param businessCustomerId the Universally Unique Identifier (UUID) for the business customer
+   * @return the business customer
+   */
+  @Override
+  public BusinessCustomer getBusinessCustomer(UUID businessCustomerId)
+      throws InvalidArgumentException, BusinessCustomerNotFoundException,
+          ServiceUnavailableException {
+    if (businessCustomerId == null) {
+      throw new InvalidArgumentException("businessCustomerId");
+    }
+
+    try {
+      Optional<BusinessCustomer> businessCustomerOptional =
+          businessCustomerRepository.findById(businessCustomerId);
+
+      if (businessCustomerOptional.isPresent()) {
+        return businessCustomerOptional.get();
+      } else {
+        throw new BusinessCustomerNotFoundException(businessCustomerId);
+      }
+    } catch (BusinessCustomerNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the business customer (" + businessCustomerId + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the business customers.
+   *
+   * @param filter the optional filter to apply to the business customers
+   * @param sortBy the optional method used to sort the business customers e.g. by name
+   * @param sortDirection the optional sort direction to apply to the business customers
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the business customers
+   */
+  @Override
+  public BusinessCustomers getBusinessCustomers(
+      String filter,
+      BusinessCustomerSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortBy == null) {
+      sortBy = BusinessCustomerSortBy.NAME;
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.ASCENDING;
+    }
+
+    try {
+      PageRequest pageRequest;
+
+      if (pageIndex == null) {
+        pageIndex = 0;
+      }
+
+      if (pageSize == null) {
+        pageSize = MAX_FILTERED_BUSINESS_CUSTOMERS;
+      }
+
+      if (sortBy == BusinessCustomerSortBy.NAME) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                (pageSize > MAX_FILTERED_BUSINESS_CUSTOMERS)
+                    ? MAX_FILTERED_BUSINESS_CUSTOMERS
+                    : pageSize,
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "name");
+      } else {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                (pageSize > MAX_FILTERED_BUSINESS_CUSTOMERS)
+                    ? MAX_FILTERED_BUSINESS_CUSTOMERS
+                    : pageSize,
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "name");
+      }
+
+      Page<BusinessCustomer> businessCustomerPage;
+      if (StringUtils.hasText(filter)) {
+        businessCustomerPage =
+            businessCustomerRepository.findFiltered("%" + filter + "%", pageRequest);
+      } else {
+        businessCustomerPage = businessCustomerRepository.findAll(pageRequest);
+      }
+
+      return new BusinessCustomers(
+          businessCustomerPage.toList(),
+          businessCustomerPage.getTotalElements(),
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize);
+    } catch (Throwable e) {
+
+      logger.error("Failed to retrieve the filtered business customers", e);
+
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered business customers", e);
     }
   }
 
@@ -267,6 +465,42 @@ public class CustomerService implements ICustomerService {
   }
 
   /**
+   * Update the business customer.
+   *
+   * @param businessCustomer the business customer
+   */
+  @Override
+  @Transactional
+  public void updateBusinessCustomer(BusinessCustomer businessCustomer)
+      throws InvalidArgumentException, BusinessCustomerNotFoundException,
+          ServiceUnavailableException {
+    if (businessCustomer == null) {
+      throw new InvalidArgumentException("businessCustomer");
+    }
+
+    Set<ConstraintViolation<BusinessCustomer>> constraintViolations =
+        validator.validate(businessCustomer);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "businessCustomer", ValidationError.toValidationErrors(constraintViolations));
+    }
+
+    try {
+      if (!businessCustomerRepository.existsById(businessCustomer.getId())) {
+        throw new BusinessCustomerNotFoundException(businessCustomer.getId());
+      }
+
+      businessCustomerRepository.saveAndFlush(businessCustomer);
+    } catch (BusinessCustomerNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the business customer (" + businessCustomer.getId() + ")", e);
+    }
+  }
+
+  /**
    * Update the individual customer.
    *
    * @param individualCustomer the individual customer
@@ -300,6 +534,17 @@ public class CustomerService implements ICustomerService {
       throw new ServiceUnavailableException(
           "Failed to update the individual customer (" + individualCustomer.getId() + ")", e);
     }
+  }
+
+  /**
+   * Validate the business customer.
+   *
+   * @param businessCustomer the business customer
+   * @return the constraint violations for the business customer
+   */
+  public Set<ConstraintViolation<BusinessCustomer>> validateBusinessCustomer(
+      BusinessCustomer businessCustomer) {
+    return validator.validate(businessCustomer);
   }
 
   /**

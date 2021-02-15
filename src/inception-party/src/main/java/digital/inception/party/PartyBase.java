@@ -16,7 +16,6 @@
 
 package digital.inception.party;
 
-import com.github.f4b6a3.uuid.UuidCreator;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -100,27 +99,44 @@ public class PartyBase implements Serializable {
   private LocalDateTime updated;
 
   /** Constructs a new <b>PartyBase</b>. */
-  public PartyBase() {}
+  protected PartyBase() {}
+
+  //  /**
+  //   * Constructs a new <b>PartyBase</b>.
+  //   *
+  //   *
+  //   * @param partyType the party type
+  //   */
+  //  protected PartyBase(PartyType partyType) {
+  //    this.id = UuidCreator.getShortPrefixComb();
+  //    this.partyType = partyType;
+  //  }
 
   /**
    * Constructs a new <b>PartyBase</b>.
    *
+   * @param id the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
+   *     with
    * @param partyType the party type
    */
-  protected PartyBase(PartyType partyType) {
+  protected PartyBase(UUID id, UUID tenantId, PartyType partyType) {
+    this.id = id;
+    this.tenantId = tenantId;
     this.partyType = partyType;
   }
 
   /**
    * Constructs a new <b>PartyBase</b>.
    *
+   * @param id the Universally Unique Identifier (UUID) for the party
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
    *     with
    * @param partyType the party type for the party
    * @param name the name of the party
    */
-  public PartyBase(UUID tenantId, PartyType partyType, String name) {
-    this.id = UuidCreator.getShortPrefixComb();
+  public PartyBase(UUID id, UUID tenantId, PartyType partyType, String name) {
+    this.id = id;
     this.tenantId = tenantId;
     this.partyType = partyType;
     this.name = name;

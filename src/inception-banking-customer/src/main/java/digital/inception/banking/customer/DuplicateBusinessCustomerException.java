@@ -25,33 +25,32 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <b>IndividualCustomerNotFoundException</b> exception is thrown to indicate an error condition
- * as a result of an individual customer that could not be found.
+ * The <b>DuplicateBusinessCustomerException</b> exception is thrown to indicate an error
+ * condition as a result of an attempt to create a duplicate business customer.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/banking/customer/individual-customer-not-found",
-    title = "The individual customer could not be found.",
-    status = HttpStatus.NOT_FOUND)
+    type = "http://inception.digital/problems/banking/customer/duplicate-business-customer",
+    title = "The business customer already exists.",
+    status = HttpStatus.CONFLICT)
 @WebFault(
-    name = "IndividualCustomerNotFoundException",
+    name = "DuplicateBusinessCustomerException",
     targetNamespace = "http://inception.digital/banking/customer",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class IndividualCustomerNotFoundException extends ServiceException {
+public class DuplicateBusinessCustomerException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>IndividualCustomerNotFoundException</b>.
+   * Constructs a new <b>DuplicateBusinessCustomerException</b>.
    *
-   * @param individualCustomerId the Universally Unique Identifier (UUID) for the individual
-   *     customer
+   * @param customerId the Universally Unique Identifier (UUID) for the business customer
    */
-  public IndividualCustomerNotFoundException(UUID individualCustomerId) {
-    super("The individual customer (" + individualCustomerId + ") could not be found");
+  public DuplicateBusinessCustomerException(UUID customerId) {
+    super("The business customer with the ID (" + customerId + ") already exists");
   }
 }
