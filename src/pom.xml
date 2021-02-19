@@ -265,21 +265,6 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-banking-customer</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-banking-customer-api</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-banking-customer-ws</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
         <artifactId>inception-bmi</artifactId>
         <version>${inception.version}</version>
       </dependency>
@@ -390,37 +375,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-party</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-party-api</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-party-ws</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
         <artifactId>inception-persistence</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-reference</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-reference-api</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-reference-ws</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -510,9 +465,6 @@
     <!-- Inception Modules -->
     <module>inception-application</module>
     <module>inception-audit</module>
-    <module>inception-banking-customer</module>
-    <module>inception-banking-customer-api</module>
-    <module>inception-banking-customer-ws</module>
     <module>inception-bmi</module>
     <module>inception-cache</module>
     <module>inception-codes</module>
@@ -533,13 +485,7 @@
     <module>inception-messaging</module>
     <module>inception-messaging-api</module>
     <module>inception-messaging-ws</module>
-    <module>inception-party</module>
-    <module>inception-party-api</module>
-    <module>inception-party-ws</module>
     <module>inception-persistence</module>
-    <module>inception-reference</module>
-    <module>inception-reference-api</module>
-    <module>inception-reference-ws</module>
     <module>inception-reporting</module>
     <module>inception-reporting-api</module>
     <module>inception-reporting-ws</module>
