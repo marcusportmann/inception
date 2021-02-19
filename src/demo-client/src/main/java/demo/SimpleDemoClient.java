@@ -83,7 +83,7 @@ public class SimpleDemoClient {
 
       TestApi testApi =
           JAXRSClientFactory.create(
-              "http://localhost:20000",
+              "http://localhost:8080",
               TestApi.class,
               Collections.singletonList(new JacksonJsonProvider(objectMapper)));
 
@@ -107,7 +107,7 @@ public class SimpleDemoClient {
 
       ReferenceApi referenceApi =
           JAXRSClientFactory.create(
-              "http://localhost:20000",
+              "http://localhost:8080",
               ReferenceApi.class,
               Collections.singletonList(new JacksonJsonProvider(objectMapper)));
 

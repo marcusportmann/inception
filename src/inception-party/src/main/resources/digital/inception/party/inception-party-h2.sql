@@ -743,12 +743,12 @@ COMMENT ON COLUMN party.titles.description IS 'The description for the title';
 
 
 CREATE TABLE party.parties (
-  created   TIMESTAMP    NOT NULL,
-  id        UUID         NOT NULL,
-  name      VARCHAR(100) NOT NULL,
-  tenant_id UUID         NOT NULL,
-  type      VARCHAR(30)  NOT NULL,
-  updated   TIMESTAMP,
+  created    TIMESTAMP    NOT NULL,
+  id         UUID         NOT NULL,
+  name       VARCHAR(100) NOT NULL,
+  tenant_id  UUID         NOT NULL,
+  party_type VARCHAR(30)  NOT NULL,
+  updated    TIMESTAMP,
 
   PRIMARY KEY (id)
 );
@@ -763,7 +763,7 @@ COMMENT ON COLUMN party.parties.name IS 'The name of the party';
 
 COMMENT ON COLUMN party.parties.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the party is associated with';
 
-COMMENT ON COLUMN party.parties.type IS 'The code for the party type';
+COMMENT ON COLUMN party.parties.party_type IS 'The code for the party type';
 
 COMMENT ON COLUMN party.parties.updated IS 'The date and time the party was last updated';
 
@@ -1421,22 +1421,22 @@ INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, descripti
 
 
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('unknown', 'unknown', 'en-US', 99, 'Unknown', 'Unknown');
-INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('married', 'in_community_of_property', 'en-US', 1, 'In Community Of Property', 'In Community Of Property');
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('married', 'anc_without_accrual', 'en-US', 1, 'ANC Without Accrual', 'ANC Without Accrual');
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('married', 'anc_with_accrual', 'en-US', 1, 'ANC With Accrual', 'ANC With Accrual');
-
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('unknown', 'unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+  VALUES ('unknown', 'unknown', 'en-US', 99, 'Unknown', 'Unknown');
+
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('married', 'in_community_of_property', 'en-ZA', 1, 'In Community Of Property', 'In Community Of Property');
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('married', 'anc_without_accrual', 'en-ZA', 1, 'ANC Without Accrual', 'ANC Without Accrual');
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('married', 'anc_with_accrual', 'en-ZA', 1, 'ANC With Accrual', 'ANC With Accrual');
+INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
+  VALUES ('unknown', 'unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
 INSERT INTO party.minor_types (code, locale_id, sort_index, name, description)
@@ -2067,50 +2067,50 @@ INSERT INTO party.times_to_contact (code, locale_id, sort_index, name, descripti
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('mr', 'en-US', 1, 'Mr', 'Mr.', 'Mr');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('ms', 'en-US', 1, 'Ms', 'Ms.', 'Ms');
+  VALUES ('ms', 'en-US', 2, 'Ms', 'Ms.', 'Ms');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('miss', 'en-US', 1, 'Miss', 'Miss', 'Miss');
+  VALUES ('miss', 'en-US', 3, 'Miss', 'Miss', 'Miss');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('mrs', 'en-US', 1, 'Mrs', 'Mrs.', 'Mrs');
+  VALUES ('mrs', 'en-US', 4, 'Mrs', 'Mrs.', 'Mrs');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('doctor', 'en-US', 1, 'Doctor', 'Dr.', 'Doctor');
+  VALUES ('doctor', 'en-US', 5, 'Doctor', 'Dr.', 'Doctor');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('the_honorable', 'en-US', 1, 'The Honorable', 'The Hon.', 'The Honorable');
+  VALUES ('the_honorable', 'en-US', 6, 'The Honorable', 'The Hon.', 'The Honorable');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('reverend', 'en-US', 1, 'Reverend', 'Rev.', 'Reverend');
+  VALUES ('reverend', 'en-US', 7, 'Reverend', 'Rev.', 'Reverend');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('father', 'en-US', 1, 'Father', 'Fr.', 'Father');
+  VALUES ('father', 'en-US', 8, 'Father', 'Fr.', 'Father');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('rabbi', 'en-US', 1, 'Rabbi', 'Rabbi', 'Rabbi');
+  VALUES ('rabbi', 'en-US', 9, 'Rabbi', 'Rabbi', 'Rabbi');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('professor', 'en-US', 1, 'Professor', 'Prof.', 'Professor');
+  VALUES ('professor', 'en-US', 10, 'Professor', 'Prof.', 'Professor');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('advocate', 'en-US', 1, 'Advocate', 'Adv.', 'Advocate');
+  VALUES ('advocate', 'en-US', 11, 'Advocate', 'Adv.', 'Advocate');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown', 'Unknown');
 
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('mr', 'en-ZA', 1, 'Mr', 'Mr.', 'Mr');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('ms', 'en-ZA', 1, 'Ms', 'Ms.', 'Ms');
+  VALUES ('ms', 'en-ZA', 2, 'Ms', 'Ms.', 'Ms');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('miss', 'en-ZA', 1, 'Miss', 'Miss', 'Miss');
+  VALUES ('miss', 'en-ZA', 3, 'Miss', 'Miss', 'Miss');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('mrs', 'en-ZA', 1, 'Mrs', 'Mrs.', 'Mrs');
+  VALUES ('mrs', 'en-ZA', 4, 'Mrs', 'Mrs.', 'Mrs');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('doctor', 'en-ZA', 1, 'Doctor', 'Dr.', 'Doctor');
+  VALUES ('doctor', 'en-ZA', 5, 'Doctor', 'Dr.', 'Doctor');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('the_honorable', 'en-ZA', 1, 'The Honorable', 'The Hon.', 'The Honorable');
+  VALUES ('the_honorable', 'en-ZA', 6, 'The Honorable', 'The Hon.', 'The Honorable');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('reverend', 'en-ZA', 1, 'Reverend', 'Rev.', 'Reverend');
+  VALUES ('reverend', 'en-ZA', 7, 'Reverend', 'Rev.', 'Reverend');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('father', 'en-ZA', 1, 'Father', 'Fr.', 'Father');
+  VALUES ('father', 'en-ZA', 8, 'Father', 'Fr.', 'Father');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('rabbi', 'en-ZA', 1, 'Rabbi', 'Rabbi', 'Rabbi');
+  VALUES ('rabbi', 'en-ZA', 9, 'Rabbi', 'Rabbi', 'Rabbi');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('professor', 'en-ZA', 1, 'Professor', 'Prof.', 'Professor');
+  VALUES ('professor', 'en-ZA', 10, 'Professor', 'Prof.', 'Professor');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('advocate', 'en-ZA', 1, 'Advocate', 'Adv.', 'Advocate');
+  VALUES ('advocate', 'en-ZA', 11, 'Advocate', 'Adv.', 'Advocate');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown', 'Unknown');
 

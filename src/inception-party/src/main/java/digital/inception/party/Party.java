@@ -59,12 +59,12 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A person or organization")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "tenantId", "type", "name"})
+@JsonPropertyOrder({"id", "tenantId", "partyType", "name"})
 @XmlRootElement(name = "Party", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Party",
     namespace = "http://inception.digital/party",
-    propOrder = {"id", "tenantId", "type", "name"})
+    propOrder = {"id", "tenantId", "partyType", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "parties")
@@ -100,6 +100,14 @@ public class Party implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
+  /** The party type. */
+  @Schema(description = "The party type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "PartyType", required = true)
+  @NotNull
+  @Column(name = "party_type", length = 30, nullable = false)
+  private PartyType partyType;
+
   /** The Universally Unique Identifier (UUID) for the tenant the party is associated with. */
   @Schema(
       description =
@@ -110,14 +118,6 @@ public class Party implements Serializable {
   @NotNull
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
-
-  /** The party type. */
-  @Schema(description = "The party type", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
-  @NotNull
-  @Column(name = "type", length = 30, nullable = false)
-  private PartyType type;
 
   /** The date and time the party was last updated. */
   @JsonIgnore
@@ -132,10 +132,10 @@ public class Party implements Serializable {
   /**
    * Constructs a new <b>Party</b>.
    *
-   * @param type the party type
+   * @param partyType the party type
    */
-  protected Party(PartyType type) {
-    this.type = type;
+  protected Party(PartyType partyType) {
+    this.partyType = partyType;
   }
 
   /**
@@ -143,13 +143,13 @@ public class Party implements Serializable {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
    *     with
-   * @param type the party type
+   * @param partyType the party type
    * @param name the name of the party
    */
-  public Party(UUID tenantId, PartyType type, String name) {
+  public Party(UUID tenantId, PartyType partyType, String name) {
     this.id = UuidCreator.getShortPrefixComb();
     this.tenantId = tenantId;
-    this.type = type;
+    this.partyType = partyType;
     this.name = name;
   }
 
@@ -206,21 +206,21 @@ public class Party implements Serializable {
   }
 
   /**
+   * Returns the party type.
+   *
+   * @return the party type
+   */
+  public PartyType getPartyType() {
+    return partyType;
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) for the tenant the party is associated with.
    *
    * @return the Universally Unique Identifier (UUID) for the tenant the party is associated with
    */
   public UUID getTenantId() {
     return tenantId;
-  }
-
-  /**
-   * Returns the party type.
-   *
-   * @return the party type
-   */
-  public PartyType getType() {
-    return type;
   }
 
   /**
@@ -261,6 +261,15 @@ public class Party implements Serializable {
   }
 
   /**
+   * Set the party type.
+   *
+   * @param partyType the party type
+   */
+  public void setPartyType(PartyType partyType) {
+    this.partyType = partyType;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) for the tenant the party is associated with.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
@@ -268,14 +277,5 @@ public class Party implements Serializable {
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
-  }
-
-  /**
-   * Set the party type.
-   *
-   * @param type the party type
-   */
-  public void setType(PartyType type) {
-    this.type = type;
   }
 }

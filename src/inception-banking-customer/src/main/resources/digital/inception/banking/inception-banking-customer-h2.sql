@@ -8,8 +8,8 @@ CREATE SCHEMA customer;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE customer.customers (
-   id   UUID        NOT NULL,
-   type VARCHAR(30) NOT NULL,
+   id            UUID        NOT NULL,
+   customer_type VARCHAR(30) NOT NULL,
 
    PRIMARY KEY (id),
    CONSTRAINT customers_party_fk FOREIGN KEY (id) REFERENCES party.parties(id) ON DELETE CASCADE
@@ -17,7 +17,7 @@ CREATE TABLE customer.customers (
 
 COMMENT ON COLUMN customer.customers.id IS 'The Universally Unique Identifier (UUID) for the customer';
 
-COMMENT ON COLUMN customer.customers.type IS 'The code for the customer type';
+COMMENT ON COLUMN customer.customers.customer_type IS 'The code for the customer type';
 
 
 CREATE TABLE customer.business_customers (

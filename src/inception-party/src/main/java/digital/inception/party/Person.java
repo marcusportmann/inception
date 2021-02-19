@@ -345,19 +345,7 @@ public class Person extends PartyBase implements Serializable {
   private String title;
 
   /** Constructs a new <b>Person</b>. */
-  public Person() {
-  }
-
-//  /**
-//   * Constructs a new <b>Person</b>.
-//   *
-//   *
-//   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the person is
-//   *     associated with
-//   */
-//  public Person(UUID tenantId) {
-//    super(UuidCreator.getShortPrefixComb(), tenantId, PartyType.PERSON);
-//  }
+  public Person() {}
 
   /**
    * Constructs a new <b>Person</b>.
@@ -1238,6 +1226,8 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setGivenName(String givenName) {
     this.givenName = givenName;
+
+    deriveName();
   }
 
   /**
@@ -1312,6 +1302,8 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setMiddleNames(String middleNames) {
     this.middleNames = middleNames;
+
+    deriveName();
   }
 
   /**
@@ -1415,6 +1407,8 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setSurname(String surname) {
     this.surname = surname;
+
+    deriveName();
   }
 
   /**
@@ -1444,5 +1438,34 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  /** Derive the name of the person from the given name, middle name(s) and surname. */
+  private void deriveName() {
+    StringBuffer derivedName = new StringBuffer();
+
+    if (StringUtils.hasText(givenName)) {
+      derivedName.append(givenName.trim());
+    }
+
+    if (StringUtils.hasText(middleNames)) {
+      if (derivedName.length() > 0) {
+        derivedName.append(" " + middleNames.trim());
+      } else {
+        derivedName.append(middleNames.trim());
+      }
+    }
+
+    if (StringUtils.hasText(surname)) {
+      if (derivedName.length() > 0) {
+        derivedName.append(" " + surname.trim());
+      } else {
+        derivedName.append(surname.trim());
+      }
+    }
+
+    if (derivedName.length() > 0) {
+      setName(derivedName.toString());
+    }
   }
 }

@@ -654,7 +654,7 @@ public class PartyReferenceServiceTest {
         party1.getTenantId(),
         party2.getTenantId());
     assertEquals(
-        "The type values for the two parties do not match", party1.getType(), party2.getType());
+        "The type values for the two parties do not match", party1.getPartyType(), party2.getPartyType());
     assertEquals(
         "The name values for the two parties do not match", party1.getName(), party2.getName());
   }

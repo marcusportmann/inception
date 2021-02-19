@@ -85,7 +85,7 @@ public class PartyBase implements Serializable {
 
   /** The party type for the party. */
   @NotNull
-  @Column(name = "type", length = 30, nullable = false)
+  @Column(name = "party_type", length = 30, nullable = false)
   private PartyType partyType;
 
   /** The Universally Unique Identifier (UUID) for the tenant the party is associated with. */
@@ -100,17 +100,6 @@ public class PartyBase implements Serializable {
 
   /** Constructs a new <b>PartyBase</b>. */
   protected PartyBase() {}
-
-  //  /**
-  //   * Constructs a new <b>PartyBase</b>.
-  //   *
-  //   *
-  //   * @param partyType the party type
-  //   */
-  //  protected PartyBase(PartyType partyType) {
-  //    this.id = UuidCreator.getShortPrefixComb();
-  //    this.partyType = partyType;
-  //  }
 
   /**
    * Constructs a new <b>PartyBase</b>.

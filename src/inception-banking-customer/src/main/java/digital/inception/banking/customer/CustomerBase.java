@@ -51,7 +51,7 @@ public class CustomerBase extends PartyBase implements Serializable {
 
   /** The customer type. */
   @NotNull
-  @Column(name = "type", length = 30, nullable = false)
+  @Column(name = "customer_type", length = 30, nullable = false)
   private CustomerType customerType;
 
   /** The Universally Unique Identifier (UUID) for the customer. */
@@ -61,19 +61,6 @@ public class CustomerBase extends PartyBase implements Serializable {
 
   /** Constructs a new <b>CustomerBase</b>. */
   protected CustomerBase() {}
-
-  //  /**
-  //   * Constructs a new <b>CustomerBase</b>.
-  //   *
-  //   * @param id the Universally Unique Identifier (UUID) for the customer
-  //   * @param partyType the party type for the customer
-  //   * @param customerType the customer type for the customer
-  //   */
-  //  public CustomerBase(UUID id, PartyType partyType, CustomerType customerType) {
-  //    super(id, partyType);
-  //
-  //    this.customerType = customerType;
-  //  }
 
   /**
    * Constructs a new <b>CustomerBase</b>.
@@ -90,21 +77,6 @@ public class CustomerBase extends PartyBase implements Serializable {
     this.id = id;
     this.customerType = customerType;
   }
-
-//  /**
-//   * Constructs a new <b>CustomerBase</b>.
-//   *
-//   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the customer is
-//   *     associated with
-//   * @param partyType the party type for the customer
-//   * @param customerType the customer type for the customer
-//   * @param name the name of the customer
-//   */
-//  public CustomerBase(UUID tenantId, PartyType partyType, CustomerType customerType, String name) {
-//    super(tenantId, partyType, name);
-//
-//    this.customerType = customerType;
-//  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

@@ -174,18 +174,7 @@ public class Organization extends PartyBase implements Serializable {
   private String countriesOfTaxResidence;
 
   /** Constructs a new <b>Organization</b>. */
-  public Organization() {
-  }
-
-//  /**
-//   * Constructs a new <b>Organization</b>.
-//   *
-//   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organization is
-//   *     associated with
-//   */
-//  public Organization(UUID tenantId) {
-//    super(UuidCreator.getShortPrefixComb(), tenantId, PartyType.ORGANIZATION);
-//  }
+  public Organization() {}
 
   /**
    * Constructs a new <b>Organization</b>.
@@ -441,8 +430,6 @@ public class Organization extends PartyBase implements Serializable {
   public Set<IdentityDocument> getIdentityDocuments() {
     return identityDocuments;
   }
-
-  // TODO: Add identity documents -- MARCUS
 
   /**
    * Returns the name of the organization.
