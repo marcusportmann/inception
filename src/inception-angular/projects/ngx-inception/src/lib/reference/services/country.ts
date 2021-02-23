@@ -22,9 +22,14 @@
 export class Country {
 
   /**
-   * The code for the country.
+   * The ISO 3166-1 alpha-2 code for the country.
    */
   code: string;
+
+  /**
+   * The ISO 3166-1 alpha-3 code for the country.
+   */
+  iso3Code: string;
 
   /**
    * The description for the country.
@@ -64,7 +69,8 @@ export class Country {
   /**
    * Constructs a new Country.
    *
-   * @param code           The code for the country.
+   * @param code           The ISO 3166-1 alpha-2 code for the country.
+   * @param iso3Code       The ISO 3166-1 alpha-3 code for the country.
    * @param localeId       The Unicode locale identifier for the country.
    * @param sortIndex      The sort index for the country.
    * @param name           The name of the country.
@@ -73,9 +79,10 @@ export class Country {
    * @param sovereignState The code for the sovereign state the country is associated with.
    * @param nationality    The nationality for the country.
    */
-  constructor(code: string, localeId: string, sortIndex: number, name: string, shortName: string,
-              description: string, sovereignState: string, nationality: string) {
+  constructor(code: string, iso3Code: string, localeId: string, sortIndex: number, name: string,
+              shortName: string, description: string, sovereignState: string, nationality: string) {
     this.code = code;
+    this.iso3Code = iso3Code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;

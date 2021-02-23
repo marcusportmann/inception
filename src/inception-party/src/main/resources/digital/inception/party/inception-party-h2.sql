@@ -743,12 +743,12 @@ COMMENT ON COLUMN party.titles.description IS 'The description for the title';
 
 
 CREATE TABLE party.parties (
-  created    TIMESTAMP    NOT NULL,
-  id         UUID         NOT NULL,
-  name       VARCHAR(100) NOT NULL,
-  tenant_id  UUID         NOT NULL,
-  party_type VARCHAR(30)  NOT NULL,
-  updated    TIMESTAMP,
+  created   TIMESTAMP    NOT NULL,
+  id        UUID         NOT NULL,
+  name      VARCHAR(100) NOT NULL,
+  tenant_id UUID         NOT NULL,
+  type      VARCHAR(30)  NOT NULL,
+  updated   TIMESTAMP,
 
   PRIMARY KEY (id)
 );
@@ -763,7 +763,7 @@ COMMENT ON COLUMN party.parties.name IS 'The name of the party';
 
 COMMENT ON COLUMN party.parties.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the party is associated with';
 
-COMMENT ON COLUMN party.parties.party_type IS 'The code for the party type';
+COMMENT ON COLUMN party.parties.type IS 'The code for the party type';
 
 COMMENT ON COLUMN party.parties.updated IS 'The date and time the party was last updated';
 

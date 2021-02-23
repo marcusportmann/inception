@@ -167,14 +167,14 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of identity document types was not retrieved",
-        8,
+        10,
         retrievedIdentityDocumentTypes.size());
 
     retrievedIdentityDocumentTypes = partyReferenceService.getIdentityDocumentTypes("en-US");
 
     assertEquals(
         "The correct number of identity document types was not retrieved",
-        4,
+        5,
         retrievedIdentityDocumentTypes.size());
   }
 
@@ -654,7 +654,7 @@ public class PartyReferenceServiceTest {
         party1.getTenantId(),
         party2.getTenantId());
     assertEquals(
-        "The type values for the two parties do not match", party1.getPartyType(), party2.getPartyType());
+        "The type values for the two parties do not match", party1.getType(), party2.getType());
     assertEquals(
         "The name values for the two parties do not match", party1.getName(), party2.getName());
   }

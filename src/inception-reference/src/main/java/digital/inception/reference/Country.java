@@ -44,6 +44,7 @@ import javax.xml.bind.annotation.XmlType;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "code",
+  "iso3Code",
   "locale",
   "sortIndex",
   "name",
@@ -58,6 +59,7 @@ import javax.xml.bind.annotation.XmlType;
     namespace = "http://inception.digital/reference",
     propOrder = {
       "code",
+      "iso3Code",
       "localeId",
       "sortIndex",
       "name",
@@ -92,6 +94,16 @@ public class Country implements Serializable {
   @Size(max = 200)
   @Column(name = "description", length = 200, nullable = false)
   private String description;
+
+  /** The ISO 3166-1 alpha-3 code for the country. */
+  @Schema(description = "The ISO 3166-1 alpha-3 code for the country", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Iso3Code", required = true)
+  @NotNull
+  @Size(min = 3, max = 3)
+  @Id
+  @Column(name = "iso3_code", length = 3, nullable = false)
+  private String iso3Code;
 
   /** The Unicode locale identifier for the country. */
   @Schema(description = "The Unicode locale identifier for the country", required = true)
@@ -197,6 +209,15 @@ public class Country implements Serializable {
   }
 
   /**
+   * Returns the ISO 3166-1 alpha-3 code for the country.
+   *
+   * @return the ISO 3166-1 alpha-3 code for the country
+   */
+  public String getIso3Code() {
+    return iso3Code;
+  }
+
+  /**
    * Returns the Unicode locale identifier for the country.
    *
    * @return the Unicode locale identifier for the country
@@ -276,6 +297,15 @@ public class Country implements Serializable {
    */
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Set the ISO 3166-1 alpha-3 code for the country.
+   *
+   * @param iso3Code the ISO 3166-1 alpha-3 code for the country
+   */
+  public void setIso3Code(String iso3Code) {
+    this.iso3Code = iso3Code;
   }
 
   /**

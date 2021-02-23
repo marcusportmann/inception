@@ -624,7 +624,7 @@
     <createTable schemaName="party" tableName="party" remarks="Parties">
       <column name="id" type="uuid"
         remarks="The Universally Unique Identifier (UUID) for the party"/>
-      <column name="type" type="int" remarks="The code for the party type"/>
+      <column name="type" type="nvarchar(30)" remarks="The code for the party type"/>
       <column name="name" type="nvarchar(100)" remarks="The name for the party"/>
     </createTable>
     <addPrimaryKey schemaName="party" tableName="party" columnNames="id"/>

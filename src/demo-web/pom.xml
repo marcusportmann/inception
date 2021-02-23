@@ -42,10 +42,6 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-banking-customer</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
       <artifactId>inception-codes</artifactId>
     </dependency>
     <dependency>

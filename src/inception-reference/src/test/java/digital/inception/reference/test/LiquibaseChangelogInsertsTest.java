@@ -181,6 +181,7 @@ public class LiquibaseChangelogInsertsTest {
 
         System.out.println("<insert schemaName=\"reference\" tableName=\"countries\">");
         System.out.println("  <column name=\"code\" value=\"" + country.getCode() + "\"/>");
+        System.out.println("  <column name=\"iso3_code\" value=\"" + country.getIso3Code() + "\"/>");
         System.out.println(
             "  <column name=\"locale_id\" value=\"" + country.getLocaleId() + "\"/>");
         System.out.println("  <column name=\"sort_index\" value=\"" + counter + "\"/>");

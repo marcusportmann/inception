@@ -24,6 +24,7 @@
 
     <createTable schemaName="reference" tableName="countries" remarks="Countries">
       <column name="code" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country"/>
+      <column name="iso3_code" type="nchar(3)" remarks="The ISO 3166-1 alpha-3 code for the country"/>
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the country"/>
       <column name="sort_index" type="int" remarks="The sort index for the country"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the country"/>
@@ -34,6 +35,7 @@
     </createTable>
     <addPrimaryKey schemaName="reference" tableName="countries" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="countries" columnName="iso3_code"/>
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="locale_id"/>
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="sort_index"/>
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="name"/>
@@ -42,6 +44,9 @@
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="sovereign_state"/>
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="nationality"/>
     <addDefaultValue schemaName="reference" tableName="countries" columnName="description" defaultValue=""/>
+    <createIndex indexName="countries_iso3_code_ix" schemaName="reference" tableName="countries">
+      <column name="iso3_code"/>
+    </createIndex>
     <createIndex indexName="countries_locale_id_ix" schemaName="reference" tableName="countries">
       <column name="locale_id"/>
     </createIndex>
@@ -130,6 +135,7 @@
 
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="DM"/>
+      <column name="iso3_code" value="DMA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="1"/>
       <column name="name" value=" Commonwealth of Dominica"/>
@@ -140,6 +146,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MC"/>
+      <column name="iso3_code" value="MCO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="2"/>
       <column name="name" value=" Principality of Monaco"/>
@@ -150,6 +157,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BY"/>
+      <column name="iso3_code" value="BLR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="3"/>
       <column name="name" value=" Republic of Belarus"/>
@@ -160,6 +168,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AF"/>
+      <column name="iso3_code" value="AFG"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="4"/>
       <column name="name" value="Afghanistan"/>
@@ -170,6 +179,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AS"/>
+      <column name="iso3_code" value="ASM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="5"/>
       <column name="name" value="American Samoa"/>
@@ -180,6 +190,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AI"/>
+      <column name="iso3_code" value="AIA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="6"/>
       <column name="name" value="Anguilla"/>
@@ -190,6 +201,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AQ"/>
+      <column name="iso3_code" value="ATA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="7"/>
       <column name="name" value="Antarctica"/>
@@ -200,6 +212,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AG"/>
+      <column name="iso3_code" value="ATG"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="8"/>
       <column name="name" value="Antigua and Barbuda"/>
@@ -210,6 +223,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="EG"/>
+      <column name="iso3_code" value="EGY"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="9"/>
       <column name="name" value="Arab Republic of Egypt"/>
@@ -220,6 +234,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AR"/>
+      <column name="iso3_code" value="ARG"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="10"/>
       <column name="name" value="Argentine Republic"/>
@@ -230,6 +245,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AW"/>
+      <column name="iso3_code" value="ABW"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="11"/>
       <column name="name" value="Aruba"/>
@@ -240,6 +256,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="JE"/>
+      <column name="iso3_code" value="JEY"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="12"/>
       <column name="name" value="Bailiwick of Jersey"/>
@@ -250,6 +267,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BB"/>
+      <column name="iso3_code" value="BRB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="13"/>
       <column name="name" value="Barbados"/>
@@ -260,6 +278,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BZ"/>
+      <column name="iso3_code" value="BLZ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="14"/>
       <column name="name" value="Belize"/>
@@ -270,6 +289,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BM"/>
+      <column name="iso3_code" value="BMU"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="15"/>
       <column name="name" value="Bermuda"/>
@@ -280,6 +300,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="VE"/>
+      <column name="iso3_code" value="VEN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="16"/>
       <column name="name" value="Bolivarian Republic of Venezuela"/>
@@ -290,6 +311,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BQ"/>
+      <column name="iso3_code" value="BES"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="17"/>
       <column name="name" value="Bonaire, Sint Eustatius and Saba"/>
@@ -300,6 +322,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BA"/>
+      <column name="iso3_code" value="BIH"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="18"/>
       <column name="name" value="Bosnia and Herzegovina"/>
@@ -310,6 +333,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BW"/>
+      <column name="iso3_code" value="BWA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="19"/>
       <column name="name" value="Botswana"/>
@@ -320,6 +344,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BV"/>
+      <column name="iso3_code" value="BVT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="20"/>
       <column name="name" value="Bouvet Island"/>
@@ -330,6 +355,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BR"/>
+      <column name="iso3_code" value="BRA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="21"/>
       <column name="name" value="Brazil"/>
@@ -340,6 +366,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BF"/>
+      <column name="iso3_code" value="BFA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="22"/>
       <column name="name" value="Burkina Faso"/>
@@ -350,6 +377,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CM"/>
+      <column name="iso3_code" value="CMR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="23"/>
       <column name="name" value="Cameroon"/>
@@ -360,6 +388,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CA"/>
+      <column name="iso3_code" value="CAN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="24"/>
       <column name="name" value="Canada"/>
@@ -370,6 +399,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="KY"/>
+      <column name="iso3_code" value="CYM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="25"/>
       <column name="name" value="Cayman Islands"/>
@@ -380,6 +410,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CF"/>
+      <column name="iso3_code" value="CAF"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="26"/>
       <column name="name" value="Central African Republic"/>
@@ -390,6 +421,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CN"/>
+      <column name="iso3_code" value="CHN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="27"/>
       <column name="name" value="China"/>
@@ -400,6 +432,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CX"/>
+      <column name="iso3_code" value="CXR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="28"/>
       <column name="name" value="Christmas Island"/>
@@ -410,6 +443,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GY"/>
+      <column name="iso3_code" value="GUY"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="29"/>
       <column name="name" value="Co-operative Republic of Guyana"/>
@@ -420,6 +454,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CC"/>
+      <column name="iso3_code" value="CCK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="30"/>
       <column name="name" value="Cocos (Keeling) Islands"/>
@@ -430,6 +465,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PF"/>
+      <column name="iso3_code" value="PYF"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="31"/>
       <column name="name" value="Collectivity of French Polynesia"/>
@@ -440,6 +476,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AU"/>
+      <column name="iso3_code" value="AUS"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="32"/>
       <column name="name" value="Commonwealth of Australia"/>
@@ -450,16 +487,18 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PR"/>
+      <column name="iso3_code" value="PRI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="33"/>
       <column name="name" value="Commonwealth of Puerto Rico"/>
-      <column name="short_name" value="Puerto Rico"/>
+      <column name="short_name" value="PRT Rico"/>
       <column name="description" value="Commonwealth of Puerto Rico"/>
       <column name="sovereign_state" value="PR"/>
       <column name="nationality" value="Puerto Rican"/>
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BS"/>
+      <column name="iso3_code" value="BHS"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="34"/>
       <column name="name" value="Commonwealth of The Bahamas"/>
@@ -470,6 +509,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MP"/>
+      <column name="iso3_code" value="MNP"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="35"/>
       <column name="name" value="Commonwealth of the Northern Mariana Islands"/>
@@ -480,6 +520,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CK"/>
+      <column name="iso3_code" value="COK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="36"/>
       <column name="name" value="Cook Islands"/>
@@ -490,6 +531,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CW"/>
+      <column name="iso3_code" value="CUW"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="37"/>
       <column name="name" value="Curaçao"/>
@@ -500,6 +542,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CZ"/>
+      <column name="iso3_code" value="CZE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="38"/>
       <column name="name" value="Czech Republic"/>
@@ -510,6 +553,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="KP"/>
+      <column name="iso3_code" value="PRK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="39"/>
       <column name="name" value="Democratic People's Republic of Korea"/>
@@ -520,6 +564,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ST"/>
+      <column name="iso3_code" value="STP"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="40"/>
       <column name="name" value="Democratic Republic of São Tomé and Príncipe"/>
@@ -530,6 +575,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TL"/>
+      <column name="iso3_code" value="TLS"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="41"/>
       <column name="name" value="Democratic Republic of Timor-Leste"/>
@@ -540,6 +586,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CD"/>
+      <column name="iso3_code" value="COD"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="42"/>
       <column name="name" value="Democratic Republic of the Congo"/>
@@ -550,6 +597,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="LK"/>
+      <column name="iso3_code" value="LKA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="43"/>
       <column name="name" value="Democratic Socialist Republic of Sri Lanka"/>
@@ -560,6 +608,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="YT"/>
+      <column name="iso3_code" value="MYT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="44"/>
       <column name="name" value="Department of Mayotte"/>
@@ -570,6 +619,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="DO"/>
+      <column name="iso3_code" value="DOM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="45"/>
       <column name="name" value="Dominican Republic"/>
@@ -580,6 +630,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="FK"/>
+      <column name="iso3_code" value="FLK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="46"/>
       <column name="name" value="Falkland Islands (Malvinas)"/>
@@ -590,6 +641,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="FO"/>
+      <column name="iso3_code" value="FRO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="47"/>
       <column name="name" value="Faroe Islands"/>
@@ -600,6 +652,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ET"/>
+      <column name="iso3_code" value="ETH"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="48"/>
       <column name="name" value="Federal Democratic Republic of Ethiopia"/>
@@ -610,6 +663,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NP"/>
+      <column name="iso3_code" value="NPL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="49"/>
       <column name="name" value="Federal Democratic Republic of Nepal"/>
@@ -620,6 +674,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="DE"/>
+      <column name="iso3_code" value="DEU"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="50"/>
       <column name="name" value="Federal Republic of Germany"/>
@@ -630,6 +685,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NG"/>
+      <column name="iso3_code" value="NGA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="51"/>
       <column name="name" value="Federal Republic of Nigeria"/>
@@ -640,6 +696,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SO"/>
+      <column name="iso3_code" value="SOM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="52"/>
       <column name="name" value="Federal Republic of Somalia"/>
@@ -650,6 +707,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="FM"/>
+      <column name="iso3_code" value="FSM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="53"/>
       <column name="name" value="Federated States of Micronesia"/>
@@ -660,6 +718,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="KN"/>
+      <column name="iso3_code" value="KNA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="54"/>
       <column name="name" value="Federation of Saint Christopher and Nevis"/>
@@ -670,6 +729,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GF"/>
+      <column name="iso3_code" value="GUF"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="55"/>
       <column name="name" value="French Guiana"/>
@@ -680,6 +740,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="FR"/>
+      <column name="iso3_code" value="FRA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="56"/>
       <column name="name" value="French Republic"/>
@@ -690,6 +751,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TF"/>
+      <column name="iso3_code" value="ATF"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="57"/>
       <column name="name" value="French Southern and Antarctic Lands"/>
@@ -700,6 +762,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GA"/>
+      <column name="iso3_code" value="GAB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="58"/>
       <column name="name" value="Gabonese Republic"/>
@@ -710,6 +773,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GE"/>
+      <column name="iso3_code" value="GEO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="59"/>
       <column name="name" value="Georgia"/>
@@ -720,6 +784,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GI"/>
+      <column name="iso3_code" value="GIB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="60"/>
       <column name="name" value="Gibraltar"/>
@@ -730,6 +795,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="LU"/>
+      <column name="iso3_code" value="LUX"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="61"/>
       <column name="name" value="Grand Duchy of Luxembourg"/>
@@ -740,6 +806,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GL"/>
+      <column name="iso3_code" value="GRL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="62"/>
       <column name="name" value="Greenland"/>
@@ -750,6 +817,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GD"/>
+      <column name="iso3_code" value="GRD"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="63"/>
       <column name="name" value="Grenada"/>
@@ -760,6 +828,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GP"/>
+      <column name="iso3_code" value="GLP"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="64"/>
       <column name="name" value="Guadeloupe"/>
@@ -770,6 +839,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GU"/>
+      <column name="iso3_code" value="GUM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="65"/>
       <column name="name" value="Guam"/>
@@ -780,6 +850,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GG"/>
+      <column name="iso3_code" value="GGY"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="66"/>
       <column name="name" value="Guernsey"/>
@@ -790,6 +861,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="JO"/>
+      <column name="iso3_code" value="JOR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="67"/>
       <column name="name" value="Hashemite Kingdom of Jordan"/>
@@ -800,6 +872,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GR"/>
+      <column name="iso3_code" value="GRC"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="68"/>
       <column name="name" value="Hellenic Republic"/>
@@ -810,6 +883,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="VA"/>
+      <column name="iso3_code" value="VAT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="69"/>
       <column name="name" value="Holy See"/>
@@ -820,6 +894,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="HK"/>
+      <column name="iso3_code" value="HKG"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="70"/>
       <column name="name" value="Hong Kong"/>
@@ -830,6 +905,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="HU"/>
+      <column name="iso3_code" value="HUN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="71"/>
       <column name="name" value="Hungary"/>
@@ -840,6 +916,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="IS"/>
+      <column name="iso3_code" value="ISL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="72"/>
       <column name="name" value="Iceland"/>
@@ -850,6 +927,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PG"/>
+      <column name="iso3_code" value="PNG"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="73"/>
       <column name="name" value="Independent State of Papua New Guinea"/>
@@ -860,6 +938,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="WS"/>
+      <column name="iso3_code" value="WSM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="74"/>
       <column name="name" value="Independent State of Samoa"/>
@@ -870,6 +949,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="IR"/>
+      <column name="iso3_code" value="IRN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="75"/>
       <column name="name" value="Islamic Republic of Iran"/>
@@ -880,6 +960,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MR"/>
+      <column name="iso3_code" value="MRT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="76"/>
       <column name="name" value="Islamic Republic of Mauritania"/>
@@ -890,6 +971,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PK"/>
+      <column name="iso3_code" value="PAK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="77"/>
       <column name="name" value="Islamic Republic of Pakistan"/>
@@ -900,6 +982,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="IM"/>
+      <column name="iso3_code" value="IMN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="78"/>
       <column name="name" value="Isle of Man"/>
@@ -910,6 +993,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="IT"/>
+      <column name="iso3_code" value="ITA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="79"/>
       <column name="name" value="Italian Republic"/>
@@ -920,6 +1004,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="JM"/>
+      <column name="iso3_code" value="JAM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="80"/>
       <column name="name" value="Jamaica"/>
@@ -930,6 +1015,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="JP"/>
+      <column name="iso3_code" value="JPN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="81"/>
       <column name="name" value="Japan"/>
@@ -940,6 +1026,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BH"/>
+      <column name="iso3_code" value="BHR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="82"/>
       <column name="name" value="Kingdom of Bahrain"/>
@@ -950,6 +1037,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BE"/>
+      <column name="iso3_code" value="BEL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="83"/>
       <column name="name" value="Kingdom of Belgium"/>
@@ -960,6 +1048,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BT"/>
+      <column name="iso3_code" value="BTN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="84"/>
       <column name="name" value="Kingdom of Bhutan"/>
@@ -970,6 +1059,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="KH"/>
+      <column name="iso3_code" value="KHM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="85"/>
       <column name="name" value="Kingdom of Cambodia"/>
@@ -980,6 +1070,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="DK"/>
+      <column name="iso3_code" value="DNK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="86"/>
       <column name="name" value="Kingdom of Denmark"/>
@@ -990,6 +1081,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SZ"/>
+      <column name="iso3_code" value="SWZ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="87"/>
       <column name="name" value="Kingdom of Eswatini"/>
@@ -1000,6 +1092,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="LS"/>
+      <column name="iso3_code" value="LSO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="88"/>
       <column name="name" value="Kingdom of Lesotho"/>
@@ -1010,6 +1103,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MA"/>
+      <column name="iso3_code" value="MAR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="89"/>
       <column name="name" value="Kingdom of Morocco"/>
@@ -1020,6 +1114,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NO"/>
+      <column name="iso3_code" value="NOR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="90"/>
       <column name="name" value="Kingdom of Norway"/>
@@ -1030,6 +1125,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SA"/>
+      <column name="iso3_code" value="SAU"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="91"/>
       <column name="name" value="Kingdom of Saudi Arabia"/>
@@ -1040,6 +1136,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ES"/>
+      <column name="iso3_code" value="ESP"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="92"/>
       <column name="name" value="Kingdom of Spain"/>
@@ -1050,6 +1147,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SE"/>
+      <column name="iso3_code" value="SWE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="93"/>
       <column name="name" value="Kingdom of Sweden"/>
@@ -1060,6 +1158,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TH"/>
+      <column name="iso3_code" value="THA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="94"/>
       <column name="name" value="Kingdom of Thailand"/>
@@ -1070,6 +1169,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TO"/>
+      <column name="iso3_code" value="TON"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="95"/>
       <column name="name" value="Kingdom of Tonga"/>
@@ -1080,6 +1180,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="KG"/>
+      <column name="iso3_code" value="KGZ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="96"/>
       <column name="name" value="Kyrgyz Republic"/>
@@ -1090,6 +1191,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="LA"/>
+      <column name="iso3_code" value="LAO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="97"/>
       <column name="name" value="Lao People's Democratic Republic"/>
@@ -1100,6 +1202,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="LB"/>
+      <column name="iso3_code" value="LBN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="98"/>
       <column name="name" value="Lebanese Republic"/>
@@ -1110,6 +1213,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MO"/>
+      <column name="iso3_code" value="MAC"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="99"/>
       <column name="name" value="Macao"/>
@@ -1120,6 +1224,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MY"/>
+      <column name="iso3_code" value="MYS"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="100"/>
       <column name="name" value="Malaysia"/>
@@ -1130,6 +1235,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MQ"/>
+      <column name="iso3_code" value="MTQ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="101"/>
       <column name="name" value="Martinique"/>
@@ -1140,6 +1246,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MN"/>
+      <column name="iso3_code" value="MNG"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="102"/>
       <column name="name" value="Mongolia"/>
@@ -1150,6 +1257,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ME"/>
+      <column name="iso3_code" value="MNE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="103"/>
       <column name="name" value="Montenegro"/>
@@ -1160,6 +1268,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MS"/>
+      <column name="iso3_code" value="MSR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="104"/>
       <column name="name" value="Montserrat"/>
@@ -1170,6 +1279,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BN"/>
+      <column name="iso3_code" value="BRN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="105"/>
       <column name="name" value="Nation of Brunei"/>
@@ -1180,6 +1290,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NL"/>
+      <column name="iso3_code" value="NLD"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="106"/>
       <column name="name" value="Netherlands"/>
@@ -1190,6 +1301,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NC"/>
+      <column name="iso3_code" value="NCL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="107"/>
       <column name="name" value="New Caledonia"/>
@@ -1200,6 +1312,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NZ"/>
+      <column name="iso3_code" value="NZL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="108"/>
       <column name="name" value="New Zealand"/>
@@ -1210,6 +1323,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NU"/>
+      <column name="iso3_code" value="NIU"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="109"/>
       <column name="name" value="Niue"/>
@@ -1220,6 +1334,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NF"/>
+      <column name="iso3_code" value="NFK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="110"/>
       <column name="name" value="Norfolk Island"/>
@@ -1230,6 +1345,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="UY"/>
+      <column name="iso3_code" value="URY"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="111"/>
       <column name="name" value="Oriental Republic of Uruguay"/>
@@ -1240,6 +1356,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="DZ"/>
+      <column name="iso3_code" value="DZA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="112"/>
       <column name="name" value="People's Democratic Republic of Algeria"/>
@@ -1250,6 +1367,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BD"/>
+      <column name="iso3_code" value="BGD"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="113"/>
       <column name="name" value="People's Republic of Bangladesh"/>
@@ -1260,6 +1378,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PN"/>
+      <column name="iso3_code" value="PCN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="114"/>
       <column name="name" value="Pitcairn Islands"/>
@@ -1270,6 +1389,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BO"/>
+      <column name="iso3_code" value="BOL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="115"/>
       <column name="name" value="Plurinational State of Bolivia"/>
@@ -1280,6 +1400,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PT"/>
+      <column name="iso3_code" value="PRT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="116"/>
       <column name="name" value="Portuguese Republic"/>
@@ -1290,6 +1411,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AD"/>
+      <column name="iso3_code" value="AND"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="117"/>
       <column name="name" value="Principality of Andorra"/>
@@ -1300,6 +1422,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="LI"/>
+      <column name="iso3_code" value="LIE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="118"/>
       <column name="name" value="Principality of Liechtenstein"/>
@@ -1310,6 +1433,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AL"/>
+      <column name="iso3_code" value="ALB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="119"/>
       <column name="name" value="Republic of Albania"/>
@@ -1320,6 +1444,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AO"/>
+      <column name="iso3_code" value="AGO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="120"/>
       <column name="name" value="Republic of Angola"/>
@@ -1330,6 +1455,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AM"/>
+      <column name="iso3_code" value="ARM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="121"/>
       <column name="name" value="Republic of Armenia"/>
@@ -1340,6 +1466,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AT"/>
+      <column name="iso3_code" value="AUT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="122"/>
       <column name="name" value="Republic of Austria"/>
@@ -1350,6 +1477,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AZ"/>
+      <column name="iso3_code" value="AZE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="123"/>
       <column name="name" value="Republic of Azerbaijan"/>
@@ -1360,6 +1488,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BJ"/>
+      <column name="iso3_code" value="BEN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="124"/>
       <column name="name" value="Republic of Benin"/>
@@ -1370,6 +1499,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BG"/>
+      <column name="iso3_code" value="BGR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="125"/>
       <column name="name" value="Republic of Bulgaria"/>
@@ -1380,6 +1510,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BI"/>
+      <column name="iso3_code" value="BDI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="126"/>
       <column name="name" value="Republic of Burundi"/>
@@ -1390,6 +1521,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CV"/>
+      <column name="iso3_code" value="CPV"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="127"/>
       <column name="name" value="Republic of Cabo Verde (Cape Verde)"/>
@@ -1400,6 +1532,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TD"/>
+      <column name="iso3_code" value="TCD"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="128"/>
       <column name="name" value="Republic of Chad"/>
@@ -1410,6 +1543,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CL"/>
+      <column name="iso3_code" value="CHL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="129"/>
       <column name="name" value="Republic of Chile"/>
@@ -1420,6 +1554,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TW"/>
+      <column name="iso3_code" value="TWN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="130"/>
       <column name="name" value="Republic of China"/>
@@ -1430,6 +1565,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CO"/>
+      <column name="iso3_code" value="COL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="131"/>
       <column name="name" value="Republic of Colombia"/>
@@ -1440,6 +1576,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CG"/>
+      <column name="iso3_code" value="COG"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="132"/>
       <column name="name" value="Republic of Congo"/>
@@ -1450,6 +1587,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CR"/>
+      <column name="iso3_code" value="CRI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="133"/>
       <column name="name" value="Republic of Costa Rica"/>
@@ -1460,6 +1598,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="HR"/>
+      <column name="iso3_code" value="HRV"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="134"/>
       <column name="name" value="Republic of Croatia"/>
@@ -1470,6 +1609,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CU"/>
+      <column name="iso3_code" value="CUB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="135"/>
       <column name="name" value="Republic of Cuba"/>
@@ -1480,6 +1620,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CY"/>
+      <column name="iso3_code" value="CYP"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="136"/>
       <column name="name" value="Republic of Cyprus"/>
@@ -1490,6 +1631,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CI"/>
+      <column name="iso3_code" value="CIV"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="137"/>
       <column name="name" value="Republic of Côte d'Ivoire"/>
@@ -1500,6 +1642,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="DJ"/>
+      <column name="iso3_code" value="DJI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="138"/>
       <column name="name" value="Republic of Djibouti"/>
@@ -1510,6 +1653,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="EC"/>
+      <column name="iso3_code" value="ECU"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="139"/>
       <column name="name" value="Republic of Ecuador"/>
@@ -1520,6 +1664,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SV"/>
+      <column name="iso3_code" value="SLV"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="140"/>
       <column name="name" value="Republic of El Salvador"/>
@@ -1530,6 +1675,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GQ"/>
+      <column name="iso3_code" value="GNQ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="141"/>
       <column name="name" value="Republic of Equatorial Guinea"/>
@@ -1540,6 +1686,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="EE"/>
+      <column name="iso3_code" value="EST"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="142"/>
       <column name="name" value="Republic of Estonia"/>
@@ -1550,6 +1697,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="FJ"/>
+      <column name="iso3_code" value="FJI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="143"/>
       <column name="name" value="Republic of Fiji"/>
@@ -1560,6 +1708,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="FI"/>
+      <column name="iso3_code" value="FIN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="144"/>
       <column name="name" value="Republic of Finland"/>
@@ -1570,6 +1719,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GH"/>
+      <column name="iso3_code" value="GHA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="145"/>
       <column name="name" value="Republic of Ghana"/>
@@ -1580,6 +1730,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GT"/>
+      <column name="iso3_code" value="GTM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="146"/>
       <column name="name" value="Republic of Guatemala"/>
@@ -1590,6 +1741,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GN"/>
+      <column name="iso3_code" value="GIN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="147"/>
       <column name="name" value="Republic of Guinea"/>
@@ -1600,6 +1752,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GW"/>
+      <column name="iso3_code" value="GNB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="148"/>
       <column name="name" value="Republic of Guinea-Bissau"/>
@@ -1610,6 +1763,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="HT"/>
+      <column name="iso3_code" value="HTI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="149"/>
       <column name="name" value="Republic of Haiti"/>
@@ -1620,6 +1774,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="HN"/>
+      <column name="iso3_code" value="HND"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="150"/>
       <column name="name" value="Republic of Honduras"/>
@@ -1630,6 +1785,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="IN"/>
+      <column name="iso3_code" value="IND"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="151"/>
       <column name="name" value="Republic of India"/>
@@ -1640,6 +1796,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ID"/>
+      <column name="iso3_code" value="IDN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="152"/>
       <column name="name" value="Republic of Indonesia"/>
@@ -1650,6 +1807,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="IQ"/>
+      <column name="iso3_code" value="IRQ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="153"/>
       <column name="name" value="Republic of Iraq"/>
@@ -1660,6 +1818,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="IE"/>
+      <column name="iso3_code" value="IRL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="154"/>
       <column name="name" value="Republic of Ireland"/>
@@ -1670,6 +1829,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="KZ"/>
+      <column name="iso3_code" value="KAZ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="155"/>
       <column name="name" value="Republic of Kazakhstan"/>
@@ -1680,6 +1840,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="KE"/>
+      <column name="iso3_code" value="KEN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="156"/>
       <column name="name" value="Republic of Kenya"/>
@@ -1690,6 +1851,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="KI"/>
+      <column name="iso3_code" value="KIR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="157"/>
       <column name="name" value="Republic of Kiribati"/>
@@ -1700,6 +1862,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="KR"/>
+      <column name="iso3_code" value="KOR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="158"/>
       <column name="name" value="Republic of Korea"/>
@@ -1710,6 +1873,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="LV"/>
+      <column name="iso3_code" value="LVA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="159"/>
       <column name="name" value="Republic of Latvia"/>
@@ -1720,6 +1884,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="LR"/>
+      <column name="iso3_code" value="LBR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="160"/>
       <column name="name" value="Republic of Liberia"/>
@@ -1730,6 +1895,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="LT"/>
+      <column name="iso3_code" value="LTU"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="161"/>
       <column name="name" value="Republic of Lithuania"/>
@@ -1740,6 +1906,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MG"/>
+      <column name="iso3_code" value="MDG"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="162"/>
       <column name="name" value="Republic of Madagascar"/>
@@ -1750,6 +1917,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MW"/>
+      <column name="iso3_code" value="MWI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="163"/>
       <column name="name" value="Republic of Malawi"/>
@@ -1760,6 +1928,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MV"/>
+      <column name="iso3_code" value="MDV"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="164"/>
       <column name="name" value="Republic of Maldives"/>
@@ -1770,6 +1939,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ML"/>
+      <column name="iso3_code" value="MLI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="165"/>
       <column name="name" value="Republic of Mali"/>
@@ -1780,6 +1950,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MT"/>
+      <column name="iso3_code" value="MLT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="166"/>
       <column name="name" value="Republic of Malta"/>
@@ -1790,6 +1961,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MU"/>
+      <column name="iso3_code" value="MUS"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="167"/>
       <column name="name" value="Republic of Mauritius"/>
@@ -1800,6 +1972,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MD"/>
+      <column name="iso3_code" value="MDA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="168"/>
       <column name="name" value="Republic of Moldova"/>
@@ -1810,6 +1983,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MZ"/>
+      <column name="iso3_code" value="MOZ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="169"/>
       <column name="name" value="Republic of Mozambique"/>
@@ -1820,6 +1994,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NA"/>
+      <column name="iso3_code" value="NAM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="170"/>
       <column name="name" value="Republic of Namibia"/>
@@ -1830,6 +2005,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NR"/>
+      <column name="iso3_code" value="NRU"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="171"/>
       <column name="name" value="Republic of Nauru"/>
@@ -1840,6 +2016,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NI"/>
+      <column name="iso3_code" value="NIC"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="172"/>
       <column name="name" value="Republic of Nicaragua"/>
@@ -1850,6 +2027,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MK"/>
+      <column name="iso3_code" value="MKD"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="173"/>
       <column name="name" value="Republic of North Macedonia"/>
@@ -1860,6 +2038,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PW"/>
+      <column name="iso3_code" value="PLW"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="174"/>
       <column name="name" value="Republic of Palau"/>
@@ -1870,6 +2049,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PA"/>
+      <column name="iso3_code" value="PAN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="175"/>
       <column name="name" value="Republic of Panama"/>
@@ -1880,6 +2060,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PY"/>
+      <column name="iso3_code" value="PRY"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="176"/>
       <column name="name" value="Republic of Paraguay"/>
@@ -1890,6 +2071,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PE"/>
+      <column name="iso3_code" value="PER"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="177"/>
       <column name="name" value="Republic of Peru"/>
@@ -1900,6 +2082,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PL"/>
+      <column name="iso3_code" value="POL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="178"/>
       <column name="name" value="Republic of Poland"/>
@@ -1910,6 +2093,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="RW"/>
+      <column name="iso3_code" value="RWA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="179"/>
       <column name="name" value="Republic of Rwanda"/>
@@ -1920,6 +2104,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SM"/>
+      <column name="iso3_code" value="SMR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="180"/>
       <column name="name" value="Republic of San Marino"/>
@@ -1930,6 +2115,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SN"/>
+      <column name="iso3_code" value="SEN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="181"/>
       <column name="name" value="Republic of Senegal"/>
@@ -1940,6 +2126,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="RS"/>
+      <column name="iso3_code" value="SRB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="182"/>
       <column name="name" value="Republic of Serbia"/>
@@ -1950,6 +2137,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SC"/>
+      <column name="iso3_code" value="SYC"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="183"/>
       <column name="name" value="Republic of Seychelles"/>
@@ -1960,6 +2148,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SL"/>
+      <column name="iso3_code" value="SLE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="184"/>
       <column name="name" value="Republic of Sierra Leone"/>
@@ -1970,6 +2159,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SG"/>
+      <column name="iso3_code" value="SGP"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="185"/>
       <column name="name" value="Republic of Singapore"/>
@@ -1980,6 +2170,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SI"/>
+      <column name="iso3_code" value="SVN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="186"/>
       <column name="name" value="Republic of Slovenia"/>
@@ -1990,6 +2181,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ZA"/>
+      <column name="iso3_code" value="ZAF"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="187"/>
       <column name="name" value="Republic of South Africa"/>
@@ -2000,6 +2192,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SS"/>
+      <column name="iso3_code" value="SSD"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="188"/>
       <column name="name" value="Republic of South Sudan"/>
@@ -2010,6 +2203,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SR"/>
+      <column name="iso3_code" value="SUR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="189"/>
       <column name="name" value="Republic of Suriname"/>
@@ -2020,6 +2214,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TJ"/>
+      <column name="iso3_code" value="TJK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="190"/>
       <column name="name" value="Republic of Tajikistan"/>
@@ -2030,6 +2225,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GM"/>
+      <column name="iso3_code" value="GMB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="191"/>
       <column name="name" value="Republic of The Gambia"/>
@@ -2040,6 +2236,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TT"/>
+      <column name="iso3_code" value="TTO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="192"/>
       <column name="name" value="Republic of Trinidad and Tobago"/>
@@ -2050,6 +2247,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TN"/>
+      <column name="iso3_code" value="TUN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="193"/>
       <column name="name" value="Republic of Tunisia"/>
@@ -2060,6 +2258,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TR"/>
+      <column name="iso3_code" value="TUR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="194"/>
       <column name="name" value="Republic of Turkey"/>
@@ -2070,6 +2269,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="UG"/>
+      <column name="iso3_code" value="UGA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="195"/>
       <column name="name" value="Republic of Uganda"/>
@@ -2080,6 +2280,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="UZ"/>
+      <column name="iso3_code" value="UZB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="196"/>
       <column name="name" value="Republic of Uzbekistan"/>
@@ -2090,6 +2291,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="VU"/>
+      <column name="iso3_code" value="VUT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="197"/>
       <column name="name" value="Republic of Vanuatu"/>
@@ -2100,6 +2302,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="YE"/>
+      <column name="iso3_code" value="YEM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="198"/>
       <column name="name" value="Republic of Yemen"/>
@@ -2110,6 +2313,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ZM"/>
+      <column name="iso3_code" value="ZMB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="199"/>
       <column name="name" value="Republic of Zambia"/>
@@ -2120,6 +2324,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ZW"/>
+      <column name="iso3_code" value="ZWE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="200"/>
       <column name="name" value="Republic of Zimbabwe"/>
@@ -2130,6 +2335,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MH"/>
+      <column name="iso3_code" value="MHL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="201"/>
       <column name="name" value="Republic of the Marshall Islands"/>
@@ -2140,6 +2346,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="NE"/>
+      <column name="iso3_code" value="NER"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="202"/>
       <column name="name" value="Republic of the Niger"/>
@@ -2150,6 +2357,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PH"/>
+      <column name="iso3_code" value="PHL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="203"/>
       <column name="name" value="Republic of the Philippines"/>
@@ -2160,6 +2368,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SD"/>
+      <column name="iso3_code" value="SDN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="204"/>
       <column name="name" value="Republic of the Sudan"/>
@@ -2170,6 +2379,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MM"/>
+      <column name="iso3_code" value="MMR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="205"/>
       <column name="name" value="Republic of the Union of Myanmar"/>
@@ -2180,6 +2390,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="RO"/>
+      <column name="iso3_code" value="ROU"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="206"/>
       <column name="name" value="Romania"/>
@@ -2190,6 +2401,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="RU"/>
+      <column name="iso3_code" value="RUS"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="207"/>
       <column name="name" value="Russian Federation"/>
@@ -2200,6 +2412,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="RE"/>
+      <column name="iso3_code" value="REU"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="208"/>
       <column name="name" value="Réunion"/>
@@ -2210,6 +2423,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="BL"/>
+      <column name="iso3_code" value="BLM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="209"/>
       <column name="name" value="Saint Barthélemy"/>
@@ -2220,6 +2434,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="LC"/>
+      <column name="iso3_code" value="LCA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="210"/>
       <column name="name" value="Saint Lucia"/>
@@ -2230,6 +2445,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MF"/>
+      <column name="iso3_code" value="MAF"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="211"/>
       <column name="name" value="Saint Martin (French part)"/>
@@ -2240,6 +2456,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PM"/>
+      <column name="iso3_code" value="SPM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="212"/>
       <column name="name" value="Saint Pierre and Miquelon"/>
@@ -2250,6 +2467,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="VC"/>
+      <column name="iso3_code" value="VCT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="213"/>
       <column name="name" value="Saint Vincent and the Grenadines"/>
@@ -2260,6 +2478,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SX"/>
+      <column name="iso3_code" value="SXM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="214"/>
       <column name="name" value="Sint Maarten (Dutch part)"/>
@@ -2270,6 +2489,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SK"/>
+      <column name="iso3_code" value="SVK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="215"/>
       <column name="name" value="Slovak Republic"/>
@@ -2280,6 +2500,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="VN"/>
+      <column name="iso3_code" value="VNM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="216"/>
       <column name="name" value="Socialist Republic of Vietnam"/>
@@ -2290,6 +2511,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SB"/>
+      <column name="iso3_code" value="SLB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="217"/>
       <column name="name" value="Solomon Islands"/>
@@ -2300,6 +2522,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ER"/>
+      <column name="iso3_code" value="ERI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="218"/>
       <column name="name" value="State of Eritrea"/>
@@ -2310,6 +2533,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="IL"/>
+      <column name="iso3_code" value="ISR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="219"/>
       <column name="name" value="State of Israel"/>
@@ -2320,6 +2544,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="KW"/>
+      <column name="iso3_code" value="KWT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="220"/>
       <column name="name" value="State of Kuwait"/>
@@ -2330,6 +2555,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="LY"/>
+      <column name="iso3_code" value="LBY"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="221"/>
       <column name="name" value="State of Libya"/>
@@ -2340,6 +2566,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="PS"/>
+      <column name="iso3_code" value="PSE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="222"/>
       <column name="name" value="State of Palestine"/>
@@ -2350,6 +2577,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="QA"/>
+      <column name="iso3_code" value="QAT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="223"/>
       <column name="name" value="State of Qatar"/>
@@ -2360,6 +2588,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="OM"/>
+      <column name="iso3_code" value="OMN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="224"/>
       <column name="name" value="Sultanate of Oman"/>
@@ -2370,6 +2599,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SJ"/>
+      <column name="iso3_code" value="SJM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="225"/>
       <column name="name" value="Svalbard and Jan Mayen"/>
@@ -2380,6 +2610,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="CH"/>
+      <column name="iso3_code" value="CHE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="226"/>
       <column name="name" value="Switzerland"/>
@@ -2390,6 +2621,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="SY"/>
+      <column name="iso3_code" value="SYR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="227"/>
       <column name="name" value="Syrian Arab Republic"/>
@@ -2400,6 +2632,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="WF"/>
+      <column name="iso3_code" value="WLF"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="228"/>
       <column name="name" value="Territory of the Wallis and Futuna Islands"/>
@@ -2410,6 +2643,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TG"/>
+      <column name="iso3_code" value="TGO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="229"/>
       <column name="name" value="Togolese Republic"/>
@@ -2420,6 +2654,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TK"/>
+      <column name="iso3_code" value="TKL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="230"/>
       <column name="name" value="Tokelau Islands"/>
@@ -2430,6 +2665,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TM"/>
+      <column name="iso3_code" value="TKM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="231"/>
       <column name="name" value="Turkmenistan"/>
@@ -2440,6 +2676,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TC"/>
+      <column name="iso3_code" value="TCA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="232"/>
       <column name="name" value="Turks and Caicos Islands"/>
@@ -2450,6 +2687,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TV"/>
+      <column name="iso3_code" value="TUV"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="233"/>
       <column name="name" value="Tuvalu"/>
@@ -2460,6 +2698,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="UA"/>
+      <column name="iso3_code" value="UKR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="234"/>
       <column name="name" value="Ukraine"/>
@@ -2470,6 +2709,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="KM"/>
+      <column name="iso3_code" value="COM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="235"/>
       <column name="name" value="Union of the Comoros"/>
@@ -2480,6 +2720,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AE"/>
+      <column name="iso3_code" value="ARE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="236"/>
       <column name="name" value="United Arab Emirates"/>
@@ -2490,6 +2731,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="GB"/>
+      <column name="iso3_code" value="GBR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="237"/>
       <column name="name" value="United Kingdom"/>
@@ -2500,6 +2742,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="MX"/>
+      <column name="iso3_code" value="MEX"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="238"/>
       <column name="name" value="United Mexican States"/>
@@ -2510,6 +2753,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="TZ"/>
+      <column name="iso3_code" value="TZA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="239"/>
       <column name="name" value="United Republic of Tanzania"/>
@@ -2520,6 +2764,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="UM"/>
+      <column name="iso3_code" value="UMI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="240"/>
       <column name="name" value="United States Minor Outlying Islands"/>
@@ -2530,6 +2775,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="VI"/>
+      <column name="iso3_code" value="VIR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="241"/>
       <column name="name" value="United States Virgin Islands"/>
@@ -2540,6 +2786,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="US"/>
+      <column name="iso3_code" value="USA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="242"/>
       <column name="name" value="United States of America"/>
@@ -2550,6 +2797,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ZZ"/>
+      <column name="iso3_code" value="ZZZ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="243"/>
       <column name="name" value="Unknown"/>
@@ -2560,6 +2808,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="VG"/>
+      <column name="iso3_code" value="VGB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="244"/>
       <column name="name" value="Virgin Islands"/>
@@ -2570,6 +2819,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="EH"/>
+      <column name="iso3_code" value="ESH"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="245"/>
       <column name="name" value="Western Sahara"/>
@@ -2580,6 +2830,7 @@
     </insert>
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="AX"/>
+      <column name="iso3_code" value="ALA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="246"/>
       <column name="name" value="Åland Islands"/>
