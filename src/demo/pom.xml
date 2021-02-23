@@ -42,6 +42,14 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-banking-customer-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-banking-customer-ws</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-codes-api</artifactId>
     </dependency>
     <dependency>
@@ -82,7 +90,19 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-party-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-party-ws</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-persistence</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-reference-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
