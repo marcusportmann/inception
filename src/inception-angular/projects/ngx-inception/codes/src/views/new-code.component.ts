@@ -64,7 +64,7 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
     // Initialise the form controls
     this.idFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.valueFormControl = new FormControl('', Validators.required);
+    this.valueFormControl = new FormControl('', [Validators.required]);
 
     // Initialise the form
     this.newCodeForm = new FormGroup({

@@ -77,7 +77,7 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
       disabled: true
     }, [Validators.required, Validators.maxLength(100)]);
     this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.valueFormControl = new FormControl('', Validators.required);
+    this.valueFormControl = new FormControl('', [Validators.required]);
 
     // Initialise the form
     this.editCodeForm = new FormGroup({
