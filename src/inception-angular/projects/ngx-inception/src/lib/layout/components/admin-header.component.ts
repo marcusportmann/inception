@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
  */
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Replace} from '../../core/util/replace';
+import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-
-import {Router} from '@angular/router';
-import {Session} from '../../security/services/session';
-import {SecurityService} from '../../security/services/security.service';
+import {Replace} from '../../core/util/replace';
+import {Session} from '../../session/services/session';
+import {SessionService} from '../../session/services/session.service';
 
 /**
  * The AdminHeaderComponent class implements the admin header component.
@@ -97,11 +96,11 @@ export class AdminHeaderComponent implements OnInit {
   /**
    * Constructs a new AdminHeaderComponent.
    *
-   * @param elementRef      The element reference.
-   * @param router          The router.
-   * @param securityService The security service.
+   * @param elementRef     The element reference.
+   * @param router         The router.
+   * @param sessionService The session service.
    */
-  constructor(private elementRef: ElementRef, private router: Router, private securityService: SecurityService) {
+  constructor(private elementRef: ElementRef, private router: Router, private sessionService: SessionService) {
   }
 
   // // tslint:disable-next-line
@@ -110,20 +109,8 @@ export class AdminHeaderComponent implements OnInit {
   //   return breakpoint ? breakpoint : '';
   // }
 
-  ngOnInit(): void {
-    Replace(this.elementRef);
-
-    if (this.fixed) {
-      const bodySelector = document.querySelector('body');
-
-      if (bodySelector) {
-        bodySelector.classList.add('admin-header-fixed');
-      }
-    }
-  }
-
   isLoggedIn(): Observable<boolean> {
-    return this.securityService.session$.pipe(map((session: Session | null) => {
+    return this.sessionService.session$.pipe(map((session: Session | null) => {
 
       //console.log('isLoggedIn session = ', session);
 
@@ -137,11 +124,23 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   logout(): void {
-    this.securityService.logout();
+    this.sessionService.logout();
+  }
+
+  ngOnInit(): void {
+    Replace(this.elementRef);
+
+    if (this.fixed) {
+      const bodySelector = document.querySelector('body');
+
+      if (bodySelector) {
+        bodySelector.classList.add('admin-header-fixed');
+      }
+    }
   }
 
   userName(): Observable<string> {
-    return this.securityService.session$.pipe(map((session: Session | null) => {
+    return this.sessionService.session$.pipe(map((session: Session | null) => {
       if (!!session) {
         return session.name;
       } else {

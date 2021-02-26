@@ -45,11 +45,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>Preference</b> class holds the information for a preference for a party.
+ * The <b>Preference</b> class holds the information for a preference.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A preference for a party")
+@Schema(description = "A preference")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "value"})
 @XmlRootElement(name = "Preference", namespace = "http://inception.digital/party")

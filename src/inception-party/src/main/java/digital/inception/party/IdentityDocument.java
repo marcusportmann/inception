@@ -49,13 +49,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>IdentityDocument</b> class holds the information for an identity document for a party.
+ * The <b>IdentityDocument</b> class holds the information for a legal document which may be used to
+ * verify aspects of a party's identity.
  *
  * <p>See: https://spec.edmcouncil.org/fibo/ontology/FND/AgentsAndPeople/People/IdentityDocument
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A legal document which may be used to verify aspects of a party's identity")
+@Schema(description = "A legal document which may be used to verify aspects of an identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
 @XmlRootElement(name = "IdentityDocument", namespace = "http://inception.digital/party")

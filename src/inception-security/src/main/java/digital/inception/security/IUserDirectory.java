@@ -95,8 +95,8 @@ interface IUserDirectory {
    * @param newPassword the new password
    */
   void changePassword(String username, String password, String newPassword)
-      throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-          ExistingPasswordException, ServiceUnavailableException;
+      throws AuthenticationFailedException, UserLockedException, ExistingPasswordException,
+          ServiceUnavailableException;
 
   /**
    * Create the new group.

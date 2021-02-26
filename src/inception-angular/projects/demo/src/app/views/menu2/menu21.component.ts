@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,20 @@
 import {Component} from '@angular/core';
 import {Error, SpinnerService} from 'ngx-inception';
 import {Router} from '@angular/router';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {Code} from "../../../../../ngx-inception/src/lib/codes/services/code";
-import {catchError, first, map} from "rxjs/operators";
-import {ProblemDetails} from "../../../../../ngx-inception/src/lib/core/errors/problem-details";
-import {throwError} from "rxjs";
-import {CodeNotFoundError} from "../../../../../ngx-inception/src/lib/codes/services/codes.service.errors";
-import {ServiceUnavailableError} from "../../../../../ngx-inception/src/lib/core/errors/service-unavailable-error";
-import {CommunicationError} from "../../../../../ngx-inception/src/lib/core/errors/communication-error";
+import {HttpClient} from "@angular/common/http";
+import {PartyService} from "ngx-inception/party";
+
+
+
+
+//import PartyService = party.PartyService;
+
+
+// import {party
+// import PartyService = party.PartyService;
+//
+// .PartyService} from "ngx-inception";
+//import {PartyService} from "../../../../../../dist/ngx-inception/lib/party/services/party.service";
 
 /**
  * The Menu21Component class implements the menu 2.1 component.
@@ -52,13 +58,22 @@ import {CommunicationError} from "../../../../../ngx-inception/src/lib/core/erro
             <button mat-flat-button color="primary" (click)="testExceptionHandling()">Test Exception Handling</button>
           </div>
         </div>
+        <div class="row">
+          <div class="col m-1">
+            <button mat-flat-button color="primary" (click)="doIt()">Do It</button>
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
   `
 })
 export class Menu21Component {
 
-  constructor(private router: Router, private httpClient: HttpClient, private spinnerService: SpinnerService) {
+  constructor(private router: Router, private httpClient: HttpClient, private partyService: PartyService, private spinnerService: SpinnerService) {
+  }
+
+  doIt(): void {
+    this.partyService.doIt();
   }
 
   testErrorReporting(): void {

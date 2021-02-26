@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
-import {ExampleFormComponent} from './example-form.component';
 import {CoreModule} from 'ngx-inception';
-import {ReferenceFormComponent} from "./reference-form.component";
+import {ExampleFormComponent} from './example-form.component';
+import {PartyReferenceFormComponent} from './party-reference-form-component';
+import {ReferenceFormComponent} from './reference-form.component';
 
 const routes: Routes = [{
   path: '',
@@ -30,6 +31,12 @@ const routes: Routes = [{
   component: ExampleFormComponent,
   data: {
     title: 'Example Form',
+  }
+}, {
+  path: 'party-reference-form',
+  component: PartyReferenceFormComponent,
+  data: {
+    title: 'Party Reference Form',
   }
 }, {
   path: 'reference-form',
@@ -48,7 +55,7 @@ const routes: Routes = [{
     // Inception modules
     CoreModule
   ],
-  declarations: [ExampleFormComponent, ReferenceFormComponent],
+  declarations: [ExampleFormComponent, PartyReferenceFormComponent, ReferenceFormComponent],
   providers: []
 })
 export class FormModule {

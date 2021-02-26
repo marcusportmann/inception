@@ -118,7 +118,7 @@ public interface ISecurityService {
    */
   UUID changePassword(String username, String password, String newPassword)
       throws InvalidArgumentException, AuthenticationFailedException, UserLockedException,
-          UserNotFoundException, ExistingPasswordException, ServiceUnavailableException;
+          ExistingPasswordException, ServiceUnavailableException;
 
   /**
    * Create the new authorised function.
@@ -729,8 +729,8 @@ public interface ISecurityService {
    * @param securityCode the security code
    */
   void resetPassword(String username, String newPassword, String securityCode)
-      throws InvalidArgumentException, UserNotFoundException, UserLockedException,
-          InvalidSecurityCodeException, ExistingPasswordException, ServiceUnavailableException;
+      throws InvalidArgumentException, InvalidSecurityCodeException, UserLockedException,
+          ExistingPasswordException, ServiceUnavailableException;
 
   /**
    * Update the authorised function.

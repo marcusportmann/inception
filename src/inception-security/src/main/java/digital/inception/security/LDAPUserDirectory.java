@@ -679,8 +679,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public void changePassword(String username, String password, String newPassword)
-      throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-          ExistingPasswordException, ServiceUnavailableException {
+      throws AuthenticationFailedException, UserLockedException, ExistingPasswordException,
+          ServiceUnavailableException {
     if (!capabilities.getSupportsChangePassword()) {
       throw new ServiceUnavailableException(
           "The change password capability is not supported for the user directory ("
@@ -696,7 +696,10 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       LdapName userDN = getUserDN(dirContext, username);
 
       if (userDN == null) {
-        throw new UserNotFoundException(username);
+        throw new AuthenticationFailedException(
+            "Authentication failed while attempting to change the password for the user ("
+                + username
+                + ")");
       }
 
       DirContext userDirContext = null;
@@ -706,10 +709,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       } catch (Throwable e) {
         if (e.getCause() instanceof javax.naming.AuthenticationException) {
           throw new AuthenticationFailedException(
-              "Failed to authenticate the user ("
+              "Authentication failed while attempting to change the password for the user ("
                   + username
-                  + ") for the user directory ("
-                  + getUserDirectoryId()
                   + ")");
         } else {
           logger.error(
@@ -740,7 +741,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, passwordAttribute));
 
       dirContext.modifyAttributes(userDN, modificationItems.toArray(new ModificationItem[0]));
-    } catch (AuthenticationFailedException | UserNotFoundException e) {
+    } catch (AuthenticationFailedException e) {
       throw e;
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,36 +14,34 @@
  * limitations under the License.
  */
 
-import {ModuleWithProviders, NgModule} from '@angular/core';
-import {
-  PERFECT_SCROLLBAR_CONFIG,
-  PerfectScrollbarConfigInterface,
-  PerfectScrollbarModule
-} from 'ngx-perfect-scrollbar';
 import {CommonModule} from '@angular/common';
-import {CoreModule} from '../core/core.module';
+import {ModuleWithProviders, NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
+import {
+  PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule
+} from 'ngx-perfect-scrollbar';
+import {CoreModule} from '../core/core.module';
 import {AdminContainerComponent} from './components/admin-container.component';
 import {AdminFooterComponent} from './components/admin-footer.component';
 import {AdminHeaderComponent} from './components/admin-header.component';
 import {BreadcrumbsComponent} from './components/breadcrumbs.component';
 import {NotFoundComponent} from './components/not-found.component';
-import {SidebarComponent} from './components/sidebar.component';
 import {SidebarFooterComponent} from './components/sidebar-footer.component';
-import {SidebarNavDropdownComponent} from './components/sidebar-nav-dropdown.component';
-import {SidebarNavItemComponent} from './components/sidebar-nav-item.component';
-import {SidebarMinimizerComponent} from './components/sidebar-minimizer.component';
-import {SidebarNavComponent} from './components/sidebar-nav.component';
-import {SpinnerComponent} from './components/spinner.component';
-import {TitleBarComponent} from './components/title-bar.component';
 import {SidebarFormComponent} from './components/sidebar-form.component';
 import {SidebarHeaderComponent} from './components/sidebar-header.component';
+import {SidebarMinimizerComponent} from './components/sidebar-minimizer.component';
+import {SidebarNavDropdownComponent} from './components/sidebar-nav-dropdown.component';
+import {SidebarNavItemComponent} from './components/sidebar-nav-item.component';
+import {SidebarNavComponent} from './components/sidebar-nav.component';
+import {SidebarComponent} from './components/sidebar.component';
 import {SimpleContainerComponent} from './components/simple-container.component';
+import {SpinnerComponent} from './components/spinner.component';
+import {TitleBarComponent} from './components/title-bar.component';
 import {BrandMinimizerDirective} from './directives/brand-minimizer.directive';
 import {MobileSidebarTogglerDirective} from './directives/mobile-sidebar-toggler.directive';
 import {SidebarMinimizerDirective} from './directives/sidebar-minimizer.directive';
-import {SidebarNavDropdownDirective} from './directives/sidebar-nav-dropdown.directive';
 import {SidebarNavDropdownTogglerDirective} from './directives/sidebar-nav-dropdown-toggler.directive';
+import {SidebarNavDropdownDirective} from './directives/sidebar-nav-dropdown.directive';
 import {SidebarOffCanvasCloseDirective} from './directives/sidebar-off-canvas-close.directive';
 import {SidebarTogglerDirective} from './directives/sidebar-toggler.directive';
 import {BreadcrumbsService} from "./services/breadcrumbs.service";

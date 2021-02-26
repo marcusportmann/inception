@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 
 import {Component} from '@angular/core';
+import {PartyService} from 'ngx-inception/party';
 
 /**
  * The Menu22Component class implements the menu 2.2 component.
@@ -22,10 +23,24 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  template: `Menu 2.2`
-})
+  template: `
+    <mat-card class="flex-grow-1">
+      <mat-card-content>
+        <div class="row">
+          <div class="col m-1">
+            <button mat-flat-button color="primary" (click)="doIt()">Do It</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  `})
 export class Menu22Component {
 
-  constructor() {
+  constructor(private partyService: PartyService) {
   }
+
+  doIt(): void {
+    this.partyService.doIt();
+  }
+
 }

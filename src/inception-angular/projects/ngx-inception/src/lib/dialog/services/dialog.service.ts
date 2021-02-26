@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 import {Injectable} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Error} from '../../core/errors/error';
-import {DialogData} from './dialog-data';
 import {ConfirmationDialogComponent} from '../components/confirmation-dialog.component';
 import {ErrorDialogComponent} from '../components/error-dialog.component';
 import {InformationDialogComponent} from '../components/information-dialog.component';
 import {WarningDialogComponent} from '../components/warning-dialog.component';
+import {DialogData} from './dialog-data';
 
 /**
  * The service that provides the capability to show different standard dialogs.

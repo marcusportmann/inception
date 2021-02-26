@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
-
-import {NavigationService} from '../services/navigation.service';
-import {NavigationItem} from '../services/navigation-item';
 import {Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {NavigationItem} from '../services/navigation-item';
+
+import {NavigationService} from '../services/navigation.service';
 
 /**
  * The SidebarNavComponent class implements the sidebar nav component.
@@ -36,8 +36,8 @@ import {map} from 'rxjs/operators';
 })
 export class SidebarNavComponent implements OnInit, OnDestroy {
 
-  @HostBinding('attr.role') role = 'nav';
   navItems: NavigationItem[];
+  @HostBinding('attr.role') role = 'nav';
   private userNavigationSubscription?: Subscription;
 
   /**
@@ -47,10 +47,6 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
    */
   constructor(private navigationService: NavigationService) {
     this.navItems = new Array<NavigationItem>();
-  }
-
-  @HostBinding('class.sidebar-nav') sidebarNav() {
-    return true;
   }
 
   ngOnDestroy(): void {
@@ -64,6 +60,10 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
       this.navigationService.userNavigation$.pipe(map((navigation: NavigationItem[]) => {
         this.navItems = navigation;
       })).subscribe();
+  }
+
+  @HostBinding('class.sidebar-nav') sidebarNav() {
+    return true;
   }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
+import {Observable} from 'rxjs';
 import {Replace} from '../../core/util/replace';
 import {BreadcrumbsService} from '../services/breadcrumbs.service';
-import {Observable} from 'rxjs';
 
 /**
  * The BreadcrumbsComponent class implements the breadcrumbs component.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,15 @@ import {Directive, HostListener} from '@angular/core';
 export class SidebarOffCanvasCloseDirective {
 
   constructor() {
+  }
+
+  // tslint:disable-next-line
+  @HostListener('click', ['$event']) toggleOpen($event: any): void {
+    $event.preventDefault();
+
+    if (SidebarOffCanvasCloseDirective.hasClass(document.querySelector('body'), 'sidebar-off-canvas')) {
+      SidebarOffCanvasCloseDirective.toggleClass(document.querySelector('body'), 'sidebar-opened');
+    }
   }
 
   /**
@@ -59,15 +68,6 @@ export class SidebarOffCanvasCloseDirective {
       element.className = newClass.replace(/^\s+|\s+$/g, '');
     } else {
       element.className += ' ' + className;
-    }
-  }
-
-  // tslint:disable-next-line
-  @HostListener('click', ['$event']) toggleOpen($event: any): void {
-    $event.preventDefault();
-
-    if (SidebarOffCanvasCloseDirective.hasClass(document.querySelector('body'), 'sidebar-off-canvas')) {
-      SidebarOffCanvasCloseDirective.toggleClass(document.querySelector('body'), 'sidebar-opened');
     }
   }
 }

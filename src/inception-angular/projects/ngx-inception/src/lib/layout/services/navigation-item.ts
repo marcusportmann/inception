@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,30 +24,25 @@ import {NavigationBadge} from './navigation-badge';
 export class NavigationItem {
 
   /**
+   * The optional authorities that are used to restrict access to the navigation item.
+   */
+  authorities: string[];
+  /**
    * The optional navigation badge associated with the navigation item.
    */
   badge?: NavigationBadge;
-
   /**
    * The optional child navigation items.
    */
   children: NavigationItem[];
-
   /**
    * The optional class associated with the navigation item.
    */
   cssClass?: string;
-
   /**
    * The optional divider indicator.
    */
   divider = false;
-
-  /**
-   * The optional authorities that are used to restrict access to the navigation item.
-   */
-  authorities: string[];
-
   /**
    * The optional icon associated with the navigation item.
    */

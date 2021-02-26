@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {BackNavigation} from './back-navigation';
 import {Observable} from 'rxjs';
+import {BackNavigation} from './back-navigation';
 
 /**
  * The AdminContainerView class provides the abstract base class that all admin container view

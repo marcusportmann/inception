@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 import {Injectable} from '@angular/core';
-import {NavigationItem} from './navigation-item';
 import {ReplaySubject, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {Session} from '../../security/services/session';
-import {SecurityService} from '../../security/services/security.service';
+import {Session} from '../../session/services/session';
+import {SessionService} from '../../session/services/session.service';
+import {NavigationItem} from './navigation-item';
 
 /**
  * The Navigation Service implementation.
@@ -38,24 +38,14 @@ export class NavigationService {
   /**
    * Constructs a new NavigationService.
    *
-   * @param securityService The security service.
+   * @param sessionService The session service.
    */
-  constructor(private securityService: SecurityService) {
+  constructor(private sessionService: SessionService) {
     console.log('Initializing the Navigation Service');
 
-    this.securityService.session$.pipe(map((session: Session | null) => {
+    this.sessionService.session$.pipe(map((session: Session | null) => {
       this.userNavigation$.next(Object.assign([], this.filterNavigationItems(this.navigation, session)));
     })).subscribe();
-  }
-
-  private static hasAccessToNavigationItem(authorities: string[], session: Session): boolean {
-    for (const authority of authorities) {
-      if (session.hasAuthority(authority)) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   /**
@@ -67,6 +57,16 @@ export class NavigationService {
     this.navigation = navigation;
 
     this.userNavigation$.next(this.filterNavigationItems(navigation, null));
+  }
+
+  private static hasAccessToNavigationItem(authorities: string[], session: Session): boolean {
+    for (const authority of authorities) {
+      if (session.hasAuthority(authority)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private filterNavigationItems(navigationItems: NavigationItem[], session: Session | null): NavigationItem[] {

@@ -503,7 +503,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public UUID changePassword(String username, String password, String newPassword)
       throws InvalidArgumentException, AuthenticationFailedException, UserLockedException,
-          UserNotFoundException, ExistingPasswordException, ServiceUnavailableException {
+          ExistingPasswordException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
@@ -554,12 +554,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
           }
         }
 
-        throw new UserNotFoundException(username);
+        throw new AuthenticationFailedException(
+            "Authentication failed while attempting to change the password for the user ("
+                + username
+                + ")");
       }
-    } catch (AuthenticationFailedException
-        | UserNotFoundException
-        | UserLockedException
-        | ExistingPasswordException e) {
+    } catch (AuthenticationFailedException | UserLockedException | ExistingPasswordException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -2504,8 +2504,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void resetPassword(String username, String newPassword, String securityCode)
-      throws InvalidArgumentException, UserNotFoundException, UserLockedException,
-          InvalidSecurityCodeException, ExistingPasswordException, ServiceUnavailableException {
+      throws InvalidArgumentException, InvalidSecurityCodeException, UserLockedException,
+          ExistingPasswordException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
@@ -2522,7 +2522,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
       UUID userDirectoryId = getUserDirectoryIdForUser(username);
 
       if (userDirectoryId == null) {
-        throw new UserNotFoundException(username);
+        throw new InvalidSecurityCodeException(username);
       }
 
       List<PasswordReset> passwordResets =
@@ -2541,9 +2541,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
         }
       }
 
-      throw new InvalidSecurityCodeException();
-    } catch (UserNotFoundException
-        | UserLockedException
+      throw new InvalidSecurityCodeException(username);
+    } catch (UserLockedException
         | InvalidSecurityCodeException
         | ExistingPasswordException e) {
       throw e;

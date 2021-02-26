@@ -16,10 +16,10 @@
 
 package digital.inception.security;
 
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
+import digital.inception.core.sorting.SortDirection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -180,12 +180,6 @@ public class SecurityWebService {
       throw new InvalidArgumentException("passwordChange");
     }
 
-    UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
-
-    if (userDirectoryId == null) {
-      throw new UserNotFoundException(username);
-    }
-
     Set<ConstraintViolation<PasswordChange>> constraintViolations =
         validator.validate(passwordChange);
 
@@ -195,6 +189,12 @@ public class SecurityWebService {
     }
 
     if (passwordChange.getReason() == PasswordChangeReason.ADMINISTRATIVE) {
+      UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
+
+      if (userDirectoryId == null) {
+        throw new UserDirectoryNotFoundException(userDirectoryId);
+      }
+
       securityService.adminChangePassword(
           userDirectoryId,
           username,

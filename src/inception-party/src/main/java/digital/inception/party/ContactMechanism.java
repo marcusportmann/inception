@@ -56,7 +56,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann @JsonProperty and @XmlElement.
  */
-@Schema(description = "A mechanism that can be used to contact a party")
+@Schema(description = "A contact mechanism")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "purpose", "value"})
 @XmlRootElement(name = "ContactMechanism", namespace = "http://inception.digital/party")

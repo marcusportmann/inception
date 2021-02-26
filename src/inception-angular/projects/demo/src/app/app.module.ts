@@ -1,5 +1,5 @@
    /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,13 +46,19 @@ const ngxInceptionConfig: InceptionConfig = {
   configApiUrlPrefix: 'http://localhost:8080/api/config',
   errorApiUrlPrefix: 'http://localhost:8080/api/error',
   mailApiUrlPrefix: 'http://localhost:8080/api/mail',
+  partyApiUrlPrefix: 'http://localhost:8080/api/party',
+  partyReferenceApiUrlPrefix: 'http://localhost:8080/api/party/reference',
   referenceApiUrlPrefix: 'http://localhost:8080/api/reference',
   reportingApiUrlPrefix: 'http://localhost:8080/api/reporting',
   schedulerApiUrlPrefix: 'http://localhost:8080/api/scheduler',
   securityApiUrlPrefix: 'http://localhost:8080/api/security',
 
   // Flags
-  forgottenPasswordEnabled: true
+  forgottenPasswordEnabled: true,
+
+  // Testing values
+  prepopulatedLoginUsername: 'Administrator',
+  prepopulatedLoginPassword: 'Password1'
 };
 
 @NgModule({
@@ -103,6 +109,7 @@ export class AppModule extends InceptionAppModule {
 
       new NavigationItem('fa fa-file-alt', 'Form', '/inception/form', [],
         [new NavigationItem('fa fa-file-alt', 'Example Form', '/inception/form/example-form'),
+          new NavigationItem('fa fa-file-alt', 'Party Reference Form', '/inception/form/party-reference-form'),
           new NavigationItem('fa fa-file-alt', 'Reference Form', '/inception/form/reference-form')
         ]),
 

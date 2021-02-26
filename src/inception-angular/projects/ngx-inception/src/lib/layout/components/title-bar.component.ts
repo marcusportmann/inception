@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Replace} from '../../core/util/replace';
 import {Router} from '@angular/router';
-import {BackNavigation} from './back-navigation';
 import {Observable} from 'rxjs';
+import {Replace} from '../../core/util/replace';
 import {TitleBarService} from '../services/title-bar.service';
+import {BackNavigation} from './back-navigation';
 
 /**
  * The TitleBarComponent class implements the title bar component.

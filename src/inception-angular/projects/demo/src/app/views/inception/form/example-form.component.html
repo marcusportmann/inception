@@ -112,9 +112,9 @@
           <mat-form-field>
             <mat-label>Favorite country</mat-label>
             <input type="text" matInput autocompleteSelectionRequired [formControl]="exampleForm.get('favoriteCountry')" required="true" [matAutocomplete]="favoriteCountryAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #favoriteCountryAutocomplete="matAutocomplete">
-              <mat-option *ngFor="let option of filteredCountryOptions$ | async" [value]="option">
-                {{option}}
+            <mat-autocomplete autoActiveFirstOption #favoriteCountryAutocomplete="matAutocomplete" [displayWith]="displayCountry">
+              <mat-option *ngFor="let country of filteredCountries$ | async" [value]="country">
+                {{country.shortName}}
               </mat-option>
             </mat-autocomplete>
             <mat-error *ngIf="exampleForm.controls['favoriteCountry'].errors && !exampleForm.controls['favoriteCountry'].untouched">

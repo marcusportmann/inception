@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,14 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-
-import {
-  CodeCategoriesTitleResolver,
-  ConfigsTitleResolver,
-  MailTitleResolver,
-  ReportingTitleResolver,
-  SchedulerTitleResolver,
-  SecurityTitleResolver
-} from 'ngx-inception';
-
-import {AdministrationComponent} from './administration.component';
+import {CodeCategoriesTitleResolver} from 'ngx-inception/codes';
+import {ConfigsTitleResolver} from 'ngx-inception/config';
+import {MailTitleResolver} from 'ngx-inception/mail';
+import {ReportingTitleResolver} from 'ngx-inception/reporting';
+import {SchedulerTitleResolver} from 'ngx-inception/scheduler';
+import {SecurityTitleResolver} from 'ngx-inception/security';
 import {AdministrationTitleResolver} from './administration-title-resolver';
+import {AdministrationComponent} from './administration.component';
 import {SystemTitleResolver} from './system-title-resolver';
 
 const routes: Routes = [{

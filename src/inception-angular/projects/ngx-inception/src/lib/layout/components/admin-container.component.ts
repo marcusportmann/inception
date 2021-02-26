@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, ActivatedRouteSnapshot, Router} from '@angular/router';
 
 import {Observable, Subscription} from 'rxjs';
+import {INCEPTION_CONFIG, InceptionConfig} from "../../inception-config";
+import {Session} from "../../session/services/session";
+import {SessionService} from "../../session/services/session.service";
+import {SpinnerService} from "../services/spinner.service";
+import {TitleBarService} from '../services/title-bar.service';
 
 import {AdminContainerView} from './admin-container-view';
-import {TitleBarService} from '../services/title-bar.service';
-import {SecurityService} from "../../security/services/security.service";
-import {Session} from "../../security/services/session";
-import {SpinnerService} from "../services/spinner.service";
-import {INCEPTION_CONFIG, InceptionConfig} from "../../inception-config";
 
 /**
  * The AdminContainerComponent class implements the admin container component.
@@ -74,13 +74,13 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
    * @param config          The Inception configuration.
    * @param router          The router.
    * @param activatedRoute  The activated route.
-   * @param securityService The security service.
+   * @param sessionService  The session service.
    * @param spinnerService  The spinner service.
    * @param titleBarService The title bar service.
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
               private router: Router, private activatedRoute: ActivatedRoute,
-              private securityService: SecurityService, private spinnerService: SpinnerService,
+              private sessionService: SessionService, private spinnerService: SpinnerService,
               private titleBarService: TitleBarService) {
     this.changes = new MutationObserver(() => {
       this.sidebarMinimized = document.body.classList.contains('sidebar-minimized');
@@ -90,7 +90,7 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
       attributes: true
     });
 
-    this.subscriptions.add(this.securityService.session$.subscribe((session: (Session | null)) => {
+    this.subscriptions.add(this.sessionService.session$.subscribe((session: (Session | null)) => {
       if (!session) {
         spinnerService.hideSpinner();
 

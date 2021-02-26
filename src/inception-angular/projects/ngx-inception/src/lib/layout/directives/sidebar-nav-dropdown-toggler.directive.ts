@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {SidebarNavDropdownDirective} from './sidebar-nav-dropdown.directive';
 import {Directive, HostListener} from '@angular/core';
+import {SidebarNavDropdownDirective} from './sidebar-nav-dropdown.directive';
 
 /**
  * The SidebarNavDropdownTogglerDirective class implements the sidebar nav dropdown toggle

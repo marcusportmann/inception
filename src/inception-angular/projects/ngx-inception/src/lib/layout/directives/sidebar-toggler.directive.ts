@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,8 @@ import {SIDEBAR_CSS_CLASSES} from '../components/sidebar-css-classes';
 })
 export class SidebarTogglerDirective implements OnInit {
 
-  @Input('sidebarToggler') breakpoint?: string;
-
   bp?: string;
+  @Input('sidebarToggler') breakpoint?: string;
 
   /**
    * Constructs a new SidebarTogglerDirective.

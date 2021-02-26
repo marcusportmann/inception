@@ -385,7 +385,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
    */
   @Override
   public void changePassword(String username, String password, String newPassword)
-      throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
+      throws AuthenticationFailedException, UserLockedException,
           ExistingPasswordException, ServiceUnavailableException {
     try {
       Optional<User> userOptional =
@@ -393,7 +393,10 @@ public class InternalUserDirectory extends UserDirectoryBase {
               .findByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
       if (userOptional.isEmpty()) {
-        throw new UserNotFoundException(username);
+        throw new AuthenticationFailedException(
+            "Authentication failed while attempting to change the password for the user ("
+                + username
+                + ")");
       }
 
       User user = userOptional.get();
@@ -426,7 +429,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
       getUserRepository().savePasswordInPasswordHistory(user.getId(), newPasswordHash);
     } catch (AuthenticationFailedException
         | ExistingPasswordException
-        | UserNotFoundException
         | UserLockedException e) {
       throw e;
     } catch (Throwable e) {

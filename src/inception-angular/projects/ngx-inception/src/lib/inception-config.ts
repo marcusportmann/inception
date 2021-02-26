@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,16 +70,26 @@ export interface InceptionConfig {
   oauthTokenUrl: string;
 
   /**
-   * The username to prepopulate the username form control on the login component with for testing
-   * purposes.
+   * The Party API URL prefix.
    */
-  prepopulatedLoginUsername?: string;
+  partyApiUrlPrefix: string;
+
+  /**
+   * The Party Reference API URL prefix.
+   */
+  partyReferenceApiUrlPrefix: string;
 
   /**
    * The password to prepopulate the password form control on the login component with for testing
    * purposes.
    */
   prepopulatedLoginPassword?: string;
+
+  /**
+   * The username to prepopulate the username form control on the login component with for testing
+   * purposes.
+   */
+  prepopulatedLoginUsername?: string;
 
   /**
    * The Reference API URL prefix.
