@@ -15,8 +15,8 @@
  */
 
 import {Component} from '@angular/core';
-import {ConfirmationDialogComponent, DialogService, Error} from 'ngx-inception';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ConfirmationDialogComponent, DialogService, Error} from 'ngx-inception';
 import {first} from 'rxjs/operators';
 
 /**

@@ -28,15 +28,15 @@ export class ExpansionPanelsComponent {
   panelOpenState = false;
   step = 0;
 
-  setStep(index: number) {
-    this.step = index;
-  }
-
   nextStep() {
     this.step++;
   }
 
   prevStep() {
     this.step--;
+  }
+
+  setStep(index: number) {
+    this.step = index;
   }
 }

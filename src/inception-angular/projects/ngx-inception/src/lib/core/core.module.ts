@@ -14,40 +14,40 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
 import {ObserversModule} from '@angular/cdk/observers';
 import {CommonModule} from '@angular/common';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatRadioModule} from '@angular/material/radio';
+import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {FileUploadComponent} from './components/file-upload.component';
-import {TableFilterComponent} from './components/table-filter.component';
-import {AutofocusDirective} from './directives/autofocus.directive';
-import {ValidatedFormDirective} from './directives/validated-form.directive';
-import {GroupFormFieldComponent} from "./components/group-form-field.component";
-import {MatCardModule} from "@angular/material/card";
-import {MatMenuModule} from "@angular/material/menu";
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatTableModule} from "@angular/material/table";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatCardModule} from "@angular/material/card";
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatExpansionModule} from "@angular/material/expansion";
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
 import {MatListModule} from "@angular/material/list";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatRadioModule} from '@angular/material/radio';
 import {MatSelectModule} from "@angular/material/select";
 import {MatSliderModule} from "@angular/material/slider";
 import {MatSortModule} from "@angular/material/sort";
+import {MatTableModule} from "@angular/material/table";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {FileUploadComponent} from './components/file-upload.component';
+import {GroupFormFieldComponent} from "./components/group-form-field.component";
+import {TableFilterComponent} from './components/table-filter.component';
 import {AutocompleteSelectionRequiredDirective} from "./directives/autocomplete-selection-required.directive";
+import {AutofocusDirective} from './directives/autofocus.directive';
+import {ValidatedFormDirective} from './directives/validated-form.directive';
 
 /**
  * The InceptionModule class implements the Inception framework module.

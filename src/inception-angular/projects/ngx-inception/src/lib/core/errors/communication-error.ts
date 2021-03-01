@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Error} from './error';
 import {HttpErrorResponse} from '@angular/common/http';
+import {Error} from './error';
 
 /**
  * The CommunicationError class holds the information for a communication error.

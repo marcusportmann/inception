@@ -20,8 +20,8 @@ import {MatTableDataSource} from '@angular/material/table';
 export interface PeriodicElement {
   name: string;
   position: number;
-  weight: number;
   symbol: string;
+  weight: number;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [{
@@ -137,9 +137,8 @@ const ELEMENT_DATA: PeriodicElement[] = [{
 })
 export class FilterableTableComponent {
 
-  displayedColumns = ['position', 'name', 'weight', 'symbol'];
-
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns = ['position', 'name', 'weight', 'symbol'];
 
   applyFilter(filterValue: string): void {
     filterValue = filterValue.trim();

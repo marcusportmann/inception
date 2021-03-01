@@ -21,8 +21,8 @@ import {MatTableDataSource} from '@angular/material/table';
 export interface PeriodicElement {
   name: string;
   position: number;
-  weight: number;
   symbol: string;
+  weight: number;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [{

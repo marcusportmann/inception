@@ -32,16 +32,14 @@ export class UserDirectory {
    * The name of the user directory.
    */
   name: string;
-
-  /**
-   * The code for the user directory type.
-   */
-  type: string;
-
   /**
    * The parameters for the user directory.
    */
   parameters: UserDirectoryParameter[];
+  /**
+   * The code for the user directory type.
+   */
+  type: string;
 
   /**
    * Constructs a new UserDirectory.

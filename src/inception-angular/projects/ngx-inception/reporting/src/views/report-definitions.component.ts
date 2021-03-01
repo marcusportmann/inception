@@ -39,12 +39,9 @@ import {ReportingService} from '../services/reporting.service';
 })
 export class ReportDefinitionsComponent extends AdminContainerView implements AfterViewInit {
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
   dataSource: MatTableDataSource<ReportDefinitionSummary> = new MatTableDataSource<ReportDefinitionSummary>();
-
   displayedColumns = ['name', 'actions'];
-
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   @ViewChild(MatSort, {static: true}) sort!: MatSort;

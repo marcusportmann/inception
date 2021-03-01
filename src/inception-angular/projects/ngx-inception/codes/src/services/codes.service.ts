@@ -267,6 +267,27 @@ export class CodesService {
   }
 
   /**
+   * Retrieve the summaries for all code categories.
+   *
+   * @return The code category summaries.
+   */
+  getCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
+    return this.httpClient.get<CodeCategory[]>(this.config.codesApiUrlPrefix + '/code-category-summaries',
+      {reportProgress: true})
+    .pipe(map((codeCategorySummaries: CodeCategorySummary[]) => {
+      return codeCategorySummaries;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the code categories.', httpErrorResponse));
+    }));
+  }
+
+  /**
    * Retrieve the name of the code.
    *
    * @param codeCategoryId The ID for the code category the code is associated with.
@@ -320,27 +341,6 @@ export class CodesService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to retrieve the codes.', httpErrorResponse));
-    }));
-  }
-
-  /**
-   * Retrieve the summaries for all code categories.
-   *
-   * @return The code category summaries.
-   */
-  getCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
-    return this.httpClient.get<CodeCategory[]>(this.config.codesApiUrlPrefix + '/code-category-summaries',
-      {reportProgress: true})
-    .pipe(map((codeCategorySummaries: CodeCategorySummary[]) => {
-      return codeCategorySummaries;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
-
-      return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the code categories.', httpErrorResponse));
     }));
   }
 

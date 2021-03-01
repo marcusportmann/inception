@@ -15,8 +15,8 @@
  */
 
 import {AfterViewInit, Directive, Host, Input, OnDestroy, Self} from '@angular/core';
-import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
 import {NgControl} from '@angular/forms';
+import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
 import {MatOptionSelectionChange} from "@angular/material/core";
 import {Subscription} from "rxjs";
 

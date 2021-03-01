@@ -25,17 +25,14 @@ export class Country {
    * The ISO 3166-1 alpha-2 code for the country.
    */
   code: string;
-
-  /**
-   * The ISO 3166-1 alpha-3 code for the country.
-   */
-  iso3Code: string;
-
   /**
    * The description for the country.
    */
   description: string;
-
+  /**
+   * The ISO 3166-1 alpha-3 code for the country.
+   */
+  iso3Code: string;
   /**
    * The Unicode locale identifier for the country.
    */

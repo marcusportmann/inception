@@ -39,14 +39,10 @@ import {CodesService} from '../services/codes.service';
 })
 export class CodesComponent extends AdminContainerView implements AfterViewInit {
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
   codeCategoryId: string;
-
   dataSource: MatTableDataSource<Code> = new MatTableDataSource<Code>();
-
   displayedColumns = ['id', 'name', 'actions'];
-
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   @ViewChild(MatSort, {static: true}) sort!: MatSort;

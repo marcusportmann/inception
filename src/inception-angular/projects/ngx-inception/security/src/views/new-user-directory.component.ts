@@ -41,10 +41,10 @@ import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
 })
 export class NewUserDirectoryComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
-  nameFormControl: FormControl;
-  newUserDirectoryForm: FormGroup;
   @ViewChild(InternalUserDirectoryComponent) internalUserDirectory?: InternalUserDirectoryComponent;
   @ViewChild(LdapUserDirectoryComponent) ldapUserDirectory?: LdapUserDirectoryComponent;
+  nameFormControl: FormControl;
+  newUserDirectoryForm: FormGroup;
   userDirectory?: UserDirectory;
   userDirectoryTypeFormControl: FormControl;
   userDirectoryTypes: UserDirectoryType[] = [];

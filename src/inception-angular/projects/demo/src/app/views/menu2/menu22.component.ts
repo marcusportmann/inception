@@ -33,7 +33,8 @@ import {PartyService} from 'ngx-inception/party';
         </div>
       </mat-card-content>
     </mat-card>
-  `})
+  `
+})
 export class Menu22Component {
 
   constructor(private partyService: PartyService) {

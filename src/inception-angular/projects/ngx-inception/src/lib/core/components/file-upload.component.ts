@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
+import {FocusMonitor} from '@angular/cdk/a11y';
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  Component,
-  DoCheck,
-  ElementRef,
-  HostBinding,
-  HostListener,
-  Input,
-  OnDestroy,
-  OnInit,
-  Optional,
-  Renderer2,
-  Self
+  Component, DoCheck, ElementRef, HostBinding, HostListener, Input, OnDestroy, OnInit, Optional,
+  Renderer2, Self
 } from '@angular/core';
 import {ControlValueAccessor, FormGroupDirective, NgControl, NgForm} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatFormFieldControl} from '@angular/material/form-field';
-import {FocusMonitor} from '@angular/cdk/a11y';
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
 
 
 import {FileUploadMixinBase} from './file-upload-mixin';
@@ -76,17 +67,15 @@ import {FileUploadMixinBase} from './file-upload-mixin';
 export class FileUploadComponent extends FileUploadMixinBase implements MatFormFieldControl<File[]>,
   ControlValueAccessor, OnInit, OnDestroy, DoCheck {
   static nextId = 0;
-
-  focused = false;
-  controlType = 'file-input';
-
-  @Input() autofilled = false;
-  @Input() placeholder = '';
-  @Input() multiple = false;
   @Input() accept?: string;
-  @Input() errorStateMatcher: ErrorStateMatcher;
-  @HostBinding() id = `ngx-mat-file-input-${FileUploadComponent.nextId++}`;
+  @Input() autofilled = false;
+  controlType = 'file-input';
   @HostBinding('attr.aria-describedby') describedBy = '';
+  @Input() errorStateMatcher: ErrorStateMatcher;
+  focused = false;
+  @HostBinding() id = `ngx-mat-file-input-${FileUploadComponent.nextId++}`;
+  @Input() multiple = false;
+  @Input() placeholder = '';
 
   /**
    * @see https://angular.io/api/forms/ControlValueAccessor
@@ -118,6 +107,38 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     this.stateChanges.next();
   }
 
+  @Input() get disabled(): boolean {
+    return this._elementRef.nativeElement.disabled;
+  }
+
+  set disabled(dis: boolean) {
+    this.setDisabledState(coerceBooleanProperty(dis));
+    this.stateChanges.next();
+  }
+
+  /**
+   * Whether the current input has files
+   */
+  get empty() {
+    return !this._elementRef.nativeElement.value || this._elementRef.nativeElement.value.length === 0;
+  }
+
+  get fileNames() {
+    if (this.value) {
+      return this.value.map((f: File) => f.name).join(',');
+    } else {
+      return this.placeholder;
+    }
+  }
+
+  @HostBinding('class.file-input-disabled') get isDisabled() {
+    return this.disabled;
+  }
+
+  @HostBinding('class.mat-form-field-should-float') get shouldLabelFloat() {
+    return this.focused || !this.empty || this.placeholder !== undefined;
+  }
+
   @Input() get value(): File[] | null {
     return this.empty ? null : this._elementRef.nativeElement.value || [];
   }
@@ -129,60 +150,22 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     }
   }
 
-  /**
-   * Whether the current input has files
-   */
-  get empty() {
-    return !this._elementRef.nativeElement.value || this._elementRef.nativeElement.value.length === 0;
+  @HostListener('focusout') blur() {
+    this.focused = false;
+    this._onTouched();
   }
 
-  @HostBinding('class.mat-form-field-should-float') get shouldLabelFloat() {
-    return this.focused || !this.empty || this.placeholder !== undefined;
-  }
-
-  @HostBinding('class.file-input-disabled') get isDisabled() {
-    return this.disabled;
-  }
-
-  @Input() get disabled(): boolean {
-    return this._elementRef.nativeElement.disabled;
-  }
-
-  set disabled(dis: boolean) {
-    this.setDisabledState(coerceBooleanProperty(dis));
-    this.stateChanges.next();
-  }
-
-  get fileNames() {
-    if (this.value) {
-      return this.value.map((f: File) => f.name).join(',');
-    } else {
-      return this.placeholder;
+  @HostListener('change', ['$event']) change(event: Event) {
+    const fileList: FileList | null = (event.target as HTMLInputElement).files;
+    const fileArray: File[] = [];
+    if (fileList) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < fileList.length; i++) {
+        fileArray.push(fileList[i]);
+      }
     }
-  }
-
-  setDescribedByIds(ids: string[]) {
-    this.describedBy = ids.join(' ');
-  }
-
-  onContainerClick(event: MouseEvent) {
-    if ((event.target as Element).tagName.toLowerCase() !== 'input' && !this.disabled) {
-      this._elementRef.nativeElement.querySelector('input').focus();
-      this.focused = true;
-      this.open();
-    }
-  }
-
-  writeValue(files: File[] | null): void {
-    this._renderer.setProperty(this._elementRef.nativeElement, 'value', files);
-  }
-
-  registerOnChange(fn: (_: any) => void): void {
-    this._onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this._onTouched = fn;
+    this.value = fileArray;
+    this._onChange(this.value);
   }
 
   /**
@@ -199,35 +182,12 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     this._onChange(this.value);
   }
 
-  @HostListener('change', ['$event']) change(event: Event) {
-    const fileList: FileList | null = (event.target as HTMLInputElement).files;
-    const fileArray: File[] = [];
-    if (fileList) {
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < fileList.length; i++) {
-        fileArray.push(fileList[i]);
-      }
-    }
-    this.value = fileArray;
-    this._onChange(this.value);
-  }
-
-  @HostListener('focusout') blur() {
-    this.focused = false;
-    this._onTouched();
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this._renderer.setProperty(this._elementRef.nativeElement, 'disabled', isDisabled);
-  }
-
-  ngOnInit() {
-    this.multiple = coerceBooleanProperty(this.multiple);
-  }
-
-  open() {
-    if (!this.disabled) {
-      this._elementRef.nativeElement.querySelector('input').click();
+  ngDoCheck(): void {
+    if (this.ngControl) {
+      // We need to re-evaluate this on every change detection cycle, because there are some
+      // error triggers that we can't subscribe to (e.g. parent form submissions). This means
+      // that whatever logic is in here has to be super lean or we risk destroying the performance.
+      this.updateErrorState();
     }
   }
 
@@ -236,13 +196,42 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     this.fm.stopMonitoring(this._elementRef.nativeElement);
   }
 
-  ngDoCheck(): void {
-    if (this.ngControl) {
-      // We need to re-evaluate this on every change detection cycle, because there are some
-      // error triggers that we can't subscribe to (e.g. parent form submissions). This means
-      // that whatever logic is in here has to be super lean or we risk destroying the performance.
-      this.updateErrorState();
+  ngOnInit() {
+    this.multiple = coerceBooleanProperty(this.multiple);
+  }
+
+  onContainerClick(event: MouseEvent) {
+    if ((event.target as Element).tagName.toLowerCase() !== 'input' && !this.disabled) {
+      this._elementRef.nativeElement.querySelector('input').focus();
+      this.focused = true;
+      this.open();
     }
+  }
+
+  open() {
+    if (!this.disabled) {
+      this._elementRef.nativeElement.querySelector('input').click();
+    }
+  }
+
+  registerOnChange(fn: (_: any) => void): void {
+    this._onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this._onTouched = fn;
+  }
+
+  setDescribedByIds(ids: string[]) {
+    this.describedBy = ids.join(' ');
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this._renderer.setProperty(this._elementRef.nativeElement, 'disabled', isDisabled);
+  }
+
+  writeValue(files: File[] | null): void {
+    this._renderer.setProperty(this._elementRef.nativeElement, 'value', files);
   }
 
   private _onChange = (_: any) => {

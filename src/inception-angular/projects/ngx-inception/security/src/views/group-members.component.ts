@@ -42,14 +42,14 @@ import {SecurityService} from '../services/security.service';
 })
 export class GroupMembersComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
   dataSource: GroupMemberDatasource;
   displayedColumns = ['memberName', 'memberType', 'actions'];
+  groupName: string;
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
   @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
   userDirectoryId: string;
-  groupName: string;
   private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,

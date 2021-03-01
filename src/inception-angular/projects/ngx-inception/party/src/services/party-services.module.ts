@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
-import {PartyService} from "./party.service";
+import {ModuleWithProviders, NgModule} from '@angular/core';
 import {PartyReferenceService} from "./party-reference.service";
+import {PartyService} from "./party.service";
 
 /**
  * The PartyServicesModule class implements the Inception Party Services Module.

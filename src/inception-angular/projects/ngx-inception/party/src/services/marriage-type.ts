@@ -30,17 +30,14 @@ export class MarriageType {
    * The description for the marriage type.
    */
   description: string;
-
-  /**
-   * The code for the marital status the marriage type is associated with.
-   */
-  maritalStatus: string;
-
   /**
    * The Unicode locale identifier for the marriage type.
    */
   localeId: string;
-
+  /**
+   * The code for the marital status the marriage type is associated with.
+   */
+  maritalStatus: string;
   /**
    * The name of the marriage type.
    */

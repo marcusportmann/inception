@@ -16,45 +16,23 @@
 
 import {Directionality} from '@angular/cdk/bidi';
 import {BooleanInput} from '@angular/cdk/coercion';
+import {Platform} from '@angular/cdk/platform';
 import {
-  AfterContentChecked,
-  AfterContentInit,
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ContentChild,
-  ContentChildren,
-  ElementRef,
-  Inject,
-  InjectionToken,
-  Input,
-  NgZone,
-  OnDestroy,
-  Optional,
-  QueryList,
-  ViewChild,
-  ViewEncapsulation,
+  AfterContentChecked, AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef,
+  Component, ContentChild, ContentChildren, ElementRef, Inject, InjectionToken, Input, NgZone,
+  OnDestroy, Optional, QueryList, ViewChild, ViewEncapsulation,
 } from '@angular/core';
+import {MatCheckbox} from "@angular/material/checkbox";
 import {CanColor, CanColorCtor, mixinColor,} from '@angular/material/core';
+import {
+  getMatFormFieldDuplicatedHintError, MAT_FORM_FIELD_DEFAULT_OPTIONS, MatError,
+  matFormFieldAnimations, MatFormFieldAppearance, MatFormFieldDefaultOptions, MatHint, MatLabel,
+  MatPrefix, MatSuffix
+} from "@angular/material/form-field";
+import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
 import {fromEvent, merge, Subject} from 'rxjs';
 import {startWith, take, takeUntil} from 'rxjs/operators';
-import {Platform} from '@angular/cdk/platform';
-import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
-import {
-  getMatFormFieldDuplicatedHintError,
-  MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MatError,
-  matFormFieldAnimations,
-  MatFormFieldAppearance,
-  MatFormFieldDefaultOptions,
-  MatHint,
-  MatLabel,
-  MatPrefix,
-  MatSuffix
-} from "@angular/material/form-field";
-import {MatCheckbox} from "@angular/material/checkbox";
-import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 
 let nextUniqueId = 0;
 const floatingLabelScale = 0.75;
@@ -117,38 +95,34 @@ export class GroupFormFieldComponent extends _GroupFormFieldMixinBase
   implements AfterContentInit, AfterContentChecked, AfterViewInit, OnDestroy, CanColor {
 
   static ngAcceptInputType_hideRequiredMarker: BooleanInput;
-
-  /** State of the mat-hint and mat-error animations. */
-  _subscriptAnimationState: string = '';
-  // Unique id for the hint label.
-  _hintLabelId: string = `mat-hint-${nextUniqueId++}`;
-  // Unique id for the internal form field label.
-  _labelId = `group-form-field-label-${nextUniqueId++}`;
   /** Whether the Angular animations are enabled. */
   _animationsEnabled: boolean;
-
+  @ContentChildren(MatCheckbox, {descendants: true}) _checkboxChildren!: QueryList<MatCheckbox>;
   @ViewChild('connectionContainer', {static: true}) _connectionContainerRef!: ElementRef;
-  @ContentChild(MatLabel) _labelChildNonStatic?: MatLabel;
-  @ContentChild(MatLabel, {static: true}) _labelChildStatic!: MatLabel;
   @ContentChildren(MatError, {descendants: true}) _errorChildren!: QueryList<MatError>;
   @ContentChildren(MatHint, {descendants: true}) _hintChildren!: QueryList<MatHint>;
+  // Unique id for the hint label.
+  _hintLabelId: string = `mat-hint-${nextUniqueId++}`;
+  @ContentChild(MatLabel) _labelChildNonStatic?: MatLabel;
+  @ContentChild(MatLabel, {static: true}) _labelChildStatic!: MatLabel;
+  // Unique id for the internal form field label.
+  _labelId = `group-form-field-label-${nextUniqueId++}`;
   @ContentChildren(MatPrefix, {descendants: true}) _prefixChildren!: QueryList<MatPrefix>;
-  @ContentChildren(MatSuffix, {descendants: true}) _suffixChildren!: QueryList<MatSuffix>;
-  @ContentChildren(MatCheckbox, {descendants: true}) _checkboxChildren!: QueryList<MatCheckbox>;
-
   @ContentChild(MatRadioGroup) _radioGroupChildNonStatic!: MatRadioGroup;
   @ContentChild(MatRadioGroup, {static: true}) _radioGroupChildStatic!: MatRadioGroup;
-
+  /** State of the mat-hint and mat-error animations. */
+  _subscriptAnimationState: string = '';
+  @ContentChildren(MatSuffix, {descendants: true}) _suffixChildren!: QueryList<MatSuffix>;
+  private _destroyed = new Subject<void>();
+  @ViewChild('label') private _label!: ElementRef;
   /**
    * Whether the outline gap needs to be calculated immediately on the next change detection run.
    */
   private _outlineGapCalculationNeededImmediately = false;
   /** Whether the outline gap needs to be calculated next time the zone has stabilized. */
   private _outlineGapCalculationNeededOnStable = false;
-  private _destroyed = new Subject<void>();
   /** Override for the logic that disables the label animation in certain cases. */
   private _showAlwaysAnimate = false;
-  @ViewChild('label') private _label!: ElementRef;
 
   constructor(
     public _elementRef: ElementRef, private _changeDetectorRef: ChangeDetectorRef,
@@ -201,90 +175,6 @@ export class GroupFormFieldComponent extends _GroupFormFieldMixinBase
 
   get _radioGroupChild(): MatRadioGroup {
     return this._radioGroupChildNonStatic || this._radioGroupChildStatic;
-  }
-
-  /**
-   * Gets an ElementRef for the element that a overlay attached to the form-field should be
-   * positioned relative to.
-   */
-  getConnectedOverlayOrigin(): ElementRef {
-    return this._connectionContainerRef || this._elementRef;
-  }
-
-  ngAfterContentChecked() {
-    this._validateControlChildren();
-    if (this._outlineGapCalculationNeededImmediately) {
-      this._updateOutlineGap();
-    }
-  }
-
-  ngAfterContentInit() {
-    this._validateControlChildren();
-
-    // Note that we have to run outside of the `NgZone` explicitly,
-    // in order to avoid throwing users into an infinite loop
-    // if `zone-patch-rxjs` is included.
-    this._ngZone.runOutsideAngular(() => {
-      this._ngZone.onStable.asObservable().pipe(takeUntil(this._destroyed)).subscribe(() => {
-        if (this._outlineGapCalculationNeededOnStable) {
-          this._updateOutlineGap();
-        }
-      });
-    });
-
-    // Run change detection and update the outline if the suffix or prefix changes.
-    merge(this._prefixChildren.changes, this._suffixChildren.changes).subscribe(() => {
-      this._outlineGapCalculationNeededOnStable = true;
-      this._changeDetectorRef.markForCheck();
-    });
-
-    // Re-validate when the number of hints changes.
-    this._hintChildren.changes.pipe(startWith(null)).subscribe(() => {
-      this._processHints();
-      this._changeDetectorRef.markForCheck();
-    });
-
-    // Update the aria-described by when the number of errors changes.
-    this._errorChildren.changes.pipe(startWith(null)).subscribe(() => {
-      this._changeDetectorRef.markForCheck();
-    });
-
-    if (this._dir) {
-      this._dir.change.pipe(takeUntil(this._destroyed)).subscribe(() => {
-        if (typeof requestAnimationFrame === 'function') {
-          this._ngZone.runOutsideAngular(() => {
-            requestAnimationFrame(() => this._updateOutlineGap());
-          });
-        } else {
-          this._updateOutlineGap();
-        }
-      });
-    }
-
-    if (!!this._labelChild) {
-      if (!!this._radioGroupChild) {
-        const radios: MatRadioButton[] = this._radioGroupChild._radios.toArray();
-
-        this._radioGroupChild._radios.forEach((radioButton: MatRadioButton) => {
-          radioButton.ariaLabelledby = this._labelId;
-        });
-      } else if (this._checkboxChildren && (this._checkboxChildren.length > 0)) {
-        this._checkboxChildren.forEach((checkbox: MatCheckbox) => {
-          checkbox.ariaLabelledby = this._labelId;
-        });
-      }
-    }
-  }
-
-  ngAfterViewInit() {
-    // Avoid animations on load.
-    this._subscriptAnimationState = 'enter';
-    this._changeDetectorRef.detectChanges();
-  }
-
-  ngOnDestroy() {
-    this._destroyed.next();
-    this._destroyed.complete();
   }
 
   /** Animates the label up and locks it in position. */
@@ -469,6 +359,90 @@ export class GroupFormFieldComponent extends _GroupFormFieldMixinBase
         }
       });
     }
+  }
+
+  /**
+   * Gets an ElementRef for the element that a overlay attached to the form-field should be
+   * positioned relative to.
+   */
+  getConnectedOverlayOrigin(): ElementRef {
+    return this._connectionContainerRef || this._elementRef;
+  }
+
+  ngAfterContentChecked() {
+    this._validateControlChildren();
+    if (this._outlineGapCalculationNeededImmediately) {
+      this._updateOutlineGap();
+    }
+  }
+
+  ngAfterContentInit() {
+    this._validateControlChildren();
+
+    // Note that we have to run outside of the `NgZone` explicitly,
+    // in order to avoid throwing users into an infinite loop
+    // if `zone-patch-rxjs` is included.
+    this._ngZone.runOutsideAngular(() => {
+      this._ngZone.onStable.asObservable().pipe(takeUntil(this._destroyed)).subscribe(() => {
+        if (this._outlineGapCalculationNeededOnStable) {
+          this._updateOutlineGap();
+        }
+      });
+    });
+
+    // Run change detection and update the outline if the suffix or prefix changes.
+    merge(this._prefixChildren.changes, this._suffixChildren.changes).subscribe(() => {
+      this._outlineGapCalculationNeededOnStable = true;
+      this._changeDetectorRef.markForCheck();
+    });
+
+    // Re-validate when the number of hints changes.
+    this._hintChildren.changes.pipe(startWith(null)).subscribe(() => {
+      this._processHints();
+      this._changeDetectorRef.markForCheck();
+    });
+
+    // Update the aria-described by when the number of errors changes.
+    this._errorChildren.changes.pipe(startWith(null)).subscribe(() => {
+      this._changeDetectorRef.markForCheck();
+    });
+
+    if (this._dir) {
+      this._dir.change.pipe(takeUntil(this._destroyed)).subscribe(() => {
+        if (typeof requestAnimationFrame === 'function') {
+          this._ngZone.runOutsideAngular(() => {
+            requestAnimationFrame(() => this._updateOutlineGap());
+          });
+        } else {
+          this._updateOutlineGap();
+        }
+      });
+    }
+
+    if (!!this._labelChild) {
+      if (!!this._radioGroupChild) {
+        const radios: MatRadioButton[] = this._radioGroupChild._radios.toArray();
+
+        this._radioGroupChild._radios.forEach((radioButton: MatRadioButton) => {
+          radioButton.ariaLabelledby = this._labelId;
+        });
+      } else if (this._checkboxChildren && (this._checkboxChildren.length > 0)) {
+        this._checkboxChildren.forEach((checkbox: MatCheckbox) => {
+          checkbox.ariaLabelledby = this._labelId;
+        });
+      }
+    }
+  }
+
+  ngAfterViewInit() {
+    // Avoid animations on load.
+    this._subscriptAnimationState = 'enter';
+    this._changeDetectorRef.detectChanges();
+  }
+
+  ngOnDestroy() {
+    this._destroyed.next();
+    this._destroyed.complete();
   }
 }
 

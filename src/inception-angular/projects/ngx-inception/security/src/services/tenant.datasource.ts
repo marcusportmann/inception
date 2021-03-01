@@ -29,11 +29,11 @@ import {Tenants} from './tenants';
  */
 export class TenantDatasource implements DataSource<Tenant> {
 
-  private totalSubject$: Subject<number> = new ReplaySubject<number>();
-  total$ = this.totalSubject$.asObservable();
   private dataSubject$: Subject<Tenant[]> = new ReplaySubject<Tenant[]>();
   private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>();
   loading$ = this.loadingSubject$.asObservable();
+  private totalSubject$: Subject<number> = new ReplaySubject<number>();
+  total$ = this.totalSubject$.asObservable();
 
   constructor(private securityService: SecurityService) {
   }

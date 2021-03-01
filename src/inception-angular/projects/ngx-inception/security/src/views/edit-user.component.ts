@@ -41,15 +41,10 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   editUserForm: FormGroup;
 
   emailFormControl: FormControl;
-
-  nameFormControl: FormControl;
-
-  preferredNameFormControl: FormControl;
-
   mobileNumberFormControl: FormControl;
-
+  nameFormControl: FormControl;
   phoneNumberFormControl: FormControl;
-
+  preferredNameFormControl: FormControl;
   user?: User;
 
   userDirectoryCapabilities?: UserDirectoryCapabilities;

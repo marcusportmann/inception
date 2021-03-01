@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {NgxInceptionComponent} from './ngx-inception.component';
 
@@ -10,7 +10,7 @@ describe('NgxInceptionComponent', () => {
     TestBed.configureTestingModule({
       declarations: [NgxInceptionComponent]
     })
-      .compileComponents();
+    .compileComponents();
   }));
 
   beforeEach(() => {

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {ProblemDetails} from './problem-details';
 import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from './http-error';
+import {ProblemDetails} from './problem-details';
 
 /**
  * The base class that all error classes should be derived from.
@@ -66,8 +66,7 @@ export class Error {
             this.cause = new HttpError('', '', cause.message, cause.status, cause.statusText, cause.url ? cause.url : '');
           }
         }
-      }
-      else if (cause instanceof ProblemDetails) {
+      } else if (cause instanceof ProblemDetails) {
         this.timestamp = cause.timestamp;
         this.cause = cause;
       } else {

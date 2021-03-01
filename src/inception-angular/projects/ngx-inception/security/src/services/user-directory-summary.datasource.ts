@@ -29,11 +29,11 @@ import {UserDirectorySummary} from './user-directory-summary';
  */
 export class UserDirectorySummaryDatasource implements DataSource<UserDirectorySummary> {
 
-  private totalSubject$: Subject<number> = new ReplaySubject<number>();
-  total$ = this.totalSubject$.asObservable();
   private dataSubject$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>();
   private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>();
   loading$ = this.loadingSubject$.asObservable();
+  private totalSubject$: Subject<number> = new ReplaySubject<number>();
+  total$ = this.totalSubject$.asObservable();
 
   constructor(private securityService: SecurityService) {
   }

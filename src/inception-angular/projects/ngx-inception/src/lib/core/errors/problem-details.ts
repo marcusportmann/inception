@@ -97,7 +97,7 @@ export class ProblemDetails {
       (httpErrorResponse.error.timestamp) && (httpErrorResponse.error.type) &&
       (httpErrorResponse.error.title) && (httpErrorResponse.error.status) &&
       (httpErrorResponse.error.detail) && (((type == null) || (type == undefined)) ||
-      ((httpErrorResponse.error.type) && (httpErrorResponse.error.type == type))));
+        ((httpErrorResponse.error.type) && (httpErrorResponse.error.type == type))));
   }
 }
 

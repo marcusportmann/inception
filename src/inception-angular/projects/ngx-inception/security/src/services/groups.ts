@@ -28,22 +28,18 @@ export class Groups {
    * The optional filter that was applied to the groups.
    */
   filter?: string;
-
-  /**
-   * The optional page index.
-   */
-  pageIndex?: number;
-
-  /**
-   * The optional page size.
-   */
-  pageSize?: number;
-
   /**
    * The groups.
    */
   groups: Group[];
-
+  /**
+   * The optional page index.
+   */
+  pageIndex?: number;
+  /**
+   * The optional page size.
+   */
+  pageSize?: number;
   /**
    * The optional sort direction that was applied to the groups.
    */

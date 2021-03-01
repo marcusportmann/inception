@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable, of} from 'rxjs';
-import {Injectable} from "@angular/core";
 
 /**
  * The Menu321TitleResolver class provides the resolver for the Menu321Component.

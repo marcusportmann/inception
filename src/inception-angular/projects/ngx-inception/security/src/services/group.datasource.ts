@@ -29,11 +29,11 @@ import {SecurityService} from './security.service';
  */
 export class GroupDatasource implements DataSource<Group> {
 
-  private totalSubject$: Subject<number> = new ReplaySubject<number>();
-  total$ = this.totalSubject$.asObservable();
   private dataSubject$: Subject<Group[]> = new ReplaySubject<Group[]>();
   private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>();
   loading$ = this.loadingSubject$.asObservable();
+  private totalSubject$: Subject<number> = new ReplaySubject<number>();
+  total$ = this.totalSubject$.asObservable();
 
   constructor(private securityService: SecurityService) {
   }

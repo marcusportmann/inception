@@ -13,10 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {HttpErrorResponse} from '@angular/common/http';
-import {HttpError} from 'ngx-inception';
-import {Error} from 'ngx-inception';
-import {ProblemDetails} from 'ngx-inception';
-
-

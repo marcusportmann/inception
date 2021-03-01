@@ -17,7 +17,7 @@
 import {Component, ElementRef, Inject, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {first, map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import {Replace} from '../../core/util/replace';
 import {INCEPTION_CONFIG, InceptionConfig} from "../../inception-config";
 import {Session} from '../../session/services/session';
@@ -103,8 +103,10 @@ export class AdminHeaderComponent implements OnInit {
               private sessionService: SessionService) {
   }
 
-  isUserProfileEnabled(): boolean {
-    return this.config.userProfileEnabled;
+  isLoggedIn(): Observable<boolean> {
+    return this.sessionService.session$.pipe(map((session: Session | null) => {
+      return (!!session);
+    }));
   }
 
   // // tslint:disable-next-line
@@ -113,10 +115,8 @@ export class AdminHeaderComponent implements OnInit {
   //   return breakpoint ? breakpoint : '';
   // }
 
-  isLoggedIn(): Observable<boolean> {
-    return this.sessionService.session$.pipe(map((session: Session | null) => {
-      return (!!session);
-    }));
+  isUserProfileEnabled(): boolean {
+    return this.config.userProfileEnabled;
   }
 
   login(): void {

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import {Location} from '@angular/common'
 import {AfterViewInit, Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -24,7 +25,6 @@ import {
 import {finalize, first} from 'rxjs/operators';
 import {SecurityService} from '../services/security.service';
 import {User} from '../services/user';
-import { Location } from '@angular/common'
 
 /**
  * The UserProfileComponent class implements the user profile component.
@@ -37,20 +37,13 @@ import { Location } from '@angular/common'
 })
 export class UserProfileComponent extends AdminContainerView implements AfterViewInit {
 
-  userProfileForm: FormGroup;
-
   emailFormControl: FormControl;
-
-  nameFormControl: FormControl;
-
-  preferredNameFormControl: FormControl;
-
   mobileNumberFormControl: FormControl;
-
+  nameFormControl: FormControl;
   phoneNumberFormControl: FormControl;
-
+  preferredNameFormControl: FormControl;
   user?: User;
-
+  userProfileForm: FormGroup;
   usernameFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private location: Location,

@@ -39,9 +39,9 @@ import {TenantDatasource} from '../services/tenant.datasource';
 })
 export class TenantsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
   dataSource: TenantDatasource;
   displayedColumns = ['name', 'actions'];
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
   @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;

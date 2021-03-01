@@ -38,17 +38,14 @@ export class Tenants {
    * The optional page size.
    */
   pageSize?: number;
-
-  /**
-   * The tenants.
-   */
-  tenants: Tenant[];
-
   /**
    * The optional sort direction that was applied to the tenants.
    */
   sortDirection?: SortDirection;
-
+  /**
+   * The tenants.
+   */
+  tenants: Tenant[];
   /**
    * The total number of tenants.
    */

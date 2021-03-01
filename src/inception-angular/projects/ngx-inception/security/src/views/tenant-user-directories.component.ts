@@ -48,8 +48,8 @@ export class TenantUserDirectoriesComponent extends AdminContainerView implement
   displayedColumns = ['existingUserDirectoryName', 'actions'];
   filteredUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>();
   newUserDirectoryFormControl: FormControl;
-  tenantId: string;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  tenantId: string;
   private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,
@@ -78,30 +78,6 @@ export class TenantUserDirectoriesComponent extends AdminContainerView implement
 
   get title(): string {
     return $localize`:@@security_tenant_user_directories_title:Tenant User Directories`
-  }
-
-  private static calculateAvailableUserDirectories(allUserDirectories: UserDirectorySummary[],
-                                                   // tslint:disable-next-line:max-line-length
-                                                   existingTenantUserDirectories: UserDirectorySummary[]): UserDirectorySummary[] {
-
-    const availableUserDirectories: UserDirectorySummary[] = [];
-
-    for (const possibleUserDirectory of allUserDirectories) {
-      let foundExistingUserDirectory = false;
-
-      for (const existingTenantUserDirectory of existingTenantUserDirectories) {
-        if (possibleUserDirectory.id === existingTenantUserDirectory.id) {
-          foundExistingUserDirectory = true;
-          break;
-        }
-      }
-
-      if (!foundExistingUserDirectory) {
-        availableUserDirectories.push(possibleUserDirectory);
-      }
-    }
-
-    return availableUserDirectories;
   }
 
   addUserDirectoryToTenant(): void {
@@ -233,6 +209,30 @@ export class TenantUserDirectoriesComponent extends AdminContainerView implement
         });
       }
     });
+  }
+
+  private static calculateAvailableUserDirectories(allUserDirectories: UserDirectorySummary[],
+                                                   // tslint:disable-next-line:max-line-length
+                                                   existingTenantUserDirectories: UserDirectorySummary[]): UserDirectorySummary[] {
+
+    const availableUserDirectories: UserDirectorySummary[] = [];
+
+    for (const possibleUserDirectory of allUserDirectories) {
+      let foundExistingUserDirectory = false;
+
+      for (const existingTenantUserDirectory of existingTenantUserDirectories) {
+        if (possibleUserDirectory.id === existingTenantUserDirectory.id) {
+          foundExistingUserDirectory = true;
+          break;
+        }
+      }
+
+      if (!foundExistingUserDirectory) {
+        availableUserDirectories.push(possibleUserDirectory);
+      }
+    }
+
+    return availableUserDirectories;
   }
 
   private filterUserDirectories(userDirectories: UserDirectorySummary[],

@@ -25,6 +25,15 @@ export class Base64 {
 
   static readonly LOOKUP: Uint8Array = new Uint8Array(256);
 
+  static _Initialize() {
+    for (let i = 0; i < Base64.CHARACTERS.length; i++) {
+      Base64.LOOKUP[Base64.CHARACTERS.charCodeAt(i)] = i;
+    }
+
+    this._Initialize = () => {
+    };
+  }
+
   /**
    * Base64 decode the string data.
    *
@@ -100,15 +109,6 @@ export class Base64 {
     }
 
     return base64;
-  }
-
-  static _Initialize() {
-    for (let i = 0; i < Base64.CHARACTERS.length; i++) {
-      Base64.LOOKUP[Base64.CHARACTERS.charCodeAt(i)] = i;
-    }
-
-    this._Initialize = () => {
-    };
   }
 }
 

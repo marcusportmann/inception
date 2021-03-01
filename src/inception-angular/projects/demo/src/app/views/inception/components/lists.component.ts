@@ -26,26 +26,6 @@ import {Component} from '@angular/core';
 })
 export class ListsComponent {
 
-  typesOfShoes = ['Dogs', 'Cats', 'Birds', 'Hamsters', 'Ponies'];
-
-  planets: any[] = [{
-    name: 'Jupiter',
-    image: 'assets/images/planets/1.png',
-    description: 'Fifth planet',
-    detail: 'Jupiter is the fifth planet from the Sun and the largest in the Solar System'
-  }, {
-    name: 'Venus',
-    image: 'assets/images/planets/2.png',
-    description: 'Second planet',
-    detail: 'Venus is the second planet from the Sun, orbiting it every 224.7 Earth days'
-  }, {
-    name: 'Mars',
-    image: 'assets/images/planets/3.png',
-    description: 'Fourth planet',
-    detail: 'Mars is the fourth planet from the Sun and the second-smallest planet'
-  }
-  ];
-
   folders = [{
     name: 'Photos',
     updated: new Date('1/1/16'),
@@ -65,6 +45,24 @@ export class ListsComponent {
     updated: new Date('1/18/16'),
   }
   ];
+  planets: any[] = [{
+    name: 'Jupiter',
+    image: 'assets/images/planets/1.png',
+    description: 'Fifth planet',
+    detail: 'Jupiter is the fifth planet from the Sun and the largest in the Solar System'
+  }, {
+    name: 'Venus',
+    image: 'assets/images/planets/2.png',
+    description: 'Second planet',
+    detail: 'Venus is the second planet from the Sun, orbiting it every 224.7 Earth days'
+  }, {
+    name: 'Mars',
+    image: 'assets/images/planets/3.png',
+    description: 'Fourth planet',
+    detail: 'Mars is the fourth planet from the Sun and the second-smallest planet'
+  }
+  ];
+  typesOfShoes = ['Dogs', 'Cats', 'Birds', 'Hamsters', 'Ponies'];
 
   constructor() {
   }

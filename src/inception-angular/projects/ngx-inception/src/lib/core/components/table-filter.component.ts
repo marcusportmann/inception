@@ -15,13 +15,7 @@
  */
 
 import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
+  Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
 import {fromEvent, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';

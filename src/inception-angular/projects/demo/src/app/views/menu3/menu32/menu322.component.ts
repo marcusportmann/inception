@@ -15,9 +15,9 @@
  */
 
 import {Component} from '@angular/core';
-import {Observable} from 'rxjs';
-import {AdminContainerView, BackNavigation} from 'ngx-inception';
 import {ActivatedRoute} from '@angular/router';
+import {AdminContainerView, BackNavigation} from 'ngx-inception';
+import {Observable} from 'rxjs';
 
 /**
  * The Menu322Component class implements the menu 3.2.2 component.

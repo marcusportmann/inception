@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {Error, SpinnerService} from 'ngx-inception';
-import {Router} from '@angular/router';
 import {HttpClient} from "@angular/common/http";
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {Error, SpinnerService} from 'ngx-inception';
 import {PartyService} from "ngx-inception/party";
-
-
 
 
 //import PartyService = party.PartyService;
@@ -55,7 +53,9 @@ import {PartyService} from "ngx-inception/party";
         </div>
         <div class="row">
           <div class="col m-1">
-            <button mat-flat-button color="primary" (click)="testExceptionHandling()">Test Exception Handling</button>
+            <button mat-flat-button color="primary" (click)="testExceptionHandling()">Test Exception
+              Handling
+            </button>
           </div>
         </div>
         <div class="row">
@@ -83,19 +83,23 @@ export class Menu21Component {
     this.router.navigateByUrl('/error/send-error-report', {state: {error}});
   }
 
+  testExceptionHandling(): void {
+    this.httpClient.get('http://localhost:8080/api/test/test-exception-handling', {reportProgress: true}).subscribe(
+      (next: any) => {
+        console.log('next: ', next)
+      },
+      (error: any) => {
+        console.log('error: ', error)
+      },
+      () => console.log('complete')
+    );
+  }
+
   testSpinner(): void {
     this.spinnerService.showSpinner();
 
     setTimeout(() => {
       this.spinnerService.hideSpinner();
     }, 600000);
-  }
-
-  testExceptionHandling(): void {
-    this.httpClient.get('http://localhost:8080/api/test/test-exception-handling', {reportProgress: true}).subscribe(
-        (next: any) => {console.log('next: ', next)},
-      (error: any) => {console.log('error: ', error)},
-      () => console.log('complete')
-    );
   }
 }

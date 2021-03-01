@@ -15,13 +15,14 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {CoreModule} from 'ngx-inception';
 import {ButtonsComponent} from './buttons.component';
 import {CardsComponent} from './cards.component';
 import {ChartsComponent} from './charts.component';
+import {DialogsComponent} from './dialogs.component';
 import {ExpansionPanelsComponent} from './expansion-panels.component';
 import {GridListComponent} from './grid-list.component';
 import {ListsComponent} from './lists.component';
@@ -29,7 +30,6 @@ import {ProgressComponent} from './progress.component';
 import {SwitchesComponent} from './switches.component';
 import {TabsComponent} from './tabs.component';
 import {TooltipsComponent} from './tooltips.component';
-import {DialogsComponent} from './dialogs.component';
 
 const routes: Routes = [{
   path: '',

@@ -65,7 +65,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     Replace(this.elementRef);
 
-    this.subscriptions.add(this.breadcrumbsService.breadcrumbs$.subscribe((breadcrumbs : Breadcrumb[]) => {
+    this.subscriptions.add(this.breadcrumbsService.breadcrumbs$.subscribe((breadcrumbs: Breadcrumb[]) => {
       const bodySelector = document.querySelector('body');
 
       if (bodySelector) {

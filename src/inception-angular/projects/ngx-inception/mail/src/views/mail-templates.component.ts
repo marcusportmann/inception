@@ -40,16 +40,11 @@ import {MailService} from '../services/mail.service';
 })
 export class MailTemplatesComponent extends AdminContainerView implements AfterViewInit {
 
-  getMailTemplateContentTypeDescription = MailService.getMailTemplateContentTypeDescription;
-
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
   MailTemplateContentType = MailTemplateContentType;
-
   dataSource: MatTableDataSource<MailTemplateSummary> = new MatTableDataSource<MailTemplateSummary>();
-
   displayedColumns = ['name', 'contentType', 'actions'];
-
+  getMailTemplateContentTypeDescription = MailService.getMailTemplateContentTypeDescription;
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   @ViewChild(MatSort, {static: true}) sort!: MatSort;

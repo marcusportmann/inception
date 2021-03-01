@@ -44,10 +44,10 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
   availableRoles$: Subject<Role[]> = new ReplaySubject<Role[]>();
   dataSource = new MatTableDataSource<GroupRole>([]);
   displayedColumns = ['existingRoleName', 'actions'];
+  groupName: string;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   selectedRole?: Role;
   userDirectoryId: string;
-  groupName: string;
   private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,
@@ -82,30 +82,6 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   get title(): string {
     return $localize`:@@security_group_roles_title:Group Roles`
-  }
-
-  private static calculateAvailableRoles(allRoles: Role[], existingGroupRoles: GroupRole[]): Role[] {
-
-    const availableRoles: Role[] = [];
-
-    for (const possibleRole of allRoles) {
-      let foundExistingRole = false;
-
-      for (const existingRole of existingGroupRoles) {
-        if (possibleRole.code === existingRole.roleCode) {
-          foundExistingRole = true;
-          break;
-        }
-      }
-
-      if (!foundExistingRole) {
-        if (possibleRole.code !== 'Administrator') {
-          availableRoles.push(possibleRole);
-        }
-      }
-    }
-
-    return availableRoles;
   }
 
   addRoleToGroup(): void {
@@ -217,5 +193,29 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
     }
 
     return 'Unknown';
+  }
+
+  private static calculateAvailableRoles(allRoles: Role[], existingGroupRoles: GroupRole[]): Role[] {
+
+    const availableRoles: Role[] = [];
+
+    for (const possibleRole of allRoles) {
+      let foundExistingRole = false;
+
+      for (const existingRole of existingGroupRoles) {
+        if (possibleRole.code === existingRole.roleCode) {
+          foundExistingRole = true;
+          break;
+        }
+      }
+
+      if (!foundExistingRole) {
+        if (possibleRole.code !== 'Administrator') {
+          availableRoles.push(possibleRole);
+        }
+      }
+    }
+
+    return availableRoles;
   }
 }

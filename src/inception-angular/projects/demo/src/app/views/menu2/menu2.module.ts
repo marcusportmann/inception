@@ -18,9 +18,9 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 
 import {RouterModule, Routes} from '@angular/router';
+import {CoreModule} from 'ngx-inception';
 import {Menu21Component} from './menu21.component';
 import {Menu22Component} from './menu22.component';
-import {CoreModule} from 'ngx-inception';
 
 const routes: Routes = [{
   path: '',

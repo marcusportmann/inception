@@ -42,18 +42,6 @@ export class ValidatedFormDirective implements AfterViewInit {
               @Host() @Self() @Optional() private formGroupDirective: FormGroupDirective) {
   }
 
-  private static isFormElement(nodeName: string): boolean {
-    switch (nodeName) {
-      case 'INPUT': {
-        return true;
-      }
-
-      default: {
-        return false;
-      }
-    }
-  }
-
   ngAfterViewInit(): void {
   }
 
@@ -76,6 +64,18 @@ export class ValidatedFormDirective implements AfterViewInit {
 
     // Find the first invalid form control and set focus to it
     return !this.checkForInvalidFormControlAndSetFocus(this.viewContainerRef.element.nativeElement);
+  }
+
+  private static isFormElement(nodeName: string): boolean {
+    switch (nodeName) {
+      case 'INPUT': {
+        return true;
+      }
+
+      default: {
+        return false;
+      }
+    }
   }
 
   // tslint:disable-next-line

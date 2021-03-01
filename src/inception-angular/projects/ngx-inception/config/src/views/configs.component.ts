@@ -39,12 +39,9 @@ import {ConfigService} from '../services/config.service';
 })
 export class ConfigsComponent extends AdminContainerView implements AfterViewInit {
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
   dataSource = new MatTableDataSource<Config>();
-
   displayedColumns = ['key', 'value', 'actions'];
-
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
