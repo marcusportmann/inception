@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Component, ElementRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subscription} from 'rxjs';
 import {Replace} from '../../core/util/replace';
+import {Breadcrumb} from "../services/breadcrumb";
 import {BreadcrumbsService} from '../services/breadcrumbs.service';
 
 /**
@@ -41,11 +42,11 @@ import {BreadcrumbsService} from '../services/breadcrumbs.service';
     </ol>
   `
 })
-export class BreadcrumbsComponent implements OnInit {
+export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   breadcrumbs: Observable<Array<{}>>;
-
   @Input() fixed = false;
+  private subscriptions: Subscription = new Subscription();
 
   /**
    * Constructs a new BreadcrumbsComponent.
@@ -57,15 +58,23 @@ export class BreadcrumbsComponent implements OnInit {
     this.breadcrumbs = this.breadcrumbsService.breadcrumbs$;
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   ngOnInit(): void {
     Replace(this.elementRef);
 
-    if (this.fixed) {
+    this.subscriptions.add(this.breadcrumbsService.breadcrumbs$.subscribe((breadcrumbs : Breadcrumb[]) => {
       const bodySelector = document.querySelector('body');
 
       if (bodySelector) {
-        bodySelector.classList.add('breadcrumbs-fixed');
+        if ((this.fixed) && (breadcrumbs.length > 0)) {
+          bodySelector.classList.add('breadcrumbs-fixed');
+        } else {
+          bodySelector.classList.remove('breadcrumbs-fixed');
+        }
       }
-    }
+    }));
   }
 }

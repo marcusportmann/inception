@@ -33,7 +33,7 @@
             </div>
           </mat-card-content>
           <mat-card-actions align="right">
-            <button type="button" mat-flat-button color="link" (click)="forgotPassword()" i18n="@@login_login_component_button_forgot_password">Forgot password?</button>
+            <button *ngIf="isForgottenPasswordEnabled()" type="button" mat-flat-button color="link" (click)="forgotPassword()" i18n="@@login_login_component_button_forgot_password">Forgot password?</button>
             <button type="button" mat-flat-button color="primary" [disabled]="!loginForm.valid" (click)="login()" i18n="@@login_login_component_button_login">Login</button>
           </mat-card-actions>
         </mat-card>

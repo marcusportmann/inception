@@ -260,7 +260,7 @@ Complete the following steps to create a new application based on the Inception 
           <dependency>
             <groupId>digital.inception</groupId>
             <artifactId>inception-api</artifactId>
-          </dependency>          
+          </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
             <artifactId>inception-application</artifactId>
@@ -604,13 +604,16 @@ Complete the following steps to create a new application based on the Inception 
         configApiUrlPrefix: 'http://localhost:8080/api/config',
         errorApiUrlPrefix: 'http://localhost:8080/api/error',
         mailApiUrlPrefix: 'http://localhost:8080/api/mail',
+        partyApiUrlPrefix: 'http://localhost:8080/api/party',
+        partyReferenceApiUrlPrefix: 'http://localhost:8080/api/party/reference',
         referenceApiUrlPrefix: 'http://localhost:8080/api/reference',
         reportingApiUrlPrefix: 'http://localhost:8080/api/reporting',
         schedulerApiUrlPrefix: 'http://localhost:8080/api/scheduler',
         securityApiUrlPrefix: 'http://localhost:8080/api/security',
 
         // Flags
-        forgottenPasswordEnabled: true
+        forgottenPasswordEnabled: true,
+        userProfileEnabled: true
       };
 
       @NgModule({
@@ -742,8 +745,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-
-          import {CodesViewsModule} from 'ngx-inception';
+          import {CodesViewsModule} from 'ngx-inception/codes';
 
           @NgModule({
             imports: [CodesViewsModule]
@@ -755,8 +757,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-
-          import {ConfigViewsModule} from 'ngx-inception';
+          import {ConfigViewsModule} from 'ngx-inception/config';
 
           @NgModule({
             imports: [ConfigViewsModule]
@@ -768,8 +769,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-
-          import {ErrorViewsModule} from 'ngx-inception';
+          import {ErrorViewsModule} from 'ngx-inception/error';
 
           @NgModule({
             imports: [ErrorViewsModule]
@@ -781,8 +781,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-
-          import {LoginViewsModule} from 'ngx-inception';
+          import {LoginViewsModule} from 'ngx-inception/login';
 
           @NgModule({
             imports: [LoginViewsModule]
@@ -794,8 +793,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-
-          import {MailViewsModule} from 'ngx-inception';
+          import {MailViewsModule} from 'ngx-inception/mail';
 
           @NgModule({
             imports: [MailViewsModule]
@@ -807,8 +805,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-
-          import {ReportingViewsModule} from 'ngx-inception';
+          import {ReportingViewsModule} from 'ngx-inception/reporting';
 
           @NgModule({
             imports: [ReportingViewsModule]
@@ -820,8 +817,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-
-          import {SchedulerViewsModule} from 'ngx-inception';
+          import {SchedulerViewsModule} from 'ngx-inception/scheduler';
 
           @NgModule({
             imports: [SchedulerViewsModule]
@@ -834,7 +830,7 @@ Complete the following steps to create a new application based on the Inception 
           ```
           import {NgModule} from '@angular/core';
 
-          import {SecurityViewsModule} from 'ngx-inception';
+          import {SecurityViewsModule} from 'ngx-inception/security';
 
           @NgModule({
             imports: [SecurityViewsModule]
@@ -848,18 +844,14 @@ Complete the following steps to create a new application based on the Inception 
        import {CommonModule} from '@angular/common';
        import {NgModule} from '@angular/core';
        import {RouterModule, Routes} from '@angular/router';
-
-       import {
-         CodeCategoriesTitleResolver,
-         ConfigsTitleResolver,
-         MailTitleResolver,
-         ReportingTitleResolver,
-         SchedulerTitleResolver,
-         SecurityTitleResolver
-       } from 'ngx-inception';
-
-       import {AdministrationComponent} from './administration.component';
+       import {CodeCategoriesTitleResolver} from 'ngx-inception/codes';
+       import {ConfigsTitleResolver} from 'ngx-inception/config';
+       import {MailTitleResolver} from 'ngx-inception/mail';
+       import {ReportingTitleResolver} from 'ngx-inception/reporting';
+       import {SchedulerTitleResolver} from 'ngx-inception/scheduler';
+       import {SecurityTitleResolver} from 'ngx-inception/security';
        import {AdministrationTitleResolver} from './administration-title-resolver';
+       import {AdministrationComponent} from './administration.component';
        import {SystemTitleResolver} from './system-title-resolver';
 
        const routes: Routes = [{
@@ -933,9 +925,9 @@ Complete the following steps to create a new application based on the Inception 
    15. Create the *src/main/frontend/src/app/views/administration/administration-title-resolver.ts* file with
        the following contents.
        ```
+       import {Injectable} from '@angular/core';
        import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
        import {Observable, of} from 'rxjs';
-       import { Injectable } from "@angular/core";
 
        /**
         * The AdministrationTitleResolver class provides the route data resolver that resolves the
@@ -965,7 +957,7 @@ Complete the following steps to create a new application based on the Inception 
    16. Create the *src/main/frontend/src/app/views/administration/system-title-resolver.ts* file with the
        following contents.
        ```
-       import {Injectable} from "@angular/core";
+       import {Injectable} from '@angular/core';
        import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
        import {Observable, of} from 'rxjs';
 
@@ -1022,7 +1014,6 @@ Complete the following steps to create a new application based on the Inception 
        import {CommonModule} from '@angular/common';
        import {NgModule} from '@angular/core';
        import {RouterModule, Routes} from '@angular/router';
-
        import {DashboardComponent} from './dashboard.component';
 
        const routes: Routes = [{
@@ -1044,11 +1035,10 @@ Complete the following steps to create a new application based on the Inception 
        ```
        import {NgModule} from '@angular/core';
        import {RouterModule, Routes} from '@angular/router';
-
        import {
          AdminContainerComponent, CanActivateFunctionGuard, NotFoundComponent, SimpleContainerComponent
        } from 'ngx-inception';
-
+       import {UserProfileComponent} from 'ngx-inception/security';
        import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
 
        export const routes: Routes = [{
@@ -1059,6 +1049,10 @@ Complete the following steps to create a new application based on the Inception 
          path: '',
          component: AdminContainerComponent,
          children: [{
+           path: 'profile',
+           component: UserProfileComponent
+         },
+         {
            path: 'dashboard',
            canActivate: [CanActivateFunctionGuard
            ],
@@ -1187,6 +1181,10 @@ Complete the following steps to create a new application based on the Inception 
          background-image: url("assets/images/logo-symbol.png");
          background-size: 100% auto;
          background-repeat: no-repeat;
+       }
+
+       .logo-login {
+         background-image: url("assets/images/logo.png");
        }
 
        span.copyright-name:before

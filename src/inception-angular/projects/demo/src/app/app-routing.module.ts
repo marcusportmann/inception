@@ -16,14 +16,10 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-
 import {
-  AdminContainerComponent,
-  CanActivateFunctionGuard,
-  NotFoundComponent,
-  SimpleContainerComponent
+  AdminContainerComponent, CanActivateFunctionGuard, NotFoundComponent, SimpleContainerComponent
 } from 'ngx-inception';
-
+import {UserProfileComponent} from 'ngx-inception/security';
 import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
 
 export const routes: Routes = [{
@@ -34,6 +30,9 @@ export const routes: Routes = [{
   path: '',
   component: AdminContainerComponent,
   children: [{
+    path: 'profile',
+    component: UserProfileComponent
+  }, {
     path: 'dashboard',
     canActivate: [CanActivateFunctionGuard
     ],
@@ -102,7 +101,7 @@ export const routes: Routes = [{
   imports: [
 
     // Angular modules
-    RouterModule.forRoot(routes, { enableTracing: false, relativeLinkResolution: 'legacy' })
+    RouterModule.forRoot(routes, {enableTracing: false, relativeLinkResolution: 'legacy'})
   ],
   exports: [RouterModule],
   providers: [AdministrationTitleResolver]

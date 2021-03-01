@@ -41,3 +41,4 @@ export * from './services/user-status';
 export * from './services/users';
 export * from './views/security-title-resolver';
 export * from './views/security-views.module';
+export * from './views/user-profile.component';

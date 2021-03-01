@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {first, map} from 'rxjs/operators';
 import {Replace} from '../../core/util/replace';
+import {INCEPTION_CONFIG, InceptionConfig} from "../../inception-config";
 import {Session} from '../../session/services/session';
 import {SessionService} from '../../session/services/session.service';
 
@@ -59,15 +60,11 @@ import {SessionService} from '../../session/services/session.service';
         </li>
 
         <mat-menu #userMenu="matMenu" yPosition="below" overlapTrigger="false" class="user-menu">
-          <a mat-menu-item href="#">
+          <a *ngIf="isUserProfileEnabled()" mat-menu-item (click)="profile()">
             <i class="fas fa-user-circle"></i>
             <span i18n="@@admin_header_component_menu_item_profile">Profile</span>
           </a>
-          <a mat-menu-item href="#">
-            <i class="fas fa-cogs"></i>
-            <span i18n="@@admin_header_component_menu_item_settings">Settings</span>
-          </a>
-          <a mat-menu-item href="#" (click)="logout()">
+          <a mat-menu-item (click)="logout()">
             <i class="fas fa-sign-out-alt"></i>
             <span i18n="@@admin_header_component_menu_item_logout">Logout</span>
           </a>
@@ -97,10 +94,17 @@ export class AdminHeaderComponent implements OnInit {
    * Constructs a new AdminHeaderComponent.
    *
    * @param elementRef     The element reference.
+   * @param config         The Inception configuration.
    * @param router         The router.
    * @param sessionService The session service.
    */
-  constructor(private elementRef: ElementRef, private router: Router, private sessionService: SessionService) {
+  constructor(private elementRef: ElementRef,
+              @Inject(INCEPTION_CONFIG) private config: InceptionConfig, private router: Router,
+              private sessionService: SessionService) {
+  }
+
+  isUserProfileEnabled(): boolean {
+    return this.config.userProfileEnabled;
   }
 
   // // tslint:disable-next-line
@@ -111,9 +115,6 @@ export class AdminHeaderComponent implements OnInit {
 
   isLoggedIn(): Observable<boolean> {
     return this.sessionService.session$.pipe(map((session: Session | null) => {
-
-      //console.log('isLoggedIn session = ', session);
-
       return (!!session);
     }));
   }
@@ -139,6 +140,16 @@ export class AdminHeaderComponent implements OnInit {
     }
   }
 
+  profile(): void {
+    console.log('Navigating to profile...');
+
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['/profile']).then((result: boolean) => {
+      console.log('Navigation result = ', result);
+    });
+
+  }
+
   userName(): Observable<string> {
     return this.sessionService.session$.pipe(map((session: Session | null) => {
       if (!!session) {
@@ -149,3 +160,9 @@ export class AdminHeaderComponent implements OnInit {
     }));
   }
 }
+
+
+// <a mat-menu-item>
+// <i class="fas fa-cogs"></i>
+//   <span i18n="@@admin_header_component_menu_item_settings">Settings</span>
+//   </a>

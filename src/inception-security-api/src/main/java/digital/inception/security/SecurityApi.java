@@ -2065,8 +2065,6 @@ public class SecurityApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
   public User getUser(
       @Parameter(
               name = "userDirectoryId",
@@ -2079,9 +2077,25 @@ public class SecurityApi extends SecureApi {
           String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           ServiceUnavailableException {
-    if (!hasAccessToUserDirectory(userDirectoryId)) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (hasRole("Administrator")) {
+      // Administrators always have access to retrieve a user's details
+    } else if (hasAccessToFunction("Security.TenantAdministration")
+        || hasAccessToFunction("Security.UserAdministration")
+        || hasAccessToFunction("Security.ResetUserPassword")) {
+      if (!hasAccessToUserDirectory(userDirectoryId)) {
+        throw new AccessDeniedException(
+            "Access denied to the user directory (" + userDirectoryId + ")");
+      }
+    } else if ((authentication != null) && (authentication.getName().equalsIgnoreCase(username))) {
+      // Users can retrieve their own details
+    } else {
+      throw new AccessDeniedException("Access denied to the user (" + username + ")");
     }
 
     User user = securityService.getUser(userDirectoryId, username);
@@ -3343,8 +3357,6 @@ public class SecurityApi extends SecureApi {
       method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public void updateUser(
       @Parameter(
               name = "userDirectoryId",
@@ -3368,13 +3380,25 @@ public class SecurityApi extends SecureApi {
           Boolean lockUser)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           ServiceUnavailableException {
-    if (!hasAccessToUserDirectory(userDirectoryId)) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
-    }
-
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
+    }
+
+    // Apply access control
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (hasRole("Administrator")) {
+      // Administrators always have access to retrieve a user's details
+    } else if (hasAccessToFunction("Security.TenantAdministration")
+        || hasAccessToFunction("Security.UserAdministration")) {
+      if (!hasAccessToUserDirectory(userDirectoryId)) {
+        throw new AccessDeniedException(
+            "Access denied to the user directory (" + userDirectoryId + ")");
+      }
+    } else if ((authentication != null) && (authentication.getName().equalsIgnoreCase(username))) {
+      // Users can retrieve their own details
+    } else {
+      throw new AccessDeniedException("Access denied to the user (" + username + ")");
     }
 
     if (user == null) {

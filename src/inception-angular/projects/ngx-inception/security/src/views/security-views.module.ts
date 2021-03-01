@@ -58,6 +58,7 @@ import {UserDirectoriesComponent} from './user-directories.component';
 import {UserDirectoryTitleResolver} from './user-directory-title-resolver';
 import {UserGroupsTitleResolver} from './user-groups-title-resolver';
 import {UserGroupsComponent} from './user-groups.component';
+import {UserProfileComponent} from "./user-profile.component";
 import {UserTitleResolver} from './user-title-resolver';
 import {UsersTitleResolver} from './users-title-resolver';
 import {UsersComponent} from './users.component';
@@ -338,7 +339,7 @@ const routes: Routes = [{
     LdapUserDirectoryComponent, NewGroupComponent, NewTenantComponent, NewUserComponent,
     NewUserDirectoryComponent, TenantsComponent, TenantUserDirectoriesComponent,
     ResetUserPasswordComponent, SecurityOverviewComponent, UserDirectoriesComponent,
-    UserGroupsComponent, UsersComponent
+    UserGroupsComponent, UserProfileComponent, UsersComponent
   ],
   imports: [
     // Angular modules

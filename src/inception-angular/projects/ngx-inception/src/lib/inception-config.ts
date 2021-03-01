@@ -37,12 +37,12 @@ export interface InceptionConfig {
   /**
    * The Codes API URL prefix.
    */
-  codesApiUrlPrefix: string;
+  codesApiUrlPrefix?: string;
 
   /**
    * The Config API URL prefix.
    */
-  configApiUrlPrefix: string;
+  configApiUrlPrefix?: string;
 
   /**
    * The Error API URL prefix.
@@ -62,7 +62,7 @@ export interface InceptionConfig {
   /**
    * The Mail API URL prefix.
    */
-  mailApiUrlPrefix: string;
+  mailApiUrlPrefix?: string;
 
   /**
    * The OAuth Token URL e.g. http://localhost:8080/oauth/token.
@@ -72,12 +72,12 @@ export interface InceptionConfig {
   /**
    * The Party API URL prefix.
    */
-  partyApiUrlPrefix: string;
+  partyApiUrlPrefix?: string;
 
   /**
    * The Party Reference API URL prefix.
    */
-  partyReferenceApiUrlPrefix: string;
+  partyReferenceApiUrlPrefix?: string;
 
   /**
    * The password to prepopulate the password form control on the login component with for testing
@@ -94,22 +94,27 @@ export interface InceptionConfig {
   /**
    * The Reference API URL prefix.
    */
-  referenceApiUrlPrefix: string;
+  referenceApiUrlPrefix?: string;
 
   /**
    * The Reporting API URL prefix.
    */
-  reportingApiUrlPrefix: string;
+  reportingApiUrlPrefix?: string;
 
   /**
    * The Scheduler API URL prefix.
    */
-  schedulerApiUrlPrefix: string;
+  schedulerApiUrlPrefix?: string;
 
   /**
    * The Security API URL prefix.
    */
-  securityApiUrlPrefix: string;
+  securityApiUrlPrefix?: string;
+
+  /**
+   * Is the user profile functionality enabled.
+   */
+  userProfileEnabled: boolean;
 }
 
 /**
