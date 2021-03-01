@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export * from './services/error.service.errors';
+//export * from './services/error.service.errors';
 export * from './services/error.service';
 export * from './services/error-report';
 export * from './services/error-report-summary';

@@ -94,8 +94,6 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
       if (!session) {
         spinnerService.hideSpinner();
 
-        console.log('REDIRECTING TO / HERE!!!!!!!');
-
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigate([!!config.logoutRedirectUri ? config.logoutRedirectUri : '/']);
       }

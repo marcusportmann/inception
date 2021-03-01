@@ -104,11 +104,8 @@ export class UserProfileComponent extends AdminContainerView implements AfterVie
     this.spinnerService.showSpinner();
 
     this.sessionService.session$.pipe(first()).subscribe((session: Session | null) => {
-      console.log('session = ', session);
-
       if (session) {
         this.securityService.getUser(session.userDirectoryId, session.username).pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((user: User) => {
-          console.log('user = ', user);
           this.user = user;
 
           this.emailFormControl.setValue(user.email);

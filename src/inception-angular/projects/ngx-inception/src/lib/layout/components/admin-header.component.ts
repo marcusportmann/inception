@@ -141,13 +141,9 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   profile(): void {
-    console.log('Navigating to profile...');
-
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['/profile']).then((result: boolean) => {
-      console.log('Navigation result = ', result);
     });
-
   }
 
   userName(): Observable<string> {

@@ -15,7 +15,7 @@
  */
 
 export * from './services/party.service';
-export * from './services/party.service.errors';
+//export * from './services/party.service.errors';
 export * from './services/party-reference.service';
 //export * from './services/party-reference.service.errors';
 
