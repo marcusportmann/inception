@@ -16,8 +16,16 @@
 
 package digital.inception.party;
 
+import digital.inception.persistence.PersistenceUtil;
+import javax.sql.DataSource;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * The <b>PartyConfiguration</b> class provides the Spring configuration for the Party module.
@@ -26,6 +34,41 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "applicationPersistenceUnit",
+    entityManagerFactoryRef = "partyEntityManagerFactory",
     basePackages = {"digital.inception.party"})
-public class PartyConfiguration {}
+public class PartyConfiguration {
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
+
+  /**
+   * Constructs a new <b>PartyConfiguration</b>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public PartyConfiguration(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
+
+  /**
+   * Returns the party entity manager factory bean associated with the application data source.
+   *
+   * @return the party entity manager factory bean associated with the application data source
+   */
+  @Bean
+  @DependsOn("applicationDataSource")
+  public LocalContainerEntityManagerFactoryBean partyEntityManagerFactory() {
+    try {
+      DataSource dataSource = applicationContext.getBean("applicationDataSource", DataSource.class);
+
+      PlatformTransactionManager platformTransactionManager =
+          applicationContext.getBean(PlatformTransactionManager.class);
+
+      return PersistenceUtil.createEntityManager(
+          "party", dataSource, platformTransactionManager, "digital.inception.party");
+
+    } catch (Throwable e) {
+      throw new FatalBeanException("Failed to initialize the party entity manager factory bean", e);
+    }
+  }
+}

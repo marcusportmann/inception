@@ -44,7 +44,7 @@ public class DataService implements IDataService {
   private final Validator validator;
 
   /* Entity Manager */
-  @PersistenceContext(unitName = "applicationPersistenceUnit")
+  @PersistenceContext(unitName = "application")
   private EntityManager entityManager;
 
   /**

@@ -17,6 +17,7 @@
 package digital.inception.bmi;
 
 import digital.inception.core.util.ServiceUtil;
+import digital.inception.persistence.PersistenceUtil;
 import javax.sql.DataSource;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
@@ -26,7 +27,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
@@ -37,7 +40,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "applicationPersistenceUnit",
+    entityManagerFactoryRef = "bmiEntityManagerFactory",
     basePackages = {"digital.inception.bmi"})
 public class BMIConfiguration {
 
@@ -67,6 +70,23 @@ public class BMIConfiguration {
     this.applicationContext = applicationContext;
     this.dataSource = dataSource;
     this.transactionManager = transactionManager;
+  }
+
+  /**
+   * Returns the bmi entity manager factory bean associated with the application data source.
+   *
+   * @return the bmi entity manager factory bean associated with the application data source
+   */
+  @Bean
+  @DependsOn("applicationDataSource")
+  public LocalContainerEntityManagerFactoryBean bmiEntityManagerFactory() {
+    try {
+      return PersistenceUtil.createEntityManager(
+          "bmi", dataSource, transactionManager, "digital.inception.bmi");
+
+    } catch (Throwable e) {
+      throw new FatalBeanException("Failed to initialize the bmi entity manager factory bean", e);
+    }
   }
 
   /**

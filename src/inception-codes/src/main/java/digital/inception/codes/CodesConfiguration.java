@@ -16,8 +16,16 @@
 
 package digital.inception.codes;
 
+import digital.inception.persistence.PersistenceUtil;
+import javax.sql.DataSource;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * The <b>CodesConfiguration</b> class provides the Spring configuration for the Codes module.
@@ -26,6 +34,41 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "applicationPersistenceUnit",
+    entityManagerFactoryRef = "codesEntityManagerFactory",
     basePackages = {"digital.inception.codes"})
-public class CodesConfiguration {}
+public class CodesConfiguration {
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
+
+  /**
+   * Constructs a new <b>CodesConfiguration</b>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public CodesConfiguration(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
+
+  /**
+   * Returns the codes entity manager factory bean associated with the application data source.
+   *
+   * @return the codes entity manager factory bean associated with the application data source
+   */
+  @Bean
+  @DependsOn("applicationDataSource")
+  public LocalContainerEntityManagerFactoryBean codesEntityManagerFactory() {
+    try {
+      DataSource dataSource = applicationContext.getBean("applicationDataSource", DataSource.class);
+
+      PlatformTransactionManager platformTransactionManager =
+          applicationContext.getBean(PlatformTransactionManager.class);
+
+      return PersistenceUtil.createEntityManager(
+          "codes", dataSource, platformTransactionManager, "digital.inception.codes");
+
+    } catch (Throwable e) {
+      throw new FatalBeanException("Failed to initialize the codes entity manager factory bean", e);
+    }
+  }
+}

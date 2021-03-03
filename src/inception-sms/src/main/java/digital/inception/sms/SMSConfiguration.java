@@ -16,9 +16,17 @@
 
 package digital.inception.sms;
 
+import digital.inception.persistence.PersistenceUtil;
+import javax.sql.DataSource;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * The <b>SMSConfiguration</b> class provides the Spring configuration for the SMS module.
@@ -27,7 +35,42 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "applicationPersistenceUnit",
+    entityManagerFactoryRef = "smsEntityManagerFactory",
     basePackages = {"digital.inception.sms"})
 @EnableScheduling
-public class SMSConfiguration {}
+public class SMSConfiguration {
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
+
+  /**
+   * Constructs a new <b>SMSConfiguration</b>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public SMSConfiguration(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
+
+  /**
+   * Returns the sms entity manager factory bean associated with the application data source.
+   *
+   * @return the sms entity manager factory bean associated with the application data source
+   */
+  @Bean
+  @DependsOn("applicationDataSource")
+  public LocalContainerEntityManagerFactoryBean smsEntityManagerFactory() {
+    try {
+      DataSource dataSource = applicationContext.getBean("applicationDataSource", DataSource.class);
+
+      PlatformTransactionManager platformTransactionManager =
+          applicationContext.getBean(PlatformTransactionManager.class);
+
+      return PersistenceUtil.createEntityManager(
+          "sms", dataSource, platformTransactionManager, "digital.inception.sms");
+
+    } catch (Throwable e) {
+      throw new FatalBeanException("Failed to initialize the sms entity manager factory bean", e);
+    }
+  }
+}

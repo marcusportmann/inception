@@ -88,7 +88,7 @@ public class SMSService implements ISMSService {
   private final WebClient.Builder webClientBuilder;
 
   /* Entity Manager */
-  @PersistenceContext(unitName = "applicationPersistenceUnit")
+  @PersistenceContext(unitName = "sms")
   private EntityManager entityManager;
 
   /** The HTTP Client. */

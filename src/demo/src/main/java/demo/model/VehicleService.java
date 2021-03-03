@@ -56,7 +56,7 @@ public class VehicleService implements IVehicleService {
   private final VehicleRepository vehicleRepository;
 
   /* Entity Manager */
-  @PersistenceContext(unitName = "applicationPersistenceUnit")
+  @PersistenceContext(unitName = "application")
   private EntityManager entityManager;
 
   /**

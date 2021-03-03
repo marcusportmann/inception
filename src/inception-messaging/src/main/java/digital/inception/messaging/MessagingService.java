@@ -122,7 +122,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   private byte[] encryptionMasterKey;
 
   /* Entity Manager */
-  @PersistenceContext(unitName = "applicationPersistenceUnit")
+  @PersistenceContext(unitName = "messaging")
   private EntityManager entityManager;
 
   /** The maximum number of times processing will be attempted for a message. */

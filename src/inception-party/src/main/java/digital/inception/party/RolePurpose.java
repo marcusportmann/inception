@@ -36,29 +36,28 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>PartyAttributeTypeCategory</b> class holds the information for a party attribute type
- * category.
+ * The <b>RolePurpose</b> class holds the information for a purpose for a role.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A collection of related party attribute types")
+@Schema(description = "A purpose for a role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "PartyAttributeTypeCategory", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "RolePurpose", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "PartyAttributeTypeCategory",
+    name = "RolePurpose",
     namespace = "http://inception.digital/party",
     propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "party_attribute_type_categories")
-@IdClass(PartyAttributeTypeCategoryId.class)
-public class PartyAttributeTypeCategory implements Serializable {
+@Table(schema = "party", name = "role_purposes")
+@IdClass(RolePurposeId.class)
+public class RolePurpose implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the party attribute type category. */
-  @Schema(description = "The code for the party attribute type category", required = true)
+  /** The code for the role purpose. */
+  @Schema(description = "The code for the role purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -67,8 +66,8 @@ public class PartyAttributeTypeCategory implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the party attribute type category. */
-  @Schema(description = "The description for the party attribute type category", required = true)
+  /** The description for the role purpose. */
+  @Schema(description = "The description for the role purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -76,10 +75,8 @@ public class PartyAttributeTypeCategory implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the party attribute type category. */
-  @Schema(
-      description = "The Unicode locale identifier for the party attribute type category",
-      required = true)
+  /** The Unicode locale identifier for the role purpose. */
+  @Schema(description = "The Unicode locale identifier for the role purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -88,8 +85,8 @@ public class PartyAttributeTypeCategory implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the party attribute type category. */
-  @Schema(description = "The name of the party attribute type category", required = true)
+  /** The name of the role purpose. */
+  @Schema(description = "The name of the role purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -97,16 +94,16 @@ public class PartyAttributeTypeCategory implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the party attribute type category. */
-  @Schema(description = "The sort index for the party attribute type category", required = true)
+  /** The sort index for the role purpose. */
+  @Schema(description = "The sort index for the role purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>PartyAttributeTypeCategory</b>. */
-  public PartyAttributeTypeCategory() {}
+  /** Constructs a new <b>RolePurpose</b>. */
+  public RolePurpose() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -128,51 +125,51 @@ public class PartyAttributeTypeCategory implements Serializable {
       return false;
     }
 
-    PartyAttributeTypeCategory other = (PartyAttributeTypeCategory) object;
+    RolePurpose other = (RolePurpose) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the party attribute type category.
+   * Returns the code for the role purpose.
    *
-   * @return the code for the party attribute type category
+   * @return the code for the role purpose
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the party attribute type category.
+   * Returns the description for the role purpose.
    *
-   * @return the description for the party attribute type category
+   * @return the description for the role purpose
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the party attribute type category.
+   * Returns the Unicode locale identifier for the role purpose.
    *
-   * @return the Unicode locale identifier for the party attribute type category
+   * @return the Unicode locale identifier for the role purpose
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the party attribute type category.
+   * Returns the name of the role purpose.
    *
-   * @return the name of the party attribute type category
+   * @return the name of the role purpose
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the party attribute type category.
+   * Returns the sort index for the role purpose.
    *
-   * @return the sort index for the party attribute type category
+   * @return the sort index for the role purpose
    */
   public Integer getSortIndex() {
     return sortIndex;
@@ -189,45 +186,45 @@ public class PartyAttributeTypeCategory implements Serializable {
   }
 
   /**
-   * Set the code for the party attribute type category.
+   * Set the code for the role purpose.
    *
-   * @param code the code for the party attribute type category
+   * @param code the code for the role purpose
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the party attribute type category.
+   * Set the description for the role purpose.
    *
-   * @param description the description for the party attribute type category
+   * @param description the description for the role purpose
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the party attribute type category.
+   * Set the Unicode locale identifier for the role purpose.
    *
-   * @param localeId the Unicode locale identifier for the party attribute type category
+   * @param localeId the Unicode locale identifier for the role purpose
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the party attribute type category.
+   * Set the name of the role purpose.
    *
-   * @param name the name of the party attribute type category
+   * @param name the name of the role purpose
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the party attribute type category.
+   * Set the sort index for the role purpose.
    *
-   * @param sortIndex the sort index for the party attribute type category
+   * @param sortIndex the sort index for the role purpose
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

@@ -21,6 +21,7 @@ import static org.junit.Assert.fail;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.party.Attribute;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.IPartyService;
@@ -30,8 +31,6 @@ import digital.inception.party.OrganizationSortBy;
 import digital.inception.party.Organizations;
 import digital.inception.party.Parties;
 import digital.inception.party.Party;
-import digital.inception.party.PartyAttribute;
-import digital.inception.party.PartyRole;
 import digital.inception.party.PartyType;
 import digital.inception.party.Person;
 import digital.inception.party.PersonSortBy;
@@ -41,6 +40,8 @@ import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressRole;
 import digital.inception.party.PhysicalAddressType;
 import digital.inception.party.Preference;
+import digital.inception.party.ResidencePermit;
+import digital.inception.party.Role;
 import digital.inception.party.TaxNumber;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
@@ -98,7 +99,7 @@ public class PartyServiceTest {
         new IdentityDocument(
             "za_company_registration", "ZA", LocalDate.of(2006, 4, 2), "2006/123456/23"));
 
-    organization.addRole(new PartyRole("employer"));
+    organization.addRole(new Role("employer"));
 
     return organization;
   }
@@ -149,7 +150,7 @@ public class PartyServiceTest {
     person.setSurname("Surname" + personCount);
     person.setTitle("mrs");
 
-    person.addAttribute(new PartyAttribute("weight", "80kg"));
+    person.addAttribute(new Attribute("weight", "80kg"));
 
     person.setCountryOfTaxResidence("ZA");
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
@@ -198,10 +199,74 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("correspondence_language", "EN"));
 
-    person.addRole(new PartyRole("employee"));
+    person.addRole(new Role("employee"));
 
     return person;
   }
+
+
+
+  private static synchronized Person getTestForeignPersonDetails() {
+    personCount++;
+
+    Person person =
+        new Person(
+            UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            String.format(
+                "GivenName%d MiddleName%d Surname%d", personCount, personCount, personCount));
+
+    person.setCountryOfBirth("ZW");
+    person.setCountryOfResidence("ZA");
+    person.setDateOfBirth(LocalDate.of(1976, 3, 7));
+    person.setEmploymentStatus("employed");
+    person.setEmploymentType("contractor");
+    person.setGender("male");
+    person.setGivenName("GivenName" + personCount);
+    person.setHomeLanguage("EN");
+    person.setId(UuidCreator.getShortPrefixComb());
+    person.setInitials("G M");
+    person.setMaritalStatus("single");
+    person.setOccupation("driver");
+    person.setPreferredName("PreferredName" + personCount);
+    person.setRace("black");
+    person.setResidencyStatus("foreign_national");
+    person.setResidentialType("renter");
+    person.setSurname("Surname" + personCount);
+    person.setTitle("mr");
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27825551234"));
+
+    person.addIdentityDocument(
+        new IdentityDocument("passport", "ZW", LocalDate.of(2010, 5, 20), "ZW1234567890"));
+
+    person.addResidencePermit(new ResidencePermit("za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "AA1234567890"));
+
+    PhysicalAddress residentialAddress =
+        new PhysicalAddress(
+            PhysicalAddressType.STREET,
+            PhysicalAddressRole.RESIDENTIAL,
+            Set.of(
+                new String[] {
+                    PhysicalAddressPurpose.BILLING,
+                    PhysicalAddressPurpose.CORRESPONDENCE,
+                    PhysicalAddressPurpose.DELIVERY
+                }));
+    residentialAddress.setStreetNumber("4");
+    residentialAddress.setStreetName("Princess Avenue");
+    residentialAddress.setSuburb("Windsor East");
+    residentialAddress.setCity("Johannesburg");
+    residentialAddress.setRegion("GP");
+    residentialAddress.setCountry("ZA");
+    residentialAddress.setPostalCode("2194");
+
+    person.addPhysicalAddress(residentialAddress);
+
+    return person;
+  }
+
+
 
   private static synchronized Person getTestBasicPersonDetails() {
     personCount++;
@@ -227,7 +292,7 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("correspondence_language", "EN"));
 
-    person.addRole(new PartyRole("employee"));
+    person.addRole(new Role("employee"));
 
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
@@ -649,7 +714,7 @@ public class PartyServiceTest {
 
     organization.removeRole("employer");
 
-    organization.addRole(new PartyRole("supplier"));
+    organization.addRole(new Role("supplier"));
 
     partyService.updateOrganization(organization);
 
@@ -698,6 +763,26 @@ public class PartyServiceTest {
     partyService.deleteParty(person.getId());
 
     partyService.deleteParty(organization.getId());
+  }
+
+  /** Test the foreign person functionality. */
+  @Test
+  public void foreignPersonTest() throws Exception {
+    Person foreignPerson = getTestForeignPersonDetails();
+
+    partyService.createPerson(foreignPerson);
+
+    Persons filteredPersons =
+        partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The correct number of filtered persons was not retrieved",
+        1,
+        filteredPersons.getPersons().size());
+
+    comparePersons(foreignPerson, filteredPersons.getPersons().get(0));
+
+    partyService.deletePerson(foreignPerson.getId());
   }
 
   /** Test the person functionality. */
@@ -789,7 +874,7 @@ public class PartyServiceTest {
 
     person.removeAttribute("weight");
 
-    person.addAttribute(new PartyAttribute("height", "180cm"));
+    person.addAttribute(new Attribute("height", "180cm"));
 
     person.removeContactMechanism("fax_number", "main_fax_number");
 
@@ -994,13 +1079,13 @@ public class PartyServiceTest {
     }
   }
 
-  private void compareAttributes(PartyAttribute attribute1, PartyAttribute attribute2) {
+  private void compareAttributes(Attribute attribute1, Attribute attribute2) {
     assertEquals(
-        "The type values for the two party attributes do not match",
+        "The type values for the two attributes do not match",
         attribute1.getType(),
         attribute2.getType());
     assertEquals(
-        "The string value values for the two party attributes do not match",
+        "The string value values for the two attributes do not match",
         attribute1.getStringValue(),
         attribute2.getStringValue());
   }
@@ -1028,10 +1113,10 @@ public class PartyServiceTest {
         organization1.getAttributes().size(),
         organization2.getAttributes().size());
 
-    for (PartyAttribute organization1Attribute : organization1.getAttributes()) {
+    for (Attribute organization1Attribute : organization1.getAttributes()) {
       boolean foundAttribute = false;
 
-      for (PartyAttribute organization2Attribute : organization2.getAttributes()) {
+      for (Attribute organization2Attribute : organization2.getAttributes()) {
 
         if (Objects.equals(organization1Attribute.getParty(), organization2Attribute.getParty())
             && Objects.equals(organization1Attribute.getType(), organization2Attribute.getType())) {
@@ -1239,14 +1324,14 @@ public class PartyServiceTest {
         person2.getTitle());
 
     assertEquals(
-        "The number of party attributes for the two persons do not match",
+        "The number of attributes for the two persons do not match",
         person1.getAttributes().size(),
         person2.getAttributes().size());
 
-    for (PartyAttribute person1Attribute : person1.getAttributes()) {
+    for (Attribute person1Attribute : person1.getAttributes()) {
       boolean foundAttribute = false;
 
-      for (PartyAttribute person2Attribute : person2.getAttributes()) {
+      for (Attribute person2Attribute : person2.getAttributes()) {
 
         if (Objects.equals(person1Attribute.getParty(), person2Attribute.getParty())
             && Objects.equals(person1Attribute.getType(), person2Attribute.getType())) {
@@ -1258,7 +1343,7 @@ public class PartyServiceTest {
       }
 
       if (!foundAttribute) {
-        fail("Failed to find the party attribute (" + person1Attribute.getType() + ")");
+        fail("Failed to find the attribute (" + person1Attribute.getType() + ")");
       }
     }
 
@@ -1386,27 +1471,69 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of party roles for the two persons do not match",
-        person1.getRoles().size(),
-        person2.getRoles().size());
+        "The number of residence permits for the two persons do not match",
+        person1.getResidencePermits().size(),
+        person2.getResidencePermits().size());
 
-    for (PartyRole person1Role : person1.getRoles()) {
-      boolean foundPartyRole = false;
+    for (ResidencePermit person1ResidencePermit : person1.getResidencePermits()) {
+      boolean foundResidencePermit = false;
 
-      for (PartyRole person2Role : person2.getRoles()) {
-        if (person1Role.getType().equals(person2Role.getType())) {
+      for (ResidencePermit person2ResidencePermit : person2.getResidencePermits()) {
+        if (person1ResidencePermit.getType().equals(person2ResidencePermit.getType())
+            && person1ResidencePermit
+            .getCountryOfIssue()
+            .equals(person2ResidencePermit.getCountryOfIssue())
+            && person1ResidencePermit
+            .getDateOfIssue()
+            .equals(person2ResidencePermit.getDateOfIssue())) {
 
           assertEquals(
-              "The purpose for the two party roles do not match",
-              person1Role.getPurpose(),
-              person2Role.getPurpose());
+              "The date of expiry for the two residence permits do not match",
+              person1ResidencePermit.getDateOfExpiry(),
+              person2ResidencePermit.getDateOfExpiry());
+          assertEquals(
+              "The numbers for the two residence permits do not match",
+              person1ResidencePermit.getNumber(),
+              person2ResidencePermit.getNumber());
 
-          foundPartyRole = true;
+          foundResidencePermit = true;
         }
       }
 
-      if (!foundPartyRole) {
-        fail("Failed to find the party role (" + person1Role.getType() + ")");
+      if (!foundResidencePermit) {
+        fail(
+            "Failed to find the residence permit ("
+                + person1ResidencePermit.getType()
+                + ")("
+                + person1ResidencePermit.getCountryOfIssue()
+                + ")("
+                + person1ResidencePermit.getDateOfIssue()
+                + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of roles for the two persons do not match",
+        person1.getRoles().size(),
+        person2.getRoles().size());
+
+    for (Role person1Role : person1.getRoles()) {
+      boolean foundRole = false;
+
+      for (Role person2Role : person2.getRoles()) {
+        if (person1Role.getType().equals(person2Role.getType())) {
+
+          assertEquals(
+              "The purpose for the two roles do not match",
+              person1Role.getPurpose(),
+              person2Role.getPurpose());
+
+          foundRole = true;
+        }
+      }
+
+      if (!foundRole) {
+        fail("Failed to find the role (" + person1Role.getType() + ")");
       }
     }
 

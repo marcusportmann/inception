@@ -29,6 +29,39 @@ import java.util.List;
 public interface IPartyReferenceService {
 
   /**
+   * Retrieve all the attribute type categories.
+   *
+   * @return the attribute type categories
+   */
+  List<AttributeTypeCategory> getAttributeTypeCategories() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the attribute type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     categories for or <b>null</b> to retrieve the attribute type categories for all locales
+   * @return the attribute type categories
+   */
+  List<AttributeTypeCategory> getAttributeTypeCategories(String localeId)
+      throws ServiceUnavailableException;
+
+  /**
+   * Retrieve all the attribute types.
+   *
+   * @return the attribute types
+   */
+  List<AttributeType> getAttributeTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the attribute types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute types
+   *     for or <b>null</b> to retrieve the attribute types for all locales
+   * @return the attribute types
+   */
+  List<AttributeType> getAttributeTypes(String localeId) throws ServiceUnavailableException;
+
+  /**
    * Retrieve all the contact mechanism purposes.
    *
    * @return the contact mechanism purposes
@@ -192,74 +225,6 @@ public interface IPartyReferenceService {
   List<Occupation> getOccupations(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the party attribute type categories.
-   *
-   * @return the party attribute type categories
-   */
-  List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories()
-      throws ServiceUnavailableException;
-
-  /**
-   * Retrieve the party attribute type categories.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
-   *     type categories for or <b>null</b> to retrieve the party attribute type categories for all
-   *     locales
-   * @return the party attribute type categories
-   */
-  List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories(String localeId)
-      throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the party attribute types.
-   *
-   * @return the party attribute types
-   */
-  List<PartyAttributeType> getPartyAttributeTypes() throws ServiceUnavailableException;
-
-  /**
-   * Retrieve the party attribute types.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
-   *     types for or <b>null</b> to retrieve the party attribute types for all locales
-   * @return the party attribute types
-   */
-  List<PartyAttributeType> getPartyAttributeTypes(String localeId)
-      throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the party role purposes.
-   *
-   * @return the party role purposes
-   */
-  List<PartyRolePurpose> getPartyRolePurposes() throws ServiceUnavailableException;
-
-  /**
-   * Retrieve the party role purposes.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party role
-   *     purposes for or <b>null</b> to retrieve the party role purposes for all locales
-   * @return the party role purposes
-   */
-  List<PartyRolePurpose> getPartyRolePurposes(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the party role types.
-   *
-   * @return the party role types
-   */
-  List<PartyRoleType> getPartyRoleTypes() throws ServiceUnavailableException;
-
-  /**
-   * Retrieve the party role types.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
-   *     for or <b>null</b> to retrieve the party role types for all locales
-   * @return the party role types
-   */
-  List<PartyRoleType> getPartyRoleTypes(String localeId) throws ServiceUnavailableException;
-
-  /**
    * Retrieve all the physical address purposes.
    *
    * @return the physical address purposes
@@ -409,6 +374,38 @@ public interface IPartyReferenceService {
   List<ResidentialType> getResidentialTypes(String localeId) throws ServiceUnavailableException;
 
   /**
+   * Retrieve all the role purposes.
+   *
+   * @return the role purposes
+   */
+  List<RolePurpose> getRolePurposes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the role purposes.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role purposes for
+   *     or <b>null</b> to retrieve the role purposes for all locales
+   * @return the role purposes
+   */
+  List<RolePurpose> getRolePurposes(String localeId) throws ServiceUnavailableException;
+
+  /**
+   * Retrieve all the role types.
+   *
+   * @return the role types
+   */
+  List<RoleType> getRoleTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the role types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
+   *     <b>null</b> to retrieve the role types for all locales
+   * @return the role types
+   */
+  List<RoleType> getRoleTypes(String localeId) throws ServiceUnavailableException;
+
+  /**
    * Retrieve all the sources of funds.
    *
    * @return the sources of funds
@@ -471,6 +468,26 @@ public interface IPartyReferenceService {
    * @return the titles
    */
   List<Title> getTitles(String localeId) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a attribute type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param attributeTypeCode the code for the attribute type
+   * @return <b>true</b> if the code is a valid code for a attribute type or <b>false</b> otherwise
+   */
+  boolean isValidAttributeType(String partyTypeCode, String attributeTypeCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a attribute type category.
+   *
+   * @param attributeTypeCategoryCode the code for the attribute type category
+   * @return <b>true</b> if the code is a valid code for a attribute type category or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidAttributeTypeCategory(String attributeTypeCategoryCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a contact mechanism purpose for the party type.
@@ -568,46 +585,6 @@ public interface IPartyReferenceService {
    * @return <b>true</b> if the code is a valid code for a occupation or <b>false</b> otherwise
    */
   boolean isValidOccupation(String occupationCode) throws ServiceUnavailableException;
-
-  /**
-   * Check whether the code is a valid code for a party attribute type for the party type.
-   *
-   * @param partyTypeCode the party type code
-   * @param partyAttributeTypeCode the code for the party attribute type
-   * @return <b>true</b> if the code is a valid code for a party attribute type or <b>false</b>
-   *     otherwise
-   */
-  boolean isValidPartyAttributeType(String partyTypeCode, String partyAttributeTypeCode)
-      throws ServiceUnavailableException;
-
-  /**
-   * Check whether the code is a valid code for a party attribute type category.
-   *
-   * @param partyAttributeTypeCategoryCode the code for the party attribute type category
-   * @return <b>true</b> if the code is a valid code for a party attribute type category or
-   *     <b>false</b> otherwise
-   */
-  boolean isValidPartyAttributeTypeCategory(String partyAttributeTypeCategoryCode)
-      throws ServiceUnavailableException;
-
-  /**
-   * Check whether the code is a valid code for a party role purpose.
-   *
-   * @param partyRolePurposeCode the code for the party role purpose
-   * @return <b>true</b> if the code is a valid code for a party role purpose or <b>false</b>
-   *     otherwise
-   */
-  boolean isValidPartyRolePurpose(String partyRolePurposeCode) throws ServiceUnavailableException;
-
-  /**
-   * Check whether the code is a valid code for a party role type for the party type.
-   *
-   * @param partyTypeCode the party type code
-   * @param partyRoleTypeCode the code for the party role type
-   * @return <b>true</b> if the code is a valid code for a party role type or <b>false</b> otherwise
-   */
-  boolean isValidPartyRoleType(String partyTypeCode, String partyRoleTypeCode)
-      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a physical address purpose for the party type.
@@ -716,6 +693,24 @@ public interface IPartyReferenceService {
    *     otherwise
    */
   boolean isValidResidentialType(String residentialTypeCode) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a role purpose.
+   *
+   * @param rolePurposeCode the code for the role purpose
+   * @return <b>true</b> if the code is a valid code for a role purpose or <b>false</b> otherwise
+   */
+  boolean isValidRolePurpose(String rolePurposeCode) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a role type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param roleTypeCode the code for the role type
+   * @return <b>true</b> if the code is a valid code for a role type or <b>false</b> otherwise
+   */
+  boolean isValidRoleType(String partyTypeCode, String roleTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a source of funds.

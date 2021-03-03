@@ -18,27 +18,36 @@ package digital.inception.party;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
- * The <b>PartyAttributeId</b> class implements the ID class for the <b>PartyAttribute</b> class.
+ * The <b>RoleTypeId</b> class implements the ID class for the <b>RoleType</b> class.
  *
  * @author Marcus Portmann
  */
-public class PartyAttributeId implements Serializable {
+@SuppressWarnings("unused")
+public class RoleTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
+  /** The code for the role type. */
+  private String code;
+
+  /** The Unicode locale identifier for the role type. */
+  private String localeId;
+
+  /** Constructs a new <b>RoleTypeId</b>. */
+  public RoleTypeId() {}
+
   /**
-   * The Universally Unique Identifier (UUID) for the party the party attribute is associated with.
+   * Constructs a new <b>RoleTypeId</b>.
+   *
+   * @param code the code for the role type
+   * @param localeId the Unicode locale identifier for the role type
    */
-  private UUID party;
-
-  /** The code for the party attribute type. */
-  private String type;
-
-  /** Constructs a new <b>PartyAttributeId</b>. */
-  public PartyAttributeId() {}
+  public RoleTypeId(String code, String localeId) {
+    this.code = code;
+    this.localeId = localeId;
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -60,9 +69,9 @@ public class PartyAttributeId implements Serializable {
       return false;
     }
 
-    PartyAttributeId other = (PartyAttributeId) object;
+    RoleTypeId other = (RoleTypeId) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -72,6 +81,6 @@ public class PartyAttributeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 }

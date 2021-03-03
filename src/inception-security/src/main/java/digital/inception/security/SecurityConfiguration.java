@@ -16,8 +16,16 @@
 
 package digital.inception.security;
 
+import digital.inception.persistence.PersistenceUtil;
+import javax.sql.DataSource;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * The <b>SecurityConfiguration</b> class provides the Spring configuration for the Security module.
@@ -26,6 +34,41 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "applicationPersistenceUnit",
+    entityManagerFactoryRef = "securityEntityManagerFactory",
     basePackages = {"digital.inception.security"})
-public class SecurityConfiguration {}
+public class SecurityConfiguration {
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
+
+  /**
+   * Constructs a new <b>SecurityConfiguration</b>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public SecurityConfiguration(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
+
+  /**
+   * Returns the security entity manager factory bean associated with the application data source.
+   *
+   * @return the security entity manager factory bean associated with the application data source
+   */
+  @Bean
+  @DependsOn("applicationDataSource")
+  public LocalContainerEntityManagerFactoryBean securityEntityManagerFactory() {
+    try {
+      DataSource dataSource = applicationContext.getBean("applicationDataSource", DataSource.class);
+
+      PlatformTransactionManager platformTransactionManager =
+          applicationContext.getBean(PlatformTransactionManager.class);
+
+      return PersistenceUtil.createEntityManager(
+          "security", dataSource, platformTransactionManager, "digital.inception.security");
+    } catch (Throwable e) {
+      throw new FatalBeanException(
+          "Failed to initialize the security entity manager factory bean", e);
+    }
+  }
+}

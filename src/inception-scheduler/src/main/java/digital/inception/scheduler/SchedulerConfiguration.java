@@ -16,9 +16,17 @@
 
 package digital.inception.scheduler;
 
+import digital.inception.persistence.PersistenceUtil;
+import javax.sql.DataSource;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * The <b>SchedulerConfiguration</b> class provides the Spring configuration for the Scheduler
@@ -28,7 +36,43 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "applicationPersistenceUnit",
+    entityManagerFactoryRef = "schedulerEntityManagerFactory",
     basePackages = {"digital.inception.scheduler"})
 @EnableScheduling
-public class SchedulerConfiguration {}
+public class SchedulerConfiguration {
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
+
+  /**
+   * Constructs a new <b>SchedulerConfiguration</b>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public SchedulerConfiguration(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
+
+  /**
+   * Returns the scheduler entity manager factory bean associated with the application data source.
+   *
+   * @return the scheduler entity manager factory bean associated with the application data source
+   */
+  @Bean
+  @DependsOn("applicationDataSource")
+  public LocalContainerEntityManagerFactoryBean schedulerEntityManagerFactory() {
+    try {
+      DataSource dataSource = applicationContext.getBean("applicationDataSource", DataSource.class);
+
+      PlatformTransactionManager platformTransactionManager =
+          applicationContext.getBean(PlatformTransactionManager.class);
+
+      return PersistenceUtil.createEntityManager(
+          "scheduler", dataSource, platformTransactionManager, "digital.inception.scheduler");
+
+    } catch (Throwable e) {
+      throw new FatalBeanException(
+          "Failed to initialize the scheduler entity manager factory bean", e);
+    }
+  }
+}

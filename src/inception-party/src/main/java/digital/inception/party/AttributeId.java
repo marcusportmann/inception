@@ -18,37 +18,25 @@ package digital.inception.party;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
- * The <b>PartyAttributeTypeCategoryId</b> class implements the ID class for the <b>
- * PartyAttributeTypeCategory</b> class.
+ * The <b>AttributeId</b> class implements the ID class for the <b>Attribute</b> class.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
-public class PartyAttributeTypeCategoryId implements Serializable {
+public class AttributeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the party attribute type category. */
-  private String code;
+  /** The Universally Unique Identifier (UUID) for the party the attribute is associated with. */
+  private UUID party;
 
-  /** The Unicode locale identifier for the party attribute type category. */
-  private String localeId;
+  /** The code for the attribute type. */
+  private String type;
 
-  /** Constructs a new <b>PartyAttributeTypeCategoryId</b>. */
-  public PartyAttributeTypeCategoryId() {}
-
-  /**
-   * Constructs a new <b>PartyAttributeTypeCategoryId</b>.
-   *
-   * @param code the code for the party attribute type category
-   * @param localeId the Unicode locale identifier for the party attribute type category
-   */
-  public PartyAttributeTypeCategoryId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
+  /** Constructs a new <b>AttributeId</b>. */
+  public AttributeId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -70,9 +58,9 @@ public class PartyAttributeTypeCategoryId implements Serializable {
       return false;
     }
 
-    PartyAttributeTypeCategoryId other = (PartyAttributeTypeCategoryId) object;
+    AttributeId other = (AttributeId) object;
 
-    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
+    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
@@ -82,6 +70,6 @@ public class PartyAttributeTypeCategoryId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
+    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 }

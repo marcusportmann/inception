@@ -76,10 +76,10 @@ public class LiquibaseChangelogInsertsTest {
     //    boolean createMinorTypeInserts = createLiquibaseInserts && false;
     //    boolean createNextOfKinInserts = createLiquibaseInserts && false;
     //    boolean createOccupationInserts = createLiquibaseInserts && false;
-    //    boolean createPartyAttributeTypeCategoryInserts = createLiquibaseInserts && true;
-    //    boolean createPartyAttributeTypeInserts = createLiquibaseInserts && true;
-    //    boolean createPartyRolePurposeInserts = createLiquibaseInserts && false;
-    //    boolean createPartyRoleTypeInserts = createLiquibaseInserts && false;
+    //    boolean createAttributeTypeCategoryInserts = createLiquibaseInserts && true;
+    //    boolean createAttributeTypeInserts = createLiquibaseInserts && true;
+    //    boolean createRolePurposeInserts = createLiquibaseInserts && false;
+    //    boolean createRoleTypeInserts = createLiquibaseInserts && false;
     //    boolean createPhysicalAddressPurposeInserts = createLiquibaseInserts && false;
     //    boolean createPhysicalAddressTypeInserts = createLiquibaseInserts && false;
     //    boolean createPreferenceTypeCategoryInserts = createLiquibaseInserts && false;
@@ -459,30 +459,30 @@ public class LiquibaseChangelogInsertsTest {
     //      System.out.println();
     //    }
 
-    //    if (createPartyAttributeTypeCategoryInserts) {
-    //      for (PartyAttributeTypeCategory partyAttributeTypeCategory :
-    //          referenceService.getPartyAttributeTypeCategories("en-US")) {
+    //    if (createAttributeTypeCategoryInserts) {
+    //      for (AttributeTypeCategory attributeTypeCategory :
+    //          referenceService.getAttributeTypeCategories("en-US")) {
     //
     //        System.out.println(
     //            "    <insert schemaName=\"reference\"
-    // tableName=\"party_attribute_type_categories\">");
+    // tableName=\"attribute_type_categories\">");
     //        System.out.println(
-    //            "      <column name=\"code\" value=\"" + partyAttributeTypeCategory.getCode() +
+    //            "      <column name=\"code\" value=\"" + attributeTypeCategory.getCode() +
     // "\"/>");
     //        System.out.println(
     //            "      <column name=\"locale_id\" value=\""
-    //                + partyAttributeTypeCategory.getLocaleId()
+    //                + attributeTypeCategory.getLocaleId()
     //                + "\"/>");
     //        System.out.println(
     //            "      <column name=\"sort_index\" value=\""
-    //                + partyAttributeTypeCategory.getSortIndex()
+    //                + attributeTypeCategory.getSortIndex()
     //                + "\"/>");
     //        System.out.println(
-    //            "      <column name=\"name\" value=\"" + partyAttributeTypeCategory.getName() +
+    //            "      <column name=\"name\" value=\"" + attributeTypeCategory.getName() +
     // "\"/>");
     //        System.out.println(
     //            "      <column name=\"description\" value=\""
-    //                + partyAttributeTypeCategory.getDescription()
+    //                + attributeTypeCategory.getDescription()
     //                + "\"/>");
     //        System.out.println("    </insert>");
     //      }
@@ -490,34 +490,34 @@ public class LiquibaseChangelogInsertsTest {
     //      System.out.println();
     //    }
 
-    //    if (createPartyAttributeTypeInserts) {
-    //      for (PartyAttributeType partyAttributeType :
-    //          referenceService.getPartyAttributeTypes("en-US")) {
+    //    if (createAttributeTypeInserts) {
+    //      for (AttributeType attributeType :
+    //          referenceService.getAttributeTypes("en-US")) {
     //
     //        System.out.println(
-    //            "    <insert schemaName=\"reference\" tableName=\"party_attribute_types\">");
+    //            "    <insert schemaName=\"reference\" tableName=\"attribute_types\">");
     //        System.out.println(
-    //            "      <column name=\"category\" value=\"" + partyAttributeType.getCategory() +
+    //            "      <column name=\"category\" value=\"" + attributeType.getCategory() +
     // "\"/>");
     //        System.out.println(
-    //            "      <column name=\"code\" value=\"" + partyAttributeType.getCode() + "\"/>");
+    //            "      <column name=\"code\" value=\"" + attributeType.getCode() + "\"/>");
     //        System.out.println(
     //            "      <column name=\"locale_id\" value=\""
-    //                + partyAttributeType.getLocaleId()
+    //                + attributeType.getLocaleId()
     //                + "\"/>");
     //        System.out.println(
     //            "      <column name=\"sort_index\" value=\""
-    //                + partyAttributeType.getSortIndex()
+    //                + attributeType.getSortIndex()
     //                + "\"/>");
     //        System.out.println(
-    //            "      <column name=\"name\" value=\"" + partyAttributeType.getName() + "\"/>");
+    //            "      <column name=\"name\" value=\"" + attributeType.getName() + "\"/>");
     //        System.out.println(
     //            "      <column name=\"description\" value=\""
-    //                + partyAttributeType.getDescription()
+    //                + attributeType.getDescription()
     //                + "\"/>");
     //        System.out.println(
     //            "      <column name=\"party_types\" value=\""
-    //                + StringUtils.arrayToCommaDelimitedString(partyAttributeType.getPartyTypes())
+    //                + StringUtils.arrayToCommaDelimitedString(attributeType.getPartyTypes())
     //                + "\"/>");
     //        System.out.println("    </insert>");
     //      }
@@ -525,26 +525,26 @@ public class LiquibaseChangelogInsertsTest {
     //      System.out.println();
     //    }
 
-    //    if (createPartyRolePurposeInserts) {
-    //      for (PartyRolePurpose partyRolePurpose : referenceService.getPartyRolePurposes("en-US"))
+    //    if (createRolePurposeInserts) {
+    //      for (RolePurpose rolePurpose : referenceService.getRolePurposes("en-US"))
     // {
     //
     //        System.out.println(
-    //            "    <insert schemaName=\"reference\" tableName=\"party_role_purposes\">");
+    //            "    <insert schemaName=\"reference\" tableName=\"role_purposes\">");
     //        System.out.println(
-    //            "      <column name=\"code\" value=\"" + partyRolePurpose.getCode() + "\"/>");
+    //            "      <column name=\"code\" value=\"" + rolePurpose.getCode() + "\"/>");
     //        System.out.println(
-    //            "      <column name=\"locale_id\" value=\"" + partyRolePurpose.getLocaleId() +
+    //            "      <column name=\"locale_id\" value=\"" + rolePurpose.getLocaleId() +
     // "\"/>");
     //        System.out.println(
     //            "      <column name=\"sort_index\" value=\""
-    //                + partyRolePurpose.getSortIndex()
+    //                + rolePurpose.getSortIndex()
     //                + "\"/>");
     //        System.out.println(
-    //            "      <column name=\"name\" value=\"" + partyRolePurpose.getName() + "\"/>");
+    //            "      <column name=\"name\" value=\"" + rolePurpose.getName() + "\"/>");
     //        System.out.println(
     //            "      <column name=\"description\" value=\""
-    //                + partyRolePurpose.getDescription()
+    //                + rolePurpose.getDescription()
     //                + "\"/>");
     //        System.out.println("    </insert>");
     //      }
@@ -552,29 +552,29 @@ public class LiquibaseChangelogInsertsTest {
     //      System.out.println();
     //    }
 
-    //    if (createPartyRoleTypeInserts) {
-    //      for (PartyRoleType partyRoleType : referenceService.getPartyRoleTypes("en-US")) {
+    //    if (createRoleTypeInserts) {
+    //      for (RoleType roleType : referenceService.getRoleTypes("en-US")) {
     //
     //        System.out.println("    <insert schemaName=\"reference\"
-    // tableName=\"party_role_types\">");
+    // tableName=\"role_types\">");
     //        System.out.println(
-    //            "      <column name=\"code\" value=\"" + partyRoleType.getCode() + "\"/>");
+    //            "      <column name=\"code\" value=\"" + roleType.getCode() + "\"/>");
     //        System.out.println(
-    //            "      <column name=\"locale_id\" value=\"" + partyRoleType.getLocaleId() +
+    //            "      <column name=\"locale_id\" value=\"" + roleType.getLocaleId() +
     // "\"/>");
     //        System.out.println(
-    //            "      <column name=\"sort_index\" value=\"" + partyRoleType.getSortIndex() +
+    //            "      <column name=\"sort_index\" value=\"" + roleType.getSortIndex() +
     // "\"/>");
     //        System.out.println(
-    //            "      <column name=\"name\" value=\"" + partyRoleType.getName() + "\"/>");
+    //            "      <column name=\"name\" value=\"" + roleType.getName() + "\"/>");
     //        System.out.println(
     //            "      <column name=\"description\" value=\""
-    //                + partyRoleType.getDescription()
+    //                + roleType.getDescription()
     //                + "\"/>");
     //
     //        System.out.println(
     //            "      <column name=\"party_types\" value=\""
-    //                + StringUtils.arrayToCommaDelimitedString(partyRoleType.getPartyTypes())
+    //                + StringUtils.arrayToCommaDelimitedString(roleType.getPartyTypes())
     //                + "\"/>");
     //
     //        System.out.println("    </insert>");

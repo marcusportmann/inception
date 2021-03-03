@@ -17,37 +17,35 @@
 package digital.inception.party;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
- * The <b>PartyRoleTypeId</b> class implements the ID class for the <b>PartyRoleType</b> class.
+ * The <b>ResidencePermitId</b> class implements the ID class for the <b>ResidencePermit</b> class.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
-public class PartyRoleTypeId implements Serializable {
+public class ResidencePermitId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the party role type. */
-  private String code;
+  /** The ISO 3166-1 alpha-2 code for the country of issue for the residence permit. */
+  private String countryOfIssue;
 
-  /** The Unicode locale identifier for the party role type. */
-  private String localeId;
-
-  /** Constructs a new <b>PartyRoleTypeId</b>. */
-  public PartyRoleTypeId() {}
+  /** The date of issue for the residence permit. */
+  private LocalDate dateOfIssue;
 
   /**
-   * Constructs a new <b>PartyRoleTypeId</b>.
-   *
-   * @param code the code for the party role type
-   * @param localeId the Unicode locale identifier for the party role type
+   * The Universally Unique Identifier (UUID) for the party the residence permit is associated with.
    */
-  public PartyRoleTypeId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
+  private UUID party;
+
+  /** The code for the residence permit type. */
+  private String type;
+
+  /** Constructs a new <b>ResidencePermitId</b>. */
+  public ResidencePermitId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -69,9 +67,12 @@ public class PartyRoleTypeId implements Serializable {
       return false;
     }
 
-    PartyRoleTypeId other = (PartyRoleTypeId) object;
+    ResidencePermitId other = (ResidencePermitId) object;
 
-    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
+    return Objects.equals(party, other.party)
+        && Objects.equals(type, other.type)
+        && Objects.equals(countryOfIssue, other.countryOfIssue)
+        && Objects.equals(dateOfIssue, other.dateOfIssue);
   }
 
   /**
@@ -81,6 +82,9 @@ public class PartyRoleTypeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
+    return ((party == null) ? 0 : party.hashCode())
+        + ((type == null) ? 0 : type.hashCode())
+        + ((countryOfIssue == null) ? 0 : countryOfIssue.hashCode())
+        + ((dateOfIssue == null) ? 0 : dateOfIssue.hashCode());
   }
 }

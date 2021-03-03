@@ -19,6 +19,9 @@ package digital.inception.party.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import digital.inception.party.Attribute;
+import digital.inception.party.AttributeType;
+import digital.inception.party.AttributeTypeCategory;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.ContactMechanismPurpose;
 import digital.inception.party.ContactMechanismType;
@@ -34,11 +37,6 @@ import digital.inception.party.NextOfKinType;
 import digital.inception.party.Occupation;
 import digital.inception.party.Organization;
 import digital.inception.party.Party;
-import digital.inception.party.PartyAttribute;
-import digital.inception.party.PartyAttributeType;
-import digital.inception.party.PartyAttributeTypeCategory;
-import digital.inception.party.PartyRolePurpose;
-import digital.inception.party.PartyRoleType;
 import digital.inception.party.PartyType;
 import digital.inception.party.Person;
 import digital.inception.party.PhysicalAddress;
@@ -52,6 +50,8 @@ import digital.inception.party.Race;
 import digital.inception.party.ResidencePermitType;
 import digital.inception.party.ResidencyStatus;
 import digital.inception.party.ResidentialType;
+import digital.inception.party.RolePurpose;
+import digital.inception.party.RoleType;
 import digital.inception.party.SourceOfFunds;
 import digital.inception.party.TaxNumber;
 import digital.inception.party.TaxNumberType;
@@ -91,6 +91,43 @@ public class PartyReferenceServiceTest {
 
   /** The Party Reference Service. */
   @Autowired private IPartyReferenceService partyReferenceService;
+
+  /** Test the attribute type category reference functionality. */
+  @Test
+  public void attributeTypeCategoryTest() throws Exception {
+    List<AttributeTypeCategory> retrievedAttributeTypeCategories =
+        partyReferenceService.getAttributeTypeCategories();
+
+    assertEquals(
+        "The correct number of attribute type categories was not retrieved",
+        2,
+        retrievedAttributeTypeCategories.size());
+
+    retrievedAttributeTypeCategories = partyReferenceService.getAttributeTypeCategories("en-US");
+
+    assertEquals(
+        "The correct number of attribute type categories was not retrieved",
+        1,
+        retrievedAttributeTypeCategories.size());
+  }
+
+  /** Test the attribute type reference functionality. */
+  @Test
+  public void attributeTypeTest() throws Exception {
+    List<AttributeType> retrievedAttributeTypes = partyReferenceService.getAttributeTypes();
+
+    assertEquals(
+        "The correct number of attribute types was not retrieved",
+        6,
+        retrievedAttributeTypes.size());
+
+    retrievedAttributeTypes = partyReferenceService.getAttributeTypes("en-US");
+
+    assertEquals(
+        "The correct number of attribute types was not retrieved",
+        3,
+        retrievedAttributeTypes.size());
+  }
 
   /** Test the contact mechanism purpose functionality. */
   @Test
@@ -242,62 +279,6 @@ public class PartyReferenceServiceTest {
         "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
   }
 
-  /** Test the party attribute type category reference functionality. */
-  @Test
-  public void partyAttributeTypeCategoryTest() throws Exception {
-    List<PartyAttributeTypeCategory> retrievedPartyAttributeTypeCategories =
-        partyReferenceService.getPartyAttributeTypeCategories();
-
-    assertEquals(
-        "The correct number of party attribute type categories was not retrieved",
-        2,
-        retrievedPartyAttributeTypeCategories.size());
-
-    retrievedPartyAttributeTypeCategories =
-        partyReferenceService.getPartyAttributeTypeCategories("en-US");
-
-    assertEquals(
-        "The correct number of party attribute type categories was not retrieved",
-        1,
-        retrievedPartyAttributeTypeCategories.size());
-  }
-
-  /** Test the party attribute type reference functionality. */
-  @Test
-  public void partyAttributeTypeTest() throws Exception {
-    List<PartyAttributeType> retrievedPartyAttributeTypes =
-        partyReferenceService.getPartyAttributeTypes();
-
-    assertEquals(
-        "The correct number of party attribute types was not retrieved",
-        6,
-        retrievedPartyAttributeTypes.size());
-
-    retrievedPartyAttributeTypes = partyReferenceService.getPartyAttributeTypes("en-US");
-
-    assertEquals(
-        "The correct number of party attribute types was not retrieved",
-        3,
-        retrievedPartyAttributeTypes.size());
-  }
-
-  /** Test the party role purpose functionality. */
-  @Test
-  public void partyRolePurposeTest() throws Exception {
-    List<PartyRolePurpose> retrievedPartyRolePurposes =
-        partyReferenceService.getPartyRolePurposes();
-
-    retrievedPartyRolePurposes = partyReferenceService.getPartyRolePurposes("en-US");
-  }
-
-  /** Test the party role type functionality. */
-  @Test
-  public void partyRoleTypeTest() throws Exception {
-    List<PartyRoleType> retrievedPartyRoleTypes = partyReferenceService.getPartyRoleTypes();
-
-    retrievedPartyRoleTypes = partyReferenceService.getPartyRoleTypes("en-US");
-  }
-
   /** Test the physical address purpose functionality. */
   @Test
   public void physicalAddressPurposeTest() throws Exception {
@@ -409,6 +390,22 @@ public class PartyReferenceServiceTest {
         retrievedResidentialTypes.size());
   }
 
+  /** Test the role purpose functionality. */
+  @Test
+  public void rolePurposeTest() throws Exception {
+    List<RolePurpose> retrievedRolePurposes = partyReferenceService.getRolePurposes();
+
+    retrievedRolePurposes = partyReferenceService.getRolePurposes("en-US");
+  }
+
+  /** Test the role type functionality. */
+  @Test
+  public void roleTypeTest() throws Exception {
+    List<RoleType> retrievedRoleTypes = partyReferenceService.getRoleTypes();
+
+    retrievedRoleTypes = partyReferenceService.getRoleTypes("en-US");
+  }
+
   /** Test the sources of funds reference functionality. */
   @Test
   public void sourceOfFundsTest() throws Exception {
@@ -490,10 +487,10 @@ public class PartyReferenceServiceTest {
     // referenceService.isValidMinorType("minor");
     partyReferenceService.isValidNextOfKinType("mother");
     partyReferenceService.isValidOccupation("executive");
-    partyReferenceService.isValidPartyAttributeType(PartyType.PERSON.code(), "height");
-    partyReferenceService.isValidPartyAttributeTypeCategory("anthropometric_measurements");
-    partyReferenceService.isValidPartyRolePurpose("test");
-    partyReferenceService.isValidPartyRoleType(PartyType.PERSON.code(), "employee");
+    partyReferenceService.isValidAttributeType(PartyType.PERSON.code(), "height");
+    partyReferenceService.isValidAttributeTypeCategory("anthropometric_measurements");
+    partyReferenceService.isValidRolePurpose("test");
+    partyReferenceService.isValidRoleType(PartyType.PERSON.code(), "employee");
     partyReferenceService.isValidPhysicalAddressPurpose(PartyType.PERSON.code(), "billing");
     partyReferenceService.isValidPhysicalAddressRole(
         PartyType.PERSON.code(), PhysicalAddressRole.RESIDENTIAL);
@@ -511,13 +508,13 @@ public class PartyReferenceServiceTest {
     partyReferenceService.isValidTitle("mrs");
   }
 
-  private void compareAttributes(PartyAttribute attribute1, PartyAttribute attribute2) {
+  private void compareAttributes(Attribute attribute1, Attribute attribute2) {
     assertEquals(
-        "The type values for the two party attributes do not match",
+        "The type values for the two attributes do not match",
         attribute1.getType(),
         attribute2.getType());
     assertEquals(
-        "The string value values for the two party attributes do not match",
+        "The string value values for the two attributes do not match",
         attribute1.getStringValue(),
         attribute2.getStringValue());
   }
@@ -545,10 +542,10 @@ public class PartyReferenceServiceTest {
         organization1.getAttributes().size(),
         organization2.getAttributes().size());
 
-    for (PartyAttribute organization1Attribute : organization1.getAttributes()) {
+    for (Attribute organization1Attribute : organization1.getAttributes()) {
       boolean foundAttribute = false;
 
-      for (PartyAttribute organization2Attribute : organization2.getAttributes()) {
+      for (Attribute organization2Attribute : organization2.getAttributes()) {
 
         if (Objects.equals(organization1Attribute.getParty(), organization2Attribute.getParty())
             && Objects.equals(organization1Attribute.getType(), organization2Attribute.getType())) {
@@ -831,10 +828,10 @@ public class PartyReferenceServiceTest {
         person1.getAttributes().size(),
         person2.getAttributes().size());
 
-    for (PartyAttribute person1Attribute : person1.getAttributes()) {
+    for (Attribute person1Attribute : person1.getAttributes()) {
       boolean foundAttribute = false;
 
-      for (PartyAttribute person2Attribute : person2.getAttributes()) {
+      for (Attribute person2Attribute : person2.getAttributes()) {
 
         if (Objects.equals(person1Attribute.getParty(), person2Attribute.getParty())
             && Objects.equals(person1Attribute.getType(), person2Attribute.getType())) {

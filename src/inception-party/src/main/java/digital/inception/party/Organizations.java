@@ -38,12 +38,28 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The results of a request to retrieve a list of organizations")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"organizations", "total", "filter", "sortBy", "sortDirection", "pageIndex", "pageSize"})
+@JsonPropertyOrder({
+  "organizations",
+  "total",
+  "filter",
+  "sortBy",
+  "sortDirection",
+  "pageIndex",
+  "pageSize"
+})
 @XmlRootElement(name = "Organizations", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Organizations",
     namespace = "http://inception.digital/party",
-    propOrder = {"organizations", "total", "filter", "sortBy", "sortDirection", "pageIndex", "pageSize"})
+    propOrder = {
+      "organizations",
+      "total",
+      "filter",
+      "sortBy",
+      "sortDirection",
+      "pageIndex",
+      "pageSize"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class Organizations implements Serializable {

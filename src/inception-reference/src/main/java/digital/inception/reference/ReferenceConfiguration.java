@@ -16,8 +16,16 @@
 
 package digital.inception.reference;
 
+import digital.inception.persistence.PersistenceUtil;
+import javax.sql.DataSource;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * The <b>ReferenceConfiguration</b> class provides the Spring configuration for the Reference
@@ -27,6 +35,42 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "applicationPersistenceUnit",
+    entityManagerFactoryRef = "referenceEntityManagerFactory",
     basePackages = {"digital.inception.reference"})
-public class ReferenceConfiguration {}
+public class ReferenceConfiguration {
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
+
+  /**
+   * Constructs a new <b>ReferenceConfiguration</b>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public ReferenceConfiguration(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
+
+  /**
+   * Returns the reference entity manager factory bean associated with the application data source.
+   *
+   * @return the reference entity manager factory bean associated with the application data source
+   */
+  @Bean
+  @DependsOn("applicationDataSource")
+  public LocalContainerEntityManagerFactoryBean referenceEntityManagerFactory() {
+    try {
+      DataSource dataSource = applicationContext.getBean("applicationDataSource", DataSource.class);
+
+      PlatformTransactionManager platformTransactionManager =
+          applicationContext.getBean(PlatformTransactionManager.class);
+
+      return PersistenceUtil.createEntityManager(
+          "reference", dataSource, platformTransactionManager, "digital.inception.reference");
+
+    } catch (Throwable e) {
+      throw new FatalBeanException(
+          "Failed to initialize the reference entity manager factory bean", e);
+    }
+  }
+}

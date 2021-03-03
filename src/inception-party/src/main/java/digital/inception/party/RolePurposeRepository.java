@@ -21,13 +21,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>PartyAttributeTypeRepository</b> interface declares the repository for the <b>
- * PartyAttributeType</b> domain type.
+ * The <b>RolePurposeRepository</b> interface declares the repository for the <b>RolePurpose</b>
+ * domain type.
  *
  * @author Marcus Portmann
  */
-public interface PartyAttributeTypeRepository
-    extends JpaRepository<PartyAttributeType, PartyAttributeTypeId> {
+public interface RolePurposeRepository extends JpaRepository<RolePurpose, RolePurposeId> {
 
-  List<PartyAttributeType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  List<RolePurpose> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

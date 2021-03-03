@@ -67,6 +67,84 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the attribute type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     categories for or <b>null</b> to retrieve the attribute type categories for all locales
+   * @return the attribute type categories
+   */
+  @Operation(
+      summary = "Retrieve the attribute type categories",
+      description = "Retrieve the attribute type categories")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/attribute-type-categories",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<AttributeTypeCategory> getAttributeTypeCategories(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the attribute type categories for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getAttributeTypeCategories(localeId);
+  }
+
+  /**
+   * Retrieve the attribute types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute types
+   *     for or <b>null</b> to retrieve the attribute types for all locales
+   * @return the attribute types
+   */
+  @Operation(summary = "Retrieve the attribute types", description = "Retrieve the attribute types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/attribute-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<AttributeType> getAttributeTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the attribute types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getAttributeTypes(localeId);
+  }
+
+  /**
    * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
@@ -455,167 +533,6 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
-   * Retrieve the party attribute type categories.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
-   *     type categories for or <b>null</b> to retrieve the party attribute type categories for all
-   *     locales
-   * @return the party attribute type categories
-   */
-  @Operation(
-      summary = "Retrieve the party attribute type categories",
-      description = "Retrieve the party attribute type categories")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/party-attribute-type-categories",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
-  public List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories(
-      @Parameter(
-              name = "localeId",
-              description =
-                  "The optional Unicode locale identifier for the locale to retrieve the party attribute type categories for",
-              example = "en-US")
-          @RequestParam(value = "localeId", required = false)
-          String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getPartyAttributeTypeCategories(localeId);
-  }
-
-  /**
-   * Retrieve the party attribute types.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
-   *     types for or <b>null</b> to retrieve the party attribute types for all locales
-   * @return the party attribute types
-   */
-  @Operation(
-      summary = "Retrieve the party attribute types",
-      description = "Retrieve the party attribute types")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/party-attribute-types",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
-  public List<PartyAttributeType> getPartyAttributeTypes(
-      @Parameter(
-              name = "localeId",
-              description =
-                  "The optional Unicode locale identifier for the locale to retrieve the party attribute types for",
-              example = "en-US")
-          @RequestParam(value = "localeId", required = false)
-          String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getPartyAttributeTypes(localeId);
-  }
-
-  /**
-   * Retrieve the party role purposes.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party role
-   *     purposes for or <b>null</b> to retrieve the party role purposes for all locales
-   * @return the party role purposes
-   */
-  @Operation(
-      summary = "Retrieve the party role purposes",
-      description = "Retrieve the party role purposes")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/party-role-purposes",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
-  public List<PartyRolePurpose> getPartyRolePurposes(
-      @Parameter(
-              name = "localeId",
-              description =
-                  "The optional Unicode locale identifier for the locale to retrieve the party role purposes for",
-              example = "en-US")
-          @RequestParam(value = "localeId", required = false)
-          String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getPartyRolePurposes(localeId);
-  }
-
-  /**
-   * Retrieve the party role types.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
-   *     for or <b>null</b> to retrieve the party role types for all locales
-   * @return the party role types
-   */
-  @Operation(
-      summary = "Retrieve the party role types",
-      description = "Retrieve the party role types")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/party-role-types",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
-  public List<PartyRoleType> getPartyRoleTypes(
-      @Parameter(
-              name = "localeId",
-              description =
-                  "The optional Unicode locale identifier for the locale to retrieve the party role types for",
-              example = "en-US")
-          @RequestParam(value = "localeId", required = false)
-          String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getPartyRoleTypes(localeId);
-  }
-
-  /**
    * Retrieve the physical address purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
@@ -968,6 +885,82 @@ public class PartyReferenceApi extends SecureApi {
           String localeId)
       throws ServiceUnavailableException {
     return partyReferenceService.getResidentialTypes(localeId);
+  }
+
+  /**
+   * Retrieve the role purposes.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role purposes for
+   *     or <b>null</b> to retrieve the role purposes for all locales
+   * @return the role purposes
+   */
+  @Operation(summary = "Retrieve the role purposes", description = "Retrieve the role purposes")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/role-purposes",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<RolePurpose> getRolePurposes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the role purposes for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getRolePurposes(localeId);
+  }
+
+  /**
+   * Retrieve the role types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
+   *     <b>null</b> to retrieve the role types for all locales
+   * @return the role types
+   */
+  @Operation(summary = "Retrieve the role types", description = "Retrieve the role types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/role-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<RoleType> getRoleTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the role types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getRoleTypes(localeId);
   }
 
   /**

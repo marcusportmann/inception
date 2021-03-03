@@ -113,9 +113,10 @@ import org.springframework.util.StringUtils;
   "identityDocuments",
   "physicalAddresses",
   "preferences",
+  "residencePermits",
+  "roles",
   "countriesOfTaxResidence",
-  "taxNumbers",
-  "roles"
+  "taxNumbers"
 })
 @XmlRootElement(name = "Person", namespace = "http://inception.digital/party")
 @XmlType(
@@ -151,9 +152,10 @@ import org.springframework.util.StringUtils;
       "identityDocuments",
       "physicalAddresses",
       "preferences",
-      "countriesOfTaxResidence",
-      "taxNumbers",
+      "residencePermits",
       "roles",
+      "countriesOfTaxResidence",
+      "taxNumbers"
     })
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @ValidPerson
@@ -170,7 +172,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<PartyAttribute> attributes = new HashSet<>();
+  private final Set<Attribute> attributes = new HashSet<>();
 
   /** The contact mechanisms for the person. */
   @Valid
@@ -208,14 +210,23 @@ public class Person extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<Preference> preferences = new HashSet<>();
 
-  /** The party roles for the person independent of a party association. */
+  /** The residence permits for the person. */
   @Valid
   @OneToMany(
       mappedBy = "party",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<PartyRole> roles = new HashSet<>();
+  private final Set<ResidencePermit> residencePermits = new HashSet<>();
+
+  /** The roles assigned directly to the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<Role> roles = new HashSet<>();
 
   /** The tax numbers for the person. */
   @Valid
@@ -227,8 +238,7 @@ public class Person extends PartyBase implements Serializable {
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
   /**
-   * The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for
-   * the person.
+   * The comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the person.
    */
   @JsonIgnore
   @XmlTransient
@@ -236,17 +246,17 @@ public class Person extends PartyBase implements Serializable {
   @Column(table = "persons", name = "countries_of_tax_residence", length = 100)
   private String countriesOfTaxResidence;
 
-  /** The optional ISO 3166-1 alpha-2 code for the country of birth for the person. */
+  /** The ISO 3166-1 alpha-2 code for the country of birth for the person. */
   @Size(min = 2, max = 2)
   @Column(table = "persons", name = "country_of_birth", length = 2)
   private String countryOfBirth;
 
-  /** The optional ISO 3166-1 alpha-2 code for the country of residence for the person. */
+  /** The ISO 3166-1 alpha-2 code for the country of residence for the person. */
   @Size(min = 2, max = 2)
   @Column(table = "persons", name = "country_of_residence", length = 2)
   private String countryOfResidence;
 
-  /** The optional date of birth for the person. */
+  /** The date of birth for the person. */
   @Column(table = "persons", name = "date_of_birth")
   private LocalDate dateOfBirth;
 
@@ -254,63 +264,63 @@ public class Person extends PartyBase implements Serializable {
   @Column(table = "persons", name = "date_of_death")
   private LocalDate dateOfDeath;
 
-  /** The optional code for the employment status for the person. */
+  /** The code for the employment status for the person. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "employment_status", length = 30)
   private String employmentStatus;
 
-  /** The optional code for the employment type for the person. */
+  /** The code for the employment type for the person. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "employment_type", length = 30)
   private String employmentType;
 
-  /** The optional code for the gender for the person. */
+  /** The code for the gender for the person. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "gender", length = 30)
   private String gender;
 
-  /** The optional given name, firstname, forename, or Christian name for the person. */
+  /** The given name, firstname, forename, or Christian name for the person. */
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "given_name", length = 100)
   private String givenName;
 
-  /** The optional code for the home language for the person. */
+  /** The code for the home language for the person. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "home_language", length = 30)
   private String homeLanguage;
 
-  /** The optional initials for the person. */
+  /** The initials for the person. */
   @Size(min = 1, max = 20)
   @Column(table = "persons", name = "initials", length = 20)
   private String initials;
 
-  /** The optional maiden name for the person. */
+  /** The maiden name for the person. */
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "maiden_name", length = 100)
   private String maidenName;
 
-  /** The optional code for the marital status for the person. */
+  /** The code for the marital status for the person. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "marital_status", length = 30)
   private String maritalStatus;
 
-  /** The optional code for the marriage type for the person if the person is married. */
+  /** The code for the marriage type for the person if the person is married. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "marriage_type", length = 30)
   private String marriageType;
 
-  /** The optional middle names for the person. */
+  /** The middle names for the person. */
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "middle_names", length = 100)
   private String middleNames;
 
-  /** The optional code for the occupation for the person. */
+  /** The code for the occupation for the person. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "occupation", length = 30)
   private String occupation;
 
   /**
-   * The optional preferred name for the person.
+   * The preferred name for the person.
    *
    * <p>In Western culture, this is usually the given name, which is also known as the first name,
    * forename, or Christian name.
@@ -319,27 +329,27 @@ public class Person extends PartyBase implements Serializable {
   @Column(table = "persons", name = "preferred_name", length = 100)
   private String preferredName;
 
-  /** The optional code for the race for the person. */
+  /** The code for the race for the person. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "race", length = 30)
   private String race;
 
-  /** The optional code for the residency status for the person. */
+  /** The code for the residency status for the person. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "residency_status", length = 30)
   private String residencyStatus;
 
-  /** The optional code for the residential type for the person. */
+  /** The code for the residential type for the person. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "residential_type", length = 30)
   private String residentialType;
 
-  /** The optional surname, last name, or family name for the person. */
+  /** The surname, last name, or family name for the person. */
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "surname", length = 100)
   private String surname;
 
-  /** The optional code for the title for the person. */
+  /** The code for the title for the person. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "title", length = 30)
   private String title;
@@ -363,7 +373,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param attribute the attribute
    */
-  public void addAttribute(PartyAttribute attribute) {
+  public void addAttribute(Attribute attribute) {
     attributes.removeIf(
         existingAttribute -> Objects.equals(existingAttribute.getType(), attribute.getType()));
 
@@ -434,11 +444,22 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Add the party role to the person independent of a party association.
+   * Add the residence permit for the person.
    *
-   * @param role the party role
+   * @param residencePermit the residence permit
    */
-  public void addRole(PartyRole role) {
+  public void addResidencePermit(ResidencePermit residencePermit) {
+    residencePermit.setParty(this);
+
+    residencePermits.add(residencePermit);
+  }
+
+  /**
+   * Add the role to the person independent of a party association.
+   *
+   * @param role the role
+   */
+  public void addRole(Role role) {
     roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), role.getType()));
 
     role.setParty(this);
@@ -492,7 +513,7 @@ public class Person extends PartyBase implements Serializable {
    * @return the attribute with the specified type for the person or <b>null</b> if the attribute
    *     could not be found
    */
-  public PartyAttribute getAttribute(String type) {
+  public Attribute getAttribute(String type) {
     return attributes.stream()
         .filter(attribute -> Objects.equals(attribute.getType(), type))
         .findFirst()
@@ -509,7 +530,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonManagedReference("attributeReference")
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  public Set<PartyAttribute> getAttributes() {
+  public Set<Attribute> getAttributes() {
     return attributes;
   }
 
@@ -546,10 +567,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
-   * person.
+   * Returns the ISO 3166-1 alpha-2 codes for the countries of tax residence for the person.
    *
-   * @return the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the person
+   * @return the ISO 3166-1 alpha-2 codes for the countries of tax residence for the person
    */
   @Schema(
       description =
@@ -562,9 +582,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional ISO 3166-1 alpha-2 code for the country of birth for the person.
+   * Returns the ISO 3166-1 alpha-2 code for the country of birth for the person.
    *
-   * @return the optional ISO 3166-1 alpha-2 code for the country of birth for the person
+   * @return the ISO 3166-1 alpha-2 code for the country of birth for the person
    */
   @Schema(
       description = "The optional ISO 3166-1 alpha-2 code for the country of birth for the person")
@@ -575,9 +595,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional ISO 3166-1 alpha-2 code for the country of residence for the person.
+   * Returns the ISO 3166-1 alpha-2 code for the country of residence for the person.
    *
-   * @return the optional ISO 3166-1 alpha-2 code for the country of residence for the person
+   * @return the ISO 3166-1 alpha-2 code for the country of residence for the person
    */
   @Schema(
       description =
@@ -600,9 +620,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional date of birth for the person.
+   * Returns the date of birth for the person.
    *
-   * @return the optional date of birth for the person
+   * @return the date of birth for the person
    */
   @Schema(description = "The optional date of birth for the person")
   @JsonProperty
@@ -628,9 +648,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the employment status for the person.
+   * Returns the code for the employment status for the person.
    *
-   * @return the optional code for the employment status for the person
+   * @return the code for the employment status for the person
    */
   @Schema(description = "The optional code for the employment status for the person")
   @JsonProperty
@@ -640,9 +660,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the employment type for the person.
+   * Returns the code for the employment type for the person.
    *
-   * @return the optional code for the employment type for the person
+   * @return the code for the employment type for the person
    */
   @Schema(description = "The optional code for the employment type for the person")
   @JsonProperty
@@ -652,9 +672,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the gender for the person.
+   * Returns the code for the gender for the person.
    *
-   * @return the optional code for the gender for the person
+   * @return the code for the gender for the person
    */
   @Schema(description = "The optional code for the gender for the person")
   @JsonProperty
@@ -664,9 +684,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional given name, firstname, forename, or Christian name for the person.
+   * Returns the given name, firstname, forename, or Christian name for the person.
    *
-   * @return the optional given name, firstname, forename, or Christian name for the person
+   * @return the given name, firstname, forename, or Christian name for the person
    */
   @Schema(
       description =
@@ -678,9 +698,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the home language for the person.
+   * Returns the code for the home language for the person.
    *
-   * @return the optional code for the home language for the person
+   * @return the code for the home language for the person
    */
   @Schema(description = "The optional code for the home language for the person")
   @JsonProperty
@@ -717,9 +737,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional initials for the person.
+   * Returns the initials for the person.
    *
-   * @return the optional initials for the person
+   * @return the initials for the person
    */
   @Schema(description = "The optional initials for the person")
   @JsonProperty
@@ -729,9 +749,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional maiden name for the person.
+   * Returns the maiden name for the person.
    *
-   * @return the optional maiden name for the person
+   * @return the maiden name for the person
    */
   @Schema(description = "The optional maiden name for the person")
   @JsonProperty
@@ -741,9 +761,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the marital status for the person.
+   * Returns the code for the marital status for the person.
    *
-   * @return the optional code for the marital status for the person
+   * @return the code for the marital status for the person
    */
   @Schema(description = "The optional code for the marital status for the person")
   @JsonProperty
@@ -753,9 +773,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the marriage type for the person if the person is married.
+   * Returns the code for the marriage type for the person if the person is married.
    *
-   * @return the optional code for the marriage type for the person if the person is married
+   * @return the code for the marriage type for the person if the person is married
    */
   @Schema(
       description =
@@ -767,9 +787,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional middle names for the person.
+   * Returns the middle names for the person.
    *
-   * @return the optional middle names for the person
+   * @return the middle names for the person
    */
   @Schema(description = "The optional middle names for the person")
   @JsonProperty
@@ -799,9 +819,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the occupation for the person.
+   * Returns the code for the occupation for the person.
    *
-   * @return the optional code for the occupation for the person
+   * @return the code for the occupation for the person
    */
   @Schema(description = "The optional code for the occupation for the person")
   @JsonProperty
@@ -879,12 +899,12 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional preferred name for the person.
+   * Returns the preferred name for the person.
    *
    * <p>In Western culture, this is usually the given name, which is also known as the first name,
    * forename, or Christian name.
    *
-   * @return the optional preferred name for the person
+   * @return the preferred name for the person
    */
   @Schema(description = "The optional preferred name for the person")
   @JsonProperty
@@ -896,7 +916,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * The optional code for the race for the person.
    *
-   * @return the optional code for the race for the person
+   * @return the code for the race for the person
    */
   @Schema(description = "The optional code for the race for the person")
   @JsonProperty
@@ -906,9 +926,23 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the residency status for the person.
+   * Returns the residence permits for the person.
    *
-   * @return the optional code for the residency status for the person
+   * @return the residence permits for the person
+   */
+  @Schema(description = "The residence permits for the person")
+  @JsonProperty
+  @JsonManagedReference("residencePermitReference")
+  @XmlElementWrapper(name = "ResidencePermits")
+  @XmlElement(name = "ResidencePermit")
+  public Set<ResidencePermit> getResidencePermits() {
+    return residencePermits;
+  }
+
+  /**
+   * Returns the code for the residency status for the person.
+   *
+   * @return the code for the residency status for the person
    */
   @Schema(description = "The optional code for the residency status for the person")
   @JsonProperty
@@ -918,9 +952,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the residential type for the person.
+   * Returns the code for the residential type for the person.
    *
-   * @return the optional code for the residential type for the person
+   * @return the code for the residential type for the person
    */
   @Schema(description = "The optional code for the residential type for the person")
   @JsonProperty
@@ -932,32 +966,32 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Retrieve the role with the specified type for the person independent of a party association.
    *
-   * @param type the code for the party role type
+   * @param type the code for the role type
    * @return the role with the specified type for the person independent of a party association or
    *     <b>null</b> if the role could not be found
    */
-  public PartyRole getRole(String type) {
+  public Role getRole(String type) {
     return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst().get();
   }
 
   /**
-   * Returns the party roles for the person independent of a party association.
+   * Returns the roles assigned directly to the person.
    *
-   * @return the party roles for the person independent of a party association
+   * @return the roles assigned directly to the person
    */
-  @Schema(description = "The party roles for the person independent of a party association")
+  @Schema(description = "The roles assigned directly to the person")
   @JsonProperty
-  @JsonManagedReference("partyRoleReference")
+  @JsonManagedReference("roleReference")
   @XmlElementWrapper(name = "Roles")
   @XmlElement(name = "Role")
-  public Set<PartyRole> getRoles() {
+  public Set<Role> getRoles() {
     return roles;
   }
 
   /**
-   * Returns the optional surname, last name, or family name for the person.
+   * Returns the surname, last name, or family name for the person.
    *
-   * @return the optional surname, last name, or family name for the person
+   * @return the surname, last name, or family name for the person
    */
   @Schema(description = "The optional surname, last name, or family name for the person")
   @JsonProperty
@@ -1010,9 +1044,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the title for the person.
+   * Returns the code for the title for the person.
    *
-   * @return the optional code for the title for the person
+   * @return the code for the title for the person
    */
   @Schema(description = "The optional code for the title for the person")
   @JsonProperty
@@ -1095,9 +1129,19 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Remove the residence permit with the specified type for the person.
+   *
+   * @param type the code for the residence permit type
+   */
+  public void removeResidencePermitByType(String type) {
+    residencePermits.removeIf(
+        existingResidencePermit -> Objects.equals(existingResidencePermit.getType(), type));
+  }
+
+  /**
    * Remove the role with the specified type for the person.
    *
-   * @param type the code for party role type
+   * @param type the code for role type
    */
   public void removeRole(String type) {
     roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), type));
@@ -1117,7 +1161,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param attributes the attributes for the person
    */
-  public void setAttributes(Set<PartyAttribute> attributes) {
+  public void setAttributes(Set<Attribute> attributes) {
     this.attributes.clear();
     this.attributes.addAll(attributes);
   }
@@ -1133,10 +1177,10 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the person.
+   * Set the ISO 3166-1 alpha-2 codes for the countries of tax residence for the person.
    *
-   * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax
-   *     residence for the person
+   * @param countriesOfTaxResidence the ISO 3166-1 alpha-2 codes for the countries of tax residence
+   *     for the person
    */
   public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
     this.countriesOfTaxResidence =
@@ -1144,30 +1188,28 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional ISO 3166-1 alpha-2 code for the country of birth for the person.
+   * Set the ISO 3166-1 alpha-2 code for the country of birth for the person.
    *
-   * @param countryOfBirth the optional ISO 3166-1 alpha-2 code for the country of birth for the
-   *     person
+   * @param countryOfBirth the ISO 3166-1 alpha-2 code for the country of birth for the person
    */
   public void setCountryOfBirth(String countryOfBirth) {
     this.countryOfBirth = countryOfBirth;
   }
 
   /**
-   * Set the optional ISO 3166-1 alpha-2 code for the country of residence for the person.
+   * Set the ISO 3166-1 alpha-2 code for the country of residence for the person.
    *
-   * @param countryOfResidence the optional ISO 3166-1 alpha-2 code for the country of residence for
-   *     the person
+   * @param countryOfResidence the ISO 3166-1 alpha-2 code for the country of residence for the
+   *     person
    */
   public void setCountryOfResidence(String countryOfResidence) {
     this.countryOfResidence = countryOfResidence;
   }
 
   /**
-   * Set the optional code for the single country of tax residence for the person.
+   * Set the code for the single country of tax residence for the person.
    *
-   * @param countryOfTaxResidence the optional code for the single country of tax residence for the
-   *     person
+   * @param countryOfTaxResidence the code for the single country of tax residence for the person
    */
   @JsonIgnore
   public void setCountryOfTaxResidence(String countryOfTaxResidence) {
@@ -1175,9 +1217,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional date of birth for the person.
+   * Set the date of birth for the person.
    *
-   * @param dateOfBirth the optional date of birth for the person
+   * @param dateOfBirth the date of birth for the person
    */
   public void setDateOfBirth(LocalDate dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
@@ -1193,36 +1235,36 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional code for the employment status for the person.
+   * Set the code for the employment status for the person.
    *
-   * @param employmentStatus the optional code for the employment status for the person
+   * @param employmentStatus the code for the employment status for the person
    */
   public void setEmploymentStatus(String employmentStatus) {
     this.employmentStatus = employmentStatus;
   }
 
   /**
-   * Set the optional code for the employment type for the person.
+   * Set the code for the employment type for the person.
    *
-   * @param employmentType the optional code for the employment type for the person
+   * @param employmentType the code for the employment type for the person
    */
   public void setEmploymentType(String employmentType) {
     this.employmentType = employmentType;
   }
 
   /**
-   * Set the optional code for the gender for the person.
+   * Set the code for the gender for the person.
    *
-   * @param gender the optional code for the gender for the person
+   * @param gender the code for the gender for the person
    */
   public void setGender(String gender) {
     this.gender = gender;
   }
 
   /**
-   * Set the optional given name, firstname, forename, or Christian name for the person.
+   * Set the given name, firstname, forename, or Christian name for the person.
    *
-   * @param givenName the optional given name, firstname, forename, or Christian name for the person
+   * @param givenName the given name, firstname, forename, or Christian name for the person
    */
   public void setGivenName(String givenName) {
     this.givenName = givenName;
@@ -1231,9 +1273,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional code for the home language for the person.
+   * Set the code for the home language for the person.
    *
-   * @param homeLanguage the optional code for the home language for the person
+   * @param homeLanguage the code for the home language for the person
    */
   public void setHomeLanguage(String homeLanguage) {
     this.homeLanguage = homeLanguage;
@@ -1259,46 +1301,45 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional initials for the person.
+   * Set the initials for the person.
    *
-   * @param initials the optional initials for the person
+   * @param initials the initials for the person
    */
   public void setInitials(String initials) {
     this.initials = initials;
   }
 
   /**
-   * Set the optional maiden name for the person.
+   * Set the maiden name for the person.
    *
-   * @param maidenName the optional maiden name for the person
+   * @param maidenName the maiden name for the person
    */
   public void setMaidenName(String maidenName) {
     this.maidenName = maidenName;
   }
 
   /**
-   * Set the optional code for the marital status for the person.
+   * Set the code for the marital status for the person.
    *
-   * @param maritalStatus the optional code for the marital status for the person
+   * @param maritalStatus the code for the marital status for the person
    */
   public void setMaritalStatus(String maritalStatus) {
     this.maritalStatus = maritalStatus;
   }
 
   /**
-   * Set the optional code for the marriage type for the person if the person is married.
+   * Set the code for the marriage type for the person if the person is married.
    *
-   * @param marriageType the optional code for the marriage type for the person if the person is
-   *     married
+   * @param marriageType the code for the marriage type for the person if the person is married
    */
   public void setMarriageType(String marriageType) {
     this.marriageType = marriageType;
   }
 
   /**
-   * Set the optional middle names for the person.
+   * Set the middle names for the person.
    *
-   * @param middleNames the optional middle names for the person
+   * @param middleNames the middle names for the person
    */
   public void setMiddleNames(String middleNames) {
     this.middleNames = middleNames;
@@ -1323,9 +1364,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional code for the occupation for the person.
+   * Set the code for the occupation for the person.
    *
-   * @param occupation the optional code for the occupation for the person
+   * @param occupation the code for the occupation for the person
    */
   public void setOccupation(String occupation) {
     this.occupation = occupation;
@@ -1352,58 +1393,68 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional preferred name for the person.
+   * Set the preferred name for the person.
    *
    * <p>In Western culture, this is usually the given name, which is also known as the first name,
    * forename, or Christian name.
    *
-   * @param preferredName the optional preferred name for the person
+   * @param preferredName the preferred name for the person
    */
   public void setPreferredName(String preferredName) {
     this.preferredName = preferredName;
   }
 
   /**
-   * Set the optional code for the race for the person.
+   * Set the code for the race for the person.
    *
-   * @param race the optional code for the race for the person
+   * @param race the code for the race for the person
    */
   public void setRace(String race) {
     this.race = race;
   }
 
   /**
-   * Set the optional code for the residency status for the person.
+   * Set the residence permits for the person.
    *
-   * @param residencyStatus the optional code for the residency status for the person
+   * @param residencePermits the residence permits for the person
+   */
+  public void setResidencePermits(Set<ResidencePermit> residencePermits) {
+    this.residencePermits.clear();
+    this.residencePermits.addAll(residencePermits);
+  }
+
+  /**
+   * Set the code for the residency status for the person.
+   *
+   * @param residencyStatus the code for the residency status for the person
    */
   public void setResidencyStatus(String residencyStatus) {
     this.residencyStatus = residencyStatus;
   }
 
   /**
-   * Set the optional code for the residential type for the person.
+   * Set the code for the residential type for the person.
    *
-   * @param residentialType the optional code for the residential type for the person
+   * @param residentialType the code for the residential type for the person
    */
   public void setResidentialType(String residentialType) {
     this.residentialType = residentialType;
   }
 
   /**
-   * Set the party roles for the person independent of a party association.
+   * Set the roles assigned directly to the person.
    *
-   * @param roles the party roles for the person
+   * @param roles the roles assigned directly to the person
    */
-  public void setRoles(Set<PartyRole> roles) {
+  public void setRoles(Set<Role> roles) {
     this.roles.clear();
     this.roles.addAll(roles);
   }
 
   /**
-   * Set the optional surname, last name, or family name for the person.
+   * Set the surname, last name, or family name for the person.
    *
-   * @param surname the optional surname, last name, or family name for the person
+   * @param surname the surname, last name, or family name for the person
    */
   public void setSurname(String surname) {
     this.surname = surname;
@@ -1432,9 +1483,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional code for the title for the person.
+   * Set the code for the title for the person.
    *
-   * @param title the optional code for the title for the person
+   * @param title the code for the title for the person
    */
   public void setTitle(String title) {
     this.title = title;

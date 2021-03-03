@@ -16,8 +16,16 @@
 
 package digital.inception.reporting;
 
+import digital.inception.persistence.PersistenceUtil;
+import javax.sql.DataSource;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * The <b>ReportingConfiguration</b> class provides the Spring configuration for the Reporting
@@ -27,6 +35,42 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Configuration
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "applicationPersistenceUnit",
+    entityManagerFactoryRef = "reportingEntityManagerFactory",
     basePackages = {"digital.inception.reporting"})
-public class ReportingConfiguration {}
+public class ReportingConfiguration {
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
+
+  /**
+   * Constructs a new <b>ReportingConfiguration</b>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public ReportingConfiguration(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
+
+  /**
+   * Returns the reporting entity manager factory bean associated with the application data source.
+   *
+   * @return the reporting entity manager factory bean associated with the application data source
+   */
+  @Bean
+  @DependsOn("applicationDataSource")
+  public LocalContainerEntityManagerFactoryBean reportingEntityManagerFactory() {
+    try {
+      DataSource dataSource = applicationContext.getBean("applicationDataSource", DataSource.class);
+
+      PlatformTransactionManager platformTransactionManager =
+          applicationContext.getBean(PlatformTransactionManager.class);
+
+      return PersistenceUtil.createEntityManager(
+          "reporting", dataSource, platformTransactionManager, "digital.inception.reporting");
+
+    } catch (Throwable e) {
+      throw new FatalBeanException(
+          "Failed to initialize the reporting entity manager factory bean", e);
+    }
+  }
+}

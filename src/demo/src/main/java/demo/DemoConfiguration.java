@@ -31,7 +31,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @ComponentScan(basePackages = {"digital.inception", "demo"})
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "applicationPersistenceUnit",
+    entityManagerFactoryRef = "applicationEntityManagerFactory",
     basePackages = {"demo"})
 public class DemoConfiguration {
 

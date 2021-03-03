@@ -107,7 +107,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<PartyAttribute> attributes = new HashSet<>();
+  private final Set<Attribute> attributes = new HashSet<>();
 
   /** The contact mechanisms for the organization. */
   @Valid
@@ -145,14 +145,14 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<Preference> preferences = new HashSet<>();
 
-  /** The party roles for the organization independent of a party association. */
+  /** The roles assigned directly to the organization. */
   @Valid
   @OneToMany(
       mappedBy = "party",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  private final Set<PartyRole> roles = new HashSet<>();
+  private final Set<Role> roles = new HashSet<>();
 
   /** The tax numbers for the organization. */
   @Valid
@@ -164,7 +164,7 @@ public class Organization extends PartyBase implements Serializable {
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
   /**
-   * The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for
+   * The comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for
    * the organization.
    */
   @JsonIgnore
@@ -192,7 +192,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param attribute the attribute
    */
-  public void addAttribute(PartyAttribute attribute) {
+  public void addAttribute(Attribute attribute) {
     attributes.removeIf(
         existingAttribute -> Objects.equals(existingAttribute.getType(), attribute.getType()));
 
@@ -263,11 +263,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Add the party role to the organization independent of a party association.
+   * Add the role to the organization independent of a party association.
    *
-   * @param role the party role
+   * @param role the role
    */
-  public void addRole(PartyRole role) {
+  public void addRole(Role role) {
     roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), role.getType()));
 
     role.setParty(this);
@@ -321,7 +321,7 @@ public class Organization extends PartyBase implements Serializable {
    * @return the attribute with the specified type for the organization or <b>null</b> if the
    *     attribute could not be found
    */
-  public PartyAttribute getAttribute(String type) {
+  public Attribute getAttribute(String type) {
     return attributes.stream()
         .filter(attribute -> Objects.equals(attribute.getType(), type))
         .findFirst()
@@ -338,7 +338,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonManagedReference("attributeReference")
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  public Set<PartyAttribute> getAttributes() {
+  public Set<Attribute> getAttributes() {
     return attributes;
   }
 
@@ -383,7 +383,7 @@ public class Organization extends PartyBase implements Serializable {
    */
   @Schema(
       description =
-          "The optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization")
+          "The ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization")
   @JsonProperty
   @XmlElementWrapper(name = "CountriesOfTaxResidence")
   @XmlElement(name = "CountryOfTaxResidence")
@@ -516,25 +516,25 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the role with the specified type for the organization independent of a party
    * association.
    *
-   * @param type the code for the party role type
+   * @param type the code for the role type
    * @return the role with the specified type for the organization independent of a party
    *     association or <b>null</b> if the role could not be found
    */
-  public PartyRole getRole(String type) {
+  public Role getRole(String type) {
     return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst().get();
   }
 
   /**
-   * Returns the party roles for the organization independent of a party association.
+   * Returns the roles assigned directly to the organization.
    *
-   * @return the party roles for the organization independent of a party association
+   * @return the roles assigned directly to the organization
    */
-  @Schema(description = "The party roles for the organization independent of a party association")
+  @Schema(description = "The roles assigned directly to the organization")
   @JsonProperty
-  @JsonManagedReference("partyRoleReference")
+  @JsonManagedReference("roleReference")
   @XmlElementWrapper(name = "Roles")
   @XmlElement(name = "Role")
-  public Set<PartyRole> getRoles() {
+  public Set<Role> getRoles() {
     return roles;
   }
 
@@ -658,7 +658,7 @@ public class Organization extends PartyBase implements Serializable {
   /**
    * Remove the role with the specified type for the organization.
    *
-   * @param type the code for party role type
+   * @param type the code for role type
    */
   public void removeRole(String type) {
     roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), type));
@@ -678,7 +678,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param attributes the attributes for the organization
    */
-  public void setAttributes(Set<PartyAttribute> attributes) {
+  public void setAttributes(Set<Attribute> attributes) {
     this.attributes.clear();
     this.attributes.addAll(attributes);
   }
@@ -767,11 +767,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the party roles for the organization independent of a party association.
+   * Set the roles assigned directly to the organization.
    *
-   * @param roles the party roles
+   * @param roles the roles
    */
-  public void setRoles(Set<PartyRole> roles) {
+  public void setRoles(Set<Role> roles) {
     this.roles.clear();
     this.roles.addAll(roles);
   }

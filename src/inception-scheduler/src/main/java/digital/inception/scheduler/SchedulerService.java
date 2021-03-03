@@ -66,7 +66,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   private final Validator validator;
 
   /* Entity Manager */
-  @PersistenceContext(unitName = "applicationPersistenceUnit")
+  @PersistenceContext(unitName = "scheduler")
   private EntityManager entityManager;
 
   /*

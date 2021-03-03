@@ -58,7 +58,7 @@ public class VehicleServiceTest {
 
   /* Entity Manager */
   @Autowired
-  @PersistenceContext(unitName = "applicationPersistenceUnit")
+  @PersistenceContext(unitName = "application")
   private EntityManager entityManager;
 
   /** The JSR-303 validator. */

@@ -41,28 +41,48 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PartyRoleType</b> class holds the information for a party role type.
+ * The <b>AttributeType</b> class holds the information for a attribute type.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A type of party role")
+@Schema(description = "A type of attribute")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
-@XmlRootElement(name = "PartyRoleType", namespace = "http://inception.digital/party")
+@JsonPropertyOrder({
+  "code",
+  "category",
+  "localeId",
+  "sortIndex",
+  "name",
+  "description",
+  "partyTypes"
+})
+@XmlRootElement(name = "AttributeType", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "PartyRoleType",
+    name = "AttributeType",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
+    propOrder = {"code", "category", "localeId", "sortIndex", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "party_role_types")
-@IdClass(PartyRoleTypeId.class)
-public class PartyRoleType implements Serializable {
+@Table(schema = "party", name = "attribute_types")
+@IdClass(AttributeTypeId.class)
+public class AttributeType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the party role type. */
-  @Schema(description = "The code for the party role type", required = true)
+  /** The code for the attribute type category the attribute type is associated with. */
+  @Schema(
+      description =
+          "The code for the attribute type category the attribute type is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Category", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(name = "category", length = 30, nullable = false)
+  private String category;
+
+  /** The code for the attribute type. */
+  @Schema(description = "The code for the attribute type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -71,8 +91,8 @@ public class PartyRoleType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the party role type. */
-  @Schema(description = "The description for the party role type", required = true)
+  /** The description for the attribute type. */
+  @Schema(description = "The description for the attribute type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -80,8 +100,8 @@ public class PartyRoleType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the party role type. */
-  @Schema(description = "The Unicode locale identifier for the party role type", required = true)
+  /** The Unicode locale identifier for the attribute type. */
+  @Schema(description = "The Unicode locale identifier for the attribute type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -90,8 +110,8 @@ public class PartyRoleType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the party role type. */
-  @Schema(description = "The name of the party role type", required = true)
+  /** The name of the attribute type. */
+  @Schema(description = "The name of the attribute type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -99,7 +119,7 @@ public class PartyRoleType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The comma-delimited codes for the party types the party role type is associated with. */
+  /** The comma-delimited codes for the party types the attribute type is associated with. */
   @JsonIgnore
   @XmlTransient
   @NotNull
@@ -107,16 +127,16 @@ public class PartyRoleType implements Serializable {
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
 
-  /** The sort index for the party role type. */
-  @Schema(description = "The sort index for the party role type", required = true)
+  /** The sort index for the attribute type. */
+  @Schema(description = "The sort index for the attribute type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>PartyRoleType</b>. */
-  public PartyRoleType() {}
+  /** Constructs a new <b>AttributeType</b>. */
+  public AttributeType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -138,54 +158,63 @@ public class PartyRoleType implements Serializable {
       return false;
     }
 
-    PartyRoleType other = (PartyRoleType) object;
+    AttributeType other = (AttributeType) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the party role type.
+   * Returns the code for the attribute type category the attribute type is associated with.
    *
-   * @return the code for the party role type
+   * @return the code for the attribute type category the attribute type is associated with
+   */
+  public String getCategory() {
+    return category;
+  }
+
+  /**
+   * Returns the code for the attribute type.
+   *
+   * @return the code for the attribute type
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the party role type.
+   * Returns the description for the attribute type.
    *
-   * @return the description for the party role type
+   * @return the description for the attribute type
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the party role type.
+   * Returns the Unicode locale identifier for the attribute type.
    *
-   * @return the Unicode locale identifier for the party role type
+   * @return the Unicode locale identifier for the attribute type
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the party role type.
+   * Returns the name of the attribute type.
    *
-   * @return the name of the party role type
+   * @return the name of the attribute type
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the codes for the party types the party role type is associated with.
+   * Returns the codes for the party types the attribute type is associated with.
    *
-   * @return the codes for the party types the party role type is associated with
+   * @return the codes for the party types the attribute type is associated with
    */
   @Schema(
-      description = "The codes for the party types the party role type is associated with",
+      description = "The codes for the party types the attribute type is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "PartyTypes", required = true)
@@ -194,9 +223,9 @@ public class PartyRoleType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the party role type.
+   * Returns the sort index for the attribute type.
    *
-   * @return the sort index for the party role type
+   * @return the sort index for the attribute type
    */
   public Integer getSortIndex() {
     return sortIndex;
@@ -213,11 +242,10 @@ public class PartyRoleType implements Serializable {
   }
 
   /**
-   * Returns whether the party role type is valid for the party type.
+   * Returns whether the attribute type is valid for the party type.
    *
    * @param partyTypeCode the party type code
-   * @return <b>true</b> if the party role type is valid for the party type or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if the attribute type is valid for the party type or <b>false</b> otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
     return Arrays.stream(getPartyTypes())
@@ -225,54 +253,63 @@ public class PartyRoleType implements Serializable {
   }
 
   /**
-   * Set the code for the party role type.
+   * Set the code for the attribute type category the attribute type is associated with.
    *
-   * @param code the code for the party role type
+   * @param category the code for the attribute type category the attribute type is associated with
+   */
+  public void setCategory(String category) {
+    this.category = category;
+  }
+
+  /**
+   * Set the code for the attribute type.
+   *
+   * @param code the code for the attribute type
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the party role type.
+   * Set the description for the attribute type.
    *
-   * @param description the description for the party role type
+   * @param description the description for the attribute type
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the party role type.
+   * Set the Unicode locale identifier for the attribute type.
    *
-   * @param localeId the Unicode locale identifier for the party role type
+   * @param localeId the Unicode locale identifier for the attribute type
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the party role type.
+   * Set the name of the attribute type.
    *
-   * @param name the name of the party role type
+   * @param name the name of the attribute type
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the codes for the party types the party role type is associated with.
+   * Set the codes for the party types the attribute type is associated with.
    *
-   * @param partyTypes the codes for the party types the party role type is associated with
+   * @param partyTypes the codes for the party types the attribute type is associated with
    */
   public void setPartyTypes(String[] partyTypes) {
     this.partyTypes = StringUtils.arrayToCommaDelimitedString(partyTypes);
   }
 
   /**
-   * Set the codes for the party types the party role type is associated with.
+   * Set the codes for the party types the attribute type is associated with.
    *
-   * @param partyTypes the codes for the party types the party role type is associated with
+   * @param partyTypes the codes for the party types the attribute type is associated with
    */
   @JsonIgnore
   public void setPartyTypes(Collection<String> partyTypes) {
@@ -280,9 +317,9 @@ public class PartyRoleType implements Serializable {
   }
 
   /**
-   * Set the sort index for the party role type.
+   * Set the sort index for the attribute type.
    *
-   * @param sortIndex the sort index for the party role type
+   * @param sortIndex the sort index for the attribute type
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

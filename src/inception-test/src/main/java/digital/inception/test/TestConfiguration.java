@@ -159,7 +159,7 @@ public class TestConfiguration {
    *
    * @return the application entity manager factory associated with the application data source
    */
-  @Bean(name = "applicationPersistenceUnit")
+  @Bean
   @DependsOn("applicationDataSource")
   public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory() {
     LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
@@ -171,7 +171,7 @@ public class TestConfiguration {
     jpaVendorAdapter.setShowSql(true);
     jpaVendorAdapter.setDatabase(Database.H2);
 
-    entityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
+    entityManagerFactoryBean.setPersistenceUnitName("application");
     entityManagerFactoryBean.setJtaDataSource(dataSource());
     entityManagerFactoryBean.setPackagesToScan(
         StringUtils.toStringArray(packagesToScanForEntities()));
@@ -337,8 +337,6 @@ public class TestConfiguration {
   protected List<String> packagesToScanForEntities() {
     List<String> packagesToScan = new ArrayList<>();
 
-    packagesToScan.add("digital.inception");
-
     // Add the packages to scan for entities explicitly specified in the configuration property
     if (StringUtils.hasText(this.packagesToScanForEntities)) {
       for (String packageToScanForEntities : this.packagesToScanForEntities.split(",")) {
@@ -365,12 +363,14 @@ public class TestConfiguration {
 
       if (enableJpaRepositories != null) {
         for (String basePackage : enableJpaRepositories.basePackages()) {
-          // Replace any existing packages to scan with the higher level package
-          packagesToScan.removeIf(packageToScan -> packageToScan.startsWith(basePackage));
+          if (!basePackage.startsWith("digital.inception")) {
+            // Replace any existing packages to scan with the higher level package
+            packagesToScan.removeIf(packageToScan -> packageToScan.startsWith(basePackage));
 
-          // Check if there is a higher level package already being scanned
-          if (packagesToScan.stream().noneMatch(basePackage::startsWith)) {
-            packagesToScan.add(basePackage);
+            // Check if there is a higher level package already being scanned
+            if (packagesToScan.stream().noneMatch(basePackage::startsWith)) {
+              packagesToScan.add(basePackage);
+            }
           }
         }
       }

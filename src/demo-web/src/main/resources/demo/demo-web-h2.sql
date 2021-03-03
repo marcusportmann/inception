@@ -227,7 +227,7 @@ VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'time_to_contact', 'anytime', NO
 
 INSERT INTO party.parties (id, tenant_id, type, name, created)
 VALUES ('00166574-6564-468a-b845-8a5c127a4345', '204e5b8f-48e7-4354-bd15-753e6543b64d', 'person', 'Sally Smith', NOW());
-INSERT INTO party.party_roles (party_id, type, created)
+INSERT INTO party.roles (party_id, type, created)
 VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'employee', NOW());
 INSERT INTO party.persons (id, title, initials, given_name, surname, gender, race, date_of_birth, home_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, occupation, residency_status, residential_type)
 VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'ms', 'S', 'Sally', 'Smith', 'female', 'asian', '1985-05-01', 'EN', 'GB', 'ZA', 'other', 'unemployed', 'single', 'unemployed', 'citizen', 'cohabitant');

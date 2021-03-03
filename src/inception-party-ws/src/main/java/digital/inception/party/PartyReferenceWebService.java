@@ -50,6 +50,32 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the attribute type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     categories for or <b>null</b> to retrieve the attribute type categories for all locales
+   * @return the attribute type categories
+   */
+  @WebMethod(operationName = "GetAttributeTypeCategories")
+  public List<AttributeTypeCategory> getAttributeTypeCategories(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return partyReferenceService.getAttributeTypeCategories(localeId);
+  }
+
+  /**
+   * Retrieve the attribute types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute types
+   *     for or <b>null</b> to retrieve the attribute types for all locales
+   * @return the attribute types
+   */
+  @WebMethod(operationName = "GetAttributeTypes")
+  public List<AttributeType> getAttributeTypes(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return partyReferenceService.getAttributeTypes(localeId);
+  }
+
+  /**
    * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
@@ -180,59 +206,6 @@ public class PartyReferenceWebService {
   }
 
   /**
-   * Retrieve the party attribute type categories.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
-   *     type categories for or <b>null</b> to retrieve the party attribute type categories for all
-   *     locales
-   * @return the party attribute type categories
-   */
-  @WebMethod(operationName = "GetPartyAttributeTypeCategories")
-  public List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getPartyAttributeTypeCategories(localeId);
-  }
-
-  /**
-   * Retrieve the party attribute types.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
-   *     types for or <b>null</b> to retrieve the party attribute types for all locales
-   * @return the party attribute types
-   */
-  @WebMethod(operationName = "GetPartyAttributeTypes")
-  public List<PartyAttributeType> getPartyAttributeTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getPartyAttributeTypes(localeId);
-  }
-
-  /**
-   * Retrieve the party role purposes.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party role
-   *     purposes for or <b>null</b> to retrieve the party role purposes for all locales
-   * @return the party role purposes
-   */
-  @WebMethod(operationName = "GetPartyRolePurposes")
-  public List<PartyRolePurpose> getPartyRolePurposes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getPartyRolePurposes(localeId);
-  }
-
-  /**
-   * Retrieve the party role types.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
-   *     for or <b>null</b> to retrieve the party role types for all locales
-   * @return the party role types
-   */
-  @WebMethod(operationName = "GetPartyRoleTypes")
-  public List<PartyRoleType> getPartyRoleTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getPartyRoleTypes(localeId);
-  }
-
-  /**
    * Retrieve the physical address purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
@@ -334,6 +307,32 @@ public class PartyReferenceWebService {
   public List<ResidentialType> getResidentialTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
     return partyReferenceService.getResidentialTypes(localeId);
+  }
+
+  /**
+   * Retrieve the role purposes.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role purposes for
+   *     or <b>null</b> to retrieve the role purposes for all locales
+   * @return the role purposes
+   */
+  @WebMethod(operationName = "GetRolePurposes")
+  public List<RolePurpose> getRolePurposes(@WebParam(name = "LocaleId") @XmlElement String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getRolePurposes(localeId);
+  }
+
+  /**
+   * Retrieve the role types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
+   *     <b>null</b> to retrieve the role types for all locales
+   * @return the role types
+   */
+  @WebMethod(operationName = "GetRoleTypes")
+  public List<RoleType> getRoleTypes(@WebParam(name = "LocaleId") @XmlElement String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getRoleTypes(localeId);
   }
 
   /**

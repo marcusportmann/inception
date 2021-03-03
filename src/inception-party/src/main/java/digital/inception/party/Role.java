@@ -45,52 +45,53 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>PartyAttribute</b> class holds the information for an attribute for a party.
+ * The <b>Role</b> class holds the information for a role assigned directly to a party or
+ * organisation.
  *
  * @author Marcus Portmann
  */
-@Schema(name = "PartyAttribute", description = "An attribute for a party")
+@Schema(description = "A role assigned directly to an organization or person]")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "stringValue"})
-@XmlRootElement(name = "PartyAttribute", namespace = "http://inception.digital/party")
+@JsonPropertyOrder({"type", "purpose"})
+@XmlRootElement(name = "Role", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "PartyAttribute",
+    name = "Role",
     namespace = "http://inception.digital/party",
-    propOrder = {"type", "stringValue"})
+    propOrder = {"type", "purpose"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "party_attributes")
-@IdClass(PartyAttributeId.class)
-public class PartyAttribute implements Serializable {
+@Table(schema = "party", name = "roles")
+@IdClass(RoleId.class)
+public class Role implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the party attribute was created. */
+  /** The date and time the role was created. */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The party the party attribute is associated with. */
+  /** The party the role is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("partyAttributeReference")
+  @JsonBackReference("roleReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /** The string value for the party attribute. */
-  @Schema(description = "The string value for the party attribute")
+  /** The optional code for the role purpose. */
+  @Schema(description = "The optional code for the role purpose")
   @JsonProperty
-  @XmlElement(name = "StringValue")
-  @Size(min = 1, max = 200)
-  @Column(name = "string_value", length = 200)
-  private String stringValue;
+  @XmlElement(name = "Purpose")
+  @Size(min = 1, max = 30)
+  @Column(name = "purpose", length = 30)
+  private String purpose;
 
-  /** The code for the party attribute type. */
-  @Schema(description = "The code for the party attribute type", required = true)
+  /** The code for the role type. */
+  @Schema(description = "The code for the role type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -99,25 +100,23 @@ public class PartyAttribute implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** The date and time the party attribute was last updated. */
+  /** The date and time the role was last updated. */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <b>PartyAttribute</b>. */
-  public PartyAttribute() {}
+  /** Constructs a new <b>Role</b>. */
+  public Role() {}
 
   /**
-   * Constructs a new <b>PartyAttribute</b>.
+   * Constructs a new <b>Role</b>.
    *
-   * @param type the party attribute type
-   * @param stringValue the string value for the party attribute
+   * @param type the role type
    */
-  public PartyAttribute(String type, String stringValue) {
+  public Role(String type) {
     this.type = type;
-    this.stringValue = stringValue;
   }
 
   /**
@@ -140,24 +139,24 @@ public class PartyAttribute implements Serializable {
       return false;
     }
 
-    PartyAttribute other = (PartyAttribute) object;
+    Role other = (Role) object;
 
     return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
-   * Returns the date and time the party attribute was created.
+   * Returns the date and time the role was created.
    *
-   * @return the date and time the party attribute was created
+   * @return the date and time the role was created
    */
   public LocalDateTime getCreated() {
     return created;
   }
 
   /**
-   * Returns the party the party attribute is associated with.
+   * Returns the party the role is associated with.
    *
-   * @return the party the party attribute is associated with
+   * @return the party the role is associated with
    */
   @Schema(hidden = true)
   public PartyBase getParty() {
@@ -165,27 +164,27 @@ public class PartyAttribute implements Serializable {
   }
 
   /**
-   * Returns the string value for the party attribute.
+   * Returns the optional code for the role purpose.
    *
-   * @return the string value for the party attribute
+   * @return the optional code for the role purpose
    */
-  public String getStringValue() {
-    return stringValue;
+  public String getPurpose() {
+    return purpose;
   }
 
   /**
-   * Returns the code for the party attribute type.
+   * Returns the code for the role type.
    *
-   * @return the code for the party attribute type
+   * @return the code for the role type
    */
   public String getType() {
     return type;
   }
 
   /**
-   * Returns the date and time the party attribute was last updated.
+   * Returns the date and time the role was last updated.
    *
-   * @return the date and time the party attribute was last updated
+   * @return the date and time the role was last updated
    */
   public LocalDateTime getUpdated() {
     return updated;
@@ -203,9 +202,9 @@ public class PartyAttribute implements Serializable {
   }
 
   /**
-   * Set the party the party attribute is associated with.
+   * Set the party the role is associated with.
    *
-   * @param party the party the party attribute is associated with
+   * @param party the party the role is associated with
    */
   @Schema(hidden = true)
   public void setParty(PartyBase party) {
@@ -213,18 +212,18 @@ public class PartyAttribute implements Serializable {
   }
 
   /**
-   * Set the string value for the party attribute.
+   * Set the optional code for the role purpose.
    *
-   * @param stringValue the string value for the party attribute
+   * @param purpose the optional code for the role purpose
    */
-  public void setStringValue(String stringValue) {
-    this.stringValue = stringValue;
+  public void setPurpose(String purpose) {
+    this.purpose = purpose;
   }
 
   /**
-   * Set the code for the party attribute type.
+   * Set the code for the role type.
    *
-   * @param type the code for the party attribute type
+   * @param type the code for the role type
    */
   public void setType(String type) {
     this.type = type;

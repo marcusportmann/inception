@@ -7,6 +7,61 @@ CREATE SCHEMA party;
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
+CREATE TABLE party.attribute_type_categories (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX attribute_type_categories_locale_id_ix ON party.attribute_type_categories(locale_id);
+
+COMMENT ON COLUMN party.attribute_type_categories.code IS 'The code for the attribute type category';
+
+COMMENT ON COLUMN party.attribute_type_categories.locale_id IS 'The Unicode locale identifier for the attribute type category';
+
+COMMENT ON COLUMN party.attribute_type_categories.sort_index IS 'The sort index for the attribute type category';
+
+COMMENT ON COLUMN party.attribute_type_categories.name IS 'The name of the attribute type category';
+
+COMMENT ON COLUMN party.attribute_type_categories.description IS 'The description for the attribute type category';
+
+
+CREATE TABLE party.attribute_types (
+  category    VARCHAR(30)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+  party_types VARCHAR(310) NOT NULL,
+
+  PRIMARY KEY (code, locale_id),
+  CONSTRAINT attribute_types_attribute_type_category_fk FOREIGN KEY (category, locale_id) REFERENCES party.attribute_type_categories(code, locale_id) ON DELETE CASCADE
+);
+
+CREATE INDEX attribute_types_category_ix ON party.attribute_types(category);
+
+CREATE INDEX attribute_types_locale_id_ix ON party.attribute_types(locale_id);
+
+COMMENT ON COLUMN party.attribute_types.category IS 'The code for the attribute type category the attribute type is associated with';
+
+COMMENT ON COLUMN party.attribute_types.code IS 'The code for the attribute type';
+
+COMMENT ON COLUMN party.attribute_types.locale_id IS 'The Unicode locale identifier for the attribute type';
+
+COMMENT ON COLUMN party.attribute_types.sort_index IS 'The sort index for the attribute type';
+
+COMMENT ON COLUMN party.attribute_types.name IS 'The name of the attribute type';
+
+COMMENT ON COLUMN party.attribute_types.description IS 'The description for the attribute type';
+
+COMMENT ON COLUMN party.attribute_types.party_types IS 'The comma-delimited list of codes for the party types the attribute type is associated with';
+
+
 CREATE TABLE party.contact_mechanism_types (
   code         VARCHAR(30)  NOT NULL,
   locale_id    VARCHAR(10)  NOT NULL,
@@ -294,61 +349,6 @@ COMMENT ON COLUMN party.occupations.name IS 'The name of the occupation';
 COMMENT ON COLUMN party.occupations.description IS 'The description for the occupation';
 
 
-CREATE TABLE party.party_attribute_type_categories (
-  code        VARCHAR(30)  NOT NULL,
-  locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
-  name        VARCHAR(50)  NOT NULL,
-  description VARCHAR(200) NOT NULL DEFAULT '',
-
-  PRIMARY KEY (code, locale_id)
-);
-
-CREATE INDEX party_attribute_type_categories_locale_id_ix ON party.party_attribute_type_categories(locale_id);
-
-COMMENT ON COLUMN party.party_attribute_type_categories.code IS 'The code for the party attribute type category';
-
-COMMENT ON COLUMN party.party_attribute_type_categories.locale_id IS 'The Unicode locale identifier for the party attribute type category';
-
-COMMENT ON COLUMN party.party_attribute_type_categories.sort_index IS 'The sort index for the party attribute type category';
-
-COMMENT ON COLUMN party.party_attribute_type_categories.name IS 'The name of the party attribute type category';
-
-COMMENT ON COLUMN party.party_attribute_type_categories.description IS 'The description for the party attribute type category';
-
-
-CREATE TABLE party.party_attribute_types (
-  category    VARCHAR(30)  NOT NULL,
-  code        VARCHAR(30)  NOT NULL,
-  locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
-  name        VARCHAR(50)  NOT NULL,
-  description VARCHAR(200) NOT NULL DEFAULT '',
-  party_types VARCHAR(310) NOT NULL,
-
-  PRIMARY KEY (code, locale_id),
-  CONSTRAINT party_attribute_types_party_attribute_type_category_fk FOREIGN KEY (category, locale_id) REFERENCES party.party_attribute_type_categories(code, locale_id) ON DELETE CASCADE
-);
-
-CREATE INDEX party_attribute_types_category_ix ON party.party_attribute_types(category);
-
-CREATE INDEX party_attribute_types_locale_id_ix ON party.party_attribute_types(locale_id);
-
-COMMENT ON COLUMN party.party_attribute_types.category IS 'The code for the party attribute type category the party attribute type is associated with';
-
-COMMENT ON COLUMN party.party_attribute_types.code IS 'The code for the party attribute type';
-
-COMMENT ON COLUMN party.party_attribute_types.locale_id IS 'The Unicode locale identifier for the party attribute type';
-
-COMMENT ON COLUMN party.party_attribute_types.sort_index IS 'The sort index for the party attribute type';
-
-COMMENT ON COLUMN party.party_attribute_types.name IS 'The name of the party attribute type';
-
-COMMENT ON COLUMN party.party_attribute_types.description IS 'The description for the party attribute type';
-
-COMMENT ON COLUMN party.party_attribute_types.party_types IS 'The comma-delimited list of codes for the party types the party attribute type is associated with';
-
-
 CREATE TABLE party.preference_type_categories (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
@@ -402,55 +402,6 @@ COMMENT ON COLUMN party.preference_types.name IS 'The name of the preference typ
 COMMENT ON COLUMN party.preference_types.description IS 'The description for the preference type';
 
 COMMENT ON COLUMN party.preference_types.party_types IS 'The comma-delimited list of codes for the party types the preference type is associated with';
-
-
-CREATE TABLE party.party_role_types (
-  code         VARCHAR(30)  NOT NULL,
-  locale_id    VARCHAR(10)  NOT NULL,
-  sort_index   INTEGER      NOT NULL,
-  name         VARCHAR(50)  NOT NULL,
-  description  VARCHAR(200) NOT NULL DEFAULT '',
-  party_types  VARCHAR(310) NOT NULL,
-
-  PRIMARY KEY (code, locale_id)
-);
-
-CREATE INDEX party_role_types_locale_id_ix ON party.party_role_types(locale_id);
-
-COMMENT ON COLUMN party.party_role_types.code IS 'The code for the party role type';
-
-COMMENT ON COLUMN party.party_role_types.locale_id IS 'The Unicode locale identifier for the party role type';
-
-COMMENT ON COLUMN party.party_role_types.sort_index IS 'The sort index for the party role type';
-
-COMMENT ON COLUMN party.party_role_types.name IS 'The name of the party role type';
-
-COMMENT ON COLUMN party.party_role_types.description IS 'The description for the party role type';
-
-COMMENT ON COLUMN party.party_role_types.party_types IS 'The comma-delimited list of codes for the party types the party role type is associated with';
-
-
-CREATE TABLE party.party_role_purposes (
-  code         VARCHAR(30)  NOT NULL,
-  locale_id    VARCHAR(10)  NOT NULL,
-  sort_index   INTEGER      NOT NULL,
-  name         VARCHAR(50)  NOT NULL,
-  description  VARCHAR(200) NOT NULL DEFAULT '',
-
-  PRIMARY KEY (code, locale_id)
-);
-
-CREATE INDEX party_role_purposes_locale_id_ix ON party.party_role_purposes(locale_id);
-
-COMMENT ON COLUMN party.party_role_purposes.code IS 'The code for the party role purpose';
-
-COMMENT ON COLUMN party.party_role_purposes.locale_id IS 'The Unicode locale identifier for the party role purpose';
-
-COMMENT ON COLUMN party.party_role_purposes.sort_index IS 'The sort index for the party role purpose';
-
-COMMENT ON COLUMN party.party_role_purposes.name IS 'The name of the party role purpose';
-
-COMMENT ON COLUMN party.party_role_purposes.description IS 'The description for the party role purpose';
 
 
 CREATE TABLE party.physical_address_types (
@@ -623,6 +574,55 @@ COMMENT ON COLUMN party.residential_types.sort_index IS 'The sort index for the 
 COMMENT ON COLUMN party.residential_types.name IS 'The name of the residential type';
 
 COMMENT ON COLUMN party.residential_types.description IS 'The description for the residential type';
+
+
+CREATE TABLE party.role_types (
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  sort_index   INTEGER      NOT NULL,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+  party_types  VARCHAR(310) NOT NULL,
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX role_types_locale_id_ix ON party.role_types(locale_id);
+
+COMMENT ON COLUMN party.role_types.code IS 'The code for the role type';
+
+COMMENT ON COLUMN party.role_types.locale_id IS 'The Unicode locale identifier for the role type';
+
+COMMENT ON COLUMN party.role_types.sort_index IS 'The sort index for the role type';
+
+COMMENT ON COLUMN party.role_types.name IS 'The name of the role type';
+
+COMMENT ON COLUMN party.role_types.description IS 'The description for the role type';
+
+COMMENT ON COLUMN party.role_types.party_types IS 'The comma-delimited list of codes for the party types the role type is associated with';
+
+
+CREATE TABLE party.role_purposes (
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  sort_index   INTEGER      NOT NULL,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX role_purposes_locale_id_ix ON party.role_purposes(locale_id);
+
+COMMENT ON COLUMN party.role_purposes.code IS 'The code for the role purpose';
+
+COMMENT ON COLUMN party.role_purposes.locale_id IS 'The Unicode locale identifier for the role purpose';
+
+COMMENT ON COLUMN party.role_purposes.sort_index IS 'The sort index for the role purpose';
+
+COMMENT ON COLUMN party.role_purposes.name IS 'The name of the role purpose';
+
+COMMENT ON COLUMN party.role_purposes.description IS 'The description for the role purpose';
 
 
 CREATE TABLE party.sources_of_funds (
@@ -868,7 +868,28 @@ COMMENT ON COLUMN party.persons.title IS 'The optional code for the title for th
 
 
 
+CREATE TABLE party.attributes (
+  created      TIMESTAMP    NOT NULL,
+  party_id     UUID         NOT NULL,
+  type         VARCHAR(30)  NOT NULL,
+  updated      TIMESTAMP,
+  string_value VARCHAR(200),
 
+  PRIMARY KEY (party_id, type),
+  CONSTRAINT attributes_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX attributes_party_id_ix ON party.attributes(party_id);
+
+COMMENT ON COLUMN party.attributes.created IS 'The date and time the attribute was created';
+
+COMMENT ON COLUMN party.attributes.party_id IS 'The Universally Unique Identifier (UUID) for the party the attribute is associated with';
+
+COMMENT ON COLUMN party.attributes.type IS 'The code for the attribute type';
+
+COMMENT ON COLUMN party.attributes.updated IS 'The date and time the attribute was last updated';
+
+COMMENT ON COLUMN party.attributes.string_value IS 'The string value for the attribute';
 
 
 CREATE TABLE party.contact_mechanisms (
@@ -929,54 +950,6 @@ COMMENT ON COLUMN party.identity_documents.party_id IS 'The Universally Unique I
 COMMENT ON COLUMN party.identity_documents.type IS 'The code for the identity document type';
 
 COMMENT ON COLUMN party.identity_documents.updated IS 'The date and time the identity document was last updated';
-
-
-CREATE TABLE party.party_attributes (
-   created      TIMESTAMP    NOT NULL,
-   party_id     UUID         NOT NULL,
-   type         VARCHAR(30)  NOT NULL,
-   updated      TIMESTAMP,
-   string_value VARCHAR(200),
-
-   PRIMARY KEY (party_id, type),
-   CONSTRAINT party_attributes_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
-);
-
-CREATE INDEX party_attributes_party_id_ix ON party.party_attributes(party_id);
-
-COMMENT ON COLUMN party.party_attributes.created IS 'The date and time the party attribute was created';
-
-COMMENT ON COLUMN party.party_attributes.party_id IS 'The Universally Unique Identifier (UUID) for the party the party attribute is associated with';
-
-COMMENT ON COLUMN party.party_attributes.type IS 'The code for the party attribute type';
-
-COMMENT ON COLUMN party.party_attributes.updated IS 'The date and time the party attribute was last updated';
-
-COMMENT ON COLUMN party.party_attributes.string_value IS 'The string value for the party attribute';
-
-
-CREATE TABLE party.party_roles (
-  created  TIMESTAMP    NOT NULL,
-  party_id UUID         NOT NULL,
-  purpose  VARCHAR(30),
-  type     VARCHAR(30)  NOT NULL,
-  updated  TIMESTAMP,
-
-  PRIMARY KEY (party_id, type),
-  CONSTRAINT party_roles_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
-);
-
-CREATE INDEX party_roles_party_id_ix ON party.party_roles(party_id);
-
-COMMENT ON COLUMN party.party_roles.created IS 'The date and time the party role was created';
-
-COMMENT ON COLUMN party.party_roles.party_id IS 'The Universally Unique Identifier (UUID) for the party the party role is associated with';
-
-COMMENT ON COLUMN party.party_roles.purpose IS 'The optional code for the party role purpose';
-
-COMMENT ON COLUMN party.party_roles.type IS 'The code for the party role type';
-
-COMMENT ON COLUMN party.party_roles.updated IS 'The date and time the party role was last updated';
 
 
 CREATE TABLE party.physical_addresses (
@@ -1097,6 +1070,63 @@ COMMENT ON COLUMN party.preferences.type IS 'The code for the preference type';
 COMMENT ON COLUMN party.preferences.updated IS 'The date and time the preference was last updated';
 
 COMMENT ON COLUMN party.preferences.value IS 'The value for the preference';
+
+
+CREATE TABLE party.residence_permits (
+  country_of_issue VARCHAR(2)  NOT NULL,
+  created          TIMESTAMP   NOT NULL,
+  date_of_expiry   DATE,
+  date_of_issue    DATE        NOT NULL,
+  number           VARCHAR(30) NOT NULL,
+  party_id         UUID        NOT NULL,
+  type             VARCHAR(30) NOT NULL,
+  updated          TIMESTAMP,
+
+  PRIMARY KEY (party_id, type, country_of_issue, date_of_issue),
+  CONSTRAINT residence_permits_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX residence_permits_party_id_ix ON party.residence_permits(party_id);
+
+COMMENT ON COLUMN party.residence_permits.country_of_issue IS 'The ISO 3166-1 alpha-2 code for the country of issue for the residence permit';
+
+COMMENT ON COLUMN party.residence_permits.created IS 'The date and time the residence permit was created';
+
+COMMENT ON COLUMN party.residence_permits.date_of_expiry IS 'The optional date of expiry for the residence permit';
+
+COMMENT ON COLUMN party.residence_permits.date_of_issue IS 'The date of issue for the residence permit';
+
+COMMENT ON COLUMN party.residence_permits.number IS 'The number for the residence permit';
+
+COMMENT ON COLUMN party.residence_permits.party_id IS 'The Universally Unique Identifier (UUID) for the party the residence permit is associated with';
+
+COMMENT ON COLUMN party.residence_permits.type IS 'The code for the residence permit type';
+
+COMMENT ON COLUMN party.residence_permits.updated IS 'The date and time the residence permit was last updated';
+
+
+CREATE TABLE party.roles (
+  created  TIMESTAMP    NOT NULL,
+  party_id UUID         NOT NULL,
+  purpose  VARCHAR(30),
+  type     VARCHAR(30)  NOT NULL,
+  updated  TIMESTAMP,
+
+  PRIMARY KEY (party_id, type),
+  CONSTRAINT roles_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX roles_party_id_ix ON party.roles(party_id);
+
+COMMENT ON COLUMN party.roles.created IS 'The date and time the role was created';
+
+COMMENT ON COLUMN party.roles.party_id IS 'The Universally Unique Identifier (UUID) for the party the role is associated with';
+
+COMMENT ON COLUMN party.roles.purpose IS 'The optional code for the role purpose';
+
+COMMENT ON COLUMN party.roles.type IS 'The code for the role type';
+
+COMMENT ON COLUMN party.roles.updated IS 'The date and time the role was last updated';
 
 
 CREATE TABLE party.tax_numbers (
@@ -1648,25 +1678,25 @@ INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
-INSERT INTO party.party_attribute_type_categories (code, locale_id, sort_index, name, description)
+INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
   VALUES ('anthropometric_measurements', 'en-US', 0, 'Anthropometric Measurements', 'Anthropometric Measurements');
 
-INSERT INTO party.party_attribute_type_categories (code, locale_id, sort_index, name, description)
+INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
   VALUES ('anthropometric_measurements', 'en-ZA', 0, 'Anthropometric Measurements', 'Anthropometric Measurements');
 
 
-INSERT INTO party.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('anthropometric_measurements','bmi', 'en-US', 0, 'Body Mass Index', 'Body Mass Index', 'person');
-INSERT INTO party.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('anthropometric_measurements','height', 'en-US', 0, 'Height', 'Height', 'person');
-INSERT INTO party.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('anthropometric_measurements','weight', 'en-US', 0, 'Weight', 'Weight', 'person');
 
-INSERT INTO party.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('anthropometric_measurements','bmi', 'en-ZA', 0, 'Body Mass Index', 'Body Mass Index', 'person');
-INSERT INTO party.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('anthropometric_measurements','height', 'en-ZA', 0, 'Height', 'Height', 'person');
-INSERT INTO party.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('anthropometric_measurements','weight', 'en-ZA', 0, 'Weight', 'Weight', 'person');
 
 
@@ -1688,29 +1718,29 @@ INSERT INTO party.preference_types (category, code, locale_id, sort_index, name,
   VALUES ('correspondence', 'time_to_contact', 'en-ZA', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
 
 
-INSERT INTO party.party_role_purposes (code, locale_id, sort_index, name, description)
+INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
   VALUES ('test', 'en-US', 1, 'Test', 'Test');
 
-INSERT INTO party.party_role_purposes (code, locale_id, sort_index, name, description)
+INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
   VALUES ('test', 'en-ZA', 1, 'Test', 'Test');
 
 
-INSERT INTO party.party_role_types (code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('employer', 'en-US', 1, 'Employer', 'Employer', 'organization,person');
-INSERT INTO party.party_role_types (code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('employee', 'en-US', 2, 'Employee', 'Employee', 'person');
-INSERT INTO party.party_role_types (code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('supplier', 'en-US', 3, 'Supplier', 'Supplier', 'organization,person');
-INSERT INTO party.party_role_types (code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('vendor', 'en-US', 4, 'Vendor', 'Vendor', 'organization,person');
 
-INSERT INTO party.party_role_types (code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('employer', 'en-ZA', 1, 'Employer', 'Employer', 'organization,person');
-INSERT INTO party.party_role_types (code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('employee', 'en-ZA', 2, 'Employee', 'Employee', 'person');
-INSERT INTO party.party_role_types (code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('supplier', 'en-ZA', 3, 'Supplier', 'Supplier', 'organization,person');
-INSERT INTO party.party_role_types (code, locale_id, sort_index, name, description, party_types)
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('vendor', 'en-ZA', 4, 'Vendor', 'Vendor', 'organization,person');
 
 

@@ -41,6 +41,12 @@ public class PartyReferenceService implements IPartyReferenceService {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(PartyReferenceService.class);
 
+  /** The Party Attribute Type Category Repository. */
+  private final AttributeTypeCategoryRepository attributeTypeCategoryRepository;
+
+  /** The Party Attribute Type Repository. */
+  private final AttributeTypeRepository attributeTypeRepository;
+
   /** The Contact Mechanism Purpose Repository. */
   private final ContactMechanismPurposeRepository contactMechanismPurposeRepository;
 
@@ -71,24 +77,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Occupation Repository. */
   private final OccupationRepository occupationRepository;
 
-  /** The Party Attribute Type Category Repository. */
-  private final PartyAttributeTypeCategoryRepository partyAttributeTypeCategoryRepository;
-
-  /** The Party Attribute Type Repository. */
-  private final PartyAttributeTypeRepository partyAttributeTypeRepository;
-
-  /** The Preference Type Category Repository. */
-  private final PreferenceTypeCategoryRepository partyPreferenceTypeCategoryRepository;
-
-  /** The Preference Type Repository */
-  private final PreferenceTypeRepository partyPreferenceTypeRepository;
-
-  /** The Party Role Purpose Repository. */
-  private final PartyRolePurposeRepository partyRolePurposeRepository;
-
-  /** The Party Role Type Repository. */
-  private final PartyRoleTypeRepository partyRoleTypeRepository;
-
   /** The Physical Address Purpose Repository. */
   private final PhysicalAddressPurposeRepository physicalAddressPurposeRepository;
 
@@ -97,6 +85,12 @@ public class PartyReferenceService implements IPartyReferenceService {
 
   /** The Physical Address Type Repository. */
   private final PhysicalAddressTypeRepository physicalAddressTypeRepository;
+
+  /** The Preference Type Category Repository. */
+  private final PreferenceTypeCategoryRepository preferenceTypeCategoryRepository;
+
+  /** The Preference Type Repository */
+  private final PreferenceTypeRepository preferenceTypeRepository;
 
   /** The Race Repository. */
   private final RaceRepository raceRepository;
@@ -109,6 +103,12 @@ public class PartyReferenceService implements IPartyReferenceService {
 
   /** The Residential Type Repository. */
   private final ResidentialTypeRepository residentialTypeRepository;
+
+  /** The Party Role Purpose Repository. */
+  private final RolePurposeRepository rolePurposeRepository;
+
+  /** The Party Role Type Repository. */
+  private final RoleTypeRepository roleTypeRepository;
 
   /** The Sources of Funds Repository. */
   private final SourceOfFundsRepository sourceOfFundsRepository;
@@ -142,15 +142,15 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param marriageTypeRepository the Marriage Type Repository
    * @param nextOfKinTypeRepository the Next Of Kin Repository
    * @param occupationRepository the Occupation Repository
-   * @param partyAttributeTypeCategoryRepository the Party Attribute Type Category Repository
-   * @param partyAttributeTypeRepository the Party Attribute Type Repository
-   * @param partyPreferenceTypeCategoryRepository the Preference Type Category Repository
-   * @param partyPreferenceTypeRepository the Preference Type Repository
-   * @param partyRolePurposeRepository the Party Role Purpose Repository
-   * @param partyRoleTypeRepository the Party Role Type Repository
+   * @param attributeTypeCategoryRepository the Party Attribute Type Category Repository
+   * @param attributeTypeRepository the Party Attribute Type Repository
+   * @param rolePurposeRepository the Party Role Purpose Repository
+   * @param roleTypeRepository the Party Role Type Repository
    * @param physicalAddressPurposeRepository the Physical Address Purpose Repository
    * @param physicalAddressRoleRepository the Physical Address Role Repository
    * @param physicalAddressTypeRepository the Physical Address Type Repository
+   * @param preferenceTypeCategoryRepository the Preference Type Category Repository
+   * @param preferenceTypeRepository the Preference Type Repository
    * @param raceRepository the Race Repository
    * @param residencePermitTypeRepository the Residence Permit Type Repository*
    * @param residencyStatusRepository the Residency Status Repository
@@ -172,15 +172,15 @@ public class PartyReferenceService implements IPartyReferenceService {
       MarriageTypeRepository marriageTypeRepository,
       NextOfKinTypeRepository nextOfKinTypeRepository,
       OccupationRepository occupationRepository,
-      PartyAttributeTypeCategoryRepository partyAttributeTypeCategoryRepository,
-      PartyAttributeTypeRepository partyAttributeTypeRepository,
-      PreferenceTypeCategoryRepository partyPreferenceTypeCategoryRepository,
-      PreferenceTypeRepository partyPreferenceTypeRepository,
-      PartyRolePurposeRepository partyRolePurposeRepository,
-      PartyRoleTypeRepository partyRoleTypeRepository,
+      AttributeTypeCategoryRepository attributeTypeCategoryRepository,
+      AttributeTypeRepository attributeTypeRepository,
+      RolePurposeRepository rolePurposeRepository,
+      RoleTypeRepository roleTypeRepository,
       PhysicalAddressPurposeRepository physicalAddressPurposeRepository,
       PhysicalAddressRoleRepository physicalAddressRoleRepository,
       PhysicalAddressTypeRepository physicalAddressTypeRepository,
+      PreferenceTypeCategoryRepository preferenceTypeCategoryRepository,
+      PreferenceTypeRepository preferenceTypeRepository,
       RaceRepository raceRepository,
       ResidencePermitTypeRepository residencePermitTypeRepository,
       ResidencyStatusRepository residencyStatusRepository,
@@ -200,15 +200,15 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.marriageTypeRepository = marriageTypeRepository;
     this.nextOfKinTypeRepository = nextOfKinTypeRepository;
     this.occupationRepository = occupationRepository;
-    this.partyAttributeTypeCategoryRepository = partyAttributeTypeCategoryRepository;
-    this.partyAttributeTypeRepository = partyAttributeTypeRepository;
-    this.partyPreferenceTypeCategoryRepository = partyPreferenceTypeCategoryRepository;
-    this.partyPreferenceTypeRepository = partyPreferenceTypeRepository;
-    this.partyRolePurposeRepository = partyRolePurposeRepository;
-    this.partyRoleTypeRepository = partyRoleTypeRepository;
+    this.attributeTypeCategoryRepository = attributeTypeCategoryRepository;
+    this.attributeTypeRepository = attributeTypeRepository;
+    this.rolePurposeRepository = rolePurposeRepository;
+    this.roleTypeRepository = roleTypeRepository;
     this.physicalAddressPurposeRepository = physicalAddressPurposeRepository;
     this.physicalAddressRoleRepository = physicalAddressRoleRepository;
     this.physicalAddressTypeRepository = physicalAddressTypeRepository;
+    this.preferenceTypeCategoryRepository = preferenceTypeCategoryRepository;
+    this.preferenceTypeRepository = preferenceTypeRepository;
     this.raceRepository = raceRepository;
     this.residencePermitTypeRepository = residencePermitTypeRepository;
     this.residencyStatusRepository = residencyStatusRepository;
@@ -217,6 +217,75 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.taxNumberTypeRepository = taxNumberTypeRepository;
     this.timeToContactRepository = timeToContactRepository;
     this.titleRepository = titleRepository;
+  }
+
+  /**
+   * Retrieve all the attribute type categories.
+   *
+   * @return the attribute type categories
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'attributeTypeCategories.ALL'")
+  public List<AttributeTypeCategory> getAttributeTypeCategories()
+      throws ServiceUnavailableException {
+    return getAttributeTypeCategories(null);
+  }
+
+  /**
+   * Retrieve the attribute type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     categories for or <b>null</b> to retrieve the attribute type categories for all locales
+   * @return the attribute type categories
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'attributeTypeCategories.' + #localeId")
+  public List<AttributeTypeCategory> getAttributeTypeCategories(String localeId)
+      throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return attributeTypeCategoryRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return attributeTypeCategoryRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the attribute type categories", e);
+    }
+  }
+
+  /**
+   * Retrieve all the attribute types.
+   *
+   * @return the attribute types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'attributeTypes.ALL'")
+  public List<AttributeType> getAttributeTypes() throws ServiceUnavailableException {
+    return getAttributeTypes(null);
+  }
+
+  /**
+   * Retrieve the attribute types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute types
+   *     for or <b>null</b> to retrieve the attribute types for all locales
+   * @return the attribute types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'attributeTypes.' + #localeId")
+  public List<AttributeType> getAttributeTypes(String localeId) throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return attributeTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return attributeTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the attribute types", e);
+    }
   }
 
   /**
@@ -560,146 +629,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the party attribute type categories.
-   *
-   * @return the party attribute type categories
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'partyAttributeTypeCategories.ALL'")
-  public List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories()
-      throws ServiceUnavailableException {
-    return getPartyAttributeTypeCategories(null);
-  }
-
-  /**
-   * Retrieve the party attribute type categories.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
-   *     type categories for or <b>null</b> to retrieve the party attribute type categories for all
-   *     locales
-   * @return the party attribute type categories
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'partyAttributeTypeCategories.' + #localeId")
-  public List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories(String localeId)
-      throws ServiceUnavailableException {
-    try {
-      if (!StringUtils.hasText(localeId)) {
-        return partyAttributeTypeCategoryRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return partyAttributeTypeCategoryRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the party attribute type categories", e);
-    }
-  }
-
-  /**
-   * Retrieve all the party attribute types.
-   *
-   * @return the party attribute types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'partyAttributeTypes.ALL'")
-  public List<PartyAttributeType> getPartyAttributeTypes() throws ServiceUnavailableException {
-    return getPartyAttributeTypes(null);
-  }
-
-  /**
-   * Retrieve the party attribute types.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
-   *     types for or <b>null</b> to retrieve the party attribute types for all locales
-   * @return the party attribute types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'partyAttributeTypes.' + #localeId")
-  public List<PartyAttributeType> getPartyAttributeTypes(String localeId)
-      throws ServiceUnavailableException {
-    try {
-      if (!StringUtils.hasText(localeId)) {
-        return partyAttributeTypeRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return partyAttributeTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the party attribute types", e);
-    }
-  }
-
-  /**
-   * Retrieve all the party role purposes.
-   *
-   * @return the party role purposes
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'partyRolePurposes.ALL'")
-  public List<PartyRolePurpose> getPartyRolePurposes() throws ServiceUnavailableException {
-    return getPartyRolePurposes(null);
-  }
-
-  /**
-   * Retrieve the party role purposes.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party role
-   *     purposes for or <b>null</b> to retrieve the party role purposes for all locales
-   * @return the party role purposes
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'partyRolePurposes.' + #localeId")
-  public List<PartyRolePurpose> getPartyRolePurposes(String localeId)
-      throws ServiceUnavailableException {
-    try {
-      if (!StringUtils.hasText(localeId)) {
-        return partyRolePurposeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return partyRolePurposeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the party role purposes", e);
-    }
-  }
-
-  /**
-   * Retrieve all the party role types.
-   *
-   * @return the party role types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'partyRoleTypes.ALL'")
-  public List<PartyRoleType> getPartyRoleTypes() throws ServiceUnavailableException {
-    return getPartyRoleTypes(null);
-  }
-
-  /**
-   * Retrieve the party role types.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
-   *     for or <b>null</b> to retrieve the party role types for all locales
-   * @return the party role types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'partyRoleTypes.' + #localeId")
-  public List<PartyRoleType> getPartyRoleTypes(String localeId) throws ServiceUnavailableException {
-    try {
-      if (!StringUtils.hasText(localeId)) {
-        return partyRoleTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return partyRoleTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the party role types", e);
-    }
-  }
-
-  /**
    * Retrieve all the physical address purposes.
    *
    * @return the physical address purposes
@@ -830,10 +759,10 @@ public class PartyReferenceService implements IPartyReferenceService {
       throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
-        return partyPreferenceTypeCategoryRepository.findAll(
+        return preferenceTypeCategoryRepository.findAll(
             Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return partyPreferenceTypeCategoryRepository.findByLocaleIdIgnoreCase(
+        return preferenceTypeCategoryRepository.findByLocaleIdIgnoreCase(
             localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
@@ -865,10 +794,9 @@ public class PartyReferenceService implements IPartyReferenceService {
       throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
-        return partyPreferenceTypeRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+        return preferenceTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return partyPreferenceTypeRepository.findByLocaleIdIgnoreCase(
+        return preferenceTypeRepository.findByLocaleIdIgnoreCase(
             localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
@@ -1013,6 +941,72 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
+   * Retrieve all the role purposes.
+   *
+   * @return the role purposes
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'rolePurposes.ALL'")
+  public List<RolePurpose> getRolePurposes() throws ServiceUnavailableException {
+    return getRolePurposes(null);
+  }
+
+  /**
+   * Retrieve the role purposes.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role purposes for
+   *     or <b>null</b> to retrieve the role purposes for all locales
+   * @return the role purposes
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'rolePurposes.' + #localeId")
+  public List<RolePurpose> getRolePurposes(String localeId) throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return rolePurposeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return rolePurposeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the role purposes", e);
+    }
+  }
+
+  /**
+   * Retrieve all the role types.
+   *
+   * @return the role types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'roleTypes.ALL'")
+  public List<RoleType> getRoleTypes() throws ServiceUnavailableException {
+    return getRoleTypes(null);
+  }
+
+  /**
+   * Retrieve the role types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
+   *     <b>null</b> to retrieve the role types for all locales
+   * @return the role types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'roleTypes.' + #localeId")
+  public List<RoleType> getRoleTypes(String localeId) throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return roleTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return roleTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the role types", e);
+    }
+  }
+
+  /**
    * Retrieve all the sources of funds.
    *
    * @return the sources of funds
@@ -1142,6 +1136,47 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the titles", e);
     }
+  }
+
+  /**
+   * Check whether the code is a valid code for a attribute type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param attributeTypeCode the code for the attribute type
+   * @return <b>true</b> if the code is a valid code for a attribute type or <b>false</b> otherwise
+   */
+  @Override
+  public boolean isValidAttributeType(String partyTypeCode, String attributeTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(attributeTypeCode)) {
+      return false;
+    }
+
+    return self.getAttributeTypes().stream()
+        .anyMatch(
+            attributeType ->
+                (attributeType.getCode().equals(attributeTypeCode)
+                    && attributeType.isValidForPartyType(partyTypeCode)));
+  }
+
+  /**
+   * Check whether the code is a valid code for a attribute type category.
+   *
+   * @param attributeTypeCategoryCode the code for the attribute type category
+   * @return <b>true</b> if the code is a valid code for a attribute type category or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidAttributeTypeCategory(String attributeTypeCategoryCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(attributeTypeCategoryCode)) {
+      return false;
+    }
+
+    return self.getAttributeTypeCategories().stream()
+        .anyMatch(
+            attributeTypeCategory ->
+                attributeTypeCategory.getCode().equals(attributeTypeCategoryCode));
   }
 
   /**
@@ -1345,87 +1380,6 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     return self.getOccupations().stream()
         .anyMatch(occupation -> occupation.getCode().equals(occupationCode));
-  }
-
-  /**
-   * Check whether the code is a valid code for a party attribute type for the party type.
-   *
-   * @param partyTypeCode the party type code
-   * @param partyAttributeTypeCode the code for the party attribute type
-   * @return <b>true</b> if the code is a valid code for a party attribute type or <b>false</b>
-   *     otherwise
-   */
-  @Override
-  public boolean isValidPartyAttributeType(String partyTypeCode, String partyAttributeTypeCode)
-      throws ServiceUnavailableException {
-    if (!StringUtils.hasText(partyAttributeTypeCode)) {
-      return false;
-    }
-
-    return self.getPartyAttributeTypes().stream()
-        .anyMatch(
-            partyAttributeType ->
-                (partyAttributeType.getCode().equals(partyAttributeTypeCode)
-                    && partyAttributeType.isValidForPartyType(partyTypeCode)));
-  }
-
-  /**
-   * Check whether the code is a valid code for a party attribute type category.
-   *
-   * @param partyAttributeTypeCategoryCode the code for the party attribute type category
-   * @return <b>true</b> if the code is a valid code for a party attribute type category or
-   *     <b>false</b> otherwise
-   */
-  @Override
-  public boolean isValidPartyAttributeTypeCategory(String partyAttributeTypeCategoryCode)
-      throws ServiceUnavailableException {
-    if (!StringUtils.hasText(partyAttributeTypeCategoryCode)) {
-      return false;
-    }
-
-    return self.getPartyAttributeTypeCategories().stream()
-        .anyMatch(
-            partyAttributeTypeCategory ->
-                partyAttributeTypeCategory.getCode().equals(partyAttributeTypeCategoryCode));
-  }
-
-  /**
-   * Check whether the code is a valid code for a party role purpose.
-   *
-   * @param partyRolePurposeCode the code for the party role purpose
-   * @return <b>true</b> if the code is a valid code for a party role purpose or <b>false</b>
-   *     otherwise
-   */
-  @Override
-  public boolean isValidPartyRolePurpose(String partyRolePurposeCode)
-      throws ServiceUnavailableException {
-    if (!StringUtils.hasText(partyRolePurposeCode)) {
-      return false;
-    }
-
-    return self.getPartyRolePurposes().stream()
-        .anyMatch(partyRolePurpose -> partyRolePurpose.getCode().equals(partyRolePurposeCode));
-  }
-
-  /**
-   * Check whether the code is a valid code for a party role type for the party type.
-   *
-   * @param partyTypeCode the party type code
-   * @param partyRoleTypeCode the code for the party role type
-   * @return <b>true</b> if the code is a valid code for a party role type or <b>false</b> otherwise
-   */
-  @Override
-  public boolean isValidPartyRoleType(String partyTypeCode, String partyRoleTypeCode)
-      throws ServiceUnavailableException {
-    if (!StringUtils.hasText(partyRoleTypeCode)) {
-      return false;
-    }
-
-    return self.getPartyRoleTypes().stream()
-        .anyMatch(
-            partyRoleType ->
-                (partyRoleType.getCode().equals(partyRoleTypeCode)
-                    && partyRoleType.isValidForPartyType(partyTypeCode)));
   }
 
   /**
@@ -1639,6 +1593,43 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     return self.getResidentialTypes().stream()
         .anyMatch(residentialType -> residentialType.getCode().equals(residentialTypeCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a role purpose.
+   *
+   * @param rolePurposeCode the code for the role purpose
+   * @return <b>true</b> if the code is a valid code for a role purpose or <b>false</b> otherwise
+   */
+  @Override
+  public boolean isValidRolePurpose(String rolePurposeCode) throws ServiceUnavailableException {
+    if (!StringUtils.hasText(rolePurposeCode)) {
+      return false;
+    }
+
+    return self.getRolePurposes().stream()
+        .anyMatch(rolePurpose -> rolePurpose.getCode().equals(rolePurposeCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a role type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param roleTypeCode the code for the role type
+   * @return <b>true</b> if the code is a valid code for a role type or <b>false</b> otherwise
+   */
+  @Override
+  public boolean isValidRoleType(String partyTypeCode, String roleTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(roleTypeCode)) {
+      return false;
+    }
+
+    return self.getRoleTypes().stream()
+        .anyMatch(
+            roleType ->
+                (roleType.getCode().equals(roleTypeCode)
+                    && roleType.isValidForPartyType(partyTypeCode)));
   }
 
   /**

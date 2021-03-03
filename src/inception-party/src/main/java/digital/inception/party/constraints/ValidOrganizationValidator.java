@@ -20,9 +20,9 @@ import digital.inception.party.ContactMechanism;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.Organization;
-import digital.inception.party.PartyRole;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.Preference;
+import digital.inception.party.Role;
 import digital.inception.party.TaxNumber;
 import digital.inception.reference.IReferenceService;
 import javax.validation.ConstraintValidator;
@@ -132,14 +132,14 @@ public class ValidOrganizationValidator
         }
       }
 
-      // Validate party roles
-      for (PartyRole partyRole : organization.getRoles()) {
-        if (!partyReferenceService.isValidPartyRoleType(
-            organization.getPartyType().code(), partyRole.getType())) {
+      // Validate roles
+      for (Role role : organization.getRoles()) {
+        if (!partyReferenceService.isValidRoleType(
+            organization.getPartyType().code(), role.getType())) {
           hibernateConstraintValidatorContext
-              .addMessageParameter("type", partyRole.getType())
+              .addMessageParameter("type", role.getType())
               .buildConstraintViolationWithTemplate(
-                  "{digital.inception.party.constraints.ValidOrganization.invalidPartyRoleTypeCode.message}")
+                  "{digital.inception.party.constraints.ValidOrganization.invalidRoleTypeCode.message}")
               .addConstraintViolation();
 
           isValid = false;

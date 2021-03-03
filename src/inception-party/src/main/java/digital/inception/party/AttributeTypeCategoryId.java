@@ -20,32 +20,32 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>PartyAttributeTypeId</b> class implements the ID class for the <b>PartyAttributeType</b>
- * class.
+ * The <b>AttributeTypeCategoryId</b> class implements the ID class for the <b>
+ * AttributeTypeCategory</b> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class PartyAttributeTypeId implements Serializable {
+public class AttributeTypeCategoryId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the party attribute type. */
+  /** The code for the attribute type category. */
   private String code;
 
-  /** The Unicode locale identifier for the party attribute type. */
+  /** The Unicode locale identifier for the attribute type category. */
   private String localeId;
 
-  /** Constructs a new <b>PartyAttributeTypeId</b>. */
-  public PartyAttributeTypeId() {}
+  /** Constructs a new <b>AttributeTypeCategoryId</b>. */
+  public AttributeTypeCategoryId() {}
 
   /**
-   * Constructs a new <b>PartyAttributeTypeId</b>.
+   * Constructs a new <b>AttributeTypeCategoryId</b>.
    *
-   * @param code the code for the party attribute type
-   * @param localeId the Unicode locale identifier for the party attribute type
+   * @param code the code for the attribute type category
+   * @param localeId the Unicode locale identifier for the attribute type category
    */
-  public PartyAttributeTypeId(String code, String localeId) {
+  public AttributeTypeCategoryId(String code, String localeId) {
     this.code = code;
     this.localeId = localeId;
   }
@@ -70,7 +70,7 @@ public class PartyAttributeTypeId implements Serializable {
       return false;
     }
 
-    PartyAttributeTypeId other = (PartyAttributeTypeId) object;
+    AttributeTypeCategoryId other = (AttributeTypeCategoryId) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
