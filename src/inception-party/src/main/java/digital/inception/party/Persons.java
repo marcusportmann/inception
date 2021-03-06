@@ -170,7 +170,7 @@ public class Persons implements Serializable {
   /**
    * Returns the optional method used to sort the persons e.g. by name.
    *
-   * @return the optional method used to sort the persons e.g. by name
+   * @return the optional method used to sort the persons
    */
   public PersonSortBy getSortBy() {
     return sortBy;

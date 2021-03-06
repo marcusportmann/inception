@@ -16,10 +16,10 @@
 
 package demo.model;
 
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
+import digital.inception.core.sorting.SortDirection;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -161,14 +161,15 @@ public class VehicleService implements IVehicleService {
       throw new InvalidArgumentException("pageSize");
     }
 
-    PageRequest pageRequest;
-
-    if ((pageIndex != null) && (pageSize != null)) {
-      pageRequest =
-          PageRequest.of(pageIndex, (pageSize > MAX_FILTERED_CARS) ? MAX_FILTERED_CARS : pageSize);
-    } else {
-      pageRequest = PageRequest.of(0, MAX_FILTERED_CARS);
+    if (pageIndex == null) {
+      pageIndex = 0;
     }
+
+    if (pageSize == null) {
+      pageSize = MAX_FILTERED_CARS;
+    }
+
+    PageRequest pageRequest = PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_CARS));
 
     try {
 
@@ -207,15 +208,15 @@ public class VehicleService implements IVehicleService {
       throw new InvalidArgumentException("pageSize");
     }
 
-    PageRequest pageRequest;
-
-    if ((pageIndex != null) && (pageSize != null)) {
-      pageRequest =
-          PageRequest.of(
-              pageIndex, (pageSize > MAX_FILTERED_VEHICLES) ? MAX_FILTERED_VEHICLES : pageSize);
-    } else {
-      pageRequest = PageRequest.of(0, MAX_FILTERED_VEHICLES);
+    if (pageIndex == null) {
+      pageIndex = 0;
     }
+
+    if (pageSize == null) {
+      pageSize = MAX_FILTERED_VEHICLES;
+    }
+
+    PageRequest pageRequest = PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_VEHICLES));
 
     try {
 

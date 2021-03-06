@@ -318,14 +318,14 @@ public class PartyService implements IPartyService {
       }
 
       if (pageSize == null) {
-        pageSize = MAX_FILTERED_PERSONS;
+        pageSize = MAX_FILTERED_ORGANISATIONS;
       }
 
       if (sortBy == OrganizationSortBy.NAME) {
         pageRequest =
             PageRequest.of(
                 pageIndex,
-                (pageSize > MAX_FILTERED_ORGANISATIONS) ? MAX_FILTERED_ORGANISATIONS : pageSize,
+                Math.min(pageSize, MAX_FILTERED_ORGANISATIONS),
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
@@ -334,7 +334,7 @@ public class PartyService implements IPartyService {
         pageRequest =
             PageRequest.of(
                 pageIndex,
-                (pageSize > MAX_FILTERED_ORGANISATIONS) ? MAX_FILTERED_ORGANISATIONS : pageSize,
+                Math.min(pageSize, MAX_FILTERED_ORGANISATIONS),
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
@@ -385,15 +385,15 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("pageSize");
     }
 
-    PageRequest pageRequest;
-
-    if ((pageIndex != null) && (pageSize != null)) {
-      pageRequest =
-          PageRequest.of(
-              pageIndex, (pageSize > MAX_FILTERED_PARTIES) ? MAX_FILTERED_PARTIES : pageSize);
-    } else {
-      pageRequest = PageRequest.of(0, MAX_FILTERED_PARTIES);
+    if (pageIndex == null) {
+      pageIndex = 0;
     }
+
+    if (pageSize == null) {
+      pageSize = MAX_FILTERED_PARTIES;
+    }
+
+    PageRequest pageRequest = PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_PARTIES));
 
     try {
 
@@ -522,7 +522,7 @@ public class PartyService implements IPartyService {
         pageRequest =
             PageRequest.of(
                 pageIndex,
-                (pageSize > MAX_FILTERED_PERSONS) ? MAX_FILTERED_PERSONS : pageSize,
+                Math.min(pageSize, MAX_FILTERED_PERSONS),
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
@@ -531,7 +531,7 @@ public class PartyService implements IPartyService {
         pageRequest =
             PageRequest.of(
                 pageIndex,
-                (pageSize > MAX_FILTERED_PERSONS) ? MAX_FILTERED_PERSONS : pageSize,
+                Math.min(pageSize, MAX_FILTERED_PERSONS),
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,

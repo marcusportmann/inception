@@ -385,8 +385,8 @@ public class InternalUserDirectory extends UserDirectoryBase {
    */
   @Override
   public void changePassword(String username, String password, String newPassword)
-      throws AuthenticationFailedException, UserLockedException,
-          ExistingPasswordException, ServiceUnavailableException {
+      throws AuthenticationFailedException, UserLockedException, ExistingPasswordException,
+          ServiceUnavailableException {
     try {
       Optional<User> userOptional =
           getUserRepository()
@@ -427,9 +427,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
           .changePassword(user.getId(), newPasswordHash, 0, Optional.of(passwordExpiry));
 
       getUserRepository().savePasswordInPasswordHistory(user.getId(), newPasswordHash);
-    } catch (AuthenticationFailedException
-        | ExistingPasswordException
-        | UserLockedException e) {
+    } catch (AuthenticationFailedException | ExistingPasswordException | UserLockedException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -806,7 +804,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
       PageRequest pageRequest =
           PageRequest.of(
               pageIndex,
-              (pageSize > maxFilteredGroups) ? maxFilteredGroups : pageSize,
+              Math.min(pageSize, maxFilteredGroups),
               (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
               "name");
 
@@ -946,8 +944,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
       }
 
       PageRequest pageRequest =
-          PageRequest.of(
-              pageIndex, (pageSize > maxFilteredGroupMembers) ? maxFilteredGroupMembers : pageSize);
+          PageRequest.of(pageIndex, Math.min(pageSize, maxFilteredGroupMembers));
 
       Page<String> usernamesForGroupPage;
 
@@ -1210,7 +1207,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
         pageRequest =
             PageRequest.of(
                 pageIndex,
-                (pageSize > maxFilteredUsers) ? maxFilteredUsers : pageSize,
+                Math.min(pageSize, maxFilteredUsers),
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
@@ -1219,7 +1216,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
         pageRequest =
             PageRequest.of(
                 pageIndex,
-                (pageSize > maxFilteredUsers) ? maxFilteredUsers : pageSize,
+                Math.min(pageSize, maxFilteredUsers),
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
@@ -1228,7 +1225,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
         pageRequest =
             PageRequest.of(
                 pageIndex,
-                (pageSize > maxFilteredUsers) ? maxFilteredUsers : pageSize,
+                Math.min(pageSize, maxFilteredUsers),
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,

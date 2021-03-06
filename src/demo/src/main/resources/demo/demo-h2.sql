@@ -397,36 +397,36 @@ INSERT INTO scheduler.jobs (id, name, scheduling_pattern, job_class, enabled, st
 
 INSERT INTO party.parties(id, tenant_id, type, name, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', '204e5b8f-48e7-4354-bd15-753e6543b64d', 'person', 'Joe Bloggs', NOW());
-INSERT INTO party.persons(id, title, initials, given_name, surname, preferred_name, gender, race, date_of_birth, home_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, marriage_type, occupation, residency_status, residential_type, countries_of_tax_residence)
-  VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'mr', 'J', 'Joe', 'Bloggs', 'Joe', 'male', 'white', '1976-03-07', 'EN', 'ZA', 'ZA', 'employed', 'full_time', 'married', 'anc_without_accrual', 'executive', 'citizen', 'owner', 'ZA');
+INSERT INTO party.persons(id, title, initials, given_name, surname, preferred_name, gender, race, date_of_birth, home_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, marriage_type, occupation, residency_status, residential_type)
+  VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'mr', 'J', 'Joe', 'Bloggs', 'Joe', 'male', 'white', '1976-03-07', 'EN', 'ZA', 'ZA', 'other', 'unemployed', 'married', 'anc_without_accrual', 'unemployed', 'citizen', 'cohabitant');
 INSERT INTO party.identity_documents(party_id, type, number, date_of_issue, country_of_issue, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'za_id_book', '7603079236083', '2007-08-04', 'ZA', NOW());
 INSERT INTO party.contact_mechanisms(party_id, type, purpose, value, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'mobile_number', 'personal_mobile_number', '+27835551234', NOW());
 INSERT INTO party.contact_mechanisms(party_id, type, purpose, value, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'email_address', 'personal_email_address', 'joe@demo.com', NOW());
-INSERT INTO party.tax_numbers (party_id, type, number, country_of_issue, created)
-  VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'za_income_tax_number', '1234567890', 'ZA', NOW());
 INSERT INTO party.physical_addresses (id, party_id, type, role, line1, line2, city, region, country, postal_code, purposes, created)
-  VALUES ('14166574-6564-468a-b845-8a5c127a4345', '54166574-6564-468a-b845-8a5c127a4345', 'street', 'residential', '145 Apple Street', 'Fairland', 'Johannesburg', 'GP', 'ZA', '2170', 'residential', NOW());
-INSERT INTO party.preferences(party_id, type, value, created)
-  VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'correspondence_language', 'EN', NOW());
-INSERT INTO party.preferences(party_id, type, value, created)
-  VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'time_to_contact', 'anytime', NOW());
+  VALUES ('14166574-6564-468a-b845-8a5c127a4345', '54166574-6564-468a-b845-8a5c127a4345', 'street', 'residential', '145 Apple Street', 'Fairland', 'Johannesburg', 'GP', 'ZA', '2170', 'billing,correspondence,delivery', NOW());
 
 
 INSERT INTO party.parties (id, tenant_id, type, name, created)
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', '204e5b8f-48e7-4354-bd15-753e6543b64d', 'person', 'Sally Smith', NOW());
 INSERT INTO party.roles (party_id, type, created)
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'employee', NOW());
-INSERT INTO party.persons (id, title, initials, given_name, surname, gender, race, date_of_birth, home_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, occupation, residency_status, residential_type)
-  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'ms', 'S', 'Sally', 'Smith', 'female', 'asian', '1985-05-01', 'EN', 'GB', 'ZA', 'other', 'unemployed', 'single', 'unemployed', 'citizen', 'cohabitant');
+INSERT INTO party.persons (id, title, initials, given_name, surname, gender, race, date_of_birth, home_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, occupation, residency_status, residential_type, countries_of_tax_residence)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'ms', 'S', 'Sally', 'Smith', 'female', 'asian', '1985-05-01', 'EN', 'GB', 'ZA', 'employed', 'full_time', 'single', 'executive', 'citizen', 'owner', 'ZA');
 INSERT INTO party.identity_documents (party_id, type, number, date_of_issue, country_of_issue, created)
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'za_id_card', '8505016777088', '2015-02-17', 'ZA', NOW());
 INSERT INTO party.contact_mechanisms (party_id, type, purpose, value, created)
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'email_address', 'work_email_address', 'sally@demo.com', NOW());
 INSERT INTO party.physical_addresses (id, party_id, type, role, complex_name, complex_unit_number, street_number, street_name, suburb, city, region, country, postal_code, latitude, longitude, purposes, created)
-  VALUES ('10166574-6564-468a-b845-8a5c127a4345', '00166574-6564-468a-b845-8a5c127a4345', 'complex', 'residential', 'Happy Place', '7', '15', 'Fifth Avenue', 'Linden', 'Johannesburg', 'GP', 'ZA', '2195', '-26.137005,', '27.969069', 'residential', NOW());
+  VALUES ('10166574-6564-468a-b845-8a5c127a4345', '00166574-6564-468a-b845-8a5c127a4345', 'complex', 'residential', 'Happy Place', '7', '15', 'Fifth Avenue', 'Linden', 'Johannesburg', 'GP', 'ZA', '2195', '-26.137005', '27.969069', 'billing,correspondence,delivery', NOW());
+INSERT INTO party.preferences(party_id, type, value, created)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'correspondence_language', 'EN', NOW());
+INSERT INTO party.preferences(party_id, type, value, created)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'time_to_contact', 'anytime', NOW());
+INSERT INTO party.tax_numbers (party_id, type, number, country_of_issue, created)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'za_income_tax_number', '1234567890', 'ZA', NOW());
 
 
 

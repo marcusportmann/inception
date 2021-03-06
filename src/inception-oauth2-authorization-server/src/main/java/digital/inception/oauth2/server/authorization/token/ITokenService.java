@@ -31,7 +31,7 @@ public interface ITokenService {
    * Issue an OAuth2 access token for the specified user.
    *
    * @param username the username for the user
-   * @param scopes the optional scope(s) associated to the access token
+   * @param scopes the optional scope(s) for the access token
    * @return the OAuth2 access token
    */
   OAuth2AccessToken issueOAuth2AccessToken(String username, Set<String> scopes)
@@ -41,7 +41,7 @@ public interface ITokenService {
    * Issue an OAuth2 refresh token for the specified user.
    *
    * @param username the username for the user
-   * @param scopes the optional scope(s) associated to the refresh token
+   * @param scopes the optional scope(s) for the refresh token
    * @return the OAuth2 refresh token
    */
   OAuth2RefreshToken issueOAuth2RefreshToken(String username, Set<String> scopes)

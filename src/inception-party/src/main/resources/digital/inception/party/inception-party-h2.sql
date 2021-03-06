@@ -602,6 +602,24 @@ COMMENT ON COLUMN party.role_types.description IS 'The description for the role 
 COMMENT ON COLUMN party.role_types.party_types IS 'The comma-delimited list of codes for the party types the role type is associated with';
 
 
+CREATE TABLE party.role_type_attribute_constraints (
+  role_type      VARCHAR(30)  NOT NULL,
+  attribute_type VARCHAR(30)  NOT NULL,
+  type           VARCHAR(30)  NOT NULL,
+  value          VARCHAR(2000),
+
+  PRIMARY KEY (role_type, attribute_type, type)
+);
+
+COMMENT ON COLUMN party.role_type_attribute_constraints.role_type IS 'The code for the role type';
+
+COMMENT ON COLUMN party.role_type_attribute_constraints.attribute_type IS 'The code for the standard or custom attribute type';
+
+COMMENT ON COLUMN party.role_type_attribute_constraints.type IS 'The attribute constraint type';
+
+COMMENT ON COLUMN party.role_type_attribute_constraints.value IS 'The optional value to apply when validating the attribute value';
+
+
 CREATE TABLE party.role_purposes (
   code         VARCHAR(30)  NOT NULL,
   locale_id    VARCHAR(10)  NOT NULL,
@@ -1742,6 +1760,28 @@ INSERT INTO party.role_types (code, locale_id, sort_index, name, description, pa
   VALUES ('supplier', 'en-ZA', 3, 'Supplier', 'Supplier', 'organization,person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('vendor', 'en-ZA', 4, 'Vendor', 'Vendor', 'organization,person');
+
+
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('employee', 'given_name', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('employee', 'surname', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('employee', 'title', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('employee', 'employee_number', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('employee', 'employee_number', 'min_size', '5');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('employee', 'employee_number', 'max_size', '20');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('employee', 'employee_number', 'pattern', '^[a-zA-Z0-9]*$');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('vendor', 'vendor_number', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('vendor', 'vendor_number', 'size', '10');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('vendor', 'vendor_number', 'pattern', '^[0-9]*$');
 
 
 INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)

@@ -187,7 +187,7 @@ public class Users implements Serializable {
   /**
    * Returns the optional method used to sort the users e.g. by name.
    *
-   * @return the optional method used to sort the users e.g. by name
+   * @return the optional method used to sort the users
    */
   public UserSortBy getSortBy() {
     return sortBy;

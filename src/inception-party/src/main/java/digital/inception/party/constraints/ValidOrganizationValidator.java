@@ -16,6 +16,7 @@
 
 package digital.inception.party.constraints;
 
+import digital.inception.party.Attribute;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
@@ -40,10 +41,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ValidOrganizationValidator
     implements ConstraintValidator<ValidOrganization, Organization> {
 
+  /**
+   * The Party Reference Service.
+   */
   private final IPartyReferenceService partyReferenceService;
 
+  /**
+   * The Reference Service.
+   */
   private final IReferenceService referenceService;
 
+  /**
+   * Constructs a new <b>ValidOrganizationValidator</b>.
+   *
+   * @param partyReferenceService the Party Reference Service
+   * @param referenceService the Reference Service
+   */
   @Autowired
   public ValidOrganizationValidator(
       IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
@@ -81,12 +94,12 @@ public class ValidOrganizationValidator
         }
 
         if (!partyReferenceService.isValidContactMechanismPurpose(
-            organization.getPartyType().code(),
+            organization.getType().code(),
             contactMechanism.getType(),
             contactMechanism.getPurpose())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("contactMechanismPurpose", contactMechanism.getPurpose())
-              .addMessageParameter("partyType", organization.getPartyType().code())
+              .addMessageParameter("partyType", organization.getType().code())
               .buildConstraintViolationWithTemplate(
                   "{digital.inception.party.constraints.ValidOrganization.invalidContactMechanismPurposeCodeForPartyType.message}")
               .addConstraintViolation();
@@ -121,7 +134,7 @@ public class ValidOrganizationValidator
         }
 
         if (!partyReferenceService.isValidIdentityDocumentType(
-            organization.getPartyType().code(), identityDocument.getType())) {
+            organization.getType().code(), identityDocument.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", identityDocument.getType())
               .buildConstraintViolationWithTemplate(
@@ -134,8 +147,7 @@ public class ValidOrganizationValidator
 
       // Validate roles
       for (Role role : organization.getRoles()) {
-        if (!partyReferenceService.isValidRoleType(
-            organization.getPartyType().code(), role.getType())) {
+        if (!partyReferenceService.isValidRoleType(organization.getType().code(), role.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", role.getType())
               .buildConstraintViolationWithTemplate(
@@ -149,10 +161,10 @@ public class ValidOrganizationValidator
       // Validate physical addresses
       for (PhysicalAddress physicalAddress : organization.getPhysicalAddresses()) {
         if (!partyReferenceService.isValidPhysicalAddressRole(
-            organization.getPartyType().code(), physicalAddress.getRole())) {
+            organization.getType().code(), physicalAddress.getRole())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("physicalAddressRole", physicalAddress.getRole())
-              .addMessageParameter("partyType", organization.getPartyType().code())
+              .addMessageParameter("partyType", organization.getType().code())
               .buildConstraintViolationWithTemplate(
                   "{digital.inception.party.constraints.ValidOrganization.invalidPhysicalAddressRoleCodeForPartyType.message}")
               .addConstraintViolation();
@@ -162,12 +174,27 @@ public class ValidOrganizationValidator
 
         for (String physicalAddressPurpose : physicalAddress.getPurposes()) {
           if (!partyReferenceService.isValidPhysicalAddressPurpose(
-              organization.getPartyType().code(), physicalAddressPurpose)) {
+              organization.getType().code(), physicalAddressPurpose)) {
             hibernateConstraintValidatorContext
                 .addMessageParameter("physicalAddressPurpose", physicalAddressPurpose)
-                .addMessageParameter("partyType", organization.getPartyType().code())
+                .addMessageParameter("partyType", organization.getType().code())
                 .buildConstraintViolationWithTemplate(
                     "{digital.inception.party.constraints.ValidOrganization.invalidPhysicalAddressPurposeCodeForPartyType.message}")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+        }
+      }
+
+      // Validate attributes
+      for (Attribute attribute : organization.getAttributes()) {
+        for (String reservedAttributeTypeCode : Attribute.RESERVED_ATTRIBUTE_TYPE_CODES) {
+          if (reservedAttributeTypeCode.equalsIgnoreCase(attribute.getType())) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("attributeType", attribute.getType())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidOrganization.invalidReservedAttributeTypeCode.message}")
                 .addConstraintViolation();
 
             isValid = false;
@@ -178,7 +205,7 @@ public class ValidOrganizationValidator
       // Validate preferences
       for (Preference preference : organization.getPreferences()) {
         if (!partyReferenceService.isValidPreferenceType(
-            organization.getPartyType().code(), preference.getType())) {
+            organization.getType().code(), preference.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", preference.getType())
               .buildConstraintViolationWithTemplate(

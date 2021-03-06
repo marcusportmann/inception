@@ -1492,7 +1492,7 @@ public class SecurityApi extends SecureApi {
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
@@ -1583,7 +1583,7 @@ public class SecurityApi extends SecureApi {
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
@@ -1940,7 +1940,7 @@ public class SecurityApi extends SecureApi {
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2167,7 +2167,7 @@ public class SecurityApi extends SecureApi {
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2498,7 +2498,7 @@ public class SecurityApi extends SecureApi {
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2829,7 +2829,7 @@ public class SecurityApi extends SecureApi {
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
           @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {

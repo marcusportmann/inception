@@ -16,8 +16,9 @@
 
 package digital.inception.error;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,6 +47,24 @@ public interface IErrorService {
    */
   ErrorReport getErrorReport(UUID errorReportId)
       throws InvalidArgumentException, ErrorReportNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the error report summaries.
+   *
+   * @param filter the optional filter to apply to the error reports
+   * @param sortBy the optional method used to sort the error reports e.g. by who submitted them
+   * @param sortDirection the optional sort direction to apply to the error reports
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the error report summaries
+   */
+  ErrorReportSummaries getErrorReportSummaries(
+      String filter,
+      ErrorReportSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the summary for the error report.

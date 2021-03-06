@@ -55,6 +55,22 @@ import org.springframework.util.StringUtils;
  * <p>This class exposes the JSON and XML properties using a property-based approach rather than a
  * field-based approach to support the JPA inheritance model.
  *
+ * <p>The following steps must be completed when adding a new attribute to the organization entity:
+ *
+ * <ol>
+ *   <li>Add a new column for the new attribute to the definition of the <b>party.organizations</b>
+ *       table in the <b>inception-party-h2.sql</b> file.
+ *   <li>Add a description for the new column for the new attribute to the
+ *       <b>inception-party-h2.sql</b> file.
+ *   <li>Add a new property for the new attribute to the <b>Organization</b> class.
+ *   <li>Add the appropriate validation for the new attribute to the
+ *       <b>ValidOrganizationValidator</b> class.
+ *   <li>Add a new column for the new attribute to the <b>inception-party.changelog.xml</b> file.
+ *   <li>Add the name of the attribute to the <b>Attribute.RESERVED_ATTRIBUTE_TYPE_CODES</b> array.
+ *   <li>Add support for applying validations described by <b>RoleTypeAttributeConstraint</b>s to
+ *       the <b>ValidOrganizationValidator</b>.
+ * </ol>
+ *
  * @author Marcus Portmann
  */
 @Schema(
@@ -164,8 +180,8 @@ public class Organization extends PartyBase implements Serializable {
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
   /**
-   * The comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for
-   * the organization.
+   * The comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the
+   * organization.
    */
   @JsonIgnore
   @XmlTransient
@@ -174,7 +190,9 @@ public class Organization extends PartyBase implements Serializable {
   private String countriesOfTaxResidence;
 
   /** Constructs a new <b>Organization</b>. */
-  public Organization() {}
+  public Organization() {
+    super(PartyType.ORGANIZATION);
+  }
 
   /**
    * Constructs a new <b>Organization</b>.
@@ -445,18 +463,6 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the party type for the organization.
-   *
-   * @return the party type for the organization
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Override
-  public PartyType getPartyType() {
-    return super.getPartyType();
-  }
-
-  /**
    * Retrieve the first physical address with the specified purpose for the organization.
    *
    * @param purpose the physical address purpose
@@ -581,6 +587,18 @@ public class Organization extends PartyBase implements Serializable {
   @XmlElement(name = "TenantId", required = true)
   public UUID getTenantId() {
     return super.getTenantId();
+  }
+
+  /**
+   * Returns the party type for the organization.
+   *
+   * @return the party type for the organization
+   */
+  @JsonIgnore
+  @XmlTransient
+  @Override
+  public PartyType getType() {
+    return super.getType();
   }
 
   /**

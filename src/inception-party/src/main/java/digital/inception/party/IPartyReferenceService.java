@@ -390,6 +390,23 @@ public interface IPartyReferenceService {
   List<RolePurpose> getRolePurposes(String localeId) throws ServiceUnavailableException;
 
   /**
+   * Retrieve the role type attribute constraints.
+   *
+   * @return the role type attribute constraints
+   */
+  List<RoleTypeAttributeConstraint> getRoleTypeAttributeConstraints()
+      throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the role type attribute constraints.
+   *
+   * @param roleType the code for the role type to retrieve the attribute constraints for
+   * @return the role type attribute constraints
+   */
+  List<RoleTypeAttributeConstraint> getRoleTypeAttributeConstraints(String roleType)
+      throws ServiceUnavailableException;
+
+  /**
    * Retrieve all the role types.
    *
    * @return the role types

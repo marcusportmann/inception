@@ -59,6 +59,12 @@ public class ProblemHandler {
   protected ResponseEntity<ProblemDetails> handle(
       HttpServletRequest request, ServiceException serviceException) {
 
+    if (debug) {
+      logger.error(
+          "Failed to process the HTTP servlet request (" + request.getRequestURI() + ")",
+          serviceException);
+    }
+
     ProblemDetails problemDetails = new ProblemDetails();
 
     problemDetails.setTimestamp(serviceException.getTimestamp());
@@ -127,6 +133,11 @@ public class ProblemHandler {
   @ExceptionHandler
   @ResponseBody
   protected ResponseEntity<ProblemDetails> handle(HttpServletRequest request, Throwable cause) {
+
+    if (debug) {
+      logger.error(
+          "Failed to process the HTTP servlet request (" + request.getRequestURI() + ")", cause);
+    }
 
     ProblemDetails problemDetails = new ProblemDetails();
 

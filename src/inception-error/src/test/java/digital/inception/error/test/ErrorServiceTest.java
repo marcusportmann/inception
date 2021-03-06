@@ -20,8 +20,11 @@ import static digital.inception.test.Assert.assertEqualsToMillisecond;
 import static org.junit.Assert.assertEquals;
 
 import com.github.f4b6a3.uuid.UuidCreator;
+import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.Base64Util;
 import digital.inception.error.ErrorReport;
+import digital.inception.error.ErrorReportSortBy;
+import digital.inception.error.ErrorReportSummaries;
 import digital.inception.error.ErrorReportSummary;
 import digital.inception.error.IErrorService;
 import digital.inception.test.TestClassRunner;
@@ -97,6 +100,18 @@ public class ErrorServiceTest {
         "The number of error report summaries is incorrect", 1, errorReportSummaries.size());
 
     compareErrorReportAndErrorReportSummary(errorReport, errorReportSummaries.get(0));
+
+    ErrorReportSummaries filteredErrorReportSummaries =
+        errorService.getErrorReportSummaries(
+            errorReport.getWho(), ErrorReportSortBy.WHO, SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The number of filtered error report summaries is incorrect",
+        1,
+        (long) filteredErrorReportSummaries.getTotal());
+
+    compareErrorReportAndErrorReportSummary(
+        errorReport, filteredErrorReportSummaries.getErrorReportSummaries().get(0));
   }
 
   /** Test the functionality to retrieve the most recent error report summaries. */

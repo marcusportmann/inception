@@ -20,7 +20,9 @@ import digital.inception.api.ProblemDetails;
 import digital.inception.api.SecureApi;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -78,13 +81,13 @@ public class ErrorApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -117,5 +120,83 @@ public class ErrorApi extends SecureApi {
     }
 
     errorService.createErrorReport(errorReport);
+  }
+
+  /**
+   * Retrieve the error report summaries.
+   *
+   * @param filter the optional filter to apply to the error reports
+   * @param sortBy the optional method used to sort the error reports e.g. by who submitted them
+   * @param sortDirection the optional sort direction to apply to the error reports
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the error report summaries
+   */
+  @Operation(
+      summary = "Retrieve the error report summaries",
+      description = "Retrieve the error report summaries")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/error-report-summaries",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  //  @PreAuthorize(
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Error.ErrorAdministration')")
+  public ErrorReportSummaries getErrorReportSummaries(
+      @Parameter(name = "filter", description = "The optional filter to apply to the error reports")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortBy",
+              description =
+                  "The optional method used to sort the error reports e.g. by who submitted them")
+          @RequestParam(value = "sortBy", required = false)
+          ErrorReportSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the error reports")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
+    return errorService.getErrorReportSummaries(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 }

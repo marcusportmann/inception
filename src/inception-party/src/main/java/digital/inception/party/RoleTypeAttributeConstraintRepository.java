@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package digital.inception.error;
+package digital.inception.party;
 
-import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>ErrorRepository</b> interface declares the repository for the <b> ErrorReportSummary</b>
- * domain type.
+ * The <b>RoleTypeAttributeConstraintRepository</b> interface declares the repository for the <b>
+ * RoleTypeAttributeConstraint</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface ErrorReportSummaryRepository extends JpaRepository<ErrorReportSummary, UUID> {
+public interface RoleTypeAttributeConstraintRepository
+    extends JpaRepository<RoleTypeAttributeConstraint, RoleTypeAttributeConstraintId> {
 
-  @Query("select ers from ErrorReportSummary ers where (lower(ers.who) like lower(:filter))")
-  Page<ErrorReportSummary> findFiltered(@Param("filter") String filter, Pageable pageable);
+  List<RoleTypeAttributeConstraint> findByRoleTypeIgnoreCase(String roleType, Sort sort);
 }

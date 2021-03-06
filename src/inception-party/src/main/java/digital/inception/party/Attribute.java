@@ -65,6 +65,45 @@ public class Attribute implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
+  /**
+   * The attribute type codes reserved for standard attributes.
+   */
+  public static final String[] RESERVED_ATTRIBUTE_TYPE_CODES = {
+      "id",
+      "tenant_id",
+      "name",
+      "country_of_birth",
+      "country_of_residence",
+      "date_of_birth",
+      "date_of_death",
+      "employment_status",
+      "employment_type",
+      "gender",
+      "given_name",
+      "home_language",
+      "initials",
+      "maiden_name",
+      "marital_status",
+      "marriage_type",
+      "middle_names",
+      "occupation",
+      "preferred_name",
+      "race",
+      "residency_status",
+      "residential_type",
+      "surname",
+      "title",
+      "attributes",
+      "contact_mechanisms",
+      "identity_documents",
+      "physical_addresses",
+      "preferences",
+      "residence_permits",
+      "roles",
+      "countries_of_tax_residence",
+      "tax_numbers"
+  };
+
   /** The date and time the attribute was created. */
   @JsonIgnore
   @XmlTransient

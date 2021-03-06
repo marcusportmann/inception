@@ -52,6 +52,7 @@ import digital.inception.party.ResidencyStatus;
 import digital.inception.party.ResidentialType;
 import digital.inception.party.RolePurpose;
 import digital.inception.party.RoleType;
+import digital.inception.party.RoleTypeAttributeConstraint;
 import digital.inception.party.SourceOfFunds;
 import digital.inception.party.TaxNumber;
 import digital.inception.party.TaxNumberType;
@@ -396,6 +397,38 @@ public class PartyReferenceServiceTest {
     List<RolePurpose> retrievedRolePurposes = partyReferenceService.getRolePurposes();
 
     retrievedRolePurposes = partyReferenceService.getRolePurposes("en-US");
+  }
+
+  /** Test the role type attribute constraint functionality. */
+  @Test
+  public void roleTypeAttributeConstraintTest() throws Exception {
+    List<RoleTypeAttributeConstraint> retrievedRoleTypeAttributeConstraints =
+        partyReferenceService.getRoleTypeAttributeConstraints();
+
+    assertEquals(
+        "The correct number of role type attribute constraints was not retrieved",
+        10,
+        retrievedRoleTypeAttributeConstraints.size());
+
+    retrievedRoleTypeAttributeConstraints =
+        partyReferenceService.getRoleTypeAttributeConstraints("employee");
+
+    assertEquals(
+        "The correct number of role type attribute constraints was not retrieved",
+        7,
+        retrievedRoleTypeAttributeConstraints.size());
+
+    retrievedRoleTypeAttributeConstraints.stream()
+        .filter(
+            roleTypeAttributeConstraint ->
+                !roleTypeAttributeConstraint.getRoleType().equals("employee"))
+        .findFirst()
+        .ifPresent(
+            roleTypeAttributeConstraint ->
+                fail(
+                    "Found invalid role type attribute constraint with role type ("
+                        + roleTypeAttributeConstraint.getAttributeType()
+                        + ")"));
   }
 
   /** Test the role type functionality. */

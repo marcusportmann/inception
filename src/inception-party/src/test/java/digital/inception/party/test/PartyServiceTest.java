@@ -204,8 +204,6 @@ public class PartyServiceTest {
     return person;
   }
 
-
-
   private static synchronized Person getTestForeignPersonDetails() {
     personCount++;
 
@@ -241,7 +239,9 @@ public class PartyServiceTest {
     person.addIdentityDocument(
         new IdentityDocument("passport", "ZW", LocalDate.of(2010, 5, 20), "ZW1234567890"));
 
-    person.addResidencePermit(new ResidencePermit("za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "AA1234567890"));
+    person.addResidencePermit(
+        new ResidencePermit(
+            "za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "AA1234567890"));
 
     PhysicalAddress residentialAddress =
         new PhysicalAddress(
@@ -249,9 +249,9 @@ public class PartyServiceTest {
             PhysicalAddressRole.RESIDENTIAL,
             Set.of(
                 new String[] {
-                    PhysicalAddressPurpose.BILLING,
-                    PhysicalAddressPurpose.CORRESPONDENCE,
-                    PhysicalAddressPurpose.DELIVERY
+                  PhysicalAddressPurpose.BILLING,
+                  PhysicalAddressPurpose.CORRESPONDENCE,
+                  PhysicalAddressPurpose.DELIVERY
                 }));
     residentialAddress.setStreetNumber("4");
     residentialAddress.setStreetName("Princess Avenue");
@@ -265,8 +265,6 @@ public class PartyServiceTest {
 
     return person;
   }
-
-
 
   private static synchronized Person getTestBasicPersonDetails() {
     personCount++;
@@ -297,6 +295,26 @@ public class PartyServiceTest {
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     partyService.createPerson(person);
+  }
+
+  /** Test the foreign person functionality. */
+  @Test
+  public void foreignPersonTest() throws Exception {
+    Person foreignPerson = getTestForeignPersonDetails();
+
+    partyService.createPerson(foreignPerson);
+
+    Persons filteredPersons =
+        partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The correct number of filtered persons was not retrieved",
+        1,
+        filteredPersons.getPersons().size());
+
+    comparePersons(foreignPerson, filteredPersons.getPersons().get(0));
+
+    partyService.deletePerson(foreignPerson.getId());
   }
 
   /** Test the invalid building address verification functionality. */
@@ -485,6 +503,37 @@ public class PartyServiceTest {
     assertEquals(
         "The correct number of constraint violations was not found for the invalid international address",
         16,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid organization attribute test. */
+  @Test
+  public void invalidOrganizationAttributeTest() {
+    Organization organization = getTestOrganizationDetails();
+
+    organization.addAttribute(new Attribute("given_name", "Given Name"));
+
+    Set<ConstraintViolation<Organization>> constraintViolations =
+        partyService.validateOrganization(organization);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid organization",
+        1,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid person attribute functionality. */
+  @Test
+  public void invalidPersonAttributeTest() {
+    Person person = getTestBasicPersonDetails();
+
+    person.addAttribute(new Attribute("given_name", "Given Name"));
+
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid person",
+        1,
         constraintViolations.size());
   }
 
@@ -763,26 +812,6 @@ public class PartyServiceTest {
     partyService.deleteParty(person.getId());
 
     partyService.deleteParty(organization.getId());
-  }
-
-  /** Test the foreign person functionality. */
-  @Test
-  public void foreignPersonTest() throws Exception {
-    Person foreignPerson = getTestForeignPersonDetails();
-
-    partyService.createPerson(foreignPerson);
-
-    Persons filteredPersons =
-        partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
-
-    assertEquals(
-        "The correct number of filtered persons was not retrieved",
-        1,
-        filteredPersons.getPersons().size());
-
-    comparePersons(foreignPerson, filteredPersons.getPersons().get(0));
-
-    partyService.deletePerson(foreignPerson.getId());
   }
 
   /** Test the person functionality. */
@@ -1481,11 +1510,11 @@ public class PartyServiceTest {
       for (ResidencePermit person2ResidencePermit : person2.getResidencePermits()) {
         if (person1ResidencePermit.getType().equals(person2ResidencePermit.getType())
             && person1ResidencePermit
-            .getCountryOfIssue()
-            .equals(person2ResidencePermit.getCountryOfIssue())
+                .getCountryOfIssue()
+                .equals(person2ResidencePermit.getCountryOfIssue())
             && person1ResidencePermit
-            .getDateOfIssue()
-            .equals(person2ResidencePermit.getDateOfIssue())) {
+                .getDateOfIssue()
+                .equals(person2ResidencePermit.getDateOfIssue())) {
 
           assertEquals(
               "The date of expiry for the two residence permits do not match",

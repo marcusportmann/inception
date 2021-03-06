@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
+import digital.inception.core.sorting.SortDirection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -45,6 +46,9 @@ import org.springframework.util.StringUtils;
 @Service
 @SuppressWarnings({"unused"})
 public class ErrorService implements IErrorService {
+
+  /** The maximum number of filtered error report summaries. */
+  private static final int MAX_FILTERED_ERROR_REPORT_SUMMARIES = 100;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ErrorService.class);
@@ -188,6 +192,96 @@ public class ErrorService implements IErrorService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the error report (" + errorReportId + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the error report summaries.
+   *
+   * @param filter the optional filter to apply to the error reports
+   * @param sortBy the optional method used to sort the error reports e.g. by who submitted them
+   * @param sortDirection the optional sort direction to apply to the error reports
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the error report summaries
+   */
+  @Override
+  public ErrorReportSummaries getErrorReportSummaries(
+      String filter,
+      ErrorReportSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortBy == null) {
+      sortBy = ErrorReportSortBy.CREATED;
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.ASCENDING;
+    }
+
+    try {
+      PageRequest pageRequest;
+
+      if (pageIndex == null) {
+        pageIndex = 0;
+      }
+
+      if (pageSize == null) {
+        pageSize = MAX_FILTERED_ERROR_REPORT_SUMMARIES;
+      }
+
+      if (sortBy == ErrorReportSortBy.WHO) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, MAX_FILTERED_ERROR_REPORT_SUMMARIES),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "who");
+      } else {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, MAX_FILTERED_ERROR_REPORT_SUMMARIES),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "created");
+      }
+
+      Page<ErrorReportSummary> errorReportSummaryPage;
+      if (StringUtils.hasText(filter)) {
+        errorReportSummaryPage =
+            errorReportSummaryRepository.findFiltered("%" + filter + "%", pageRequest);
+      } else {
+        errorReportSummaryPage = errorReportSummaryRepository.findAll(pageRequest);
+      }
+
+      return new ErrorReportSummaries(
+          errorReportSummaryPage.toList(),
+          errorReportSummaryPage.getTotalElements(),
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize);
+    } catch (Throwable e) {
+
+      logger.error("Failed to retrieve the filtered error report summaries", e);
+
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered error report summaries", e);
     }
   }
 

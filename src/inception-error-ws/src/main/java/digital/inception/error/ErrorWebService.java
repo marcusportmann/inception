@@ -16,8 +16,9 @@
 
 package digital.inception.error;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.sorting.SortDirection;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -59,5 +60,32 @@ public class ErrorWebService {
       @WebParam(name = "ErrorReport") @XmlElement(required = true) ErrorReport errorReport)
       throws InvalidArgumentException, ServiceUnavailableException {
     errorService.createErrorReport(errorReport);
+  }
+
+  /**
+   * Retrieve the error report summaries.
+   *
+   * @param filter the optional filter to apply to the error reports
+   * @param sortBy the optional method used to sort the error reports e.g. by who submitted them
+   * @param sortDirection the optional sort direction to apply to the error reports
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the error report summaries
+   */
+  public ErrorReportSummaries getErrorReportSummaries(
+      String filter,
+      ErrorReportSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
+    return errorService.getErrorReportSummaries(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 }

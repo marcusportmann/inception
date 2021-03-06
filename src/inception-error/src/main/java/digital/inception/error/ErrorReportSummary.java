@@ -57,7 +57,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 @XmlRootElement(name = "ErrorReportSummary", namespace = "http://inception.digital/error")
 @XmlType(
-    name = "ErrorReport",
+    name = "ErrorReportSummary",
     namespace = "http://inception.digital/error",
     propOrder = {
       "id",

@@ -926,6 +926,46 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the role type attribute constraints.
+   *
+   * @param roleType the code for the role type to retrieve the role type attribute constraints for
+   *     or <b>null</b> to retrieve the role type attribute constraints for all role types
+   * @return the role type attribute constraints
+   */
+  @Operation(
+      summary = "Retrieve the role type attribute constraints",
+      description = "Retrieve the role type attribute constraints")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/role-type-attribute-constraints",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<RoleTypeAttributeConstraint> getRoleTypeAttributeConstraints(
+      @Parameter(
+              name = "roleType",
+              description =
+                  "The optional code for the role type to retrieve the role type attribute constraints for",
+              example = "employee")
+          @RequestParam(value = "roleType", required = false)
+          String roleType)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getRoleTypeAttributeConstraints(roleType);
+  }
+
+  /**
    * Retrieve the role types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
@@ -945,10 +985,7 @@ public class PartyReferenceApi extends SecureApi {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(
-      value = "/role-types",
-      method = RequestMethod.GET,
-      produces = "application/json")
+  @RequestMapping(value = "/role-types", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   // @PreAuthorize("isAuthenticated()")
   public List<RoleType> getRoleTypes(

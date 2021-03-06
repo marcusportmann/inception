@@ -1430,16 +1430,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
       throw new InvalidArgumentException("pageSize");
     }
 
-    PageRequest pageRequest;
-
-    if ((pageIndex != null) && (pageSize != null)) {
-      pageRequest =
-          PageRequest.of(
-              pageIndex,
-              (pageSize > MAX_FILTERED_ORGANISATIONS) ? MAX_FILTERED_ORGANISATIONS : pageSize);
-    } else {
-      pageRequest = PageRequest.of(0, MAX_FILTERED_ORGANISATIONS);
+    if (pageIndex == null) {
+      pageIndex = 0;
     }
+
+    if (pageSize == null) {
+      pageSize = MAX_FILTERED_ORGANISATIONS;
+    }
+
+    PageRequest pageRequest =
+        PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_ORGANISATIONS));
 
     try {
       Page<Tenant> tenantPage;
@@ -1579,18 +1579,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
       throw new InvalidArgumentException("pageSize");
     }
 
-    PageRequest pageRequest;
-
-    if ((pageIndex != null) && (pageSize != null)) {
-      pageRequest =
-          PageRequest.of(
-              pageIndex,
-              (pageSize > MAX_FILTERED_USER_DIRECTORIES)
-                  ? MAX_FILTERED_USER_DIRECTORIES
-                  : pageSize);
-    } else {
-      pageRequest = PageRequest.of(0, MAX_FILTERED_USER_DIRECTORIES);
+    if (pageIndex == null) {
+      pageIndex = 0;
     }
+
+    if (pageSize == null) {
+      pageSize = MAX_FILTERED_USER_DIRECTORIES;
+    }
+
+    PageRequest pageRequest =
+        PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_USER_DIRECTORIES));
 
     try {
       Page<UserDirectory> userDirectoryPage;
@@ -1888,18 +1886,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
       throw new InvalidArgumentException("pageSize");
     }
 
-    PageRequest pageRequest;
-
-    if ((pageIndex != null) && (pageSize != null)) {
-      pageRequest =
-          PageRequest.of(
-              pageIndex,
-              (pageSize > MAX_FILTERED_USER_DIRECTORIES)
-                  ? MAX_FILTERED_USER_DIRECTORIES
-                  : pageSize);
-    } else {
-      pageRequest = PageRequest.of(0, MAX_FILTERED_USER_DIRECTORIES);
+    if (pageIndex == null) {
+      pageIndex = 0;
     }
+
+    if (pageSize == null) {
+      pageSize = MAX_FILTERED_USER_DIRECTORIES;
+    }
+
+    PageRequest pageRequest =
+        PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_USER_DIRECTORIES));
 
     try {
       Page<UserDirectorySummary> userDirectorySummaryPage;
@@ -2542,9 +2538,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
       }
 
       throw new InvalidSecurityCodeException(username);
-    } catch (UserLockedException
-        | InvalidSecurityCodeException
-        | ExistingPasswordException e) {
+    } catch (UserLockedException | InvalidSecurityCodeException | ExistingPasswordException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
