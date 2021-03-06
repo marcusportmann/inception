@@ -1207,6 +1207,28 @@ COMMENT ON COLUMN party.tax_numbers.updated IS 'The date and time the tax number
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
+INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('anthropometric_measurements', 'en-US', 0, 'Anthropometric Measurements', 'Anthropometric Measurements');
+
+INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('anthropometric_measurements', 'en-ZA', 0, 'Anthropometric Measurements', 'Anthropometric Measurements');
+
+
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','bmi', 'en-US', 0, 'Body Mass Index', 'Body Mass Index', 'person');
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','height', 'en-US', 0, 'Height', 'Height', 'person');
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','weight', 'en-US', 0, 'Weight', 'Weight', 'person');
+
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','bmi', 'en-ZA', 0, 'Body Mass Index', 'Body Mass Index', 'person');
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','height', 'en-ZA', 0, 'Height', 'Height', 'person');
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','weight', 'en-ZA', 0, 'Weight', 'Weight', 'person');
+
+
 INSERT INTO party.contact_mechanism_types (code, locale_id, sort_index, name, plural, description)
   VALUES ('mobile_number', 'en-US', 1, 'Mobile Number', 'Mobile Numbers', 'Mobile Number');
 INSERT INTO party.contact_mechanism_types (code, locale_id, sort_index, name, plural, description)
@@ -1696,94 +1718,6 @@ INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
-INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('anthropometric_measurements', 'en-US', 0, 'Anthropometric Measurements', 'Anthropometric Measurements');
-
-INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('anthropometric_measurements', 'en-ZA', 0, 'Anthropometric Measurements', 'Anthropometric Measurements');
-
-
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','bmi', 'en-US', 0, 'Body Mass Index', 'Body Mass Index', 'person');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','height', 'en-US', 0, 'Height', 'Height', 'person');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','weight', 'en-US', 0, 'Weight', 'Weight', 'person');
-
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','bmi', 'en-ZA', 0, 'Body Mass Index', 'Body Mass Index', 'person');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','height', 'en-ZA', 0, 'Height', 'Height', 'person');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','weight', 'en-ZA', 0, 'Weight', 'Weight', 'person');
-
-
-INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('correspondence', 'en-US', 0, 'Correspondence', 'Correspondence');
-
-INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('correspondence', 'en-ZA', 0, 'Correspondence', 'Correspondence');
-
-
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence','correspondence_language', 'en-US', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence','time_to_contact', 'en-US', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
-
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'correspondence_language', 'en-ZA', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'time_to_contact', 'en-ZA', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
-
-
-INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-US', 1, 'Test', 'Test');
-
-INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-ZA', 1, 'Test', 'Test');
-
-
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employer', 'en-US', 1, 'Employer', 'Employer', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employee', 'en-US', 2, 'Employee', 'Employee', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('supplier', 'en-US', 3, 'Supplier', 'Supplier', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('vendor', 'en-US', 4, 'Vendor', 'Vendor', 'organization,person');
-
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employer', 'en-ZA', 1, 'Employer', 'Employer', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employee', 'en-ZA', 2, 'Employee', 'Employee', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('supplier', 'en-ZA', 3, 'Supplier', 'Supplier', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('vendor', 'en-ZA', 4, 'Vendor', 'Vendor', 'organization,person');
-
-
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('employee', 'given_name', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('employee', 'surname', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('employee', 'title', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('employee', 'employee_number', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
-  VALUES ('employee', 'employee_number', 'min_size', '5');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
-  VALUES ('employee', 'employee_number', 'max_size', '20');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
-  VALUES ('employee', 'employee_number', 'pattern', '^[a-zA-Z0-9]*$');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('vendor', 'vendor_number', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
-  VALUES ('vendor', 'vendor_number', 'size', '10');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
-  VALUES ('vendor', 'vendor_number', 'pattern', '^[0-9]*$');
-
-
 INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
   VALUES ('billing', 'en-US', 1, 'Billing', 'Billing Address', 'organization,person');
 INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
@@ -1879,6 +1813,24 @@ INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, des
   VALUES ('street', 'en-ZA', 7, 'Street', 'Street');
 INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
   VALUES ('unstructured', 'en-ZA', 99, 'Unstructured', 'Unstructured');
+
+
+INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('correspondence', 'en-US', 0, 'Correspondence', 'Correspondence');
+
+INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('correspondence', 'en-ZA', 0, 'Correspondence', 'Correspondence');
+
+
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('correspondence','correspondence_language', 'en-US', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('correspondence','time_to_contact', 'en-US', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
+
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('correspondence', 'correspondence_language', 'en-ZA', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('correspondence', 'time_to_contact', 'en-ZA', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
 
 
 INSERT INTO party.races (code, locale_id, sort_index, name, description)
@@ -1999,6 +1951,54 @@ INSERT INTO party.residential_types (code, locale_id, sort_index, name, descript
   VALUES ('not_specified', 'en-ZA', 6, 'Not Specified', 'Not Specified');
 INSERT INTO party.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+
+
+INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-US', 1, 'Test', 'Test');
+
+INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-ZA', 1, 'Test', 'Test');
+
+
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('employer', 'en-US', 1, 'Employer', 'Employer', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('employee', 'en-US', 2, 'Employee', 'Employee', 'person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('supplier', 'en-US', 3, 'Supplier', 'Supplier', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('vendor', 'en-US', 4, 'Vendor', 'Vendor', 'organization,person');
+
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('employer', 'en-ZA', 1, 'Employer', 'Employer', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('employee', 'en-ZA', 2, 'Employee', 'Employee', 'person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('supplier', 'en-ZA', 3, 'Supplier', 'Supplier', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('vendor', 'en-ZA', 4, 'Vendor', 'Vendor', 'organization,person');
+
+
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('employee', 'given_name', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('employee', 'surname', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('employee', 'title', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('employee', 'employee_number', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('employee', 'employee_number', 'min_size', '5');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('employee', 'employee_number', 'max_size', '20');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('employee', 'employee_number', 'pattern', '^[a-zA-Z0-9]*$');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('vendor', 'vendor_number', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('vendor', 'vendor_number', 'size', '10');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('vendor', 'vendor_number', 'pattern', '^[0-9]*$');
 
 
 INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)

@@ -263,6 +263,9 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(residentialAddress);
 
+    person.addRole(new Role("employee"));
+
+
     return person;
   }
 
@@ -290,11 +293,24 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("correspondence_language", "EN"));
 
-    person.addRole(new Role("employee"));
-
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     partyService.createPerson(person);
+  }
+
+  /** Test the role type attribute constraint functionality. */
+  @Test
+  public void roleTypeAttributeConstraintTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addRole(new Role("employee"));
+
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid person",
+        3,
+        constraintViolations.size());
   }
 
   /** Test the foreign person functionality. */

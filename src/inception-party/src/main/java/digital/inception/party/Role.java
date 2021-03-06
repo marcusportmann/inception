@@ -120,6 +120,17 @@ public class Role implements Serializable {
   }
 
   /**
+   * Constructs a new <b>Role</b>.
+   *
+   * @param type the role type
+   * @param purpose the optional code for the role purpose
+   */
+  public Role(String type, String purpose) {
+    this.type = type;
+    this.purpose = purpose;
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
