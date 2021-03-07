@@ -36,8 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>RoleTypeAttributeConstraint</b> class holds the information for a constraint that should be
- * applied to an attribute for a party when the party is assigned a role type.
+ * The <b>RoleTypeAttributeConstraint</b> class holds the information for a constraint that should
+ * be applied to an attribute for a party when the party is assigned a role type.
  *
  * @author Marcus Portmann
  */
@@ -59,8 +59,8 @@ public class RoleTypeAttributeConstraint implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the standard or custom attribute type. */
-  @Schema(description = "The code for the standard or custom attribute type", required = true)
+  /** The code for the attribute type. */
+  @Schema(description = "The code for the attribute type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "AttributeType", required = true)
   @NotNull
@@ -68,6 +68,16 @@ public class RoleTypeAttributeConstraint implements Serializable {
   @Id
   @Column(name = "attribute_type", length = 30, nullable = false)
   private String attributeType;
+
+  /** The qualifier for the attribute type. */
+  @Schema(description = "The qualifier for the attribute type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "AttributeTypeQualifier", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Id
+  @Column(name = "attribute_type_qualifier", length = 30, nullable = false)
+  private String attributeTypeQualifier;
 
   /** The code for the role type. */
   @Schema(description = "The code for the role type", required = true)
@@ -94,7 +104,7 @@ public class RoleTypeAttributeConstraint implements Serializable {
   @Schema(description = "The optional value to apply when validating the attribute value")
   @JsonProperty
   @XmlElement(name = "Value")
-  @Size(max = 2000)
+  @Size(max = 1000)
   @Column(name = "value", length = 1000)
   private String value;
 
@@ -102,14 +112,33 @@ public class RoleTypeAttributeConstraint implements Serializable {
    * Constructs a new <b>RoleTypeAttributeConstraint</b>.
    *
    * @param roleType the code for the role type
-   * @param attributeType the code for the standard or custom attribute type
+   * @param attributeType the code for the attribute type
    * @param type the attribute constraint type
    * @param value the optional value to apply when validating the attribute value
    */
   public RoleTypeAttributeConstraint(
       String roleType, String attributeType, AttributeConstraintType type, String value) {
+    this(roleType, attributeType, "", type, value);
+  }
+
+  /**
+   * Constructs a new <b>RoleTypeAttributeConstraint</b>.
+   *
+   * @param roleType the code for the role type
+   * @param attributeType the code for the attribute type
+   * @param attributeTypeQualifier the qualifier for the attribute type
+   * @param type the attribute constraint type
+   * @param value the optional value to apply when validating the attribute value
+   */
+  public RoleTypeAttributeConstraint(
+      String roleType,
+      String attributeType,
+      String attributeTypeQualifier,
+      AttributeConstraintType type,
+      String value) {
     this.roleType = roleType;
     this.attributeType = attributeType;
+    this.attributeTypeQualifier = attributeTypeQualifier;
     this.type = type;
     this.value = value;
   }
@@ -118,14 +147,28 @@ public class RoleTypeAttributeConstraint implements Serializable {
    * Constructs a new <b>RoleTypeAttributeConstraint</b>.
    *
    * @param roleType the code for the role type
-   * @param attributeType the code for the standard or custom attribute type
+   * @param attributeType the code for the attribute type
+   * @param attributeTypeQualifier the qualifier for the attribute type
+   * @param type the attribute constraint type
+   */
+  public RoleTypeAttributeConstraint(
+      String roleType,
+      String attributeType,
+      String attributeTypeQualifier,
+      AttributeConstraintType type) {
+    this(roleType, attributeType, attributeTypeQualifier, type, null);
+  }
+
+  /**
+   * Constructs a new <b>RoleTypeAttributeConstraint</b>.
+   *
+   * @param roleType the code for the role type
+   * @param attributeType the code for the attribute type
    * @param type the attribute constraint type
    */
   public RoleTypeAttributeConstraint(
       String roleType, String attributeType, AttributeConstraintType type) {
-    this.roleType = roleType;
-    this.attributeType = attributeType;
-    this.type = type;
+    this(roleType, attributeType, "", type, null);
   }
 
   /** Constructs a new <b>RoleTypeAttributeConstraint</b>. */
@@ -155,16 +198,26 @@ public class RoleTypeAttributeConstraint implements Serializable {
 
     return Objects.equals(roleType, other.roleType)
         && Objects.equals(attributeType, other.attributeType)
+        && Objects.equals(attributeTypeQualifier, other.attributeTypeQualifier)
         && Objects.equals(type, other.type);
   }
 
   /**
-   * Returns the code for the standard or custom attribute type.
+   * Returns the code for the attribute type.
    *
-   * @return the code for the standard or custom attribute type
+   * @return the code for the attribute type
    */
   public String getAttributeType() {
     return attributeType;
+  }
+
+  /**
+   * Returns the qualifier for the attribute type.
+   *
+   * @return the qualifier for the attribute type
+   */
+  public String getAttributeTypeQualifier() {
+    return attributeTypeQualifier;
   }
 
   /**
@@ -204,16 +257,26 @@ public class RoleTypeAttributeConstraint implements Serializable {
   public int hashCode() {
     return ((roleType == null) ? 0 : roleType.hashCode())
         + ((attributeType == null) ? 0 : attributeType.hashCode())
+        + ((attributeTypeQualifier == null) ? 0 : attributeTypeQualifier.hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }
 
   /**
-   * Set the code for the standard or custom attribute type.
+   * Set the code for the attribute type.
    *
-   * @param attributeType the code for the standard or custom attribute type
+   * @param attributeType the code for the attribute type
    */
   public void setAttributeType(String attributeType) {
     this.attributeType = attributeType;
+  }
+
+  /**
+   * Set the qualifier for the attribute type.
+   *
+   * @param attributeTypeQualifier the qualifier for the attribute type
+   */
+  public void setAttributeTypeQualifier(String attributeTypeQualifier) {
+    this.attributeTypeQualifier = attributeTypeQualifier;
   }
 
   /**

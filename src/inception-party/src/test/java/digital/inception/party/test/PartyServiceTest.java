@@ -199,8 +199,6 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("correspondence_language", "EN"));
 
-    person.addRole(new Role("employee"));
-
     return person;
   }
 
@@ -263,9 +261,6 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(residentialAddress);
 
-    person.addRole(new Role("employee"));
-
-
     return person;
   }
 
@@ -303,14 +298,25 @@ public class PartyServiceTest {
   public void roleTypeAttributeConstraintTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
-    person.addRole(new Role("employee"));
+    person.addRole(new Role("test_person_role"));
 
-    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+    Set<ConstraintViolation<Person>> personConstraintViolations = partyService.validatePerson(person);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid person",
-        3,
-        constraintViolations.size());
+        10,
+        personConstraintViolations.size());
+
+    Organization organization = getTestOrganizationDetails();
+
+    organization.addRole(new Role("test_organization_role"));
+
+    Set<ConstraintViolation<Organization>> organizationConstraintViolations = partyService.validateOrganization(organization);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid organization",
+        7,
+        organizationConstraintViolations.size());
   }
 
   /** Test the foreign person functionality. */
@@ -779,7 +785,7 @@ public class PartyServiceTest {
 
     organization.removeRole("employer");
 
-    organization.addRole(new Role("supplier"));
+    organization.addRole(new Role("vendor"));
 
     partyService.updateOrganization(organization);
 

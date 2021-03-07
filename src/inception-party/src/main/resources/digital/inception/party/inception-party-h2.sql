@@ -603,17 +603,20 @@ COMMENT ON COLUMN party.role_types.party_types IS 'The comma-delimited list of c
 
 
 CREATE TABLE party.role_type_attribute_constraints (
-  role_type      VARCHAR(30)  NOT NULL,
-  attribute_type VARCHAR(30)  NOT NULL,
-  type           VARCHAR(30)  NOT NULL,
-  value          VARCHAR(2000),
+  role_type                VARCHAR(30) NOT NULL,
+  attribute_type           VARCHAR(30) NOT NULL,
+  attribute_type_qualifier VARCHAR(30) NOT NULL DEFAULT '',
+  type                     VARCHAR(30) NOT NULL,
+  value                    VARCHAR(1000),
 
-  PRIMARY KEY (role_type, attribute_type, type)
+  PRIMARY KEY (role_type, attribute_type, attribute_type_qualifier, type)
 );
 
 COMMENT ON COLUMN party.role_type_attribute_constraints.role_type IS 'The code for the role type';
 
-COMMENT ON COLUMN party.role_type_attribute_constraints.attribute_type IS 'The code for the standard or custom attribute type';
+COMMENT ON COLUMN party.role_type_attribute_constraints.attribute_type IS 'The code for the attribute type';
+
+COMMENT ON COLUMN party.role_type_attribute_constraints.attribute_type_qualifier IS 'The qualifier for the attribute type';
 
 COMMENT ON COLUMN party.role_type_attribute_constraints.type IS 'The attribute constraint type';
 
@@ -1961,44 +1964,79 @@ INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
 
 
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employer', 'en-US', 1, 'Employer', 'Employer', 'organization,person');
+  VALUES ('test_organization_role', 'en-US', 101, 'Test Organization Role', 'Test Organization Role', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employee', 'en-US', 2, 'Employee', 'Employee', 'person');
+  VALUES ('employer', 'en-US', 102, 'Employer', 'Employer', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('supplier', 'en-US', 3, 'Supplier', 'Supplier', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('vendor', 'en-US', 4, 'Vendor', 'Vendor', 'organization,person');
+  VALUES ('vendor', 'en-US', 102, 'Vendor', 'Vendor', 'organization');
 
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employer', 'en-ZA', 1, 'Employer', 'Employer', 'organization,person');
+  VALUES ('test_person_role', 'en-US', 201, 'Test Person Role', 'Test Person Role', 'person');
+
+
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employee', 'en-ZA', 2, 'Employee', 'Employee', 'person');
+  VALUES ('test_organization_role', 'en-ZA', 101, 'Test Organization Role', 'Test Organization Role', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('supplier', 'en-ZA', 3, 'Supplier', 'Supplier', 'organization,person');
+  VALUES ('employer', 'en-ZA', 102, 'Employer', 'Employer', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('vendor', 'en-ZA', 4, 'Vendor', 'Vendor', 'organization,person');
+  VALUES ('vendor', 'en-ZA', 102, 'Vendor', 'Vendor', 'organization');
+
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test_person_role', 'en-ZA', 201, 'Test Person Role', 'Test Person Role', 'person');
 
 
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('employee', 'given_name', 'required');
+  VALUES ('test_person_role', 'contact_mechanisms', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_person_role', 'contact_mechanism', 'email_address', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_person_role', 'contact_mechanism', 'fax_number', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_person_role', 'contact_mechanism', 'mobile_number', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_person_role', 'contact_mechanism', 'phone_number', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('employee', 'surname', 'required');
+  VALUES ('test_person_role', 'given_name', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('employee', 'title', 'required');
+  VALUES ('test_person_role', 'physical_addresses', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_person_role', 'physical_address', 'residential', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('employee', 'employee_number', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
-  VALUES ('employee', 'employee_number', 'min_size', '5');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
-  VALUES ('employee', 'employee_number', 'max_size', '20');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
-  VALUES ('employee', 'employee_number', 'pattern', '^[a-zA-Z0-9]*$');
+  VALUES ('test_person_role', 'surname', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('vendor', 'vendor_number', 'required');
+  VALUES ('test_person_role', 'title', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'test_attribute', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
-  VALUES ('vendor', 'vendor_number', 'size', '10');
+  VALUES ('test_person_role', 'test_attribute', 'min_size', '5');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
-  VALUES ('vendor', 'vendor_number', 'pattern', '^[0-9]*$');
+  VALUES ('test_person_role', 'test_attribute', 'max_size', '20');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('test_person_role', 'test_attribute', 'pattern', '^[a-zA-Z0-9]*$');
+
+
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_organization_role', 'contact_mechanisms', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_organization_role', 'contact_mechanism', 'email_address', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_organization_role', 'contact_mechanism', 'fax_number', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_organization_role', 'contact_mechanism', 'mobile_number', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_organization_role', 'contact_mechanism', 'phone_number', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_organization_role', 'physical_addresses', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_organization_role', 'physical_address', 'main', 'required');
+
+
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_organization_role', 'test_attribute', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('test_organization_role', 'test_attribute', 'size', '10');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('test_organization_role', 'test_attribute', 'pattern', '^[0-9]*$');
 
 
 INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)

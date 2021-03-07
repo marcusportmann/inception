@@ -411,7 +411,7 @@ public class PartyReferenceServiceTest {
         retrievedRoleTypeAttributeConstraints.size());
 
     retrievedRoleTypeAttributeConstraints =
-        partyReferenceService.getRoleTypeAttributeConstraints("employee");
+        partyReferenceService.getRoleTypeAttributeConstraints("test_person_role");
 
     assertEquals(
         "The correct number of role type attribute constraints was not retrieved",
@@ -421,7 +421,7 @@ public class PartyReferenceServiceTest {
     retrievedRoleTypeAttributeConstraints.stream()
         .filter(
             roleTypeAttributeConstraint ->
-                !roleTypeAttributeConstraint.getRoleType().equals("employee"))
+                !roleTypeAttributeConstraint.getRoleType().equals("test_person_role"))
         .findFirst()
         .ifPresent(
             roleTypeAttributeConstraint ->
@@ -523,7 +523,7 @@ public class PartyReferenceServiceTest {
     partyReferenceService.isValidAttributeType(PartyType.PERSON.code(), "height");
     partyReferenceService.isValidAttributeTypeCategory("anthropometric_measurements");
     partyReferenceService.isValidRolePurpose("test");
-    partyReferenceService.isValidRoleType(PartyType.PERSON.code(), "employee");
+    partyReferenceService.isValidRoleType(PartyType.PERSON.code(), "test_person_role");
     partyReferenceService.isValidPhysicalAddressPurpose(PartyType.PERSON.code(), "billing");
     partyReferenceService.isValidPhysicalAddressRole(
         PartyType.PERSON.code(), PhysicalAddressRole.RESIDENTIAL);

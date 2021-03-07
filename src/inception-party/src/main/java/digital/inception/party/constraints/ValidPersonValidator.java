@@ -46,7 +46,8 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Person> {
+public class ValidPersonValidator extends PartyValidator
+    implements ConstraintValidator<ValidPerson, Person> {
 
   /** The Party Reference Service. */
   private final IPartyReferenceService partyReferenceService;
@@ -405,12 +406,9 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
         }
 
         for (Role role : person.getRoles()) {
-          for (RoleTypeAttributeConstraint roleTypeAttributeConstraint :
-              partyReferenceService.getRoleTypeAttributeConstraints(role.getType())) {
-            if (!checkRoleTypeAttributeConstraint(
-                roleTypeAttributeConstraint, person, hibernateConstraintValidatorContext)) {
-              isValid = false;
-            }
+          if (!validatePersonWithRole(
+              person, role.getType(), hibernateConstraintValidatorContext)) {
+            isValid = false;
           }
         }
 
@@ -424,226 +422,302 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
     }
   }
 
-  private boolean checkRoleTypeAttributeConstraint(
-      RoleTypeAttributeConstraint roleTypeAttributeConstraint,
+  private boolean validatePersonWithRole(
       Person person,
-      HibernateConstraintValidatorContext hibernateConstraintValidatorContext) {
+      String roleType,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws Exception {
     boolean isValid = true;
-    
-    if (roleTypeAttributeConstraint.getType() == AttributeConstraintType.REQUIRED) {
-      switch (roleTypeAttributeConstraint.getAttributeType()) {
-        case "country_of_birth":
-          if (!StringUtils.hasText(person.getCountryOfBirth())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.countryOfBirthRequiredForRoleType.message}")
-                .addConstraintViolation();
 
-            isValid = false;
-          }
-          break;
-        case "country_of_residence":
-          if (!StringUtils.hasText(person.getCountryOfResidence())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.countryOfResidenceRequiredForRoleType.message}")
-                .addConstraintViolation();
+    for (RoleTypeAttributeConstraint roleTypeAttributeConstraint :
+        partyReferenceService.getRoleTypeAttributeConstraints(roleType)) {
 
-            isValid = false;
-          }
-          break;
-        case "countries_of_tax_residence":
-          if (person.getCountriesOfTaxResidence().size() == 0) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.countryOfTaxResidenceRequiredForRoleType.message}")
-                .addConstraintViolation();
+      if (roleTypeAttributeConstraint.getType() == AttributeConstraintType.REQUIRED) {
+        switch (roleTypeAttributeConstraint.getAttributeType()) {
+          case "contact_mechanism":
+            if (!person.hasContactMechanismType(roleTypeAttributeConstraint.getAttributeTypeQualifier())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter(
+                      "contactMechanismType",
+                      roleTypeAttributeConstraint.getAttributeTypeQualifier())
+                  .addMessageParameter("roleType", roleType)
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.contactMechanismTypeRequiredForRoleType.message}")
+                  .addConstraintViolation();
 
-            isValid = false;
-          }
-          break;
-        case "date_of_birth":
-          if (person.getDateOfBirth() == null) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.dateOfBirthRequiredForRoleType.message}")
-                .addConstraintViolation();
+              isValid = false;
+            }
 
-            isValid = false;
-          }
-          break;
-        case "employment_status":
-          if (!StringUtils.hasText(person.getEmploymentStatus())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.employmentStatusRequiredForRoleType.message}")
-                .addConstraintViolation();
+            break;
 
-            isValid = false;
-          }
-          break;
-        case "employment_type":
-          if (!StringUtils.hasText(person.getEmploymentType())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.employmentTypeRequiredForRoleType.message}")
-                .addConstraintViolation();
+          case "contact_mechanisms":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getContactMechanisms(),
+                "{digital.inception.party.constraints.ValidPerson.contactMechanismRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
 
-            isValid = false;
-          }
-          break;
-        case "gender":
-          if (!StringUtils.hasText(person.getGender())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.genderRequiredForRoleType.message}")
-                .addConstraintViolation();
+            break;
 
-            isValid = false;
-          }
-          break;
-        case "given_name":
-          if (!StringUtils.hasText(person.getGivenName())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.givenNameRequiredForRoleType.message}")
-                .addConstraintViolation();
+          case "country_of_birth":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getCountryOfBirth(),
+                "{digital.inception.party.constraints.ValidPerson.countryOfBirthRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
 
-            isValid = false;
-          }
-          break;
-        case "home_language":
-          if (!StringUtils.hasText(person.getHomeLanguage())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.homeLanguageRequiredForRoleType.message}")
-                .addConstraintViolation();
+            break;
 
-            isValid = false;
-          }
-          break;
-        case "initials":
-          if (!StringUtils.hasText(person.getInitials())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.initialsRequiredForRoleType.message}")
-                .addConstraintViolation();
+          case "country_of_residence":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getCountryOfResidence(),
+                "{digital.inception.party.constraints.ValidPerson.countryOfResidenceRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
 
-            isValid = false;
-          }
-          break;
-        case "marital_status":
-          if (!StringUtils.hasText(person.getMaritalStatus())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.maritalStatusRequiredForRoleType.message}")
-                .addConstraintViolation();
+            break;
 
-            isValid = false;
-          }
-          break;
-        case "marriage_type":
-          if (!StringUtils.hasText(person.getMarriageType())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.marriageTypeRequiredForRoleType.message}")
-                .addConstraintViolation();
+          case "countries_of_tax_residence":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getCountriesOfTaxResidence(),
+                "{digital.inception.party.constraints.ValidPerson.countryOfTaxResidenceRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
 
-            isValid = false;
-          }
-          break;
-        case "occupation":
-          if (!StringUtils.hasText(person.getOccupation())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.occupationRequiredForRoleType.message}")
-                .addConstraintViolation();
+            break;
 
-            isValid = false;
-          }
-          break;
-        case "preferred_name":
-          if (!StringUtils.hasText(person.getPreferredName())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.preferredNameRequiredForRoleType.message}")
-                .addConstraintViolation();
+          case "date_of_birth":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getDateOfBirth(),
+                "{digital.inception.party.constraints.ValidPerson.dateOfBirthRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
 
-            isValid = false;
-          }
-          break;
-        case "race":
-          if (!StringUtils.hasText(person.getRace())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.raceRequiredForRoleType.message}")
-                .addConstraintViolation();
+            break;
 
-            isValid = false;
-          }
-          break;
-        case "residency_status":
-          if (!StringUtils.hasText(person.getResidencyStatus())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.residencyStatusRequiredForRoleType.message}")
-                .addConstraintViolation();
+          case "employment_status":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getEmploymentStatus(),
+                "{digital.inception.party.constraints.ValidPerson.employmentStatusRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
 
-            isValid = false;
-          }
-          break;
-        case "residential_type":
-          if (!StringUtils.hasText(person.getResidentialType())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.residentialTypeRequiredForRoleType.message}")
-                .addConstraintViolation();
+            break;
 
-            isValid = false;
-          }
-          break;
-        case "surname":
-          if (!StringUtils.hasText(person.getSurname())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.surnameRequiredForRoleType.message}")
-                .addConstraintViolation();
+          case "employment_type":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getEmploymentType(),
+                "{digital.inception.party.constraints.ValidPerson.employmentTypeRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
 
-            isValid = false;
-          }
-          break;
-        case "title":
-          if (!StringUtils.hasText(person.getTitle())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", roleTypeAttributeConstraint.getRoleType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.titleRequiredForRoleType.message}")
-                .addConstraintViolation();
+            break;
 
-            isValid = false;
-          }
-          break;
-        default:
+          case "gender":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getGender(),
+                "{digital.inception.party.constraints.ValidPerson.genderRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
 
-          break;
+            break;
+
+          case "given_name":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getGivenName(),
+                "{digital.inception.party.constraints.ValidPerson.givenNameRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "home_language":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getHomeLanguage(),
+                "{digital.inception.party.constraints.ValidPerson.homeLanguageRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "identity_documents":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getIdentityDocuments(),
+                "{digital.inception.party.constraints.ValidPerson.identityDocumentRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "initials":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getInitials(),
+                "{digital.inception.party.constraints.ValidPerson.initialsRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "marital_status":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getMaritalStatus(),
+                "{digital.inception.party.constraints.ValidPerson.maritalStatusRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "marriage_type":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getMarriageType(),
+                "{digital.inception.party.constraints.ValidPerson.marriageTypeRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "occupation":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getOccupation(),
+                "{digital.inception.party.constraints.ValidPerson.occupationRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "physical_addresses":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getPhysicalAddresses(),
+                "{digital.inception.party.constraints.ValidPerson.physicalAddressRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "physical_address":
+            if (!person.hasPhysicalAddressRole(roleTypeAttributeConstraint.getAttributeTypeQualifier())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter(
+                      "physicalAddressRole",
+                      roleTypeAttributeConstraint.getAttributeTypeQualifier())
+                  .addMessageParameter("roleType", roleType)
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.physicalAddressRoleRequiredForRoleType.message}")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            break;
+
+          case "preferred_name":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getPreferredName(),
+                "{digital.inception.party.constraints.ValidPerson.preferredNameRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "race":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getRace(),
+                "{digital.inception.party.constraints.ValidPerson.raceRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "residency_status":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getResidencyStatus(),
+                "{digital.inception.party.constraints.ValidPerson.residencyStatusRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "residential_type":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getResidentialType(),
+                "{digital.inception.party.constraints.ValidPerson.residentialTypeRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "surname":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getSurname(),
+                "{digital.inception.party.constraints.ValidPerson.surnameRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "tax_numbers":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getTaxNumbers(),
+                "{digital.inception.party.constraints.ValidPerson.taxNumberRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "title":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getTitle(),
+                "{digital.inception.party.constraints.ValidPerson.titleRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+            break;
+        }
       }
     }
 

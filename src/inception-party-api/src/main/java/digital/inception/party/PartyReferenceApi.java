@@ -957,8 +957,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "roleType",
               description =
-                  "The optional code for the role type to retrieve the role type attribute constraints for",
-              example = "employee")
+                  "The optional code for the role type to retrieve the role type attribute constraints for")
           @RequestParam(value = "roleType", required = false)
           String roleType)
       throws ServiceUnavailableException {

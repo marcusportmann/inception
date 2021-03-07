@@ -1533,39 +1533,6 @@
       <column name="name" value="Test"/>
       <column name="description" value="Test"/>
     </insert>
-
-    <insert schemaName="party" tableName="party_role_types">
-      <column name="code" value="employer"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="1"/>
-      <column name="name" value="Employer"/>
-      <column name="description" value="Employer"/>
-      <column name="party_types" value="organization,person"/>
-    </insert>
-    <insert schemaName="party" tableName="party_role_types">
-      <column name="code" value="employee"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="2"/>
-      <column name="name" value="Employee"/>
-      <column name="description" value="Employee"/>
-      <column name="party_types" value="person"/>
-    </insert>
-    <insert schemaName="party" tableName="party_role_types">
-      <column name="code" value="supplier"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="3"/>
-      <column name="name" value="Supplier"/>
-      <column name="description" value="Supplier"/>
-      <column name="party_types" value="organization,person"/>
-    </insert>
-    <insert schemaName="party" tableName="party_role_types">
-      <column name="code" value="vendor"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="4"/>
-      <column name="name" value="Vendor"/>
-      <column name="description" value="Vendor"/>
-      <column name="party_types" value="organization,person"/>
-    </insert>    
     
     <insert schemaName="party" tableName="physical_address_purposes">
       <column name="code" value="billing"/>

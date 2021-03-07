@@ -30,8 +30,11 @@ public class RoleTypeAttributeConstraintId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the standard or custom attribute type. */
+  /** The code for the attribute type. */
   private String attributeType;
+
+  /** The qualifier for the attribute type. */
+  private String attributeTypeQualifier;
 
   /** The code for the role type. */
   private String roleType;
@@ -46,14 +49,31 @@ public class RoleTypeAttributeConstraintId implements Serializable {
    * Constructs a new <b>RoleTypeAttributeConstraintId</b>.
    *
    * @param roleType the code for the role type
-   * @param attributeType the code for the standard or custom attribute type
+   * @param attributeType the code for the attribute type
+   * @param attributeTypeQualifier the qualifier for the attribute type
+   * @param type the attribute constraint type
+   */
+  public RoleTypeAttributeConstraintId(
+      String roleType,
+      String attributeType,
+      String attributeTypeQualifier,
+      AttributeConstraintType type) {
+    this.roleType = roleType;
+    this.attributeType = attributeType;
+    this.attributeTypeQualifier = attributeTypeQualifier;
+    this.type = type;
+  }
+
+  /**
+   * Constructs a new <b>RoleTypeAttributeConstraintId</b>.
+   *
+   * @param roleType the code for the role type
+   * @param attributeType the code for the attribute type
    * @param type the attribute constraint type
    */
   public RoleTypeAttributeConstraintId(
       String roleType, String attributeType, AttributeConstraintType type) {
-    this.roleType = roleType;
-    this.attributeType = attributeType;
-    this.type = type;
+    this(roleType, attributeType, "", type);
   }
 
   /**
@@ -80,6 +100,7 @@ public class RoleTypeAttributeConstraintId implements Serializable {
 
     return Objects.equals(roleType, other.roleType)
         && Objects.equals(attributeType, other.attributeType)
+        && Objects.equals(attributeTypeQualifier, other.attributeTypeQualifier)
         && Objects.equals(type, other.type);
   }
 
@@ -92,6 +113,7 @@ public class RoleTypeAttributeConstraintId implements Serializable {
   public int hashCode() {
     return ((roleType == null) ? 0 : roleType.hashCode())
         + ((attributeType == null) ? 0 : attributeType.hashCode())
+        + ((attributeTypeQualifier == null) ? 0 : attributeTypeQualifier.hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }
 }

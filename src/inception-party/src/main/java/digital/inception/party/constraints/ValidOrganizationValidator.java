@@ -17,6 +17,7 @@
 package digital.inception.party.constraints;
 
 import digital.inception.party.Attribute;
+import digital.inception.party.AttributeConstraintType;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
@@ -24,6 +25,7 @@ import digital.inception.party.Organization;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.Preference;
 import digital.inception.party.Role;
+import digital.inception.party.RoleTypeAttributeConstraint;
 import digital.inception.party.TaxNumber;
 import digital.inception.reference.IReferenceService;
 import javax.validation.ConstraintValidator;
@@ -38,17 +40,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author Marcus Portmann
  */
-public class ValidOrganizationValidator
+public class ValidOrganizationValidator extends PartyValidator
     implements ConstraintValidator<ValidOrganization, Organization> {
 
-  /**
-   * The Party Reference Service.
-   */
+  /** The Party Reference Service. */
   private final IPartyReferenceService partyReferenceService;
 
-  /**
-   * The Reference Service.
-   */
+  /** The Reference Service. */
   private final IReferenceService referenceService;
 
   /**
@@ -239,8 +237,121 @@ public class ValidOrganizationValidator
         }
       }
 
+      for (Role role : organization.getRoles()) {
+        if (!validateOrganizationWithRole(
+            organization, role.getType(), hibernateConstraintValidatorContext)) {
+          isValid = false;
+        }
+      }
+
     } catch (Throwable e) {
       throw new ValidationException("Failed to validate the organization", e);
+    }
+
+    return isValid;
+  }
+
+  private boolean validateOrganizationWithRole(
+      Organization organization,
+      String roleType,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws Exception {
+    boolean isValid = true;
+
+    for (RoleTypeAttributeConstraint roleTypeAttributeConstraint :
+        partyReferenceService.getRoleTypeAttributeConstraints(roleType)) {
+
+      if (roleTypeAttributeConstraint.getType() == AttributeConstraintType.REQUIRED) {
+        switch (roleTypeAttributeConstraint.getAttributeType()) {
+          case "contact_mechanism":
+            if (!organization.hasContactMechanismType(
+                roleTypeAttributeConstraint.getAttributeTypeQualifier())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter(
+                      "contactMechanismType",
+                      roleTypeAttributeConstraint.getAttributeTypeQualifier())
+                  .addMessageParameter("roleType", roleType)
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.contactMechanismTypeRequiredForRoleType.message}")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            break;
+
+          case "contact_mechanisms":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                organization.getContactMechanisms(),
+                "{digital.inception.party.constraints.ValidOrganization.contactMechanismRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "countries_of_tax_residence":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                organization.getCountriesOfTaxResidence(),
+                "{digital.inception.party.constraints.ValidOrganization.countryOfTaxResidenceRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "identity_documents":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                organization.getIdentityDocuments(),
+                "{digital.inception.party.constraints.ValidOrganization.identityDocumentRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "physical_addresses":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                organization.getPhysicalAddresses(),
+                "{digital.inception.party.constraints.ValidOrganization.physicalAddressRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "physical_address":
+            if (!organization.hasPhysicalAddressRole(roleTypeAttributeConstraint.getAttributeTypeQualifier())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter(
+                      "physicalAddressRole",
+                      roleTypeAttributeConstraint.getAttributeTypeQualifier())
+                  .addMessageParameter("roleType", roleType)
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.physicalAddressRoleRequiredForRoleType.message}")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            break;
+
+          case "tax_numbers":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                organization.getTaxNumbers(),
+                "{digital.inception.party.constraints.ValidOrganization.taxNumberRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+        }
+      }
     }
 
     return isValid;

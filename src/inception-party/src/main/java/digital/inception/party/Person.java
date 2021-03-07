@@ -1071,6 +1071,30 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns whether the person has a contact mechanism with the specified type.
+   *
+   * @param type the code for the contact mechanism type
+   * @return <b>true</b>> if the person has a contact mechanism with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasContactMechanismType(String type) {
+    return contactMechanisms.stream()
+        .anyMatch(contactMechanism -> contactMechanism.getType().equals(type));
+  }
+
+  /**
+   * Returns whether the person has a physical address with the specified role.
+   *
+   * @param role the code for the physical address role
+   * @return <b>true</b>> if the person has a physical address with the specified role or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasPhysicalAddressRole(String role) {
+    return physicalAddresses.stream()
+        .anyMatch(physicalAddress -> physicalAddress.getRole().equals(role));
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object

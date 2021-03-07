@@ -412,7 +412,7 @@ INSERT INTO party.physical_addresses (id, party_id, type, role, line1, line2, ci
 INSERT INTO party.parties (id, tenant_id, type, name, created)
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', '204e5b8f-48e7-4354-bd15-753e6543b64d', 'person', 'Sally Smith', NOW());
 INSERT INTO party.roles (party_id, type, created)
-  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'employee', NOW());
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'test_person_role', NOW());
 INSERT INTO party.persons (id, title, initials, given_name, surname, gender, race, date_of_birth, home_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, occupation, residency_status, residential_type, countries_of_tax_residence)
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'ms', 'S', 'Sally', 'Smith', 'female', 'asian', '1985-05-01', 'EN', 'GB', 'ZA', 'employed', 'full_time', 'single', 'executive', 'citizen', 'owner', 'ZA');
 INSERT INTO party.identity_documents (party_id, type, number, date_of_issue, country_of_issue, created)
