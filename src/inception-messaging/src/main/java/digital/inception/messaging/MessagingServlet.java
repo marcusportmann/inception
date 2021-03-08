@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-import digital.inception.Debug;
+//import digital.inception.Debug;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
 import java.io.ByteArrayOutputStream;
@@ -108,9 +108,10 @@ public class MessagingServlet extends HttpServlet {
           // We are processing a Message...
         case "Message":
           if (!processMessage(document, response)) {
-            if (Debug.inDebugMode()) {
-              logger.debug("Failed to process the message: " + document.toString());
-            }
+// TODO: FIX LOGGING
+//            if (Debug.inDebugMode()) {
+//              logger.debug("Failed to process the message: " + document.toString());
+//            }
           }
 
           break;
@@ -118,9 +119,10 @@ public class MessagingServlet extends HttpServlet {
           // We are processing a MessagePart...
         case "MessagePart":
           if (!processMessagePart(document, response)) {
-            if (Debug.inDebugMode()) {
-              logger.debug("Failed to process the message part: " + document.toString());
-            }
+// TODO: FIX LOGGING
+//            if (Debug.inDebugMode()) {
+//              logger.debug("Failed to process the message part: " + document.toString());
+//            }
           }
 
           break;
@@ -128,10 +130,11 @@ public class MessagingServlet extends HttpServlet {
           // We are processing a request to download messages queued for a device
         case "MessageDownloadRequest":
           if (!processMessageDownloadRequest(document, response)) {
-            if (Debug.inDebugMode()) {
-              logger.debug(
-                  "Failed to process the message download request: " + document.toString());
-            }
+// TODO: FIX LOGGING
+//            if (Debug.inDebugMode()) {
+//              logger.debug(
+//                  "Failed to process the message download request: " + document.toString());
+//            }
           }
 
           break;
@@ -139,10 +142,11 @@ public class MessagingServlet extends HttpServlet {
           // We are processing an acknowledgement that a message has been downloaded successfully
         case "MessageReceivedRequest":
           if (!processMessageReceivedRequest(document, response)) {
-            if (Debug.inDebugMode()) {
-              logger.debug(
-                  "Failed to process the message received request: " + document.toString());
-            }
+// TODO: FIX LOGGING
+//            if (Debug.inDebugMode()) {
+//              logger.debug(
+//                  "Failed to process the message received request: " + document.toString());
+//            }
           }
 
           break;
@@ -150,10 +154,11 @@ public class MessagingServlet extends HttpServlet {
           // We are processing a request to download message parts queued for a device
         case "MessagePartDownloadRequest":
           if (!processMessagePartDownloadRequest(document, response)) {
-            if (Debug.inDebugMode()) {
-              logger.debug(
-                  "Failed to process the message part download request: " + document.toString());
-            }
+// TODO: FIX LOGGING
+//            if (Debug.inDebugMode()) {
+//              logger.debug(
+//                  "Failed to process the message part download request: " + document.toString());
+//            }
           }
 
           break;
@@ -162,10 +167,11 @@ public class MessagingServlet extends HttpServlet {
           // successfully
         case "MessagePartReceivedRequest":
           if (!processMessagePartReceivedRequest(document, response)) {
-            if (Debug.inDebugMode()) {
-              logger.debug(
-                  "Failed to process the message part received request: " + document.toString());
-            }
+// TODO: FIX LOGGING
+//            if (Debug.inDebugMode()) {
+//              logger.debug(
+//                  "Failed to process the message part received request: " + document.toString());
+//            }
           }
 
           break;

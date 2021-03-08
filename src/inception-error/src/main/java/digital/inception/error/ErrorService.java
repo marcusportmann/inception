@@ -65,9 +65,9 @@ public class ErrorService implements IErrorService {
   /** The JSR-303 validator. */
   private final Validator validator;
 
-  /* Is debugging enabled for the Inception Framework? */
-  @Value("${inception.debug:#{false}}")
-  private boolean debug;
+  /** Is debugging enabled for the Inception Framework? */
+  @Value("${inception.debug.enabled:#{false}}")
+  private boolean inDebugMode;
 
   /**
    * Constructs a new <b>ErrorService</b>.
@@ -151,7 +151,7 @@ public class ErrorService implements IErrorService {
 
       errorReportRepository.saveAndFlush(errorReport);
 
-      if (debug) {
+      if (inDebugMode) {
         ObjectMapper objectMapper = applicationContext.getBean(ObjectMapper.class);
 
         if (objectMapper != null) {

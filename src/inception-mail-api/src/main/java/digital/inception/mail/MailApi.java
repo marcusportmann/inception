@@ -31,6 +31,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
@@ -52,6 +53,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/mail")
 @CrossOrigin
 @SuppressWarnings({"unused"})
+// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
 public class MailApi extends SecureApi {
 
   /* Logger */
@@ -63,9 +65,12 @@ public class MailApi extends SecureApi {
   /**
    * Constructs a new <b>MailRestController</b>.
    *
+   * @param applicationContext the Spring application context
    * @param mailService the Mail Service
    */
-  public MailApi(IMailService mailService) {
+  public MailApi(ApplicationContext applicationContext, IMailService mailService) {
+    super(applicationContext);
+
     this.mailService = mailService;
   }
 
@@ -87,13 +92,13 @@ public class MailApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "A mail template with the specified ID already exists",
@@ -116,7 +121,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
   public void createMailTemplate(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The mail template to create",
@@ -145,13 +150,13 @@ public class MailApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The mail template could not be found",
@@ -174,7 +179,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
   public void deleteMailTemplate(
       @Parameter(
               name = "mailTemplateId",
@@ -202,13 +207,13 @@ public class MailApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The mail template could not be found",
@@ -231,7 +236,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
   public MailTemplate getMailTemplate(
       @Parameter(
               name = "mailTemplateId",
@@ -262,13 +267,13 @@ public class MailApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The mail template could not be found",
@@ -291,7 +296,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
   public String getMailTemplateName(
       @Parameter(
               name = "mailTemplateId",
@@ -329,7 +334,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
   public List<MailTemplateSummary> getMailTemplateSummaries() throws ServiceUnavailableException {
     return mailService.getMailTemplateSummaries();
   }
@@ -358,80 +363,80 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
   public List<MailTemplate> getMailTemplates() throws ServiceUnavailableException {
     return mailService.getMailTemplates();
   }
 
-//  /** Send a test mail. */
-//  @Operation(summary = "Send a test mail", description = "Send a test mail")
-//  @ApiResponses(
-//      value = {
-//        @ApiResponse(responseCode = "204", description = "The mail was sent successfully"),
-//        @ApiResponse(
-//            responseCode = "400",
-//            description = "Invalid argument",
-//            content =
-//                @Content(
-//                    mediaType = "application/problem+json",
-//                    schema = @Schema(implementation = ProblemDetails.class))),
-//          @ApiResponse(
-//              responseCode = "403",
-//              description = "Access denied",
-//              content =
-//              @Content(
-//                  mediaType = "application/problem+json",
-//                  schema = @Schema(implementation = ProblemDetails.class))),
-//        @ApiResponse(
-//            responseCode = "404",
-//            description = "The mail template could not be found",
-//            content =
-//                @Content(
-//                    mediaType = "application/problem+json",
-//                    schema = @Schema(implementation = ProblemDetails.class))),
-//        @ApiResponse(
-//            responseCode = "409",
-//            description = "A mail template with the specified ID already exists",
-//            content =
-//                @Content(
-//                    mediaType = "application/problem+json",
-//                    schema = @Schema(implementation = ProblemDetails.class))),
-//        @ApiResponse(
-//            responseCode = "500",
-//            description =
-//                "An error has occurred and the request could not be processed at this time",
-//            content =
-//                @Content(
-//                    mediaType = "application/problem+json",
-//                    schema = @Schema(implementation = ProblemDetails.class)))
-//      })
-//  @RequestMapping(
-//      value = "/send-test-mail",
-//      method = RequestMethod.POST,
-//      produces = "application/json")
-//  @ResponseStatus(HttpStatus.NO_CONTENT)
-//  @PreAuthorize(
-//      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
-//  public void sendMailTest()
-//      throws InvalidArgumentException, DuplicateMailTemplateException,
-//          MailTemplateNotFoundException, ServiceUnavailableException {
-//    MailTemplate mailTemplate = new MailTemplate();
-//    mailTemplate.setId("TestMailTemplate");
-//    mailTemplate.setName("Test Mail Template");
-//    mailTemplate.setContentType(MailTemplateContentType.HTML);
-//    mailTemplate.setTemplate("Hello World!".getBytes());
-//
-//    mailService.createMailTemplate(mailTemplate);
-//
-//    MailTemplate retrievedMailTemplate = mailService.getMailTemplate(mailTemplate.getId());
-//
-//    logger.info(
-//        "Retrieved mail template ("
-//            + retrievedMailTemplate.getName()
-//            + ") with ID ("
-//            + retrievedMailTemplate.getId()
-//            + ")");
-//  }
+  //  /** Send a test mail. */
+  //  @Operation(summary = "Send a test mail", description = "Send a test mail")
+  //  @ApiResponses(
+  //      value = {
+  //        @ApiResponse(responseCode = "204", description = "The mail was sent successfully"),
+  //        @ApiResponse(
+  //            responseCode = "400",
+  //            description = "Invalid argument",
+  //            content =
+  //                @Content(
+  //                    mediaType = "application/problem+json",
+  //                    schema = @Schema(implementation = ProblemDetails.class))),
+  //          @ApiResponse(
+  //              responseCode = "403",
+  //              description = "Access denied",
+  //              content =
+  //              @Content(
+  //                  mediaType = "application/problem+json",
+  //                  schema = @Schema(implementation = ProblemDetails.class))),
+  //        @ApiResponse(
+  //            responseCode = "404",
+  //            description = "The mail template could not be found",
+  //            content =
+  //                @Content(
+  //                    mediaType = "application/problem+json",
+  //                    schema = @Schema(implementation = ProblemDetails.class))),
+  //        @ApiResponse(
+  //            responseCode = "409",
+  //            description = "A mail template with the specified ID already exists",
+  //            content =
+  //                @Content(
+  //                    mediaType = "application/problem+json",
+  //                    schema = @Schema(implementation = ProblemDetails.class))),
+  //        @ApiResponse(
+  //            responseCode = "500",
+  //            description =
+  //                "An error has occurred and the request could not be processed at this time",
+  //            content =
+  //                @Content(
+  //                    mediaType = "application/problem+json",
+  //                    schema = @Schema(implementation = ProblemDetails.class)))
+  //      })
+  //  @RequestMapping(
+  //      value = "/send-test-mail",
+  //      method = RequestMethod.POST,
+  //      produces = "application/json")
+  //  @ResponseStatus(HttpStatus.NO_CONTENT)
+  //  @PreAuthorize(
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
+  //  public void sendMailTest()
+  //      throws InvalidArgumentException, DuplicateMailTemplateException,
+  //          MailTemplateNotFoundException, ServiceUnavailableException {
+  //    MailTemplate mailTemplate = new MailTemplate();
+  //    mailTemplate.setId("TestMailTemplate");
+  //    mailTemplate.setName("Test Mail Template");
+  //    mailTemplate.setContentType(MailTemplateContentType.HTML);
+  //    mailTemplate.setTemplate("Hello World!".getBytes());
+  //
+  //    mailService.createMailTemplate(mailTemplate);
+  //
+  //    MailTemplate retrievedMailTemplate = mailService.getMailTemplate(mailTemplate.getId());
+  //
+  //    logger.info(
+  //        "Retrieved mail template ("
+  //            + retrievedMailTemplate.getName()
+  //            + ") with ID ("
+  //            + retrievedMailTemplate.getId()
+  //            + ")");
+  //  }
 
   /**
    * Update the mail template.
@@ -452,13 +457,13 @@ public class MailApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The mail template could not be found",
@@ -481,7 +486,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
   public void updateMailTemplate(
       @Parameter(
               name = "mailTemplateId",

@@ -48,9 +48,9 @@ public class ProblemHandler {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ProblemHandler.class);
 
-  /* Is debugging enabled for the Inception Framework? */
-  @Value("${inception.debug:#{false}}")
-  private boolean debug;
+  /** Is debugging enabled for the Inception Framework? */
+  @Value("${inception.debug.enabled:#{false}}")
+  private boolean inDebugMode;
 
   public ProblemHandler() {}
 
@@ -59,7 +59,7 @@ public class ProblemHandler {
   protected ResponseEntity<ProblemDetails> handle(
       HttpServletRequest request, ServiceException serviceException) {
 
-    if (debug) {
+    if (inDebugMode) {
       logger.error(
           "Failed to process the HTTP servlet request (" + request.getRequestURI() + ")",
           serviceException);
@@ -103,7 +103,7 @@ public class ProblemHandler {
 
     problemDetails.setDetail(serviceException.getMessage());
 
-    if (debug) {
+    if (inDebugMode) {
       problemDetails.setStackTrace(dumpStackTrace(serviceException));
     }
 
@@ -123,7 +123,7 @@ public class ProblemHandler {
     problemDetails.setStatus(HttpStatus.FORBIDDEN.value());
     problemDetails.setDetail(accessDeniedException.getMessage());
 
-    if (debug) {
+    if (inDebugMode) {
       problemDetails.setStackTrace(dumpStackTrace(accessDeniedException));
     }
 
@@ -134,7 +134,7 @@ public class ProblemHandler {
   @ResponseBody
   protected ResponseEntity<ProblemDetails> handle(HttpServletRequest request, Throwable cause) {
 
-    if (debug) {
+    if (inDebugMode) {
       logger.error(
           "Failed to process the HTTP servlet request (" + request.getRequestURI() + ")", cause);
     }
@@ -148,7 +148,7 @@ public class ProblemHandler {
     problemDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
     problemDetails.setDetail(cause.getMessage());
 
-    if (debug) {
+    if (inDebugMode) {
       problemDetails.setStackTrace(dumpStackTrace(cause));
     }
 

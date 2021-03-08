@@ -33,7 +33,12 @@ server:
 
 
 inception:
-  debug: true
+  api:
+    security:
+      enabled: true;
+
+  debug:
+    enabled: true
 
   application:
     data-source:

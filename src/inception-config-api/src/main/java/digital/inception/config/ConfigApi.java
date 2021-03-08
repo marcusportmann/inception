@@ -29,6 +29,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -49,6 +50,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/config")
 @CrossOrigin
 @SuppressWarnings({"unused"})
+// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
 public class ConfigApi extends SecureApi {
 
   /** The Config Service. */
@@ -57,9 +59,12 @@ public class ConfigApi extends SecureApi {
   /**
    * Constructs a new <b>ConfigApi</b>.
    *
+   * @param applicationContext the Spring application context
    * @param configService the Config Service
    */
-  public ConfigApi(IConfigService configService) {
+  public ConfigApi(ApplicationContext applicationContext, IConfigService configService) {
+    super(applicationContext);
+
     this.configService = configService;
   }
 
@@ -107,7 +112,8 @@ public class ConfigApi extends SecureApi {
       method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration') or isSecurityDisabled()")
   public void deleteConfig(
       @Parameter(name = "key", description = "The key for the config", required = true)
           @PathVariable
@@ -160,7 +166,8 @@ public class ConfigApi extends SecureApi {
       value = "/configs/{key}",
       method = RequestMethod.GET,
       produces = "application/json")
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration') or isSecurityDisabled()")
   public Config getConfig(
       @Parameter(name = "key", description = "The key for the config", required = true)
           @PathVariable
@@ -213,7 +220,8 @@ public class ConfigApi extends SecureApi {
       value = "/configs/{key}/value",
       method = RequestMethod.GET,
       produces = "application/json")
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration') or isSecurityDisabled()")
   public String getConfigValue(
       @Parameter(name = "key", description = "The key for the config", required = true)
           @PathVariable
@@ -241,7 +249,8 @@ public class ConfigApi extends SecureApi {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(value = "/configs", method = RequestMethod.GET, produces = "application/json")
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration') or isSecurityDisabled()")
   public List<Config> getConfigs() throws ServiceUnavailableException {
     return configService.getConfigs();
   }
@@ -280,7 +289,8 @@ public class ConfigApi extends SecureApi {
       })
   @RequestMapping(value = "/configs", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration') or isSecurityDisabled()")
   public void setConfig(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The config",

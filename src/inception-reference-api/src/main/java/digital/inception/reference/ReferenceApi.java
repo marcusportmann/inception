@@ -27,7 +27,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,6 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/reference")
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
+// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
 public class ReferenceApi extends SecureApi {
 
   /** The Reference Service. */
@@ -53,9 +56,12 @@ public class ReferenceApi extends SecureApi {
   /**
    * Constructs a new <b>ReferenceRestController</b>.
    *
+   * @param applicationContext the Spring application context
    * @param referenceService the Reference Service
    */
-  public ReferenceApi(IReferenceService referenceService) {
+  public ReferenceApi(ApplicationContext applicationContext, IReferenceService referenceService) {
+    super(applicationContext);
+
     this.referenceService = referenceService;
   }
 
@@ -81,7 +87,7 @@ public class ReferenceApi extends SecureApi {
       })
   @RequestMapping(value = "/countries", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<Country> getCountries(
       @Parameter(
               name = "localeId",
@@ -116,7 +122,7 @@ public class ReferenceApi extends SecureApi {
       })
   @RequestMapping(value = "/languages", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<Language> getLanguages(
       @Parameter(
               name = "localeId",
@@ -151,7 +157,7 @@ public class ReferenceApi extends SecureApi {
       })
   @RequestMapping(value = "/regions", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<Region> getRegions(
       @Parameter(
               name = "localeId",
@@ -191,7 +197,7 @@ public class ReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<VerificationMethod> getVerificationMethods(
       @Parameter(
               name = "localeId",
@@ -231,7 +237,7 @@ public class ReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<VerificationStatus> getVerificationStatuses(
       @Parameter(
               name = "localeId",

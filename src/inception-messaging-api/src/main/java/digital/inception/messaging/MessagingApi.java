@@ -18,6 +18,7 @@ package digital.inception.messaging;
 
 import digital.inception.api.SecureApi;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/messaging")
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
+// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
 public class MessagingApi extends SecureApi {
 
   /** The Messaging Service. */
@@ -40,9 +42,12 @@ public class MessagingApi extends SecureApi {
   /**
    * Constructs a new <b>MessagingRestController</b>.
    *
+   * @param applicationContext the Spring application context
    * @param messagingService the Messaging Service
    */
-  public MessagingApi(IMessagingService messagingService) {
+  public MessagingApi(ApplicationContext applicationContext, IMessagingService messagingService) {
+    super(applicationContext);
+
     this.messagingService = messagingService;
   }
 }

@@ -19,6 +19,7 @@ package digital.inception.api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +33,43 @@ import org.springframework.util.StringUtils;
  */
 @SuppressWarnings("unused")
 public abstract class SecureApi {
+
+  /** Is debugging enabled for the Inception Framework? */
+  private boolean inDebugMode;
+
+  /** Is API security enabled for the Inception Framework? */
+  private boolean isApiSecurityEnabled;
+
+
+  /**
+   * Constructs a new <b>SecureApi</b>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public SecureApi(ApplicationContext applicationContext) {
+
+    // Check if debugging is enabled for the Inception Framework
+    try {
+      if (StringUtils.hasText(applicationContext.getEnvironment().getProperty("inception.debug.enabled"))) {
+        this.inDebugMode =
+            Boolean.parseBoolean(
+                applicationContext.getEnvironment().getProperty("inception.debug.enabled"));
+      }
+    } catch (Throwable e) {
+      this.inDebugMode = false;
+    }
+
+    // Check if security is enabled for the Inception Framework
+    try {
+      if (StringUtils.hasText(applicationContext.getEnvironment().getProperty("inception.api.security.enabled"))) {
+        this.isApiSecurityEnabled =
+            Boolean.parseBoolean(
+                applicationContext.getEnvironment().getProperty("inception.api.security.enabled"));
+      }
+    } catch (Throwable e) {
+      this.isApiSecurityEnabled = !this.inDebugMode;
+    }
+  }
 
   /**
    * Returns the <b>Long</b> value portion of the authorities with the specified prefix.

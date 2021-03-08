@@ -38,6 +38,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -64,6 +65,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/security")
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
+// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
 public class SecurityApi extends SecureApi {
 
   /* Logger */
@@ -78,12 +80,18 @@ public class SecurityApi extends SecureApi {
   /**
    * Constructs a new <b>SecurityRestController</b>.
    *
-   * @param securityService the Security Service
+   * @param applicationContext the Spring application context
    * @param validator the JSR-303 validator
+   * @param securityService the Security Service
    */
-  public SecurityApi(ISecurityService securityService, Validator validator) {
-    this.securityService = securityService;
+  public SecurityApi(
+      ApplicationContext applicationContext,
+      Validator validator,
+      ISecurityService securityService) {
+    super(applicationContext);
+
     this.validator = validator;
+    this.securityService = securityService;
   }
 
   /**
@@ -144,7 +152,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public void addMemberToGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -250,7 +258,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public void addRoleToGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -368,7 +376,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or isSecurityDisabled()")
   public void addUserDirectoryToTenant(
       @Parameter(
               name = "tenantId",
@@ -463,7 +471,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword') or isSecurityDisabled()")
   public void adminChangePassword(
       @Parameter(
               name = "userDirectoryId",
@@ -720,7 +728,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public void createGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -794,7 +802,7 @@ public class SecurityApi extends SecureApi {
   @RequestMapping(value = "/tenants", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or isSecurityDisabled()")
   public void createTenant(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The tenant to create",
@@ -865,7 +873,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or isSecurityDisabled()")
   public void createUser(
       @Parameter(
               name = "userDirectoryId",
@@ -952,7 +960,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or isSecurityDisabled()")
   public void createUserDirectory(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The user directory to create",
@@ -1018,7 +1026,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public void deleteGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -1084,7 +1092,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or isSecurityDisabled()")
   public void deleteTenant(
       @Parameter(
               name = "tenantId",
@@ -1142,7 +1150,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or isSecurityDisabled()")
   public void deleteUser(
       @Parameter(
               name = "userDirectoryId",
@@ -1210,7 +1218,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or isSecurityDisabled()")
   public void deleteUserDirectory(
       @Parameter(
               name = "userDirectoryId",
@@ -1269,7 +1277,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public Group getGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -1336,7 +1344,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public List<String> getGroupNames(
       @Parameter(
               name = "userDirectoryId",
@@ -1402,7 +1410,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or isSecurityDisabled()")
   public List<String> getGroupNamesForUser(
       @Parameter(
               name = "userDirectoryId",
@@ -1473,7 +1481,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public Groups getGroups(
       @Parameter(
               name = "userDirectoryId",
@@ -1561,7 +1569,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public GroupMembers getMembersForGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -1653,7 +1661,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public List<String> getRoleCodesForGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -1695,7 +1703,7 @@ public class SecurityApi extends SecureApi {
   @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public List<Role> getRoles() throws ServiceUnavailableException {
     return securityService.getRoles();
   }
@@ -1749,7 +1757,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public List<GroupRole> getRolesForGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -1816,7 +1824,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or isSecurityDisabled()")
   public Tenant getTenant(
       @Parameter(
               name = "tenantId",
@@ -1876,7 +1884,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or isSecurityDisabled()")
   public String getTenantName(
       @Parameter(
               name = "tenantId",
@@ -1927,7 +1935,7 @@ public class SecurityApi extends SecureApi {
   @RequestMapping(value = "/tenants", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or isSecurityDisabled()")
   public Tenants getTenants(
       @Parameter(name = "filter", description = "The optional filter to apply to the tenants")
           @RequestParam(value = "filter", required = false)
@@ -2152,7 +2160,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or isSecurityDisabled()")
   public UserDirectories getUserDirectories(
       @Parameter(
               name = "filter",
@@ -2229,7 +2237,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public ResponseEntity<List<UserDirectory>> getUserDirectoriesForTenant(
       @Parameter(
               name = "tenantId",
@@ -2302,7 +2310,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or isSecurityDisabled()")
   public UserDirectory getUserDirectory(
       @Parameter(
               name = "userDirectoryId",
@@ -2362,7 +2370,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword') or isSecurityDisabled()")
   public UserDirectoryCapabilities getUserDirectoryCapabilities(
       @Parameter(
               name = "userDirectoryId",
@@ -2427,7 +2435,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or isSecurityDisabled()")
   public String getUserDirectoryName(
       @Parameter(
               name = "userDirectoryId",
@@ -2483,7 +2491,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or isSecurityDisabled()")
   public UserDirectorySummaries getUserDirectorySummaries(
       @Parameter(
               name = "filter",
@@ -2560,7 +2568,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.UserGroups')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.UserGroups') or isSecurityDisabled()")
   public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummariesForTenant(
       @Parameter(
               name = "tenantId",
@@ -2635,7 +2643,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or isSecurityDisabled()")
   public UserDirectoryType getUserDirectoryTypeForUserDirectory(
       @Parameter(
               name = "userDirectoryId",
@@ -2679,7 +2687,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or isSecurityDisabled()")
   public List<UserDirectoryType> getUserDirectoryTypes() throws ServiceUnavailableException {
     return securityService.getUserDirectoryTypes();
   }
@@ -2733,7 +2741,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword') or isSecurityDisabled()")
   public String getUserName(
       @Parameter(
               name = "userDirectoryId",
@@ -2805,7 +2813,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword') or isSecurityDisabled()")
   public Users getUsers(
       @Parameter(
               name = "userDirectoryId",
@@ -2902,7 +2910,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public void removeMemberFromGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -2980,7 +2988,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public void removeRoleFromGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -3066,7 +3074,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or isSecurityDisabled()")
   public void removeUserDirectoryFromTenant(
       @Parameter(
               name = "tenantId",
@@ -3196,7 +3204,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or isSecurityDisabled()")
   public void updateGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -3280,7 +3288,7 @@ public class SecurityApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or isSecurityDisabled()")
   public void updateTenant(
       @Parameter(
               name = "tenantId",

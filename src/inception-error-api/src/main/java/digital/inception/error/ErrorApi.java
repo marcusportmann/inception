@@ -28,7 +28,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -49,6 +51,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/error")
 @CrossOrigin
 @SuppressWarnings({"unused"})
+// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
 public class ErrorApi extends SecureApi {
 
   /** The Error Service. */
@@ -57,9 +60,12 @@ public class ErrorApi extends SecureApi {
   /**
    * Constructs a new <b>ErrorRestController</b>.
    *
+   * @param applicationContext the Spring application context
    * @param errorService the Error Service
    */
-  public ErrorApi(IErrorService errorService) {
+  public ErrorApi(ApplicationContext applicationContext, IErrorService errorService) {
+    super(applicationContext);
+
     this.errorService = errorService;
   }
 
@@ -166,8 +172,8 @@ public class ErrorApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Error.ErrorAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Error.ErrorAdministration') or isSecurityDisabled()")
   public ErrorReportSummaries getErrorReportSummaries(
       @Parameter(name = "filter", description = "The optional filter to apply to the error reports")
           @RequestParam(value = "filter", required = false)

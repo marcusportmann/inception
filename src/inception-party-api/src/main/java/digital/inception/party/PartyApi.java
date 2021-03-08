@@ -29,7 +29,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,6 +51,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/party")
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
+// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
 public class PartyApi extends SecureApi {
 
   /** The Party Service. */
@@ -57,9 +60,12 @@ public class PartyApi extends SecureApi {
   /**
    * Constructs a new <b>PartyRestController</b>.
    *
+   * @param applicationContext the Spring application context
    * @param partyService the Party Service
    */
-  public PartyApi(IPartyService partyService) {
+  public PartyApi(ApplicationContext applicationContext, IPartyService partyService) {
+    super(applicationContext);
+
     this.partyService = partyService;
   }
 
@@ -109,9 +115,8 @@ public class PartyApi extends SecureApi {
       method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
-  // hasAuthority('FUNCTION_Party.OrganizationAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration') or isSecurityDisabled()")
   public void createOrganization(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The organization to create",
@@ -163,9 +168,8 @@ public class PartyApi extends SecureApi {
       })
   @RequestMapping(value = "/persons", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
-  // hasAuthority('FUNCTION_Party.PersonAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration') or isSecurityDisabled()")
   public void createPerson(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The person to create",
@@ -221,9 +225,8 @@ public class PartyApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
-  // hasAuthority('FUNCTION_Party.OrganizationAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration') or isSecurityDisabled()")
   public Organization getOrganization(
       @Parameter(
               name = "organizationId",
@@ -277,9 +280,8 @@ public class PartyApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
-  // hasAuthority('FUNCTION_Party.OrganizationAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration') or isSecurityDisabled()")
   public Organizations getOrganizations(
       @Parameter(name = "filter", description = "The optional filter to apply to the organizations")
           @RequestParam(value = "filter", required = false)
@@ -349,8 +351,8 @@ public class PartyApi extends SecureApi {
       })
   @RequestMapping(value = "/parties", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or isSecurityDisabled()")
   public Parties getParties(
       @Parameter(name = "filter", description = "The optional filter to apply to the parties")
           @RequestParam(value = "filter", required = false)
@@ -422,8 +424,8 @@ public class PartyApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or isSecurityDisabled()")
   public Party getParty(
       @Parameter(
               name = "partyId",
@@ -480,9 +482,8 @@ public class PartyApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
-  // hasAuthority('FUNCTION_Party.PersonAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration') or isSecurityDisabled()")
   public Person getPerson(
       @Parameter(
               name = "personId",
@@ -533,9 +534,8 @@ public class PartyApi extends SecureApi {
       })
   @RequestMapping(value = "/persons", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
-  // hasAuthority('FUNCTION_Party.PersonAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration') or isSecurityDisabled()")
   public Persons getPersons(
       @Parameter(name = "filter", description = "The optional filter to apply to the persons")
           @RequestParam(value = "filter", required = false)
@@ -614,9 +614,8 @@ public class PartyApi extends SecureApi {
       method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
-  // hasAuthority('FUNCTION_Party.OrganizationAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration') or isSecurityDisabled()")
   public void updateOrganization(
       @Parameter(
               name = "organizationId",
@@ -690,9 +689,8 @@ public class PartyApi extends SecureApi {
       method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
-  // hasAuthority('FUNCTION_Party.PersonAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration') or isSecurityDisabled()")
   public void updatePerson(
       @Parameter(name = "personId", description = "The ID for the person", required = true)
           @PathVariable

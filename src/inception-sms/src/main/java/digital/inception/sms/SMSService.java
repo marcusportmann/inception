@@ -17,7 +17,6 @@
 package digital.inception.sms;
 
 import com.github.f4b6a3.uuid.UuidCreator;
-import digital.inception.Debug;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
@@ -400,16 +399,16 @@ public class SMSService implements ISMSService {
         logger.debug("Attempting to send a SMS using the mobile number (" + mobileNumber + ")");
       }
 
-      if (Debug.inDebugMode()) {
-        logger.info(
-            "Skipping sending of SMS ("
-                + message
-                + ") to mobile number ("
-                + mobileNumber
-                + ") in DEBUG mode");
-
-        return true;
-      }
+//      if (Debug.inDebugMode()) {
+//        logger.info(
+//            "Skipping sending of SMS ("
+//                + message
+//                + ") to mobile number ("
+//                + mobileNumber
+//                + ") in DEBUG mode");
+//
+//        return true;
+//      }
 
       if (PROVIDER_SMS_PORTAL.equalsIgnoreCase(useProvider)) {
         String smsPortalToken = getSMSPortalToken();

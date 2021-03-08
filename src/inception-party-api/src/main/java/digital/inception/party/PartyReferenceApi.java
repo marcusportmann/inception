@@ -19,7 +19,6 @@ package digital.inception.party;
 import digital.inception.api.ProblemDetails;
 import digital.inception.api.SecureApi;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.reference.IReferenceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +27,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,24 +47,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/party/reference")
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
+// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
 public class PartyReferenceApi extends SecureApi {
 
   /** The Party Reference Service. */
   private final IPartyReferenceService partyReferenceService;
 
-  /** The Reference Service. */
-  private final IReferenceService referenceService;
-
   /**
    * Constructs a new <b>PartyReferenceRestController</b>.
    *
+   * @param applicationContext the Spring application context
    * @param partyReferenceService the Party Reference Service
-   * @param referenceService the Reference Service
    */
   public PartyReferenceApi(
-      IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
+      ApplicationContext applicationContext, IPartyReferenceService partyReferenceService) {
+    super(applicationContext);
+
     this.partyReferenceService = partyReferenceService;
-    this.referenceService = referenceService;
   }
 
   /**
@@ -93,7 +93,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<AttributeTypeCategory> getAttributeTypeCategories(
       @Parameter(
               name = "localeId",
@@ -131,7 +131,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<AttributeType> getAttributeTypes(
       @Parameter(
               name = "localeId",
@@ -171,7 +171,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<ContactMechanismPurpose> getContactMechanismPurposes(
       @Parameter(
               name = "localeId",
@@ -211,7 +211,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<ContactMechanismType> getContactMechanismTypes(
       @Parameter(
               name = "localeId",
@@ -251,7 +251,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<EmploymentStatus> getEmploymentStatuses(
       @Parameter(
               name = "localeId",
@@ -291,7 +291,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<EmploymentType> getEmploymentTypes(
       @Parameter(
               name = "localeId",
@@ -326,7 +326,7 @@ public class PartyReferenceApi extends SecureApi {
       })
   @RequestMapping(value = "/genders", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<Gender> getGenders(
       @Parameter(
               name = "localeId",
@@ -366,7 +366,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<IdentityDocumentType> getIdentityDocumentTypes(
       @Parameter(
               name = "localeId",
@@ -406,7 +406,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<MaritalStatus> getMaritalStatuses(
       @Parameter(
               name = "localeId",
@@ -444,7 +444,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<MarriageType> getMarriageTypes(
       @Parameter(
               name = "localeId",
@@ -484,7 +484,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<NextOfKinType> getNextOfKinTypes(
       @Parameter(
               name = "localeId",
@@ -519,7 +519,7 @@ public class PartyReferenceApi extends SecureApi {
       })
   @RequestMapping(value = "/occupations", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<Occupation> getOccupations(
       @Parameter(
               name = "localeId",
@@ -559,7 +559,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(
       @Parameter(
               name = "localeId",
@@ -599,7 +599,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<PhysicalAddressRole> getPhysicalAddressRoles(
       @Parameter(
               name = "localeId",
@@ -639,7 +639,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<PhysicalAddressType> getPhysicalAddressTypes(
       @Parameter(
               name = "localeId",
@@ -679,7 +679,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(
       @Parameter(
               name = "localeId",
@@ -719,7 +719,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<PreferenceType> getPreferenceTypes(
       @Parameter(
               name = "localeId",
@@ -754,7 +754,7 @@ public class PartyReferenceApi extends SecureApi {
       })
   @RequestMapping(value = "/races", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<Race> getRaces(
       @Parameter(
               name = "localeId",
@@ -794,7 +794,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<ResidencePermitType> getResidencePermitTypes(
       @Parameter(
               name = "localeId",
@@ -834,7 +834,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<ResidencyStatus> getResidencyStatuses(
       @Parameter(
               name = "localeId",
@@ -874,7 +874,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<ResidentialType> getResidentialTypes(
       @Parameter(
               name = "localeId",
@@ -912,7 +912,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<RolePurpose> getRolePurposes(
       @Parameter(
               name = "localeId",
@@ -952,7 +952,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<RoleTypeAttributeConstraint> getRoleTypeAttributeConstraints(
       @Parameter(
               name = "roleType",
@@ -986,7 +986,7 @@ public class PartyReferenceApi extends SecureApi {
       })
   @RequestMapping(value = "/role-types", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<RoleType> getRoleTypes(
       @Parameter(
               name = "localeId",
@@ -1026,7 +1026,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<SourceOfFunds> getSourcesOfFunds(
       @Parameter(
               name = "localeId",
@@ -1066,7 +1066,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<TaxNumberType> getTaxNumberTypes(
       @Parameter(
               name = "localeId",
@@ -1106,7 +1106,7 @@ public class PartyReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<TimeToContact> getTimesToContact(
       @Parameter(
               name = "localeId",
@@ -1141,7 +1141,7 @@ public class PartyReferenceApi extends SecureApi {
       })
   @RequestMapping(value = "/titles", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
   public List<Title> getTitles(
       @Parameter(
               name = "localeId",

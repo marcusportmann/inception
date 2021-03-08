@@ -29,6 +29,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
@@ -50,6 +51,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/scheduler")
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
+// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
 public class SchedulerApi extends SecureApi {
 
   /** The Scheduler Service. */
@@ -58,9 +60,12 @@ public class SchedulerApi extends SecureApi {
   /**
    * Constructs a new <b>SchedulerRestController</b>.
    *
+   * @param applicationContext the Spring application context
    * @param schedulerService the Scheduler Service
    */
-  public SchedulerApi(ISchedulerService schedulerService) {
+  public SchedulerApi(ApplicationContext applicationContext, ISchedulerService schedulerService) {
+    super(applicationContext);
+
     this.schedulerService = schedulerService;
   }
 
@@ -80,13 +85,13 @@ public class SchedulerApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "A job with the specified ID already exists",
@@ -106,8 +111,7 @@ public class SchedulerApi extends SecureApi {
   @RequestMapping(value = "/jobs", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
-          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
   public void createJob(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The job to create",
@@ -134,13 +138,13 @@ public class SchedulerApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The job could not be found",
@@ -163,8 +167,7 @@ public class SchedulerApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
-          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
   public void deleteJob(
       @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
           String jobId)
@@ -189,13 +192,13 @@ public class SchedulerApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The job could not be found",
@@ -218,8 +221,7 @@ public class SchedulerApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
-          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
   public Job getJob(
       @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
           String jobId)
@@ -244,13 +246,13 @@ public class SchedulerApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The job could not be found",
@@ -273,8 +275,7 @@ public class SchedulerApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
-          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
   public String getJobName(
       @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
           String jobId)
@@ -303,8 +304,7 @@ public class SchedulerApi extends SecureApi {
   @RequestMapping(value = "/jobs", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
-          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
   public List<Job> getJobs() throws ServiceUnavailableException {
     return schedulerService.getJobs();
   }
@@ -326,13 +326,13 @@ public class SchedulerApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
             description = "The job could not be found",
@@ -355,8 +355,7 @@ public class SchedulerApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
-          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
   public void updateJob(
       @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
           String jobId,

@@ -18,6 +18,7 @@ package digital.inception.sms;
 
 import digital.inception.api.SecureApi;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/sms")
 @CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
+// @el (isSecurityDisabled: digital.inception.api.ApiSecurityExpressionRoot.isSecurityEnabled)
 public class SMSApi extends SecureApi {
 
   /** The SMS Service. */
@@ -40,9 +42,12 @@ public class SMSApi extends SecureApi {
   /**
    * Constructs a new <b>SMSRestController</b>.
    *
+   * @param applicationContext the Spring application context
    * @param smsService the SMS Service
    */
-  public SMSApi(ISMSService smsService) {
+  public SMSApi(ApplicationContext applicationContext, ISMSService smsService) {
+    super(applicationContext);
+
     this.smsService = smsService;
   }
 }
