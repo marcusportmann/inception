@@ -111,7 +111,7 @@ public class SchedulerApi extends SecureApi {
   @RequestMapping(value = "/jobs", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public void createJob(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The job to create",
@@ -167,7 +167,7 @@ public class SchedulerApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public void deleteJob(
       @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
           String jobId)
@@ -221,7 +221,7 @@ public class SchedulerApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public Job getJob(
       @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
           String jobId)
@@ -275,7 +275,7 @@ public class SchedulerApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public String getJobName(
       @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
           String jobId)
@@ -304,7 +304,7 @@ public class SchedulerApi extends SecureApi {
   @RequestMapping(value = "/jobs", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public List<Job> getJobs() throws ServiceUnavailableException {
     return schedulerService.getJobs();
   }
@@ -355,7 +355,7 @@ public class SchedulerApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public void updateJob(
       @Parameter(name = "jobId", description = "The ID for the job", required = true) @PathVariable
           String jobId,

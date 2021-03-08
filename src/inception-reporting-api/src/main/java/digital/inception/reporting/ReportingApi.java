@@ -142,7 +142,7 @@ public class ReportingApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void createReportDefinition(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The report definition to create",
@@ -201,7 +201,7 @@ public class ReportingApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void deleteReportDefinition(
       @Parameter(
               name = "reportDefinitionId",
@@ -360,7 +360,7 @@ public class ReportingApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public ReportDefinition getReportDefinition(
       @Parameter(
               name = "reportDefinition",
@@ -458,7 +458,7 @@ public class ReportingApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
       throws ServiceUnavailableException {
     return reportingService.getReportDefinitionSummaries();
@@ -490,7 +490,7 @@ public class ReportingApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public List<ReportDefinition> getReportDefinitions() throws ServiceUnavailableException {
     return reportingService.getReportDefinitions();
   }
@@ -543,7 +543,7 @@ public class ReportingApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void updateReportDefinition(
       @Parameter(
               name = "reportDefinitionId",

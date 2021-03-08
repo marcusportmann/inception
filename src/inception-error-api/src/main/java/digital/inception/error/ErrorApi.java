@@ -173,7 +173,7 @@ public class ErrorApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Error.ErrorAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Error.ErrorAdministration')")
   public ErrorReportSummaries getErrorReportSummaries(
       @Parameter(name = "filter", description = "The optional filter to apply to the error reports")
           @RequestParam(value = "filter", required = false)

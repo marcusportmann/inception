@@ -121,7 +121,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public void createMailTemplate(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The mail template to create",
@@ -179,7 +179,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public void deleteMailTemplate(
       @Parameter(
               name = "mailTemplateId",
@@ -236,7 +236,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public MailTemplate getMailTemplate(
       @Parameter(
               name = "mailTemplateId",
@@ -296,7 +296,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public String getMailTemplateName(
       @Parameter(
               name = "mailTemplateId",
@@ -334,7 +334,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public List<MailTemplateSummary> getMailTemplateSummaries() throws ServiceUnavailableException {
     return mailService.getMailTemplateSummaries();
   }
@@ -363,7 +363,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public List<MailTemplate> getMailTemplates() throws ServiceUnavailableException {
     return mailService.getMailTemplates();
   }
@@ -486,7 +486,7 @@ public class MailApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public void updateMailTemplate(
       @Parameter(
               name = "mailTemplateId",

@@ -116,7 +116,7 @@ public class PartyApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public void createOrganization(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The organization to create",
@@ -169,7 +169,7 @@ public class PartyApi extends SecureApi {
   @RequestMapping(value = "/persons", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration')")
   public void createPerson(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The person to create",
@@ -226,7 +226,7 @@ public class PartyApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public Organization getOrganization(
       @Parameter(
               name = "organizationId",
@@ -281,7 +281,7 @@ public class PartyApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public Organizations getOrganizations(
       @Parameter(name = "filter", description = "The optional filter to apply to the organizations")
           @RequestParam(value = "filter", required = false)
@@ -352,7 +352,7 @@ public class PartyApi extends SecureApi {
   @RequestMapping(value = "/parties", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
   public Parties getParties(
       @Parameter(name = "filter", description = "The optional filter to apply to the parties")
           @RequestParam(value = "filter", required = false)
@@ -425,7 +425,7 @@ public class PartyApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
   public Party getParty(
       @Parameter(
               name = "partyId",
@@ -483,7 +483,7 @@ public class PartyApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration')")
   public Person getPerson(
       @Parameter(
               name = "personId",
@@ -535,7 +535,7 @@ public class PartyApi extends SecureApi {
   @RequestMapping(value = "/persons", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration')")
   public Persons getPersons(
       @Parameter(name = "filter", description = "The optional filter to apply to the persons")
           @RequestParam(value = "filter", required = false)
@@ -615,7 +615,7 @@ public class PartyApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public void updateOrganization(
       @Parameter(
               name = "organizationId",
@@ -690,7 +690,7 @@ public class PartyApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration')")
   public void updatePerson(
       @Parameter(name = "personId", description = "The ID for the person", required = true)
           @PathVariable

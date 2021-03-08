@@ -40,21 +40,21 @@ public class PasswordUtil {
   private static final Random random = new SecureRandom();
 
   /**
-   * Create the SHA-256 hash of the specified password.
+   * Create the SHA-512 hash of the specified password.
    *
    * @param password the password to hash
-   * @return the SHA-256 hash of the password
+   * @return the SHA-512 hash of the password
    */
   public static final String createPasswordHash(String password) {
     try {
-      MessageDigest md = MessageDigest.getInstance("SHA-256");
+      MessageDigest md = MessageDigest.getInstance("SHA-512");
 
       md.update(password.getBytes(StandardCharsets.ISO_8859_1), 0, password.length());
 
       return Base64Util.encodeBytes(md.digest());
     } catch (Throwable e) {
       throw new RuntimeException(
-          String.format("Failed to generate a SHA-256 hash of the password (%s)", password), e);
+          String.format("Failed to generate a SHA-512 hash of the password (%s)", password), e);
     }
   }
 

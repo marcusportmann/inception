@@ -123,7 +123,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void createCode(
       @Parameter(
               name = "codeCategoryId",
@@ -196,7 +196,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void createCodeCategory(
       @RequestBody
           @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -253,7 +253,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void deleteCode(
       @Parameter(
               name = "codeCategoryId",
@@ -315,7 +315,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void deleteCodeCategory(
       @Parameter(
               name = "codeCategoryId",
@@ -374,7 +374,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public Code getCode(
       @Parameter(
               name = "codeCategoryId",
@@ -413,7 +413,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public List<CodeCategory> getCodeCategories() throws ServiceUnavailableException {
     return codesService.getCodeCategories();
   }
@@ -464,7 +464,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public CodeCategory getCodeCategory(
       @Parameter(
               name = "codeCategoryId",
@@ -524,7 +524,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public String getCodeCategoryData(
       @Parameter(
               name = "codeCategoryId",
@@ -586,7 +586,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public String getCodeCategoryName(
       @Parameter(
               name = "codeCategoryId",
@@ -624,7 +624,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public List<CodeCategorySummary> getCodeCategorySummaries() throws ServiceUnavailableException {
     return codesService.getCodeCategorySummaries();
   }
@@ -677,7 +677,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public String getCodeCategoryUpdated(
       @Parameter(
               name = "codeCategoryId",
@@ -739,7 +739,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public String getCodeName(
       @Parameter(
               name = "codeCategoryId",
@@ -802,7 +802,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public List<Code> getCodesForCodeCategory(
       @Parameter(
               name = "codeCategoryId",
@@ -861,7 +861,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void updateCode(
       @Parameter(
               name = "codeCategoryId",
@@ -949,7 +949,7 @@ public class CodesApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void updateCodeCategory(
       @Parameter(
               name = "codeCategoryId",

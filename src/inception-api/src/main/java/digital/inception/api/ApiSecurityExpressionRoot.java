@@ -38,7 +38,7 @@ public class ApiSecurityExpressionRoot extends SecurityExpressionRoot
   private boolean inDebugMode;
 
   /** Is API security enabled for the Inception Framework? */
-  private boolean isApiSecurityEnabled;
+  private boolean isSecurityEnabled;
 
   /** The return object. */
   private Object returnObject;
@@ -69,12 +69,12 @@ public class ApiSecurityExpressionRoot extends SecurityExpressionRoot
     try {
       if (StringUtils.hasText(
           applicationContext.getEnvironment().getProperty("inception.api.security.enabled"))) {
-        this.isApiSecurityEnabled =
+        this.isSecurityEnabled =
             Boolean.parseBoolean(
                 applicationContext.getEnvironment().getProperty("inception.api.security.enabled"));
       }
     } catch (Throwable e) {
-      this.isApiSecurityEnabled = !this.inDebugMode;
+      this.isSecurityEnabled = !this.inDebugMode;
     }
   }
 
@@ -99,7 +99,16 @@ public class ApiSecurityExpressionRoot extends SecurityExpressionRoot
    * @return <b>true</b> if security is disabled or <b>false</b> otherwise
    */
   public boolean isSecurityDisabled() {
-    return inDebugMode;
+    return (!isSecurityEnabled);
+  }
+
+  /**
+   * Returns whether security is enabled.
+   *
+   * @return <b>true</b> if security is enabled or <b>false</b> otherwise
+   */
+  public boolean isSecurityEnabled() {
+    return isSecurityEnabled;
   }
 
   @Override

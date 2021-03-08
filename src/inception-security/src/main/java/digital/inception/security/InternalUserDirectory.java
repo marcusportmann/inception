@@ -20,6 +20,7 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.PasswordUtil;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
 /**
@@ -75,6 +78,9 @@ public class InternalUserDirectory extends UserDirectoryBase {
   /** The maximum number of password attempts. */
   private final int maxPasswordAttempts;
 
+  /** The password encoder. */
+  private final PasswordEncoder passwordEncoder;
+
   /** The password expiry period in months. */
   private final int passwordExpiryMonths;
 
@@ -98,6 +104,8 @@ public class InternalUserDirectory extends UserDirectoryBase {
       RoleRepository roleRepository)
       throws ServiceUnavailableException {
     super(userDirectoryId, parameters, groupRepository, userRepository, roleRepository);
+
+    this.passwordEncoder = new BCryptPasswordEncoder(10, new SecureRandom());
 
     try {
       if (UserDirectoryParameter.contains(parameters, "MaxPasswordAttempts")) {
@@ -281,7 +289,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
         throw new UserNotFoundException(username);
       }
 
-      String newPasswordHash = PasswordUtil.createPasswordHash(newPassword);
+      String encodedNewPassword = passwordEncoder.encode(newPassword);
 
       int passwordAttempts = 0;
 
@@ -300,13 +308,16 @@ public class InternalUserDirectory extends UserDirectoryBase {
 
       getUserRepository()
           .changePassword(
-              userIdOptional.get(), newPasswordHash, passwordAttempts, Optional.of(passwordExpiry));
+              userIdOptional.get(),
+              encodedNewPassword,
+              passwordAttempts,
+              Optional.of(passwordExpiry));
 
       if (resetPasswordHistory) {
         getUserRepository().resetPasswordHistory(userIdOptional.get());
       }
 
-      getUserRepository().savePasswordInPasswordHistory(userIdOptional.get(), newPasswordHash);
+      getUserRepository().savePasswordInPasswordHistory(userIdOptional.get(), encodedNewPassword);
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -346,9 +357,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
         throw new UserLockedException(username);
       }
 
-      String passwordHash = PasswordUtil.createPasswordHash(password);
-
-      if (!user.getPassword().equals(passwordHash)) {
+      if (!passwordEncoder.matches(password, user.getPassword())) {
         if ((user.getPasswordAttempts() != null) && (user.getPasswordAttempts() != -1)) {
           getUserRepository().incrementPasswordAttempts(user.getId());
         }
@@ -406,17 +415,16 @@ public class InternalUserDirectory extends UserDirectoryBase {
         throw new UserLockedException(username);
       }
 
-      String passwordHash = PasswordUtil.createPasswordHash(password);
-      String newPasswordHash = PasswordUtil.createPasswordHash(newPassword);
+      String encodedNewPassword = passwordEncoder.encode(newPassword);
 
-      if (!user.getPassword().equals(passwordHash)) {
+      if (!passwordEncoder.matches(password, user.getPassword())) {
         throw new AuthenticationFailedException(
             "Authentication failed while attempting to change the password for the user ("
                 + username
                 + ")");
       }
 
-      if (isPasswordInHistory(user.getId(), newPasswordHash)) {
+      if (isPasswordInHistory(user.getId(), newPassword)) {
         throw new ExistingPasswordException(username);
       }
 
@@ -424,9 +432,9 @@ public class InternalUserDirectory extends UserDirectoryBase {
       passwordExpiry = passwordExpiry.plus(passwordExpiryMonths, ChronoUnit.MONTHS);
 
       getUserRepository()
-          .changePassword(user.getId(), newPasswordHash, 0, Optional.of(passwordExpiry));
+          .changePassword(user.getId(), encodedNewPassword, 0, Optional.of(passwordExpiry));
 
-      getUserRepository().savePasswordInPasswordHistory(user.getId(), newPasswordHash);
+      getUserRepository().savePasswordInPasswordHistory(user.getId(), encodedNewPassword);
     } catch (AuthenticationFailedException | ExistingPasswordException | UserLockedException e) {
       throw e;
     } catch (Throwable e) {
@@ -487,11 +495,15 @@ public class InternalUserDirectory extends UserDirectoryBase {
 
       user.setId(UuidCreator.getShortPrefixComb());
 
+      String encodedNewPassword;
+
       if (!isNullOrEmpty(user.getPassword())) {
-        user.setPassword(PasswordUtil.createPasswordHash(user.getPassword()));
+        encodedNewPassword = passwordEncoder.encode(user.getPassword());
       } else {
-        user.setPassword(PasswordUtil.createPasswordHash(PasswordUtil.generateRandomPassword()));
+        encodedNewPassword = passwordEncoder.encode(PasswordUtil.generateRandomPassword());
       }
+
+      user.setPassword(encodedNewPassword);
 
       if (userLocked) {
         user.setPasswordAttempts(maxPasswordAttempts);
@@ -511,7 +523,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
 
       getUserRepository().saveAndFlush(user);
 
-      getUserRepository().savePasswordInPasswordHistory(user.getId(), user.getPassword());
+      getUserRepository().savePasswordInPasswordHistory(user.getId(), encodedNewPassword);
     } catch (DuplicateUserException e) {
       throw e;
     } catch (Throwable e) {
@@ -1449,18 +1461,18 @@ public class InternalUserDirectory extends UserDirectoryBase {
         throw new UserLockedException(username);
       }
 
-      String newPasswordHash = PasswordUtil.createPasswordHash(newPassword);
+      String encodedNewPassword = passwordEncoder.encode(newPassword);
 
-      if (isPasswordInHistory(user.getId(), newPasswordHash)) {
+      if (isPasswordInHistory(user.getId(), newPassword)) {
         throw new ExistingPasswordException(username);
       }
 
       LocalDateTime passwordExpiry = LocalDateTime.now();
       passwordExpiry = passwordExpiry.plus(passwordExpiryMonths, ChronoUnit.MONTHS);
 
-      getUserRepository().resetPassword(user.getId(), newPasswordHash, passwordExpiry);
+      getUserRepository().resetPassword(user.getId(), encodedNewPassword, passwordExpiry);
 
-      getUserRepository().savePasswordInPasswordHistory(user.getId(), newPasswordHash);
+      getUserRepository().savePasswordInPasswordHistory(user.getId(), encodedNewPassword);
     } catch (UserNotFoundException | UserLockedException | ExistingPasswordException e) {
       throw e;
     } catch (Throwable e) {
@@ -1551,7 +1563,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
       }
 
       if (StringUtils.hasText(user.getPassword())) {
-        existingUser.setPassword(PasswordUtil.createPasswordHash(user.getPassword()));
+        existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
       }
 
       if (lockUser) {
@@ -1581,18 +1593,24 @@ public class InternalUserDirectory extends UserDirectoryBase {
   }
 
   /**
-   * Is the password, given by the specified password hash, a historical password that cannot be
-   * reused for a period of time i.e. was the password used previously in the last X months.
+   * Is the password a historical password that cannot be reused for a period of time i.e. was the
+   * password used previously in the last X months.
    *
    * @param userId the Universally Unique Identifier (UUID) for the user
-   * @param passwordHash the password hash
+   * @param password the password
    * @return <b>true</b> if the password was previously used and cannot be reused for a period of
    *     time or <b>false</b> otherwise
    */
-  private boolean isPasswordInHistory(UUID userId, String passwordHash) {
+  private boolean isPasswordInHistory(UUID userId, String password) {
     LocalDateTime after = LocalDateTime.now();
     after = after.minus(passwordHistoryMonths, ChronoUnit.MONTHS);
 
-    return getUserRepository().countPasswordHistory(userId, after, passwordHash) > 0;
+    for (String historicalPassword : getUserRepository().getPasswordHistory(userId, after)) {
+      if (passwordEncoder.matches(password, historicalPassword)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

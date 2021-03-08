@@ -87,7 +87,7 @@ public class ReferenceApi extends SecureApi {
       })
   @RequestMapping(value = "/countries", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<Country> getCountries(
       @Parameter(
               name = "localeId",
@@ -122,7 +122,7 @@ public class ReferenceApi extends SecureApi {
       })
   @RequestMapping(value = "/languages", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<Language> getLanguages(
       @Parameter(
               name = "localeId",
@@ -157,7 +157,7 @@ public class ReferenceApi extends SecureApi {
       })
   @RequestMapping(value = "/regions", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<Region> getRegions(
       @Parameter(
               name = "localeId",
@@ -197,7 +197,7 @@ public class ReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<VerificationMethod> getVerificationMethods(
       @Parameter(
               name = "localeId",
@@ -237,7 +237,7 @@ public class ReferenceApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("isAuthenticated() or isSecurityDisabled()")
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<VerificationStatus> getVerificationStatuses(
       @Parameter(
               name = "localeId",

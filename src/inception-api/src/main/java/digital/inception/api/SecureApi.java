@@ -38,8 +38,7 @@ public abstract class SecureApi {
   private boolean inDebugMode;
 
   /** Is API security enabled for the Inception Framework? */
-  private boolean isApiSecurityEnabled;
-
+  private boolean isSecurityEnabled;
 
   /**
    * Constructs a new <b>SecureApi</b>.
@@ -50,7 +49,8 @@ public abstract class SecureApi {
 
     // Check if debugging is enabled for the Inception Framework
     try {
-      if (StringUtils.hasText(applicationContext.getEnvironment().getProperty("inception.debug.enabled"))) {
+      if (StringUtils.hasText(
+          applicationContext.getEnvironment().getProperty("inception.debug.enabled"))) {
         this.inDebugMode =
             Boolean.parseBoolean(
                 applicationContext.getEnvironment().getProperty("inception.debug.enabled"));
@@ -61,14 +61,43 @@ public abstract class SecureApi {
 
     // Check if security is enabled for the Inception Framework
     try {
-      if (StringUtils.hasText(applicationContext.getEnvironment().getProperty("inception.api.security.enabled"))) {
-        this.isApiSecurityEnabled =
+      if (StringUtils.hasText(
+          applicationContext.getEnvironment().getProperty("inception.api.security.enabled"))) {
+        this.isSecurityEnabled =
             Boolean.parseBoolean(
                 applicationContext.getEnvironment().getProperty("inception.api.security.enabled"));
       }
     } catch (Throwable e) {
-      this.isApiSecurityEnabled = !this.inDebugMode;
+      this.isSecurityEnabled = !this.inDebugMode;
     }
+  }
+
+  /**
+   * Returns whether debugging is enabled for the Inception Framework.
+   *
+   * @return <b>true</b> if debugging is enabled for the Inception Framework or <b>false</b>
+   *     otherwise
+   */
+  public boolean inDebugMode() {
+    return inDebugMode;
+  }
+
+  /**
+   * Returns whether API security is disabled.
+   *
+   * @return <b>true</b> if API security is disabled or <b>false</b> otherwise
+   */
+  public boolean isSecurityDisabled() {
+    return !isSecurityEnabled;
+  }
+
+  /**
+   * Returns whether API security is enabled.
+   *
+   * @return <b>true</b> if API security is enabled or <b>false</b> otherwise
+   */
+  public boolean isSecurityEnabled() {
+    return isSecurityEnabled;
   }
 
   /**

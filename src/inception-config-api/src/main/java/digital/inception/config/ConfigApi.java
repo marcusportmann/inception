@@ -113,7 +113,7 @@ public class ConfigApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
   public void deleteConfig(
       @Parameter(name = "key", description = "The key for the config", required = true)
           @PathVariable
@@ -167,7 +167,7 @@ public class ConfigApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
   public Config getConfig(
       @Parameter(name = "key", description = "The key for the config", required = true)
           @PathVariable
@@ -221,7 +221,7 @@ public class ConfigApi extends SecureApi {
       method = RequestMethod.GET,
       produces = "application/json")
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
   public String getConfigValue(
       @Parameter(name = "key", description = "The key for the config", required = true)
           @PathVariable
@@ -250,7 +250,7 @@ public class ConfigApi extends SecureApi {
       })
   @RequestMapping(value = "/configs", method = RequestMethod.GET, produces = "application/json")
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
   public List<Config> getConfigs() throws ServiceUnavailableException {
     return configService.getConfigs();
   }
@@ -290,7 +290,7 @@ public class ConfigApi extends SecureApi {
   @RequestMapping(value = "/configs", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration') or isSecurityDisabled()")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Config.ConfigAdministration')")
   public void setConfig(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The config",

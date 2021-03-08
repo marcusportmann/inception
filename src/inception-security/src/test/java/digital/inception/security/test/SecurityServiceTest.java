@@ -57,6 +57,7 @@ import digital.inception.security.UserStatus;
 import digital.inception.security.Users;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -268,6 +270,31 @@ public class SecurityServiceTest {
     securityService.authenticate(user.getUsername(), "Password2");
   }
 
+  /** Test the change user password functionality. */
+  @Test
+  public void changePasswordTest() throws Exception {
+    Tenant tenant = getTestTenantDetails();
+
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+
+    User user = getTestUserDetails(userDirectory.getId());
+
+    String originalPassword = user.getPassword();
+
+    securityService.createUser(user, false, false);
+
+    UUID userDirectoryId =
+        securityService.changePassword(user.getUsername(), originalPassword, "New Password");
+
+    assertEquals(
+        "The correct user directory ID was not returned", userDirectory.getId(), userDirectoryId);
+
+    userDirectoryId = securityService.authenticate(user.getUsername(), "New Password");
+
+    assertEquals(
+        "The correct user directory ID was not returned", userDirectory.getId(), userDirectoryId);
+  }
+
   //  /** Test the name-value attribute functionality. */
   //  @Test
   //  public void attributeTest() throws AttributeException {
@@ -374,31 +401,6 @@ public class SecurityServiceTest {
   //
   //    assertEquals("String", stringAttribute.getName());
   //  }
-
-  /** Test the change user password functionality. */
-  @Test
-  public void changePasswordTest() throws Exception {
-    Tenant tenant = getTestTenantDetails();
-
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
-
-    User user = getTestUserDetails(userDirectory.getId());
-
-    String originalPassword = user.getPassword();
-
-    securityService.createUser(user, false, false);
-
-    UUID userDirectoryId =
-        securityService.changePassword(user.getUsername(), originalPassword, "New Password");
-
-    assertEquals(
-        "The correct user directory ID was not returned", userDirectory.getId(), userDirectoryId);
-
-    userDirectoryId = securityService.authenticate(user.getUsername(), "New Password");
-
-    assertEquals(
-        "The correct user directory ID was not returned", userDirectory.getId(), userDirectoryId);
-  }
 
   /** Test the functionality to delete a group with existing members. */
   @Test(expected = digital.inception.security.ExistingGroupMembersException.class)
@@ -1163,6 +1165,14 @@ public class SecurityServiceTest {
       fail("Retrieved the tenant (" + tenant.getId() + ") that should have been " + "deleted");
     } catch (TenantNotFoundException ignored) {
     }
+  }
+
+  /** Test the password encoder functionality. */
+  @Test
+  public void testPasswordEncoder() throws Exception {
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10, new SecureRandom());
+
+    String encodedPassword = passwordEncoder.encode("Password1");
   }
 
   /** Test the user directory tenant mapping functionality. */

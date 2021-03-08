@@ -326,7 +326,7 @@ INSERT INTO security.user_directory_to_tenant_map (user_directory_id, tenant_id)
   VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry, created)
-  VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', 'administrator', 1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'), NOW());
+  VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', 'administrator', 1, 'Administrator', '', '', '', '', '$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL.', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'), NOW());
 
 INSERT INTO security.groups (id, user_directory_id, name, description, created)
   VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', 'Administrators', 'Administrators', NOW());
