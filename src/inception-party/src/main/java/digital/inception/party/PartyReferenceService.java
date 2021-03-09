@@ -50,6 +50,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Contact Mechanism Purpose Repository. */
   private final ContactMechanismPurposeRepository contactMechanismPurposeRepository;
 
+  /** The Contact Mechanism Role Repository. */
+  private final ContactMechanismRoleRepository contactMechanismRoleRepository;
+
   /** The Contact Mechanism Type Repository. */
   private final ContactMechanismTypeRepository contactMechanismTypeRepository;
 
@@ -136,6 +139,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    *
    * @param validator the JSR-303 validator
    * @param contactMechanismPurposeRepository the Contact Mechanism Purpose Repository
+   * @param contactMechanismRoleRepository the Contact Mechanism Role Repository
    * @param contactMechanismTypeRepository the Contact Mechanism Type Repository
    * @param employmentStatusRepository the Employment Status Repository
    * @param employmentTypeRepository the Employment Type Repository
@@ -167,6 +171,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   public PartyReferenceService(
       Validator validator,
       ContactMechanismPurposeRepository contactMechanismPurposeRepository,
+      ContactMechanismRoleRepository contactMechanismRoleRepository,
       ContactMechanismTypeRepository contactMechanismTypeRepository,
       EmploymentStatusRepository employmentStatusRepository,
       EmploymentTypeRepository employmentTypeRepository,
@@ -196,6 +201,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       TitleRepository titleRepository) {
     this.validator = validator;
     this.contactMechanismPurposeRepository = contactMechanismPurposeRepository;
+    this.contactMechanismRoleRepository = contactMechanismRoleRepository;
     this.contactMechanismTypeRepository = contactMechanismTypeRepository;
     this.employmentStatusRepository = employmentStatusRepository;
     this.employmentTypeRepository = employmentTypeRepository;
@@ -327,6 +333,41 @@ public class PartyReferenceService implements IPartyReferenceService {
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the contact mechanism purposes", e);
+    }
+  }
+
+  /**
+   * Retrieve all the contact mechanism roles.
+   *
+   * @return the contact mechanism roles
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'contactMechanismRoles.ALL'")
+  public List<ContactMechanismRole> getContactMechanismRoles() throws ServiceUnavailableException {
+    return getContactMechanismRoles(null);
+  }
+
+  /**
+   * Retrieve the contact mechanism roles.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     purposes for or <b>null</b> to retrieve the contact mechanism roles for all locales
+   * @return the contact mechanism roles
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'contactMechanismRoles.' + #localeId")
+  public List<ContactMechanismRole> getContactMechanismRoles(String localeId)
+      throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return contactMechanismRoleRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return contactMechanismRoleRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the contact mechanism roles", e);
     }
   }
 
@@ -1241,9 +1282,37 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getContactMechanismPurposes().stream()
         .anyMatch(
             contactMechanismPurpose ->
-                (contactMechanismPurpose.getType().equals(contactMechanismTypeCode)
-                    && contactMechanismPurpose.getCode().equals(contactMechanismPurposeCode)
-                    && contactMechanismPurpose.isValidForPartyType(partyTypeCode)));
+                (contactMechanismPurpose.isValidForPartyType(partyTypeCode)
+                    && contactMechanismPurpose.isValidForContactMechanismType(
+                        contactMechanismTypeCode)
+                    && contactMechanismPurpose.getCode().equals(contactMechanismPurposeCode)));
+  }
+
+  /**
+   * Check whether the code is a valid code for a contact mechanism role for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param contactMechanismTypeCode the code for the contact mechanism type
+   * @param contactMechanismRoleCode the code for the contact mechanism role
+   * @return <b>true</b> if the code is a valid code for a contact mechanism role or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidContactMechanismRole(
+      String partyTypeCode, String contactMechanismTypeCode, String contactMechanismRoleCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(contactMechanismRoleCode)) {
+      return false;
+    }
+
+    return self.getContactMechanismRoles().stream()
+        .anyMatch(
+            contactMechanismRole ->
+                (contactMechanismRole.isValidForPartyType(partyTypeCode)
+                    && contactMechanismRole
+                        .getContactMechanismType()
+                        .equals(contactMechanismTypeCode)
+                    && contactMechanismRole.getCode().equals(contactMechanismRoleCode)));
   }
 
   /**

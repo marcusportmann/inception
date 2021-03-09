@@ -395,7 +395,7 @@ public class Person extends PartyBase implements Serializable {
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), contactMechanism.getType())
                 && Objects.equals(
-                    existingContactMechanism.getPurpose(), contactMechanism.getPurpose()));
+                    existingContactMechanism.getRole(), contactMechanism.getRole()));
 
     contactMechanism.setParty(this);
 
@@ -541,7 +541,7 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the contact mechanism with the specified type and purpose for the person.
    *
    * @param type the code for the contact mechanism type
-   * @param purpose the code for the contact mechanism purpose
+   * @param purpose the code for the contact mechanism role
    * @return the contact mechanism with the specified type and purpose for the person or <b>null</b>
    *     if the contact mechanism could not be found
    */
@@ -550,7 +550,7 @@ public class Person extends PartyBase implements Serializable {
         .filter(
             contactMechanism ->
                 Objects.equals(contactMechanism.getType(), type)
-                    && Objects.equals(contactMechanism.getPurpose(), purpose))
+                    && Objects.equals(contactMechanism.getRole(), purpose))
         .findFirst()
         .get();
   }
@@ -1079,7 +1079,7 @@ public class Person extends PartyBase implements Serializable {
    */
   public boolean hasContactMechanismType(String type) {
     return contactMechanisms.stream()
-        .anyMatch(contactMechanism -> contactMechanism.getType().equals(type));
+        .anyMatch(contactMechanism -> Objects.equals(contactMechanism.getType(), type));
   }
 
   /**
@@ -1091,7 +1091,7 @@ public class Person extends PartyBase implements Serializable {
    */
   public boolean hasPhysicalAddressRole(String role) {
     return physicalAddresses.stream()
-        .anyMatch(physicalAddress -> physicalAddress.getRole().equals(role));
+        .anyMatch(physicalAddress -> Objects.equals(physicalAddress.getRole(), role));
   }
 
   /**
@@ -1118,13 +1118,13 @@ public class Person extends PartyBase implements Serializable {
    * Remove the contact mechanism with the specified type and purpose for the person.
    *
    * @param type the code for the contact mechanism type
-   * @param purpose the code for the contact mechanism purpose
+   * @param purpose the code for the contact mechanism role
    */
   public void removeContactMechanism(String type, String purpose) {
     contactMechanisms.removeIf(
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), type)
-                && Objects.equals(existingContactMechanism.getPurpose(), purpose));
+                && Objects.equals(existingContactMechanism.getRole(), purpose));
   }
 
   /**

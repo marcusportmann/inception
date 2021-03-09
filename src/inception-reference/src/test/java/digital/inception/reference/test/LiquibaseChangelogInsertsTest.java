@@ -64,7 +64,7 @@ public class LiquibaseChangelogInsertsTest {
   public void createLiquibaseChangelogInserts() throws Exception {
     boolean createLiquibaseInserts = true;
     //    boolean createContactMechanismTypeInserts = createLiquibaseInserts && false;
-    //    boolean createContactMechanismPurposeInserts = createLiquibaseInserts && false;
+    //    boolean createContactMechanismRoleInserts = createLiquibaseInserts && false;
     boolean createCountryInserts = createLiquibaseInserts && false;
     //    boolean createEmploymentStatusInserts = createLiquibaseInserts && false;
     //    boolean createEmploymentTypeInserts = createLiquibaseInserts && false;
@@ -127,37 +127,37 @@ public class LiquibaseChangelogInsertsTest {
     //      System.out.println();
     //    }
 
-    //    if (createContactMechanismPurposeInserts) {
-    //      for (ContactMechanismPurpose contactMechanismPurpose :
-    //          referenceService.getContactMechanismPurposes("en-US")) {
+    //    if (createContactMechanismRoleInserts) {
+    //      for (ContactMechanismRole contactMechanismRole :
+    //          referenceService.getContactMechanismRoles("en-US")) {
     //
     //        System.out.println(
-    //            "    <insert schemaName=\"reference\" tableName=\"contact_mechanism_purposes\">");
+    //            "    <insert schemaName=\"reference\" tableName=\"contact_mechanism_roles\">");
     //        System.out.println(
-    //            "      <column name=\"type\" value=\"" + contactMechanismPurpose.getType() +
+    //            "      <column name=\"type\" value=\"" + contactMechanismRole.getType() +
     // "\"/>");
     //        System.out.println(
-    //            "      <column name=\"code\" value=\"" + contactMechanismPurpose.getCode() +
+    //            "      <column name=\"code\" value=\"" + contactMechanismRole.getCode() +
     // "\"/>");
     //        System.out.println(
     //            "      <column name=\"locale_id\" value=\""
-    //                + contactMechanismPurpose.getLocaleId()
+    //                + contactMechanismRole.getLocaleId()
     //                + "\"/>");
     //        System.out.println(
     //            "      <column name=\"sort_index\" value=\""
-    //                + contactMechanismPurpose.getSortIndex()
+    //                + contactMechanismRole.getSortIndex()
     //                + "\"/>");
     //        System.out.println(
-    //            "      <column name=\"name\" value=\"" + contactMechanismPurpose.getName() +
+    //            "      <column name=\"name\" value=\"" + contactMechanismRole.getName() +
     // "\"/>");
     //        System.out.println(
     //            "      <column name=\"description\" value=\""
-    //                + contactMechanismPurpose.getDescription()
+    //                + contactMechanismRole.getDescription()
     //                + "\"/>");
     //        System.out.println(
     //            "      <column name=\"party_types\" value=\""
     //                +
-    // StringUtils.arrayToCommaDelimitedString(contactMechanismPurpose.getPartyTypes())
+    // StringUtils.arrayToCommaDelimitedString(contactMechanismRole.getPartyTypes())
     //                + "\"/>");
     //        System.out.println("    </insert>");
     //      }

@@ -18,7 +18,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  ContactMechanismPurpose, ContactMechanismType, EmploymentStatus, EmploymentType, Gender,
+  ContactMechanismRole, ContactMechanismType, EmploymentStatus, EmploymentType, Gender,
   IdentityDocumentType, MaritalStatus, MarriageType, NextOfKinType, Occupation,
   PartyReferenceService, Race, ResidencePermitType, ResidencyStatus, ResidentialType, SourceOfFunds,
   TaxNumberType, Title
@@ -36,7 +36,7 @@ import {debounceTime, first, map, startWith} from 'rxjs/operators';
 })
 export class PartyReferenceFormComponent implements OnInit, OnDestroy {
 
-  filteredContactMechanismPurposes$: Subject<ContactMechanismPurpose[]> = new ReplaySubject<ContactMechanismPurpose[]>();
+  filteredContactMechanismRoles$: Subject<ContactMechanismRole[]> = new ReplaySubject<ContactMechanismRole[]>();
   filteredContactMechanismTypes$: Subject<ContactMechanismType[]> = new ReplaySubject<ContactMechanismType[]>();
   filteredEmploymentStatuses$: Subject<EmploymentStatus[]> = new ReplaySubject<EmploymentStatus[]>();
   filteredEmploymentTypes$: Subject<EmploymentType[]> = new ReplaySubject<EmploymentType[]>();
@@ -63,7 +63,7 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
       // hideRequired: false,
       // floatLabel: 'auto',
       // tslint:disable-next-line
-      contactMechanismPurpose: ['', Validators.required],
+      contactMechanismRole: ['', Validators.required],
       contactMechanismType: ['', Validators.required],
       employmentStatus: ['', Validators.required],
       employmentType: ['', Validators.required],
@@ -84,9 +84,9 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  displayContactMechanismPurpose(contactMechanismPurpose: ContactMechanismPurpose): string {
-    if (!!contactMechanismPurpose) {
-      return contactMechanismPurpose.name;
+  displayContactMechanismRole(contactMechanismRole: ContactMechanismRole): string {
+    if (!!contactMechanismRole) {
+      return contactMechanismRole.name;
     } else {
       return '';
     }
@@ -225,20 +225,20 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.partyReferenceService.getContactMechanismPurposes().pipe(first()).subscribe((contactMechanismPurposes: ContactMechanismPurpose[]) => {
-      const contactMechanismPurposeControl = this.partyReferenceForm.get('contactMechanismPurpose');
+    this.partyReferenceService.getContactMechanismRoles().pipe(first()).subscribe((contactMechanismRoles: ContactMechanismRole[]) => {
+      const contactMechanismRoleControl = this.partyReferenceForm.get('contactMechanismRole');
 
-      if (contactMechanismPurposeControl) {
-        this.subscriptions.add(contactMechanismPurposeControl.valueChanges.pipe(
+      if (contactMechanismRoleControl) {
+        this.subscriptions.add(contactMechanismRoleControl.valueChanges.pipe(
           startWith(''),
           debounceTime(500),
-          map((value: string | ContactMechanismPurpose) => {
+          map((value: string | ContactMechanismRole) => {
             if (typeof (value) === 'string') {
-              this.filteredContactMechanismPurposes$.next(contactMechanismPurposes.filter(
-                contactMechanismPurpose => contactMechanismPurpose.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              this.filteredContactMechanismRoles$.next(contactMechanismRoles.filter(
+                contactMechanismRole => contactMechanismRole.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
             } else {
-              this.filteredContactMechanismPurposes$.next(contactMechanismPurposes.filter(
-                contactMechanismPurpose => contactMechanismPurpose.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              this.filteredContactMechanismRoles$.next(contactMechanismRoles.filter(
+                contactMechanismRole => contactMechanismRole.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
             }
           })).subscribe());
       }
@@ -550,7 +550,7 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
   }
 
   ok(): void {
-    console.log('Contact Mechanism Sub Type = ', this.partyReferenceForm.get('contactMechanismPurpose')!.value);
+    console.log('Contact Mechanism Sub Type = ', this.partyReferenceForm.get('contactMechanismRole')!.value);
     console.log('Contact Mechanism Type = ', this.partyReferenceForm.get('contactMechanismType')!.value);
     console.log('Employment Status = ', this.partyReferenceForm.get('employmentStatus')!.value);
     console.log('Employment Type = ', this.partyReferenceForm.get('employmentType')!.value);

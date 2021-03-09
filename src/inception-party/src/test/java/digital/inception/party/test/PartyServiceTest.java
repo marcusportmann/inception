@@ -293,6 +293,37 @@ public class PartyServiceTest {
     partyService.createPerson(person);
   }
 
+  /** Test the contact mechanism purpose validation functionality. */
+  @Test
+  public void contactMechanismPurposeValidationTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27835551234", "invalid_purpose"));
+
+    Set<ConstraintViolation<Person>> personConstraintViolations = partyService.validatePerson(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid person",
+        1,
+        personConstraintViolations.size());
+
+    Organization organization = getTestOrganizationDetails();
+
+    organization.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS, "main_email_address", "test@test.com", "invalid_purpose"));
+
+    Set<ConstraintViolation<Organization>> organizationConstraintViolations = partyService.validateOrganization(organization);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid organization",
+        1,
+        organizationConstraintViolations.size());
+  }
+
+
   /** Test the role type attribute constraint functionality. */
   @Test
   public void roleTypeAttributeConstraintTest() throws Exception {
@@ -304,10 +335,12 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid person",
-        10,
+        28,
         personConstraintViolations.size());
 
     Organization organization = getTestOrganizationDetails();
+
+    organization.removeIdentityDocumentByType("za_company_registration");
 
     organization.addRole(new Role("test_organization_role"));
 
@@ -315,7 +348,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid organization",
-        7,
+        10,
         organizationConstraintViolations.size());
   }
 
@@ -865,7 +898,7 @@ public class PartyServiceTest {
     //        try (ResultSet rs = statement.executeQuery()) {
     //          while (rs.next()) {
     //            Integer contactMechanismType = rs.getInt(1);
-    //            Integer contactMechanismPurpose = rs.getInt(2);
+    //            Integer contactMechanismRole = rs.getInt(2);
     //
     //            int xxx = 0;
     //            xxx++;
@@ -1196,7 +1229,7 @@ public class PartyServiceTest {
         if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
             && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
             && Objects.equals(
-                person1ContactMechanism.getPurpose(), person2ContactMechanism.getPurpose())) {
+                person1ContactMechanism.getRole(), person2ContactMechanism.getRole())) {
           assertEquals(
               "The values for the two contact mechanisms do not match",
               person1ContactMechanism.getValue(),
@@ -1211,7 +1244,7 @@ public class PartyServiceTest {
             "Failed to find the contact mechanism ("
                 + person1ContactMechanism.getType()
                 + ")("
-                + person1ContactMechanism.getPurpose()
+                + person1ContactMechanism.getRole()
                 + ")");
       }
     }
@@ -1411,7 +1444,7 @@ public class PartyServiceTest {
         if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
             && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
             && Objects.equals(
-                person1ContactMechanism.getPurpose(), person2ContactMechanism.getPurpose())) {
+                person1ContactMechanism.getRole(), person2ContactMechanism.getRole())) {
           assertEquals(
               "The values for the two contact mechanisms do not match",
               person1ContactMechanism.getValue(),
@@ -1426,7 +1459,7 @@ public class PartyServiceTest {
             "Failed to find the contact mechanism ("
                 + person1ContactMechanism.getType()
                 + ")("
-                + person1ContactMechanism.getPurpose()
+                + person1ContactMechanism.getRole()
                 + ")");
       }
     }

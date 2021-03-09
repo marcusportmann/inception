@@ -20,32 +20,38 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>ContactMechanismPurposeId</b> class implements the ID class for the <b>
- * ContactMechanismPurpose</b> class.
+ * The <b>ContactMechanismRoleId</b> class implements the ID class for the <b>
+ * ContactMechanismRole</b> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ContactMechanismPurposeId implements Serializable {
+public class ContactMechanismRoleId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the contact mechanism purpose. */
+  /** The code for the contact mechanism role. */
   private String code;
 
-  /** The Unicode locale identifier for the contact mechanism purpose. */
+  /** The code for the contact mechanism type the contact mechanism role is associated with. */
+  private String contactMechanismType;
+
+  /** The Unicode locale identifier for the contact mechanism role. */
   private String localeId;
 
-  /** Constructs a new <b>ContactMechanismPurposeId</b>. */
-  public ContactMechanismPurposeId() {}
+  /** Constructs a new <b>ContactMechanismRoleId</b>. */
+  public ContactMechanismRoleId() {}
 
   /**
-   * Constructs a new <b>ContactMechanismPurposeId</b>.
+   * Constructs a new <b>ContactMechanismRoleId</b>.
    *
-   * @param code the code for the contact mechanism purpose
-   * @param localeId the Unicode locale identifier for the contact mechanism purpose
+   * @param contactMechanismType the code for the contact mechanism type the contact mechanism role
+   *     is associated with
+   * @param code the code for the contact mechanism role
+   * @param localeId the Unicode locale identifier for the contact mechanism role
    */
-  public ContactMechanismPurposeId(String code, String localeId) {
+  public ContactMechanismRoleId(String contactMechanismType, String code, String localeId) {
+    this.contactMechanismType = contactMechanismType;
     this.code = code;
     this.localeId = localeId;
   }
@@ -70,9 +76,11 @@ public class ContactMechanismPurposeId implements Serializable {
       return false;
     }
 
-    ContactMechanismPurposeId other = (ContactMechanismPurposeId) object;
+    ContactMechanismRoleId other = (ContactMechanismRoleId) object;
 
-    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
+    return Objects.equals(contactMechanismType, other.contactMechanismType)
+        && Objects.equals(code, other.code)
+        && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -82,6 +90,8 @@ public class ContactMechanismPurposeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
+    return ((contactMechanismType == null) ? 0 : contactMechanismType.hashCode())
+        + ((code == null) ? 0 : code.hashCode())
+        + ((localeId == null) ? 0 : localeId.hashCode());
   }
 }

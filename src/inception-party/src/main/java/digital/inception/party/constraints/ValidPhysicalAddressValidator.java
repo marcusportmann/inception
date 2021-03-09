@@ -108,7 +108,8 @@ public class ValidPhysicalAddressValidator
           hibernateConstraintValidatorContext
               .addMessageParameter("type", physicalAddress.getType())
               .buildConstraintViolationWithTemplate(
-                  "{digital.inception.party.constraints.ValidPhysicalAddress.invalidTypeCode.message}")
+                  "{digital.inception.party.constraints.ValidPhysicalAddress.invalidType.message}")
+              .addPropertyNode("type")
               .addConstraintViolation();
 
           isValid = false;
@@ -120,6 +121,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.buildingNameRequired.message}")
+                    .addPropertyNode("buildingName")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -129,6 +131,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
+                    .addPropertyNode("city")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -138,6 +141,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameRequired.message}")
+                    .addPropertyNode("streetName")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -149,6 +153,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
+                    .addPropertyNode("city")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -158,6 +163,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.complexNameRequired.message}")
+                    .addPropertyNode("complexName")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -167,6 +173,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.complexUnitNumberRequired.message}")
+                    .addPropertyNode("complexNumber")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -176,6 +183,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameRequired.message}")
+                    .addPropertyNode("streetName")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -187,6 +195,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.farmNumberRequired.message}")
+                    .addPropertyNode("farmNumber")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -198,6 +207,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.line1InternationalRequired.message}")
+                    .addPropertyNode("line1")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -207,6 +217,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameNotSupported.message}")
+                    .addPropertyNode("streetName")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -216,6 +227,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.streetNumberNotSupported.message}")
+                    .addPropertyNode("streetNumber")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -225,6 +237,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.suburbNotSupported.message}")
+                    .addPropertyNode("suburb")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -236,6 +249,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.line1PostalRequired.message}")
+                    .addPropertyNode("line1")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -245,6 +259,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameNotSupported.message}")
+                    .addPropertyNode("streetName")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -254,6 +269,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.streetNumberNotSupported.message}")
+                    .addPropertyNode("streetNumber")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -265,6 +281,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
+                    .addPropertyNode("city")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -274,6 +291,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.siteBlockRequired.message}")
+                    .addPropertyNode("siteBlock")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -283,6 +301,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.siteNumberRequired.message}")
+                    .addPropertyNode("siteNumber")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -294,6 +313,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
+                    .addPropertyNode("city")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -303,6 +323,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameRequired.message}")
+                    .addPropertyNode("streetName")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -323,6 +344,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.line1UnstructuredRequired.message}")
+                    .addPropertyNode("line1")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -332,6 +354,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameNotSupported.message}")
+                    .addPropertyNode("streetName")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -341,6 +364,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.streetNumberNotSupported.message}")
+                    .addPropertyNode("streetNumber")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -350,6 +374,7 @@ public class ValidPhysicalAddressValidator
                 hibernateConstraintValidatorContext
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPhysicalAddress.suburbNotSupported.message}")
+                    .addPropertyNode("suburb")
                     .addConstraintViolation();
 
                 isValid = false;
@@ -361,6 +386,7 @@ public class ValidPhysicalAddressValidator
             hibernateConstraintValidatorContext
                 .buildConstraintViolationWithTemplate(
                     "{digital.inception.party.constraints.ValidPhysicalAddress.countryRequired.message}")
+                .addPropertyNode("country")
                 .addConstraintViolation();
 
             isValid = false;
@@ -370,6 +396,7 @@ public class ValidPhysicalAddressValidator
             hibernateConstraintValidatorContext
                 .buildConstraintViolationWithTemplate(
                     "{digital.inception.party.constraints.ValidPhysicalAddress.postalCodeRequired.message}")
+                .addPropertyNode("postalCode")
                 .addConstraintViolation();
 
             isValid = false;
@@ -380,6 +407,7 @@ public class ValidPhysicalAddressValidator
             hibernateConstraintValidatorContext
                 .buildConstraintViolationWithTemplate(
                     "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
+                .addPropertyNode("city")
                 .addConstraintViolation();
 
             isValid = false;
@@ -394,6 +422,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.buildingFloorNotSupported.message}")
+                  .addPropertyNode("buildingFloor")
                   .addConstraintViolation();
 
               isValid = false;
@@ -403,6 +432,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.buildingNameNotSupported.message}")
+                  .addPropertyNode("buildingName")
                   .addConstraintViolation();
 
               isValid = false;
@@ -412,6 +442,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.buildingRoomNotSupported.message}")
+                  .addPropertyNode("buildingRoom")
                   .addConstraintViolation();
 
               isValid = false;
@@ -427,6 +458,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.complexNameNotSupported.message}")
+                  .addPropertyNode("complexName")
                   .addConstraintViolation();
 
               isValid = false;
@@ -436,6 +468,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.complexUnitNumberNotSupported.message}")
+                  .addPropertyNode("complexUnitNumber")
                   .addConstraintViolation();
 
               isValid = false;
@@ -451,6 +484,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.farmDescriptionNotSupported.message}")
+                  .addPropertyNode("farmDescription")
                   .addConstraintViolation();
 
               isValid = false;
@@ -460,6 +494,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.farmNameNotSupported.message}")
+                  .addPropertyNode("farmName")
                   .addConstraintViolation();
 
               isValid = false;
@@ -469,6 +504,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.farmNumberNotSupported.message}")
+                  .addPropertyNode("farmNumber")
                   .addConstraintViolation();
 
               isValid = false;
@@ -484,6 +520,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.siteBlockNotSupported.message}")
+                  .addPropertyNode("siteBlock")
                   .addConstraintViolation();
 
               isValid = false;
@@ -493,6 +530,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.siteNumberNotSupported.message}")
+                  .addPropertyNode("siteNumber")
                   .addConstraintViolation();
 
               isValid = false;
@@ -510,6 +548,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.line1NotSupported.message}")
+                  .addPropertyNode("line1")
                   .addConstraintViolation();
 
               isValid = false;
@@ -519,6 +558,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.line2NotSupported.message}")
+                  .addPropertyNode("line2")
                   .addConstraintViolation();
 
               isValid = false;
@@ -528,6 +568,7 @@ public class ValidPhysicalAddressValidator
               hibernateConstraintValidatorContext
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPhysicalAddress.line3NotSupported.message}")
+                  .addPropertyNode("line3")
                   .addConstraintViolation();
 
               isValid = false;
@@ -540,6 +581,7 @@ public class ValidPhysicalAddressValidator
                 .addMessageParameter("country", physicalAddress.getCountry())
                 .buildConstraintViolationWithTemplate(
                     "{digital.inception.party.constraints.ValidPhysicalAddress.invalidCountryCode.message}")
+                .addPropertyNode("country")
                 .addConstraintViolation();
 
             isValid = false;
@@ -550,21 +592,25 @@ public class ValidPhysicalAddressValidator
             hibernateConstraintValidatorContext
                 .addMessageParameter("purpose", purpose)
                 .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPhysicalAddress.invalidPurposeCode.message}")
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.invalidPurpose.message}")
+                .addPropertyNode("purposes")
                 .addConstraintViolation();
 
             isValid = false;
           }
         }
 
-        if (!partyReferenceService.isValidPhysicalAddressRole(physicalAddress.getRole())) {
-          hibernateConstraintValidatorContext
-              .addMessageParameter("role", physicalAddress.getType())
-              .buildConstraintViolationWithTemplate(
-                  "{digital.inception.party.constraints.ValidPhysicalAddress.invalidRoleCode.message}")
-              .addConstraintViolation();
+        if (StringUtils.hasText(physicalAddress.getRole())) {
+          if (!partyReferenceService.isValidPhysicalAddressRole(physicalAddress.getRole())) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("role", physicalAddress.getRole())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.invalidRole.message}")
+                .addPropertyNode("role")
+                .addConstraintViolation();
 
-          isValid = false;
+            isValid = false;
+          }
         }
       } catch (Throwable e) {
         throw new ValidationException("Failed to validate the physical address", e);

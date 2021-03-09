@@ -21,7 +21,7 @@ import {
 } from 'ngx-inception';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {ContactMechanismPurpose} from "./contact-mechanism-purpose";
+import {ContactMechanismRole} from "./contact-mechanism-role";
 import {ContactMechanismType} from "./contact-mechanism-type";
 import {EmploymentStatus} from "./employment-status";
 import {EmploymentType} from "./employment-type";
@@ -62,19 +62,19 @@ export class PartyReferenceService {
   }
 
   /**
-   * Retrieve the contact mechanism purposes.
+   * Retrieve the contact mechanism roles.
    *
-   * @return The contact mechanism purposes.
+   * @return The contact mechanism roles.
    */
-  getContactMechanismPurposes(): Observable<ContactMechanismPurpose[]> {
+  getContactMechanismRoles(): Observable<ContactMechanismRole[]> {
     let params = new HttpParams();
 
     params = params.append('localeId', this.localeId);
 
-    return this.httpClient.get<ContactMechanismPurpose[]>(this.config.partyReferenceApiUrlPrefix + '/contact-mechanism-purposes',
+    return this.httpClient.get<ContactMechanismRole[]>(this.config.partyReferenceApiUrlPrefix + '/contact-mechanism-roles',
       {params, reportProgress: true})
-    .pipe(map((contactMechanismPurposes: ContactMechanismPurpose[]) => {
-      return contactMechanismPurposes;
+    .pipe(map((contactMechanismRoles: ContactMechanismRole[]) => {
+      return contactMechanismRoles;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
         return throwError(new AccessDeniedError(httpErrorResponse));
@@ -82,7 +82,7 @@ export class PartyReferenceService {
         return throwError(new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism purposes.', httpErrorResponse));
+      return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism roles.', httpErrorResponse));
     }));
   }
 

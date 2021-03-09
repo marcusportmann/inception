@@ -16,6 +16,8 @@
 
 package digital.inception.party.constraints;
 
+import digital.inception.core.util.ISO8601Util;
+import java.time.LocalDate;
 import java.util.Set;
 import javax.validation.ValidationException;
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
@@ -34,6 +36,7 @@ public abstract class PartyValidator {
    *
    * @param roleType the code for the role type
    * @param attributeValue the value for the attribute
+   * @param propertyNodeName the property node name
    * @param messageTemplate the message template
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
    * @return <b>true</b> if the attribute value is valid or <b>false</b> otherwise
@@ -41,6 +44,7 @@ public abstract class PartyValidator {
   protected boolean validateRequiredAttributeForRoleType(
       String roleType,
       Object attributeValue,
+      String propertyNodeName,
       String messageTemplate,
       HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
       throws ValidationException {
@@ -53,6 +57,9 @@ public abstract class PartyValidator {
         isValid = StringUtils.hasText((String) attributeValue);
       } else if (attributeValue instanceof Set) {
         isValid = ((Set<?>) attributeValue).size() > 0;
+      } else if (attributeValue instanceof LocalDate) {
+        // The fact we have a valid LocalDate instance means we parsed the attribute value
+        isValid = true;
       } else {
         throw new ValidationException(
             "Failed to validate the required attribute value ("
@@ -67,6 +74,7 @@ public abstract class PartyValidator {
       hibernateConstraintValidatorContext
           .addMessageParameter("roleType", roleType)
           .buildConstraintViolationWithTemplate(messageTemplate)
+          .addPropertyNode(propertyNodeName)
           .addConstraintViolation();
     }
 

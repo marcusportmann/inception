@@ -79,6 +79,23 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
+   * Retrieve all the contact mechanism roles.
+   *
+   * @return the contact mechanism roles
+   */
+  List<ContactMechanismRole> getContactMechanismRoles() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the contact mechanism roles.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     purposes for or <b>null</b> to retrieve the contact mechanism roles for all locales
+   * @return the contact mechanism roles
+   */
+  List<ContactMechanismRole> getContactMechanismRoles(String localeId)
+      throws ServiceUnavailableException;
+
+  /**
    * Retrieve all the contact mechanism types.
    *
    * @return the contact mechanism types
@@ -517,6 +534,19 @@ public interface IPartyReferenceService {
    */
   boolean isValidContactMechanismPurpose(
       String partyTypeCode, String contactMechanismTypeCode, String contactMechanismPurposeCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a contact mechanism role for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param contactMechanismTypeCode the code for the contact mechanism type
+   * @param contactMechanismRoleCode the code for the contact mechanism role
+   * @return <b>true</b> if the code is a valid code for a contact mechanism role or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidContactMechanismRole(
+      String partyTypeCode, String contactMechanismTypeCode, String contactMechanismRoleCode)
       throws ServiceUnavailableException;
 
   /**

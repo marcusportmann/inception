@@ -52,7 +52,7 @@ import org.springframework.util.StringUtils;
 @XmlType(
     name = "PhysicalAddressPurpose",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "partyTypes", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "physical_address_purposes")

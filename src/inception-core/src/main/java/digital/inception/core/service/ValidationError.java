@@ -40,24 +40,17 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Schema(description = "A validation error")
-@JsonPropertyOrder({"property", "message", "attributes"})
+@JsonPropertyOrder({"property", "message"})
 @XmlRootElement(name = "ValidationError", namespace = "http://inception.digital/core")
 @XmlType(
     name = "ValidationError",
     namespace = "http://inception.digital/core",
-    propOrder = {"property", "message", "attributes"})
+    propOrder = {"property", "message"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ValidationError implements Serializable, Cloneable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The attributes associated with the validation error. */
-  @Schema(description = "The attributes associated with the validation error")
-  @JsonProperty
-  @XmlElement(name = "Attributes")
-  @NotNull
-  private List<ValidationErrorAttribute> attributes;
 
   /** The error message for the validation error. */
   @Schema(description = "The error message for the validation error", required = true)
@@ -87,17 +80,7 @@ public class ValidationError implements Serializable, Cloneable {
     this.property = constraintViolation.getPropertyPath().toString();
     this.message = constraintViolation.getMessage();
 
-    this.attributes = new ArrayList<>();
-
     Map<String, Object> attributes = constraintViolation.getConstraintDescriptor().getAttributes();
-
-    for (String attributeName : attributes.keySet()) {
-      Object attributeValue = attributes.get(attributeName);
-
-      if (!(attributeValue instanceof Class[])) {
-        this.attributes.add(new ValidationErrorAttribute(attributeName, attributeValue.toString()));
-      }
-    }
   }
 
   /**
@@ -109,21 +92,6 @@ public class ValidationError implements Serializable, Cloneable {
   public ValidationError(String property, String message) {
     this.property = property;
     this.message = message;
-    this.attributes = new ArrayList<>();
-  }
-
-  /**
-   * Constructs a new <b>ValidationError</b>.
-   *
-   * @param property the path for the property that resulted in the validation error
-   * @param message the error message for the validation error
-   * @param attributes the attributes associated with the validation error
-   */
-  public ValidationError(
-      String property, String message, List<ValidationErrorAttribute> attributes) {
-    this.property = property;
-    this.message = message;
-    this.attributes = attributes;
   }
 
   /**
@@ -214,15 +182,6 @@ public class ValidationError implements Serializable, Cloneable {
   }
 
   /**
-   * Returns the attributes associated with the validation error.
-   *
-   * @return the attributes associated with the validation error
-   */
-  public List<ValidationErrorAttribute> getAttributes() {
-    return attributes;
-  }
-
-  /**
    * Returns the error message for the validation error.
    *
    * @return the error message for the validation error
@@ -241,15 +200,6 @@ public class ValidationError implements Serializable, Cloneable {
   }
 
   /**
-   * Set the attributes associated with the validation error.
-   *
-   * @param attributes the attributes associated with the validation error
-   */
-  public void setAttributes(List<ValidationErrorAttribute> attributes) {
-    this.attributes = attributes;
-  }
-
-  /**
    * Set the error message for the validation error.
    *
    * @param message the error message for the validation error
@@ -265,20 +215,5 @@ public class ValidationError implements Serializable, Cloneable {
    */
   public void setProperty(String property) {
     this.property = property;
-  }
-
-  @Override
-  protected Object clone() throws CloneNotSupportedException {
-    Object clone = super.clone();
-
-    List<ValidationErrorAttribute> attributes = new ArrayList<>();
-
-    for (ValidationErrorAttribute attribute : this.attributes) {
-      attributes.add((ValidationErrorAttribute) attribute.clone());
-    }
-
-    ((ValidationError) clone).setAttributes(attributes);
-
-    return clone;
   }
 }

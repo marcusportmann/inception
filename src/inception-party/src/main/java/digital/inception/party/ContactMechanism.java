@@ -24,7 +24,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,11 +41,13 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>ContactMechanism</b> class holds the information for a contact mechanism for a party.
@@ -58,17 +62,23 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A contact mechanism")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "purpose", "value"})
+@JsonPropertyOrder({"type", "role", "value", "purposes"})
 @XmlRootElement(name = "ContactMechanism", namespace = "http://inception.digital/party")
 @XmlType(
     name = "ContactMechanism",
     namespace = "http://inception.digital/party",
-    propOrder = {"type", "purpose", "value"})
+    propOrder = {"type", "role", "value", "purposes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "contact_mechanisms")
 @IdClass(ContactMechanismId.class)
 public class ContactMechanism implements Serializable {
+
+  /** The valid contact mechanism types. */
+  @JsonIgnore
+  @XmlTransient
+  public static final Set<String> VALID_CONTACT_MECHANISM_TYPES =
+      Set.of("mobile_number", "phone_number", "fax_number", "email_address", "social_media");
 
   private static final long serialVersionUID = 1000000;
 
@@ -88,9 +98,15 @@ public class ContactMechanism implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /** The code for the contact mechanism purpose. */
+  /** The optional comma-delimited codes for the contact mechanism purposes. */
+  @JsonIgnore
+  @XmlTransient
+  @Column(name = "purposes", length = 310)
+  private String purposes;
+
+  /** The code for the contact mechanism role. */
   @Schema(
-      description = "The code for the contact mechanism purpose",
+      description = "The code for the contact mechanism role",
       required = true,
       allowableValues = {
         "personal_mobile_number",
@@ -116,21 +132,12 @@ public class ContactMechanism implements Serializable {
         "twitter_id"
       })
   @JsonProperty(required = true)
-  @XmlElement(name = "Purpose", required = true)
+  @XmlElement(name = "Role", required = true)
   @NotNull
   @Size(min = 1, max = 30)
-  @Pattern(
-      message = "{digital.inception.party.ContactMechanism.Purpose.Pattern.message}",
-      regexp =
-          "(personal_mobile_number|work_mobile_number|other_mobile_number|main_mobile_number"
-              + "|home_phone_number|work_phone_number|school_phone_number|pager_phone_number"
-              + "|other_phone_number|main_phone_number|home_fax_number|work_fax_number"
-              + "|other_fax_number|main_fax_number|personal_email_address|work_email_address"
-              + "|school_email_address|other_email_address|main_email_address|whatsapp_user_id"
-              + "|twitter_id)")
   @Id
-  @Column(name = "purpose", length = 30, nullable = false)
-  private String purpose;
+  @Column(name = "role", length = 30, nullable = false)
+  private String role;
 
   /** The code for the contact mechanism type. */
   @Schema(
@@ -177,13 +184,46 @@ public class ContactMechanism implements Serializable {
    * Constructs a new <b>ContactMechanism</b>.
    *
    * @param type the code for the contact mechanism type
-   * @param purpose the code for the contact mechanism purpose
+   * @param role the code for the contact mechanism role
    * @param value the value for the contact mechanism
    */
-  public ContactMechanism(String type, String purpose, String value) {
+  public ContactMechanism(String type, String role, String value) {
     this.type = type;
-    this.purpose = purpose;
+    this.role = role;
     this.value = value;
+  }
+
+  /**
+   * Constructs a new <b>ContactMechanism</b>.
+   *
+   * @param type the code for the contact mechanism type
+   * @param role the code for the contact mechanism role
+   * @param value the value for the contact mechanism
+   * @param purpose the code for the contact mechanism purpose
+   */
+  public ContactMechanism(String type, String role, String value, String purpose) {
+    this.type = type;
+    this.role = role;
+    this.value = value;
+    this.purposes = purpose;
+  }
+
+  /**
+   * Constructs a new <b>ContactMechanism</b>.
+   *
+   * @param type the code for the contact mechanism type
+   * @param role the code for the contact mechanism role
+   * @param value the value for the contact mechanism
+   * @param purposes the codes for the contact mechanism purposes
+   */
+  public ContactMechanism(String type, String role, String value, Set<String> purposes) {
+    this.type = type;
+    this.role = role;
+    this.value = value;
+
+    if ((purposes != null) && (purposes.size() > 0)) {
+      this.purposes = StringUtils.collectionToCommaDelimitedString(purposes);
+    }
   }
 
   /**
@@ -210,7 +250,7 @@ public class ContactMechanism implements Serializable {
 
     return Objects.equals(party, other.party)
         && Objects.equals(type, other.type)
-        && Objects.equals(purpose, other.purpose);
+        && Objects.equals(role, other.role);
   }
 
   /**
@@ -233,12 +273,29 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Returns the code for the contact mechanism purpose.
+   * Returns the optional codes for the contact mechanism purposes.
    *
-   * @return the code for the contact mechanism purpose
+   * @return the optional codes for the contact mechanism purposes
    */
-  public String getPurpose() {
-    return purpose;
+  @Schema(description = "The codes for the contact mechanism purposes", required = true)
+  @JsonProperty(required = true)
+  @XmlElementWrapper(name = "Purposes", required = true)
+  @XmlElement(name = "Purpose", required = true)
+  public Set<String> getPurposes() {
+    if (this.purposes != null) {
+      return StringUtils.commaDelimitedListToSet(this.purposes);
+    } else {
+      return new LinkedHashSet<>();
+    }
+  }
+
+  /**
+   * Returns the code for the contact mechanism role.
+   *
+   * @return the code for the contact mechanism role
+   */
+  public String getRole() {
+    return role;
   }
 
   /**
@@ -277,7 +334,7 @@ public class ContactMechanism implements Serializable {
   public int hashCode() {
     return (((party == null) || (party.getId() == null)) ? 0 : party.getId().hashCode())
         + ((type == null) ? 0 : type.hashCode())
-        + ((purpose == null) ? 0 : purpose.hashCode());
+        + ((role == null) ? 0 : role.hashCode());
   }
 
   /**
@@ -291,12 +348,25 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Set the code for the contact mechanism purpose.
+   * Set the optional codes for the contact mechanism purposes.
    *
-   * @param purpose the code for the contact mechanism purpose
+   * @param purposes the optional codes for the contact mechanism purposes
    */
-  public void setPurpose(String purpose) {
-    this.purpose = purpose;
+  public void setPurposes(Set<String> purposes) {
+    if ((purposes != null) && (purposes.size() > 0)) {
+      this.purposes = StringUtils.collectionToCommaDelimitedString(purposes);
+    } else {
+      this.purposes = null;
+    }
+  }
+
+  /**
+   * Set the code for the contact mechanism role.
+   *
+   * @param purpose the code for the contact mechanism role
+   */
+  public void setRole(String purpose) {
+    this.role = purpose;
   }
 
   /**

@@ -21,13 +21,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>ContactMechanismPurposeRepository</b> interface declares the repository for the
- * <b>ContactMechanismPurpose</b> domain type.
+ * The <b>ContactMechanismRoleRepository</b> interface declares the repository for the <b>
+ * ContactMechanismRole</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface ContactMechanismPurposeRepository
-    extends JpaRepository<ContactMechanismPurpose, ContactMechanismPurposeId> {
+public interface ContactMechanismRoleRepository
+    extends JpaRepository<ContactMechanismRole, ContactMechanismRoleId> {
 
-  List<ContactMechanismPurpose> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  List<ContactMechanismRole> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

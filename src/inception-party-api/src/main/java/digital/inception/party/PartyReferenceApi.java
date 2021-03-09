@@ -185,6 +185,46 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the contact mechanism roles.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     purposes for or <b>null</b> to retrieve the contact mechanism roles for all locales
+   * @return the contact mechanism roles
+   */
+  @Operation(
+      summary = "Retrieve the contact mechanism roles",
+      description = "Retrieve the contact mechanism roles")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/contact-mechanism-roles",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<ContactMechanismRole> getContactMechanismRoles(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the contact mechanism roles for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getContactMechanismRoles(localeId);
+  }
+
+  /**
    * Retrieve the contact mechanism types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism

@@ -89,6 +89,19 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the contact mechanism roles.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     purposes for or <b>null</b> to retrieve the contact mechanism roles for all locales
+   * @return the contact mechanism roles
+   */
+  @WebMethod(operationName = "GetContactMechanismRoles")
+  public List<ContactMechanismRole> getContactMechanismRoles(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return partyReferenceService.getContactMechanismRoles(localeId);
+  }
+
+  /**
    * Retrieve the contact mechanism types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism

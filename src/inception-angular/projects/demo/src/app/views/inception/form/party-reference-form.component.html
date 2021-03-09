@@ -4,15 +4,15 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Contact Mechanism Purpose</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('contactMechanismPurpose')" required="true" [matAutocomplete]="contactMechanismPurposeAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #contactMechanismPurposeAutocomplete="matAutocomplete" [displayWith]="displayContactMechanismPurpose">
-              <mat-option *ngFor="let contactMechanismPurpose of filteredContactMechanismPurposes$ | async" [value]="contactMechanismPurpose">
-                {{contactMechanismPurpose.name}}
+            <mat-label>Contact Mechanism Role</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('contactMechanismRole')" required="true" [matAutocomplete]="contactMechanismRoleAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #contactMechanismRoleAutocomplete="matAutocomplete" [displayWith]="displayContactMechanismRole">
+              <mat-option *ngFor="let contactMechanismRole of filteredContactMechanismRoles$ | async" [value]="contactMechanismRole">
+                {{contactMechanismRole.name}}
               </mat-option>
             </mat-autocomplete>
-            <mat-error *ngIf="partyReferenceForm.controls['contactMechanismPurpose'].errors && !partyReferenceForm.controls['contactMechanismPurpose'].untouched">
-              <span *ngIf="partyReferenceForm.controls['contactMechanismPurpose'].errors?.required">A contact mechanism purpose is required.</span>
+            <mat-error *ngIf="partyReferenceForm.controls['contactMechanismRole'].errors && !partyReferenceForm.controls['contactMechanismRole'].untouched">
+              <span *ngIf="partyReferenceForm.controls['contactMechanismRole'].errors?.required">A contact mechanism role is required.</span>
             </mat-error>
           </mat-form-field>
         </div>

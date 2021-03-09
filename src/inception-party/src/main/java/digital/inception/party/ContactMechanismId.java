@@ -36,8 +36,8 @@ public class ContactMechanismId implements Serializable {
    */
   private UUID party;
 
-  /** The code for the contact mechanism purpose. */
-  private String purpose;
+  /** The code for the contact mechanism role. */
+  private String role;
 
   /** The code for the contact mechanism type. */
   private String type;
@@ -66,7 +66,7 @@ public class ContactMechanismId implements Serializable {
 
     return Objects.equals(party, other.party)
         && Objects.equals(type, other.type)
-        && Objects.equals(purpose, other.purpose);
+        && Objects.equals(role, other.role);
   }
 
   /**
@@ -78,6 +78,6 @@ public class ContactMechanismId implements Serializable {
   public int hashCode() {
     return ((party == null) ? 0 : party.hashCode())
         + ((type == null) ? 0 : type.hashCode())
-        + ((purpose == null) ? 0 : purpose.hashCode());
+        + ((role == null) ? 0 : role.hashCode());
   }
 }

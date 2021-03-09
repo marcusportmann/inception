@@ -23,7 +23,7 @@ import digital.inception.party.Attribute;
 import digital.inception.party.AttributeType;
 import digital.inception.party.AttributeTypeCategory;
 import digital.inception.party.ContactMechanism;
-import digital.inception.party.ContactMechanismPurpose;
+import digital.inception.party.ContactMechanismRole;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.EmploymentStatus;
 import digital.inception.party.EmploymentType;
@@ -130,13 +130,13 @@ public class PartyReferenceServiceTest {
         retrievedAttributeTypes.size());
   }
 
-  /** Test the contact mechanism purpose functionality. */
+  /** Test the contact mechanism role functionality. */
   @Test
-  public void contactMechanismPurposesTest() throws Exception {
-    List<ContactMechanismPurpose> retrievedContactMechanismPurposes =
-        partyReferenceService.getContactMechanismPurposes();
+  public void contactMechanismRolesTest() throws Exception {
+    List<ContactMechanismRole> retrievedContactMechanismRoles =
+        partyReferenceService.getContactMechanismRoles();
 
-    retrievedContactMechanismPurposes = partyReferenceService.getContactMechanismPurposes("en-US");
+    retrievedContactMechanismRoles = partyReferenceService.getContactMechanismRoles("en-US");
   }
 
   /** Test the contact mechanism type functionality. */
@@ -407,7 +407,7 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of role type attribute constraints was not retrieved",
-        10,
+        42,
         retrievedRoleTypeAttributeConstraints.size());
 
     retrievedRoleTypeAttributeConstraints =
@@ -415,7 +415,7 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of role type attribute constraints was not retrieved",
-        7,
+        32,
         retrievedRoleTypeAttributeConstraints.size());
 
     retrievedRoleTypeAttributeConstraints.stream()
@@ -508,7 +508,7 @@ public class PartyReferenceServiceTest {
   /** Test the reference data validity check functionality. */
   @Test
   public void validityTest() throws Exception {
-    partyReferenceService.isValidContactMechanismPurpose(
+    partyReferenceService.isValidContactMechanismRole(
         PartyType.PERSON.code(), ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number");
     partyReferenceService.isValidContactMechanismType(ContactMechanismType.MOBILE_NUMBER);
     partyReferenceService.isValidEmploymentStatus("employed");
@@ -607,7 +607,7 @@ public class PartyReferenceServiceTest {
         if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
             && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
             && Objects.equals(
-                person1ContactMechanism.getPurpose(), person2ContactMechanism.getPurpose())) {
+                person1ContactMechanism.getRole(), person2ContactMechanism.getRole())) {
           assertEquals(
               "The values for the two contact mechanisms do not match",
               person1ContactMechanism.getValue(),
@@ -622,7 +622,7 @@ public class PartyReferenceServiceTest {
             "Failed to find the contact mechanism ("
                 + person1ContactMechanism.getType()
                 + ")("
-                + person1ContactMechanism.getPurpose()
+                + person1ContactMechanism.getRole()
                 + ")");
       }
     }
@@ -893,7 +893,7 @@ public class PartyReferenceServiceTest {
         if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
             && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
             && Objects.equals(
-                person1ContactMechanism.getPurpose(), person2ContactMechanism.getPurpose())) {
+                person1ContactMechanism.getRole(), person2ContactMechanism.getRole())) {
           assertEquals(
               "The values for the two contact mechanisms do not match",
               person1ContactMechanism.getValue(),
@@ -908,7 +908,7 @@ public class PartyReferenceServiceTest {
             "Failed to find the contact mechanism ("
                 + person1ContactMechanism.getType()
                 + ")("
-                + person1ContactMechanism.getPurpose()
+                + person1ContactMechanism.getRole()
                 + ")");
       }
     }

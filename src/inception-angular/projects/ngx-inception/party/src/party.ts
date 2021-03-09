@@ -19,7 +19,7 @@ export * from './services/party.service';
 export * from './services/party-reference.service';
 //export * from './services/party-reference.service.errors';
 
-export * from './services/contact-mechanism-purpose';
+export * from './services/contact-mechanism-role';
 export * from './services/contact-mechanism-type';
 export * from './services/employment-status';
 export * from './services/employment-type';
