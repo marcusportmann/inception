@@ -45,12 +45,12 @@ import javax.xml.bind.annotation.XmlType;
     description =
         "A constraint that should be applied to an attribute for a party when the party is assigned a role type")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"roleType", "attributeType", "type", "value"})
+@JsonPropertyOrder({"roleType", "attributeType", "attributeTypeQualifier", "type", "value"})
 @XmlRootElement(name = "RoleTypeAttributeConstraint", namespace = "http://inception.digital/party")
 @XmlType(
     name = "RoleTypeAttributeConstraint",
     namespace = "http://inception.digital/party",
-    propOrder = {"roleType", "attributeType", "type", "value"})
+    propOrder = {"roleType", "attributeType", "attributeTypeQualifier", "type", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "role_type_attribute_constraints")
