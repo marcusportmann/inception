@@ -407,7 +407,7 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of role type attribute constraints was not retrieved",
-        42,
+        45,
         retrievedRoleTypeAttributeConstraints.size());
 
     retrievedRoleTypeAttributeConstraints =
@@ -536,7 +536,7 @@ public class PartyReferenceServiceTest {
     partyReferenceService.isValidResidencyStatus("permanent_resident");
     partyReferenceService.isValidResidentialType("owner");
     partyReferenceService.isValidSourceOfFunds("salary");
-    partyReferenceService.isValidTaxNumberType("za_income_tax_number");
+    partyReferenceService.isValidTaxNumberType("person", "za_income_tax_number");
     partyReferenceService.isValidTimeToContact("anytime");
     partyReferenceService.isValidTitle("mrs");
   }

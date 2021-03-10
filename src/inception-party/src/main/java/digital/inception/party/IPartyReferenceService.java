@@ -770,10 +770,12 @@ public interface IPartyReferenceService {
   /**
    * Check whether the code is a valid code for a tax number type.
    *
+   * @param partyTypeCode the party type code
    * @param taxNumberTypeCode the code for the tax number type
    * @return <b>true</b> if the code is a valid code for a tax number type or <b>false</b> otherwise
    */
-  boolean isValidTaxNumberType(String taxNumberTypeCode) throws ServiceUnavailableException;
+  boolean isValidTaxNumberType(String partyTypeCode, String taxNumberTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a time to contact.

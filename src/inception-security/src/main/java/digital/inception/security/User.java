@@ -130,13 +130,13 @@ public class User implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The optional mobile number for the user. */
-  @Schema(description = "The optional mobile number for the user")
+  /** The optional international format mobile number for the user. */
+  @Schema(description = "The optional international format mobile number for the user")
   @JsonProperty
   @XmlElement(name = "MobileNumber")
   @Size(max = 100)
   @Pattern(
-      message = "invalid mobile number",
+      message = "invalid international format mobile number",
       regexp =
           "^$|(\\+|00)(297|93|244|1264|358|355|376|971|54|374|1684|1268|61"
               + "|43|994|257|32|229|226|880|359|973|1242|387|590|375|501|1441|591|55|1246|673|975|267|236|1"
@@ -317,9 +317,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the optional mobile number for the user.
+   * Returns the optional international format mobile number for the user.
    *
-   * @return the optional mobile number for the user
+   * @return the optional international format mobile number for the user
    */
   public String getMobileNumber() {
     return mobileNumber;
@@ -507,9 +507,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the optional mobile number for the user.
+   * Set the optional international format mobile number for the user.
    *
-   * @param mobileNumber the optional mobile number for the user
+   * @param mobileNumber the optional international format mobile number for the user
    */
   public void setMobileNumber(String mobileNumber) {
     this.mobileNumber = mobileNumber;

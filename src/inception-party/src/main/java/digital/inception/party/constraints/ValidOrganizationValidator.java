@@ -63,6 +63,12 @@ public class ValidOrganizationValidator extends PartyValidator
     this.referenceService = referenceService;
   }
 
+  /** Constructs a new <b>ValidOrganizationValidator</b>. */
+  public ValidOrganizationValidator() {
+    this.partyReferenceService = null;
+    this.referenceService = null;
+  }
+
   @Override
   public void initialize(ValidOrganization constraintAnnotation) {}
 
@@ -70,69 +76,26 @@ public class ValidOrganizationValidator extends PartyValidator
   public boolean isValid(
       Organization organization, ConstraintValidatorContext constraintValidatorContext) {
 
-    boolean isValid = true;
+    if ((partyReferenceService != null) && (referenceService != null)) {
+      boolean isValid = true;
 
-    // Disable the default constraint violation
-    constraintValidatorContext.disableDefaultConstraintViolation();
+      // Disable the default constraint violation
+      constraintValidatorContext.disableDefaultConstraintViolation();
 
-    HibernateConstraintValidatorContext hibernateConstraintValidatorContext =
-        constraintValidatorContext.unwrap(HibernateConstraintValidatorContext.class);
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext =
+          constraintValidatorContext.unwrap(HibernateConstraintValidatorContext.class);
 
-    try {
-      // Validate attributes
-      for (Attribute attribute : organization.getAttributes()) {
-        for (String reservedAttributeTypeCode : Attribute.RESERVED_ATTRIBUTE_TYPE_CODES) {
-          if (reservedAttributeTypeCode.equalsIgnoreCase(attribute.getType())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("attributeType", attribute.getType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidOrganization.invalidReservedAttributeType.message}")
-                .addPropertyNode("attributes")
-                .addPropertyNode("type")
-                .inIterable()
-                .addConstraintViolation();
-
-            isValid = false;
-          }
-        }
-      }
-
-      // Validate contact mechanisms
-      for (ContactMechanism contactMechanism : organization.getContactMechanisms()) {
-        if (!ContactMechanism.VALID_CONTACT_MECHANISM_TYPES.contains(contactMechanism.getType())) {
-          // Do not add a constraint violation here as it would duplicate the regex validation
-        } else {
-          if (!partyReferenceService.isValidContactMechanismRole(
-              organization.getType().code(),
-              contactMechanism.getType(),
-              contactMechanism.getRole())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("contactMechanismRole", contactMechanism.getRole())
-                .addMessageParameter("contactMechanismType", contactMechanism.getType())
-                .addMessageParameter("partyType", organization.getType().code())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidOrganization.invalidContactMechanismRoleForPartyType.message}")
-                .addPropertyNode("contactMechanisms")
-                .addPropertyNode("role")
-                .inIterable()
-                .addConstraintViolation();
-
-            isValid = false;
-          }
-
-          for (String contactMechanismPurpose : contactMechanism.getPurposes()) {
-            if (!partyReferenceService.isValidContactMechanismPurpose(
-                organization.getType().code(),
-                contactMechanism.getType(),
-                contactMechanismPurpose)) {
+      try {
+        // Validate attributes
+        for (Attribute attribute : organization.getAttributes()) {
+          for (String reservedAttributeTypeCode : Attribute.RESERVED_ATTRIBUTE_TYPE_CODES) {
+            if (reservedAttributeTypeCode.equalsIgnoreCase(attribute.getType())) {
               hibernateConstraintValidatorContext
-                  .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
-                  .addMessageParameter("contactMechanismType", contactMechanism.getType())
-                  .addMessageParameter("partyType", organization.getType().code())
+                  .addMessageParameter("attributeType", attribute.getType())
                   .buildConstraintViolationWithTemplate(
-                      "{digital.inception.party.constraints.ValidOrganization.invalidContactMechanismPurposeForPartyType.message}")
-                  .addPropertyNode("contactMechanisms")
-                  .addPropertyNode("purpose")
+                      "{digital.inception.party.constraints.ValidOrganization.invalidReservedAttributeType.message}")
+                  .addPropertyNode("attributes")
+                  .addPropertyNode("type")
                   .inIterable()
                   .addConstraintViolation();
 
@@ -140,177 +103,238 @@ public class ValidOrganizationValidator extends PartyValidator
             }
           }
         }
-      }
 
-      // Validate countries of tax residence
-      for (String countryOfTaxResidence : organization.getCountriesOfTaxResidence()) {
-        if (!referenceService.isValidCountry(countryOfTaxResidence)) {
-          hibernateConstraintValidatorContext
-              .addMessageParameter("countryOfTaxResidence", countryOfTaxResidence)
-              .buildConstraintViolationWithTemplate(
-                  "{digital.inception.party.constraints.ValidOrganization.invalidCountryOfTaxResidence.message}")
-              .addPropertyNode("countriesOfTaxResidence")
-              .addConstraintViolation();
+        // Validate contact mechanisms
+        for (ContactMechanism contactMechanism : organization.getContactMechanisms()) {
+          if (StringUtils.hasText(contactMechanism.getType())) {
+            if (!ContactMechanism.VALID_CONTACT_MECHANISM_TYPES.contains(
+                contactMechanism.getType())) {
+              // Do not add a constraint violation here as it would duplicate the regex validation
+            } else {
 
-          isValid = false;
+              if (StringUtils.hasText(contactMechanism.getRole())) {
+                if (!partyReferenceService.isValidContactMechanismRole(
+                    organization.getType().code(),
+                    contactMechanism.getType(),
+                    contactMechanism.getRole())) {
+                  hibernateConstraintValidatorContext
+                      .addMessageParameter("contactMechanismRole", contactMechanism.getRole())
+                      .addMessageParameter("contactMechanismType", contactMechanism.getType())
+                      .addMessageParameter("partyType", organization.getType().code())
+                      .buildConstraintViolationWithTemplate(
+                          "{digital.inception.party.constraints.ValidOrganization.invalidContactMechanismRoleForPartyType.message}")
+                      .addPropertyNode("contactMechanisms")
+                      .addPropertyNode("role")
+                      .inIterable()
+                      .addConstraintViolation();
+
+                  isValid = false;
+                }
+              }
+
+              for (String contactMechanismPurpose : contactMechanism.getPurposes()) {
+                if (!partyReferenceService.isValidContactMechanismPurpose(
+                    organization.getType().code(),
+                    contactMechanism.getType(),
+                    contactMechanismPurpose)) {
+                  hibernateConstraintValidatorContext
+                      .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
+                      .addMessageParameter("contactMechanismType", contactMechanism.getType())
+                      .addMessageParameter("partyType", organization.getType().code())
+                      .buildConstraintViolationWithTemplate(
+                          "{digital.inception.party.constraints.ValidOrganization.invalidContactMechanismPurposeForPartyType.message}")
+                      .addPropertyNode("contactMechanisms")
+                      .addPropertyNode("purpose")
+                      .inIterable()
+                      .addConstraintViolation();
+
+                  isValid = false;
+                }
+              }
+
+              if (!validateContactMechanismValue(
+                  contactMechanism, hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+            }
+          }
         }
-      }
 
-      // Validate identity documents
-      for (IdentityDocument identityDocument : organization.getIdentityDocuments()) {
-
-        if (StringUtils.hasText(identityDocument.getCountryOfIssue())) {
-          if (!referenceService.isValidCountry(identityDocument.getCountryOfIssue())) {
+        // Validate countries of tax residence
+        for (String countryOfTaxResidence : organization.getCountriesOfTaxResidence()) {
+          if (!referenceService.isValidCountry(countryOfTaxResidence)) {
             hibernateConstraintValidatorContext
-                .addMessageParameter("countryOfIssue", identityDocument.getCountryOfIssue())
+                .addMessageParameter("countryOfTaxResidence", countryOfTaxResidence)
                 .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidOrganization.invalidIdentityDocumentCountryOfIssue.message}")
-                .addPropertyNode("identityDocuments")
-                .addPropertyNode("countryOfIssue")
-                .inIterable()
+                    "{digital.inception.party.constraints.ValidOrganization.invalidCountryOfTaxResidence.message}")
+                .addPropertyNode("countriesOfTaxResidence")
                 .addConstraintViolation();
 
             isValid = false;
           }
         }
 
-        if (StringUtils.hasText(identityDocument.getType())) {
-          if (!partyReferenceService.isValidIdentityDocumentType(
-              organization.getType().code(), identityDocument.getType())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("identityDocumentType", identityDocument.getType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidOrganization.invalidIdentityDocumentType.message}")
-                .addPropertyNode("identityDocuments")
-                .addPropertyNode("type")
-                .inIterable()
-                .addConstraintViolation();
+        // Validate identity documents
+        for (IdentityDocument identityDocument : organization.getIdentityDocuments()) {
 
-            isValid = false;
+          if (StringUtils.hasText(identityDocument.getCountryOfIssue())) {
+            if (!referenceService.isValidCountry(identityDocument.getCountryOfIssue())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("countryOfIssue", identityDocument.getCountryOfIssue())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidIdentityDocumentCountryOfIssue.message}")
+                  .addPropertyNode("identityDocuments")
+                  .addPropertyNode("countryOfIssue")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
           }
-        }
-      }
 
-      // Validate physical addresses
-      for (PhysicalAddress physicalAddress : organization.getPhysicalAddresses()) {
-        if (StringUtils.hasText(physicalAddress.getRole())) {
-          if (!partyReferenceService.isValidPhysicalAddressRole(
-              organization.getType().code(), physicalAddress.getRole())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("physicalAddressRole", physicalAddress.getRole())
-                .addMessageParameter("partyType", organization.getType().code())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidOrganization.invalidPhysicalAddressRoleForPartyType.message}")
-                .addPropertyNode("physicalAddresses")
-                .addPropertyNode("role")
-                .inIterable()
-                .addConstraintViolation();
+          if (StringUtils.hasText(identityDocument.getType())) {
+            if (!partyReferenceService.isValidIdentityDocumentType(
+                organization.getType().code(), identityDocument.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("identityDocumentType", identityDocument.getType())
+                  .addMessageParameter("partyType", organization.getType().code())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidIdentityDocumentTypeForPartyType.message}")
+                  .addPropertyNode("identityDocuments")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
 
-            isValid = false;
-          }
-        }
-
-        for (String physicalAddressPurpose : physicalAddress.getPurposes()) {
-          if (!partyReferenceService.isValidPhysicalAddressPurpose(
-              organization.getType().code(), physicalAddressPurpose)) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("physicalAddressPurpose", physicalAddressPurpose)
-                .addMessageParameter("partyType", organization.getType().code())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidOrganization.invalidPhysicalAddressPurposeForPartyType.message}")
-                .addPropertyNode("physicalAddresses")
-                .addPropertyNode("purposes")
-                .inIterable()
-                .addConstraintViolation();
-
-            isValid = false;
-          }
-        }
-      }
-
-      // Validate preferences
-      for (Preference preference : organization.getPreferences()) {
-        if (StringUtils.hasText(preference.getType())) {
-          if (!partyReferenceService.isValidPreferenceType(
-              organization.getType().code(), preference.getType())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("preferenceType", preference.getType())
-                .addMessageParameter("partyType", organization.getType().code())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidOrganization.invalidPreferenceTypeForPartyType.message}")
-                .addPropertyNode("preferences")
-                .addPropertyNode("type")
-                .inIterable()
-                .addConstraintViolation();
-
-            isValid = false;
-          }
-        }
-      }
-
-      // Validate tax numbers
-      for (TaxNumber taxNumber : organization.getTaxNumbers()) {
-        if (StringUtils.hasText(taxNumber.getCountryOfIssue())) {
-          if (!referenceService.isValidCountry(taxNumber.getCountryOfIssue())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("countryOfIssue", taxNumber.getCountryOfIssue())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidOrganization.invalidTaxNumberCountryOfIssue.message}")
-                .addPropertyNode("taxNumbers")
-                .addPropertyNode("countryOfIssue")
-                .inIterable()
-                .addConstraintViolation();
-
-            isValid = false;
-          }
-        }
-
-        if (StringUtils.hasText(taxNumber.getType())) {
-          if (!partyReferenceService.isValidTaxNumberType(taxNumber.getType())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("taxNumberType", taxNumber.getType())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidOrganization.invalidTaxNumberType.message}")
-                .addPropertyNode("taxNumbers")
-                .addPropertyNode("type")
-                .inIterable()
-                .addConstraintViolation();
-
-            isValid = false;
-          }
-        }
-      }
-
-      // Validate roles
-      for (Role role : organization.getRoles()) {
-        if (StringUtils.hasText(role.getType())) {
-          if (!partyReferenceService.isValidRoleType(
-              organization.getType().code(), role.getType())) {
-            hibernateConstraintValidatorContext
-                .addMessageParameter("roleType", role.getType())
-                .addMessageParameter("partyType", organization.getType().code())
-                .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidOrganization.invalidRoleTypeForPartyType.message}")
-                .addPropertyNode("roles")
-                .addPropertyNode("type")
-                .inIterable()
-                .addConstraintViolation();
-
-            isValid = false;
-          } else {
-            if (!validateOrganizationWithRole(
-                organization, role.getType(), hibernateConstraintValidatorContext)) {
               isValid = false;
             }
           }
         }
+
+        // Validate physical addresses
+        for (PhysicalAddress physicalAddress : organization.getPhysicalAddresses()) {
+          if (StringUtils.hasText(physicalAddress.getRole())) {
+            if (!partyReferenceService.isValidPhysicalAddressRole(
+                organization.getType().code(), physicalAddress.getRole())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("physicalAddressRole", physicalAddress.getRole())
+                  .addMessageParameter("partyType", organization.getType().code())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidPhysicalAddressRoleForPartyType.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("role")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+
+          for (String physicalAddressPurpose : physicalAddress.getPurposes()) {
+            if (!partyReferenceService.isValidPhysicalAddressPurpose(
+                organization.getType().code(), physicalAddressPurpose)) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("physicalAddressPurpose", physicalAddressPurpose)
+                  .addMessageParameter("partyType", organization.getType().code())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidPhysicalAddressPurposeForPartyType.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("purposes")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+        }
+
+        // Validate preferences
+        for (Preference preference : organization.getPreferences()) {
+          if (StringUtils.hasText(preference.getType())) {
+            if (!partyReferenceService.isValidPreferenceType(
+                organization.getType().code(), preference.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("preferenceType", preference.getType())
+                  .addMessageParameter("partyType", organization.getType().code())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidPreferenceTypeForPartyType.message}")
+                  .addPropertyNode("preferences")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+        }
+
+        // Validate tax numbers
+        for (TaxNumber taxNumber : organization.getTaxNumbers()) {
+          if (StringUtils.hasText(taxNumber.getCountryOfIssue())) {
+            if (!referenceService.isValidCountry(taxNumber.getCountryOfIssue())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("countryOfIssue", taxNumber.getCountryOfIssue())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidTaxNumberCountryOfIssue.message}")
+                  .addPropertyNode("taxNumbers")
+                  .addPropertyNode("countryOfIssue")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+
+          if (StringUtils.hasText(taxNumber.getType())) {
+            if (!partyReferenceService.isValidTaxNumberType(
+                organization.getType().code(), taxNumber.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("taxNumberType", taxNumber.getType())
+                  .addMessageParameter("partyType", organization.getType().code())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidTaxNumberTypeForPartyType.message}")
+                  .addPropertyNode("taxNumbers")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+        }
+
+        // Validate roles
+        for (Role role : organization.getRoles()) {
+          if (StringUtils.hasText(role.getType())) {
+            if (!partyReferenceService.isValidRoleType(
+                organization.getType().code(), role.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("roleType", role.getType())
+                  .addMessageParameter("partyType", organization.getType().code())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidRoleTypeForPartyType.message}")
+                  .addPropertyNode("roles")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            } else {
+              if (!validateOrganizationWithRole(
+                  organization, role.getType(), hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+            }
+          }
+        }
+
+      } catch (Throwable e) {
+        throw new ValidationException("Failed to validate the organization", e);
       }
 
-    } catch (Throwable e) {
-      throw new ValidationException("Failed to validate the organization", e);
+      return isValid;
+    } else {
+      return true;
     }
-
-    return isValid;
   }
 
   private boolean validateOrganizationWithRole(
@@ -335,6 +359,7 @@ public class ValidOrganizationValidator extends PartyValidator
                   .addMessageParameter("roleType", roleType)
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidOrganization.contactMechanismTypeRequiredForRoleType.message}")
+                  .addPropertyNode("contactMechanisms")
                   .addConstraintViolation();
 
               isValid = false;

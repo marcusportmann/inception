@@ -111,41 +111,52 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate contact mechanisms
         for (ContactMechanism contactMechanism : person.getContactMechanisms()) {
-          if (!ContactMechanism.VALID_CONTACT_MECHANISM_TYPES.contains(
-              contactMechanism.getType())) {
-            // Do not add a constraint violation here as it would duplicate the regex validation
-          } else {
+          if (StringUtils.hasText(contactMechanism.getType())) {
+            if (!ContactMechanism.VALID_CONTACT_MECHANISM_TYPES.contains(
+                contactMechanism.getType())) {
+              // Do not add a constraint violation here as it would duplicate the regex validation
+            } else {
 
-            if (!partyReferenceService.isValidContactMechanismRole(
-                person.getType().code(), contactMechanism.getType(), contactMechanism.getRole())) {
-              hibernateConstraintValidatorContext
-                  .addMessageParameter("contactMechanismRole", contactMechanism.getRole())
-                  .addMessageParameter("contactMechanismType", contactMechanism.getType())
-                  .addMessageParameter("partyType", person.getType().code())
-                  .buildConstraintViolationWithTemplate(
-                      "{digital.inception.party.constraints.ValidPerson.invalidContactMechanismRoleForPartyType.message}")
-                  .addPropertyNode("contactMechanisms")
-                  .addPropertyNode("role")
-                  .inIterable()
-                  .addConstraintViolation();
+              if (StringUtils.hasText(contactMechanism.getRole())) {
+                if (!partyReferenceService.isValidContactMechanismRole(
+                    person.getType().code(),
+                    contactMechanism.getType(),
+                    contactMechanism.getRole())) {
+                  hibernateConstraintValidatorContext
+                      .addMessageParameter("contactMechanismRole", contactMechanism.getRole())
+                      .addMessageParameter("contactMechanismType", contactMechanism.getType())
+                      .addMessageParameter("partyType", person.getType().code())
+                      .buildConstraintViolationWithTemplate(
+                          "{digital.inception.party.constraints.ValidPerson.invalidContactMechanismRoleForPartyType.message}")
+                      .addPropertyNode("contactMechanisms")
+                      .addPropertyNode("role")
+                      .inIterable()
+                      .addConstraintViolation();
 
-              isValid = false;
-            }
+                  isValid = false;
+                }
+              }
 
-            for (String contactMechanismPurpose : contactMechanism.getPurposes()) {
-              if (!partyReferenceService.isValidContactMechanismPurpose(
-                  person.getType().code(), contactMechanism.getType(), contactMechanismPurpose)) {
-                hibernateConstraintValidatorContext
-                    .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
-                    .addMessageParameter("contactMechanismType", contactMechanism.getType())
-                    .addMessageParameter("partyType", person.getType().code())
-                    .buildConstraintViolationWithTemplate(
-                        "{digital.inception.party.constraints.ValidPerson.invalidContactMechanismPurposeForPartyType.message}")
-                    .addPropertyNode("contactMechanisms")
-                    .addPropertyNode("purpose")
-                    .inIterable()
-                    .addConstraintViolation();
+              for (String contactMechanismPurpose : contactMechanism.getPurposes()) {
+                if (!partyReferenceService.isValidContactMechanismPurpose(
+                    person.getType().code(), contactMechanism.getType(), contactMechanismPurpose)) {
+                  hibernateConstraintValidatorContext
+                      .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
+                      .addMessageParameter("contactMechanismType", contactMechanism.getType())
+                      .addMessageParameter("partyType", person.getType().code())
+                      .buildConstraintViolationWithTemplate(
+                          "{digital.inception.party.constraints.ValidPerson.invalidContactMechanismPurposeForPartyType.message}")
+                      .addPropertyNode("contactMechanisms")
+                      .addPropertyNode("purpose")
+                      .inIterable()
+                      .addConstraintViolation();
 
+                  isValid = false;
+                }
+              }
+
+              if (!validateContactMechanismValue(
+                  contactMechanism, hibernateConstraintValidatorContext)) {
                 isValid = false;
               }
             }
@@ -267,8 +278,9 @@ public class ValidPersonValidator extends PartyValidator
                 person.getType().code(), identityDocument.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("identityDocumentType", identityDocument.getType())
+                  .addMessageParameter("partyType", person.getType().code())
                   .buildConstraintViolationWithTemplate(
-                      "{digital.inception.party.constraints.ValidPerson.invalidIdentityDocumentType.message}")
+                      "{digital.inception.party.constraints.ValidPerson.invalidIdentityDocumentTypeForPartyType.message}")
                   .addPropertyNode("identityDocuments")
                   .addPropertyNode("type")
                   .inIterable()
@@ -298,9 +310,7 @@ public class ValidPersonValidator extends PartyValidator
                 .addMessageParameter("maritalStatus", person.getMaritalStatus())
                 .addMessageParameter(
                     "marriageType",
-                    StringUtils.hasText(person.getMarriageType())
-                        ? person.getMarriageType()
-                        : "")
+                    StringUtils.hasText(person.getMarriageType()) ? person.getMarriageType() : "")
                 .buildConstraintViolationWithTemplate(
                     "{digital.inception.party.constraints.ValidPerson.invalidMarriageType.message}")
                 .addPropertyNode("marriageType")
@@ -470,11 +480,13 @@ public class ValidPersonValidator extends PartyValidator
           }
 
           if (StringUtils.hasText(taxNumber.getType())) {
-            if (!partyReferenceService.isValidTaxNumberType(taxNumber.getType())) {
+            if (!partyReferenceService.isValidTaxNumberType(
+                person.getType().code(), taxNumber.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("taxNumberType", taxNumber.getType())
+                  .addMessageParameter("partyType", person.getType().code())
                   .buildConstraintViolationWithTemplate(
-                      "{digital.inception.party.constraints.ValidPerson.invalidTaxNumberType.message}")
+                      "{digital.inception.party.constraints.ValidPerson.invalidTaxNumberTypeForPartyType.message}")
                   .addPropertyNode("taxNumbers")
                   .addPropertyNode("type")
                   .inIterable()
