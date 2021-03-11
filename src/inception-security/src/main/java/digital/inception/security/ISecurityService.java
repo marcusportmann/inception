@@ -20,6 +20,7 @@ import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -142,10 +143,10 @@ public interface ISecurityService {
    *
    * @param tenant the tenant
    * @param createUserDirectory should a new internal user directory be created for the tenant
-   * @return the new internal user directory that was created for the tenant or <b>null</b> if no
-   *     user directory was created
+   * @return an Optional containing the new internal user directory that was created for the tenant
+   *     or an empty Optional if no user directory was created
    */
-  UserDirectory createTenant(Tenant tenant, boolean createUserDirectory)
+  Optional<UserDirectory> createTenant(Tenant tenant, boolean createUserDirectory)
       throws InvalidArgumentException, DuplicateTenantException, ServiceUnavailableException;
 
   /**
@@ -511,10 +512,11 @@ public interface ISecurityService {
    * specified username is associated with.
    *
    * @param username the username for the user
-   * @return the Universally Unique Identifier (UUID) for the user directory that the user with the
-   *     specified username is associated with or <b>null</b> if the user cannot be found
+   * @return an Optional containing the Universally Unique Identifier (UUID) for the user directory
+   *     that the user with the specified username is associated with or an empty Optional if the
+   *     user cannot be found
    */
-  UUID getUserDirectoryIdForUser(String username)
+  Optional<UUID> getUserDirectoryIdForUser(String username)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**

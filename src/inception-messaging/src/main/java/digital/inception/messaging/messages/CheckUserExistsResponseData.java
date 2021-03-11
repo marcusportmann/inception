@@ -112,15 +112,21 @@ public class CheckUserExistsResponseData extends WbxmlMessageData {
     }
 
     try {
-      this.errorCode = Integer.parseInt(rootElement.getChildText("ErrorCode"));
+      rootElement
+          .getChildText("ErrorCode")
+          .ifPresent(errorCode -> this.errorCode = Integer.parseInt(errorCode));
     } catch (Throwable e) {
       return false;
     }
 
-    this.errorMessage = rootElement.getChildText("ErrorMessage");
+    rootElement
+        .getChildText("ErrorMessage")
+        .ifPresent(errorMessage -> this.errorMessage = errorMessage);
 
     try {
-      this.userExists = Boolean.parseBoolean(rootElement.getChildText("UserExists"));
+      rootElement
+          .getChildText("UserExists")
+          .ifPresent(userExists -> this.userExists = Boolean.parseBoolean(userExists));
     } catch (Throwable e) {
       return false;
     }

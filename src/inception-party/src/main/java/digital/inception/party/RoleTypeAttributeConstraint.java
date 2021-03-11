@@ -89,13 +89,23 @@ public class RoleTypeAttributeConstraint implements Serializable {
   @Column(name = "role_type", length = 30, nullable = false)
   private String roleType;
 
-  /** The attribute constraint type. */
-  @Schema(description = "The attribute constraint type", required = true)
+  /** The constraint type. */
+  @Schema(
+      description = "The constraint type",
+      required = true,
+      allowableValues = {
+        "max_size",
+        "min_size",
+        "pattern",
+        "reference",
+        "required",
+        "size"
+      })
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Column(name = "type", length = 30, nullable = false)
-  private AttributeConstraintType type;
+  private ConstraintType type;
 
   /**
    * The optional value to apply when validating the attribute value, e.g. the length, the regular
@@ -113,11 +123,11 @@ public class RoleTypeAttributeConstraint implements Serializable {
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
-   * @param type the attribute constraint type
+   * @param type the constraint type
    * @param value the optional value to apply when validating the attribute value
    */
   public RoleTypeAttributeConstraint(
-      String roleType, String attributeType, AttributeConstraintType type, String value) {
+      String roleType, String attributeType, ConstraintType type, String value) {
     this(roleType, attributeType, "", type, value);
   }
 
@@ -127,14 +137,14 @@ public class RoleTypeAttributeConstraint implements Serializable {
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
    * @param attributeTypeQualifier the qualifier for the attribute type
-   * @param type the attribute constraint type
+   * @param type the constraint type
    * @param value the optional value to apply when validating the attribute value
    */
   public RoleTypeAttributeConstraint(
       String roleType,
       String attributeType,
       String attributeTypeQualifier,
-      AttributeConstraintType type,
+      ConstraintType type,
       String value) {
     this.roleType = roleType;
     this.attributeType = attributeType;
@@ -149,13 +159,10 @@ public class RoleTypeAttributeConstraint implements Serializable {
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
    * @param attributeTypeQualifier the qualifier for the attribute type
-   * @param type the attribute constraint type
+   * @param type the constraint type
    */
   public RoleTypeAttributeConstraint(
-      String roleType,
-      String attributeType,
-      String attributeTypeQualifier,
-      AttributeConstraintType type) {
+      String roleType, String attributeType, String attributeTypeQualifier, ConstraintType type) {
     this(roleType, attributeType, attributeTypeQualifier, type, null);
   }
 
@@ -164,10 +171,9 @@ public class RoleTypeAttributeConstraint implements Serializable {
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
-   * @param type the attribute constraint type
+   * @param type the constraint type
    */
-  public RoleTypeAttributeConstraint(
-      String roleType, String attributeType, AttributeConstraintType type) {
+  public RoleTypeAttributeConstraint(String roleType, String attributeType, ConstraintType type) {
     this(roleType, attributeType, "", type, null);
   }
 
@@ -230,11 +236,11 @@ public class RoleTypeAttributeConstraint implements Serializable {
   }
 
   /**
-   * Returns the attribute constraint type.
+   * Returns the constraint type.
    *
-   * @return the attribute constraint type
+   * @return the constraint type
    */
-  public AttributeConstraintType getType() {
+  public ConstraintType getType() {
     return type;
   }
 
@@ -289,19 +295,19 @@ public class RoleTypeAttributeConstraint implements Serializable {
   }
 
   /**
-   * Set the attribute constraint type.
+   * Set the constraint type.
    *
-   * @param type the attribute constraint type
+   * @param type the constraint type
    */
-  public void setType(AttributeConstraintType type) {
+  public void setType(ConstraintType type) {
     this.type = type;
   }
 
   /**
-   * Set the optional value to apply when validating the attribute value, e.g. the length, the
-   * regular expression pattern, etc.
+   * Set the value to apply when validating the attribute value, e.g. the length, the regular
+   * expression pattern, etc.
    *
-   * @param value the optional value to apply when validating the attribute value
+   * @param value the value to apply when validating the attribute value
    */
   public void setValue(String value) {
     this.value = value;

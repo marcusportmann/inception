@@ -32,6 +32,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.ConstraintViolation;
@@ -634,11 +635,13 @@ public class SecurityApi extends SecureApi {
           || hasAccessToFunction("Security.UserAdministration")
           || hasAccessToFunction("Security.ResetUserPassword")) {
 
-        UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
+        Optional<UUID> userDirectoryIdOptional = securityService.getUserDirectoryIdForUser(username);
 
-        if (userDirectoryId == null) {
+        if (userDirectoryIdOptional.isEmpty()) {
           throw new UserNotFoundException(username);
         }
+
+        UUID userDirectoryId = userDirectoryIdOptional.get();
 
         if (isSecurityEnabled() && (!hasAccessToUserDirectory(userDirectoryId))) {
           throw new AccessDeniedException(

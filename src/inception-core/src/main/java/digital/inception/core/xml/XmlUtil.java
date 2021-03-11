@@ -19,6 +19,7 @@ package digital.inception.core.xml;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 import javax.xml.XMLConstants;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -91,10 +92,10 @@ public class XmlUtil {
    *
    * @param element the parent element
    * @param name the name of the child element to return
-   * @return the child element or <b>null</b> if a child element with the specified name could not
-   *     be found
+   * @return an Optional containing the child element or an empty Optional if a child element with
+   *     the specified name could not be found
    */
-  public static Element getChildElement(Element element, String name) {
+  public static Optional<Element> getChildElement(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
 
     for (int i = 0; i < nodeList.getLength(); i++) {
@@ -104,12 +105,12 @@ public class XmlUtil {
         Element childElement = (Element) node;
 
         if (childElement.getNodeName().equals(name)) {
-          return childElement;
+          return Optional.of(childElement);
         }
       }
     }
 
-    return null;
+    return Optional.empty();
   }
 
   /**
@@ -118,10 +119,10 @@ public class XmlUtil {
    *
    * @param element the parent element
    * @param name the name of the child element to return
-   * @return the boolean value of the text content for the child element or <b>null</b> if a child
-   *     element with the specified name could not be found
+   * @return an Optional containing the boolean value of the text content for the child element or
+   *     an empty Optional if a child element with the specified name could not be found
    */
-  public static Boolean getChildElementBoolean(Element element, String name) {
+  public static Optional<Boolean> getChildElementBoolean(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
 
     for (int i = 0; i < nodeList.getLength(); i++) {
@@ -132,7 +133,7 @@ public class XmlUtil {
 
         if (childElement.getNodeName().equals(name)) {
           try {
-            return Boolean.parseBoolean(childElement.getTextContent());
+            return Optional.of(Boolean.parseBoolean(childElement.getTextContent()));
           } catch (Throwable e) {
             throw new RuntimeException(
                 "Failed to parse the invalid boolean value ("
@@ -143,7 +144,7 @@ public class XmlUtil {
       }
     }
 
-    return null;
+    return Optional.empty();
   }
 
   /**
@@ -152,10 +153,10 @@ public class XmlUtil {
    *
    * @param element the parent element
    * @param name the name of the child element to return
-   * @return the text content for the child element or <b>null</b> if a child element with the
-   *     specified name could not be found
+   * @return an Optional containing the text content for the child element or an empty Optional if
+   *     a child element with the specified name could not be found
    */
-  public static String getChildElementText(Element element, String name) {
+  public static Optional<String> getChildElementText(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
 
     for (int i = 0; i < nodeList.getLength(); i++) {
@@ -165,12 +166,12 @@ public class XmlUtil {
         Element childElement = (Element) node;
 
         if (childElement.getNodeName().equals(name)) {
-          return childElement.getTextContent();
+          return Optional.of(childElement.getTextContent());
         }
       }
     }
 
-    return null;
+    return Optional.empty();
   }
 
   /**

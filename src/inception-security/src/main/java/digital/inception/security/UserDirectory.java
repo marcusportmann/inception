@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.Access;
@@ -304,10 +305,12 @@ public class UserDirectory implements Serializable {
       for (int i = 0; i < parameterElements.getLength(); i++) {
         Element parameterElement = (Element) parameterElements.item(i);
 
-        parameters.add(
-            new UserDirectoryParameter(
-                XmlUtil.getChildElementText(parameterElement, "name"),
-                XmlUtil.getChildElementText(parameterElement, "value")));
+        Optional<String> nameOptional = XmlUtil.getChildElementText(parameterElement, "name");
+        Optional<String> valueOptional = XmlUtil.getChildElementText(parameterElement, "value");
+
+        if (nameOptional.isPresent() && valueOptional.isPresent()) {
+          parameters.add(new UserDirectoryParameter(nameOptional.get(), valueOptional.get()));
+        }
       }
     } catch (Throwable e) {
       throw new InvalidConfigurationException(

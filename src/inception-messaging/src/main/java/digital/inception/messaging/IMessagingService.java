@@ -19,6 +19,7 @@ package digital.inception.messaging;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -205,10 +206,10 @@ public interface IMessagingService {
    *
    * <p>The message will be locked to prevent duplicate processing.
    *
-   * @return the next message that has been queued for processing or <b>null</b> if no messages are
+   * @return an Optional containing the next message that has been queued for processing or an empty Optional if no messages are
    *     currently queued for processing
    */
-  Message getNextMessageQueuedForProcessing() throws ServiceUnavailableException;
+  Optional<Message> getNextMessageQueuedForProcessing() throws ServiceUnavailableException;
 
   /**
    * Should the specified message be archived?
@@ -265,9 +266,9 @@ public interface IMessagingService {
    * Process the message.
    *
    * @param message the message to process
-   * @return the response message or <b>null</b> if no response message exists
+   * @return an Optional containing the response message or an empty Optional if no response message exists
    */
-  Message processMessage(Message message)
+  Optional<Message> processMessage(Message message)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**

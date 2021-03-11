@@ -16,6 +16,7 @@
 
 package digital.inception.sms;
 
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -74,14 +75,14 @@ public class BackgroundSMSSender implements InitializingBean {
   @Scheduled(cron = "0 * * * * *")
   @Async
   void sendSMSs() {
-    SMS sms;
+    Optional<SMS> smsOptional;
 
     while (true) {
       // Retrieve the next SMS queued for sending
       try {
-        sms = smsService.getNextSMSQueuedForSending();
+        smsOptional = smsService.getNextSMSQueuedForSending();
 
-        if (sms == null) {
+        if (smsOptional.isEmpty()) {
           if (logger.isDebugEnabled()) {
             logger.debug("No SMSs queued for sending");
           }
@@ -93,6 +94,8 @@ public class BackgroundSMSSender implements InitializingBean {
 
         return;
       }
+
+      SMS sms = smsOptional.get();
 
       // Send the SMS
       try {

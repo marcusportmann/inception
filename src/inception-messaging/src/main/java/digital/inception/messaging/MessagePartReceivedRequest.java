@@ -34,12 +34,12 @@ public class MessagePartReceivedRequest {
    * The Universally Unique Identifier (UUID) for the device the message part received request
    * originated from.
    */
-  private final UUID deviceId;
+  private UUID deviceId;
 
   /**
    * The Universally Unique Identifier (UUID) for the message part that was successfully downloaded.
    */
-  private final UUID messagePartId;
+  private UUID messagePartId;
 
   /**
    * Constructs a new <b>MessagePartReceivedRequest</b> and populates it from the information stored
@@ -50,8 +50,13 @@ public class MessagePartReceivedRequest {
   public MessagePartReceivedRequest(Document document) {
     Element rootElement = document.getRootElement();
 
-    this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
-    this.messagePartId = UUID.fromString(rootElement.getAttributeValue("messagePartId"));
+    rootElement
+        .getAttributeValue("deviceId")
+        .ifPresent(deviceId -> this.deviceId = UUID.fromString(deviceId));
+
+    rootElement
+        .getAttributeValue("messagePartId")
+        .ifPresent(messagePartId -> this.messagePartId = UUID.fromString(messagePartId));
   }
 
   /**

@@ -75,8 +75,7 @@ import org.springframework.util.StringUtils;
 public class ContactMechanism implements Serializable {
 
   /** The valid contact mechanism types. */
-  @JsonIgnore
-  @XmlTransient
+  @JsonIgnore @XmlTransient
   public static final Set<String> VALID_CONTACT_MECHANISM_TYPES =
       Set.of("mobile_number", "phone_number", "fax_number", "email_address", "social_media");
 
@@ -326,6 +325,18 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
+   * Returns whether the contact mechanism has the specified purpose.
+   *
+   * @param purpose the code for the contact mechanism purpose
+   * @return <b>true</b> if the contact mechanism has the specified contact mechanism purpose or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasPurpose(String purpose) {
+    return getPurposes().stream()
+        .anyMatch(existingPurpose -> Objects.equals(purpose, existingPurpose));
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -348,9 +359,9 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Set the optional codes for the contact mechanism purposes.
+   * Set the codes for the contact mechanism purposes.
    *
-   * @param purposes the optional codes for the contact mechanism purposes
+   * @param purposes the codes for the contact mechanism purposes
    */
   public void setPurposes(Set<String> purposes) {
     if ((purposes != null) && (purposes.size() > 0)) {

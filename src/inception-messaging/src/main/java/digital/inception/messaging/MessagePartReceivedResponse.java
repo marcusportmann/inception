@@ -71,14 +71,13 @@ public class MessagePartReceivedResponse {
   public MessagePartReceivedResponse(Document document) {
     Element rootElement = document.getRootElement();
 
-    this.code = Long.parseLong(rootElement.getAttributeValue("code"));
-    this.detail = rootElement.getAttributeValue("detail");
+    rootElement.getAttributeValue("code").ifPresent(code -> this.code = Long.parseLong(code));
 
-    if (rootElement.hasChild("Exception")) {
-      Element exceptionElement = rootElement.getChild("Exception");
+    rootElement.getAttributeValue("detail").ifPresent(detail -> this.detail = detail);
 
-      exception = exceptionElement.getText();
-    }
+    rootElement
+        .getChild("Exception")
+        .ifPresent(exceptionElement -> this.exception = exceptionElement.getText());
   }
 
   /**

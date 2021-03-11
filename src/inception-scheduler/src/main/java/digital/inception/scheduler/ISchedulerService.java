@@ -19,6 +19,7 @@ package digital.inception.scheduler;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The <b>ISchedulerService</b> interface defines the functionality provided by a Scheduler Service
@@ -97,10 +98,10 @@ public interface ISchedulerService {
    *
    * <p>The job will be locked to prevent duplicate processing.
    *
-   * @return the next job that is scheduled for execution or <b>null</b> if no jobs are currently
+   * @return an Optional containing the next job that is scheduled for execution or an empty Optional if no jobs are currently
    *     scheduled for execution
    */
-  Job getNextJobScheduledForExecution() throws ServiceUnavailableException;
+  Optional<Job> getNextJobScheduledForExecution() throws ServiceUnavailableException;
 
   /**
    * Retrieve the unscheduled jobs.

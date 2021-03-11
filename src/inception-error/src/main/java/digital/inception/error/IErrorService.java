@@ -43,7 +43,7 @@ public interface IErrorService {
    * Retrieve the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
-   * @return the error report or <b>null</b> if the error report could not be found
+   * @return the error report
    */
   ErrorReport getErrorReport(UUID errorReportId)
       throws InvalidArgumentException, ErrorReportNotFoundException, ServiceUnavailableException;
@@ -70,7 +70,7 @@ public interface IErrorService {
    * Retrieve the summary for the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
-   * @return the summary for the error report or <b>null</b> if the error report could not be found
+   * @return the summary for the error report
    */
   ErrorReportSummary getErrorReportSummary(UUID errorReportId)
       throws InvalidArgumentException, ErrorReportNotFoundException, ServiceUnavailableException;

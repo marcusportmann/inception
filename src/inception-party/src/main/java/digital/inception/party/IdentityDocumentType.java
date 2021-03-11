@@ -276,9 +276,9 @@ public class IdentityDocumentType implements Serializable {
   }
 
   /**
-   * Set the optional code for the country of issue for the identity document type.
+   * Set the code for the country of issue for the identity document type.
    *
-   * @param countryOfIssue the optional code for the country of issue for the identity document type
+   * @param countryOfIssue the code for the country of issue for the identity document type
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;

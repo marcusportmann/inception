@@ -16,8 +16,8 @@
 
 package digital.inception.codes;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
@@ -876,12 +876,16 @@ public class CodesService implements ICodesService, InitializingBean {
 
         for (Element codeProviderElement : codeProviderElements) {
           // Read the handler configuration
-          String name = XmlUtil.getChildElementText(codeProviderElement, "name");
-          String className = XmlUtil.getChildElementText(codeProviderElement, "class");
+          Optional<String> nameOptional = XmlUtil.getChildElementText(codeProviderElement, "name");
+          Optional<String> classNameOptional =
+              XmlUtil.getChildElementText(codeProviderElement, "class");
 
-          CodeProviderConfig codeProviderConfig = new CodeProviderConfig(name, className);
+          if (nameOptional.isPresent() && classNameOptional.isPresent()) {
+            CodeProviderConfig codeProviderConfig =
+                new CodeProviderConfig(nameOptional.get(), classNameOptional.get());
 
-          codeProviderConfigs.add(codeProviderConfig);
+            codeProviderConfigs.add(codeProviderConfig);
+          }
         }
       }
     } catch (Throwable e) {

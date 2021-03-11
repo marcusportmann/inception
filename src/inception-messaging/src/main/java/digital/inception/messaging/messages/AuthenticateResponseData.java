@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
@@ -141,37 +142,49 @@ public class AuthenticateResponseData extends WbxmlMessageData {
     }
 
     try {
-      this.errorCode = Integer.parseInt(rootElement.getChildText("ErrorCode"));
+      rootElement
+          .getChildText("ErrorCode")
+          .ifPresent(errorCode -> this.errorCode = Integer.parseInt(errorCode));
     } catch (Throwable e) {
       return false;
     }
 
-    this.errorMessage = rootElement.getChildText("ErrorMessage");
+    rootElement
+        .getChildText("ErrorMessage")
+        .ifPresent(errorMessage -> this.errorMessage = errorMessage);
 
     this.tenants = new ArrayList<>();
 
     if (rootElement.hasChild("Tenants")) {
-      Element tenantsElement = rootElement.getChild("Tenants");
+      rootElement
+          .getChild("Tenants")
+          .ifPresent(
+              tenantsElement -> {
+                List<Element> tenantElements = tenantsElement.getChildren("Tenant");
 
-      List<Element> tenantElements = tenantsElement.getChildren("Tenant");
-
-      this.tenants.addAll(
-          tenantElements.stream().map(TenantData::new).collect(Collectors.toList()));
+                this.tenants.addAll(
+                    tenantElements.stream().map(TenantData::new).collect(Collectors.toList()));
+              });
     }
 
-    this.userEncryptionKey = rootElement.getChildOpaque("UserEncryptionKey");
+    rootElement
+        .getChildOpaque("UserEncryptionKey")
+        .ifPresent(userEncryptionKey -> this.userEncryptionKey = userEncryptionKey);
 
     this.userProperties = new HashMap<>();
 
-    if (rootElement.hasChild("UserProperties")) {
-      Element userPropertiesElement = rootElement.getChild("UserProperties");
+    Optional<Element> userPropertiesElementOptional = rootElement.getChild("UserProperties");
+
+    if (userPropertiesElementOptional.isPresent()) {
+      Element userPropertiesElement = userPropertiesElementOptional.get();
 
       List<Element> userPropertyElements = userPropertiesElement.getChildren("UserProperty");
 
       for (Element userPropertyElement : userPropertyElements) {
         try {
-          String userPropertyName = userPropertyElement.getAttributeValue("name");
-          int userPropertyType = Integer.parseInt(userPropertyElement.getAttributeValue("type"));
+          String userPropertyName = userPropertyElement.getAttributeValue("name").get();
+          int userPropertyType =
+              Integer.parseInt(userPropertyElement.getAttributeValue("type").get());
 
           if (userPropertyType == 0) {
             this.userProperties.put(userPropertyName, userPropertyElement.getText());

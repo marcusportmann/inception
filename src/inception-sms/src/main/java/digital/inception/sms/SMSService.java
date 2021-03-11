@@ -198,12 +198,12 @@ public class SMSService implements ISMSService {
    *
    * <p>The SMS will be locked to prevent duplicate sending.
    *
-   * @return the next SMS that has been queued for sending or <b>null</b> if no SMSs are currently
-   *     queued for sending
+   * @return an Optional containing the next SMS that has been queued for sending or an empty
+   *     Optional if no SMSs are currently queued for sending
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public SMS getNextSMSQueuedForSending() throws ServiceUnavailableException {
+  public Optional<SMS> getNextSMSQueuedForSending() throws ServiceUnavailableException {
     try {
       LocalDateTime lastProcessedBefore = LocalDateTime.now();
 
@@ -228,9 +228,9 @@ public class SMSService implements ISMSService {
         sms.incrementSendAttempts();
         sms.setLastProcessed(when);
 
-        return sms;
+        return Optional.of(sms);
       } else {
-        return null;
+        return Optional.empty();
       }
 
     } catch (Throwable e) {
@@ -280,7 +280,7 @@ public class SMSService implements ISMSService {
    * Retrieve the SMS.
    *
    * @param smsId the ID for the SMS
-   * @return the SMS or <b>null</b> if the SMS could not be found
+   * @return the SMS
    */
   @Override
   public SMS getSMS(UUID smsId)
@@ -399,16 +399,16 @@ public class SMSService implements ISMSService {
         logger.debug("Attempting to send a SMS using the mobile number (" + mobileNumber + ")");
       }
 
-//      if (Debug.inDebugMode()) {
-//        logger.info(
-//            "Skipping sending of SMS ("
-//                + message
-//                + ") to mobile number ("
-//                + mobileNumber
-//                + ") in DEBUG mode");
-//
-//        return true;
-//      }
+      //      if (Debug.inDebugMode()) {
+      //        logger.info(
+      //            "Skipping sending of SMS ("
+      //                + message
+      //                + ") to mobile number ("
+      //                + mobileNumber
+      //                + ") in DEBUG mode");
+      //
+      //        return true;
+      //      }
 
       if (PROVIDER_SMS_PORTAL.equalsIgnoreCase(useProvider)) {
         String smsPortalToken = getSMSPortalToken();
@@ -677,24 +677,27 @@ public class SMSService implements ISMSService {
         throw new RuntimeException("Invalid API result XML: api_result element not found");
       }
 
-      Element callResultElement = XmlUtil.getChildElement(apiResultElement, "call_result");
+      Optional<Element> callResultElementOptional =
+          XmlUtil.getChildElement(apiResultElement, "call_result");
 
-      if (callResultElement == null) {
+      if (callResultElementOptional.isEmpty()) {
         throw new RuntimeException("Invalid API result XML: call_result element not found");
       }
 
-      Boolean result = XmlUtil.getChildElementBoolean(callResultElement, "result");
+      Optional<Boolean> resultOptional =
+          XmlUtil.getChildElementBoolean(callResultElementOptional.get(), "result");
 
-      if (result == null) {
+      if (resultOptional.isEmpty()) {
         throw new RuntimeException("Invalid API result XML: result element not found");
       }
 
-      if (!result) {
-        String error = XmlUtil.getChildElementText(callResultElement, "error");
+      if (!resultOptional.get()) {
+        Optional<String> errorOptional =
+            XmlUtil.getChildElementText(callResultElementOptional.get(), "error");
 
         throw new RuntimeException(
             "The MyMobileAPI service returned an error: "
-                + (StringUtils.hasText(error) ? error : "UNKNOWN"));
+                + (errorOptional.isPresent() ? errorOptional.get() : "UNKNOWN"));
       }
 
       return apiResultElement;

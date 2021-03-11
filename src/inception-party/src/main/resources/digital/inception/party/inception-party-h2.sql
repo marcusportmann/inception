@@ -647,7 +647,7 @@ COMMENT ON COLUMN party.role_type_attribute_constraints.attribute_type IS 'The c
 
 COMMENT ON COLUMN party.role_type_attribute_constraints.attribute_type_qualifier IS 'The qualifier for the attribute type';
 
-COMMENT ON COLUMN party.role_type_attribute_constraints.type IS 'The attribute constraint type';
+COMMENT ON COLUMN party.role_type_attribute_constraints.type IS 'The constraint type';
 
 COMMENT ON COLUMN party.role_type_attribute_constraints.value IS 'The optional value to apply when validating the attribute value';
 
@@ -696,6 +696,61 @@ COMMENT ON COLUMN party.sources_of_funds.sort_index IS 'The sort index for the s
 COMMENT ON COLUMN party.sources_of_funds.name IS 'The name of the source of funds';
 
 COMMENT ON COLUMN party.sources_of_funds.description IS 'The description for the source of funds';
+
+
+CREATE TABLE party.status_type_categories (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX status_type_categories_locale_id_ix ON party.status_type_categories(locale_id);
+
+COMMENT ON COLUMN party.status_type_categories.code IS 'The code for the status type category';
+
+COMMENT ON COLUMN party.status_type_categories.locale_id IS 'The Unicode locale identifier for the status type category';
+
+COMMENT ON COLUMN party.status_type_categories.sort_index IS 'The sort index for the status type category';
+
+COMMENT ON COLUMN party.status_type_categories.name IS 'The name of the status type category';
+
+COMMENT ON COLUMN party.status_type_categories.description IS 'The description for the status type category';
+
+
+CREATE TABLE party.status_types (
+  category    VARCHAR(30)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+  party_types VARCHAR(310) NOT NULL,
+
+  PRIMARY KEY (code, locale_id),
+  CONSTRAINT status_types_status_type_category_fk FOREIGN KEY (category, locale_id) REFERENCES party.status_type_categories(code, locale_id) ON DELETE CASCADE
+);
+
+CREATE INDEX status_types_category_ix ON party.status_types(category);
+
+CREATE INDEX status_types_locale_id_ix ON party.status_types(locale_id);
+
+COMMENT ON COLUMN party.status_types.category IS 'The code for the status type category the status type is associated with';
+
+COMMENT ON COLUMN party.status_types.code IS 'The code for the status type';
+
+COMMENT ON COLUMN party.status_types.locale_id IS 'The Unicode locale identifier for the status type';
+
+COMMENT ON COLUMN party.status_types.sort_index IS 'The sort index for the status type';
+
+COMMENT ON COLUMN party.status_types.name IS 'The name of the status type';
+
+COMMENT ON COLUMN party.status_types.description IS 'The description for the status type';
+
+COMMENT ON COLUMN party.status_types.party_types IS 'The comma-delimited list of codes for the party types the status type is associated with';
 
 
 CREATE TABLE party.tax_number_types (
@@ -819,7 +874,7 @@ COMMENT ON COLUMN party.parties.updated IS 'The date and time the party was last
 
 
 CREATE TABLE party.organizations (
-  countries_of_tax_residence VARCHAR(100),
+  countries_of_tax_residence VARCHAR(30),
   id                         UUID          NOT NULL,
 
   PRIMARY KEY (id),
@@ -832,7 +887,8 @@ COMMENT ON COLUMN party.organizations.id IS 'The Universally Unique Identifier (
 
 
 CREATE TABLE party.persons (
-  countries_of_tax_residence VARCHAR(100),
+  countries_of_citizenship   VARCHAR(30),
+  countries_of_tax_residence VARCHAR(30),
   country_of_birth           CHAR(2),
   country_of_residence       CHAR(2),
   date_of_birth              DATE,
@@ -864,11 +920,13 @@ CREATE TABLE party.persons (
 
 CREATE INDEX persons_date_of_birth_ix ON party.persons(date_of_birth);
 
+COMMENT ON COLUMN party.persons.countries_of_citizenship IS 'The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of citizenship for the person';
+
+COMMENT ON COLUMN party.persons.countries_of_tax_residence IS 'The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the person';
+
 COMMENT ON COLUMN party.persons.country_of_birth IS 'The optional code for the country of birth for the person';
 
 COMMENT ON COLUMN party.persons.country_of_residence IS 'The optional code for the country of residence for the person';
-
-COMMENT ON COLUMN party.persons.countries_of_tax_residence IS 'The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the person';
 
 COMMENT ON COLUMN party.persons.date_of_birth IS 'The optional date of birth for the person';
 
@@ -916,11 +974,15 @@ COMMENT ON COLUMN party.persons.title IS 'The optional code for the title for th
 
 
 CREATE TABLE party.attributes (
-  created      TIMESTAMP    NOT NULL,
-  party_id     UUID         NOT NULL,
-  type         VARCHAR(30)  NOT NULL,
-  updated      TIMESTAMP,
-  string_value VARCHAR(200),
+  created       TIMESTAMP    NOT NULL,
+  party_id      UUID         NOT NULL,
+  type          VARCHAR(30)  NOT NULL,
+  updated       TIMESTAMP,
+  boolean_value DOUBLE,
+  date_value    DATE,
+  double_value  DOUBLE,
+  integer_value INTEGER,
+  string_value  VARCHAR(200),
 
   PRIMARY KEY (party_id, type),
   CONSTRAINT attributes_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
@@ -935,6 +997,14 @@ COMMENT ON COLUMN party.attributes.party_id IS 'The Universally Unique Identifie
 COMMENT ON COLUMN party.attributes.type IS 'The code for the attribute type';
 
 COMMENT ON COLUMN party.attributes.updated IS 'The date and time the attribute was last updated';
+
+COMMENT ON COLUMN party.attributes.boolean_value IS 'The boolean value for the attribute';
+
+COMMENT ON COLUMN party.attributes.date_value IS 'The date value for the attribute';
+
+COMMENT ON COLUMN party.attributes.double_value IS 'The double value for the attribute';
+
+COMMENT ON COLUMN party.attributes.integer_value IS 'The integer value for the attribute';
 
 COMMENT ON COLUMN party.attributes.string_value IS 'The string value for the attribute';
 
@@ -974,6 +1044,7 @@ CREATE TABLE party.identity_documents (
   created          TIMESTAMP   NOT NULL,
   date_of_expiry   DATE,
   date_of_issue    DATE        NOT NULL,
+  date_provided    DATE,
   number           VARCHAR(30) NOT NULL,
   party_id         UUID        NOT NULL,
   type             VARCHAR(30) NOT NULL,
@@ -992,6 +1063,8 @@ COMMENT ON COLUMN party.identity_documents.created IS 'The date and time the ide
 COMMENT ON COLUMN party.identity_documents.date_of_expiry IS 'The optional date of expiry for the identity document';
 
 COMMENT ON COLUMN party.identity_documents.date_of_issue IS 'The date of issue for the identity document';
+
+COMMENT ON COLUMN party.identity_documents.date_provided IS 'The optional date the identity document was provided';
 
 COMMENT ON COLUMN party.identity_documents.number IS 'The number for the identity document';
 
@@ -1874,12 +1947,16 @@ INSERT INTO party.preference_types (category, code, locale_id, sort_index, name,
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('correspondence','correspondence_language', 'en-US', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('correspondence', 'preferred_contact_mechanism', 'en-US', 0, 'Preferred Contact Mechanism', 'Preferred Contact Mechanism', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('correspondence','time_to_contact', 'en-US', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
 
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('correspondence','contact_person', 'en-ZA', 0, 'Contact Person', 'Contact Person', 'organization');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('correspondence', 'correspondence_language', 'en-ZA', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('correspondence', 'preferred_contact_mechanism', 'en-ZA', 0, 'Preferred Contact Mechanism', 'Preferred Contact Mechanism', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('correspondence', 'time_to_contact', 'en-ZA', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
 
@@ -1909,6 +1986,12 @@ INSERT INTO party.races (code, locale_id, sort_index, name, description)
   VALUES ('white', 'en-ZA', 5, 'White', 'White');
 INSERT INTO party.races (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+
+
+INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('fraud', 'en-US', 1, 'Fraud', 'Fraud');
+INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('kyc', 'en-US', 1, 'KYC', 'Know Your Customer');
 
 
 INSERT INTO party.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
@@ -2044,11 +2127,13 @@ INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, att
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_person_role', 'contact_mechanism', 'phone_number', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'countries_of_citizenship', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'countries_of_tax_residence', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'country_of_birth', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'country_of_residence', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'countries_of_tax_residence', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'date_of_birth', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
@@ -2097,6 +2182,24 @@ INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, typ
   VALUES ('test_person_role', 'test_attribute', 'max_size', '20');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
   VALUES ('test_person_role', 'test_attribute', 'pattern', '^[a-zA-Z0-9]*$');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'test_contact_mechanism_type', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'test_contact_mechanism_type', 'contact_mechanism_type');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'test_country', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'test_country', 'contact_mechanism_type');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'test_language', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'test_language', 'contact_mechanism_type');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'test_size', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('test_person_role', 'test_size', 'size', '10');
+
+
 
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'contact_mechanisms', 'required');

@@ -442,9 +442,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
     try {
       // First check if this is an internal user and if so determine the user directory ID
-      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      Optional<UUID> internalUserDirectoryIdOptional = getInternalUserDirectoryIdForUser(username);
 
-      if (internalUserDirectoryId != null) {
+      if (internalUserDirectoryIdOptional.isPresent()) {
+        UUID internalUserDirectoryId = internalUserDirectoryIdOptional.get();
+
         IUserDirectory internalUserDirectory = userDirectories.get(internalUserDirectoryId);
 
         if (internalUserDirectory == null) {
@@ -518,9 +520,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
     try {
       // First check if this is an internal user and if so determine the user directory ID
-      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      Optional<UUID> internalUserDirectoryIdOptional = getInternalUserDirectoryIdForUser(username);
 
-      if (internalUserDirectoryId != null) {
+      if (internalUserDirectoryIdOptional.isPresent()) {
+        UUID internalUserDirectoryId = internalUserDirectoryIdOptional.get();
+
         IUserDirectory internalUserDirectory = userDirectories.get(internalUserDirectoryId);
 
         if (internalUserDirectory == null) {
@@ -618,12 +622,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
    *
    * @param tenant the tenant
    * @param createUserDirectory should a new internal user directory be created for the tenant
-   * @return the new internal user directory that was created for the tenant or <b>null</b> if no
-   *     user directory was created
+   * @return an Optional containing the new internal user directory that was created for the tenant
+   *     or an empty Optional if no user directory was created
    */
   @Override
   @Transactional
-  public UserDirectory createTenant(Tenant tenant, boolean createUserDirectory)
+  public Optional<UserDirectory> createTenant(Tenant tenant, boolean createUserDirectory)
       throws InvalidArgumentException, DuplicateTenantException, ServiceUnavailableException {
     validateTenant(tenant);
 
@@ -652,7 +656,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
         logger.error("Failed to reload the user directories", e);
       }
 
-      return userDirectory;
+      return Optional.ofNullable(userDirectory);
     } catch (DuplicateTenantException e) {
       throw e;
     } catch (Throwable e) {
@@ -1708,11 +1712,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * specified username is associated with.
    *
    * @param username the username for the user
-   * @return the Universally Unique Identifier (UUID) for the user directory that the user with the
-   *     specified username is associated with or <b>null</b> if the user cannot be found
+   * @return an Optional containing the Universally Unique Identifier (UUID) for the user directory
+   *     that the user with the specified username is associated with or an empty Optional if the
+   *     user cannot be found
    */
   @Override
-  public UUID getUserDirectoryIdForUser(String username)
+  public Optional<UUID> getUserDirectoryIdForUser(String username)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
@@ -1720,10 +1725,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
     try {
       // First check if this is an internal user and if so determine the user directory ID
-      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      Optional<UUID> internalUserDirectoryIdOptional = getInternalUserDirectoryIdForUser(username);
 
-      if (internalUserDirectoryId != null) {
-        return internalUserDirectoryId;
+      if (internalUserDirectoryIdOptional.isPresent()) {
+        return internalUserDirectoryIdOptional;
       } else {
         /*
          * Check all of the "external" user directories to see if the user is associated with one
@@ -1735,13 +1740,13 @@ public class SecurityService implements ISecurityService, InitializingBean {
           if (userDirectory != null) {
             if (!(userDirectory instanceof InternalUserDirectory)) {
               if (userDirectory.isExistingUser(username)) {
-                return userDirectoryId;
+                return Optional.of(userDirectoryId);
               }
             }
           }
         }
 
-        return null;
+        return Optional.empty();
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -1801,9 +1806,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
     try {
       List<UUID> userDirectoryIdsForUser = new ArrayList<>();
 
-      UUID userDirectoryId = getUserDirectoryIdForUser(username);
+      Optional<UUID> userDirectoryIdOptional = getUserDirectoryIdForUser(username);
 
-      if (userDirectoryId == null) {
+      if (userDirectoryIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
@@ -1811,7 +1816,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
        * Retrieve the list of IDs for the tenants the user is associated with as a result
        * of their user directory being associated with these tenants.
        */
-      List<UUID> tenantIds = getTenantIdsForUserDirectory(userDirectoryId);
+      List<UUID> tenantIds = getTenantIdsForUserDirectory(userDirectoryIdOptional.get());
 
       /*
        * Retrieve the list of IDs for the user directories the user is associated with as a result
@@ -2154,13 +2159,13 @@ public class SecurityService implements ISecurityService, InitializingBean {
     }
 
     try {
-      UUID userDirectoryId = getUserDirectoryIdForUser(username);
+      Optional<UUID> userDirectoryIdOptional = getUserDirectoryIdForUser(username);
 
-      if (userDirectoryId == null) {
+      if (userDirectoryIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
-      IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+      IUserDirectory userDirectory = userDirectories.get(userDirectoryIdOptional.get());
 
       User user = userDirectory.getUser(username);
 
@@ -2515,9 +2520,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
     }
 
     try {
-      UUID userDirectoryId = getUserDirectoryIdForUser(username);
+      Optional<UUID> userDirectoryIdOptional = getUserDirectoryIdForUser(username);
 
-      if (userDirectoryId == null) {
+      if (userDirectoryIdOptional.isEmpty()) {
         throw new InvalidSecurityCodeException(username);
       }
 
@@ -2529,7 +2534,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
       for (PasswordReset passwordReset : passwordResets) {
         if (passwordReset.getSecurityCodeHash().equals(securityCodeHash)) {
-          IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+          IUserDirectory userDirectory = userDirectories.get(userDirectoryIdOptional.get());
 
           userDirectory.resetPassword(username, newPassword);
 
@@ -2679,17 +2684,14 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * user with the specified username is associated with.
    *
    * @param username the username for the internal user
-   * @return the Universally Unique Identifier (UUID) for the internal user directory the internal
-   *     user with the specified username is associated with or <b>null/b> if an internal user with
-   *     the specified username could not be found
+   * @return an Optional containing the Universally Unique Identifier (UUID) for the internal user
+   *     directory the internal user with the specified username is associated with or an empty
+   *     Optional if an internal user with the specified username could not be found
    */
-  private UUID getInternalUserDirectoryIdForUser(String username)
+  private Optional<UUID> getInternalUserDirectoryIdForUser(String username)
       throws ServiceUnavailableException {
     try {
-      Optional<UUID> userDirectoryIdOptional =
-          userRepository.getUserDirectoryIdByUsernameIgnoreCase(username);
-
-      return userDirectoryIdOptional.orElse(null);
+      return userRepository.getUserDirectoryIdByUsernameIgnoreCase(username);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the ID for the internal user directory for the internal user ("

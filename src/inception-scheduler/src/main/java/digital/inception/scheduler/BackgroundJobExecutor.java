@@ -16,6 +16,7 @@
 
 package digital.inception.scheduler;
 
+import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -109,7 +110,7 @@ public class BackgroundJobExecutor implements InitializingBean {
   @SuppressWarnings("StatementWithEmptyBody")
   @Scheduled(cron = "0 * * * * *")
   public void executeJobs() {
-    Job job;
+    Optional<Job> jobOptional;
 
     if (schedulerService == null) {
       return;
@@ -118,9 +119,9 @@ public class BackgroundJobExecutor implements InitializingBean {
     while (true) {
       // Retrieve the next job scheduled for execution
       try {
-        job = schedulerService.getNextJobScheduledForExecution();
+        jobOptional = schedulerService.getNextJobScheduledForExecution();
 
-        if (job == null) {
+        if (jobOptional.isEmpty()) {
           if (logger.isDebugEnabled()) {
             logger.debug("No jobs scheduled for execution");
           }
@@ -136,7 +137,7 @@ public class BackgroundJobExecutor implements InitializingBean {
         return;
       }
 
-      jobProcessor.execute(new JobExecutor(schedulerService, job));
+      jobProcessor.execute(new JobExecutor(schedulerService, jobOptional.get()));
     }
   }
 }

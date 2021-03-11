@@ -17,25 +17,24 @@
 package digital.inception.party;
 
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>StringToAttributeConstraintTypeTypeConverter</b> class implements the Spring converter
- * that converts a <b>String</b> type into a <b>AttributeConstraintTypeType</b> type.
+ * The <b>ConstraintTypeToStringConverter</b> class implements the Spring converter that converts a
+ * <b>ConstraintType</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
 @Component
-@ReadingConverter
-public class StringToAttributeConstraintTypeConverter
-    implements Converter<String, AttributeConstraintType> {
+@WritingConverter
+public class ConstraintTypeToStringConverter implements Converter<ConstraintType, String> {
 
-  /** Constructs a new <b>StringToAttributeConstraintTypeTypeConverter</b>. */
-  public StringToAttributeConstraintTypeConverter() {}
+  /** Constructs a new <b>ConstraintTypeToStringConverter</b>. */
+  public ConstraintTypeToStringConverter() {}
 
   @Override
-  public AttributeConstraintType convert(String source) {
-    return AttributeConstraintType.fromCode(source);
+  public String convert(ConstraintType source) {
+    return source.code();
   }
 }

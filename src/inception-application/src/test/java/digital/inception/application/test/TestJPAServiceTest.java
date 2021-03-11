@@ -20,6 +20,7 @@ import static org.junit.Assert.fail;
 
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,9 +89,9 @@ public class TestJPAServiceTest {
               + "Failed to find an active transaction after creating the test data");
     }
 
-    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test JPA Service in an existing transaction: "
               + "Failed to retrieve the test data within the transaction");
@@ -110,9 +111,9 @@ public class TestJPAServiceTest {
               + "The transaction was not rolled back successfully");
     }
 
-    retrievedTestData = testJPAService.getTestData(testData.getId());
+    retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData != null) {
+    if (retrievedTestDataOptional.isPresent()) {
       fail(
           "Failed to invoked the Test JPA Service in an existing transaction: "
               + "Retrieved the test data after the transaction was rolled back");
@@ -141,9 +142,9 @@ public class TestJPAServiceTest {
 
     platformTransactionManager.rollback(transactionStatus);
 
-    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isPresent()) {
       fail(
           "Failed to invoked the Test JPA Service in a new transaction: "
               + "Failed to retrieve the test data after a checked exception was caught");
@@ -173,9 +174,9 @@ public class TestJPAServiceTest {
 
     platformTransactionManager.rollback(transactionStatus);
 
-    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData != null) {
+    if (retrievedTestDataOptional.isPresent()) {
       fail(
           "Failed to invoked the Test JPA Service in an existing transaction: "
               + "Retrieved the test data after the transaction was rolled back");
@@ -204,9 +205,9 @@ public class TestJPAServiceTest {
 
     platformTransactionManager.rollback(transactionStatus);
 
-    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData != null) {
+    if (retrievedTestDataOptional.isPresent()) {
       fail(
           "Failed to invoked the Test JPA Service in a new transaction: "
               + "Retrieved the test data after a runtime exception was caught");
@@ -223,9 +224,9 @@ public class TestJPAServiceTest {
     } catch (TestJPAServiceException ignored) {
     }
 
-    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test JPA Service without an existing transaction: "
               + "Failed to retrieve the test data after a checked exception was caught");
@@ -249,9 +250,9 @@ public class TestJPAServiceTest {
               + "Failed to find an active transaction after creating the test data");
     }
 
-    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test JPA Service in an existing transaction: "
               + "Failed to retrieve the test data within the transaction");
@@ -271,9 +272,9 @@ public class TestJPAServiceTest {
               + "The transaction was not committed successfully");
     }
 
-    retrievedTestData = testJPAService.getTestData(testData.getId());
+    retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test JPA Service in an existing transaction: "
               + "Failed to retrieve the test data after the transaction was committed");
@@ -297,9 +298,9 @@ public class TestJPAServiceTest {
               + "Failed to find an active transaction after creating the test data");
     }
 
-    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test JPA Service in an existing transaction: "
               + "Failed to retrieve the test data within the transaction");
@@ -319,9 +320,9 @@ public class TestJPAServiceTest {
               + "The transaction was not rolled back successfully");
     }
 
-    retrievedTestData = testJPAService.getTestData(testData.getId());
+    retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData != null) {
+    if (retrievedTestDataOptional.isPresent()) {
       fail(
           "Failed to invoked the Test JPA Service in an existing transaction: "
               + "Retrieved the test data after the transaction was rolled back");
@@ -345,9 +346,9 @@ public class TestJPAServiceTest {
               + "Failed to find an active transaction after creating the test data");
     }
 
-    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test JPA Service in a new transaction: "
               + "Failed to retrieve the test data within the transaction");
@@ -367,9 +368,9 @@ public class TestJPAServiceTest {
               + "The transaction was not committed successfully");
     }
 
-    retrievedTestData = testJPAService.getTestData(testData.getId());
+    retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test JPA Service in a new transaction: "
               + "Failed to retrieve the test data after the transaction was committed");
@@ -393,9 +394,9 @@ public class TestJPAServiceTest {
               + "Failed to find an active transaction after creating the test data");
     }
 
-    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test JPA Service in a new transaction: "
               + "Failed to retrieve the test data within the transaction");
@@ -415,9 +416,9 @@ public class TestJPAServiceTest {
               + "The transaction was not rolled back successfully");
     }
 
-    retrievedTestData = testJPAService.getTestData(testData.getId());
+    retrievedTestDataOptional = testJPAService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test JPA Service in a new transaction: "
               + "Failed to retrieve the test data after the transaction was rolled back");
@@ -432,9 +433,10 @@ public class TestJPAServiceTest {
     // NOTE: The transactional createTestData method is called as merging requires a transaction
     testJPAService.createTestData(testData);
 
-    TestData retrievedTestData = testJPAService.getTestDataWithoutTransaction(testData.getId());
+    Optional<TestData> retrievedTestDataOptional =
+        testJPAService.getTestDataWithoutTransaction(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test JPA Service without an existing transaction: "
               + "Failed to retrieve the test data");

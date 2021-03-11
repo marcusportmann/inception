@@ -18,6 +18,7 @@ package digital.inception.scheduler;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * The <b>JobExecutionContext</b> class provides access to context information associated with the
@@ -58,10 +59,10 @@ public class JobExecutionContext {
    * Returns the parameter with the specified name for the job.
    *
    * @param name the name of the parameter
-   * @return the value of the parameter with the specified name or <b>null</b> if the parameter
-   *     cannot be found
+   * @return an Optional containing the value of the parameter with the specified name or an empty
+   *     Optional if the parameter cannot be found
    */
-  public String getParameter(String name) {
-    return parameters.get(name);
+  public Optional<String> getParameter(String name) {
+    return Optional.ofNullable(parameters.get(name));
   }
 }

@@ -22,6 +22,7 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.core.wbxml.Parser;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.util.Optional;
 
 /**
  * The <b>MessageResult</b> class stores the results of processing a message.
@@ -84,22 +85,19 @@ public class MessageResult {
   public MessageResult(Document document) throws MessagingException {
     Element rootElement = document.getRootElement();
 
-    this.code = Long.parseLong(rootElement.getAttributeValue("code"));
-    this.detail = rootElement.getAttributeValue("detail");
+    rootElement.getAttributeValue("code").ifPresent(code -> this.code = Long.parseLong(code));
 
-    if (rootElement.hasChild("Exception")) {
-      Element exceptionElement = rootElement.getChild("Exception");
+    rootElement.getAttributeValue("detail").ifPresent(detail -> this.detail = detail);
 
-      exception = exceptionElement.getText();
-    }
+    rootElement.getChild("Exception").ifPresent(exception -> this.exception = exception.getText());
 
-    if (rootElement.hasChild("Message")) {
-      Element messageElement = rootElement.getChild("Message");
+    Optional<Element> messageElementOptional = rootElement.getChild("Message");
 
+    if (messageElementOptional.isPresent()) {
       try {
         Parser parser = new Parser();
 
-        Document messageDocument = parser.parse(messageElement.getOpaque());
+        Document messageDocument = parser.parse(messageElementOptional.get().getOpaque());
 
         message = new Message(messageDocument);
       } catch (Throwable e) {

@@ -291,55 +291,81 @@ public class MessagePart {
   public MessagePart(Document document) {
     Element rootElement = document.getRootElement();
 
-    this.id = UUID.fromString(rootElement.getAttributeValue("id"));
-    this.partNo = Integer.parseInt(rootElement.getAttributeValue("partNo"));
-    this.totalParts = Integer.parseInt(rootElement.getAttributeValue("totalParts"));
+    rootElement.getAttributeValue("id").ifPresent(id -> this.id = UUID.fromString(id));
 
-    if (rootElement.hasAttribute("sendAttempts")) {
-      this.sendAttempts = Integer.parseInt(rootElement.getAttributeValue("sendAttempts"));
-    }
+    rootElement
+        .getAttributeValue("partNo")
+        .ifPresent(partNo -> this.partNo = Integer.parseInt(partNo));
 
-    if (rootElement.hasAttribute("downloadAttempts")) {
-      this.downloadAttempts = Integer.parseInt(rootElement.getAttributeValue("downloadAttempts"));
-    }
+    rootElement
+        .getAttributeValue("totalParts")
+        .ifPresent(totalParts -> this.totalParts = Integer.parseInt(totalParts));
+
+    rootElement
+        .getAttributeValue("sendAttempts")
+        .ifPresent(sendAttempts -> this.sendAttempts = Integer.parseInt(sendAttempts));
+
+    rootElement
+        .getAttributeValue("downloadAttempts")
+        .ifPresent(downloadAttempts -> this.downloadAttempts = Integer.parseInt(downloadAttempts));
 
     this.status = MessagePartStatus.INITIALIZED;
 
-    this.messageId = UUID.fromString(rootElement.getAttributeValue("messageId"));
-    this.messageUsername = rootElement.getAttributeValue("messageUsername");
-    this.messageDeviceId = UUID.fromString(rootElement.getAttributeValue("messageDeviceId"));
-    this.messageTypeId = UUID.fromString(rootElement.getAttributeValue("messageTypeId"));
+    rootElement
+        .getAttributeValue("messageId")
+        .ifPresent(messageId -> this.messageId = UUID.fromString(messageId));
 
-    if (rootElement.hasAttribute("messageCorrelationId")) {
-      this.messageCorrelationId =
-          UUID.fromString(rootElement.getAttributeValue("messageCorrelationId"));
-    }
+    rootElement
+        .getAttributeValue("messageUsername")
+        .ifPresent(messageUsername -> this.messageUsername = messageUsername);
 
-    this.messagePriority =
-        MessagePriority.fromNumericCode(
-            Integer.parseInt(rootElement.getAttributeValue("messagePriority")));
+    rootElement
+        .getAttributeValue("messageDeviceId")
+        .ifPresent(messageDeviceId -> this.messageDeviceId = UUID.fromString(messageDeviceId));
 
-    String messageCreatedAttributeValue = rootElement.getAttributeValue("messageCreated");
+    rootElement
+        .getAttributeValue("messageTypeId")
+        .ifPresent(messageTypeId -> this.messageTypeId = UUID.fromString(messageTypeId));
 
-    try {
-      this.messageCreated = ISO8601Util.toLocalDateTime(messageCreatedAttributeValue);
-    } catch (Throwable e) {
-      throw new RuntimeException(
-          String.format(
-              "Failed to parse the messageCreated ISO8601 timestamp (%s) for the message part (%s)",
-              messageCreatedAttributeValue, id),
-          e);
-    }
+    rootElement
+        .getAttributeValue("messageCorrelationId")
+        .ifPresent(
+            messageCorrelationId ->
+                this.messageCorrelationId = UUID.fromString(messageCorrelationId));
 
-    if (rootElement.hasAttribute("messageDataHash")) {
-      this.messageDataHash = rootElement.getAttributeValue("messageDataHash");
-    }
+    rootElement
+        .getAttributeValue("messagePriority")
+        .ifPresent(
+            messagePriority ->
+                this.messagePriority =
+                    MessagePriority.fromNumericCode(Integer.parseInt(messagePriority)));
 
-    if (rootElement.hasAttribute("messageEncryptionIV")) {
-      this.messageEncryptionIV = rootElement.getAttributeValue("messageEncryptionIV");
-    }
+    rootElement
+        .getAttributeValue("messageCreated")
+        .ifPresent(
+            messageCreated -> {
+              try {
+                this.messageCreated = ISO8601Util.toLocalDateTime(messageCreated);
+              } catch (Throwable e) {
+                throw new RuntimeException(
+                    String.format(
+                        "Failed to parse the messageCreated ISO8601 timestamp (%s) for the message part (%s)",
+                        messageCreated, id),
+                    e);
+              }
+            });
 
-    this.messageChecksum = rootElement.getAttributeValue("messageChecksum");
+    rootElement
+        .getAttributeValue("messageDataHash")
+        .ifPresent(messageDataHash -> this.messageDataHash = messageDataHash);
+
+    rootElement
+        .getAttributeValue("messageEncryptionIV")
+        .ifPresent(messageEncryptionIV -> this.messageEncryptionIV = messageEncryptionIV);
+
+    rootElement
+        .getAttributeValue("messageChecksum")
+        .ifPresent(messageChecksum -> this.messageChecksum = messageChecksum);
 
     this.data = rootElement.getOpaque();
   }

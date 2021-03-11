@@ -480,9 +480,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the optional e-mail address for the user.
+   * Set the e-mail address for the user.
    *
-   * @param email the optional e-mail address for the user
+   * @param email the e-mail address for the user
    */
   public void setEmail(String email) {
     this.email = email;
@@ -507,9 +507,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the optional international format mobile number for the user.
+   * Set the international format mobile number for the user.
    *
-   * @param mobileNumber the optional international format mobile number for the user
+   * @param mobileNumber the international format mobile number for the user
    */
   public void setMobileNumber(String mobileNumber) {
     this.mobileNumber = mobileNumber;
@@ -552,18 +552,18 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the optional phone number for the user.
+   * Set the phone number for the user.
    *
-   * @param phoneNumber the optional phone number for the user
+   * @param phoneNumber the phone number for the user
    */
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 
   /**
-   * Set the optional preferred name for the user.
+   * Set the preferred name for the user.
    *
-   * @param preferredName the optional preferred name for the user
+   * @param preferredName the preferred name for the user
    */
   public void setPreferredName(String preferredName) {
     this.preferredName = preferredName;

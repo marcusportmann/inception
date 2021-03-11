@@ -110,15 +110,23 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData {
       return false;
     }
 
-    this.errorCode = Integer.parseInt(rootElement.getChildText("ErrorCode"));
-    this.errorMessage = rootElement.getChildText("ErrorMessage");
+    rootElement
+        .getChildText("ErrorCode")
+        .ifPresent(errorCode -> this.errorCode = Integer.parseInt(errorCode));
+
+    rootElement
+        .getChildText("ErrorMessage")
+        .ifPresent(errorMessage -> this.errorMessage = errorMessage);
 
     if (errorCode == 0) {
       if (!rootElement.hasChild("CodeCategory")) {
         return false;
       }
 
-      this.codeCategory = new CodeCategoryData(rootElement.getChild("CodeCategory"));
+      rootElement
+          .getChild("CodeCategory")
+          .ifPresent(
+              codeCategoryElement -> this.codeCategory = new CodeCategoryData(codeCategoryElement));
     }
 
     return true;

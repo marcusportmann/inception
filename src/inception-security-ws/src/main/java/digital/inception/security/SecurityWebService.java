@@ -21,6 +21,7 @@ import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.jws.WebMethod;
@@ -189,21 +190,23 @@ public class SecurityWebService {
     }
 
     if (passwordChange.getReason() == PasswordChangeReason.ADMINISTRATIVE) {
-      UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
+      Optional<UUID> userDirectoryIdOptional = securityService.getUserDirectoryIdForUser(username);
 
-      if (userDirectoryId == null) {
-        throw new UserDirectoryNotFoundException(userDirectoryId);
+      if (userDirectoryIdOptional.isEmpty()) {
+        throw new UserNotFoundException(username);
+      } else {
+        UUID userDirectoryId = userDirectoryIdOptional.get();
+
+        securityService.adminChangePassword(
+            userDirectoryId,
+            username,
+            passwordChange.getNewPassword(),
+            passwordChange.getExpirePassword() != null && passwordChange.getExpirePassword(),
+            passwordChange.getLockUser() != null && passwordChange.getLockUser(),
+            passwordChange.getResetPasswordHistory() != null
+                && passwordChange.getResetPasswordHistory(),
+            passwordChange.getReason());
       }
-
-      securityService.adminChangePassword(
-          userDirectoryId,
-          username,
-          passwordChange.getNewPassword(),
-          passwordChange.getExpirePassword() != null && passwordChange.getExpirePassword(),
-          passwordChange.getLockUser() != null && passwordChange.getLockUser(),
-          passwordChange.getResetPasswordHistory() != null
-              && passwordChange.getResetPasswordHistory(),
-          passwordChange.getReason());
     } else if (passwordChange.getReason() == PasswordChangeReason.USER) {
       if (!StringUtils.hasText(passwordChange.getPassword())) {
         throw new InvalidArgumentException("passwordChange");

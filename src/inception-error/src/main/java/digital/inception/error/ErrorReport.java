@@ -399,9 +399,9 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the optional base-64 encoded data associated with the error report.
+   * Set the base-64 encoded data associated with the error report.
    *
-   * @param data the optional base-64 encoded data associated with the error report
+   * @param data the base-64 encoded data associated with the error report
    */
   public void setData(String data) {
     this.data = data;
@@ -426,20 +426,19 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the optional Universally Unique Identifier (UUID) for the device the error report
-   * originated from.
+   * Set the Universally Unique Identifier (UUID) for the device the error report originated from.
    *
-   * @param deviceId the optional Universally Unique Identifier (UUID) for the device the error
-   *     report originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the error report
+   *     originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
   }
 
   /**
-   * Set the optional feedback provided by the user for the error.
+   * Set the feedback provided by the user for the error.
    *
-   * @param feedback the optional feedback provided by the user for the error
+   * @param feedback the feedback provided by the user for the error
    */
   public void setFeedback(String feedback) {
     this.feedback = feedback;
@@ -455,9 +454,9 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the optional username for the user associated with the error report.
+   * Set the username for the user associated with the error report.
    *
-   * @param who the optional username for the user associated with the error report
+   * @param who the username for the user associated with the error report
    */
   public void setWho(String who) {
     this.who = who;

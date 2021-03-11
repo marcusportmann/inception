@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2021 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +14,15 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception;
+// package digital.inception;
 //
-///**
+/// **
 // * The <b>Debug</b> class provides debugging capabilities.
 // *
 // * @author Marcus Portmann
 // */
-//@SuppressWarnings("unused")
-//public class Debug {
+// @SuppressWarnings("unused")
+// public class Debug {
 //
 //  /**
 //   * Returns the root directory for the JEE application server the application is running under or
@@ -62,10 +62,12 @@
 //  }
 //
 //  /**
-//   * Returns <b>true</b> if the application infrastructure is running in debug mode or <b> false</b>
+//   * Returns <b>true</b> if the application infrastructure is running in debug mode or <b>
+// false</b>
 //   * otherwise.
 //   *
-//   * @return <b>true</b> if the application infrastructure is running in debug mode or <b> false</b>
+//   * @return <b>true</b> if the application infrastructure is running in debug mode or <b>
+// false</b>
 //   *     otherwise
 //   */
 //  public static boolean inDebugMode() {
@@ -78,4 +80,4 @@
 //
 //    return false;
 //  }
-//}
+// }

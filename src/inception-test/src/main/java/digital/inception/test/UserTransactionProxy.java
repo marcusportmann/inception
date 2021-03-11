@@ -17,6 +17,7 @@
 package digital.inception.test;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -78,11 +79,11 @@ public class UserTransactionProxy implements UserTransaction {
     try {
       userTransaction.begin();
     } finally {
-      Transaction afterTransaction = getCurrentTransaction();
+      Optional<Transaction> afterTransactionOptional = getCurrentTransaction();
 
-      if (afterTransaction != null) {
+      if (afterTransactionOptional.isPresent()) {
         getActiveTransactionStackTraces()
-            .put(afterTransaction, Thread.currentThread().getStackTrace());
+            .put(afterTransactionOptional.get(), Thread.currentThread().getStackTrace());
       }
     }
   }
@@ -91,15 +92,15 @@ public class UserTransactionProxy implements UserTransaction {
   public void commit()
       throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
           SecurityException, IllegalStateException, SystemException {
-    Transaction beforeTransaction = getCurrentTransaction();
+    Optional<Transaction> beforeTransactionOptional = getCurrentTransaction();
 
     try {
       userTransaction.commit();
     } finally {
-      Transaction afterTransaction = getCurrentTransaction();
+      Optional<Transaction> afterTransactionOptional = getCurrentTransaction();
 
-      if ((beforeTransaction != null) && (afterTransaction == null)) {
-        getActiveTransactionStackTraces().remove(beforeTransaction);
+      if (beforeTransactionOptional.isPresent() && (afterTransactionOptional.isEmpty())) {
+        getActiveTransactionStackTraces().remove(beforeTransactionOptional.get());
       }
     }
   }
@@ -111,15 +112,15 @@ public class UserTransactionProxy implements UserTransaction {
 
   @Override
   public void rollback() throws IllegalStateException, SecurityException, SystemException {
-    Transaction beforeTransaction = getCurrentTransaction();
+    Optional<Transaction> beforeTransactionOptional = getCurrentTransaction();
 
     try {
       userTransaction.rollback();
     } finally {
-      Transaction afterTransaction = getCurrentTransaction();
+      Optional<Transaction> afterTransactionOptional = getCurrentTransaction();
 
-      if ((beforeTransaction != null) && (afterTransaction == null)) {
-        getActiveTransactionStackTraces().remove(beforeTransaction);
+      if (beforeTransactionOptional.isPresent() && (afterTransactionOptional.isEmpty())) {
+        getActiveTransactionStackTraces().remove(beforeTransactionOptional.get());
       }
     }
   }
@@ -137,15 +138,16 @@ public class UserTransactionProxy implements UserTransaction {
   /**
    * Returns the current transaction.
    *
-   * @return the current transaction or <b>null</b> if there is no current transaction
+   * @return an Optional containing the current transaction or an empty Optional if there is no
+   *     current transaction
    */
-  private Transaction getCurrentTransaction() {
+  private Optional<Transaction> getCurrentTransaction() {
     try {
-      return transactionManager.getTransaction();
+      return Optional.ofNullable(transactionManager.getTransaction());
     } catch (Throwable e) {
       logger.error("Failed to retrieve the current transaction", e);
 
-      return null;
+      return Optional.empty();
     }
   }
 }

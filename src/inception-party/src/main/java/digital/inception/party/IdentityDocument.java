@@ -58,12 +58,19 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A legal document which may be used to verify aspects of an identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
+@JsonPropertyOrder({
+  "type",
+  "countryOfIssue",
+  "dateOfIssue",
+  "dateOfExpiry",
+  "dateProvided",
+  "number"
+})
 @XmlRootElement(name = "IdentityDocument", namespace = "http://inception.digital/party")
 @XmlType(
     name = "IdentityDocument",
     namespace = "http://inception.digital/party",
-    propOrder = {"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
+    propOrder = {"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "dateProvided", "number"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "identity_documents")
@@ -111,6 +118,15 @@ public class IdentityDocument implements Serializable {
   @Id
   @Column(name = "date_of_issue", nullable = false)
   private LocalDate dateOfIssue;
+
+  /** The optional date the identity document was provided. */
+  @Schema(description = "The optional date the identity document was provided")
+  @JsonProperty
+  @XmlElement(name = "DateProvided")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  @Column(name = "date_provided")
+  private LocalDate dateProvided;
 
   /** The number for the identity document. */
   @Schema(description = "The number for the identity document", required = true)
@@ -175,7 +191,7 @@ public class IdentityDocument implements Serializable {
    *     document
    * @param dateOfIssue the date of issue for the identity document
    * @param dateOfExpiry the optional date of expiry for the identity document
-   * @param number thge number for the identity document
+   * @param number the number for the identity document
    */
   public IdentityDocument(
       String type,
@@ -255,6 +271,15 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
+   * Returns the optional date the identity document was provided.
+   *
+   * @return the optional date the identity document was provided
+   */
+  public LocalDate getDateProvided() {
+    return dateProvided;
+  }
+
+  /**
    * The number for the identity document.
    *
    * @return the number for the identity document
@@ -315,9 +340,9 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Set the optional date of expiry for the identity document.
+   * Set the date of expiry for the identity document.
    *
-   * @param dateOfExpiry the optional date of expiry for the identity document
+   * @param dateOfExpiry the date of expiry for the identity document
    */
   public void setDateOfExpiry(LocalDate dateOfExpiry) {
     this.dateOfExpiry = dateOfExpiry;
@@ -330,6 +355,15 @@ public class IdentityDocument implements Serializable {
    */
   public void setDateOfIssue(LocalDate dateOfIssue) {
     this.dateOfIssue = dateOfIssue;
+  }
+
+  /**
+   * Set the date the identity document was provided.
+   *
+   * @param dateProvided the date the identity document was provided
+   */
+  public void setDateProvided(LocalDate dateProvided) {
+    this.dateProvided = dateProvided;
   }
 
   /**

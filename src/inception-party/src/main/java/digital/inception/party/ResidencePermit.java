@@ -310,9 +310,9 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Set the optional date of expiry for the residence permit.
+   * Set the date of expiry for the residence permit.
    *
-   * @param dateOfExpiry the optional date of expiry for the residence permit
+   * @param dateOfExpiry the date of expiry for the residence permit
    */
   public void setDateOfExpiry(LocalDate dateOfExpiry) {
     this.dateOfExpiry = dateOfExpiry;

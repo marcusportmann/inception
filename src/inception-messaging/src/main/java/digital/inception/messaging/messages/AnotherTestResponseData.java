@@ -83,8 +83,9 @@ public class AnotherTestResponseData extends WbxmlMessageData {
       return false;
     }
 
-    this.testValue = rootElement.getChildText("TestValue");
-    this.testData = rootElement.getChildOpaque("TestData");
+    rootElement.getChildText("TestValue").ifPresent(testValue -> this.testValue = testValue);
+
+    rootElement.getChildOpaque("TestData").ifPresent(testData -> this.testData = testData);
 
     return true;
   }

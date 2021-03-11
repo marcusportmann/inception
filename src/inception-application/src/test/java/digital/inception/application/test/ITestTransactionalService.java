@@ -16,6 +16,8 @@
 
 package digital.inception.application.test;
 
+import java.util.Optional;
+
 /**
  * The <b>ITestTransactionalService</b> interface defines the functionality provided by a Test
  * Transactional Service implementation.
@@ -74,7 +76,8 @@ public interface ITestTransactionalService {
    * Retrieve the test data.
    *
    * @param id the ID
-   * @return the test data or <b>null</b> if the test data cannot be found
+   * @return an Optional containing the test data or an empty Optional if the test data cannot be
+   *     found
    */
-  TestData getTestData(String id) throws TestTransactionalServiceException;
+  Optional<TestData> getTestData(String id) throws TestTransactionalServiceException;
 }

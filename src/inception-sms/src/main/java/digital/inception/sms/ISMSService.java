@@ -18,6 +18,7 @@ package digital.inception.sms;
 
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -56,10 +57,10 @@ public interface ISMSService {
    *
    * <p>The SMS will be locked to prevent duplicate sending.
    *
-   * @return the next SMS that has been queued for sending or <b>null</b> if no SMSs are currently
-   *     queued for sending
+   * @return an Optional containing the next SMS that has been queued for sending or an empty
+   *     Optional if no SMSs are currently queued for sending
    */
-  SMS getNextSMSQueuedForSending() throws ServiceUnavailableException;
+  Optional<SMS> getNextSMSQueuedForSending() throws ServiceUnavailableException;
 
   /**
    * Returns the number of SMS credits remaining.
@@ -72,7 +73,7 @@ public interface ISMSService {
    * Retrieve the SMS.
    *
    * @param smsId the ID for the SMS
-   * @return the SMS or <b>null</b> if the SMS could not be found
+   * @return the SMS
    */
   SMS getSMS(UUID smsId)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException;

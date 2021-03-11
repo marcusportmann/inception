@@ -17,7 +17,7 @@
 package digital.inception.party.constraints;
 
 import digital.inception.party.Attribute;
-import digital.inception.party.AttributeConstraintType;
+import digital.inception.party.ConstraintType;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
@@ -28,6 +28,7 @@ import digital.inception.party.Role;
 import digital.inception.party.RoleTypeAttributeConstraint;
 import digital.inception.party.TaxNumber;
 import digital.inception.reference.IReferenceService;
+import java.util.Optional;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.ValidationException;
@@ -44,12 +45,6 @@ import org.springframework.util.StringUtils;
 public class ValidOrganizationValidator extends PartyValidator
     implements ConstraintValidator<ValidOrganization, Organization> {
 
-  /** The Party Reference Service. */
-  private final IPartyReferenceService partyReferenceService;
-
-  /** The Reference Service. */
-  private final IReferenceService referenceService;
-
   /**
    * Constructs a new <b>ValidOrganizationValidator</b>.
    *
@@ -59,14 +54,12 @@ public class ValidOrganizationValidator extends PartyValidator
   @Autowired
   public ValidOrganizationValidator(
       IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
-    this.partyReferenceService = partyReferenceService;
-    this.referenceService = referenceService;
+    super(partyReferenceService, referenceService);
   }
 
   /** Constructs a new <b>ValidOrganizationValidator</b>. */
   public ValidOrganizationValidator() {
-    this.partyReferenceService = null;
-    this.referenceService = null;
+    super(null, null);
   }
 
   @Override
@@ -76,7 +69,7 @@ public class ValidOrganizationValidator extends PartyValidator
   public boolean isValid(
       Organization organization, ConstraintValidatorContext constraintValidatorContext) {
 
-    if ((partyReferenceService != null) && (referenceService != null)) {
+    if ((getPartyReferenceService() != null) && (getReferenceService() != null)) {
       boolean isValid = true;
 
       // Disable the default constraint violation
@@ -113,10 +106,11 @@ public class ValidOrganizationValidator extends PartyValidator
             } else {
 
               if (StringUtils.hasText(contactMechanism.getRole())) {
-                if (!partyReferenceService.isValidContactMechanismRole(
-                    organization.getType().code(),
-                    contactMechanism.getType(),
-                    contactMechanism.getRole())) {
+                if (!getPartyReferenceService()
+                    .isValidContactMechanismRole(
+                        organization.getType().code(),
+                        contactMechanism.getType(),
+                        contactMechanism.getRole())) {
                   hibernateConstraintValidatorContext
                       .addMessageParameter("contactMechanismRole", contactMechanism.getRole())
                       .addMessageParameter("contactMechanismType", contactMechanism.getType())
@@ -133,10 +127,11 @@ public class ValidOrganizationValidator extends PartyValidator
               }
 
               for (String contactMechanismPurpose : contactMechanism.getPurposes()) {
-                if (!partyReferenceService.isValidContactMechanismPurpose(
-                    organization.getType().code(),
-                    contactMechanism.getType(),
-                    contactMechanismPurpose)) {
+                if (!getPartyReferenceService()
+                    .isValidContactMechanismPurpose(
+                        organization.getType().code(),
+                        contactMechanism.getType(),
+                        contactMechanismPurpose)) {
                   hibernateConstraintValidatorContext
                       .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
                       .addMessageParameter("contactMechanismType", contactMechanism.getType())
@@ -162,7 +157,7 @@ public class ValidOrganizationValidator extends PartyValidator
 
         // Validate countries of tax residence
         for (String countryOfTaxResidence : organization.getCountriesOfTaxResidence()) {
-          if (!referenceService.isValidCountry(countryOfTaxResidence)) {
+          if (!getReferenceService().isValidCountry(countryOfTaxResidence)) {
             hibernateConstraintValidatorContext
                 .addMessageParameter("countryOfTaxResidence", countryOfTaxResidence)
                 .buildConstraintViolationWithTemplate(
@@ -178,7 +173,7 @@ public class ValidOrganizationValidator extends PartyValidator
         for (IdentityDocument identityDocument : organization.getIdentityDocuments()) {
 
           if (StringUtils.hasText(identityDocument.getCountryOfIssue())) {
-            if (!referenceService.isValidCountry(identityDocument.getCountryOfIssue())) {
+            if (!getReferenceService().isValidCountry(identityDocument.getCountryOfIssue())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("countryOfIssue", identityDocument.getCountryOfIssue())
                   .buildConstraintViolationWithTemplate(
@@ -193,8 +188,9 @@ public class ValidOrganizationValidator extends PartyValidator
           }
 
           if (StringUtils.hasText(identityDocument.getType())) {
-            if (!partyReferenceService.isValidIdentityDocumentType(
-                organization.getType().code(), identityDocument.getType())) {
+            if (!getPartyReferenceService()
+                .isValidIdentityDocumentType(
+                    organization.getType().code(), identityDocument.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("identityDocumentType", identityDocument.getType())
                   .addMessageParameter("partyType", organization.getType().code())
@@ -213,8 +209,9 @@ public class ValidOrganizationValidator extends PartyValidator
         // Validate physical addresses
         for (PhysicalAddress physicalAddress : organization.getPhysicalAddresses()) {
           if (StringUtils.hasText(physicalAddress.getRole())) {
-            if (!partyReferenceService.isValidPhysicalAddressRole(
-                organization.getType().code(), physicalAddress.getRole())) {
+            if (!getPartyReferenceService()
+                .isValidPhysicalAddressRole(
+                    organization.getType().code(), physicalAddress.getRole())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("physicalAddressRole", physicalAddress.getRole())
                   .addMessageParameter("partyType", organization.getType().code())
@@ -230,8 +227,9 @@ public class ValidOrganizationValidator extends PartyValidator
           }
 
           for (String physicalAddressPurpose : physicalAddress.getPurposes()) {
-            if (!partyReferenceService.isValidPhysicalAddressPurpose(
-                organization.getType().code(), physicalAddressPurpose)) {
+            if (!getPartyReferenceService()
+                .isValidPhysicalAddressPurpose(
+                    organization.getType().code(), physicalAddressPurpose)) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("physicalAddressPurpose", physicalAddressPurpose)
                   .addMessageParameter("partyType", organization.getType().code())
@@ -250,8 +248,8 @@ public class ValidOrganizationValidator extends PartyValidator
         // Validate preferences
         for (Preference preference : organization.getPreferences()) {
           if (StringUtils.hasText(preference.getType())) {
-            if (!partyReferenceService.isValidPreferenceType(
-                organization.getType().code(), preference.getType())) {
+            if (!getPartyReferenceService()
+                .isValidPreferenceType(organization.getType().code(), preference.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("preferenceType", preference.getType())
                   .addMessageParameter("partyType", organization.getType().code())
@@ -270,7 +268,7 @@ public class ValidOrganizationValidator extends PartyValidator
         // Validate tax numbers
         for (TaxNumber taxNumber : organization.getTaxNumbers()) {
           if (StringUtils.hasText(taxNumber.getCountryOfIssue())) {
-            if (!referenceService.isValidCountry(taxNumber.getCountryOfIssue())) {
+            if (!getReferenceService().isValidCountry(taxNumber.getCountryOfIssue())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("countryOfIssue", taxNumber.getCountryOfIssue())
                   .buildConstraintViolationWithTemplate(
@@ -285,8 +283,8 @@ public class ValidOrganizationValidator extends PartyValidator
           }
 
           if (StringUtils.hasText(taxNumber.getType())) {
-            if (!partyReferenceService.isValidTaxNumberType(
-                organization.getType().code(), taxNumber.getType())) {
+            if (!getPartyReferenceService()
+                .isValidTaxNumberType(organization.getType().code(), taxNumber.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("taxNumberType", taxNumber.getType())
                   .addMessageParameter("partyType", organization.getType().code())
@@ -305,8 +303,8 @@ public class ValidOrganizationValidator extends PartyValidator
         // Validate roles
         for (Role role : organization.getRoles()) {
           if (StringUtils.hasText(role.getType())) {
-            if (!partyReferenceService.isValidRoleType(
-                organization.getType().code(), role.getType())) {
+            if (!getPartyReferenceService()
+                .isValidRoleType(organization.getType().code(), role.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("roleType", role.getType())
                   .addMessageParameter("partyType", organization.getType().code())
@@ -345,9 +343,17 @@ public class ValidOrganizationValidator extends PartyValidator
     boolean isValid = true;
 
     for (RoleTypeAttributeConstraint roleTypeAttributeConstraint :
-        partyReferenceService.getRoleTypeAttributeConstraints(roleType)) {
+        getPartyReferenceService().getRoleTypeAttributeConstraints(roleType)) {
 
-      if (roleTypeAttributeConstraint.getType() == AttributeConstraintType.REQUIRED) {
+      if (roleTypeAttributeConstraint.getType() == ConstraintType.MAX_SIZE) {
+        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
+      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.MIN_SIZE) {
+        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
+      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.PATTERN) {
+        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
+      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.REFERENCE) {
+        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
+      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.REQUIRED) {
         switch (roleTypeAttributeConstraint.getAttributeType()) {
           case "contact_mechanism":
             if (!organization.hasContactMechanismType(
@@ -446,7 +452,29 @@ public class ValidOrganizationValidator extends PartyValidator
             }
 
             break;
+
+          default:
+            Optional<Attribute> attributeOptional =
+                organization.getAttribute(roleTypeAttributeConstraint.getAttributeType());
+
+            if (attributeOptional.isEmpty() || (!attributeOptional.get().hasValue())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter(
+                      "attributeType", roleTypeAttributeConstraint.getAttributeType())
+                  .addMessageParameter("roleType", roleType)
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidParty.attributeTypeRequiredForRoleType.message}")
+                  .addPropertyNode("attributes")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+            break;
         }
+      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.SIZE) {
+
       }
     }
 

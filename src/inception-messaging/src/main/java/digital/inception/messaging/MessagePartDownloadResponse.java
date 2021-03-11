@@ -50,14 +50,14 @@ public class MessagePartDownloadResponse {
    * The result code. A result code of 0 is used to indicate that the message part download request
    * was processed successfully.
    */
-  private final long code;
+  private long code;
 
   /**
    * The user-friendly text description of the result of processing the message part download
    * request. The <b>detail</b> field may be blank if the message download request was processed
    * successfully.
    */
-  private final String detail;
+  private String detail;
 
   /**
    * The flattened information for the exception that resulted from processing the message part
@@ -77,14 +77,13 @@ public class MessagePartDownloadResponse {
   public MessagePartDownloadResponse(Document document) throws MessagingException {
     Element rootElement = document.getRootElement();
 
-    this.code = Long.parseLong(rootElement.getAttributeValue("code"));
-    this.detail = rootElement.getAttributeValue("detail");
+    rootElement.getAttributeValue("code").ifPresent(code -> this.code = Long.parseLong(code));
 
-    if (rootElement.hasChild("Exception")) {
-      Element exceptionElement = rootElement.getChild("Exception");
+    rootElement.getAttributeValue("detail").ifPresent(detail -> this.detail = detail);
 
-      exception = exceptionElement.getText();
-    }
+    rootElement
+        .getChild("Exception")
+        .ifPresent(exceptionElement -> this.exception = exceptionElement.getText());
 
     List<Element> messagePartElements = rootElement.getChildren("MessagePart");
 

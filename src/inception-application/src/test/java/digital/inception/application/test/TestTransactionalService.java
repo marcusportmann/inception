@@ -22,6 +22,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -165,9 +166,10 @@ public class TestTransactionalService implements ITestTransactionalService {
    * Retrieve the test data.
    *
    * @param id the ID
-   * @return the test data or <b>null</b> if the test data cannot be found
+   * @return an Optional containing the test data or an empty Optional if the test data cannot be
+   *     found
    */
-  public TestData getTestData(String id) throws TestTransactionalServiceException {
+  public Optional<TestData> getTestData(String id) throws TestTransactionalServiceException {
     String getTestDataSQL = "SELECT ID, NAME, VALUE FROM TEST.TEST_DATA WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
@@ -176,9 +178,9 @@ public class TestTransactionalService implements ITestTransactionalService {
 
       try (ResultSet rs = statement.executeQuery()) {
         if (rs.next()) {
-          return buildTestDataFromResultSet(rs);
+          return Optional.of(buildTestDataFromResultSet(rs));
         } else {
-          return null;
+          return Optional.empty();
         }
       }
     } catch (Throwable e) {

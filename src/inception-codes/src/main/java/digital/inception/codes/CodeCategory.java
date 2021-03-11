@@ -207,9 +207,9 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Set the optional code data for the code category.
+   * Set the code data for the code category.
    *
-   * @param data the optional code data for the code category
+   * @param data the code data for the code category
    */
   public void setData(String data) {
     this.data = data;

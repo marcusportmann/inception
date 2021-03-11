@@ -102,9 +102,17 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
       return false;
     }
 
-    errorCode = Integer.parseInt(rootElement.getChildText("ErrorCode"));
-    errorMessage = rootElement.getChildText("ErrorMessage");
-    errorReportId = UUID.fromString(rootElement.getChildText("ErrorReportId"));
+    rootElement
+        .getChildText("ErrorCode")
+        .ifPresent(errorCode -> this.errorCode = Integer.parseInt(errorCode));
+
+    rootElement
+        .getChildText("ErrorMessage")
+        .ifPresent(errorMessage -> this.errorMessage = errorMessage);
+
+    rootElement
+        .getChildText("ErrorReportId")
+        .ifPresent(errorReportId -> this.errorReportId = UUID.fromString(errorReportId));
 
     return true;
   }

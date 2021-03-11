@@ -31,16 +31,16 @@ public class CodeData implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The ID for the category the code is associated with. */
-  private final String codeCategoryId;
+  private String codeCategoryId;
 
   /** The ID for the code. */
-  private final String id;
+  private String id;
 
   /** The name of the code. */
-  private final String name;
+  private String name;
 
   /** The value for the code. */
-  private final String value;
+  private String value;
 
   /**
    * Constructs a new <b>CodeData</b>.
@@ -61,12 +61,15 @@ public class CodeData implements Serializable {
    */
   CodeData(Element element) {
     try {
-      this.id = element.getChildText("Id");
-      this.codeCategoryId = element.getChildText("CodeCategoryId");
-      this.name =
-          StringUtils.hasText(element.getChildText("Name")) ? element.getChildText("Name") : "";
-      this.value =
-          StringUtils.hasText(element.getChildText("Value")) ? element.getChildText("Value") : "";
+      element.getChildText("Id").ifPresent(id -> this.id = id);
+
+      element
+          .getChildText("CodeCategoryId")
+          .ifPresent(codeCategoryId -> this.codeCategoryId = codeCategoryId);
+
+      element.getChildText("Name").ifPresent(name -> this.name = name);
+
+      element.getChildText("Value").ifPresent(value -> this.value = value);
     } catch (Throwable e) {
       throw new RuntimeException("Failed to extract the code data from the WBXML", e);
     }

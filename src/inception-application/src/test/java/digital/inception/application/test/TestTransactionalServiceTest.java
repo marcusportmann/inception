@@ -20,6 +20,7 @@ import static org.junit.Assert.fail;
 
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,9 +89,10 @@ public class TestTransactionalServiceTest {
               + "Failed to find an active transaction after creating the test data");
     }
 
-    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional =
+        testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test Transactional Service in an existing transaction: "
               + "Failed to retrieve the test data within the transaction");
@@ -110,9 +112,9 @@ public class TestTransactionalServiceTest {
               + "Failed to find a completed transaction after rolling back the transaction");
     }
 
-    retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    retrievedTestDataOptional = testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData != null) {
+    if (retrievedTestDataOptional.isPresent()) {
       fail(
           "Failed to invoked the Test Transactional Service in an existing transaction: "
               + "Retrieved the test data after the transaction was rolled back");
@@ -141,9 +143,10 @@ public class TestTransactionalServiceTest {
 
     platformTransactionManager.rollback(transactionStatus);
 
-    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional =
+        testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test Transactional Service in a new transaction: "
               + "Failed to retrieve the test data after a checked exception was caught");
@@ -173,9 +176,10 @@ public class TestTransactionalServiceTest {
 
     platformTransactionManager.rollback(transactionStatus);
 
-    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional =
+        testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData != null) {
+    if (retrievedTestDataOptional.isPresent()) {
       fail(
           "Failed to invoked the Test Transactional Service in an existing transaction: "
               + "Retrieved the test data after the transaction was rolled back");
@@ -204,9 +208,10 @@ public class TestTransactionalServiceTest {
 
     platformTransactionManager.rollback(transactionStatus);
 
-    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional =
+        testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData != null) {
+    if (retrievedTestDataOptional.isPresent()) {
       fail(
           "Failed to invoked the Test Transactional Service in a new transaction: "
               + "Retrieved the test data after a runtime exception was caught");
@@ -223,9 +228,10 @@ public class TestTransactionalServiceTest {
     } catch (TestTransactionalServiceException ignored) {
     }
 
-    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional =
+        testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test Transactional Service without an existing transaction: "
               + "Failed to retrieve the test data after a checked exception was caught");
@@ -249,9 +255,10 @@ public class TestTransactionalServiceTest {
               + "Failed to find an active transaction after creating the test data");
     }
 
-    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional =
+        testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test Transactional Service in an existing transaction: "
               + "Failed to retrieve the test data within the transaction");
@@ -271,9 +278,9 @@ public class TestTransactionalServiceTest {
               + "The transaction was not committed successfully");
     }
 
-    retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    retrievedTestDataOptional = testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test Transactional Service in an existing transaction: "
               + "Failed to retrieve the test data after the transaction was committed");
@@ -297,9 +304,10 @@ public class TestTransactionalServiceTest {
               + "Failed to find an active transaction after creating the test data");
     }
 
-    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional =
+        testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test Transactional Service in an existing transaction: "
               + "Failed to retrieve the test data within the transaction");
@@ -319,9 +327,9 @@ public class TestTransactionalServiceTest {
               + "The transaction was not committed successfully");
     }
 
-    retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    retrievedTestDataOptional = testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData != null) {
+    if (retrievedTestDataOptional.isPresent()) {
       fail(
           "Failed to invoked the Test Transactional Service in an existing transaction: "
               + "Retrieved the test data after the transaction was rolled back");
@@ -345,9 +353,10 @@ public class TestTransactionalServiceTest {
               + "Failed to find an active transaction after creating the test data");
     }
 
-    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional =
+        testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test Transactional Service in a new transaction: "
               + "Failed to retrieve the test data within the transaction");
@@ -367,9 +376,9 @@ public class TestTransactionalServiceTest {
               + "The transaction was not committed successfully");
     }
 
-    retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    retrievedTestDataOptional = testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test Transactional Service in a new transaction: "
               + "Failed to retrieve the test data after the transaction was committed");
@@ -393,9 +402,10 @@ public class TestTransactionalServiceTest {
               + "Failed to find an active transaction after creating the test data");
     }
 
-    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional =
+        testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test Transactional Service in a new transaction: "
               + "Failed to retrieve the test data within the transaction");
@@ -415,9 +425,9 @@ public class TestTransactionalServiceTest {
               + "The transaction was not rolled back successfully");
     }
 
-    retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    retrievedTestDataOptional = testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test Transactional Service in a new transaction: "
               + "Failed to retrieve the test data after the transaction was rolled back");
@@ -431,9 +441,10 @@ public class TestTransactionalServiceTest {
 
     testTransactionalService.createTestData(testData);
 
-    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+    Optional<TestData> retrievedTestDataOptional =
+        testTransactionalService.getTestData(testData.getId());
 
-    if (retrievedTestData == null) {
+    if (retrievedTestDataOptional.isEmpty()) {
       fail(
           "Failed to invoked the Test Transactional Service without an existing transaction: "
               + "Failed to retrieve the test data");

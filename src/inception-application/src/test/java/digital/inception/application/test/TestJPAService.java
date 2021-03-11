@@ -17,6 +17,7 @@
 package digital.inception.application.test;
 
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -142,10 +143,11 @@ public class TestJPAService implements ITestJPAService {
    * Retrieve the test data.
    *
    * @param id the ID
-   * @return the test data or <b>null</b> if the test data cannot be found
+   * @return an Optional containing the test data or an empty Optional if the test data cannot be
+   *     found
    */
   @Transactional
-  public TestData getTestData(String id) throws TestJPAServiceException {
+  public Optional<TestData> getTestData(String id) throws TestJPAServiceException {
     try {
       String getTestDataSQL = "SELECT td FROM TestData td WHERE td.id = :id";
 
@@ -156,9 +158,9 @@ public class TestJPAService implements ITestJPAService {
       List<TestData> testData = query.getResultList();
 
       if (testData.size() == 0) {
-        return null;
+        return Optional.empty();
       } else {
-        return testData.get(0);
+        return Optional.of(testData.get(0));
       }
     } catch (Throwable e) {
       throw new TestJPAServiceException("Failed to retrieve the test data (" + id + ")", e);
@@ -169,9 +171,11 @@ public class TestJPAService implements ITestJPAService {
    * Retrieve the test data without a transaction.
    *
    * @param id the ID
-   * @return the test data or <b>null</b> if the test data cannot be found
+   * @return an Optional containing the test data or an empty Optional if the test data cannot be
+   *     found
    */
-  public TestData getTestDataWithoutTransaction(String id) throws TestJPAServiceException {
+  public Optional<TestData> getTestDataWithoutTransaction(String id)
+      throws TestJPAServiceException {
     try {
       String getTestDataSQL = "SELECT td FROM TestData td WHERE td.id = :id";
 
@@ -182,9 +186,9 @@ public class TestJPAService implements ITestJPAService {
       List<TestData> testData = query.getResultList();
 
       if (testData.size() == 0) {
-        return null;
+        return Optional.empty();
       } else {
-        return testData.get(0);
+        return Optional.of(testData.get(0));
       }
     } catch (Throwable e) {
       throw new TestJPAServiceException("Failed to retrieve the test data (" + id + ")", e);

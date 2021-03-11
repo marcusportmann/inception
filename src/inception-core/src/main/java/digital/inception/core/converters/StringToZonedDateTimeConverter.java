@@ -44,8 +44,7 @@ public final class StringToZonedDateTimeConverter implements Converter<String, Z
     try {
       return ISO8601Util.toZonedDateTime(source);
     } catch (Throwable e) {
-      throw new RuntimeException(
-          "Failed to parse the ISO8601 date time value (" + source + ")", e);
+      throw new RuntimeException("Failed to parse the ISO8601 date time value (" + source + ")", e);
     }
   }
 }

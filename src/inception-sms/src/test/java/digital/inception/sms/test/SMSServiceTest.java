@@ -17,8 +17,8 @@
 package digital.inception.sms.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.sms.ISMSService;
@@ -26,6 +26,7 @@ import digital.inception.sms.SMS;
 import digital.inception.sms.SMSStatus;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,16 +120,24 @@ public class SMSServiceTest {
 
     smsService.createSMS(sms);
 
-    retrievedSMS = smsService.getNextSMSQueuedForSending();
+    Optional<SMS> smsQueuedForSendingOptional = smsService.getNextSMSQueuedForSending();
 
-    assertNotNull(retrievedSMS);
+    if (smsQueuedForSendingOptional.isEmpty()) {
+      fail("Failed to retrieve the SMS queued for sending");
+    }
 
-    assertEquals(
-        "The send attempts for the SMS is not correct",
-        Integer.valueOf(1),
-        retrievedSMS.getSendAttempts());
-    assertEquals(
-        "The status for the SMS is not correct", SMSStatus.SENDING, retrievedSMS.getStatus());
+    smsQueuedForSendingOptional.ifPresent(
+        smsQueuedForSending -> {
+          assertEquals(
+              "The send attempts for the SMS is not correct",
+              Integer.valueOf(1),
+              smsQueuedForSending.getSendAttempts());
+
+          assertEquals(
+              "The status for the SMS is not correct",
+              SMSStatus.SENDING,
+              smsQueuedForSending.getStatus());
+        });
 
     smsService.resetSMSLocks(SMSStatus.SENDING, SMSStatus.FAILED);
 

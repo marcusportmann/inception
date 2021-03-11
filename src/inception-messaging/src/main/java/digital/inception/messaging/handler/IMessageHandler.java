@@ -17,6 +17,7 @@
 package digital.inception.messaging.handler;
 
 import digital.inception.messaging.Message;
+import java.util.Optional;
 
 /**
  * The <b>IMessageHandler</b> interface defines the interface that must be implemented by all
@@ -37,7 +38,8 @@ public interface IMessageHandler {
    * Process the specified message.
    *
    * @param message the message to process
-   * @return the response message or <b>null</b> if no response message exists
+   * @return an Optional containing the response message or an empty Optional if no response message
+   *     exists
    */
-  Message processMessage(Message message) throws MessageHandlerException;
+  Optional<Message> processMessage(Message message) throws MessageHandlerException;
 }

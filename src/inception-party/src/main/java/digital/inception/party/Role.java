@@ -223,9 +223,9 @@ public class Role implements Serializable {
   }
 
   /**
-   * Set the optional code for the role purpose.
+   * Set the code for the role purpose.
    *
-   * @param purpose the optional code for the role purpose
+   * @param purpose the code for the role purpose
    */
   public void setPurpose(String purpose) {
     this.purpose = purpose;

@@ -39,8 +39,8 @@ public class RoleTypeAttributeConstraintId implements Serializable {
   /** The code for the role type. */
   private String roleType;
 
-  /** The attribute constraint type. */
-  private AttributeConstraintType type;
+  /** The constraint type. */
+  private ConstraintType type;
 
   /** Constructs a new <b>RoleTypeAttributeConstraintId</b>. */
   public RoleTypeAttributeConstraintId() {}
@@ -51,13 +51,10 @@ public class RoleTypeAttributeConstraintId implements Serializable {
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
    * @param attributeTypeQualifier the qualifier for the attribute type
-   * @param type the attribute constraint type
+   * @param type the constraint type
    */
   public RoleTypeAttributeConstraintId(
-      String roleType,
-      String attributeType,
-      String attributeTypeQualifier,
-      AttributeConstraintType type) {
+      String roleType, String attributeType, String attributeTypeQualifier, ConstraintType type) {
     this.roleType = roleType;
     this.attributeType = attributeType;
     this.attributeTypeQualifier = attributeTypeQualifier;
@@ -69,10 +66,9 @@ public class RoleTypeAttributeConstraintId implements Serializable {
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
-   * @param type the attribute constraint type
+   * @param type the constraint type
    */
-  public RoleTypeAttributeConstraintId(
-      String roleType, String attributeType, AttributeConstraintType type) {
+  public RoleTypeAttributeConstraintId(String roleType, String attributeType, ConstraintType type) {
     this(roleType, attributeType, "", type);
   }
 

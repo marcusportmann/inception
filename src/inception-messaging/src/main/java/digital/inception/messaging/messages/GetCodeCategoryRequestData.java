@@ -29,6 +29,7 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -124,39 +125,50 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
       return false;
     }
 
-    this.codeCategoryId = rootElement.getChildText("CodeCategoryId");
+    rootElement
+        .getChildText("CodeCategoryId")
+        .ifPresent(codeCategoryId -> this.codeCategoryId = codeCategoryId);
 
-    String lastRetrievedValue = rootElement.getChildText("LastRetrieved");
-
-    if (lastRetrievedValue.contains("T")) {
-      try {
-        this.lastRetrieved = ISO8601Util.toLocalDateTime(lastRetrievedValue);
-      } catch (Throwable e) {
-        throw new RuntimeException(
-            "Failed to parse the LastRetrieved ISO8601 timestamp ("
-                + lastRetrievedValue
-                + ") for the \"Get Code Category Request\" message",
-            e);
-      }
-    } else {
-      this.lastRetrieved =
-          LocalDateTime.ofInstant(
-              Instant.ofEpochSecond(Long.parseLong(lastRetrievedValue)), ZoneId.systemDefault());
-    }
+    rootElement
+        .getChildText("LastRetrieved")
+        .ifPresent(
+            lastRetrievedValue -> {
+              if (lastRetrievedValue.contains("T")) {
+                try {
+                  this.lastRetrieved = ISO8601Util.toLocalDateTime(lastRetrievedValue);
+                } catch (Throwable e) {
+                  throw new RuntimeException(
+                      "Failed to parse the LastRetrieved ISO8601 timestamp ("
+                          + lastRetrievedValue
+                          + ") for the \"Get Code Category Request\" message",
+                      e);
+                }
+              } else {
+                this.lastRetrieved =
+                    LocalDateTime.ofInstant(
+                        Instant.ofEpochSecond(Long.parseLong(lastRetrievedValue)),
+                        ZoneId.systemDefault());
+              }
+            });
 
     this.parameters = new HashMap<>();
 
     List<Element> parameterElements = rootElement.getChildren("Parameter");
 
     for (Element parameterElement : parameterElements) {
-      String parameterName = parameterElement.getAttributeValue("name");
-      String parameterValue = parameterElement.getAttributeValue("value");
+      Optional<String> parameterName = parameterElement.getAttributeValue("name");
+      Optional<String> parameterValue = parameterElement.getAttributeValue("value");
 
-      this.parameters.put(parameterName, parameterValue);
+      if (parameterName.isPresent() && parameterValue.isPresent()) {
+        this.parameters.put(parameterName.get(), parameterValue.get());
+      }
     }
 
-    this.returnCodesIfCurrent =
-        Boolean.parseBoolean(rootElement.getChildText("ReturnCodesIfCurrent"));
+    rootElement
+        .getChildText("ReturnCodesIfCurrent")
+        .ifPresent(
+            returnCodesIfCurrent ->
+                this.returnCodesIfCurrent = Boolean.parseBoolean(returnCodesIfCurrent));
 
     return true;
   }

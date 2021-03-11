@@ -94,9 +94,13 @@ public class AuthenticateRequestData extends WbxmlMessageData {
       return false;
     }
 
-    this.deviceId = UUID.fromString(rootElement.getChildText("DeviceId"));
-    this.password = rootElement.getChildText("Password");
-    this.username = rootElement.getChildText("Username");
+    rootElement
+        .getChildText("DeviceId")
+        .ifPresent(deviceId -> this.deviceId = UUID.fromString(deviceId));
+
+    rootElement.getChildText("Password").ifPresent(password -> this.password = password);
+
+    rootElement.getChildText("Username").ifPresent(username -> this.username = username);
 
     return true;
   }

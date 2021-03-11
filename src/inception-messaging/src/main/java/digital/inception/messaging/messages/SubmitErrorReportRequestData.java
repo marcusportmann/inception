@@ -147,37 +147,53 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
       return false;
     }
 
-    this.id = UUID.fromString(rootElement.getChildText("Id"));
-    this.applicationId = rootElement.getChildText("ApplicationId");
-    this.applicationVersion = rootElement.getChildText("ApplicationVersion");
-    this.description = rootElement.getChildText("Description");
-    this.detail = rootElement.getChildText("Detail");
-    this.feedback = rootElement.getChildText("Feedback");
+    rootElement.getChildText("Id").ifPresent(id -> this.id = UUID.fromString(id));
 
-    String createdValue = rootElement.getChildText("Created");
+    rootElement
+        .getChildText("ApplicationId")
+        .ifPresent(applicationId -> this.applicationId = applicationId);
 
-    if (createdValue.contains("T")) {
-      try {
-        this.created = ISO8601Util.toLocalDateTime(createdValue);
-      } catch (Throwable e) {
-        throw new RuntimeException(
-            "Failed to parse the When ISO8601 timestamp ("
-                + createdValue
-                + ") for the \"Submit Error Report Request\" message",
-            e);
-      }
-    } else {
-      this.created =
-          LocalDateTime.ofInstant(
-              Instant.ofEpochSecond(Long.parseLong(createdValue)), ZoneId.systemDefault());
-    }
+    rootElement
+        .getChildText("ApplicationVersion")
+        .ifPresent(applicationVersion -> this.applicationVersion = applicationVersion);
 
-    this.who = rootElement.getChildText("Who");
-    this.deviceId = UUID.fromString(rootElement.getChildText("DeviceId"));
+    rootElement
+        .getChildText("Description")
+        .ifPresent(description -> this.description = description);
 
-    if (rootElement.hasChild("Data")) {
-      this.data = rootElement.getChildText("Data");
-    }
+    rootElement.getChildText("Detail").ifPresent(detail -> this.detail = detail);
+
+    rootElement.getChildText("Feedback").ifPresent(feedback -> this.feedback = feedback);
+
+    rootElement
+        .getChildText("Created")
+        .ifPresent(
+            createdValue -> {
+              if (createdValue.contains("T")) {
+                try {
+                  this.created = ISO8601Util.toLocalDateTime(createdValue);
+                } catch (Throwable e) {
+                  throw new RuntimeException(
+                      "Failed to parse the When ISO8601 timestamp ("
+                          + createdValue
+                          + ") for the \"Submit Error Report Request\" message",
+                      e);
+                }
+              } else {
+                this.created =
+                    LocalDateTime.ofInstant(
+                        Instant.ofEpochSecond(Long.parseLong(createdValue)),
+                        ZoneId.systemDefault());
+              }
+            });
+
+    rootElement.getChildText("Who").ifPresent(who -> this.who = who);
+
+    rootElement
+        .getChildText("DeviceId")
+        .ifPresent(deviceId -> this.deviceId = UUID.fromString(deviceId));
+
+    rootElement.getChildText("Data").ifPresent(data -> this.data = data);
 
     return true;
   }

@@ -78,7 +78,7 @@ public class TestRequestData extends WbxmlMessageData {
       return false;
     }
 
-    this.testValue = rootElement.getChildText("TestValue");
+    rootElement.getChildText("TestValue").ifPresent(testValue -> this.testValue = testValue);
 
     return true;
   }

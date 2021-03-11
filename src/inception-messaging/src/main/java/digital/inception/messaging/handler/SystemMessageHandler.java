@@ -46,6 +46,7 @@ import digital.inception.security.Tenant;
 import digital.inception.security.UserNotFoundException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,38 +90,38 @@ public class SystemMessageHandler extends MessageHandler {
    * Process the specified message.
    *
    * @param message the message to process
-   * @return the response message or <b>null</b> if no response message exists
+   * @return an Optional containing the response message or an empty Optional if no response message exists
    */
   @Override
-  public Message processMessage(Message message) throws MessageHandlerException {
+  public Optional<Message> processMessage(Message message) throws MessageHandlerException {
     // Process a "Authenticate Request" message
     if (message.getTypeId().equals(AuthenticateRequestData.MESSAGE_TYPE_ID)) {
-      return processAuthenticateMessage(message);
+      return Optional.ofNullable(processAuthenticateMessage(message));
     }
 
     // Process a "Check User Exists Request" message
     else if (message.getTypeId().equals(CheckUserExistsRequestData.MESSAGE_TYPE_ID)) {
-      return processCheckUserExistsMessage(message);
+      return Optional.ofNullable(processCheckUserExistsMessage(message));
     }
 
     // Process a "Test Request" message
     else if (message.getTypeId().equals(TestRequestData.MESSAGE_TYPE_ID)) {
-      return processTestMessage(message);
+      return Optional.ofNullable(processTestMessage(message));
     }
 
     // Process a "Another Test Request" message
     else if (message.getTypeId().equals(AnotherTestRequestData.MESSAGE_TYPE_ID)) {
-      return processAnotherTestMessage(message);
+      return Optional.ofNullable(processAnotherTestMessage(message));
     }
 
     // Process a "Submit Error Report Request" message
     else if (message.getTypeId().equals(SubmitErrorReportRequestData.MESSAGE_TYPE_ID)) {
-      return processSubmitErrorReportRequestMessage(message);
+      return Optional.ofNullable(processSubmitErrorReportRequestMessage(message));
     }
 
     // Process a "Get Code Category Request" message
     else if (message.getTypeId().equals(GetCodeCategoryRequestData.MESSAGE_TYPE_ID)) {
-      return processGetCodeCategoryRequestMessage(message);
+      return Optional.ofNullable(processGetCodeCategoryRequestMessage(message));
     }
 
     throw new MessageHandlerException(

@@ -62,6 +62,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -203,7 +204,13 @@ public class SecurityServiceTest {
   public void addUserToGroupTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -254,7 +261,13 @@ public class SecurityServiceTest {
   public void adminChangePasswordTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -275,7 +288,13 @@ public class SecurityServiceTest {
   public void changePasswordTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -407,7 +426,13 @@ public class SecurityServiceTest {
   public void deleteGroupWithExistingMembers() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -460,7 +485,13 @@ public class SecurityServiceTest {
   public void deleteInvalidUserTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -482,7 +513,13 @@ public class SecurityServiceTest {
   public void duplicateGroupTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -504,7 +541,13 @@ public class SecurityServiceTest {
   public void duplicateUserTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -517,7 +560,13 @@ public class SecurityServiceTest {
   public void expiredUserPasswordTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -538,7 +587,13 @@ public class SecurityServiceTest {
   public void failedAuthenticationTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -562,7 +617,13 @@ public class SecurityServiceTest {
   public void findUsersTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     for (int i = 1; i < 20; i++) {
       User user = getNumberedTestUserDetails(userDirectory.getId(), i);
@@ -692,7 +753,13 @@ public class SecurityServiceTest {
   public void groupMembershipTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -739,7 +806,13 @@ public class SecurityServiceTest {
   public void groupTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     assertTrue(
         "The user directory does not support group administration",
@@ -800,7 +873,13 @@ public class SecurityServiceTest {
   public void isUserInGroupTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -824,7 +903,13 @@ public class SecurityServiceTest {
   public void lockedUserTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -845,7 +930,13 @@ public class SecurityServiceTest {
   public void passwordResetTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -873,7 +964,13 @@ public class SecurityServiceTest {
   public void removeUserFromGroupTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -1006,7 +1103,13 @@ public class SecurityServiceTest {
 
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -1052,7 +1155,13 @@ public class SecurityServiceTest {
 
     List<Tenant> beforeRetrievedTenants = securityService.getTenants();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     Tenant retrievedTenant = securityService.getTenant(tenant.getId());
 
@@ -1180,7 +1289,13 @@ public class SecurityServiceTest {
   public void userDirectoryTenantMappingTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     List<Tenant> tenantsForUserDirectory =
         securityService.getTenantsForUserDirectory(userDirectory.getId());
@@ -1307,7 +1422,13 @@ public class SecurityServiceTest {
   public void userPasswordHistoryTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -1324,18 +1445,31 @@ public class SecurityServiceTest {
   public void userTest() throws Exception {
     Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+    Optional<UserDirectory> userDirectoryOptional = securityService.createTenant(tenant, true);
+
+    if (userDirectoryOptional.isEmpty()) {
+      fail("Failed to retrieve the new user directory for the new tenant");
+    }
+
+    UserDirectory userDirectory = userDirectoryOptional.get();
 
     User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(user, false, false);
 
-    UUID userDirectoryId = securityService.getUserDirectoryIdForUser(user.getUsername());
+    Optional<UUID> userDirectoryIdOptional =
+        securityService.getUserDirectoryIdForUser(user.getUsername());
+
+    if (userDirectoryIdOptional.isEmpty()) {
+      fail("Failed to retrieve user directory ID for the user");
+    }
+
+    UUID userDirectoryId = userDirectoryIdOptional.get();
 
     assertEquals(
         "The correct user directory ID was not retrieved for the user",
         userDirectory.getId(),
-        userDirectoryId);
+        userDirectoryIdOptional.get());
 
     List<UUID> userDirectorIds = securityService.getUserDirectoryIdsForUser(user.getUsername());
 

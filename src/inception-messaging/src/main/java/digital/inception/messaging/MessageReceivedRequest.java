@@ -34,10 +34,10 @@ public class MessageReceivedRequest {
    * The Universally Unique Identifier (UUID) for the device the message received request originated
    * from.
    */
-  private final UUID deviceId;
+  private UUID deviceId;
 
   /** The Universally Unique Identifier (UUID) for the message that was successfully downloaded. */
-  private final UUID messageId;
+  private UUID messageId;
 
   /**
    * Constructs a new <b>MessageReceivedRequest</b> and populates it from the information stored in
@@ -48,8 +48,19 @@ public class MessageReceivedRequest {
   public MessageReceivedRequest(Document document) {
     Element rootElement = document.getRootElement();
 
-    this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
-    this.messageId = UUID.fromString(rootElement.getAttributeValue("messageId"));
+    rootElement
+        .getAttributeValue("deviceId")
+        .ifPresent(
+            deviceId -> {
+              this.deviceId = UUID.fromString(deviceId);
+            });
+
+    rootElement
+        .getAttributeValue("messageId")
+        .ifPresent(
+            messageId -> {
+              this.messageId = UUID.fromString(messageId);
+            });
   }
 
   /**

@@ -24,81 +24,74 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>AttributeConstraintType</b> enumeration defines the types of constraints that can be
- * applied when validating an attribute for a party.
+ * The <b>ConstraintType</b> enumeration defines the types of constraints that can be applied when
+ * validating an attribute or preference for a party.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The attribute constraint type")
+@Schema(description = "The constraint type")
 @XmlEnum
-@XmlType(name = "AttributeConstraintType", namespace = "http://inception.digital/party")
-public enum AttributeConstraintType {
+@XmlType(name = "ConstraintType", namespace = "http://inception.digital/party")
+public enum ConstraintType {
   @XmlEnumValue("MaxSize")
   MAX_SIZE("max_size", "Maximum Size"),
   @XmlEnumValue("MinSize")
   MIN_SIZE("min_size", "Minimum Size"),
-  @XmlEnumValue("NotNull")
-  NOT_NULL("not_null", "Not Null"),
   @XmlEnumValue("Pattern")
   PATTERN("pattern", "Pattern"),
+  @XmlEnumValue("Reference")
+  REFERENCE("reference", "Reference"),
   @XmlEnumValue("Required")
   REQUIRED("required", "Required"),
   @XmlEnumValue("Size")
-  SIZE("size", "Size"),
-  @XmlEnumValue("Type")
-  TYPE("type", "Type");
+  SIZE("size", "Size");
 
   private final String code;
 
   private final String description;
 
-  AttributeConstraintType(String code, String description) {
+  ConstraintType(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the attribute constraint type given by the specified code value.
+   * Returns the constraint type given by the specified code value.
    *
-   * @param code the code for the attribute constraint type
-   * @return the attribute constraint type given by the specified code value
+   * @param code the code for the constraint type
+   * @return the constraint type given by the specified code value
    */
   @JsonCreator
-  public static AttributeConstraintType fromCode(String code) {
+  public static ConstraintType fromCode(String code) {
     switch (code) {
       case "max_size":
-        return AttributeConstraintType.MAX_SIZE;
+        return ConstraintType.MAX_SIZE;
 
       case "min_size":
-        return AttributeConstraintType.MIN_SIZE;
-
-      case "not_null":
-        return AttributeConstraintType.NOT_NULL;
+        return ConstraintType.MIN_SIZE;
 
       case "pattern":
-        return AttributeConstraintType.PATTERN;
+        return ConstraintType.PATTERN;
+
+      case "reference":
+        return ConstraintType.REFERENCE;
 
       case "required":
-        return AttributeConstraintType.REQUIRED;
+        return ConstraintType.REQUIRED;
 
       case "size":
-        return AttributeConstraintType.SIZE;
-
-      case "type":
-        return AttributeConstraintType.TYPE;
+        return ConstraintType.SIZE;
 
       default:
         throw new RuntimeException(
-            "Failed to determine the attribute constraint type with the invalid code ("
-                + code
-                + ")");
+            "Failed to determine the constraint type with the invalid code (" + code + ")");
     }
   }
 
   /**
-   * Returns the code for the attribute constraint type.
+   * Returns the code for the constraint type.
    *
-   * @return the code for the attribute constraint type
+   * @return the code for the constraint type
    */
   @JsonValue
   public String code() {
@@ -106,9 +99,9 @@ public enum AttributeConstraintType {
   }
 
   /**
-   * Returns the description for the attribute constraint type.
+   * Returns the description for the constraint type.
    *
-   * @return the description for the attribute constraint type
+   * @return the description for the constraint type
    */
   public String description() {
     return description;

@@ -170,7 +170,7 @@ public class ErrorService implements IErrorService {
    * Retrieve the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
-   * @return the error report or <b>null</b> if the error report could not be found
+   * @return the error report
    */
   @Override
   public ErrorReport getErrorReport(UUID errorReportId)
@@ -289,7 +289,7 @@ public class ErrorService implements IErrorService {
    * Retrieve the summary for the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
-   * @return the summary for the error report or <b>null</b> if the error report could not be found
+   * @return the summary for the error report
    */
   @Override
   public ErrorReportSummary getErrorReportSummary(UUID errorReportId)

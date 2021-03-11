@@ -16,13 +16,14 @@
 
 package digital.inception.messaging;
 
-//import digital.inception.Debug;
+// import digital.inception.Debug;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
@@ -108,10 +109,10 @@ public class MessagingServlet extends HttpServlet {
           // We are processing a Message...
         case "Message":
           if (!processMessage(document, response)) {
-// TODO: FIX LOGGING
-//            if (Debug.inDebugMode()) {
-//              logger.debug("Failed to process the message: " + document.toString());
-//            }
+            // TODO: FIX LOGGING
+            //            if (Debug.inDebugMode()) {
+            //              logger.debug("Failed to process the message: " + document.toString());
+            //            }
           }
 
           break;
@@ -119,10 +120,11 @@ public class MessagingServlet extends HttpServlet {
           // We are processing a MessagePart...
         case "MessagePart":
           if (!processMessagePart(document, response)) {
-// TODO: FIX LOGGING
-//            if (Debug.inDebugMode()) {
-//              logger.debug("Failed to process the message part: " + document.toString());
-//            }
+            // TODO: FIX LOGGING
+            //            if (Debug.inDebugMode()) {
+            //              logger.debug("Failed to process the message part: " +
+            // document.toString());
+            //            }
           }
 
           break;
@@ -130,11 +132,12 @@ public class MessagingServlet extends HttpServlet {
           // We are processing a request to download messages queued for a device
         case "MessageDownloadRequest":
           if (!processMessageDownloadRequest(document, response)) {
-// TODO: FIX LOGGING
-//            if (Debug.inDebugMode()) {
-//              logger.debug(
-//                  "Failed to process the message download request: " + document.toString());
-//            }
+            // TODO: FIX LOGGING
+            //            if (Debug.inDebugMode()) {
+            //              logger.debug(
+            //                  "Failed to process the message download request: " +
+            // document.toString());
+            //            }
           }
 
           break;
@@ -142,11 +145,12 @@ public class MessagingServlet extends HttpServlet {
           // We are processing an acknowledgement that a message has been downloaded successfully
         case "MessageReceivedRequest":
           if (!processMessageReceivedRequest(document, response)) {
-// TODO: FIX LOGGING
-//            if (Debug.inDebugMode()) {
-//              logger.debug(
-//                  "Failed to process the message received request: " + document.toString());
-//            }
+            // TODO: FIX LOGGING
+            //            if (Debug.inDebugMode()) {
+            //              logger.debug(
+            //                  "Failed to process the message received request: " +
+            // document.toString());
+            //            }
           }
 
           break;
@@ -154,11 +158,12 @@ public class MessagingServlet extends HttpServlet {
           // We are processing a request to download message parts queued for a device
         case "MessagePartDownloadRequest":
           if (!processMessagePartDownloadRequest(document, response)) {
-// TODO: FIX LOGGING
-//            if (Debug.inDebugMode()) {
-//              logger.debug(
-//                  "Failed to process the message part download request: " + document.toString());
-//            }
+            // TODO: FIX LOGGING
+            //            if (Debug.inDebugMode()) {
+            //              logger.debug(
+            //                  "Failed to process the message part download request: " +
+            // document.toString());
+            //            }
           }
 
           break;
@@ -167,11 +172,12 @@ public class MessagingServlet extends HttpServlet {
           // successfully
         case "MessagePartReceivedRequest":
           if (!processMessagePartReceivedRequest(document, response)) {
-// TODO: FIX LOGGING
-//            if (Debug.inDebugMode()) {
-//              logger.debug(
-//                  "Failed to process the message part received request: " + document.toString());
-//            }
+            // TODO: FIX LOGGING
+            //            if (Debug.inDebugMode()) {
+            //              logger.debug(
+            //                  "Failed to process the message part received request: " +
+            // document.toString());
+            //            }
           }
 
           break;
@@ -336,14 +342,16 @@ public class MessagingServlet extends HttpServlet {
         messagingService.archiveMessage(requestMessage);
 
         // Attempt to process the synchronous message
-        Message responseMessage = messagingService.processMessage(requestMessage);
-
-        // Attempt to archive the synchronous response message
-        messagingService.archiveMessage(responseMessage);
+        Optional<Message> responseMessageOptional = messagingService.processMessage(requestMessage);
 
         MessageResult messageResult;
 
-        if (responseMessage != null) {
+        if (responseMessageOptional.isPresent()) {
+          Message responseMessage = responseMessageOptional.get();
+
+          // Attempt to archive the synchronous response message
+          messagingService.archiveMessage(responseMessage);
+
           if ((isRequestMessageEncrypted) && (!responseMessage.isEncrypted())) {
             messagingService.encryptMessage(responseMessage);
           }
@@ -353,6 +361,7 @@ public class MessagingServlet extends HttpServlet {
                   0,
                   String.format("Successfully processed the message (%s)", requestMessage.getId()),
                   responseMessage);
+
         } else {
           messageResult =
               new MessageResult(

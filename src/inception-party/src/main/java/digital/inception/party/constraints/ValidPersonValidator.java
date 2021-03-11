@@ -17,7 +17,7 @@
 package digital.inception.party.constraints;
 
 import digital.inception.party.Attribute;
-import digital.inception.party.AttributeConstraintType;
+import digital.inception.party.ConstraintType;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
@@ -29,6 +29,7 @@ import digital.inception.party.Role;
 import digital.inception.party.RoleTypeAttributeConstraint;
 import digital.inception.party.TaxNumber;
 import digital.inception.reference.IReferenceService;
+import java.util.Optional;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.ValidationException;
@@ -50,12 +51,6 @@ import org.springframework.util.StringUtils;
 public class ValidPersonValidator extends PartyValidator
     implements ConstraintValidator<ValidPerson, Person> {
 
-  /** The Party Reference Service. */
-  private final IPartyReferenceService partyReferenceService;
-
-  /** The Reference Service. */
-  private final IReferenceService referenceService;
-
   /**
    * Constructs a new <b>ValidPersonValidator</b>.
    *
@@ -65,14 +60,12 @@ public class ValidPersonValidator extends PartyValidator
   @Autowired
   public ValidPersonValidator(
       IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
-    this.partyReferenceService = partyReferenceService;
-    this.referenceService = referenceService;
+    super(partyReferenceService, referenceService);
   }
 
   /** Constructs a new <b>ValidPersonValidator</b>. */
   public ValidPersonValidator() {
-    this.partyReferenceService = null;
-    this.referenceService = null;
+    super(null, null);
   }
 
   @Override
@@ -81,7 +74,7 @@ public class ValidPersonValidator extends PartyValidator
   @Override
   public boolean isValid(Person person, ConstraintValidatorContext constraintValidatorContext) {
 
-    if ((partyReferenceService != null) && (referenceService != null)) {
+    if ((getPartyReferenceService() != null) && (getReferenceService() != null)) {
       boolean isValid = true;
 
       // Disable the default constraint violation
@@ -118,10 +111,11 @@ public class ValidPersonValidator extends PartyValidator
             } else {
 
               if (StringUtils.hasText(contactMechanism.getRole())) {
-                if (!partyReferenceService.isValidContactMechanismRole(
-                    person.getType().code(),
-                    contactMechanism.getType(),
-                    contactMechanism.getRole())) {
+                if (!getPartyReferenceService()
+                    .isValidContactMechanismRole(
+                        person.getType().code(),
+                        contactMechanism.getType(),
+                        contactMechanism.getRole())) {
                   hibernateConstraintValidatorContext
                       .addMessageParameter("contactMechanismRole", contactMechanism.getRole())
                       .addMessageParameter("contactMechanismType", contactMechanism.getType())
@@ -138,8 +132,11 @@ public class ValidPersonValidator extends PartyValidator
               }
 
               for (String contactMechanismPurpose : contactMechanism.getPurposes()) {
-                if (!partyReferenceService.isValidContactMechanismPurpose(
-                    person.getType().code(), contactMechanism.getType(), contactMechanismPurpose)) {
+                if (!getPartyReferenceService()
+                    .isValidContactMechanismPurpose(
+                        person.getType().code(),
+                        contactMechanism.getType(),
+                        contactMechanismPurpose)) {
                   hibernateConstraintValidatorContext
                       .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
                       .addMessageParameter("contactMechanismType", contactMechanism.getType())
@@ -163,9 +160,23 @@ public class ValidPersonValidator extends PartyValidator
           }
         }
 
+        // Validate countries of citizenship
+        for (String countryOfCitizenship : person.getCountriesOfCitizenship()) {
+          if (!getReferenceService().isValidCountry(countryOfCitizenship)) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("countryOfCitizenship", countryOfCitizenship)
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPerson.invalidCountryOfCitizenship.message}")
+                .addPropertyNode("countriesOfCitizenship")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+        }
+
         // Validate countries of tax residence
         for (String countryOfTaxResidence : person.getCountriesOfTaxResidence()) {
-          if (!referenceService.isValidCountry(countryOfTaxResidence)) {
+          if (!getReferenceService().isValidCountry(countryOfTaxResidence)) {
             hibernateConstraintValidatorContext
                 .addMessageParameter("countryOfTaxResidence", countryOfTaxResidence)
                 .buildConstraintViolationWithTemplate(
@@ -179,7 +190,7 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate country of birth
         if (StringUtils.hasText(person.getCountryOfBirth())
-            && (!referenceService.isValidCountry(person.getCountryOfBirth()))) {
+            && (!getReferenceService().isValidCountry(person.getCountryOfBirth()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("countryOfBirth", person.getCountryOfBirth())
               .buildConstraintViolationWithTemplate(
@@ -192,7 +203,7 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate country of residence
         if (StringUtils.hasText(person.getCountryOfResidence())
-            && (!referenceService.isValidCountry(person.getCountryOfResidence()))) {
+            && (!getReferenceService().isValidCountry(person.getCountryOfResidence()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("countryOfResidence", person.getCountryOfResidence())
               .buildConstraintViolationWithTemplate(
@@ -205,7 +216,8 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate employment status
         if (StringUtils.hasText(person.getEmploymentStatus())
-            && (!partyReferenceService.isValidEmploymentStatus(person.getEmploymentStatus()))) {
+            && (!getPartyReferenceService()
+                .isValidEmploymentStatus(person.getEmploymentStatus()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("employmentStatus", person.getEmploymentStatus())
               .buildConstraintViolationWithTemplate(
@@ -218,8 +230,8 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate employment type
         if (StringUtils.hasText(person.getEmploymentType())
-            && (!partyReferenceService.isValidEmploymentType(
-                person.getEmploymentStatus(), person.getEmploymentType()))) {
+            && (!getPartyReferenceService()
+                .isValidEmploymentType(person.getEmploymentStatus(), person.getEmploymentType()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("employmentType", person.getEmploymentType())
               .buildConstraintViolationWithTemplate(
@@ -232,7 +244,7 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate gender
         if (StringUtils.hasText(person.getGender())
-            && (!partyReferenceService.isValidGender(person.getGender()))) {
+            && (!getPartyReferenceService().isValidGender(person.getGender()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("gender", person.getGender())
               .buildConstraintViolationWithTemplate(
@@ -245,7 +257,7 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate home language
         if (StringUtils.hasText(person.getHomeLanguage())
-            && (!referenceService.isValidLanguage(person.getHomeLanguage()))) {
+            && (!getReferenceService().isValidLanguage(person.getHomeLanguage()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("homeLanguage", person.getHomeLanguage())
               .buildConstraintViolationWithTemplate(
@@ -259,7 +271,7 @@ public class ValidPersonValidator extends PartyValidator
         // Validate identity documents
         for (IdentityDocument identityDocument : person.getIdentityDocuments()) {
           if (StringUtils.hasText(identityDocument.getCountryOfIssue())) {
-            if (!referenceService.isValidCountry(identityDocument.getCountryOfIssue())) {
+            if (!getReferenceService().isValidCountry(identityDocument.getCountryOfIssue())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("countryOfIssue", identityDocument.getCountryOfIssue())
                   .buildConstraintViolationWithTemplate(
@@ -274,8 +286,8 @@ public class ValidPersonValidator extends PartyValidator
           }
 
           if (StringUtils.hasText(identityDocument.getType())) {
-            if (!partyReferenceService.isValidIdentityDocumentType(
-                person.getType().code(), identityDocument.getType())) {
+            if (!getPartyReferenceService()
+                .isValidIdentityDocumentType(person.getType().code(), identityDocument.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("identityDocumentType", identityDocument.getType())
                   .addMessageParameter("partyType", person.getType().code())
@@ -293,7 +305,7 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate marital status
         if (StringUtils.hasText(person.getMaritalStatus())
-            && (!partyReferenceService.isValidMaritalStatus(person.getMaritalStatus()))) {
+            && (!getPartyReferenceService().isValidMaritalStatus(person.getMaritalStatus()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("maritalStatus", person.getMaritalStatus())
               .buildConstraintViolationWithTemplate(
@@ -304,8 +316,8 @@ public class ValidPersonValidator extends PartyValidator
           isValid = false;
         } else {
           // Validate marriage type
-          if (!partyReferenceService.isValidMarriageType(
-              person.getMaritalStatus(), person.getMarriageType())) {
+          if (!getPartyReferenceService()
+              .isValidMarriageType(person.getMaritalStatus(), person.getMarriageType())) {
             hibernateConstraintValidatorContext
                 .addMessageParameter("maritalStatus", person.getMaritalStatus())
                 .addMessageParameter(
@@ -322,7 +334,7 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate occupation
         if (StringUtils.hasText(person.getOccupation())
-            && (!partyReferenceService.isValidOccupation(person.getOccupation()))) {
+            && (!getPartyReferenceService().isValidOccupation(person.getOccupation()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("occupation", person.getOccupation())
               .buildConstraintViolationWithTemplate(
@@ -336,8 +348,8 @@ public class ValidPersonValidator extends PartyValidator
         // Validate physical addresses
         for (PhysicalAddress physicalAddress : person.getPhysicalAddresses()) {
           if (StringUtils.hasText(physicalAddress.getRole())) {
-            if (!partyReferenceService.isValidPhysicalAddressRole(
-                person.getType().code(), physicalAddress.getRole())) {
+            if (!getPartyReferenceService()
+                .isValidPhysicalAddressRole(person.getType().code(), physicalAddress.getRole())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("physicalAddressRole", physicalAddress.getRole())
                   .addMessageParameter("partyType", person.getType().code())
@@ -353,8 +365,8 @@ public class ValidPersonValidator extends PartyValidator
           }
 
           for (String physicalAddressPurpose : physicalAddress.getPurposes()) {
-            if (!partyReferenceService.isValidPhysicalAddressPurpose(
-                person.getType().code(), physicalAddressPurpose)) {
+            if (!getPartyReferenceService()
+                .isValidPhysicalAddressPurpose(person.getType().code(), physicalAddressPurpose)) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("physicalAddressPurpose", physicalAddressPurpose)
                   .addMessageParameter("partyType", person.getType().code())
@@ -373,8 +385,8 @@ public class ValidPersonValidator extends PartyValidator
         // Validate preferences
         for (Preference preference : person.getPreferences()) {
           if (StringUtils.hasText(preference.getType())) {
-            if (!partyReferenceService.isValidPreferenceType(
-                person.getType().code(), preference.getType())) {
+            if (!getPartyReferenceService()
+                .isValidPreferenceType(person.getType().code(), preference.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("preferenceType", preference.getType())
                   .addMessageParameter("partyType", person.getType().code())
@@ -392,7 +404,7 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate race
         if (StringUtils.hasText(person.getRace())
-            && (!partyReferenceService.isValidRace(person.getRace()))) {
+            && (!getPartyReferenceService().isValidRace(person.getRace()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("race", person.getRace())
               .buildConstraintViolationWithTemplate(
@@ -405,7 +417,7 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate residency status
         if (StringUtils.hasText(person.getResidencyStatus())
-            && (!partyReferenceService.isValidResidencyStatus(person.getResidencyStatus()))) {
+            && (!getPartyReferenceService().isValidResidencyStatus(person.getResidencyStatus()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("residencyStatus", person.getResidencyStatus())
               .buildConstraintViolationWithTemplate(
@@ -419,7 +431,7 @@ public class ValidPersonValidator extends PartyValidator
         // Validate resident permits
         for (ResidencePermit residencePermit : person.getResidencePermits()) {
           if (StringUtils.hasText(residencePermit.getCountryOfIssue())) {
-            if (!referenceService.isValidCountry(residencePermit.getCountryOfIssue())) {
+            if (!getReferenceService().isValidCountry(residencePermit.getCountryOfIssue())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("countryOfIssue", residencePermit.getCountryOfIssue())
                   .buildConstraintViolationWithTemplate(
@@ -434,7 +446,7 @@ public class ValidPersonValidator extends PartyValidator
           }
 
           if (StringUtils.hasText(residencePermit.getType())) {
-            if (!partyReferenceService.isValidResidencePermitType(residencePermit.getType())) {
+            if (!getPartyReferenceService().isValidResidencePermitType(residencePermit.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("residencePermitType", residencePermit.getType())
                   .buildConstraintViolationWithTemplate(
@@ -451,7 +463,7 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate residential type
         if (StringUtils.hasText(person.getResidentialType())
-            && (!partyReferenceService.isValidResidentialType(person.getResidentialType()))) {
+            && (!getPartyReferenceService().isValidResidentialType(person.getResidentialType()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("residentialType", person.getResidentialType())
               .buildConstraintViolationWithTemplate(
@@ -465,7 +477,7 @@ public class ValidPersonValidator extends PartyValidator
         // Validate tax numbers
         for (TaxNumber taxNumber : person.getTaxNumbers()) {
           if (StringUtils.hasText(taxNumber.getCountryOfIssue())) {
-            if (!referenceService.isValidCountry(taxNumber.getCountryOfIssue())) {
+            if (!getReferenceService().isValidCountry(taxNumber.getCountryOfIssue())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("countryOfIssue", taxNumber.getCountryOfIssue())
                   .buildConstraintViolationWithTemplate(
@@ -480,8 +492,8 @@ public class ValidPersonValidator extends PartyValidator
           }
 
           if (StringUtils.hasText(taxNumber.getType())) {
-            if (!partyReferenceService.isValidTaxNumberType(
-                person.getType().code(), taxNumber.getType())) {
+            if (!getPartyReferenceService()
+                .isValidTaxNumberType(person.getType().code(), taxNumber.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("taxNumberType", taxNumber.getType())
                   .addMessageParameter("partyType", person.getType().code())
@@ -499,7 +511,7 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate title
         if (StringUtils.hasText(person.getTitle())
-            && (!partyReferenceService.isValidTitle(person.getTitle()))) {
+            && (!getPartyReferenceService().isValidTitle(person.getTitle()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("title", person.getTitle())
               .buildConstraintViolationWithTemplate(
@@ -515,7 +527,8 @@ public class ValidPersonValidator extends PartyValidator
         // Validate roles
         for (Role role : person.getRoles()) {
           if (StringUtils.hasText(role.getType())) {
-            if (!partyReferenceService.isValidRoleType(person.getType().code(), role.getType())) {
+            if (!getPartyReferenceService()
+                .isValidRoleType(person.getType().code(), role.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("roleType", role.getType())
                   .addMessageParameter("partyType", person.getType().code())
@@ -554,9 +567,17 @@ public class ValidPersonValidator extends PartyValidator
     boolean isValid = true;
 
     for (RoleTypeAttributeConstraint roleTypeAttributeConstraint :
-        partyReferenceService.getRoleTypeAttributeConstraints(roleType)) {
+        getPartyReferenceService().getRoleTypeAttributeConstraints(roleType)) {
 
-      if (roleTypeAttributeConstraint.getType() == AttributeConstraintType.REQUIRED) {
+      if (roleTypeAttributeConstraint.getType() == ConstraintType.MAX_SIZE) {
+        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
+      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.MIN_SIZE) {
+        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
+      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.PATTERN) {
+        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
+      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.REFERENCE) {
+        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
+      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.REQUIRED) {
         switch (roleTypeAttributeConstraint.getAttributeType()) {
           case "contact_mechanism":
             if (!person.hasContactMechanismType(
@@ -588,6 +609,30 @@ public class ValidPersonValidator extends PartyValidator
 
             break;
 
+          case "countries_of_citizenship":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getCountriesOfCitizenship(),
+                "countriesOfCitizenship",
+                "{digital.inception.party.constraints.ValidPerson.countryOfCitizenshipRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
+          case "countries_of_tax_residence":
+            if (!validateRequiredAttributeForRoleType(
+                roleType,
+                person.getCountriesOfTaxResidence(),
+                "countriesOfTaxResidence",
+                "{digital.inception.party.constraints.ValidPerson.countryOfTaxResidenceRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
+              isValid = false;
+            }
+
+            break;
+
           case "country_of_birth":
             if (!validateRequiredAttributeForRoleType(
                 roleType,
@@ -606,18 +651,6 @@ public class ValidPersonValidator extends PartyValidator
                 person.getCountryOfResidence(),
                 "countryOfResidence",
                 "{digital.inception.party.constraints.ValidPerson.countryOfResidenceRequiredForRoleType.message}",
-                hibernateConstraintValidatorContext)) {
-              isValid = false;
-            }
-
-            break;
-
-          case "countries_of_tax_residence":
-            if (!validateRequiredAttributeForRoleType(
-                roleType,
-                person.getCountriesOfTaxResidence(),
-                "countriesOfTaxResidence",
-                "{digital.inception.party.constraints.ValidPerson.countryOfTaxResidenceRequiredForRoleType.message}",
                 hibernateConstraintValidatorContext)) {
               isValid = false;
             }
@@ -870,7 +903,29 @@ public class ValidPersonValidator extends PartyValidator
               isValid = false;
             }
             break;
+
+          default:
+            Optional<Attribute> attributeOptional =
+                person.getAttribute(roleTypeAttributeConstraint.getAttributeType());
+
+            if (attributeOptional.isEmpty() || (!attributeOptional.get().hasValue())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter(
+                      "attributeType", roleTypeAttributeConstraint.getAttributeType())
+                  .addMessageParameter("roleType", roleType)
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidParty.attributeTypeRequiredForRoleType.message}")
+                  .addPropertyNode("attributes")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+            break;
         }
+      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.SIZE) {
+        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
       }
     }
 

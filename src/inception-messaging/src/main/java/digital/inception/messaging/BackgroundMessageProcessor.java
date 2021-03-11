@@ -16,6 +16,7 @@
 
 package digital.inception.messaging;
 
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -76,14 +77,14 @@ public class BackgroundMessageProcessor implements InitializingBean {
   @Scheduled(cron = "0 * * * * *")
   @Async
   public void processMessages() {
-    Message requestMessage;
+    Optional<Message> requestMessageOptional;
 
     while (true) {
       // Retrieve the next message queued for processing
       try {
-        requestMessage = messagingService.getNextMessageQueuedForProcessing();
+        requestMessageOptional = messagingService.getNextMessageQueuedForProcessing();
 
-        if (requestMessage == null) {
+        if (requestMessageOptional.isEmpty()) {
           if (logger.isDebugEnabled()) {
             logger.debug("No messages queued for processing");
           }
@@ -95,6 +96,8 @@ public class BackgroundMessageProcessor implements InitializingBean {
 
         return;
       }
+
+      Message requestMessage = requestMessageOptional.get();
 
       // Process the asynchronous message
       try {
@@ -136,9 +139,11 @@ public class BackgroundMessageProcessor implements InitializingBean {
           }
         }
 
-        Message responseMessage = messagingService.processMessage(requestMessage);
+        Optional<Message> responseMessageOptional = messagingService.processMessage(requestMessage);
 
-        if (responseMessage != null) {
+        if (responseMessageOptional.isPresent()) {
+          Message responseMessage = responseMessageOptional.get();
+
           if ((isRequestMessageEncrypted) && (!responseMessage.isEncrypted())) {
             messagingService.encryptMessage(responseMessage);
           }

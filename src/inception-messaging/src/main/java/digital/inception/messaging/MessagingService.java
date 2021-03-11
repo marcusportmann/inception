@@ -16,12 +16,12 @@
 
 package digital.inception.messaging;
 
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.core.service.ValidationError;
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.core.util.ServiceUtil;
-import digital.inception.core.service.InvalidArgumentException;
-import digital.inception.core.service.ValidationError;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
@@ -38,6 +38,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -874,20 +875,23 @@ public class MessagingService implements IMessagingService, InitializingBean {
        * download attempts.
        */
       for (Message message : messages) {
-        if (StringUtils.hasText(message.getLockName())) {
-          if (!message.getLockName().equals(instanceName)) {
-            if (logger.isDebugEnabled()) {
-              logger.debug(
-                  "The message ("
-                      + message.getId()
-                      + ") that was originally locked for download using the lock name ("
-                      + message.getLockName()
-                      + ") will now be locked for download using the lock name ("
-                      + instanceName
-                      + ")");
-            }
-          }
-        }
+        message
+            .getLockName()
+            .ifPresent(
+                lockName -> {
+                  if (!Objects.equals(lockName, instanceName)) {
+                    if (logger.isDebugEnabled()) {
+                      logger.debug(
+                          "The message ("
+                              + message.getId()
+                              + ") that was originally locked for download using the lock name ("
+                              + message.getLockName()
+                              + ") will now be locked for download using the lock name ("
+                              + instanceName
+                              + ")");
+                    }
+                  }
+                });
 
         messageRepository.lockMessageForDownload(message.getId(), instanceName);
 
@@ -915,12 +919,12 @@ public class MessagingService implements IMessagingService, InitializingBean {
    *
    * <p>The message will be locked to prevent duplicate processing.
    *
-   * @return the next message that has been queued for processing or <b>null</b> if no messages are
-   *     currently queued for processing
+   * @return an Optional containing the next message that has been queued for processing or an empty
+   *     Optional if no messages are currently queued for processing
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public Message getNextMessageQueuedForProcessing() throws ServiceUnavailableException {
+  public Optional<Message> getNextMessageQueuedForProcessing() throws ServiceUnavailableException {
     try {
       LocalDateTime processedBefore = LocalDateTime.now();
 
@@ -945,9 +949,9 @@ public class MessagingService implements IMessagingService, InitializingBean {
         message.incrementProcessAttempts();
         message.setLastProcessed(when);
 
-        return message;
+        return Optional.of(message);
       } else {
-        return null;
+        return Optional.empty();
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -1047,10 +1051,11 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Process the message.
    *
    * @param message the message to process
-   * @return the response message or <b>null</b> if no response message exists
+   * @return an Optional containing the response message or an empty Optional if no response message
+   *     exists
    */
   @Override
-  public Message processMessage(Message message)
+  public Optional<Message> processMessage(Message message)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (message == null) {
       throw new InvalidArgumentException("message");
@@ -1693,34 +1698,42 @@ public class MessagingService implements IMessagingService, InitializingBean {
 
         for (Element messageHandlerElement : messageHandlerElements) {
           // Read the handler configuration
-          String name = XmlUtil.getChildElementText(messageHandlerElement, "name");
-          String className = XmlUtil.getChildElementText(messageHandlerElement, "class");
+          Optional<String> nameOptional =
+              XmlUtil.getChildElementText(messageHandlerElement, "name");
+          Optional<String> classNameOptional =
+              XmlUtil.getChildElementText(messageHandlerElement, "class");
 
-          MessageHandlerConfig messageHandlerConfig = new MessageHandlerConfig(name, className);
+          if (nameOptional.isPresent() && classNameOptional.isPresent()) {
 
-          // Get the "Messages" element
-          Element messagesElement = XmlUtil.getChildElement(messageHandlerElement, "messages");
+            MessageHandlerConfig messageHandlerConfig =
+                new MessageHandlerConfig(nameOptional.get(), classNameOptional.get());
 
-          // Read the message configuration for the handler
-          if (messagesElement != null) {
-            List<Element> messageElements = XmlUtil.getChildElements(messagesElement, "message");
+            // Get the "Messages" element
+            Optional<Element> messagesElement =
+                XmlUtil.getChildElement(messageHandlerElement, "messages");
 
-            for (Element messageElement : messageElements) {
-              UUID messageType = UUID.fromString(messageElement.getAttribute("type"));
-              boolean isSynchronous =
-                  messageElement.getAttribute("isSynchronous").equalsIgnoreCase("Y");
-              boolean isAsynchronous =
-                  messageElement.getAttribute("isAsynchronous").equalsIgnoreCase("Y");
-              boolean isSecure = messageElement.getAttribute("isSecure").equalsIgnoreCase("Y");
-              boolean isArchivable =
-                  messageElement.getAttribute("isArchivable").equalsIgnoreCase("Y");
+            // Read the message configuration for the handler
+            if (messagesElement.isPresent()) {
+              List<Element> messageElements =
+                  XmlUtil.getChildElements(messagesElement.get(), "message");
 
-              messageHandlerConfig.addMessageConfig(
-                  messageType, isSynchronous, isAsynchronous, isSecure, isArchivable);
+              for (Element messageElement : messageElements) {
+                UUID messageType = UUID.fromString(messageElement.getAttribute("type"));
+                boolean isSynchronous =
+                    messageElement.getAttribute("isSynchronous").equalsIgnoreCase("Y");
+                boolean isAsynchronous =
+                    messageElement.getAttribute("isAsynchronous").equalsIgnoreCase("Y");
+                boolean isSecure = messageElement.getAttribute("isSecure").equalsIgnoreCase("Y");
+                boolean isArchivable =
+                    messageElement.getAttribute("isArchivable").equalsIgnoreCase("Y");
+
+                messageHandlerConfig.addMessageConfig(
+                    messageType, isSynchronous, isAsynchronous, isSecure, isArchivable);
+              }
             }
-          }
 
-          messageHandlersConfig.add(messageHandlerConfig);
+            messageHandlersConfig.add(messageHandlerConfig);
+          }
         }
       }
     } catch (Throwable e) {

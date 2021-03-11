@@ -44,9 +44,8 @@ public class TenantData implements Serializable {
    */
   TenantData(Element element) {
     try {
-      this.id = UUID.fromString(element.getChildText("Id"));
-      this.name =
-          StringUtils.hasText(element.getChildText("Name")) ? element.getChildText("Name") : "";
+      element.getChildText("Id").ifPresent(id -> this.id = UUID.fromString(id));
+      element.getChildText("Name").ifPresent(name -> this.name = name);
     } catch (Throwable e) {
       throw new RuntimeException("Failed to extract the tenant data from the WBXML", e);
     }

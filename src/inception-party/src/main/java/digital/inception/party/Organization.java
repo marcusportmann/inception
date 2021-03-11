@@ -29,6 +29,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -185,8 +186,8 @@ public class Organization extends PartyBase implements Serializable {
    */
   @JsonIgnore
   @XmlTransient
-  @Size(max = 100)
-  @Column(table = "organizations", name = "countries_of_tax_residence", length = 100)
+  @Size(max = 30)
+  @Column(table = "organizations", name = "countries_of_tax_residence", length = 30)
   private String countriesOfTaxResidence;
 
   /** Constructs a new <b>Organization</b>. */
@@ -228,8 +229,7 @@ public class Organization extends PartyBase implements Serializable {
     contactMechanisms.removeIf(
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), contactMechanism.getType())
-                && Objects.equals(
-                    existingContactMechanism.getRole(), contactMechanism.getRole()));
+                && Objects.equals(existingContactMechanism.getRole(), contactMechanism.getRole()));
 
     contactMechanism.setParty(this);
 
@@ -336,14 +336,13 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the attribute with the specified type for the organization.
    *
    * @param type the code for the attribute type
-   * @return the attribute with the specified type for the organization or <b>null</b> if the
-   *     attribute could not be found
+   * @return an Optional containing the attribute with the specified type for the organization or an
+   *     empty Optional if the attribute could not be found
    */
-  public Attribute getAttribute(String type) {
+  public Optional<Attribute> getAttribute(String type) {
     return attributes.stream()
         .filter(attribute -> Objects.equals(attribute.getType(), type))
-        .findFirst()
-        .get();
+        .findFirst();
   }
 
   /**
@@ -365,17 +364,29 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the code for the contact mechanism type
    * @param purpose the code for the contact mechanism role
-   * @return the contact mechanism with the specified type and purpose for the organization or
-   *     <b>null</b> if the contact mechanism could not be found
+   * @return an Optional containing the contact mechanism with the specified type and purpose for
+   *     the organization or an empty Optional if the contact mechanism could not be found
    */
-  public ContactMechanism getContactMechanism(String type, String purpose) {
+  public Optional<ContactMechanism> getContactMechanism(String type, String purpose) {
     return contactMechanisms.stream()
         .filter(
             contactMechanism ->
                 Objects.equals(contactMechanism.getType(), type)
-                    && Objects.equals(contactMechanism.getRole(), purpose))
-        .findFirst()
-        .get();
+                    && contactMechanism.hasPurpose(purpose))
+        .findFirst();
+  }
+
+  /**
+   * Retrieve the contact mechanism with the specified role for the organization.
+   *
+   * @param role the code for the contact mechanism role
+   * @return an Optional containing the contact mechanism with the specified role for the
+   *     organization or an empty Optional if the contact mechanism could not be found
+   */
+  public Optional<ContactMechanism> getContactMechanism(String role) {
+    return contactMechanisms.stream()
+        .filter(contactMechanism -> Objects.equals(contactMechanism.getRole(), role))
+        .findFirst();
   }
 
   /**
@@ -405,6 +416,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "CountriesOfTaxResidence")
   @XmlElement(name = "CountryOfTaxResidence")
+  @Size(max = 10)
   public Set<String> getCountriesOfTaxResidence() {
     return Set.of(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence));
   }
@@ -466,14 +478,13 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the first physical address with the specified purpose for the organization.
    *
    * @param purpose the physical address purpose
-   * @return the first physical address with the specified purpose for the organization or <b>
-   *     null</b> if the physical address could not be found
+   * @return an Optional containing the first physical address with the specified purpose for the
+   *     organization or an empty Optional if the physical address could not be found
    */
-  public PhysicalAddress getPhysicalAddress(PhysicalAddressPurpose purpose) {
+  public Optional<PhysicalAddress> getPhysicalAddress(PhysicalAddressPurpose purpose) {
     return physicalAddresses.stream()
         .filter(physicalAddress -> physicalAddress.getPurposes().contains(purpose))
-        .findFirst()
-        .get();
+        .findFirst();
   }
 
   /**
@@ -494,14 +505,13 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the preference with the specified type for the organization.
    *
    * @param type the code for the preference type
-   * @return the preference with the specified type for the organization or <b>null</b> if the
-   *     preference could not be found
+   * @return an Optional containing the preference with the specified type for the organization or
+   *     an empty Optional if the preference could not be found
    */
-  public Preference getPreference(String type) {
+  public Optional<Preference> getPreference(String type) {
     return preferences.stream()
         .filter(preference -> Objects.equals(preference.getType(), type))
-        .findFirst()
-        .get();
+        .findFirst();
   }
 
   /**
@@ -523,11 +533,11 @@ public class Organization extends PartyBase implements Serializable {
    * association.
    *
    * @param type the code for the role type
-   * @return the role with the specified type for the organization independent of a party
-   *     association or <b>null</b> if the role could not be found
+   * @return an Optional containing the role with the specified type for the organization
+   *     independent of a party association or an empty Optional if the role could not be found
    */
-  public Role getRole(String type) {
-    return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst().get();
+  public Optional<Role> getRole(String type) {
+    return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst();
   }
 
   /**
@@ -548,14 +558,13 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the tax number with the specified type for the organization.
    *
    * @param type the tax number type
-   * @return the tax number with the specified type for the organization or <b>null</b> if the tax
-   *     number could not be found
+   * @return an Optional containing the tax number with the specified type for the organization or
+   *     an empty Optional if the tax number could not be found
    */
-  public TaxNumber getTaxNumber(String type) {
+  public Optional<TaxNumber> getTaxNumber(String type) {
     return taxNumbers.stream()
         .filter(taxNumber -> Objects.equals(taxNumber.getType(), type))
-        .findFirst()
-        .get();
+        .findFirst();
   }
 
   /**
@@ -610,6 +619,17 @@ public class Organization extends PartyBase implements Serializable {
   @XmlTransient
   public LocalDateTime getUpdated() {
     return super.getUpdated();
+  }
+
+  /**
+   * Returns whether the organization has an attribute with the specified type.
+   *
+   * @param type the code for the attribute type
+   * @return <b>true</b>> if the organization has an attribute with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasAttributeType(String type) {
+    return attributes.stream().anyMatch(attribute -> Objects.equals(attribute.getType(), type));
   }
 
   /**
@@ -736,11 +756,10 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
-   * organization.
+   * Set the ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization.
    *
-   * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax
-   *     residence for the organization
+   * @param countriesOfTaxResidence the ISO 3166-1 alpha-2 codes for the countries of tax residence
+   *     for the organization
    */
   public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
     this.countriesOfTaxResidence =
@@ -748,9 +767,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional code for the single country of tax residence for the organization.
+   * Set the code for the single country of tax residence for the organization.
    *
-   * @param countryOfTaxResidence the optional code for the single country of tax residence for the
+   * @param countryOfTaxResidence the code for the single country of tax residence for the
    *     organization
    */
   @JsonIgnore

@@ -79,7 +79,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData {
       return false;
     }
 
-    this.username = rootElement.getChildText("Username");
+    rootElement.getChildText("Username").ifPresent(username -> this.username = username);
 
     return true;
   }

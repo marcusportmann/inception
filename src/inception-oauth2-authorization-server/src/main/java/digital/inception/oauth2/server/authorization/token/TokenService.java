@@ -26,6 +26,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
@@ -161,31 +162,38 @@ public class TokenService implements ITokenService {
   private OAuth2AccessToken createOAuth2AccessToken(String username, Set<String> scopes)
       throws TokenCreationException {
     try {
-      UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
+      Optional<UUID> userDirectoryIdOptional = securityService.getUserDirectoryIdForUser(username);
 
-      // Retrieve the details for the user
-      User user = securityService.getUser(userDirectoryId, username);
+      if (userDirectoryIdOptional.isEmpty()) {
+        throw new TokenCreationException(
+            "Failed to retrieve the user directory ID for the user (" + username + ")");
+      } else {
+        UUID userDirectoryId = userDirectoryIdOptional.get();
 
-      // Retrieve the function codes for the user
-      List<String> functionCodes =
-          securityService.getFunctionCodesForUser(userDirectoryId, username);
+        // Retrieve the details for the user
+        User user = securityService.getUser(userDirectoryId, username);
 
-      // Retrieve the list of IDs for the tenants the user is associated with
-      List<UUID> tenantIds = securityService.getTenantIdsForUserDirectory(userDirectoryId);
+        // Retrieve the function codes for the user
+        List<String> functionCodes =
+            securityService.getFunctionCodesForUser(userDirectoryId, username);
 
-      // Retrieve the list of roles for the user
-      List<String> roleCodes = securityService.getRoleCodesForUser(userDirectoryId, username);
+        // Retrieve the list of IDs for the tenants the user is associated with
+        List<UUID> tenantIds = securityService.getTenantIdsForUserDirectory(userDirectoryId);
 
-      // Build the OAuth2 access token
-      return OAuth2AccessToken.build(
-          user,
-          roleCodes,
-          functionCodes,
-          tenantIds,
-          scopes,
-          applicationName,
-          ACCESS_TOKEN_VALIDITY,
-          rsaPrivateKey);
+        // Retrieve the list of roles for the user
+        List<String> roleCodes = securityService.getRoleCodesForUser(userDirectoryId, username);
+
+        // Build the OAuth2 access token
+        return OAuth2AccessToken.build(
+            user,
+            roleCodes,
+            functionCodes,
+            tenantIds,
+            scopes,
+            applicationName,
+            ACCESS_TOKEN_VALIDITY,
+            rsaPrivateKey);
+      }
     } catch (Throwable e) {
       throw new TokenCreationException("Failed to create the OAuth2 access token", e);
     }

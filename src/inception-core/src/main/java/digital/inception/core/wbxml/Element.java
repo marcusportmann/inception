@@ -23,6 +23,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * The <b>Element</b> class stores the data for a WBXML element content type in a WBXML document.
@@ -106,34 +109,30 @@ public class Element implements Serializable, Content {
    * Returns the attribute with the specified name.
    *
    * @param name the name of the attribute
-   * @return the attribute with the specified name or <b>null</b> if no matching attribute could be
-   *     found
+   * @return an Optional containing the attribute with the specified name or an empty Optional if no
+   *     matching attribute could be found
    */
-  public Attribute getAttribute(String name) {
-    for (Attribute attribute : attributes) {
-      if (attribute.getName().equals(name)) {
-        return attribute;
-      }
-    }
-
-    return null;
+  public Optional<Attribute> getAttribute(String name) {
+    return attributes.stream()
+        .filter(attribute -> Objects.equals(attribute.getName(), name))
+        .findFirst();
   }
 
   /**
    * Returns the value for the attribute with the specified name.
    *
    * @param name the name of the attribute
-   * @return the value for the attribute with the specified name or <b>null</b> if no matching
-   *     attribute could be found
+   * @return an Optional containing the value for the attribute with the specified name or an empty
+   *     Optional if no matching attribute could be found
    */
-  public String getAttributeValue(String name) {
-    for (Attribute attribute : attributes) {
-      if (attribute.getName().equals(name)) {
-        return attribute.getValue();
-      }
-    }
+  public Optional<String> getAttributeValue(String name) {
+    Optional<Attribute> attributeOptional = getAttribute(name);
 
-    return null;
+    if (attributeOptional.isPresent()) {
+      return Optional.of(attributeOptional.get().getValue());
+    } else {
+      return Optional.empty();
+    }
   }
 
   /**
@@ -149,63 +148,63 @@ public class Element implements Serializable, Content {
    * Returns the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return the child element or <b>null</b> if an element with the specified name could not be
-   *     found
+   * @return an Optional containing the child element with the specified name or an empty Optional
+   *     if the child element could not be found
    */
-  public Element getChild(String name) {
+  public Optional<Element> getChild(String name) {
     for (Content tmpContent : content) {
       if (tmpContent instanceof Element) {
         Element element = (Element) tmpContent;
 
         if (element.getName().equals(name)) {
-          return element;
+          return Optional.of(element);
         }
       }
     }
 
-    return null;
+    return Optional.empty();
   }
 
   /**
    * Get the binary data content for the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return the binary data content for the child element or <b>null</b> if an element with the
-   *     specified name could not be found
+   * @return an Optional containing the binary data content for the child element or an empty
+   *     Optional if a child element with the specified name could not be found
    */
-  public byte[] getChildOpaque(String name) {
+  public Optional<byte[]> getChildOpaque(String name) {
     for (Content tmpContent : content) {
       if (tmpContent instanceof Element) {
         Element element = (Element) tmpContent;
 
         if (element.getName().equals(name)) {
-          return element.getOpaque();
+          return Optional.of(element.getOpaque());
         }
       }
     }
 
-    return null;
+    return Optional.empty();
   }
 
   /**
    * Get the text content for the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return the text content for the child element or <b>null</b> if an element with the specified
-   *     name could not be found
+   * @return an Optional containing the text content for the child element or an empty Optional if a
+   *     child element with the specified name could not be found
    */
-  public String getChildText(String name) {
+  public Optional<String> getChildText(String name) {
     for (Content tmpContent : content) {
       if (tmpContent instanceof Element) {
         Element element = (Element) tmpContent;
 
         if (element.getName().equals(name)) {
-          return element.getText();
+          return Optional.of(element.getText());
         }
       }
     }
 
-    return null;
+    return Optional.empty();
   }
 
   /**
@@ -232,19 +231,11 @@ public class Element implements Serializable, Content {
    * @return the child elements with the specified name
    */
   public List<Element> getChildren(String name) {
-    List<Element> list = new ArrayList<>();
-
-    for (Content tmpContent : content) {
-      if (tmpContent instanceof Element) {
-        Element e = (Element) tmpContent;
-
-        if (e.getName().equals(name)) {
-          list.add(e);
-        }
-      }
-    }
-
-    return list;
+    return content.stream()
+        .filter(tmpContent -> tmpContent instanceof Element)
+        .map(tmpContent -> (Element) tmpContent)
+        .filter(e -> Objects.equals(e.getName(), name))
+        .collect(Collectors.toList());
   }
 
   /**
@@ -304,8 +295,7 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Returns <b>true</b> if the element has an attribute with the specified name or <b> false</b>
-   * otherwise.
+   * Returns whether the element has an attribute with the specified name.
    *
    * @param name the name of the attribute
    * @return <b>true</b> if the element has an attribute with the specified name or <b> false</b>
@@ -335,7 +325,7 @@ public class Element implements Serializable, Content {
    * otherwise.
    *
    * @param name the name of the child element
-   * @return <b>true</b> if the element has a child element with the specified name or <b> false</b>
+   * @return <b>true</b> if the element has a child element with the specified name or <b>false</b>
    *     otherwise
    */
   public boolean hasChild(String name) {

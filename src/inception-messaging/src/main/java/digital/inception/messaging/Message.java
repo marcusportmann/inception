@@ -28,6 +28,7 @@ import digital.inception.core.xml.LocalDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -265,51 +266,62 @@ public class Message {
   public Message(Document document) throws MessagingException {
     Element rootElement = document.getRootElement();
 
-    this.id = UUID.fromString(rootElement.getAttributeValue("id"));
-    this.username = rootElement.getAttributeValue("username");
-    this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
-    this.typeId = UUID.fromString(rootElement.getAttributeValue("typeId"));
+    rootElement.getAttributeValue("id").ifPresent(id -> this.id = UUID.fromString(id));
 
-    if (rootElement.hasAttribute("correlationId")) {
-      this.correlationId = UUID.fromString(rootElement.getAttributeValue("correlationId"));
-    }
+    rootElement.getAttributeValue("username").ifPresent(username -> this.username = username);
 
-    this.priority =
-        MessagePriority.fromNumericCode(
-            Integer.parseInt(rootElement.getAttributeValue("priority")));
+    rootElement
+        .getAttributeValue("deviceId")
+        .ifPresent(deviceId -> this.deviceId = UUID.fromString(deviceId));
+
+    rootElement
+        .getAttributeValue("typeId")
+        .ifPresent(typeId -> this.typeId = UUID.fromString(typeId));
+
+    rootElement
+        .getAttributeValue("correlationId")
+        .ifPresent(correlationId -> this.correlationId = UUID.fromString(correlationId));
+
+    rootElement
+        .getAttributeValue("priority")
+        .ifPresent(
+            priority ->
+                this.priority = MessagePriority.fromNumericCode(Integer.parseInt(priority)));
+
     this.data = rootElement.getOpaque();
 
-    if (rootElement.hasAttribute("dataHash")) {
-      this.dataHash = rootElement.getAttributeValue("dataHash");
-    }
+    rootElement.getAttributeValue("dataHash").ifPresent(dataHash -> this.dataHash = dataHash);
 
-    if (rootElement.hasAttribute("encryptionIV")) {
-      this.encryptionIV = rootElement.getAttributeValue("encryptionIV");
-    }
+    rootElement
+        .getAttributeValue("encryptionIV")
+        .ifPresent(encryptionIV -> this.encryptionIV = encryptionIV);
 
-    String createdAttributeValue = rootElement.getAttributeValue("created");
+    rootElement
+        .getAttributeValue("created")
+        .ifPresent(
+            created -> {
+              try {
+                this.created = ISO8601Util.toLocalDateTime(created);
+              } catch (Throwable e) {
+                throw new RuntimeException(
+                    String.format(
+                        "Failed to parse the created ISO8601 timestamp (%s) for the message (%s)",
+                        created, id),
+                    e);
+              }
+            });
 
-    try {
-      this.created = ISO8601Util.toLocalDateTime(createdAttributeValue);
-    } catch (Throwable e) {
-      throw new MessagingException(
-          String.format(
-              "Failed to parse the created ISO8601 timestamp (%s) for the message (%s)",
-              createdAttributeValue, id),
-          e);
-    }
+    rootElement
+        .getAttributeValue("sendAttempts")
+        .ifPresent(sendAttempts -> this.sendAttempts = Integer.parseInt(sendAttempts));
 
-    if (rootElement.hasAttribute("sendAttempts")) {
-      this.sendAttempts = Integer.parseInt(rootElement.getAttributeValue("sendAttempts"));
-    }
+    rootElement
+        .getAttributeValue("processAttempts")
+        .ifPresent(processAttempts -> this.processAttempts = Integer.parseInt(processAttempts));
 
-    if (rootElement.hasAttribute("processAttempts")) {
-      this.processAttempts = Integer.parseInt(rootElement.getAttributeValue("processAttempts"));
-    }
-
-    if (rootElement.hasAttribute("downloadAttempts")) {
-      this.downloadAttempts = Integer.parseInt(rootElement.getAttributeValue("downloadAttempts"));
-    }
+    rootElement
+        .getAttributeValue("downloadAttempts")
+        .ifPresent(downloadAttempts -> this.downloadAttempts = Integer.parseInt(downloadAttempts));
 
     this.status = MessageStatus.INITIALIZED;
   }
@@ -610,14 +622,13 @@ public class Message {
   }
 
   /**
-   * Returns the name of the entity that has locked this message for processing or <b>null</b> if
-   * the message is not being processed.
+   * Returns the name of the entity that has locked this message for processing.
    *
-   * @return the name of the entity that has locked this message for processing or <b>null</b> if
-   *     the message is not being processed
+   * @return an Optional containing the name of the entity that has locked this message for
+   *     processing or an empty Optional if the message is not being processed
    */
-  public String getLockName() {
-    return lockName;
+  public Optional<String> getLockName() {
+    return Optional.ofNullable(lockName);
   }
 
   /**

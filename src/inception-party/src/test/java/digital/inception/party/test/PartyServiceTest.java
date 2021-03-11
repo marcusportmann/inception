@@ -300,9 +300,13 @@ public class PartyServiceTest {
 
     person.addContactMechanism(
         new ContactMechanism(
-            ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27835551234", "invalid_purpose"));
+            ContactMechanismType.MOBILE_NUMBER,
+            "personal_mobile_number",
+            "+27835551234",
+            "invalid_purpose"));
 
-    Set<ConstraintViolation<Person>> personConstraintViolations = partyService.validatePerson(person);
+    Set<ConstraintViolation<Person>> personConstraintViolations =
+        partyService.validatePerson(person);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid person",
@@ -313,42 +317,17 @@ public class PartyServiceTest {
 
     organization.addContactMechanism(
         new ContactMechanism(
-            ContactMechanismType.EMAIL_ADDRESS, "main_email_address", "test@test.com", "invalid_purpose"));
+            ContactMechanismType.EMAIL_ADDRESS,
+            "main_email_address",
+            "test@test.com",
+            "invalid_purpose"));
 
-    Set<ConstraintViolation<Organization>> organizationConstraintViolations = partyService.validateOrganization(organization);
+    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
+        partyService.validateOrganization(organization);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid organization",
         1,
-        organizationConstraintViolations.size());
-  }
-
-
-  /** Test the role type attribute constraint functionality. */
-  @Test
-  public void roleTypeAttributeConstraintTest() throws Exception {
-    Person person = getTestBasicPersonDetails();
-
-    person.addRole(new Role("test_person_role"));
-
-    Set<ConstraintViolation<Person>> personConstraintViolations = partyService.validatePerson(person);
-
-    assertEquals(
-        "The correct number of constraint violations was not found for the invalid person",
-        28,
-        personConstraintViolations.size());
-
-    Organization organization = getTestOrganizationDetails();
-
-    organization.removeIdentityDocumentByType("za_company_registration");
-
-    organization.addRole(new Role("test_organization_role"));
-
-    Set<ConstraintViolation<Organization>> organizationConstraintViolations = partyService.validateOrganization(organization);
-
-    assertEquals(
-        "The correct number of constraint violations was not found for the invalid organization",
-        10,
         organizationConstraintViolations.size());
   }
 
@@ -874,6 +853,8 @@ public class PartyServiceTest {
   public void personTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
+    person.setCountryOfCitizenship("ZA");
+
     partyService.createPerson(person);
 
     Persons filteredPersons =
@@ -892,36 +873,6 @@ public class PartyServiceTest {
 
     partyService.createPerson(person);
 
-    //    try (Connection connection = dataSource.getConnection()) {
-    //      try (PreparedStatement statement =
-    //          connection.prepareStatement("SELECT type, purpose FROM party.contact_mechanisms")) {
-    //        try (ResultSet rs = statement.executeQuery()) {
-    //          while (rs.next()) {
-    //            Integer contactMechanismType = rs.getInt(1);
-    //            Integer contactMechanismRole = rs.getInt(2);
-    //
-    //            int xxx = 0;
-    //            xxx++;
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    try (Connection connection = dataSource.getConnection()) {
-    //      try (PreparedStatement statement =
-    //          connection.prepareStatement("SELECT type, purpose FROM party.physical_addresses")) {
-    //        try (ResultSet rs = statement.executeQuery()) {
-    //          while (rs.next()) {
-    //            Integer physicalAddressType = rs.getInt(1);
-    //            Integer physicalAddressPurpose = rs.getInt(2);
-    //
-    //            int xxx = 0;
-    //            xxx++;
-    //          }
-    //        }
-    //      }
-    //    }
-
     filteredPersons =
         partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
@@ -932,6 +883,7 @@ public class PartyServiceTest {
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
+    person.setCountriesOfCitizenship(Set.of("ZA", "GB"));
     person.setCountryOfBirth("GB");
     person.setCountryOfResidence("ZA");
     person.setCountryOfTaxResidence("GB");
@@ -960,11 +912,17 @@ public class PartyServiceTest {
 
     person.addAttribute(new Attribute("height", "180cm"));
 
+    Attribute attribute = new Attribute("complex_attribute");
+    attribute.setBooleanValue(true);
+    attribute.setDateValue(LocalDate.now());
+    attribute.setDoubleValue(123.456);
+    attribute.setStringValue("String Value");
+
+    person.addAttribute(new Attribute("height", "180cm"));
+
     person.removeContactMechanism("fax_number", "main_fax_number");
 
-    person
-        .getContactMechanism(ContactMechanismType.EMAIL_ADDRESS, "personal_email_address")
-        .setValue("test.updated@test.com");
+    person.getContactMechanism("personal_email_address").get().setValue("test.updated@test.com");
 
     person.addContactMechanism(
         new ContactMechanism("phone_number", "home_phone_number", "0115551234"));
@@ -1126,6 +1084,36 @@ public class PartyServiceTest {
     partyService.deleteParty(person.getId());
   }
 
+  /** Test the role type attribute constraint functionality. */
+  @Test
+  public void roleTypeAttributeConstraintTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addRole(new Role("test_person_role"));
+
+    Set<ConstraintViolation<Person>> personConstraintViolations =
+        partyService.validatePerson(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid person",
+        29,
+        personConstraintViolations.size());
+
+    Organization organization = getTestOrganizationDetails();
+
+    organization.removeIdentityDocumentByType("za_company_registration");
+
+    organization.addRole(new Role("test_organization_role"));
+
+    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
+        partyService.validateOrganization(organization);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid organization",
+        10,
+        organizationConstraintViolations.size());
+  }
+
   /** Test the organization validation functionality. */
   @Test
   public void validateOrganizationTest() {
@@ -1168,6 +1156,22 @@ public class PartyServiceTest {
         "The type values for the two attributes do not match",
         attribute1.getType(),
         attribute2.getType());
+    assertEquals(
+        "The boolean value values for the two attributes do not match",
+        attribute1.getBooleanValue(),
+        attribute2.getBooleanValue());
+    assertEquals(
+        "The date value values for the two attributes do not match",
+        attribute1.getDateValue(),
+        attribute2.getDateValue());
+    assertEquals(
+        "The double value values for the two attributes do not match",
+        attribute1.getDoubleValue(),
+        attribute2.getDoubleValue());
+    assertEquals(
+        "The integer value values for the two attributes do not match",
+        attribute1.getIntegerValue(),
+        attribute2.getIntegerValue());
     assertEquals(
         "The string value values for the two attributes do not match",
         attribute1.getStringValue(),
@@ -1312,6 +1316,10 @@ public class PartyServiceTest {
   }
 
   private void comparePersons(Person person1, Person person2) {
+    assertEquals(
+        "The countries of citizenship values for the two persons do not match",
+        person1.getCountriesOfCitizenship(),
+        person2.getCountriesOfCitizenship());
     assertEquals(
         "The countries of tax residence values for the two persons do not match",
         person1.getCountriesOfTaxResidence(),
@@ -1482,9 +1490,13 @@ public class PartyServiceTest {
                 .equals(person2IdentityDocument.getDateOfIssue())) {
 
           assertEquals(
-              "The date of expiry for the two identity documents do not match",
+              "The date of expiry for the two identity documents does not match",
               person1IdentityDocument.getDateOfExpiry(),
               person2IdentityDocument.getDateOfExpiry());
+          assertEquals(
+              "The date provided for the two identity documents does not match",
+              person1IdentityDocument.getDateProvided(),
+              person2IdentityDocument.getDateProvided());
           assertEquals(
               "The numbers for the two identity documents do not match",
               person1IdentityDocument.getNumber(),

@@ -1767,13 +1767,17 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return <b>true</b> if the code is a valid code for a tax number type or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidTaxNumberType(String partyTypeCode, String taxNumberTypeCode) throws ServiceUnavailableException {
+  public boolean isValidTaxNumberType(String partyTypeCode, String taxNumberTypeCode)
+      throws ServiceUnavailableException {
     if (!StringUtils.hasText(taxNumberTypeCode)) {
       return false;
     }
 
     return self.getTaxNumberTypes().stream()
-        .anyMatch(taxNumberType -> taxNumberType.getCode().equals(taxNumberTypeCode) && taxNumberType.isValidForPartyType(partyTypeCode));
+        .anyMatch(
+            taxNumberType ->
+                taxNumberType.getCode().equals(taxNumberTypeCode)
+                    && taxNumberType.isValidForPartyType(partyTypeCode));
   }
 
   /**

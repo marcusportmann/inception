@@ -39,20 +39,20 @@ public class CodeCategoryData implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The XML or JSON data for the code category. */
-  private final String codeData;
-
   /** The codes for the code category. */
   private final List<CodeData> codes;
 
+  /** The XML or JSON data for the code category. */
+  private String codeData;
+
   /** The ID for the code category. */
-  private final String id;
+  private String id;
 
   /** The date and time the code category was last updated. */
-  private final LocalDateTime lastUpdated;
+  private LocalDateTime lastUpdated;
 
   /** The name of the code category. */
-  private final String name;
+  private String name;
 
   /**
    * Constructs a new <b>CodeCategoryData</b>.
@@ -60,40 +60,44 @@ public class CodeCategoryData implements Serializable {
    * @param element the WBXML element containing the code category data
    */
   CodeCategoryData(Element element) {
-    this.id = element.getChildText("Id");
-    this.name = element.getChildText("Name");
+    element.getChildText("Id").ifPresent(id -> this.id = id);
 
-    String lastUpdatedValue = element.getChildText("LastUpdated");
+    element.getChildText("Name").ifPresent(name -> this.name = name);
 
-    if (lastUpdatedValue.contains("T")) {
-      try {
-        this.lastUpdated = ISO8601Util.toLocalDateTime(lastUpdatedValue);
-      } catch (Throwable e) {
-        throw new RuntimeException(
-            "Failed to parse the LastUpdated ISO8601 timestamp ("
-                + lastUpdatedValue
-                + ") for the code category data",
-            e);
-      }
-    } else {
-      this.lastUpdated =
-          LocalDateTime.ofInstant(
-              Instant.ofEpochSecond(Long.parseLong(lastUpdatedValue)), ZoneId.systemDefault());
-    }
+    element
+        .getChildText("LastUpdated")
+        .ifPresent(
+            lastUpdatedValue -> {
+              if (lastUpdatedValue.contains("T")) {
+                try {
+                  this.lastUpdated = ISO8601Util.toLocalDateTime(lastUpdatedValue);
+                } catch (Throwable e) {
+                  throw new RuntimeException(
+                      "Failed to parse the LastUpdated ISO8601 timestamp ("
+                          + lastUpdatedValue
+                          + ") for the code category data",
+                      e);
+                }
+              } else {
+                this.lastUpdated =
+                    LocalDateTime.ofInstant(
+                        Instant.ofEpochSecond(Long.parseLong(lastUpdatedValue)),
+                        ZoneId.systemDefault());
+              }
+            });
 
-    if (element.hasChild("CodeData")) {
-      this.codeData = element.getChildText("CodeData");
-    } else {
-      this.codeData = "";
-    }
+    element.getChildText("CodeData").ifPresent(codeData -> this.codeData = codeData);
 
     this.codes = new ArrayList<>();
 
-    if (element.hasChild("Codes")) {
-      List<Element> codeElements = element.getChild("Codes").getChildren("Code");
-
-      this.codes.addAll(codeElements.stream().map(CodeData::new).collect(Collectors.toList()));
-    }
+    element
+        .getChild("Codes")
+        .ifPresent(
+            codesElement ->
+                this.codes.addAll(
+                    codesElement.getChildren("Code").stream()
+                        .map(CodeData::new)
+                        .collect(Collectors.toList())));
   }
 
   /**

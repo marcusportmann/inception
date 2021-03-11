@@ -16,7 +16,10 @@
 
 package digital.inception.party.constraints;
 
+import digital.inception.party.Attribute;
 import digital.inception.party.ContactMechanism;
+import digital.inception.party.IPartyReferenceService;
+import digital.inception.reference.IReferenceService;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -58,6 +61,42 @@ public abstract class PartyValidator {
           + "|260|263)(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210"
           + "]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{4,20}$";
 
+  /** The Party Reference Service. */
+  private final IPartyReferenceService partyReferenceService;
+
+  /** The Reference Service. */
+  private final IReferenceService referenceService;
+
+  /**
+   * Constructs a new <b>ValidPersonValidator</b>.
+   *
+   * @param partyReferenceService the Party Reference Service
+   * @param referenceService the Reference Service
+   */
+  public PartyValidator(
+      IPartyReferenceService partyReferenceService, IReferenceService referenceService) {
+    this.partyReferenceService = partyReferenceService;
+    this.referenceService = referenceService;
+  }
+
+  /**
+   * Returns the Party Reference Service
+   *
+   * @return the Party Reference Service
+   */
+  public IPartyReferenceService getPartyReferenceService() {
+    return partyReferenceService;
+  }
+
+  /**
+   * Returns the Reference Service
+   *
+   * @return the Reference Service
+   */
+  public IReferenceService getReferenceService() {
+    return referenceService;
+  }
+
   /**
    * Check whether the e-mail address is valid.
    *
@@ -83,6 +122,41 @@ public abstract class PartyValidator {
       return Pattern.matches(MOBILE_NUMBER_PATTERN, mobileNumber);
     } else {
       return false;
+    }
+  }
+
+  /**
+   * Validate the contact mechanism type attribute.
+   *
+   * @param attribute the attribute
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the attribute value is valid or <b>false</b> otherwise
+   */
+  protected boolean validateContactMechanismTypeAttribute(
+      Attribute attribute, HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    try {
+      boolean isValid =
+          partyReferenceService.isValidContactMechanismType(attribute.getStringValue());
+
+      if (!isValid) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("contactMechanismType", attribute.getStringValue())
+            .addMessageParameter("attributeType", attribute.getType())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.party.constraints.ValidParty.invalidContactMechanismTypeForAttributeType.message}")
+            .addPropertyNode("attributes")
+            .addPropertyNode("type")
+            .inIterable()
+            .addConstraintViolation();
+      }
+
+      return isValid;
+    } catch (Throwable e) {
+      throw new ValidationException(
+          "Failed to verify that the attribute value ("
+              + attribute.getStringValue()
+              + ") is a valid contact mechanism type");
     }
   }
 

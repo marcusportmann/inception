@@ -20,14 +20,13 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <b>AttributeConstraintTypeConverter</b> class implements the custom JPA converter for the
- * <b>AttributeConstraintType</b> enumeration.
+ * The <b>ConstraintTypeConverter</b> class implements the custom JPA converter for the
+ * <b>ConstraintType</b> enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-public class AttributeConstraintTypeConverter
-    implements AttributeConverter<AttributeConstraintType, String> {
+public class ConstraintTypeConverter implements AttributeConverter<ConstraintType, String> {
 
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
@@ -37,7 +36,7 @@ public class AttributeConstraintTypeConverter
    * @return the converted data to be stored in the database column
    */
   @Override
-  public String convertToDatabaseColumn(AttributeConstraintType attribute) {
+  public String convertToDatabaseColumn(ConstraintType attribute) {
     if (attribute == null) {
       return null;
     }
@@ -54,10 +53,10 @@ public class AttributeConstraintTypeConverter
    * @return the converted value to be stored in the entity attribute
    */
   @Override
-  public AttributeConstraintType convertToEntityAttribute(String dbData) {
+  public ConstraintType convertToEntityAttribute(String dbData) {
     if (dbData == null) {
       return null;
     }
-    return AttributeConstraintType.fromCode(dbData);
+    return ConstraintType.fromCode(dbData);
   }
 }

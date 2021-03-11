@@ -18,6 +18,7 @@ package digital.inception.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;
@@ -151,17 +152,18 @@ public abstract class SecureApi {
    *
    * @param authentication the authenticated principal associated with the authenticated request
    * @param prefix the authority prefix
-   * @return the value portion of the authority with the specified prefix or <b>null</b> if the
-   *     authority with the specified prefix could not be found
+   * @return an Optional containing the value portion of the authority with the specified prefix or
+   *     an empty Optional if the authority with the specified prefix could not be found
    */
-  protected String getValueForAuthorityWithPrefix(Authentication authentication, String prefix) {
+  protected Optional<String> getValueForAuthorityWithPrefix(
+      Authentication authentication, String prefix) {
     for (GrantedAuthority authority : authentication.getAuthorities()) {
       if (authority.getAuthority().startsWith(prefix)) {
-        return authority.getAuthority().substring(prefix.length());
+        return Optional.of(authority.getAuthority().substring(prefix.length()));
       }
     }
 
-    return null;
+    return Optional.empty();
   }
 
   /**

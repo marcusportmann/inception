@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -114,7 +115,13 @@ public class SystemMessageTest {
     Message requestMessage =
         messageTranslator.toMessage(requestData, UuidCreator.getShortPrefixComb());
 
-    Message responseMessage = messagingService.processMessage(requestMessage);
+    Optional<Message> responseMessageOptional = messagingService.processMessage(requestMessage);
+
+    if (responseMessageOptional.isEmpty()) {
+      fail("Failed to retrieve the response message");
+    }
+
+    Message responseMessage = responseMessageOptional.get();
 
     AnotherTestResponseData responseData =
         messageTranslator.fromMessage(responseMessage, new AnotherTestResponseData());
@@ -134,7 +141,13 @@ public class SystemMessageTest {
     Message requestMessage =
         messageTranslator.toMessage(requestData, UuidCreator.getShortPrefixComb());
 
-    Message responseMessage = messagingService.processMessage(requestMessage);
+    Optional<Message> responseMessageOptional = messagingService.processMessage(requestMessage);
+
+    if (responseMessageOptional.isEmpty()) {
+      fail("Failed to retrieve the response message");
+    }
+
+    Message responseMessage = responseMessageOptional.get();
 
     AuthenticateResponseData responseData =
         messageTranslator.fromMessage(responseMessage, new AuthenticateResponseData());
@@ -170,7 +183,13 @@ public class SystemMessageTest {
     Message requestMessage =
         messageTranslator.toMessage(requestData, UuidCreator.getShortPrefixComb());
 
-    Message responseMessage = messagingService.processMessage(requestMessage);
+    Optional<Message> responseMessageOptional = messagingService.processMessage(requestMessage);
+
+    if (responseMessageOptional.isEmpty()) {
+      fail("Failed to retrieve the response message");
+    }
+
+    Message responseMessage = responseMessageOptional.get();
 
     CheckUserExistsResponseData responseData =
         messageTranslator.fromMessage(responseMessage, new CheckUserExistsResponseData());
@@ -213,7 +232,13 @@ public class SystemMessageTest {
       Message requestMessage =
           messageTranslator.toMessage(requestData, UuidCreator.getShortPrefixComb());
 
-      Message responseMessage = messagingService.processMessage(requestMessage);
+      Optional<Message> responseMessageOptional = messagingService.processMessage(requestMessage);
+
+      if (responseMessageOptional.isEmpty()) {
+        fail("Failed to retrieve the response message");
+      }
+
+      Message responseMessage = responseMessageOptional.get();
 
       GetCodeCategoryResponseData responseData =
           messageTranslator.fromMessage(responseMessage, new GetCodeCategoryResponseData());
@@ -264,7 +289,13 @@ public class SystemMessageTest {
       Message requestMessage =
           messageTranslator.toMessage(requestData, UuidCreator.getShortPrefixComb());
 
-      Message responseMessage = messagingService.processMessage(requestMessage);
+      Optional<Message> responseMessageOptional = messagingService.processMessage(requestMessage);
+
+      if (responseMessageOptional.isEmpty()) {
+        fail("Failed to retrieve the response message");
+      }
+
+      Message responseMessage = responseMessageOptional.get();
 
       GetCodeCategoryResponseData responseData =
           messageTranslator.fromMessage(responseMessage, new GetCodeCategoryResponseData());
@@ -317,7 +348,13 @@ public class SystemMessageTest {
       Message requestMessage =
           messageTranslator.toMessage(requestData, UuidCreator.getShortPrefixComb());
 
-      Message responseMessage = messagingService.processMessage(requestMessage);
+      Optional<Message> responseMessageOptional = messagingService.processMessage(requestMessage);
+
+      if (responseMessageOptional.isEmpty()) {
+        fail("Failed to retrieve the response message");
+      }
+
+      Message responseMessage = responseMessageOptional.get();
 
       GetCodeCategoryResponseData responseData =
           messageTranslator.fromMessage(responseMessage, new GetCodeCategoryResponseData());
@@ -368,7 +405,13 @@ public class SystemMessageTest {
     Message requestMessage =
         messageTranslator.toMessage(requestData, UuidCreator.getShortPrefixComb());
 
-    Message responseMessage = messagingService.processMessage(requestMessage);
+    Optional<Message> responseMessageOptional = messagingService.processMessage(requestMessage);
+
+    if (responseMessageOptional.isEmpty()) {
+      fail("Failed to retrieve the response message");
+    }
+
+    Message responseMessage = responseMessageOptional.get();
 
     GetCodeCategoryResponseData responseData =
         messageTranslator.fromMessage(responseMessage, new GetCodeCategoryResponseData());
@@ -403,7 +446,13 @@ public class SystemMessageTest {
     Message requestMessage =
         messageTranslator.toMessage(requestData, UuidCreator.getShortPrefixComb());
 
-    Message responseMessage = messagingService.processMessage(requestMessage);
+    Optional<Message> responseMessageOptional = messagingService.processMessage(requestMessage);
+
+    if (responseMessageOptional.isEmpty()) {
+      fail("Failed to retrieve the response message");
+    }
+
+    Message responseMessage = responseMessageOptional.get();
 
     SubmitErrorReportResponseData responseData =
         messageTranslator.fromMessage(responseMessage, new SubmitErrorReportResponseData());
@@ -427,7 +476,13 @@ public class SystemMessageTest {
     Message requestMessage =
         messageTranslator.toMessage(requestData, UuidCreator.getShortPrefixComb());
 
-    Message responseMessage = messagingService.processMessage(requestMessage);
+    Optional<Message> responseMessageOptional = messagingService.processMessage(requestMessage);
+
+    if (responseMessageOptional.isEmpty()) {
+      fail("Failed to retrieve the response message");
+    }
+
+    Message responseMessage = responseMessageOptional.get();
 
     TestResponseData responseData =
         messageTranslator.fromMessage(responseMessage, new TestResponseData());

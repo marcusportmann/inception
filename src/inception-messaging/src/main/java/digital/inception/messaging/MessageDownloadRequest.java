@@ -51,8 +51,11 @@ public class MessageDownloadRequest {
   public MessageDownloadRequest(Document document) {
     Element rootElement = document.getRootElement();
 
-    this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
-    this.username = rootElement.getAttributeValue("username");
+    rootElement
+        .getAttributeValue("deviceId")
+        .ifPresent(deviceId -> this.deviceId = UUID.fromString(deviceId));
+
+    rootElement.getAttributeValue("username").ifPresent(username -> this.username = username);
   }
 
   /**

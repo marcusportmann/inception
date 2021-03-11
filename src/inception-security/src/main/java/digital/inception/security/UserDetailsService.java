@@ -18,6 +18,7 @@ package digital.inception.security;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,14 +48,16 @@ public class UserDetailsService
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     try {
-      UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
+      Optional<UUID> userDirectoryIdOptional = securityService.getUserDirectoryIdForUser(username);
 
-      if (userDirectoryId == null) {
+      if (userDirectoryIdOptional.isEmpty()) {
         throw new UsernameNotFoundException(
             "Failed to retrieve the details for the user ("
                 + username
                 + "): The user is not associated with any of the configured user directories");
       } else {
+        UUID userDirectoryId = userDirectoryIdOptional.get();
+
         // Retrieve the details for the user
         User user = securityService.getUser(userDirectoryId, username);
 

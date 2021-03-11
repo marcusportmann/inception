@@ -16,6 +16,8 @@
 
 package digital.inception.core.util;
 
+import java.util.Optional;
+
 /**
  * The <b>Base64Util</b> class provides a number of Base-64 related utility functions.
  *
@@ -350,37 +352,19 @@ public class Base64Util {
    * there was an error.
    *
    * @param encodedObject the Base64Util data to decode
-   * @return the decoded and deserialized object or <b>null</b> if there was an error
+   * @return an Optional containing the decoded and deserialized object or an empty Optional if
+   *     there was an error
    * @since 1.4
    */
-  public static Object decodeToObject(String encodedObject) {
+  public static Optional<Object> decodeToObject(String encodedObject) {
     byte[] objBytes = decode(encodedObject);
-    java.io.ByteArrayInputStream bais = null;
-    java.io.ObjectInputStream ois = null;
 
-    try {
-      bais = new java.io.ByteArrayInputStream(objBytes);
-      ois = new java.io.ObjectInputStream(bais);
+    try (java.io.ObjectInputStream ois =
+        new java.io.ObjectInputStream(new java.io.ByteArrayInputStream(objBytes))) {
 
-      return ois.readObject();
+      return Optional.of(ois.readObject());
     } catch (Throwable e) {
-      throw new Base64Exception("Failed to decode the base64 data to an object", e);
-    } finally {
-      try {
-        if (ois != null) {
-          bais.close();
-        }
-      } catch (Exception e) {
-        // Do nothing
-      }
-
-      try {
-        if (ois != null) {
-          ois.close();
-        }
-      } catch (Exception e) {
-        // Do nothing
-      }
+      return Optional.empty();
     }
   }
 

@@ -16,10 +16,10 @@
 
 package digital.inception.scheduler;
 
-import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
+import digital.inception.core.util.ServiceUtil;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -327,12 +327,12 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    *
    * <p>The job will be locked to prevent duplicate processing.
    *
-   * @return the next job that is scheduled for execution or <b>null</b> if no jobs are currently
-   *     scheduled for execution
+   * @return an Optional containing the next job that is scheduled for execution or an empty
+   *     Optional if no jobs are currently scheduled for execution
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public Job getNextJobScheduledForExecution() throws ServiceUnavailableException {
+  public Optional<Job> getNextJobScheduledForExecution() throws ServiceUnavailableException {
     try {
       LocalDateTime lastExecutedBefore = LocalDateTime.now();
 
@@ -358,9 +358,9 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
         job.incrementExecutionAttempts();
         job.setLastExecuted(when);
 
-        return job;
+        return Optional.of(job);
       } else {
-        return null;
+        return Optional.empty();
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
