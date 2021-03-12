@@ -2184,16 +2184,16 @@ INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, typ
   VALUES ('test_person_role', 'test_attribute', 'pattern', '^[a-zA-Z0-9]*$');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'test_contact_mechanism_type', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'test_contact_mechanism_type', 'contact_mechanism_type');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('test_person_role', 'test_contact_mechanism_type', 'reference', 'contact_mechanism_type');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'test_country', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'test_country', 'contact_mechanism_type');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('test_person_role', 'test_country', 'reference', 'country');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'test_language', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'test_language', 'contact_mechanism_type');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+  VALUES ('test_person_role', 'test_language', 'reference', 'language');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'test_size', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
