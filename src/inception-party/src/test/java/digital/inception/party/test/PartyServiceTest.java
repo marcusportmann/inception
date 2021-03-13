@@ -129,9 +129,9 @@ public class PartyServiceTest {
     person.setEmploymentType("self_employed");
     person.setGender("female");
     person.setGivenName("GivenName" + personCount);
-    person.setHomeLanguage("EN");
     person.setId(UuidCreator.getShortPrefixComb());
     person.setInitials("G M");
+    person.setLanguage("EN");
     person.setMaidenName("MaidenName" + personCount);
 
     if (isMarried) {
@@ -218,9 +218,9 @@ public class PartyServiceTest {
     person.setEmploymentType("contractor");
     person.setGender("male");
     person.setGivenName("GivenName" + personCount);
-    person.setHomeLanguage("EN");
     person.setId(UuidCreator.getShortPrefixComb());
     person.setInitials("G M");
+    person.setLanguage("EN");
     person.setMaritalStatus("single");
     person.setOccupation("driver");
     person.setPreferredName("PreferredName" + personCount);
@@ -893,8 +893,8 @@ public class PartyServiceTest {
     person.setEmploymentType("full_time");
     person.setGender("female");
     person.setGivenName(person.getGivenName() + " Updated");
-    person.setHomeLanguage("AF");
     person.setInitials(person.getInitials() + " Updated");
+    person.setLanguage("AF");
     person.setMaidenName(person.getMaidenName() + " Updated");
     person.setMaritalStatus("divorced");
     person.setMarriageType(null);
@@ -1357,15 +1357,15 @@ public class PartyServiceTest {
         person1.getGivenName(),
         person2.getGivenName());
     assertEquals(
-        "The home language values for the two persons do not match",
-        person1.getHomeLanguage(),
-        person2.getHomeLanguage());
-    assertEquals(
         "The ID values for the two persons do not match", person1.getId(), person2.getId());
     assertEquals(
         "The initials values for the two persons do not match",
         person1.getInitials(),
         person2.getInitials());
+    assertEquals(
+        "The language values for the two persons do not match",
+        person1.getLanguage(),
+        person2.getLanguage());
     assertEquals(
         "The maiden name values for the two persons do not match",
         person1.getMaidenName(),

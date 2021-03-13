@@ -897,7 +897,7 @@ CREATE TABLE party.persons (
   employment_type            VARCHAR(30),
   gender                     VARCHAR(30),
   given_name                 VARCHAR(100),
-  home_language              VARCHAR(30),
+  language                   VARCHAR(30),
   id                         UUID          NOT NULL,
   initials                   VARCHAR(20),
   maiden_name                VARCHAR(100),
@@ -940,11 +940,11 @@ COMMENT ON COLUMN party.persons.gender IS 'The optional code for the gender for 
 
 COMMENT ON COLUMN party.persons.given_name IS 'The optional given name for the person';
 
-COMMENT ON COLUMN party.persons.home_language IS 'The optional code for the home language for the person';
-
 COMMENT ON COLUMN party.persons.id IS 'The Universally Unique Identifier (UUID) for the person';
 
 COMMENT ON COLUMN party.persons.initials IS 'The optional initials for the person';
+
+COMMENT ON COLUMN party.persons.language IS 'The optional code for the language for the person';
 
 COMMENT ON COLUMN party.persons.maiden_name IS 'The optional maiden name for the person';
 
@@ -2145,11 +2145,11 @@ INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, typ
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'given_name', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'home_language', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'identity_documents', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'initials', 'required');
+INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'language', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'marital_status', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)

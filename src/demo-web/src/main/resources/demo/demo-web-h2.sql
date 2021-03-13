@@ -207,7 +207,7 @@ VALUES ('TestCode113', 'TestCodeCategory11', 'Test Code Name 11.3', 'Test Code V
 
 INSERT INTO party.parties(id, tenant_id, type, name, created)
 VALUES ('54166574-6564-468a-b845-8a5c127a4345', '204e5b8f-48e7-4354-bd15-753e6543b64d', 'person', 'Joe Bloggs', NOW());
-INSERT INTO party.persons(id, title, initials, given_name, surname, preferred_name, gender, race, date_of_birth, home_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, marriage_type, occupation, residency_status, residential_type, countries_of_tax_residence)
+INSERT INTO party.persons(id, title, initials, given_name, surname, preferred_name, gender, race, date_of_birth, language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, marriage_type, occupation, residency_status, residential_type, countries_of_tax_residence)
 VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'mr', 'J', 'Joe', 'Bloggs', 'Joe', 'male', 'white', '1976-03-07', 'EN', 'ZA', 'ZA', 'employed', 'full_time', 'married', 'anc_without_accrual', 'executive', 'citizen', 'owner', 'ZA');
 INSERT INTO party.identity_documents(party_id, type, number, date_of_issue, country_of_issue, created)
 VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'za_id_book', '7603079236083', '2007-08-04', 'ZA', NOW());
@@ -229,7 +229,7 @@ INSERT INTO party.parties (id, tenant_id, type, name, created)
 VALUES ('00166574-6564-468a-b845-8a5c127a4345', '204e5b8f-48e7-4354-bd15-753e6543b64d', 'person', 'Sally Smith', NOW());
 INSERT INTO party.roles (party_id, type, created)
 VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'test_person_role', NOW());
-INSERT INTO party.persons (id, title, initials, given_name, surname, gender, race, date_of_birth, home_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, occupation, residency_status, residential_type)
+INSERT INTO party.persons (id, title, initials, given_name, surname, gender, race, date_of_birth, language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, occupation, residency_status, residential_type)
 VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'ms', 'S', 'Sally', 'Smith', 'female', 'asian', '1985-05-01', 'EN', 'GB', 'ZA', 'other', 'unemployed', 'single', 'unemployed', 'citizen', 'cohabitant');
 INSERT INTO party.identity_documents (party_id, type, number, date_of_issue, country_of_issue, created)
 VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'za_id_card', '8505016777088', '2015-02-17', 'ZA', NOW());

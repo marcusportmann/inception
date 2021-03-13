@@ -126,41 +126,6 @@ public abstract class PartyValidator {
   }
 
   /**
-   * Validate the contact mechanism type attribute.
-   *
-   * @param attribute the attribute
-   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the attribute value is valid or <b>false</b> otherwise
-   */
-  protected boolean validateContactMechanismTypeAttribute(
-      Attribute attribute, HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
-      throws ValidationException {
-    try {
-      boolean isValid =
-          partyReferenceService.isValidContactMechanismType(attribute.getStringValue());
-
-      if (!isValid) {
-        hibernateConstraintValidatorContext
-            .addMessageParameter("contactMechanismType", attribute.getStringValue())
-            .addMessageParameter("attributeType", attribute.getType())
-            .buildConstraintViolationWithTemplate(
-                "{digital.inception.party.constraints.ValidParty.invalidContactMechanismTypeForAttributeType.message}")
-            .addPropertyNode("attributes")
-            .addPropertyNode("type")
-            .inIterable()
-            .addConstraintViolation();
-      }
-
-      return isValid;
-    } catch (Throwable e) {
-      throw new ValidationException(
-          "Failed to verify that the attribute value ("
-              + attribute.getStringValue()
-              + ") is a valid contact mechanism type");
-    }
-  }
-
-  /**
    * Validate the contact mechanism value.
    *
    * @param contactMechanism the contact mechanism
@@ -219,6 +184,194 @@ public abstract class PartyValidator {
   }
 
   /**
+   * Validate the maximum size attribute constraint.
+   *
+   * @param maximumSize the maximum size
+   * @param attribute the attribute
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the attribute is valid or <b>false</b> otherwise
+   */
+  protected boolean validateMaximumSizeAttributeConstraint(
+      int maximumSize,
+      Attribute attribute,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    if ((!StringUtils.hasText(attribute.getStringValue()))
+        || (attribute.getStringValue().length() > maximumSize)) {
+      hibernateConstraintValidatorContext
+          .addMessageParameter(
+              "value",
+              StringUtils.hasText(attribute.getStringValue()) ? attribute.getStringValue() : "")
+          .addMessageParameter("maximumSize", maximumSize)
+          .addMessageParameter("attributeType", attribute.getType())
+          .buildConstraintViolationWithTemplate(
+              "{digital.inception.party.constraints.ValidParty.invalidMaximumSizeForAttributeType.message}")
+          .addPropertyNode("attributes")
+          .addPropertyNode("stringValue")
+          .inIterable()
+          .addConstraintViolation();
+
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   * Validate the minimum size attribute constraint.
+   *
+   * @param minimumSize the minimum size
+   * @param attribute the attribute
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the attribute is valid or <b>false</b> otherwise
+   */
+  protected boolean validateMinimumSizeAttributeConstraint(
+      int minimumSize,
+      Attribute attribute,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    if ((!StringUtils.hasText(attribute.getStringValue()))
+        || (attribute.getStringValue().length() < minimumSize)) {
+      hibernateConstraintValidatorContext
+          .addMessageParameter(
+              "value",
+              StringUtils.hasText(attribute.getStringValue()) ? attribute.getStringValue() : "")
+          .addMessageParameter("minimumSize", minimumSize)
+          .addMessageParameter("attributeType", attribute.getType())
+          .buildConstraintViolationWithTemplate(
+              "{digital.inception.party.constraints.ValidParty.invalidMinimumSizeForAttributeType.message}")
+          .addPropertyNode("attributes")
+          .addPropertyNode("stringValue")
+          .inIterable()
+          .addConstraintViolation();
+
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   * Validate the pattern attribute constraint.
+   *
+   * @param pattern the pattern
+   * @param attribute the attribute
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the attribute is valid or <b>false</b> otherwise
+   */
+  protected boolean validatePatternAttributeConstraint(
+      String pattern,
+      Attribute attribute,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    if (StringUtils.hasText(attribute.getStringValue())) {
+      if (!Pattern.matches(pattern, attribute.getStringValue())) {
+
+        hibernateConstraintValidatorContext
+            .addMessageParameter(
+                "value",
+                StringUtils.hasText(attribute.getStringValue()) ? attribute.getStringValue() : "")
+            .addMessageParameter("attributeType", attribute.getType())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.party.constraints.ValidParty.patternMatchFailedForAttributeType.message}")
+            .addPropertyNode("attributes")
+            .addPropertyNode("stringValue")
+            .inIterable()
+            .addConstraintViolation();
+
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   * Validate the reference attribute constraint.
+   *
+   * @param referenceType the type of reference
+   * @param attribute the attribute
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the attribute is valid or <b>false</b> otherwise
+   */
+  protected boolean validateReferenceAttributeConstraint(
+      String referenceType,
+      Attribute attribute,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    boolean isValid;
+
+    try {
+      switch (referenceType) {
+        case "contact_mechanism_type":
+          isValid = partyReferenceService.isValidContactMechanismType(attribute.getStringValue());
+
+          if (!isValid) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("contactMechanismType", attribute.getStringValue())
+                .addMessageParameter("attributeType", attribute.getType())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidParty.invalidContactMechanismTypeForAttributeType.message}")
+                .addPropertyNode("attributes")
+                .addPropertyNode("type")
+                .inIterable()
+                .addConstraintViolation();
+          }
+
+          break;
+
+        case "country":
+          isValid = referenceService.isValidCountry(attribute.getStringValue());
+
+          if (!isValid) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("country", attribute.getStringValue())
+                .addMessageParameter("attributeType", attribute.getType())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidParty.invalidCountryForAttributeType.message}")
+                .addPropertyNode("attributes")
+                .addPropertyNode("type")
+                .inIterable()
+                .addConstraintViolation();
+          }
+
+          break;
+
+        case "language":
+          isValid = referenceService.isValidLanguage(attribute.getStringValue());
+
+          if (!isValid) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("language", attribute.getStringValue())
+                .addMessageParameter("attributeType", attribute.getType())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidParty.invalidLanguageForAttributeType.message}")
+                .addPropertyNode("attributes")
+                .addPropertyNode("stringValue")
+                .inIterable()
+                .addConstraintViolation();
+          }
+
+          break;
+
+        default:
+          throw new ValidationException("Invalid reference type (" + referenceType + ")");
+      }
+
+      return isValid;
+    } catch (Throwable e) {
+      throw new ValidationException(
+          "Failed to verify that the attribute value ("
+              + attribute.getStringValue()
+              + ") is a valid reference value of type ("
+              + referenceType
+              + ')');
+    }
+  }
+
+  /**
    * Validate the required attribute for the role type.
    *
    * @param roleType the code for the role type
@@ -228,7 +381,7 @@ public abstract class PartyValidator {
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
    * @return <b>true</b> if the attribute value is valid or <b>false</b> otherwise
    */
-  protected boolean validateRequiredAttributeForRoleType(
+  protected boolean validateRequiredAttributeConstraint(
       String roleType,
       Object attributeValue,
       String propertyNodeName,
@@ -266,5 +419,39 @@ public abstract class PartyValidator {
     }
 
     return isValid;
+  }
+
+  /**
+   * Validate the size attribute constraint.
+   *
+   * @param size the size
+   * @param attribute the attribute
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the attribute is valid or <b>false</b> otherwise
+   */
+  protected boolean validateSizeAttributeConstraint(
+      int size,
+      Attribute attribute,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    if ((!StringUtils.hasText(attribute.getStringValue()))
+        || (attribute.getStringValue().length() != size)) {
+      hibernateConstraintValidatorContext
+          .addMessageParameter(
+              "value",
+              StringUtils.hasText(attribute.getStringValue()) ? attribute.getStringValue() : "")
+          .addMessageParameter("size", attribute.getStringValue().length())
+          .addMessageParameter("attributeType", attribute.getType())
+          .buildConstraintViolationWithTemplate(
+              "{digital.inception.party.constraints.ValidParty.invalidSizeForAttributeType.message}")
+          .addPropertyNode("attributes")
+          .addPropertyNode("stringValue")
+          .inIterable()
+          .addConstraintViolation();
+
+      return false;
+    } else {
+      return true;
+    }
   }
 }

@@ -97,8 +97,8 @@ import org.springframework.util.StringUtils;
   "employmentType",
   "gender",
   "givenName",
-  "homeLanguage",
   "initials",
+  "language",
   "maidenName",
   "maritalStatus",
   "marriageType",
@@ -137,8 +137,8 @@ import org.springframework.util.StringUtils;
       "employmentType",
       "gender",
       "givenName",
-      "homeLanguage",
       "initials",
+      "language",
       "maidenName",
       "maritalStatus",
       "marriageType",
@@ -298,15 +298,15 @@ public class Person extends PartyBase implements Serializable {
   @Column(table = "persons", name = "given_name", length = 100)
   private String givenName;
 
-  /** The optional code for the home language for the person. */
-  @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "home_language", length = 30)
-  private String homeLanguage;
-
   /** The optional initials for the person. */
   @Size(min = 1, max = 20)
   @Column(table = "persons", name = "initials", length = 20)
   private String initials;
+
+  /** The optional code for the language for the person. */
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "language", length = 30)
+  private String language;
 
   /** The optional maiden name for the person. */
   @Size(min = 1, max = 100)
@@ -525,8 +525,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the attribute with the specified type for the person.
    *
    * @param type the code for the attribute type
-   * @return an Optional containing the attribute with the specified type for the person or an empty Optional if the attribute
-   *     could not be found
+   * @return an Optional containing the attribute with the specified type for the person or an empty
+   *     Optional if the attribute could not be found
    */
   public Optional<Attribute> getAttribute(String type) {
     return attributes.stream()
@@ -569,8 +569,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the contact mechanism with the specified role for the person.
    *
    * @param role the code for the contact mechanism role
-   * @return an Optional containing the contact mechanism with the specified role for the person or an empty Optional if the
-   *     contact mechanism could not be found
+   * @return an Optional containing the contact mechanism with the specified role for the person or
+   *     an empty Optional if the contact mechanism could not be found
    */
   public Optional<ContactMechanism> getContactMechanism(String role) {
     return contactMechanisms.stream()
@@ -742,18 +742,6 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the home language for the person.
-   *
-   * @return the optional code for the home language for the person
-   */
-  @Schema(description = "The optional code for the home language for the person")
-  @JsonProperty
-  @XmlElement(name = "HomeLanguage")
-  public String getHomeLanguage() {
-    return homeLanguage;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) for the person.
    *
    * @return the Universally Unique Identifier (UUID) for the person
@@ -790,6 +778,18 @@ public class Person extends PartyBase implements Serializable {
   @XmlElement(name = "Initials")
   public String getInitials() {
     return initials;
+  }
+
+  /**
+   * Returns the optional code for the language for the person.
+   *
+   * @return the optional code for the language for the person
+   */
+  @Schema(description = "The optional code for the language for the person")
+  @JsonProperty
+  @XmlElement(name = "Language")
+  public String getLanguage() {
+    return language;
   }
 
   /**
@@ -878,8 +878,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the first physical address with the specified purpose for the person.
    *
    * @param purpose the physical address purpose
-   * @return an Optional containing the first physical address with the specified purpose for the person or an empty Optional if
-   *     the physical address could not be found
+   * @return an Optional containing the first physical address with the specified purpose for the
+   *     person or an empty Optional if the physical address could not be found
    */
   public Optional<PhysicalAddress> getPhysicalAddress(PhysicalAddressPurpose purpose) {
     return physicalAddresses.stream()
@@ -905,8 +905,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the preference with the specified type for the person.
    *
    * @param type the code for the preference type
-   * @return an Optional containing the preference with the specified type for the person or an empty optional if the preference
-   *     could not be found
+   * @return an Optional containing the preference with the specified type for the person or an
+   *     empty optional if the preference could not be found
    */
   public Optional<Preference> getPreference(String type) {
     return preferences.stream()
@@ -997,8 +997,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the role with the specified type for the person independent of a party association.
    *
    * @param type the code for the role type
-   * @return an Optional containing the role with the specified type for the person independent of a party association or
-   *     an empty Optional if the role could not be found
+   * @return an Optional containing the role with the specified type for the person independent of a
+   *     party association or an empty Optional if the role could not be found
    */
   public Optional<Role> getRole(String type) {
     return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst();
@@ -1034,8 +1034,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the tax number with the specified type for the person.
    *
    * @param type the code for the tax number type
-   * @return an Optional containing the tax number with the specified type for the person or an empty Optional if the tax number
-   *     could not be found
+   * @return an Optional containing the tax number with the specified type for the person or an
+   *     empty Optional if the tax number could not be found
    */
   public Optional<TaxNumber> getTaxNumber(String type) {
     return taxNumbers.stream()
@@ -1371,15 +1371,6 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional code for the home language for the person.
-   *
-   * @param homeLanguage the optional code for the home language for the person
-   */
-  public void setHomeLanguage(String homeLanguage) {
-    this.homeLanguage = homeLanguage;
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) for the person.
    *
    * @param id the Universally Unique Identifier (UUID) for the person
@@ -1405,6 +1396,15 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setInitials(String initials) {
     this.initials = initials;
+  }
+
+  /**
+   * Set the optional code for the language for the person.
+   *
+   * @param language the optional code for the language for the person
+   */
+  public void setLanguage(String language) {
+    this.language = language;
   }
 
   /**

@@ -727,15 +727,15 @@ public class PartyReferenceServiceTest {
         person1.getGivenName(),
         person2.getGivenName());
     assertEquals(
-        "The home language values for the two persons do not match",
-        person1.getHomeLanguage(),
-        person2.getHomeLanguage());
-    assertEquals(
         "The ID values for the two persons do not match", person1.getId(), person2.getId());
     assertEquals(
         "The initials values for the two persons do not match",
         person1.getInitials(),
         person2.getInitials());
+    assertEquals(
+        "The language values for the two persons do not match",
+        person1.getLanguage(),
+        person2.getLanguage());
     assertEquals(
         "The maiden name values for the two persons do not match",
         person1.getMaidenName(),

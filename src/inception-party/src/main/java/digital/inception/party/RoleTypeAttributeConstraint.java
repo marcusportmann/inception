@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>RoleTypeAttributeConstraint</b> class holds the information for a constraint that should
@@ -93,14 +94,7 @@ public class RoleTypeAttributeConstraint implements Serializable {
   @Schema(
       description = "The constraint type",
       required = true,
-      allowableValues = {
-        "max_size",
-        "min_size",
-        "pattern",
-        "reference",
-        "required",
-        "size"
-      })
+      allowableValues = {"max_size", "min_size", "pattern", "reference", "required", "size"})
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -224,6 +218,19 @@ public class RoleTypeAttributeConstraint implements Serializable {
    */
   public String getAttributeTypeQualifier() {
     return attributeTypeQualifier;
+  }
+
+  /**
+   * Returns the integer value to apply when validating the attribute value.
+   *
+   * @return the integer value to apply when validating the attribute value
+   */
+  public int getIntegerValue() {
+    if (!StringUtils.hasText(value)) {
+      return 0;
+    } else {
+      return Integer.parseInt(value);
+    }
   }
 
   /**

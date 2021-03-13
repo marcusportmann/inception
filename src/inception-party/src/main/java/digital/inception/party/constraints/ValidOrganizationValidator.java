@@ -346,13 +346,43 @@ public class ValidOrganizationValidator extends PartyValidator
         getPartyReferenceService().getRoleTypeAttributeConstraints(roleType)) {
 
       if (roleTypeAttributeConstraint.getType() == ConstraintType.MAX_SIZE) {
-        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
+        Optional<Attribute> attributeOptional =
+            organization.getAttribute(roleTypeAttributeConstraint.getAttributeType());
+
+        if (attributeOptional.isPresent()) {
+          if (!validateMaximumSizeAttributeConstraint(
+              roleTypeAttributeConstraint.getIntegerValue(),
+              attributeOptional.get(),
+              hibernateConstraintValidatorContext)) {
+            isValid = false;
+          }
+        }
       } else if (roleTypeAttributeConstraint.getType() == ConstraintType.MIN_SIZE) {
-        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
+        Optional<Attribute> attributeOptional =
+            organization.getAttribute(roleTypeAttributeConstraint.getAttributeType());
+
+        if (attributeOptional.isPresent()) {
+          if (!validateMinimumSizeAttributeConstraint(
+              roleTypeAttributeConstraint.getIntegerValue(),
+              attributeOptional.get(),
+              hibernateConstraintValidatorContext)) {
+            isValid = false;
+          }
+        }
       } else if (roleTypeAttributeConstraint.getType() == ConstraintType.PATTERN) {
         // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
       } else if (roleTypeAttributeConstraint.getType() == ConstraintType.REFERENCE) {
-        // TODO: IMPLEMENT THIS VALIDATION  -- MARCUS
+        Optional<Attribute> attributeOptional =
+            organization.getAttribute(roleTypeAttributeConstraint.getAttributeType());
+
+        if (attributeOptional.isPresent()) {
+          if (!validateReferenceAttributeConstraint(
+              roleTypeAttributeConstraint.getValue(),
+              attributeOptional.get(),
+              hibernateConstraintValidatorContext)) {
+            isValid = false;
+          }
+        }
       } else if (roleTypeAttributeConstraint.getType() == ConstraintType.REQUIRED) {
         switch (roleTypeAttributeConstraint.getAttributeType()) {
           case "contact_mechanism":
@@ -374,7 +404,7 @@ public class ValidOrganizationValidator extends PartyValidator
             break;
 
           case "contact_mechanisms":
-            if (!validateRequiredAttributeForRoleType(
+            if (!validateRequiredAttributeConstraint(
                 roleType,
                 organization.getContactMechanisms(),
                 "contactMechanisms",
@@ -386,7 +416,7 @@ public class ValidOrganizationValidator extends PartyValidator
             break;
 
           case "countries_of_tax_residence":
-            if (!validateRequiredAttributeForRoleType(
+            if (!validateRequiredAttributeConstraint(
                 roleType,
                 organization.getCountriesOfTaxResidence(),
                 "countriesOfTaxResidence",
@@ -398,7 +428,7 @@ public class ValidOrganizationValidator extends PartyValidator
             break;
 
           case "identity_documents":
-            if (!validateRequiredAttributeForRoleType(
+            if (!validateRequiredAttributeConstraint(
                 roleType,
                 organization.getIdentityDocuments(),
                 "identityDocuments",
@@ -410,7 +440,7 @@ public class ValidOrganizationValidator extends PartyValidator
             break;
 
           case "physical_addresses":
-            if (!validateRequiredAttributeForRoleType(
+            if (!validateRequiredAttributeConstraint(
                 roleType,
                 organization.getPhysicalAddresses(),
                 "physicalAddresses",
@@ -442,7 +472,7 @@ public class ValidOrganizationValidator extends PartyValidator
             break;
 
           case "tax_numbers":
-            if (!validateRequiredAttributeForRoleType(
+            if (!validateRequiredAttributeConstraint(
                 roleType,
                 organization.getTaxNumbers(),
                 "taxNumbers",
@@ -474,7 +504,17 @@ public class ValidOrganizationValidator extends PartyValidator
             break;
         }
       } else if (roleTypeAttributeConstraint.getType() == ConstraintType.SIZE) {
+        Optional<Attribute> attributeOptional =
+            organization.getAttribute(roleTypeAttributeConstraint.getAttributeType());
 
+        if (attributeOptional.isPresent()) {
+          if (!validateSizeAttributeConstraint(
+              roleTypeAttributeConstraint.getIntegerValue(),
+              attributeOptional.get(),
+              hibernateConstraintValidatorContext)) {
+            isValid = false;
+          }
+        }
       }
     }
 
