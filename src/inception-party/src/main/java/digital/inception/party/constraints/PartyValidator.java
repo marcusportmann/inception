@@ -19,6 +19,7 @@ package digital.inception.party.constraints;
 import digital.inception.party.Attribute;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.IPartyReferenceService;
+import digital.inception.party.Preference;
 import digital.inception.reference.IReferenceService;
 import java.time.LocalDate;
 import java.util.Set;
@@ -218,6 +219,39 @@ public abstract class PartyValidator {
   }
 
   /**
+   * Validate the maximum size preference constraint.
+   *
+   * @param maximumSize the maximum size
+   * @param preference the preference
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the preference is valid or <b>false</b> otherwise
+   */
+  protected boolean validateMaximumSizePreferenceConstraint(
+      int maximumSize,
+      Preference preference,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    if ((!StringUtils.hasText(preference.getValue()))
+        || (preference.getValue().length() > maximumSize)) {
+      hibernateConstraintValidatorContext
+          .addMessageParameter(
+              "value", StringUtils.hasText(preference.getValue()) ? preference.getValue() : "")
+          .addMessageParameter("maximumSize", maximumSize)
+          .addMessageParameter("preferenceType", preference.getType())
+          .buildConstraintViolationWithTemplate(
+              "{digital.inception.party.constraints.ValidParty.invalidMaximumSizeForPreferenceType.message}")
+          .addPropertyNode("preferences")
+          .addPropertyNode("value")
+          .inIterable()
+          .addConstraintViolation();
+
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
    * Validate the minimum size attribute constraint.
    *
    * @param minimumSize the minimum size
@@ -242,6 +276,39 @@ public abstract class PartyValidator {
               "{digital.inception.party.constraints.ValidParty.invalidMinimumSizeForAttributeType.message}")
           .addPropertyNode("attributes")
           .addPropertyNode("stringValue")
+          .inIterable()
+          .addConstraintViolation();
+
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   * Validate the minimum size preference constraint.
+   *
+   * @param minimumSize the minimum size
+   * @param preference the preference
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the preference is valid or <b>false</b> otherwise
+   */
+  protected boolean validateMinimumSizePreferenceConstraint(
+      int minimumSize,
+      Preference preference,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    if ((!StringUtils.hasText(preference.getValue()))
+        || (preference.getValue().length() < minimumSize)) {
+      hibernateConstraintValidatorContext
+          .addMessageParameter(
+              "value", StringUtils.hasText(preference.getValue()) ? preference.getValue() : "")
+          .addMessageParameter("minimumSize", minimumSize)
+          .addMessageParameter("preferenceType", preference.getType())
+          .buildConstraintViolationWithTemplate(
+              "{digital.inception.party.constraints.ValidParty.invalidMinimumSizeForPreferenceType.message}")
+          .addPropertyNode("preferences")
+          .addPropertyNode("value")
           .inIterable()
           .addConstraintViolation();
 
@@ -289,6 +356,42 @@ public abstract class PartyValidator {
   }
 
   /**
+   * Validate the pattern preference constraint.
+   *
+   * @param pattern the pattern
+   * @param preference the preference
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the preference is valid or <b>false</b> otherwise
+   */
+  protected boolean validatePatternPreferenceConstraint(
+      String pattern,
+      Preference preference,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    if (StringUtils.hasText(preference.getValue())) {
+      if (!Pattern.matches(pattern, preference.getValue())) {
+
+        hibernateConstraintValidatorContext
+            .addMessageParameter(
+                "value", StringUtils.hasText(preference.getValue()) ? preference.getValue() : "")
+            .addMessageParameter("preferenceType", preference.getType())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.party.constraints.ValidParty.patternMatchFailedForPreferenceType.message}")
+            .addPropertyNode("preferences")
+            .addPropertyNode("value")
+            .inIterable()
+            .addConstraintViolation();
+
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  /**
    * Validate the reference attribute constraint.
    *
    * @param referenceType the type of reference
@@ -301,6 +404,11 @@ public abstract class PartyValidator {
       Attribute attribute,
       HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
       throws ValidationException {
+    // A null or empty string value is not invalid unless a required constraint is specified
+    if (!StringUtils.hasText(attribute.getStringValue())) {
+      return true;
+    }
+
     boolean isValid;
 
     try {
@@ -315,7 +423,7 @@ public abstract class PartyValidator {
                 .buildConstraintViolationWithTemplate(
                     "{digital.inception.party.constraints.ValidParty.invalidContactMechanismTypeForAttributeType.message}")
                 .addPropertyNode("attributes")
-                .addPropertyNode("type")
+                .addPropertyNode("stringValue")
                 .inIterable()
                 .addConstraintViolation();
           }
@@ -332,7 +440,7 @@ public abstract class PartyValidator {
                 .buildConstraintViolationWithTemplate(
                     "{digital.inception.party.constraints.ValidParty.invalidCountryForAttributeType.message}")
                 .addPropertyNode("attributes")
-                .addPropertyNode("type")
+                .addPropertyNode("stringValue")
                 .inIterable()
                 .addConstraintViolation();
           }
@@ -365,6 +473,94 @@ public abstract class PartyValidator {
       throw new ValidationException(
           "Failed to verify that the attribute value ("
               + attribute.getStringValue()
+              + ") is a valid reference value of type ("
+              + referenceType
+              + ')');
+    }
+  }
+
+  /**
+   * Validate the reference preference constraint.
+   *
+   * @param referenceType the type of reference
+   * @param preference the preference
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the preference is valid or <b>false</b> otherwise
+   */
+  protected boolean validateReferencePreferenceConstraint(
+      String referenceType,
+      Preference preference,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    // A null or empty string value is not invalid unless a required constraint is specified
+    if (!StringUtils.hasText(preference.getValue())) {
+      return true;
+    }
+
+    boolean isValid;
+
+    try {
+      switch (referenceType) {
+        case "contact_mechanism_type":
+          isValid = partyReferenceService.isValidContactMechanismType(preference.getValue());
+
+          if (!isValid) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("contactMechanismType", preference.getValue())
+                .addMessageParameter("preferenceType", preference.getType())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidParty.invalidContactMechanismTypeForPreferenceType.message}")
+                .addPropertyNode("preferences")
+                .addPropertyNode("value")
+                .inIterable()
+                .addConstraintViolation();
+          }
+
+          break;
+
+        case "country":
+          isValid = referenceService.isValidCountry(preference.getValue());
+
+          if (!isValid) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("country", preference.getValue())
+                .addMessageParameter("preferenceType", preference.getType())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidParty.invalidCountryForPreferenceType.message}")
+                .addPropertyNode("preferences")
+                .addPropertyNode("value")
+                .inIterable()
+                .addConstraintViolation();
+          }
+
+          break;
+
+        case "language":
+          isValid = referenceService.isValidLanguage(preference.getValue());
+
+          if (!isValid) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("language", preference.getValue())
+                .addMessageParameter("preferenceType", preference.getType())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidParty.invalidLanguageForPreferenceType.message}")
+                .addPropertyNode("preferences")
+                .addPropertyNode("value")
+                .inIterable()
+                .addConstraintViolation();
+          }
+
+          break;
+
+        default:
+          throw new ValidationException("Invalid reference type (" + referenceType + ")");
+      }
+
+      return isValid;
+    } catch (Throwable e) {
+      throw new ValidationException(
+          "Failed to verify that the preference value ("
+              + preference.getValue()
               + ") is a valid reference value of type ("
               + referenceType
               + ')');
@@ -422,6 +618,56 @@ public abstract class PartyValidator {
   }
 
   /**
+   * Validate the required preference for the role type.
+   *
+   * @param roleType the code for the role type
+   * @param preferenceValue the value for the preference
+   * @param propertyNodeName the property node name
+   * @param messageTemplate the message template
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the preference value is valid or <b>false</b> otherwise
+   */
+  protected boolean validateRequiredPreferenceConstraint(
+      String roleType,
+      Object preferenceValue,
+      String propertyNodeName,
+      String messageTemplate,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    boolean isValid;
+
+    if (preferenceValue == null) {
+      isValid = false;
+    } else {
+      if (preferenceValue instanceof String) {
+        isValid = StringUtils.hasText((String) preferenceValue);
+      } else if (preferenceValue instanceof Set) {
+        isValid = ((Set<?>) preferenceValue).size() > 0;
+      } else if (preferenceValue instanceof LocalDate) {
+        // The fact we have a valid LocalDate instance means we parsed the preference value
+        isValid = true;
+      } else {
+        throw new ValidationException(
+            "Failed to validate the required preference value ("
+                + preferenceValue
+                + ") with the unrecognized type ("
+                + preferenceValue.getClass().getName()
+                + ")");
+      }
+    }
+
+    if (!isValid) {
+      hibernateConstraintValidatorContext
+          .addMessageParameter("roleType", roleType)
+          .buildConstraintViolationWithTemplate(messageTemplate)
+          .addPropertyNode(propertyNodeName)
+          .addConstraintViolation();
+    }
+
+    return isValid;
+  }
+
+  /**
    * Validate the size attribute constraint.
    *
    * @param size the size
@@ -440,12 +686,44 @@ public abstract class PartyValidator {
           .addMessageParameter(
               "value",
               StringUtils.hasText(attribute.getStringValue()) ? attribute.getStringValue() : "")
-          .addMessageParameter("size", attribute.getStringValue().length())
+          .addMessageParameter("size", size)
           .addMessageParameter("attributeType", attribute.getType())
           .buildConstraintViolationWithTemplate(
               "{digital.inception.party.constraints.ValidParty.invalidSizeForAttributeType.message}")
           .addPropertyNode("attributes")
           .addPropertyNode("stringValue")
+          .inIterable()
+          .addConstraintViolation();
+
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   * Validate the size preference constraint.
+   *
+   * @param size the size
+   * @param preference the preference
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the preference is valid or <b>false</b> otherwise
+   */
+  protected boolean validateSizePreferenceConstraint(
+      int size,
+      Preference preference,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
+      throws ValidationException {
+    if ((!StringUtils.hasText(preference.getValue())) || (preference.getValue().length() != size)) {
+      hibernateConstraintValidatorContext
+          .addMessageParameter(
+              "value", StringUtils.hasText(preference.getValue()) ? preference.getValue() : "")
+          .addMessageParameter("size", size)
+          .addMessageParameter("preferenceType", preference.getType())
+          .buildConstraintViolationWithTemplate(
+              "{digital.inception.party.constraints.ValidParty.invalidSizeForPreferenceType.message}")
+          .addPropertyNode("preferences")
+          .addPropertyNode("value")
           .inIterable()
           .addConstraintViolation();
 

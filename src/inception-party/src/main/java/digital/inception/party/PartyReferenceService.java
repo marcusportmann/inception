@@ -113,6 +113,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Role Type Attribute Constraint Repository. */
   private final RoleTypeAttributeConstraintRepository roleTypeAttributeConstraintRepository;
 
+  /** The Role Type Preference Constraint Repository. */
+  private final RoleTypePreferenceConstraintRepository roleTypePreferenceConstraintRepository;
+
   /** The Party Role Type Repository. */
   private final RoleTypeRepository roleTypeRepository;
 
@@ -163,6 +166,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param residencyStatusRepository the Residency Status Repository
    * @param residentialTypeRepository the Residential Type Repository
    * @param roleTypeAttributeConstraintRepository the Role Type Attribute Constraint Repository
+   * @param roleTypePreferenceConstraintRepository the Role Type Preference Constraint Repository
    * @param sourceOfFundsRepository the Source Of Funds Repository
    * @param taxNumberTypeRepository the Tax Number Type Repository
    * @param timeToContactRepository the Time To Contact Repository
@@ -195,6 +199,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       ResidencyStatusRepository residencyStatusRepository,
       ResidentialTypeRepository residentialTypeRepository,
       RoleTypeAttributeConstraintRepository roleTypeAttributeConstraintRepository,
+      RoleTypePreferenceConstraintRepository roleTypePreferenceConstraintRepository,
       SourceOfFundsRepository sourceOfFundsRepository,
       TaxNumberTypeRepository taxNumberTypeRepository,
       TimeToContactRepository timeToContactRepository,
@@ -225,6 +230,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.residencyStatusRepository = residencyStatusRepository;
     this.residentialTypeRepository = residentialTypeRepository;
     this.roleTypeAttributeConstraintRepository = roleTypeAttributeConstraintRepository;
+    this.roleTypePreferenceConstraintRepository = roleTypePreferenceConstraintRepository;
     this.sourceOfFundsRepository = sourceOfFundsRepository;
     this.taxNumberTypeRepository = taxNumberTypeRepository;
     this.timeToContactRepository = timeToContactRepository;
@@ -1053,6 +1059,42 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the role type attribute constraints", e);
+    }
+  }
+
+  /**
+   * Retrieve the role type preference constraints.
+   *
+   * @return the role type preference constraints
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'roleTypePreferenceConstraints.ALL'")
+  public List<RoleTypePreferenceConstraint> getRoleTypePreferenceConstraints()
+      throws ServiceUnavailableException {
+    return getRoleTypePreferenceConstraints(null);
+  }
+
+  /**
+   * Retrieve the role type preference constraints.
+   *
+   * @param roleType the code for the role type to retrieve the preference constraints for
+   * @return the role type preference constraints
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'roleTypePreferenceConstraints.' + #roleType")
+  public List<RoleTypePreferenceConstraint> getRoleTypePreferenceConstraints(String roleType)
+      throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(roleType)) {
+        return roleTypePreferenceConstraintRepository.findAll(
+            Sort.by(Direction.ASC, "roleType", "preferenceType"));
+      } else {
+        return roleTypePreferenceConstraintRepository.findByRoleTypeIgnoreCase(
+            roleType, Sort.by(Direction.ASC, "roleType", "preferenceType"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the role type preference constraints", e);
     }
   }
 

@@ -424,6 +424,23 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
+   * Retrieve the role type preference constraints.
+   *
+   * @return the role type preference constraints
+   */
+  List<RoleTypePreferenceConstraint> getRoleTypePreferenceConstraints()
+      throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the role type preference constraints.
+   *
+   * @param roleType the code for the role type to retrieve the preference constraints for
+   * @return the role type preference constraints
+   */
+  List<RoleTypePreferenceConstraint> getRoleTypePreferenceConstraints(String roleType)
+      throws ServiceUnavailableException;
+
+  /**
    * Retrieve all the role types.
    *
    * @return the role types

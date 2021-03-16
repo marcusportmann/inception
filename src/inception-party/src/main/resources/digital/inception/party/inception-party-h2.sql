@@ -605,6 +605,29 @@ COMMENT ON COLUMN party.residential_types.name IS 'The name of the residential t
 COMMENT ON COLUMN party.residential_types.description IS 'The description for the residential type';
 
 
+CREATE TABLE party.role_purposes (
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  sort_index   INTEGER      NOT NULL,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX role_purposes_locale_id_ix ON party.role_purposes(locale_id);
+
+COMMENT ON COLUMN party.role_purposes.code IS 'The code for the role purpose';
+
+COMMENT ON COLUMN party.role_purposes.locale_id IS 'The Unicode locale identifier for the role purpose';
+
+COMMENT ON COLUMN party.role_purposes.sort_index IS 'The sort index for the role purpose';
+
+COMMENT ON COLUMN party.role_purposes.name IS 'The name of the role purpose';
+
+COMMENT ON COLUMN party.role_purposes.description IS 'The description for the role purpose';
+
+
 CREATE TABLE party.role_types (
   code         VARCHAR(30)  NOT NULL,
   locale_id    VARCHAR(10)  NOT NULL,
@@ -652,27 +675,22 @@ COMMENT ON COLUMN party.role_type_attribute_constraints.type IS 'The constraint 
 COMMENT ON COLUMN party.role_type_attribute_constraints.value IS 'The optional value to apply when validating the attribute value';
 
 
-CREATE TABLE party.role_purposes (
-  code         VARCHAR(30)  NOT NULL,
-  locale_id    VARCHAR(10)  NOT NULL,
-  sort_index   INTEGER      NOT NULL,
-  name         VARCHAR(50)  NOT NULL,
-  description  VARCHAR(200) NOT NULL DEFAULT '',
+CREATE TABLE party.role_type_preference_constraints (
+  role_type       VARCHAR(30) NOT NULL,
+  preference_type VARCHAR(30) NOT NULL,
+  type            VARCHAR(30) NOT NULL,
+  value           VARCHAR(1000),
 
-  PRIMARY KEY (code, locale_id)
+  PRIMARY KEY (role_type, preference_type, type)
 );
 
-CREATE INDEX role_purposes_locale_id_ix ON party.role_purposes(locale_id);
+COMMENT ON COLUMN party.role_type_preference_constraints.role_type IS 'The code for the role type';
 
-COMMENT ON COLUMN party.role_purposes.code IS 'The code for the role purpose';
+COMMENT ON COLUMN party.role_type_preference_constraints.preference_type IS 'The code for the preference type';
 
-COMMENT ON COLUMN party.role_purposes.locale_id IS 'The Unicode locale identifier for the role purpose';
+COMMENT ON COLUMN party.role_type_preference_constraints.type IS 'The constraint type';
 
-COMMENT ON COLUMN party.role_purposes.sort_index IS 'The sort index for the role purpose';
-
-COMMENT ON COLUMN party.role_purposes.name IS 'The name of the role purpose';
-
-COMMENT ON COLUMN party.role_purposes.description IS 'The description for the role purpose';
+COMMENT ON COLUMN party.role_type_preference_constraints.value IS 'The optional value to apply when validating the preference value';
 
 
 CREATE TABLE party.sources_of_funds (
@@ -1936,29 +1954,53 @@ INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, des
 
 
 INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('correspondence', 'en-US', 0, 'Correspondence', 'Correspondence');
+  VALUES ('correspondence', 'en-US', 100, 'Correspondence', 'Correspondence');
+INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-US', 900, 'Test', 'Test');
 
 INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('correspondence', 'en-ZA', 0, 'Correspondence', 'Correspondence');
+  VALUES ('correspondence', 'en-ZA', 100, 'Correspondence', 'Correspondence');
+INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-ZA', 900, 'Test', 'Test');
 
 
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence','contact_person', 'en-US', 0, 'Contact Person', 'Contact Person', 'organization');
+  VALUES ('correspondence','contact_person', 'en-US', 101, 'Contact Person', 'Contact Person', 'organization');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence','correspondence_language', 'en-US', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
+  VALUES ('correspondence','correspondence_language', 'en-US', 102, 'Correspondence Language', 'Correspondence Language', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'preferred_contact_mechanism', 'en-US', 0, 'Preferred Contact Mechanism', 'Preferred Contact Mechanism', 'organization,person');
+  VALUES ('correspondence', 'preferred_contact_mechanism', 'en-US', 103, 'Preferred Contact Mechanism', 'Preferred Contact Mechanism', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence','time_to_contact', 'en-US', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
+  VALUES ('correspondence','time_to_contact', 'en-US', 104, 'Time To Contact', 'Suitable Time To Contact', 'person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test','test_contact_mechanism_type', 'en-US', 901, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test','test_country', 'en-US', 902, 'Test Country', 'Test Country', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test','test_language', 'en-US', 903, 'Test Language', 'Test Language', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test','test_preference', 'en-US', 904, 'Test Preference', 'Test Preference', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test','test_size', 'en-US', 905, 'Test Size', 'Test Size', 'organization,person');
 
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence','contact_person', 'en-ZA', 0, 'Contact Person', 'Contact Person', 'organization');
+  VALUES ('correspondence','contact_person', 'en-ZA', 101, 'Contact Person', 'Contact Person', 'organization');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'correspondence_language', 'en-ZA', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
+  VALUES ('correspondence', 'correspondence_language', 'en-ZA', 102, 'Correspondence Language', 'Correspondence Language', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'preferred_contact_mechanism', 'en-ZA', 0, 'Preferred Contact Mechanism', 'Preferred Contact Mechanism', 'organization,person');
+  VALUES ('correspondence', 'preferred_contact_mechanism', 'en-ZA', 103, 'Preferred Contact Mechanism', 'Preferred Contact Mechanism', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'time_to_contact', 'en-ZA', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
+  VALUES ('correspondence', 'time_to_contact', 'en-ZA', 104, 'Time To Contact', 'Suitable Time To Contact', 'person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test','test_contact_mechanism_type', 'en-ZA', 901, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test','test_country', 'en-ZA', 902, 'Test Country', 'Test Country', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test','test_language', 'en-ZA', 903, 'Test Language', 'Test Language', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test','test_preference', 'en-ZA', 904, 'Test Preference', 'Test Preference', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test','test_size', 'en-ZA', 905, 'Test Size', 'Test Size', 'organization,person');
 
 
 INSERT INTO party.races (code, locale_id, sort_index, name, description)
@@ -2199,8 +2241,6 @@ INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, typ
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
   VALUES ('test_person_role', 'test_size', 'size', '10');
 
-
-
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'contact_mechanisms', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
@@ -2221,14 +2261,47 @@ INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, att
   VALUES ('test_organization_role', 'physical_address', 'main', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'tax_numbers', 'required');
-
-
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'test_attribute', 'required');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
   VALUES ('test_organization_role', 'test_attribute', 'size', '10');
 INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
   VALUES ('test_organization_role', 'test_attribute', 'pattern', '^[0-9]*$');
+
+
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+  VALUES ('test_person_role', 'test_preference', 'required');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+  VALUES ('test_person_role', 'test_preference', 'min_size', '5');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+  VALUES ('test_person_role', 'test_preference', 'max_size', '20');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+  VALUES ('test_person_role', 'test_preference', 'pattern', '^[a-zA-Z0-9]*$');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+  VALUES ('test_person_role', 'test_contact_mechanism_type', 'required');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+  VALUES ('test_person_role', 'test_contact_mechanism_type', 'reference', 'contact_mechanism_type');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+  VALUES ('test_person_role', 'test_country', 'required');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+  VALUES ('test_person_role', 'test_country', 'reference', 'country');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+  VALUES ('test_person_role', 'test_language', 'required');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+  VALUES ('test_person_role', 'test_language', 'reference', 'language');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+  VALUES ('test_person_role', 'test_size', 'required');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+  VALUES ('test_person_role', 'test_size', 'size', '10');
+
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+  VALUES ('test_organization_role', 'test_preference', 'required');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+  VALUES ('test_organization_role', 'test_preference', 'min_size', '5');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+  VALUES ('test_organization_role', 'test_preference', 'max_size', '20');
+INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+  VALUES ('test_organization_role', 'test_preference', 'pattern', '^[0-9]*$');
 
 
 INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
