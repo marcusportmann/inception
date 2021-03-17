@@ -335,7 +335,7 @@ Complete the following steps to create a new application based on the Inception 
               <artifactId>frontend-maven-plugin</artifactId>
               <version>1.6</version>
               <configuration>
-                <workingDirectory>main/frontend</workingDirectory>
+                <workingDirectory>src/main/frontend</workingDirectory>
                 <nodeVersion>v14.7.0</nodeVersion>
                 <npmVersion>6.14.7</npmVersion>
               </configuration>
@@ -915,7 +915,7 @@ Complete the following steps to create a new application based on the Inception 
          providers: [
 
            // Resolvers
-           CodeCategoriesTitleResolver, ConfigurationsTitleResolver, MailTitleResolver, ReportingTitleResolver,
+           CodeCategoriesTitleResolver, ConfigsTitleResolver, MailTitleResolver, ReportingTitleResolver,
            SchedulerTitleResolver, SecurityTitleResolver, SystemTitleResolver
          ]
        })
