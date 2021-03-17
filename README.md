@@ -228,7 +228,7 @@ Complete the following steps to create a new application based on the Inception 
       openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -pkeyopt rsa_keygen_pubexp:65537 | openssl pkcs8 -topk8 -nocrypt -outform pem > src/main/resources/META-INF/oauth2-jwt-key
       openssl pkey -pubout -inform pem -outform pem -in src/main/resources/META-INF/oauth2-jwt-key -out src/main/resources/META-INF/oauth2-jwt-key.pub
       ```
-   2. Create the *pom.xml* file under the *src* directory with the following contents,
+   2. Create the *pom.xml* file under the top-level directory for the new application with the following contents,
       changing the *groupId*, *artifactId*, *version*, *name* and *description* values
       as appropriate.
 
