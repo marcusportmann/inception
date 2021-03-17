@@ -20,13 +20,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>RoleTypeAttributeConstraintId</b> class implements the ID class for the
- * <b>RoleTypeAttributeConstraint</b> class.
+ * The <b>RoleTypeAttributeTypeConstraintId</b> class implements the ID class for the
+ * <b>RoleTypeAttributeTypeConstraint</b> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class RoleTypeAttributeConstraintId implements Serializable {
+public class RoleTypeAttributeTypeConstraintId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
@@ -42,18 +42,18 @@ public class RoleTypeAttributeConstraintId implements Serializable {
   /** The constraint type. */
   private ConstraintType type;
 
-  /** Constructs a new <b>RoleTypeAttributeConstraintId</b>. */
-  public RoleTypeAttributeConstraintId() {}
+  /** Constructs a new <b>RoleTypeAttributeTypeConstraintId</b>. */
+  public RoleTypeAttributeTypeConstraintId() {}
 
   /**
-   * Constructs a new <b>RoleTypeAttributeConstraintId</b>.
+   * Constructs a new <b>RoleTypeAttributeTypeConstraintId</b>.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
    * @param attributeTypeQualifier the qualifier for the attribute type
    * @param type the constraint type
    */
-  public RoleTypeAttributeConstraintId(
+  public RoleTypeAttributeTypeConstraintId(
       String roleType, String attributeType, String attributeTypeQualifier, ConstraintType type) {
     this.roleType = roleType;
     this.attributeType = attributeType;
@@ -62,13 +62,14 @@ public class RoleTypeAttributeConstraintId implements Serializable {
   }
 
   /**
-   * Constructs a new <b>RoleTypeAttributeConstraintId</b>.
+   * Constructs a new <b>RoleTypeAttributeTypeConstraintId</b>.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
    * @param type the constraint type
    */
-  public RoleTypeAttributeConstraintId(String roleType, String attributeType, ConstraintType type) {
+  public RoleTypeAttributeTypeConstraintId(
+      String roleType, String attributeType, ConstraintType type) {
     this(roleType, attributeType, "", type);
   }
 
@@ -92,7 +93,7 @@ public class RoleTypeAttributeConstraintId implements Serializable {
       return false;
     }
 
-    RoleTypeAttributeConstraintId other = (RoleTypeAttributeConstraintId) object;
+    RoleTypeAttributeTypeConstraintId other = (RoleTypeAttributeTypeConstraintId) object;
 
     return Objects.equals(roleType, other.roleType)
         && Objects.equals(attributeType, other.attributeType)

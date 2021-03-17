@@ -50,7 +50,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ContactMechanism</b> class holds the information for a contact mechanism for a party.
+ * The <b>ContactMechanism</b> class holds the information for a contact mechanism for an
+ * organization or person.
  *
  * <p>The JPA 2.2 spec (10.6) does not support attribute converters for attributes annotated
  * with @Id. If Enum types are used for these attributes then the ordinal value is always used. As a
@@ -60,7 +61,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann @JsonProperty and @XmlElement.
  */
-@Schema(description = "A contact mechanism")
+@Schema(description = "A contact mechanism for an organization or person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "role", "value", "purposes"})
 @XmlRootElement(name = "ContactMechanism", namespace = "http://inception.digital/party")

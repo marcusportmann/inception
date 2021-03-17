@@ -257,6 +257,61 @@ COMMENT ON COLUMN party.identity_document_types.country_of_issue IS 'The optiona
 COMMENT ON COLUMN party.identity_document_types.party_types IS 'The comma-delimited list of codes for the party types the identity document type is associated with';
 
 
+CREATE TABLE party.lock_type_categories (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX lock_type_categories_locale_id_ix ON party.lock_type_categories(locale_id);
+
+COMMENT ON COLUMN party.lock_type_categories.code IS 'The code for the lock type category';
+
+COMMENT ON COLUMN party.lock_type_categories.locale_id IS 'The Unicode locale identifier for the lock type category';
+
+COMMENT ON COLUMN party.lock_type_categories.sort_index IS 'The sort index for the lock type category';
+
+COMMENT ON COLUMN party.lock_type_categories.name IS 'The name of the lock type category';
+
+COMMENT ON COLUMN party.lock_type_categories.description IS 'The description for the lock type category';
+
+
+CREATE TABLE party.lock_types (
+  category    VARCHAR(30)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+  party_types VARCHAR(310) NOT NULL,
+
+  PRIMARY KEY (code, locale_id),
+  CONSTRAINT lock_types_lock_type_category_fk FOREIGN KEY (category, locale_id) REFERENCES party.lock_type_categories(code, locale_id) ON DELETE CASCADE
+);
+
+CREATE INDEX lock_types_category_ix ON party.lock_types(category);
+
+CREATE INDEX lock_types_locale_id_ix ON party.lock_types(locale_id);
+
+COMMENT ON COLUMN party.lock_types.category IS 'The code for the lock type category the lock type is associated with';
+
+COMMENT ON COLUMN party.lock_types.code IS 'The code for the lock type';
+
+COMMENT ON COLUMN party.lock_types.locale_id IS 'The Unicode locale identifier for the lock type';
+
+COMMENT ON COLUMN party.lock_types.sort_index IS 'The sort index for the lock type';
+
+COMMENT ON COLUMN party.lock_types.name IS 'The name of the lock type';
+
+COMMENT ON COLUMN party.lock_types.description IS 'The description for the lock type';
+
+COMMENT ON COLUMN party.lock_types.party_types IS 'The comma-delimited list of codes for the party types the lock type is associated with';
+
+
 CREATE TABLE party.marital_statuses (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
@@ -654,7 +709,7 @@ COMMENT ON COLUMN party.role_types.description IS 'The description for the role 
 COMMENT ON COLUMN party.role_types.party_types IS 'The comma-delimited list of codes for the party types the role type is associated with';
 
 
-CREATE TABLE party.role_type_attribute_constraints (
+CREATE TABLE party.role_type_attribute_type_constraints (
   role_type                VARCHAR(30) NOT NULL,
   attribute_type           VARCHAR(30) NOT NULL,
   attribute_type_qualifier VARCHAR(30) NOT NULL DEFAULT '',
@@ -664,18 +719,18 @@ CREATE TABLE party.role_type_attribute_constraints (
   PRIMARY KEY (role_type, attribute_type, attribute_type_qualifier, type)
 );
 
-COMMENT ON COLUMN party.role_type_attribute_constraints.role_type IS 'The code for the role type';
+COMMENT ON COLUMN party.role_type_attribute_type_constraints.role_type IS 'The code for the role type';
 
-COMMENT ON COLUMN party.role_type_attribute_constraints.attribute_type IS 'The code for the attribute type';
+COMMENT ON COLUMN party.role_type_attribute_type_constraints.attribute_type IS 'The code for the attribute type';
 
-COMMENT ON COLUMN party.role_type_attribute_constraints.attribute_type_qualifier IS 'The qualifier for the attribute type';
+COMMENT ON COLUMN party.role_type_attribute_type_constraints.attribute_type_qualifier IS 'The qualifier for the attribute type';
 
-COMMENT ON COLUMN party.role_type_attribute_constraints.type IS 'The constraint type';
+COMMENT ON COLUMN party.role_type_attribute_type_constraints.type IS 'The constraint type';
 
-COMMENT ON COLUMN party.role_type_attribute_constraints.value IS 'The optional value to apply when validating the attribute value';
+COMMENT ON COLUMN party.role_type_attribute_type_constraints.value IS 'The optional value to apply when validating the attribute value';
 
 
-CREATE TABLE party.role_type_preference_constraints (
+CREATE TABLE party.role_type_preference_type_constraints (
   role_type       VARCHAR(30) NOT NULL,
   preference_type VARCHAR(30) NOT NULL,
   type            VARCHAR(30) NOT NULL,
@@ -684,13 +739,13 @@ CREATE TABLE party.role_type_preference_constraints (
   PRIMARY KEY (role_type, preference_type, type)
 );
 
-COMMENT ON COLUMN party.role_type_preference_constraints.role_type IS 'The code for the role type';
+COMMENT ON COLUMN party.role_type_preference_type_constraints.role_type IS 'The code for the role type';
 
-COMMENT ON COLUMN party.role_type_preference_constraints.preference_type IS 'The code for the preference type';
+COMMENT ON COLUMN party.role_type_preference_type_constraints.preference_type IS 'The code for the preference type';
 
-COMMENT ON COLUMN party.role_type_preference_constraints.type IS 'The constraint type';
+COMMENT ON COLUMN party.role_type_preference_type_constraints.type IS 'The constraint type';
 
-COMMENT ON COLUMN party.role_type_preference_constraints.value IS 'The optional value to apply when validating the preference value';
+COMMENT ON COLUMN party.role_type_preference_type_constraints.value IS 'The optional value to apply when validating the preference value';
 
 
 CREATE TABLE party.sources_of_funds (
@@ -1093,6 +1148,33 @@ COMMENT ON COLUMN party.identity_documents.type IS 'The code for the identity do
 COMMENT ON COLUMN party.identity_documents.updated IS 'The date and time the identity document was last updated';
 
 
+CREATE TABLE party.locks (
+  created        TIMESTAMP   NOT NULL,
+  effective_from DATE        NOT NULL,
+  effective_to   DATE,
+  party_id       UUID        NOT NULL,
+  type           VARCHAR(30) NOT NULL,
+  updated        TIMESTAMP,
+
+  PRIMARY KEY (party_id, type),
+  CONSTRAINT locks_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX locks_party_id_ix ON party.locks(party_id);
+
+COMMENT ON COLUMN party.locks.created IS 'The date and time the lock was created';
+
+COMMENT ON COLUMN party.locks.effective_from IS 'The date that the lock is effective from';
+
+COMMENT ON COLUMN party.locks.effective_to IS 'The optional date that the lock is effective to';
+
+COMMENT ON COLUMN party.locks.party_id IS 'The Universally Unique Identifier (UUID) for the party the lock is associated with';
+
+COMMENT ON COLUMN party.locks.type IS 'The code for the lock type';
+
+COMMENT ON COLUMN party.locks.updated IS 'The date and time the lock was last updated';
+
+
 CREATE TABLE party.physical_addresses (
   building_floor      VARCHAR(20),
   building_name       VARCHAR(50),
@@ -1270,6 +1352,33 @@ COMMENT ON COLUMN party.roles.type IS 'The code for the role type';
 COMMENT ON COLUMN party.roles.updated IS 'The date and time the role was last updated';
 
 
+CREATE TABLE party.statuses (
+  created        TIMESTAMP   NOT NULL,
+  effective_from DATE        NOT NULL,
+  effective_to   DATE,
+  party_id       UUID        NOT NULL,
+  type           VARCHAR(30) NOT NULL,
+  updated        TIMESTAMP,
+
+  PRIMARY KEY (party_id, type),
+  CONSTRAINT statuses_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX statuses_party_id_ix ON party.statuses(party_id);
+
+COMMENT ON COLUMN party.statuses.created IS 'The date and time the status was created';
+
+COMMENT ON COLUMN party.statuses.effective_from IS 'The date that the status is effective from';
+
+COMMENT ON COLUMN party.statuses.effective_to IS 'The optional date that the status is effective to';
+
+COMMENT ON COLUMN party.statuses.party_id IS 'The Universally Unique Identifier (UUID) for the party the status is associated with';
+
+COMMENT ON COLUMN party.statuses.type IS 'The code for the status type';
+
+COMMENT ON COLUMN party.statuses.updated IS 'The date and time the status was last updated';
+
+
 CREATE TABLE party.tax_numbers (
   country_of_issue VARCHAR(30) NOT NULL,
   created          TIMESTAMP   NOT NULL,
@@ -1391,106 +1500,106 @@ INSERT INTO party.contact_mechanism_types (code, locale_id, sort_index, name, pl
 
 
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('mobile_number', 'personal_mobile_number', 'en-US', 100, 'Personal Mobile Number', 'Personal Mobile Number', 'person');
+  VALUES ('mobile_number', 'personal_mobile_number', 'en-US', 101, 'Personal Mobile Number', 'Personal Mobile Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('mobile_number', 'work_mobile_number', 'en-US', 101, 'Work Mobile Number', 'Work Mobile Number', 'person');
+  VALUES ('mobile_number', 'work_mobile_number', 'en-US', 102, 'Work Mobile Number', 'Work Mobile Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('mobile_number', 'other_mobile_number', 'en-US', 102, 'Other Mobile Number', 'Other Mobile Number', 'person');
+  VALUES ('mobile_number', 'other_mobile_number', 'en-US', 103, 'Other Mobile Number', 'Other Mobile Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('mobile_number', 'alternate_mobile_number', 'en-US', 103, 'Alternate Mobile Number', 'Alternate Mobile Number', 'person');
+  VALUES ('mobile_number', 'alternate_mobile_number', 'en-US', 104, 'Alternate Mobile Number', 'Alternate Mobile Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('mobile_number', 'main_mobile_number', 'en-US', 110, 'Main Mobile Number', 'Main Mobile Number', 'organization');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'home_phone_number', 'en-US', 200, 'Home Phone Number', 'Home Phone Number', 'person');
+  VALUES ('phone_number', 'home_phone_number', 'en-US', 201, 'Home Phone Number', 'Home Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'work_phone_number', 'en-US', 201, 'Work Phone Number', 'Work Phone Number', 'person');
+  VALUES ('phone_number', 'work_phone_number', 'en-US', 202, 'Work Phone Number', 'Work Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'school_phone_number', 'en-US', 202, 'School Phone Number', 'School Phone Number', 'person');
+  VALUES ('phone_number', 'school_phone_number', 'en-US', 203, 'School Phone Number', 'School Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'pager_phone_number', 'en-US', 203, 'Pager Phone Number', 'Pager Phone Number', 'person');
+  VALUES ('phone_number', 'pager_phone_number', 'en-US', 204, 'Pager Phone Number', 'Pager Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'other_phone_number', 'en-US', 204, 'Other Phone Number', 'Other Phone Number', 'person');
+  VALUES ('phone_number', 'other_phone_number', 'en-US', 205, 'Other Phone Number', 'Other Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'alternate_phone_number', 'en-US', 205, 'Alternate Phone Number', 'Alternate Phone Number', 'person');
+  VALUES ('phone_number', 'alternate_phone_number', 'en-US', 206, 'Alternate Phone Number', 'Alternate Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('phone_number', 'main_phone_number', 'en-US', 210, 'Main Phone Number', 'Main Phone Number', 'organization');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fax_number', 'home_fax_number', 'en-US', 300, 'Home Fax Number', 'Home Fax Number', 'person');
+  VALUES ('fax_number', 'home_fax_number', 'en-US', 301, 'Home Fax Number', 'Home Fax Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fax_number', 'work_fax_number', 'en-US', 301, 'Work Fax Number', 'Work Fax Number', 'person');
+  VALUES ('fax_number', 'work_fax_number', 'en-US', 302, 'Work Fax Number', 'Work Fax Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fax_number', 'other_fax_number', 'en-US', 302, 'Other Fax Number', 'Other Fax Number', 'person');
+  VALUES ('fax_number', 'other_fax_number', 'en-US', 303, 'Other Fax Number', 'Other Fax Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fax_number', 'alternate_fax_number', 'en-US', 303, 'Alternate Fax Number', 'Alternate Fax Number', 'person');
+  VALUES ('fax_number', 'alternate_fax_number', 'en-US', 304, 'Alternate Fax Number', 'Alternate Fax Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('fax_number', 'main_fax_number', 'en-US', 310, 'Main Fax Number', 'Main Fax Number', 'organization');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('email_address', 'personal_email_address', 'en-US', 400, 'Personal E-mail Address', 'Personal E-mail Address', 'person');
+  VALUES ('email_address', 'personal_email_address', 'en-US', 401, 'Personal E-mail Address', 'Personal E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('email_address', 'work_email_address', 'en-US', 401, 'Work E-mail Address', 'Work E-mail Address', 'person');
+  VALUES ('email_address', 'work_email_address', 'en-US', 402, 'Work E-mail Address', 'Work E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('email_address', 'school_email_address', 'en-US', 402, 'School E-mail Address', 'School E-mail Address', 'person');
+  VALUES ('email_address', 'school_email_address', 'en-US', 403, 'School E-mail Address', 'School E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('email_address', 'other_email_address', 'en-US', 403, 'Other E-mail Address', 'Other E-mail Address', 'person');
+  VALUES ('email_address', 'other_email_address', 'en-US', 404, 'Other E-mail Address', 'Other E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('email_address', 'alternate_email_address', 'en-US', 404, 'Alternate E-mail Address', 'Alternate E-mail Address', 'person');
+  VALUES ('email_address', 'alternate_email_address', 'en-US', 405, 'Alternate E-mail Address', 'Alternate E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('email_address', 'main_email_address', 'en-US', 410, 'Main E-mail Address', 'Main E-mail Address', 'organization');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('social_media', 'whatsapp_user_id', 'en-US', 500, 'WhatsApp User ID', 'WhatsApp User ID', 'person');
+  VALUES ('social_media', 'whatsapp_user_id', 'en-US', 501, 'WhatsApp User ID', 'WhatsApp User ID', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('social_media', 'twitter_id', 'en-US', 501, 'Twitter ID', 'Twitter ID', 'person');
+  VALUES ('social_media', 'twitter_id', 'en-US', 502, 'Twitter ID', 'Twitter ID', 'person');
 
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('mobile_number', 'personal_mobile_number', 'en-ZA', 100, 'Personal Mobile Number', 'Personal Mobile Number', 'person');
+  VALUES ('mobile_number', 'personal_mobile_number', 'en-ZA', 101, 'Personal Mobile Number', 'Personal Mobile Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('mobile_number', 'work_mobile_number', 'en-ZA', 101, 'Work Mobile Number', 'Work Mobile Number', 'person');
+  VALUES ('mobile_number', 'work_mobile_number', 'en-ZA', 102, 'Work Mobile Number', 'Work Mobile Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('mobile_number', 'other_mobile_number', 'en-ZA', 102, 'Other Mobile Number', 'Other Mobile Number', 'person');
+  VALUES ('mobile_number', 'other_mobile_number', 'en-ZA', 103, 'Other Mobile Number', 'Other Mobile Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('mobile_number', 'alternate_mobile_number', 'en-ZA', 103, 'Alternate Mobile Number', 'Alternate Mobile Number', 'person');
+  VALUES ('mobile_number', 'alternate_mobile_number', 'en-ZA', 104, 'Alternate Mobile Number', 'Alternate Mobile Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('mobile_number', 'main_mobile_number', 'en-ZA', 110, 'Main Mobile Number', 'Main Mobile Number', 'organization');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'home_phone_number', 'en-ZA', 200, 'Home Phone Number', 'Home Phone Number', 'person');
+  VALUES ('phone_number', 'home_phone_number', 'en-ZA', 201, 'Home Phone Number', 'Home Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'work_phone_number', 'en-ZA', 201, 'Work Phone Number', 'Work Phone Number', 'person');
+  VALUES ('phone_number', 'work_phone_number', 'en-ZA', 202, 'Work Phone Number', 'Work Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'school_phone_number', 'en-ZA', 202, 'School Phone Number', 'School Phone Number', 'person');
+  VALUES ('phone_number', 'school_phone_number', 'en-ZA', 203, 'School Phone Number', 'School Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'pager_phone_number', 'en-ZA', 203, 'Pager Phone Number', 'Pager Phone Number', 'person');
+  VALUES ('phone_number', 'pager_phone_number', 'en-ZA', 204, 'Pager Phone Number', 'Pager Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'other_phone_number', 'en-ZA', 204, 'Other Phone Number', 'Other Phone Number', 'person');
+  VALUES ('phone_number', 'other_phone_number', 'en-ZA', 205, 'Other Phone Number', 'Other Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('phone_number', 'alternate_phone_number', 'en-ZA', 205, 'Alternate Phone Number', 'Alternate Phone Number', 'person');
+  VALUES ('phone_number', 'alternate_phone_number', 'en-ZA', 206, 'Alternate Phone Number', 'Alternate Phone Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('phone_number', 'main_phone_number', 'en-ZA', 210, 'Main Phone Number', 'Main Phone Number', 'organization');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fax_number', 'home_fax_number', 'en-ZA', 300, 'Home Fax Number', 'Home Fax Number', 'person');
+  VALUES ('fax_number', 'home_fax_number', 'en-ZA', 301, 'Home Fax Number', 'Home Fax Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fax_number', 'work_fax_number', 'en-ZA', 301, 'Work Fax Number', 'Work Fax Number', 'person');
+  VALUES ('fax_number', 'work_fax_number', 'en-ZA', 302, 'Work Fax Number', 'Work Fax Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fax_number', 'other_fax_number', 'en-ZA', 302, 'Other Fax Number', 'Other Fax Number', 'person');
+  VALUES ('fax_number', 'other_fax_number', 'en-ZA', 303, 'Other Fax Number', 'Other Fax Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fax_number', 'alternate_fax_number', 'en-ZA', 303, 'Alternate Fax Number', 'Alternate Fax Number', 'person');
+  VALUES ('fax_number', 'alternate_fax_number', 'en-ZA', 304, 'Alternate Fax Number', 'Alternate Fax Number', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('fax_number', 'main_fax_number', 'en-ZA', 310, 'Main Fax Number', 'Main Fax Number', 'organization');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('email_address', 'personal_email_address', 'en-ZA', 400, 'Personal E-mail Address', 'Personal E-mail Address', 'person');
+  VALUES ('email_address', 'personal_email_address', 'en-ZA', 401, 'Personal E-mail Address', 'Personal E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('email_address', 'work_email_address', 'en-ZA', 401, 'Work E-mail Address', 'Work E-mail Address', 'person');
+  VALUES ('email_address', 'work_email_address', 'en-ZA', 402, 'Work E-mail Address', 'Work E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('email_address', 'school_email_address', 'en-ZA', 402, 'School E-mail Address', 'School E-mail Address', 'person');
+  VALUES ('email_address', 'school_email_address', 'en-ZA', 403, 'School E-mail Address', 'School E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('email_address', 'other_email_address', 'en-ZA', 403, 'Other E-mail Address', 'Other E-mail Address', 'person');
+  VALUES ('email_address', 'other_email_address', 'en-ZA', 404, 'Other E-mail Address', 'Other E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('email_address', 'alternate_email_address', 'en-ZA', 404, 'Alternate E-mail Address', 'Alternate E-mail Address', 'person');
+  VALUES ('email_address', 'alternate_email_address', 'en-ZA', 405, 'Alternate E-mail Address', 'Alternate E-mail Address', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
   VALUES ('email_address', 'main_email_address', 'en-ZA', 410, 'Main E-mail Address', 'Main E-mail Address', 'organization');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('social_media', 'whatsapp_user_id', 'en-ZA', 500, 'WhatsApp User ID', 'WhatsApp User ID', 'person');
+  VALUES ('social_media', 'whatsapp_user_id', 'en-ZA', 501, 'WhatsApp User ID', 'WhatsApp User ID', 'person');
 INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('social_media', 'twitter_id', 'en-ZA', 501, 'Twitter ID', 'Twitter ID', 'person');
+  VALUES ('social_media', 'twitter_id', 'en-ZA', 502, 'Twitter ID', 'Twitter ID', 'person');
 
 
 INSERT INTO party.employment_statuses (code, locale_id, sort_index, name, description)
@@ -1599,6 +1708,36 @@ INSERT INTO party.identity_document_types (code, locale_id, sort_index, name, de
   VALUES ('passport', 'en-ZA', 99999, 'Passport', 'Passport', 'person');
 INSERT INTO party.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
   VALUES ('za_company_registration', 'en-ZA', 20001, 'South African Company Registration', 'South African Company Registration', 'ZA', 'organization');
+
+
+INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('fraud', 'en-US', 1, 'Fraud', 'Fraud');
+INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('kyc', 'en-US', 2, 'KYC', 'Know Your Customer');
+INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-US', 99, 'Test Lock Category', 'Test Lock Category');
+
+INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('fraud', 'en-ZA', 1, 'Fraud', 'Fraud');
+INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('kyc', 'en-ZA', 2, 'KYC', 'Know Your Customer');
+INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-ZA', 99, 'Test Lock Category', 'Test Lock Category');
+
+
+INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('fraud', 'suspected_fraud', 'en-US', 101, 'Suspected Fraud', 'Suspected Fraud', 'organization,person');
+INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('kyc', 'kyc_unverified', 'en-US', 201, 'KYC Unverified', 'KYC Unverified', 'organization,person');
+INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test', 'test', 'en-US', 9901, 'Test Lock', 'Test Lock', 'organization,person');
+
+INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('fraud', 'suspected_fraud', 'en-ZA', 101, 'Suspected Fraud', 'Suspected Fraud', 'organization,person');
+INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('kyc', 'kyc_unverified', 'en-ZA', 201, 'KYC Unverified', 'KYC Unverified', 'organization,person');
+INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test', 'test', 'en-ZA', 9901, 'Test Lock', 'Test Lock', 'organization,person');
 
 
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
@@ -1954,14 +2093,14 @@ INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, des
 
 
 INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('correspondence', 'en-US', 100, 'Correspondence', 'Correspondence');
+  VALUES ('correspondence', 'en-US', 1, 'Correspondence', 'Correspondence');
 INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-US', 900, 'Test', 'Test');
+  VALUES ('test', 'en-US', 99, 'Test', 'Test');
 
 INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('correspondence', 'en-ZA', 100, 'Correspondence', 'Correspondence');
+  VALUES ('correspondence', 'en-ZA', 1, 'Correspondence', 'Correspondence');
 INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-ZA', 900, 'Test', 'Test');
+  VALUES ('test', 'en-ZA', 99, 'Test', 'Test');
 
 
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
@@ -1973,15 +2112,15 @@ INSERT INTO party.preference_types (category, code, locale_id, sort_index, name,
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('correspondence','time_to_contact', 'en-US', 104, 'Time To Contact', 'Suitable Time To Contact', 'person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_contact_mechanism_type', 'en-US', 901, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
+  VALUES ('test','test_contact_mechanism_type', 'en-US', 9901, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_country', 'en-US', 902, 'Test Country', 'Test Country', 'organization,person');
+  VALUES ('test','test_country', 'en-US', 9902, 'Test Country', 'Test Country', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_language', 'en-US', 903, 'Test Language', 'Test Language', 'organization,person');
+  VALUES ('test','test_language', 'en-US', 9903, 'Test Language', 'Test Language', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_preference', 'en-US', 904, 'Test Preference', 'Test Preference', 'organization,person');
+  VALUES ('test','test_preference', 'en-US', 9904, 'Test Preference', 'Test Preference', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_size', 'en-US', 905, 'Test Size', 'Test Size', 'organization,person');
+  VALUES ('test','test_size', 'en-US', 9905, 'Test Size', 'Test Size', 'organization,person');
 
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('correspondence','contact_person', 'en-ZA', 101, 'Contact Person', 'Contact Person', 'organization');
@@ -1992,15 +2131,15 @@ INSERT INTO party.preference_types (category, code, locale_id, sort_index, name,
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('correspondence', 'time_to_contact', 'en-ZA', 104, 'Time To Contact', 'Suitable Time To Contact', 'person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_contact_mechanism_type', 'en-ZA', 901, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
+  VALUES ('test','test_contact_mechanism_type', 'en-ZA', 9901, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_country', 'en-ZA', 902, 'Test Country', 'Test Country', 'organization,person');
+  VALUES ('test','test_country', 'en-ZA', 9902, 'Test Country', 'Test Country', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_language', 'en-ZA', 903, 'Test Language', 'Test Language', 'organization,person');
+  VALUES ('test','test_language', 'en-ZA', 9903, 'Test Language', 'Test Language', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_preference', 'en-ZA', 904, 'Test Preference', 'Test Preference', 'organization,person');
+  VALUES ('test','test_preference', 'en-ZA', 9904, 'Test Preference', 'Test Preference', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_size', 'en-ZA', 905, 'Test Size', 'Test Size', 'organization,person');
+  VALUES ('test','test_size', 'en-ZA', 9905, 'Test Size', 'Test Size', 'organization,person');
 
 
 INSERT INTO party.races (code, locale_id, sort_index, name, description)
@@ -2028,12 +2167,6 @@ INSERT INTO party.races (code, locale_id, sort_index, name, description)
   VALUES ('white', 'en-ZA', 5, 'White', 'White');
 INSERT INTO party.races (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
-
-
-INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('fraud', 'en-US', 1, 'Fraud', 'Fraud');
-INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('kyc', 'en-US', 1, 'KYC', 'Know Your Customer');
 
 
 INSERT INTO party.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
@@ -2158,149 +2291,149 @@ INSERT INTO party.role_types (code, locale_id, sort_index, name, description, pa
   VALUES ('test_person_role', 'en-ZA', 201, 'Test Person Role', 'Test Person Role', 'person');
 
 
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'contact_mechanisms', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_person_role', 'contact_mechanism', 'email_address', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_person_role', 'contact_mechanism', 'fax_number', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_person_role', 'contact_mechanism', 'mobile_number', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_person_role', 'contact_mechanism', 'phone_number', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'countries_of_citizenship', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'countries_of_tax_residence', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'country_of_birth', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'country_of_residence', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'date_of_birth', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'employment_status', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'employment_type', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'gender', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'given_name', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'identity_documents', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'initials', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'language', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'marital_status', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'marriage_type', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'occupation', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'physical_addresses', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_person_role', 'physical_address', 'residential', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'preferred_name', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'race', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'residency_status', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'residential_type', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'surname', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'tax_numbers', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'title', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'test_attribute', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
   VALUES ('test_person_role', 'test_attribute', 'min_size', '5');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
   VALUES ('test_person_role', 'test_attribute', 'max_size', '20');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
   VALUES ('test_person_role', 'test_attribute', 'pattern', '^[a-zA-Z0-9]*$');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'test_contact_mechanism_type', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
   VALUES ('test_person_role', 'test_contact_mechanism_type', 'reference', 'contact_mechanism_type');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'test_country', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
   VALUES ('test_person_role', 'test_country', 'reference', 'country');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'test_language', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
   VALUES ('test_person_role', 'test_language', 'reference', 'language');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'test_size', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
   VALUES ('test_person_role', 'test_size', 'size', '10');
 
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'contact_mechanisms', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_organization_role', 'contact_mechanism', 'email_address', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_organization_role', 'contact_mechanism', 'fax_number', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_organization_role', 'contact_mechanism', 'mobile_number', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_organization_role', 'contact_mechanism', 'phone_number', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'countries_of_tax_residence', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'identity_documents', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'physical_addresses', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_organization_role', 'physical_address', 'main', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'tax_numbers', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'test_attribute', 'required');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
   VALUES ('test_organization_role', 'test_attribute', 'size', '10');
-INSERT INTO party.role_type_attribute_constraints(role_type, attribute_type, type, value)
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
   VALUES ('test_organization_role', 'test_attribute', 'pattern', '^[0-9]*$');
 
 
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
   VALUES ('test_person_role', 'test_preference', 'required');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_person_role', 'test_preference', 'min_size', '5');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_person_role', 'test_preference', 'max_size', '20');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_person_role', 'test_preference', 'pattern', '^[a-zA-Z0-9]*$');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
   VALUES ('test_person_role', 'test_contact_mechanism_type', 'required');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_person_role', 'test_contact_mechanism_type', 'reference', 'contact_mechanism_type');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
   VALUES ('test_person_role', 'test_country', 'required');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_person_role', 'test_country', 'reference', 'country');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
   VALUES ('test_person_role', 'test_language', 'required');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_person_role', 'test_language', 'reference', 'language');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
   VALUES ('test_person_role', 'test_size', 'required');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_person_role', 'test_size', 'size', '10');
 
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
   VALUES ('test_organization_role', 'test_preference', 'required');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_organization_role', 'test_preference', 'min_size', '5');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_organization_role', 'test_preference', 'max_size', '20');
-INSERT INTO party.role_type_preference_constraints(role_type, preference_type, type, value)
+INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_organization_role', 'test_preference', 'pattern', '^[0-9]*$');
 
 
@@ -2381,6 +2514,36 @@ INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, descripti
   VALUES ('other', 'en-ZA', 18, 'Other', 'Other');
 INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+
+
+INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('fraud', 'en-US', 1, 'Fraud', 'Fraud');
+INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('kyc', 'en-US', 2, 'KYC', 'Know Your Customer');
+INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-US', 99, 'Test', 'Test');
+
+INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('fraud', 'en-ZA', 1, 'Fraud', 'Fraud');
+INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('kyc', 'en-ZA', 2, 'KYC', 'Know Your Customer');
+INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-ZA', 99, 'Test', 'Test');
+
+
+INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('fraud', 'fraud_investigation', 'en-US', 101, 'Fraud Investigation', 'Fraud Investigation', 'organization,person');
+INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('kyc', 'kyc_verified', 'en-US', 201, 'KYC Verified', 'KYC Verified', 'organization,person');
+INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test', 'test', 'en-US', 9901, 'Test Status', 'Test Status', 'organization,person');
+
+INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('fraud', 'fraud_investigation', 'en-ZA', 101, 'Fraud Investigation', 'Fraud Investigation', 'organization,person');
+INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('kyc', 'kyc_verified', 'en-ZA', 201, 'KYC Verified', 'KYC Verified', 'organization,person');
+INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test', 'test', 'en-ZA', 9901, 'Test Status', 'Test Status', 'organization,person');
 
 
 INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)

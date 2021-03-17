@@ -36,11 +36,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>TimeToContact</b> class holds the information for a time to contact for a person.
+ * The <b>TimeToContact</b> class holds the information for a time to contact.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A time to contact for a person")
+@Schema(description = "A time to contact")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "TimeToContact", namespace = "http://inception.digital/party")

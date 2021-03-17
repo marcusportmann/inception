@@ -36,28 +36,28 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>EmploymentType</b> class holds the information for an employment type.
+ * The <b>LockTypeCategory</b> class holds the information for a lock type category.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A type of employment")
+@Schema(description = "A collection of related lock types")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"employmentStatus", "code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "EmploymentType", namespace = "http://inception.digital/party")
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
+@XmlRootElement(name = "LockTypeCategory", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "EmploymentType",
+    name = "LockTypeCategory",
     namespace = "http://inception.digital/party",
-    propOrder = {"employmentStatus", "code", "localeId", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "employment_types")
-@IdClass(EmploymentTypeId.class)
-public class EmploymentType implements Serializable {
+@Table(schema = "party", name = "lock_type_categories")
+@IdClass(LockTypeCategoryId.class)
+public class LockTypeCategory implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the employment type. */
-  @Schema(description = "The code for the employment type", required = true)
+  /** The code for the lock type category. */
+  @Schema(description = "The code for the lock type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -66,8 +66,8 @@ public class EmploymentType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the employment type. */
-  @Schema(description = "The description for the employment type", required = true)
+  /** The description for the lock type category. */
+  @Schema(description = "The description for the lock type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -75,20 +75,8 @@ public class EmploymentType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The code for the employment status the employment type is associated with. */
-  @Schema(
-      description = "The code for the employment status the employment type is associated with",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "EmploymentStatus", required = true)
-  @NotNull
-  @Size(min = 1, max = 30)
-  @Id
-  @Column(name = "employment_status", length = 30, nullable = false)
-  private String employmentStatus;
-
-  /** The Unicode locale identifier for the employment type. */
-  @Schema(description = "The Unicode locale identifier for the employment type", required = true)
+  /** The Unicode locale identifier for the lock type category. */
+  @Schema(description = "The Unicode locale identifier for the lock type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -97,8 +85,8 @@ public class EmploymentType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the employment type. */
-  @Schema(description = "The name of the employment type", required = true)
+  /** The name of the lock type category. */
+  @Schema(description = "The name of the lock type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -106,16 +94,16 @@ public class EmploymentType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the employment type. */
-  @Schema(description = "The sort index for the employment type", required = true)
+  /** The sort index for the lock type category. */
+  @Schema(description = "The sort index for the lock type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>EmploymentType</b>. */
-  public EmploymentType() {}
+  /** Constructs a new <b>LockTypeCategory</b>. */
+  public LockTypeCategory() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -137,62 +125,51 @@ public class EmploymentType implements Serializable {
       return false;
     }
 
-    EmploymentType other = (EmploymentType) object;
+    LockTypeCategory other = (LockTypeCategory) object;
 
-    return Objects.equals(employmentStatus, other.employmentStatus)
-        && Objects.equals(code, other.code)
-        && Objects.equals(localeId, other.localeId);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the employment type.
+   * Returns the code for the lock type category.
    *
-   * @return the code for the employment type
+   * @return the code for the lock type category
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the employment type.
+   * Returns the description for the lock type category.
    *
-   * @return the description for the employment type
+   * @return the description for the lock type category
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the code for the employment status the employment type is associated with.
+   * Returns the Unicode locale identifier for the lock type category.
    *
-   * @return the code for the employment status the employment type is associated with
-   */
-  public String getEmploymentStatus() {
-    return employmentStatus;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the employment type.
-   *
-   * @return the Unicode locale identifier for the employment type
+   * @return the Unicode locale identifier for the lock type category
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the employment type.
+   * Returns the name of the lock type category.
    *
-   * @return the name of the employment type
+   * @return the name of the lock type category
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the employment type.
+   * Returns the sort index for the lock type category.
    *
-   * @return the sort index for the employment type
+   * @return the sort index for the lock type category
    */
   public Integer getSortIndex() {
     return sortIndex;
@@ -205,61 +182,49 @@ public class EmploymentType implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((employmentStatus == null) ? 0 : employmentStatus.hashCode())
-        + ((code == null) ? 0 : code.hashCode())
-        + ((localeId == null) ? 0 : localeId.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
-   * Set the code for the employment type.
+   * Set the code for the lock type category.
    *
-   * @param code the code for the employment type
+   * @param code the code for the lock type category
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the employment type.
+   * Set the description for the lock type category.
    *
-   * @param description the description for the employment type
+   * @param description the description for the lock type category
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the code for the employment status the employment type is associated with.
+   * Set the Unicode locale identifier for the lock type category.
    *
-   * @param employmentStatus the code for the employment status the employment type is associated
-   *     with
-   */
-  public void setEmploymentStatus(String employmentStatus) {
-    this.employmentStatus = employmentStatus;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the employment type.
-   *
-   * @param localeId the Unicode locale identifier for the employment type
+   * @param localeId the Unicode locale identifier for the lock type category
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the employment type.
+   * Set the name of the lock type category.
    *
-   * @param name the name of the employment type
+   * @param name the name of the lock type category
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the employment type.
+   * Set the sort index for the lock type category.
    *
-   * @param sortIndex the sort index for the employment type
+   * @param sortIndex the sort index for the lock type category
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

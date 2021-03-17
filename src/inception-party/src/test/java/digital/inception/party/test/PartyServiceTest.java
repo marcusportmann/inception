@@ -17,6 +17,7 @@
 package digital.inception.party.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.github.f4b6a3.uuid.UuidCreator;
@@ -47,6 +48,7 @@ import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.ConstraintViolation;
@@ -152,15 +154,34 @@ public class PartyServiceTest {
 
     person.addAttribute(new Attribute("weight", "80kg"));
 
+    assertTrue(
+        "Failed to confirm that the person has an attribute with type (weight)",
+        person.hasAttributeType("weight"));
+
     person.setCountryOfTaxResidence("ZA");
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     person.addContactMechanism(
         new ContactMechanism(
             ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27835551234"));
+
     person.addContactMechanism(
         new ContactMechanism(
-            ContactMechanismType.EMAIL_ADDRESS, "personal_email_address", "test@test.com"));
+            ContactMechanismType.EMAIL_ADDRESS,
+            "personal_email_address",
+            "giveName@test.com",
+            "marketing"));
+
+    Optional<ContactMechanism> contactMechanismOptional =
+        person.getContactMechanism(ContactMechanismType.EMAIL_ADDRESS, "marketing");
+
+    if (contactMechanismOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the contact mechanism for the person with the type ("
+              + ContactMechanismType.EMAIL_ADDRESS
+              + ") and purpose (marketing)");
+    }
+
 
     person.addIdentityDocument(
         new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
@@ -779,7 +800,24 @@ public class PartyServiceTest {
     organization.setCountriesOfTaxResidence(Set.of("GB", "ZA"));
 
     organization.addContactMechanism(
-        new ContactMechanism("phone_number", "main_phone_number", "0115551234"));
+        new ContactMechanism(ContactMechanismType.PHONE_NUMBER, "main_phone_number", "0115551234"));
+
+    organization.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            "main_email_address",
+            "test@test.com",
+            "marketing"));
+
+    Optional<ContactMechanism> contactMechanismOptional =
+        organization.getContactMechanism(ContactMechanismType.EMAIL_ADDRESS, "marketing");
+
+    if (contactMechanismOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the contact mechanism for the organization with the type ("
+              + ContactMechanismType.EMAIL_ADDRESS
+              + ") and purpose (marketing)");
+    }
 
     PhysicalAddress mainAddress =
         new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressRole.MAIN);
@@ -920,18 +958,18 @@ public class PartyServiceTest {
 
     person.addAttribute(new Attribute("height", "180cm"));
 
-    person.removeContactMechanism("fax_number", "main_fax_number");
+    person.removeContactMechanism("main_fax_number");
 
     person.getContactMechanism("personal_email_address").get().setValue("test.updated@test.com");
 
     person.addContactMechanism(
-        new ContactMechanism("phone_number", "home_phone_number", "0115551234"));
+        new ContactMechanism(ContactMechanismType.PHONE_NUMBER, "home_phone_number", "0115551234"));
 
     person.addIdentityDocument(
         new IdentityDocument(
             "passport", "ZA", LocalDate.of(2016, 10, 7), LocalDate.of(2025, 9, 1), "A1234567890"));
 
-    person.removeIdentityDocumentByType("za_id_card");
+    person.removeIdentityDocument("za_id_card");
 
     person.removePreference("correspondence_language");
 
@@ -1084,9 +1122,9 @@ public class PartyServiceTest {
     partyService.deleteParty(person.getId());
   }
 
-  /** Test the role type attribute constraint functionality. */
+  /** Test the role type attribute type constraint functionality. */
   @Test
-  public void roleTypeAttributeConstraintTest() throws Exception {
+  public void roleTypeAttributeTypeConstraintTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.addRole(new Role("test_person_role"));
@@ -1101,7 +1139,7 @@ public class PartyServiceTest {
 
     Organization organization = getTestOrganizationDetails();
 
-    organization.removeIdentityDocumentByType("za_company_registration");
+    organization.removeIdentityDocument("za_company_registration");
 
     organization.addRole(new Role("test_organization_role"));
 

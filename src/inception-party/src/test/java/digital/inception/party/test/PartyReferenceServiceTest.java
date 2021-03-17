@@ -52,7 +52,7 @@ import digital.inception.party.ResidencyStatus;
 import digital.inception.party.ResidentialType;
 import digital.inception.party.RolePurpose;
 import digital.inception.party.RoleType;
-import digital.inception.party.RoleTypeAttributeConstraint;
+import digital.inception.party.RoleTypeAttributeTypeConstraint;
 import digital.inception.party.SourceOfFunds;
 import digital.inception.party.TaxNumber;
 import digital.inception.party.TaxNumberType;
@@ -399,35 +399,35 @@ public class PartyReferenceServiceTest {
     retrievedRolePurposes = partyReferenceService.getRolePurposes("en-US");
   }
 
-  /** Test the role type attribute constraint functionality. */
+  /** Test the role type attribute type constraint functionality. */
   @Test
-  public void roleTypeAttributeConstraintTest() throws Exception {
-    List<RoleTypeAttributeConstraint> retrievedRoleTypeAttributeConstraints =
-        partyReferenceService.getRoleTypeAttributeConstraints();
+  public void roleTypeAttributeTypeConstraintTest() throws Exception {
+    List<RoleTypeAttributeTypeConstraint> retrievedRoleTypeAttributeTypeConstraints =
+        partyReferenceService.getRoleTypeAttributeTypeConstraints();
 
     assertEquals(
-        "The correct number of role type attribute constraints was not retrieved",
+        "The correct number of role type attribute type constraints was not retrieved",
         46,
-        retrievedRoleTypeAttributeConstraints.size());
+        retrievedRoleTypeAttributeTypeConstraints.size());
 
-    retrievedRoleTypeAttributeConstraints =
-        partyReferenceService.getRoleTypeAttributeConstraints("test_person_role");
+    retrievedRoleTypeAttributeTypeConstraints =
+        partyReferenceService.getRoleTypeAttributeTypeConstraints("test_person_role");
 
     assertEquals(
-        "The correct number of role type attribute constraints was not retrieved",
+        "The correct number of role type attribute type constraints was not retrieved",
         33,
-        retrievedRoleTypeAttributeConstraints.size());
+        retrievedRoleTypeAttributeTypeConstraints.size());
 
-    retrievedRoleTypeAttributeConstraints.stream()
+    retrievedRoleTypeAttributeTypeConstraints.stream()
         .filter(
-            roleTypeAttributeConstraint ->
-                !roleTypeAttributeConstraint.getRoleType().equals("test_person_role"))
+            roleTypeAttributeTypeConstraint ->
+                !roleTypeAttributeTypeConstraint.getRoleType().equals("test_person_role"))
         .findFirst()
         .ifPresent(
-            roleTypeAttributeConstraint ->
+            roleTypeAttributeTypeConstraint ->
                 fail(
-                    "Found invalid role type attribute constraint with role type ("
-                        + roleTypeAttributeConstraint.getAttributeType()
+                    "Found invalid role type attribute type constraint with role type ("
+                        + roleTypeAttributeTypeConstraint.getAttributeType()
                         + ")"));
   }
 

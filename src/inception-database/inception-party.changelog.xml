@@ -684,7 +684,7 @@
       <column name="type" value="mobile_number"/>
       <column name="code" value="personal_mobile_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="100"/>
+      <column name="sort_index" value="101"/>
       <column name="name" value="Personal Mobile Number"/>
       <column name="description" value="Personal Mobile Number"/>
       <column name="party_types" value="person"/>
@@ -693,7 +693,7 @@
       <column name="type" value="mobile_number"/>
       <column name="code" value="work_mobile_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="101"/>
+      <column name="sort_index" value="102"/>
       <column name="name" value="Work Mobile Number"/>
       <column name="description" value="Work Mobile Number"/>
       <column name="party_types" value="person"/>
@@ -702,7 +702,7 @@
       <column name="type" value="mobile_number"/>
       <column name="code" value="other_mobile_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="102"/>
+      <column name="sort_index" value="103"/>
       <column name="name" value="Other Mobile Number"/>
       <column name="description" value="Other Mobile Number"/>
       <column name="party_types" value="person"/>
@@ -711,7 +711,7 @@
       <column name="type" value="mobile_number"/>
       <column name="code" value="alternate_mobile_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="103"/>
+      <column name="sort_index" value="104"/>
       <column name="name" value="Alternate Mobile Number"/>
       <column name="description" value="Alternate Mobile Number"/>
       <column name="party_types" value="person"/>
@@ -729,7 +729,7 @@
       <column name="type" value="phone_number"/>
       <column name="code" value="home_phone_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="200"/>
+      <column name="sort_index" value="201"/>
       <column name="name" value="Home Phone Number"/>
       <column name="description" value="Home Phone Number"/>
       <column name="party_types" value="person"/>
@@ -738,7 +738,7 @@
       <column name="type" value="phone_number"/>
       <column name="code" value="work_phone_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="201"/>
+      <column name="sort_index" value="202"/>
       <column name="name" value="Work Phone Number"/>
       <column name="description" value="Work Phone Number"/>
       <column name="party_types" value="person"/>
@@ -747,7 +747,7 @@
       <column name="type" value="phone_number"/>
       <column name="code" value="school_phone_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="202"/>
+      <column name="sort_index" value="203"/>
       <column name="name" value="School Phone Number"/>
       <column name="description" value="School Phone Number"/>
       <column name="party_types" value="person"/>
@@ -756,7 +756,7 @@
       <column name="type" value="phone_number"/>
       <column name="code" value="pager_phone_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="203"/>
+      <column name="sort_index" value="204"/>
       <column name="name" value="Pager Phone Number"/>
       <column name="description" value="Pager Phone Number"/>
       <column name="party_types" value="person"/>
@@ -765,7 +765,7 @@
       <column name="type" value="phone_number"/>
       <column name="code" value="other_phone_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="204"/>
+      <column name="sort_index" value="205"/>
       <column name="name" value="Other Phone Number"/>
       <column name="description" value="Other Phone Number"/>
       <column name="party_types" value="person"/>
@@ -774,7 +774,7 @@
       <column name="type" value="phone_number"/>
       <column name="code" value="alternate_phone_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="205"/>
+      <column name="sort_index" value="206"/>
       <column name="name" value="Alternate Phone Number"/>
       <column name="description" value="Alternate Phone Number"/>
       <column name="party_types" value="person"/>
@@ -792,7 +792,7 @@
       <column name="type" value="fax_number"/>
       <column name="code" value="home_fax_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="300"/>
+      <column name="sort_index" value="301"/>
       <column name="name" value="Home Fax Number"/>
       <column name="description" value="Home Fax Number"/>
       <column name="party_types" value="person"/>
@@ -801,7 +801,7 @@
       <column name="type" value="fax_number"/>
       <column name="code" value="work_fax_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="301"/>
+      <column name="sort_index" value="302"/>
       <column name="name" value="Work Fax Number"/>
       <column name="description" value="Work Fax Number"/>
       <column name="party_types" value="person"/>
@@ -810,7 +810,7 @@
       <column name="type" value="fax_number"/>
       <column name="code" value="other_fax_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="302"/>
+      <column name="sort_index" value="303"/>
       <column name="name" value="Other Fax Number"/>
       <column name="description" value="Other Fax Number"/>
       <column name="party_types" value="person"/>
@@ -819,7 +819,7 @@
       <column name="type" value="fax_number"/>
       <column name="code" value="alternate_fax_number"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="303"/>
+      <column name="sort_index" value="304"/>
       <column name="name" value="Alternate Fax Number"/>
       <column name="description" value="Alternate Fax Number"/>
       <column name="party_types" value="person"/>
@@ -837,7 +837,7 @@
       <column name="type" value="email_address"/>
       <column name="code" value="personal_email_address"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="400"/>
+      <column name="sort_index" value="401"/>
       <column name="name" value="Personal E-mail Address"/>
       <column name="description" value="Personal E-mail Address"/>
       <column name="party_types" value="person"/>
@@ -846,7 +846,7 @@
       <column name="type" value="email_address"/>
       <column name="code" value="work_email_address"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="401"/>
+      <column name="sort_index" value="402"/>
       <column name="name" value="Work E-mail Address"/>
       <column name="description" value="Work E-mail Address"/>
       <column name="party_types" value="person"/>
@@ -855,7 +855,7 @@
       <column name="type" value="email_address"/>
       <column name="code" value="school_email_address"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="402"/>
+      <column name="sort_index" value="403"/>
       <column name="name" value="School E-mail Address"/>
       <column name="description" value="School E-mail Address"/>
       <column name="party_types" value="person"/>
@@ -864,7 +864,7 @@
       <column name="type" value="email_address"/>
       <column name="code" value="other_email_address"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="403"/>
+      <column name="sort_index" value="404"/>
       <column name="name" value="Other E-mail Address"/>
       <column name="description" value="Other E-mail Address"/>
       <column name="party_types" value="person"/>
@@ -873,7 +873,7 @@
       <column name="type" value="email_address"/>
       <column name="code" value="alternate_email_address"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="404"/>
+      <column name="sort_index" value="405"/>
       <column name="name" value="Alternate E-mail Address"/>
       <column name="description" value="Alternate E-mail Address"/>
       <column name="party_types" value="person"/>
@@ -891,7 +891,7 @@
       <column name="type" value="social_media"/>
       <column name="code" value="whatsapp_user_id"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="500"/>
+      <column name="sort_index" value="501"/>
       <column name="name" value="WhatsApp User ID"/>
       <column name="description" value="WhatsApp User ID"/>
       <column name="party_types" value="person"/>
@@ -900,7 +900,7 @@
       <column name="type" value="social_media"/>
       <column name="code" value="twitter_id"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="501"/>
+      <column name="sort_index" value="502"/>
       <column name="name" value="Twitter ID"/>
       <column name="description" value="Twitter ID"/>
       <column name="party_types" value="person"/>

@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -33,30 +34,33 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>RoleTypePreferenceConstraint</b> class holds the information for a constraint that should
- * be applied to a preference for a party when the party is assigned a role type.
+ * The <b>RoleTypePreferenceTypeConstraint</b> class holds the information for a constraint that
+ * should be applied to a preference for a party that is assigned a particular role.
  *
  * @author Marcus Portmann
  */
 @Schema(
     description =
-        "A constraint that should be applied to a preference for a party when the party is assigned a role type")
+        "A constraint that should be applied to a preference for a party that is assigned a particular role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"roleType", "preferenceType", "type", "value"})
-@XmlRootElement(name = "RoleTypePreferenceConstraint", namespace = "http://inception.digital/party")
+@XmlRootElement(
+    name = "RoleTypePreferenceTypeConstraint",
+    namespace = "http://inception.digital/party")
 @XmlType(
-    name = "RoleTypePreferenceConstraint",
+    name = "RoleTypePreferenceTypeConstraint",
     namespace = "http://inception.digital/party",
     propOrder = {"roleType", "preferenceType", "type", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "role_type_preference_constraints")
-@IdClass(RoleTypePreferenceConstraintId.class)
-public class RoleTypePreferenceConstraint implements Serializable {
+@Table(schema = "party", name = "role_type_preference_type_constraints")
+@IdClass(RoleTypePreferenceTypeConstraintId.class)
+public class RoleTypePreferenceTypeConstraint implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
@@ -103,14 +107,14 @@ public class RoleTypePreferenceConstraint implements Serializable {
   private String value;
 
   /**
-   * Constructs a new <b>RoleTypePreferenceConstraint</b>.
+   * Constructs a new <b>RoleTypePreferenceTypeConstraint</b>.
    *
    * @param roleType the code for the role type
    * @param preferenceType the code for the preference type
    * @param type the constraint type
    * @param value the optional value to apply when validating the preference value
    */
-  public RoleTypePreferenceConstraint(
+  public RoleTypePreferenceTypeConstraint(
       String roleType, String preferenceType, ConstraintType type, String value) {
     this.roleType = roleType;
     this.preferenceType = preferenceType;
@@ -119,18 +123,19 @@ public class RoleTypePreferenceConstraint implements Serializable {
   }
 
   /**
-   * Constructs a new <b>RoleTypePreferenceConstraint</b>.
+   * Constructs a new <b>RoleTypePreferenceTypeConstraint</b>.
    *
    * @param roleType the code for the role type
    * @param preferenceType the code for the preference type
    * @param type the constraint type
    */
-  public RoleTypePreferenceConstraint(String roleType, String preferenceType, ConstraintType type) {
+  public RoleTypePreferenceTypeConstraint(
+      String roleType, String preferenceType, ConstraintType type) {
     this(roleType, preferenceType, type, null);
   }
 
-  /** Constructs a new <b>RoleTypePreferenceConstraint</b>. */
-  public RoleTypePreferenceConstraint() {}
+  /** Constructs a new <b>RoleTypePreferenceTypeConstraint</b>. */
+  public RoleTypePreferenceTypeConstraint() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -152,7 +157,7 @@ public class RoleTypePreferenceConstraint implements Serializable {
       return false;
     }
 
-    RoleTypePreferenceConstraint other = (RoleTypePreferenceConstraint) object;
+    RoleTypePreferenceTypeConstraint other = (RoleTypePreferenceTypeConstraint) object;
 
     return Objects.equals(roleType, other.roleType)
         && Objects.equals(preferenceType, other.preferenceType)
@@ -164,6 +169,8 @@ public class RoleTypePreferenceConstraint implements Serializable {
    *
    * @return the integer value to apply when validating the preference value
    */
+  @JsonIgnore
+  @XmlTransient
   public int getIntegerValue() {
     if (!StringUtils.hasText(value)) {
       return 0;

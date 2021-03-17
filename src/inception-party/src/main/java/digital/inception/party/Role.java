@@ -45,12 +45,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>Role</b> class holds the information for a role assigned directly to a party or
- * organisation.
+ * The <b>Role</b> class holds the information for a role assigned directly to an organization or
+ * person.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A role assigned directly to an organization or person]")
+@Schema(description = "A role assigned directly to an organization or person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "purpose"})
 @XmlRootElement(name = "Role", namespace = "http://inception.digital/party")

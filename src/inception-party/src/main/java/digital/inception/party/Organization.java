@@ -68,8 +68,8 @@ import org.springframework.util.StringUtils;
  *       <b>ValidOrganizationValidator</b> class.
  *   <li>Add a new column for the new attribute to the <b>inception-party.changelog.xml</b> file.
  *   <li>Add the name of the attribute to the <b>Attribute.RESERVED_ATTRIBUTE_TYPE_CODES</b> array.
- *   <li>Add support for applying validations described by <b>RoleTypeAttributeConstraint</b>s to
- *       the <b>ValidOrganizationValidator</b>.
+ *   <li>Add support for applying validations described by <b>RoleTypeAttributeTypeConstraint</b>s
+ *       to the <b>ValidOrganizationValidator</b>.
  * </ol>
  *
  * @author Marcus Portmann
@@ -86,11 +86,13 @@ import org.springframework.util.StringUtils;
   "attributes",
   "contactMechanisms",
   "identityDocuments",
+  "locks",
   "physicalAddresses",
   "preferences",
+  "roles",
+  "statuses",
   "countriesOfTaxResidence",
   "taxNumbers",
-  "roles"
 })
 @XmlRootElement(name = "Organization", namespace = "http://inception.digital/party")
 @XmlType(
@@ -102,12 +104,14 @@ import org.springframework.util.StringUtils;
       "name",
       "attributes",
       "contactMechanisms",
-      "physicalAddresses",
       "identityDocuments",
+      "locks",
+      "physicalAddresses",
       "preferences",
+      "roles",
+      "statuses",
       "countriesOfTaxResidence",
-      "taxNumbers",
-      "roles"
+      "taxNumbers"
     })
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @ValidOrganization
@@ -144,6 +148,15 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<IdentityDocument> identityDocuments = new HashSet<>();
 
+  /** The locks applied to the organization. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<Lock> locks = new HashSet<>();
+
   /** The physical addresses for the organization. */
   @Valid
   @OneToMany(
@@ -170,6 +183,15 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<Role> roles = new HashSet<>();
+
+  /** The statuses assigned to the organization. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<Status> statuses = new HashSet<>();
 
   /** The tax numbers for the organization. */
   @Valid
@@ -252,6 +274,19 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
+   * Apply the lock to the organization. s
+   *
+   * @param lock the lock
+   */
+  public void addLock(Lock lock) {
+    locks.removeIf(existingLock -> Objects.equals(existingLock.getType(), lock.getType()));
+
+    lock.setParty(this);
+
+    locks.add(lock);
+  }
+
+  /**
    * Add the physical address for the organization.
    *
    * @param physicalAddress the physical address
@@ -291,6 +326,19 @@ public class Organization extends PartyBase implements Serializable {
     role.setParty(this);
 
     roles.add(role);
+  }
+
+  /**
+   * Assign the status to the organization. s
+   *
+   * @param status the status
+   */
+  public void addStatus(Status status) {
+    statuses.removeIf(existingStatus -> Objects.equals(existingStatus.getType(), status.getType()));
+
+    status.setParty(this);
+
+    statuses.add(status);
   }
 
   /**
@@ -462,6 +510,31 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
+   * Retrieve the lock with the specified type for the organization.
+   *
+   * @param type the code for the lock type
+   * @return an Optional containing the lock with the specified type for the organization or an
+   *     empty Optional if the lock could not be found
+   */
+  public Optional<Lock> getLock(String type) {
+    return locks.stream().filter(lock -> Objects.equals(lock.getType(), type)).findFirst();
+  }
+
+  /**
+   * Returns the locks applied to the organization.
+   *
+   * @return the locks applied to the organization
+   */
+  @Schema(description = "The locks applied to the organization")
+  @JsonProperty
+  @JsonManagedReference("lockReference")
+  @XmlElementWrapper(name = "Locks")
+  @XmlElement(name = "Lock")
+  public Set<Lock> getLocks() {
+    return locks;
+  }
+
+  /**
    * Returns the name of the organization.
    *
    * @return the name of the organization
@@ -475,15 +548,32 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Retrieve the first physical address with the specified purpose for the organization.
+   * Retrieve the first physical address with the specified role for the organization.
    *
-   * @param purpose the physical address purpose
-   * @return an Optional containing the first physical address with the specified purpose for the
+   * @param role the code for the physical address role
+   * @return an Optional containing the first physical address with the specified role for the
    *     organization or an empty Optional if the physical address could not be found
    */
-  public Optional<PhysicalAddress> getPhysicalAddress(PhysicalAddressPurpose purpose) {
+  public Optional<PhysicalAddress> getPhysicalAddress(String role) {
     return physicalAddresses.stream()
-        .filter(physicalAddress -> physicalAddress.getPurposes().contains(purpose))
+        .filter(physicalAddress -> Objects.equals(physicalAddress.getRole(), role))
+        .findFirst();
+  }
+
+  /**
+   * Retrieve the first physical address with the specified type and purpose for the organization.
+   *
+   * @param type the code for the physical address type
+   * @param purpose the code for the physical address purpose
+   * @return an Optional containing the first physical address with the specified type and purpose
+   *     for the organization or an empty Optional if the physical address could not be found
+   */
+  public Optional<PhysicalAddress> getPhysicalAddress(String type, String purpose) {
+    return physicalAddresses.stream()
+        .filter(
+            physicalAddress ->
+                Objects.equals(physicalAddress.getType(), type)
+                    && physicalAddress.getPurposes().contains(purpose))
         .findFirst();
   }
 
@@ -552,6 +642,31 @@ public class Organization extends PartyBase implements Serializable {
   @XmlElement(name = "Role")
   public Set<Role> getRoles() {
     return roles;
+  }
+
+  /**
+   * Retrieve the status with the specified type for the organization.
+   *
+   * @param type the code for the status type
+   * @return an Optional containing the status with the specified type for the organization or an
+   *     empty Optional if the status could not be found
+   */
+  public Optional<Status> getStatus(String type) {
+    return statuses.stream().filter(status -> Objects.equals(status.getType(), type)).findFirst();
+  }
+
+  /**
+   * Returns the statuses assigned to the organization.
+   *
+   * @return the statuses assigned to the organization
+   */
+  @Schema(description = "The statuses assigned to the organization")
+  @JsonProperty
+  @JsonManagedReference("statusReference")
+  @XmlElementWrapper(name = "Statuses")
+  @XmlElement(name = "Status")
+  public Set<Status> getStatuses() {
+    return statuses;
   }
 
   /**
@@ -645,6 +760,17 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns whether the organization has a lock with the specified type.
+   *
+   * @param type the code for the lock type
+   * @return <b>true</b>> if the organization has a lock with the specified type or <b>false</b>
+   *     otherwise
+   */
+  public boolean hasLockType(String type) {
+    return locks.stream().anyMatch(lock -> Objects.equals(lock.getType(), type));
+  }
+
+  /**
    * Returns whether the organization has a physical address with the specified role.
    *
    * @param role the code for the physical address role
@@ -654,6 +780,17 @@ public class Organization extends PartyBase implements Serializable {
   public boolean hasPhysicalAddressRole(String role) {
     return physicalAddresses.stream()
         .anyMatch(physicalAddress -> Objects.equals(physicalAddress.getRole(), role));
+  }
+
+  /**
+   * Returns whether the organization has a status with the specified type.
+   *
+   * @param type the code for the status type
+   * @return <b>true</b>> if the organization has a status with the specified type or <b>false</b>
+   *     otherwise
+   */
+  public boolean hasStatusType(String type) {
+    return statuses.stream().anyMatch(status -> Objects.equals(status.getType(), type));
   }
 
   /**
@@ -679,13 +816,23 @@ public class Organization extends PartyBase implements Serializable {
    * Remove the contact mechanism with the specified type and purpose for the organization.
    *
    * @param type the code for the contact mechanism type
-   * @param purpose the code for the contact mechanism role
+   * @param purpose the code for the contact mechanism purpose
    */
   public void removeContactMechanism(String type, String purpose) {
     contactMechanisms.removeIf(
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), type)
-                && Objects.equals(existingContactMechanism.getRole(), purpose));
+                && existingContactMechanism.getPurposes().contains(purpose));
+  }
+
+  /**
+   * Remove the contact mechanism with the specified role for the organization.
+   *
+   * @param role the code for the contact mechanism role
+   */
+  public void removeContactMechanism(String role) {
+    contactMechanisms.removeIf(
+        existingContactMechanism -> Objects.equals(existingContactMechanism.getRole(), role));
   }
 
   /**
@@ -693,19 +840,41 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the code for the identity document type
    */
-  public void removeIdentityDocumentByType(String type) {
+  public void removeIdentityDocument(String type) {
     identityDocuments.removeIf(
         existingIdentityDocument -> Objects.equals(existingIdentityDocument.getType(), type));
   }
 
   /**
-   * Remove any physical addresses with the specified purpose for the organization.
+   * Remove the lock with the specified type for the organization.
    *
-   * @param purpose the physical address purpose
+   * @param type the code for the lock type
    */
-  public void removePhysicalAddress(PhysicalAddressPurpose purpose) {
+  public void removeLock(String type) {
+    locks.removeIf(existingLock -> Objects.equals(existingLock.getType(), type));
+  }
+
+  /**
+   * Remove any physical addresses with the specified role for the organization.
+   *
+   * @param role the code for the physical address role
+   */
+  public void removePhysicalAddress(String role) {
     physicalAddresses.removeIf(
-        existingPhysicalAddress -> existingPhysicalAddress.getPurposes().contains(purpose));
+        existingPhysicalAddress -> Objects.equals(existingPhysicalAddress.getRole(), role));
+  }
+
+  /**
+   * Remove any physical addresses with the specified type and purpose for the organization.
+   *
+   * @param type the code for the physical address type
+   * @param purpose the code for the physical address purpose
+   */
+  public void removePhysicalAddress(String type, String purpose) {
+    physicalAddresses.removeIf(
+        existingPhysicalAddress ->
+            Objects.equals(existingPhysicalAddress.getType(), type)
+                && existingPhysicalAddress.getPurposes().contains(purpose));
   }
 
   /**
@@ -724,6 +893,15 @@ public class Organization extends PartyBase implements Serializable {
    */
   public void removeRole(String type) {
     roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), type));
+  }
+
+  /**
+   * Remove the status with the specified type for the organization.
+   *
+   * @param type the code for the lock type
+   */
+  public void removeStatus(String type) {
+    statuses.removeIf(existingStatus -> Objects.equals(existingStatus.getType(), type));
   }
 
   /**
@@ -798,6 +976,16 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
+   * Set the locks for the organization.
+   *
+   * @param locks the locks for the organization
+   */
+  public void setLocks(Set<Lock> locks) {
+    this.locks.clear();
+    this.locks.addAll(locks);
+  }
+
+  /**
    * Set the name of the organization.
    *
    * @param name the name of the organization
@@ -835,6 +1023,16 @@ public class Organization extends PartyBase implements Serializable {
   public void setRoles(Set<Role> roles) {
     this.roles.clear();
     this.roles.addAll(roles);
+  }
+
+  /**
+   * Set the statuses for the organization.
+   *
+   * @param statuses the statuses for the organization
+   */
+  public void setStatuses(Set<Status> statuses) {
+    this.statuses.clear();
+    this.statuses.addAll(statuses);
   }
 
   /**

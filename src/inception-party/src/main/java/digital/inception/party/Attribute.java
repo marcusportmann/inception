@@ -50,11 +50,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>Attribute</b> class holds the information for an attribute.
+ * The <b>Attribute</b> class holds the information for an attribute for an organization or person.
  *
  * @author Marcus Portmann
  */
-@Schema(name = "Attribute", description = "An attribute")
+@Schema(name = "Attribute", description = "An attribute for an organization or person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "type",

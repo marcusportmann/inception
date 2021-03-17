@@ -20,40 +20,34 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>RoleTypePreferenceConstraintId</b> class implements the ID class for the
- * <b>RoleTypePreferenceConstraint</b> class.
+ * The <b>LockTypeCategoryId</b> class implements the ID class for the <b>LockTypeCategory</b>
+ * class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class RoleTypePreferenceConstraintId implements Serializable {
+public class LockTypeCategoryId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the preference type. */
-  private String preferenceType;
+  /** The code for the lock type category. */
+  private String code;
 
-  /** The code for the role type. */
-  private String roleType;
+  /** The Unicode locale identifier for the lock type category. */
+  private String localeId;
 
-  /** The constraint type. */
-  private ConstraintType type;
-
-  /** Constructs a new <b>RoleTypePreferenceConstraintId</b>. */
-  public RoleTypePreferenceConstraintId() {}
+  /** Constructs a new <b>LockTypeCategoryId</b>. */
+  public LockTypeCategoryId() {}
 
   /**
-   * Constructs a new <b>RoleTypePreferenceConstraintId</b>.
+   * Constructs a new <b>LockTypeCategoryId</b>.
    *
-   * @param roleType the code for the role type
-   * @param preferenceType the code for the preference type
-   * @param type the constraint type
+   * @param code the code for the lock type category
+   * @param localeId the Unicode locale identifier for the lock type category
    */
-  public RoleTypePreferenceConstraintId(
-      String roleType, String preferenceType, ConstraintType type) {
-    this.roleType = roleType;
-    this.preferenceType = preferenceType;
-    this.type = type;
+  public LockTypeCategoryId(String code, String localeId) {
+    this.code = code;
+    this.localeId = localeId;
   }
 
   /**
@@ -76,11 +70,9 @@ public class RoleTypePreferenceConstraintId implements Serializable {
       return false;
     }
 
-    RoleTypePreferenceConstraintId other = (RoleTypePreferenceConstraintId) object;
+    LockTypeCategoryId other = (LockTypeCategoryId) object;
 
-    return Objects.equals(roleType, other.roleType)
-        && Objects.equals(preferenceType, other.preferenceType)
-        && Objects.equals(type, other.type);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -90,8 +82,6 @@ public class RoleTypePreferenceConstraintId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((roleType == null) ? 0 : roleType.hashCode())
-        + ((preferenceType == null) ? 0 : preferenceType.hashCode())
-        + ((type == null) ? 0 : type.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 }

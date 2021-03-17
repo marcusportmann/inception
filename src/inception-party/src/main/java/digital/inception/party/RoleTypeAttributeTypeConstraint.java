@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -33,30 +34,33 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>RoleTypeAttributeConstraint</b> class holds the information for a constraint that should
- * be applied to an attribute for a party when the party is assigned a role type.
+ * The <b>RoleTypeAttributeTypeConstraint</b> class holds the information for a constraint that
+ * should be applied to an attribute for a party that is assigned a particular role.
  *
  * @author Marcus Portmann
  */
 @Schema(
     description =
-        "A constraint that should be applied to an attribute for a party when the party is assigned a role type")
+        "A constraint that should be applied to an attribute for a party that is assigned a particular role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"roleType", "attributeType", "attributeTypeQualifier", "type", "value"})
-@XmlRootElement(name = "RoleTypeAttributeConstraint", namespace = "http://inception.digital/party")
+@XmlRootElement(
+    name = "RoleTypeAttributeTypeConstraint",
+    namespace = "http://inception.digital/party")
 @XmlType(
-    name = "RoleTypeAttributeConstraint",
+    name = "RoleTypeAttributeTypeConstraint",
     namespace = "http://inception.digital/party",
     propOrder = {"roleType", "attributeType", "attributeTypeQualifier", "type", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "role_type_attribute_constraints")
-@IdClass(RoleTypeAttributeConstraintId.class)
-public class RoleTypeAttributeConstraint implements Serializable {
+@Table(schema = "party", name = "role_type_attribute_type_constraints")
+@IdClass(RoleTypeAttributeTypeConstraintId.class)
+public class RoleTypeAttributeTypeConstraint implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
@@ -113,20 +117,20 @@ public class RoleTypeAttributeConstraint implements Serializable {
   private String value;
 
   /**
-   * Constructs a new <b>RoleTypeAttributeConstraint</b>.
+   * Constructs a new <b>RoleTypeAttributeTypeConstraint</b>.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
    * @param type the constraint type
    * @param value the optional value to apply when validating the attribute value
    */
-  public RoleTypeAttributeConstraint(
+  public RoleTypeAttributeTypeConstraint(
       String roleType, String attributeType, ConstraintType type, String value) {
     this(roleType, attributeType, "", type, value);
   }
 
   /**
-   * Constructs a new <b>RoleTypeAttributeConstraint</b>.
+   * Constructs a new <b>RoleTypeAttributeTypeConstraint</b>.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
@@ -134,7 +138,7 @@ public class RoleTypeAttributeConstraint implements Serializable {
    * @param type the constraint type
    * @param value the optional value to apply when validating the attribute value
    */
-  public RoleTypeAttributeConstraint(
+  public RoleTypeAttributeTypeConstraint(
       String roleType,
       String attributeType,
       String attributeTypeQualifier,
@@ -148,31 +152,32 @@ public class RoleTypeAttributeConstraint implements Serializable {
   }
 
   /**
-   * Constructs a new <b>RoleTypeAttributeConstraint</b>.
+   * Constructs a new <b>RoleTypeAttributeTypeConstraint</b>.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
    * @param attributeTypeQualifier the qualifier for the attribute type
    * @param type the constraint type
    */
-  public RoleTypeAttributeConstraint(
+  public RoleTypeAttributeTypeConstraint(
       String roleType, String attributeType, String attributeTypeQualifier, ConstraintType type) {
     this(roleType, attributeType, attributeTypeQualifier, type, null);
   }
 
   /**
-   * Constructs a new <b>RoleTypeAttributeConstraint</b>.
+   * Constructs a new <b>RoleTypeAttributeTypeConstraint</b>.
    *
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
    * @param type the constraint type
    */
-  public RoleTypeAttributeConstraint(String roleType, String attributeType, ConstraintType type) {
+  public RoleTypeAttributeTypeConstraint(
+      String roleType, String attributeType, ConstraintType type) {
     this(roleType, attributeType, "", type, null);
   }
 
-  /** Constructs a new <b>RoleTypeAttributeConstraint</b>. */
-  public RoleTypeAttributeConstraint() {}
+  /** Constructs a new <b>RoleTypeAttributeTypeConstraint</b>. */
+  public RoleTypeAttributeTypeConstraint() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -194,7 +199,7 @@ public class RoleTypeAttributeConstraint implements Serializable {
       return false;
     }
 
-    RoleTypeAttributeConstraint other = (RoleTypeAttributeConstraint) object;
+    RoleTypeAttributeTypeConstraint other = (RoleTypeAttributeTypeConstraint) object;
 
     return Objects.equals(roleType, other.roleType)
         && Objects.equals(attributeType, other.attributeType)
@@ -225,6 +230,8 @@ public class RoleTypeAttributeConstraint implements Serializable {
    *
    * @return the integer value to apply when validating the attribute value
    */
+  @JsonIgnore
+  @XmlTransient
   public int getIntegerValue() {
     if (!StringUtils.hasText(value)) {
       return 0;

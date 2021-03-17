@@ -45,7 +45,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A type of preference for a party")
+@Schema(description = "A type of preference")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "code",

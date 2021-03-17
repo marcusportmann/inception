@@ -335,7 +335,7 @@ Complete the following steps to create a new application based on the Inception 
               <artifactId>frontend-maven-plugin</artifactId>
               <version>1.6</version>
               <configuration>
-                <workingDirectory>src/main/frontend</workingDirectory>
+                <workingDirectory>main/frontend</workingDirectory>
                 <nodeVersion>v14.7.0</nodeVersion>
                 <npmVersion>6.14.7</npmVersion>
               </configuration>
@@ -1192,11 +1192,10 @@ Complete the following steps to create a new application based on the Inception 
          content: "Marcus Portmann";
        }
        ```
-
-
-
-
-
+5. Execute the following command under the *src* directory to build the new application.
+   ```
+   mvn package
+   ```
 
 
 

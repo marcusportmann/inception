@@ -68,6 +68,12 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Identity Document Type Repository. */
   private final IdentityDocumentTypeRepository identityDocumentTypeRepository;
 
+  /** The Lock Type Category Repository. */
+  private final LockTypeCategoryRepository lockTypeCategoryRepository;
+
+  /** The Lock Type Repository */
+  private final LockTypeRepository lockTypeRepository;
+
   /** The Marital Status Repository. */
   private final MaritalStatusRepository maritalStatusRepository;
 
@@ -110,17 +116,24 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Party Role Purpose Repository. */
   private final RolePurposeRepository rolePurposeRepository;
 
-  /** The Role Type Attribute Constraint Repository. */
-  private final RoleTypeAttributeConstraintRepository roleTypeAttributeConstraintRepository;
+  /** The Role Type Attribute Type Constraint Repository. */
+  private final RoleTypeAttributeTypeConstraintRepository roleTypeAttributeTypeConstraintRepository;
 
-  /** The Role Type Preference Constraint Repository. */
-  private final RoleTypePreferenceConstraintRepository roleTypePreferenceConstraintRepository;
+  /** The Role Type Preference Type Constraint Repository. */
+  private final RoleTypePreferenceTypeConstraintRepository
+      roleTypePreferenceTypeConstraintRepository;
 
   /** The Party Role Type Repository. */
   private final RoleTypeRepository roleTypeRepository;
 
   /** The Sources of Funds Repository. */
   private final SourceOfFundsRepository sourceOfFundsRepository;
+
+  /** The Status Type Category Repository. */
+  private final StatusTypeCategoryRepository statusTypeCategoryRepository;
+
+  /** The Status Type Repository */
+  private final StatusTypeRepository statusTypeRepository;
 
   /** The Tax Number Type Repository. */
   private final TaxNumberTypeRepository taxNumberTypeRepository;
@@ -148,6 +161,8 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param employmentTypeRepository the Employment Type Repository
    * @param genderRepository the Gender Repository
    * @param identityDocumentTypeRepository the Identity Document Type Repository
+   * @param lockTypeCategoryRepository the Lock Type Category Repository
+   * @param lockTypeRepository the Lock Type Repository
    * @param maritalStatusRepository the Marital Status Repository
    * @param marriageTypeRepository the Marriage Type Repository
    * @param nextOfKinTypeRepository the Next Of Kin Repository
@@ -165,9 +180,13 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param residencePermitTypeRepository the Residence Permit Type Repository
    * @param residencyStatusRepository the Residency Status Repository
    * @param residentialTypeRepository the Residential Type Repository
-   * @param roleTypeAttributeConstraintRepository the Role Type Attribute Constraint Repository
-   * @param roleTypePreferenceConstraintRepository the Role Type Preference Constraint Repository
+   * @param roleTypeAttributeTypeConstraintRepository the Role Type Attribute Type Constraint
+   *     Repository
+   * @param roleTypePreferenceTypeConstraintRepository the Role Type Preference Type Constraint
+   *     Repository
    * @param sourceOfFundsRepository the Source Of Funds Repository
+   * @param statusTypeCategoryRepository the Status Type Category Repository
+   * @param statusTypeRepository the Status Type Repository
    * @param taxNumberTypeRepository the Tax Number Type Repository
    * @param timeToContactRepository the Time To Contact Repository
    * @param titleRepository the Title Repository
@@ -181,6 +200,8 @@ public class PartyReferenceService implements IPartyReferenceService {
       EmploymentTypeRepository employmentTypeRepository,
       GenderRepository genderRepository,
       IdentityDocumentTypeRepository identityDocumentTypeRepository,
+      LockTypeCategoryRepository lockTypeCategoryRepository,
+      LockTypeRepository lockTypeRepository,
       MaritalStatusRepository maritalStatusRepository,
       MarriageTypeRepository marriageTypeRepository,
       NextOfKinTypeRepository nextOfKinTypeRepository,
@@ -198,9 +219,11 @@ public class PartyReferenceService implements IPartyReferenceService {
       ResidencePermitTypeRepository residencePermitTypeRepository,
       ResidencyStatusRepository residencyStatusRepository,
       ResidentialTypeRepository residentialTypeRepository,
-      RoleTypeAttributeConstraintRepository roleTypeAttributeConstraintRepository,
-      RoleTypePreferenceConstraintRepository roleTypePreferenceConstraintRepository,
+      RoleTypeAttributeTypeConstraintRepository roleTypeAttributeTypeConstraintRepository,
+      RoleTypePreferenceTypeConstraintRepository roleTypePreferenceTypeConstraintRepository,
       SourceOfFundsRepository sourceOfFundsRepository,
+      StatusTypeCategoryRepository statusTypeCategoryRepository,
+      StatusTypeRepository statusTypeRepository,
       TaxNumberTypeRepository taxNumberTypeRepository,
       TimeToContactRepository timeToContactRepository,
       TitleRepository titleRepository) {
@@ -212,6 +235,8 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.employmentTypeRepository = employmentTypeRepository;
     this.genderRepository = genderRepository;
     this.identityDocumentTypeRepository = identityDocumentTypeRepository;
+    this.lockTypeCategoryRepository = lockTypeCategoryRepository;
+    this.lockTypeRepository = lockTypeRepository;
     this.maritalStatusRepository = maritalStatusRepository;
     this.marriageTypeRepository = marriageTypeRepository;
     this.nextOfKinTypeRepository = nextOfKinTypeRepository;
@@ -229,9 +254,11 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.residencePermitTypeRepository = residencePermitTypeRepository;
     this.residencyStatusRepository = residencyStatusRepository;
     this.residentialTypeRepository = residentialTypeRepository;
-    this.roleTypeAttributeConstraintRepository = roleTypeAttributeConstraintRepository;
-    this.roleTypePreferenceConstraintRepository = roleTypePreferenceConstraintRepository;
+    this.roleTypeAttributeTypeConstraintRepository = roleTypeAttributeTypeConstraintRepository;
+    this.roleTypePreferenceTypeConstraintRepository = roleTypePreferenceTypeConstraintRepository;
     this.sourceOfFundsRepository = sourceOfFundsRepository;
+    this.statusTypeCategoryRepository = statusTypeCategoryRepository;
+    this.statusTypeRepository = statusTypeRepository;
     this.taxNumberTypeRepository = taxNumberTypeRepository;
     this.timeToContactRepository = timeToContactRepository;
     this.titleRepository = titleRepository;
@@ -545,6 +572,73 @@ public class PartyReferenceService implements IPartyReferenceService {
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the identity document types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the lock type categories.
+   *
+   * @return the lock type categories
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'lockTypeCategories.ALL'")
+  public List<LockTypeCategory> getLockTypeCategories() throws ServiceUnavailableException {
+    return getLockTypeCategories(null);
+  }
+
+  /**
+   * Retrieve the lock type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
+   *     categories for or <b>null</b> to retrieve the lock type categories for all locales
+   * @return the lock type categories
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'lockTypeCategories.' + #localeId")
+  public List<LockTypeCategory> getLockTypeCategories(String localeId)
+      throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return lockTypeCategoryRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return lockTypeCategoryRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the lock type categories", e);
+    }
+  }
+
+  /**
+   * Retrieve all the lock types.
+   *
+   * @return the lock types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'lockTypes.ALL'")
+  public List<LockType> getLockTypes() throws ServiceUnavailableException {
+    return getLockTypes(null);
+  }
+
+  /**
+   * Retrieve the lock types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock types for or
+   *     <b>null</b> to retrieve the lock types for all locales
+   * @return the lock types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'lockTypes.' + #localeId")
+  public List<LockType> getLockTypes(String localeId) throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return lockTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return lockTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the lock types", e);
     }
   }
 
@@ -1027,74 +1121,74 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve the role type attribute constraints.
+   * Retrieve the role type attribute type constraints.
    *
-   * @return the role type attribute constraints
+   * @return the role type attribute type constraints
    */
   @Override
-  @Cacheable(value = "reference", key = "'roleTypeAttributeConstraints.ALL'")
-  public List<RoleTypeAttributeConstraint> getRoleTypeAttributeConstraints()
+  @Cacheable(value = "reference", key = "'roleTypeAttributeTypeConstraints.ALL'")
+  public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints()
       throws ServiceUnavailableException {
-    return getRoleTypeAttributeConstraints(null);
+    return getRoleTypeAttributeTypeConstraints(null);
   }
 
   /**
-   * Retrieve the role type attribute constraints.
+   * Retrieve the role type attribute type constraints.
    *
    * @param roleType the code for the role type to retrieve the attribute constraints for
-   * @return the role type attribute constraints
+   * @return the role type attribute type constraints
    */
   @Override
-  @Cacheable(value = "reference", key = "'roleTypeAttributeConstraints.' + #roleType")
-  public List<RoleTypeAttributeConstraint> getRoleTypeAttributeConstraints(String roleType)
+  @Cacheable(value = "reference", key = "'roleTypeAttributeTypeConstraints.' + #roleType")
+  public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(String roleType)
       throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(roleType)) {
-        return roleTypeAttributeConstraintRepository.findAll(
+        return roleTypeAttributeTypeConstraintRepository.findAll(
             Sort.by(Direction.ASC, "roleType", "attributeType"));
       } else {
-        return roleTypeAttributeConstraintRepository.findByRoleTypeIgnoreCase(
+        return roleTypeAttributeTypeConstraintRepository.findByRoleTypeIgnoreCase(
             roleType, Sort.by(Direction.ASC, "roleType", "attributeType"));
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the role type attribute constraints", e);
+          "Failed to retrieve the role type attribute type constraints", e);
     }
   }
 
   /**
-   * Retrieve the role type preference constraints.
+   * Retrieve the role type preference type constraints.
    *
-   * @return the role type preference constraints
+   * @return the role type preference type constraints
    */
   @Override
-  @Cacheable(value = "reference", key = "'roleTypePreferenceConstraints.ALL'")
-  public List<RoleTypePreferenceConstraint> getRoleTypePreferenceConstraints()
+  @Cacheable(value = "reference", key = "'roleTypePreferenceTypeConstraints.ALL'")
+  public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints()
       throws ServiceUnavailableException {
-    return getRoleTypePreferenceConstraints(null);
+    return getRoleTypePreferenceTypeConstraints(null);
   }
 
   /**
-   * Retrieve the role type preference constraints.
+   * Retrieve the role type preference type constraints.
    *
    * @param roleType the code for the role type to retrieve the preference constraints for
-   * @return the role type preference constraints
+   * @return the role type preference type constraints
    */
   @Override
-  @Cacheable(value = "reference", key = "'roleTypePreferenceConstraints.' + #roleType")
-  public List<RoleTypePreferenceConstraint> getRoleTypePreferenceConstraints(String roleType)
-      throws ServiceUnavailableException {
+  @Cacheable(value = "reference", key = "'roleTypePreferenceTypeConstraints.' + #roleType")
+  public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
+      String roleType) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(roleType)) {
-        return roleTypePreferenceConstraintRepository.findAll(
+        return roleTypePreferenceTypeConstraintRepository.findAll(
             Sort.by(Direction.ASC, "roleType", "preferenceType"));
       } else {
-        return roleTypePreferenceConstraintRepository.findByRoleTypeIgnoreCase(
+        return roleTypePreferenceTypeConstraintRepository.findByRoleTypeIgnoreCase(
             roleType, Sort.by(Direction.ASC, "roleType", "preferenceType"));
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the role type preference constraints", e);
+          "Failed to retrieve the role type preference type constraints", e);
     }
   }
 
@@ -1161,6 +1255,74 @@ public class PartyReferenceService implements IPartyReferenceService {
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the sources of funds", e);
+    }
+  }
+
+  /**
+   * Retrieve all the status type categories.
+   *
+   * @return the status type categories
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'statusTypeCategories.ALL'")
+  public List<StatusTypeCategory> getStatusTypeCategories() throws ServiceUnavailableException {
+    return getStatusTypeCategories(null);
+  }
+
+  /**
+   * Retrieve the status type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     categories for or <b>null</b> to retrieve the status type categories for all locales
+   * @return the status type categories
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'statusTypeCategories.' + #localeId")
+  public List<StatusTypeCategory> getStatusTypeCategories(String localeId)
+      throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return statusTypeCategoryRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return statusTypeCategoryRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the status type categories", e);
+    }
+  }
+
+  /**
+   * Retrieve all the status types.
+   *
+   * @return the status types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'statusTypes.ALL'")
+  public List<StatusType> getStatusTypes() throws ServiceUnavailableException {
+    return getStatusTypes(null);
+  }
+
+  /**
+   * Retrieve the status types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status types for
+   *     or <b>null</b> to retrieve the status types for all locales
+   * @return the status types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'statusTypes.' + #localeId")
+  public List<StatusType> getStatusTypes(String localeId) throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return statusTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return statusTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the status types", e);
     }
   }
 
@@ -1452,6 +1614,45 @@ public class PartyReferenceService implements IPartyReferenceService {
             identityDocumentType ->
                 (identityDocumentType.getCode().equals(identityDocumentTypeCode)
                     && identityDocumentType.isValidForPartyType(partyTypeCode)));
+  }
+
+  /**
+   * Check whether the code is a valid code for a lock type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param lockTypeCode the code for the lock type
+   * @return <b>true</b> if the code is a valid code for a lock type or <b>false</b> otherwise
+   */
+  @Override
+  public boolean isValidLockType(String partyTypeCode, String lockTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(lockTypeCode)) {
+      return false;
+    }
+
+    return self.getLockTypes().stream()
+        .anyMatch(
+            lockType ->
+                (lockType.getCode().equals(lockTypeCode)
+                    && lockType.isValidForPartyType(partyTypeCode)));
+  }
+
+  /**
+   * Check whether the code is a valid code for a lock type category.
+   *
+   * @param lockTypeCategoryCode the code for the lock type category
+   * @return <b>true</b> if the code is a valid code for a lock type category or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidLockTypeCategory(String lockTypeCategoryCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(lockTypeCategoryCode)) {
+      return false;
+    }
+
+    return self.getLockTypeCategories().stream()
+        .anyMatch(lockTypeCategory -> lockTypeCategory.getCode().equals(lockTypeCategoryCode));
   }
 
   /**
@@ -1799,6 +2000,46 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     return self.getSourcesOfFunds().stream()
         .anyMatch(sourceOfFunds -> sourceOfFunds.getCode().equals(sourceOfFundsCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a status type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param statusTypeCode the code for the status type
+   * @return <b>true</b> if the code is a valid code for a status type or <b>false</b> otherwise
+   */
+  @Override
+  public boolean isValidStatusType(String partyTypeCode, String statusTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(statusTypeCode)) {
+      return false;
+    }
+
+    return self.getStatusTypes().stream()
+        .anyMatch(
+            statusType ->
+                (statusType.getCode().equals(statusTypeCode)
+                    && statusType.isValidForPartyType(partyTypeCode)));
+  }
+
+  /**
+   * Check whether the code is a valid code for a status type category.
+   *
+   * @param statusTypeCategoryCode the code for the status type category
+   * @return <b>true</b> if the code is a valid code for a status type category or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidStatusTypeCategory(String statusTypeCategoryCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(statusTypeCategoryCode)) {
+      return false;
+    }
+
+    return self.getStatusTypeCategories().stream()
+        .anyMatch(
+            statusTypeCategory -> statusTypeCategory.getCode().equals(statusTypeCategoryCode));
   }
 
   /**

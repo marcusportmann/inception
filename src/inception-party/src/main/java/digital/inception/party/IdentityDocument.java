@@ -56,7 +56,9 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A legal document which may be used to verify aspects of an identity")
+@Schema(
+    description =
+        "A legal document which may be used to verify aspects of an organization's or person's identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "type",

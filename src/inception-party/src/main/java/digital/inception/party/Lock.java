@@ -21,8 +21,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -39,75 +41,71 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>TaxNumber</b> class holds the information for a tax number associated with an organization
- * or person.
- *
- * <p>Even though the country of issue is specified as part of the reference data for a tax number
- * type, it is included here to eliminate the additional join. The additional join will also be
- * problematic if the reference data is stored in a separate database.
+ * The <b>Lock</b> class holds the information for a lock applied to an organization or person.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A tax number for an organization or person")
+@Schema(description = "A lock applied to an organization or person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"countryOfIssue", "type", "number"})
-@XmlRootElement(name = "TaxNumber", namespace = "http://inception.digital/party")
+@JsonPropertyOrder({"type", "effectiveFrom", "effectiveTo"})
+@XmlRootElement(name = "Lock", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "TaxNumber",
+    name = "Lock",
     namespace = "http://inception.digital/party",
-    propOrder = {"countryOfIssue", "type", "number"})
+    propOrder = {"type", "effectiveFrom", "effectiveTo"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "tax_numbers")
-@IdClass(TaxNumberId.class)
-public class TaxNumber implements Serializable {
+@Table(schema = "party", name = "locks")
+@IdClass(LockId.class)
+public class Lock implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ISO 3166-1 alpha-2 code for the country of issue for the tax number. */
-  @Schema(
-      description = "The ISO 3166-1 alpha-2 code for the country of issue for the tax number",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "CountryOfIssue", required = true)
-  @NotNull
-  @Size(min = 2, max = 2)
-  @Column(name = "country_of_issue", length = 2, nullable = false)
-  private String countryOfIssue;
-
-  /** The date and time the tax number was created. */
+  /** The date and time the lock was created. */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The tax number. */
-  @Schema(description = "The tax number", required = true)
+  /** The date the lock is effective from. */
+  @Schema(description = "The date the lock is effective from", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Number", required = true)
+  @XmlElement(name = "EffectiveFrom", required = true)
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
   @NotNull
-  @Size(min = 1, max = 30)
-  @Column(name = "number", length = 30, nullable = false)
-  private String number;
+  @Column(name = "effective_from", nullable = false)
+  private LocalDate effectiveFrom;
 
-  /** The party the tax number is associated with. */
+  /** The optional date the lock is effective to. */
+  @Schema(description = "The optional date the lock is effective to")
+  @JsonProperty
+  @XmlElement(name = "EffectiveTo")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  @Column(name = "effective_to")
+  private LocalDate effectiveTo;
+
+  /** The party the lock is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("taxNumberReference")
+  @JsonBackReference("lockReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /** The code for the tax number type. */
-  @Schema(description = "The code for the tax number type", required = true)
+  /** The code for the lock type. */
+  @Schema(description = "The code for the lock type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -116,27 +114,47 @@ public class TaxNumber implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** The date and time the tax number was last updated. */
+  /** The date and time the lock was last updated. */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <b>TaxNumber</b>. */
-  public TaxNumber() {}
+  /** Constructs a new <b>Lock</b>. */
+  public Lock() {}
 
   /**
-   * Constructs a new <b>TaxNumber</b>.
+   * Constructs a new <b>Lock</b>.
    *
-   * @param type the code for the tax number type
-   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
-   * @param number the tax number
+   * @param type the lock type
    */
-  public TaxNumber(String type, String countryOfIssue, String number) {
+  public Lock(String type) {
     this.type = type;
-    this.countryOfIssue = countryOfIssue;
-    this.number = number;
+  }
+
+  /**
+   * Constructs a new <b>Lock</b>.
+   *
+   * @param type the lock type
+   * @param effectiveFrom the date the lock is effective from
+   */
+  public Lock(String type, LocalDate effectiveFrom) {
+    this.type = type;
+    this.effectiveFrom = effectiveFrom;
+  }
+
+  /**
+   * Constructs a new <b>Lock</b>.
+   *
+   * @param type the lock type
+   * @param effectiveFrom the date the lock is effective from
+   * @param effectiveTo the date the lock is effective to
+   */
+  public Lock(String type, LocalDate effectiveFrom, LocalDate effectiveTo) {
+    this.type = type;
+    this.effectiveFrom = effectiveFrom;
+    this.effectiveTo = effectiveTo;
   }
 
   /**
@@ -159,42 +177,42 @@ public class TaxNumber implements Serializable {
       return false;
     }
 
-    TaxNumber other = (TaxNumber) object;
+    Lock other = (Lock) object;
 
     return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
-   * Returns the ISO 3166-1 alpha-2 code for the country of issue for the tax number.
+   * Returns the date and time the lock was created.
    *
-   * @return the ISO 3166-1 alpha-2 code for the country of issue for the tax number
-   */
-  public String getCountryOfIssue() {
-    return countryOfIssue;
-  }
-
-  /**
-   * Returns the date and time the tax number was created.
-   *
-   * @return the date and time the tax number was created
+   * @return the date and time the lock was created
    */
   public LocalDateTime getCreated() {
     return created;
   }
 
   /**
-   * Returns the tax number.
+   * Returns the date the lock is effective from.
    *
-   * @return the tax number
+   * @return the date the lock is effective from
    */
-  public String getNumber() {
-    return number;
+  public LocalDate getEffectiveFrom() {
+    return effectiveFrom;
   }
 
   /**
-   * Returns the party the tax number is associated with.
+   * Returns the optional date the lock is effective to.
    *
-   * @return the party the tax number is associated with
+   * @return the optional date the lock is effective to
+   */
+  public LocalDate getEffectiveTo() {
+    return effectiveTo;
+  }
+
+  /**
+   * Returns the party the lock is associated with.
+   *
+   * @return the party the lock is associated with
    */
   @Schema(hidden = true)
   public PartyBase getParty() {
@@ -202,18 +220,18 @@ public class TaxNumber implements Serializable {
   }
 
   /**
-   * Returns the code for the tax number type.
+   * Returns the code for the lock type.
    *
-   * @return the code for the tax number type
+   * @return the code for the lock type
    */
   public String getType() {
     return type;
   }
 
   /**
-   * Returns the date and time the tax number was last updated.
+   * Returns the date and time the lock was last updated.
    *
-   * @return the date and time the tax number was last updated
+   * @return the date and time the lock was last updated
    */
   public LocalDateTime getUpdated() {
     return updated;
@@ -231,27 +249,27 @@ public class TaxNumber implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country of issue for the tax number.
+   * Set the date the lock is effective from.
    *
-   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
+   * @param effectiveFrom the date the lock is effective from
    */
-  public void setCountryOfIssue(String countryOfIssue) {
-    this.countryOfIssue = countryOfIssue;
+  public void setEffectiveFrom(LocalDate effectiveFrom) {
+    this.effectiveFrom = effectiveFrom;
   }
 
   /**
-   * Set the tax number.
+   * Set the optional date the lock is effective to.
    *
-   * @param number the tax number
+   * @param effectiveTo the optional date the lock is effective to
    */
-  public void setNumber(String number) {
-    this.number = number;
+  public void setEffectiveTo(LocalDate effectiveTo) {
+    this.effectiveTo = effectiveTo;
   }
 
   /**
-   * Set the party the tax number is associated with.
+   * Set the party the lock is associated with.
    *
-   * @param party the party the tax number is associated with
+   * @param party the party the lock is associated with
    */
   @Schema(hidden = true)
   public void setParty(PartyBase party) {
@@ -259,9 +277,9 @@ public class TaxNumber implements Serializable {
   }
 
   /**
-   * Set the code for the tax number type.
+   * Set the code for the lock type.
    *
-   * @param type the code for the tax number type
+   * @param type the code for the lock type
    */
   public void setType(String type) {
     this.type = type;

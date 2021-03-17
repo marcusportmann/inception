@@ -21,13 +21,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>RoleTypeAttributeConstraintRepository</b> interface declares the repository for the <b>
- * RoleTypeAttributeConstraint</b> domain type.
+ * The <b>StatusTypeRepository</b> interface declares the repository for the <b> StatusType</b>
+ * domain type.
  *
  * @author Marcus Portmann
  */
-public interface RoleTypeAttributeConstraintRepository
-    extends JpaRepository<RoleTypeAttributeConstraint, RoleTypeAttributeConstraintId> {
+public interface StatusTypeRepository extends JpaRepository<StatusType, StatusTypeId> {
 
-  List<RoleTypeAttributeConstraint> findByRoleTypeIgnoreCase(String roleType, Sort sort);
+  List<StatusType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

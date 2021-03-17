@@ -53,11 +53,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>PhysicalAddress</b> class holds the information for a physical address.
+ * The <b>PhysicalAddress</b> class holds the information for a physical address for an organization
+ * or person.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A physical address")
+@Schema(description = "A physical address for an organization or person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",

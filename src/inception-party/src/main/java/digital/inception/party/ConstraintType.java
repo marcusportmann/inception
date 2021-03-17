@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The constraint type")
+@Schema(description = "A type of constraint")
 @XmlEnum
 @XmlType(name = "ConstraintType", namespace = "http://inception.digital/party")
 public enum ConstraintType {

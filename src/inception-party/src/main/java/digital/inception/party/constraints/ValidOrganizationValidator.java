@@ -21,12 +21,14 @@ import digital.inception.party.ConstraintType;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
+import digital.inception.party.Lock;
 import digital.inception.party.Organization;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.Preference;
 import digital.inception.party.Role;
-import digital.inception.party.RoleTypeAttributeConstraint;
-import digital.inception.party.RoleTypePreferenceConstraint;
+import digital.inception.party.RoleTypeAttributeTypeConstraint;
+import digital.inception.party.RoleTypePreferenceTypeConstraint;
+import digital.inception.party.Status;
 import digital.inception.party.TaxNumber;
 import digital.inception.reference.IReferenceService;
 import java.util.Optional;
@@ -207,6 +209,26 @@ public class ValidOrganizationValidator extends PartyValidator
           }
         }
 
+        // Validate locks
+        for (Lock lock : organization.getLocks()) {
+          if (StringUtils.hasText(lock.getType())) {
+            if (!getPartyReferenceService()
+                .isValidLockType(organization.getType().code(), lock.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("lockType", lock.getType())
+                  .addMessageParameter("partyType", organization.getType().code())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidLockTypeForPartyType.message}")
+                  .addPropertyNode("locks")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+        }
+
         // Validate physical addresses
         for (PhysicalAddress physicalAddress : organization.getPhysicalAddresses()) {
           if (StringUtils.hasText(physicalAddress.getRole())) {
@@ -266,6 +288,56 @@ public class ValidOrganizationValidator extends PartyValidator
           }
         }
 
+        // Validate roles
+        for (Role role : organization.getRoles()) {
+          if (StringUtils.hasText(role.getType())) {
+            if (!getPartyReferenceService()
+                .isValidRoleType(organization.getType().code(), role.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("roleType", role.getType())
+                  .addMessageParameter("partyType", organization.getType().code())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidRoleTypeForPartyType.message}")
+                  .addPropertyNode("roles")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            } else {
+              if (!validateRoleTypeAttributeTypeConstraintsForOrganizationWithRole(
+                  organization, role.getType(), hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              if (!validateRoleTypePreferenceTypeConstraintsForOrganizationWithRole(
+                  organization, role.getType(), hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+            }
+          }
+        }
+
+        // Validate statuses
+        for (Status status : organization.getStatuses()) {
+          if (StringUtils.hasText(status.getType())) {
+            if (!getPartyReferenceService()
+                .isValidStatusType(organization.getType().code(), status.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("statusType", status.getType())
+                  .addMessageParameter("partyType", organization.getType().code())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidStatusTypeForPartyType.message}")
+                  .addPropertyNode("statuses")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+        }
+
         // Validate tax numbers
         for (TaxNumber taxNumber : organization.getTaxNumbers()) {
           if (StringUtils.hasText(taxNumber.getCountryOfIssue())) {
@@ -300,37 +372,6 @@ public class ValidOrganizationValidator extends PartyValidator
             }
           }
         }
-
-        // Validate roles
-        for (Role role : organization.getRoles()) {
-          if (StringUtils.hasText(role.getType())) {
-            if (!getPartyReferenceService()
-                .isValidRoleType(organization.getType().code(), role.getType())) {
-              hibernateConstraintValidatorContext
-                  .addMessageParameter("roleType", role.getType())
-                  .addMessageParameter("partyType", organization.getType().code())
-                  .buildConstraintViolationWithTemplate(
-                      "{digital.inception.party.constraints.ValidOrganization.invalidRoleTypeForPartyType.message}")
-                  .addPropertyNode("roles")
-                  .addPropertyNode("type")
-                  .inIterable()
-                  .addConstraintViolation();
-
-              isValid = false;
-            } else {
-              if (!validateRoleTypeAttributeConstraintsForOrganizationWithRole(
-                  organization, role.getType(), hibernateConstraintValidatorContext)) {
-                isValid = false;
-              }
-
-              if (!validateRoleTypePreferenceConstraintsForOrganizationWithRole(
-                  organization, role.getType(), hibernateConstraintValidatorContext)) {
-                isValid = false;
-              }
-            }
-          }
-        }
-
       } catch (Throwable e) {
         throw new ValidationException("Failed to validate the organization", e);
       }
@@ -341,73 +382,73 @@ public class ValidOrganizationValidator extends PartyValidator
     }
   }
 
-  private boolean validateRoleTypeAttributeConstraintsForOrganizationWithRole(
+  private boolean validateRoleTypeAttributeTypeConstraintsForOrganizationWithRole(
       Organization organization,
       String roleType,
       HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
       throws Exception {
     boolean isValid = true;
 
-    for (RoleTypeAttributeConstraint roleTypeAttributeConstraint :
-        getPartyReferenceService().getRoleTypeAttributeConstraints(roleType)) {
+    for (RoleTypeAttributeTypeConstraint roleTypeAttributeTypeConstraint :
+        getPartyReferenceService().getRoleTypeAttributeTypeConstraints(roleType)) {
 
-      if (roleTypeAttributeConstraint.getType() == ConstraintType.MAX_SIZE) {
+      if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.MAX_SIZE) {
         Optional<Attribute> attributeOptional =
-            organization.getAttribute(roleTypeAttributeConstraint.getAttributeType());
+            organization.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
 
         if (attributeOptional.isPresent()) {
           if (!validateMaximumSizeAttributeConstraint(
-              roleTypeAttributeConstraint.getIntegerValue(),
+              roleTypeAttributeTypeConstraint.getIntegerValue(),
               attributeOptional.get(),
               hibernateConstraintValidatorContext)) {
             isValid = false;
           }
         }
-      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.MIN_SIZE) {
+      } else if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.MIN_SIZE) {
         Optional<Attribute> attributeOptional =
-            organization.getAttribute(roleTypeAttributeConstraint.getAttributeType());
+            organization.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
 
         if (attributeOptional.isPresent()) {
           if (!validateMinimumSizeAttributeConstraint(
-              roleTypeAttributeConstraint.getIntegerValue(),
+              roleTypeAttributeTypeConstraint.getIntegerValue(),
               attributeOptional.get(),
               hibernateConstraintValidatorContext)) {
             isValid = false;
           }
         }
-      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.PATTERN) {
+      } else if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.PATTERN) {
         Optional<Attribute> attributeOptional =
-            organization.getAttribute(roleTypeAttributeConstraint.getAttributeType());
+            organization.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
 
         if (attributeOptional.isPresent()) {
           if (!validatePatternAttributeConstraint(
-              roleTypeAttributeConstraint.getValue(),
+              roleTypeAttributeTypeConstraint.getValue(),
               attributeOptional.get(),
               hibernateConstraintValidatorContext)) {
             isValid = false;
           }
         }
-      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.REFERENCE) {
+      } else if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.REFERENCE) {
         Optional<Attribute> attributeOptional =
-            organization.getAttribute(roleTypeAttributeConstraint.getAttributeType());
+            organization.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
 
         if (attributeOptional.isPresent()) {
           if (!validateReferenceAttributeConstraint(
-              roleTypeAttributeConstraint.getValue(),
+              roleTypeAttributeTypeConstraint.getValue(),
               attributeOptional.get(),
               hibernateConstraintValidatorContext)) {
             isValid = false;
           }
         }
-      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.REQUIRED) {
-        switch (roleTypeAttributeConstraint.getAttributeType()) {
+      } else if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.REQUIRED) {
+        switch (roleTypeAttributeTypeConstraint.getAttributeType()) {
           case "contact_mechanism":
             if (!organization.hasContactMechanismType(
-                roleTypeAttributeConstraint.getAttributeTypeQualifier())) {
+                roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter(
                       "contactMechanismType",
-                      roleTypeAttributeConstraint.getAttributeTypeQualifier())
+                      roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())
                   .addMessageParameter("roleType", roleType)
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidOrganization.contactMechanismTypeRequiredForRoleType.message}")
@@ -469,11 +510,11 @@ public class ValidOrganizationValidator extends PartyValidator
 
           case "physical_address":
             if (!organization.hasPhysicalAddressRole(
-                roleTypeAttributeConstraint.getAttributeTypeQualifier())) {
+                roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter(
                       "physicalAddressRole",
-                      roleTypeAttributeConstraint.getAttributeTypeQualifier())
+                      roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())
                   .addMessageParameter("roleType", roleType)
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidOrganization.physicalAddressRoleRequiredForRoleType.message}")
@@ -501,12 +542,12 @@ public class ValidOrganizationValidator extends PartyValidator
 
           default:
             Optional<Attribute> attributeOptional =
-                organization.getAttribute(roleTypeAttributeConstraint.getAttributeType());
+                organization.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
 
             if (attributeOptional.isEmpty() || (!attributeOptional.get().hasValue())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter(
-                      "attributeType", roleTypeAttributeConstraint.getAttributeType())
+                      "attributeType", roleTypeAttributeTypeConstraint.getAttributeType())
                   .addMessageParameter("roleType", roleType)
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidParty.attributeTypeRequiredForRoleType.message}")
@@ -519,13 +560,13 @@ public class ValidOrganizationValidator extends PartyValidator
             }
             break;
         }
-      } else if (roleTypeAttributeConstraint.getType() == ConstraintType.SIZE) {
+      } else if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.SIZE) {
         Optional<Attribute> attributeOptional =
-            organization.getAttribute(roleTypeAttributeConstraint.getAttributeType());
+            organization.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
 
         if (attributeOptional.isPresent()) {
           if (!validateSizeAttributeConstraint(
-              roleTypeAttributeConstraint.getIntegerValue(),
+              roleTypeAttributeTypeConstraint.getIntegerValue(),
               attributeOptional.get(),
               hibernateConstraintValidatorContext)) {
             isValid = false;
@@ -537,73 +578,73 @@ public class ValidOrganizationValidator extends PartyValidator
     return isValid;
   }
 
-  private boolean validateRoleTypePreferenceConstraintsForOrganizationWithRole(
+  private boolean validateRoleTypePreferenceTypeConstraintsForOrganizationWithRole(
       Organization organization,
       String roleType,
       HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
       throws Exception {
     boolean isValid = true;
 
-    for (RoleTypePreferenceConstraint roleTypePreferenceConstraint :
-        getPartyReferenceService().getRoleTypePreferenceConstraints(roleType)) {
+    for (RoleTypePreferenceTypeConstraint roleTypePreferenceTypeConstraint :
+        getPartyReferenceService().getRoleTypePreferenceTypeConstraints(roleType)) {
 
-      if (roleTypePreferenceConstraint.getType() == ConstraintType.MAX_SIZE) {
+      if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.MAX_SIZE) {
         Optional<Preference> preferenceOptional =
-            organization.getPreference(roleTypePreferenceConstraint.getPreferenceType());
+            organization.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isPresent()) {
           if (!validateMaximumSizePreferenceConstraint(
-              roleTypePreferenceConstraint.getIntegerValue(),
+              roleTypePreferenceTypeConstraint.getIntegerValue(),
               preferenceOptional.get(),
               hibernateConstraintValidatorContext)) {
             isValid = false;
           }
         }
-      } else if (roleTypePreferenceConstraint.getType() == ConstraintType.MIN_SIZE) {
+      } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.MIN_SIZE) {
         Optional<Preference> preferenceOptional =
-            organization.getPreference(roleTypePreferenceConstraint.getPreferenceType());
+            organization.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isPresent()) {
           if (!validateMinimumSizePreferenceConstraint(
-              roleTypePreferenceConstraint.getIntegerValue(),
+              roleTypePreferenceTypeConstraint.getIntegerValue(),
               preferenceOptional.get(),
               hibernateConstraintValidatorContext)) {
             isValid = false;
           }
         }
-      } else if (roleTypePreferenceConstraint.getType() == ConstraintType.PATTERN) {
+      } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.PATTERN) {
         Optional<Preference> preferenceOptional =
-            organization.getPreference(roleTypePreferenceConstraint.getPreferenceType());
+            organization.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isPresent()) {
           if (!validatePatternPreferenceConstraint(
-              roleTypePreferenceConstraint.getValue(),
+              roleTypePreferenceTypeConstraint.getValue(),
               preferenceOptional.get(),
               hibernateConstraintValidatorContext)) {
             isValid = false;
           }
         }
-      } else if (roleTypePreferenceConstraint.getType() == ConstraintType.REFERENCE) {
+      } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.REFERENCE) {
         Optional<Preference> preferenceOptional =
-            organization.getPreference(roleTypePreferenceConstraint.getPreferenceType());
+            organization.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isPresent()) {
           if (!validateReferencePreferenceConstraint(
-              roleTypePreferenceConstraint.getValue(),
+              roleTypePreferenceTypeConstraint.getValue(),
               preferenceOptional.get(),
               hibernateConstraintValidatorContext)) {
             isValid = false;
           }
         }
-      } else if (roleTypePreferenceConstraint.getType() == ConstraintType.REQUIRED) {
+      } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.REQUIRED) {
         Optional<Preference> preferenceOptional =
-            organization.getPreference(roleTypePreferenceConstraint.getPreferenceType());
+            organization.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isEmpty()
             || (!StringUtils.hasText(preferenceOptional.get().getValue()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter(
-                  "preferenceType", roleTypePreferenceConstraint.getPreferenceType())
+                  "preferenceType", roleTypePreferenceTypeConstraint.getPreferenceType())
               .addMessageParameter("roleType", roleType)
               .buildConstraintViolationWithTemplate(
                   "{digital.inception.party.constraints.ValidParty.preferenceTypeRequiredForRoleType.message}")
@@ -614,13 +655,13 @@ public class ValidOrganizationValidator extends PartyValidator
 
           isValid = false;
         }
-      } else if (roleTypePreferenceConstraint.getType() == ConstraintType.SIZE) {
+      } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.SIZE) {
         Optional<Preference> preferenceOptional =
-            organization.getPreference(roleTypePreferenceConstraint.getPreferenceType());
+            organization.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isPresent()) {
           if (!validateSizePreferenceConstraint(
-              roleTypePreferenceConstraint.getIntegerValue(),
+              roleTypePreferenceTypeConstraint.getIntegerValue(),
               preferenceOptional.get(),
               hibernateConstraintValidatorContext)) {
             isValid = false;

@@ -167,6 +167,32 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the lock type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
+   *     categories for or <b>null</b> to retrieve the lock type categories for all locales
+   * @return the lock type categories
+   */
+  @WebMethod(operationName = "GetLockTypeCategories")
+  public List<LockTypeCategory> getLockTypeCategories(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return partyReferenceService.getLockTypeCategories(localeId);
+  }
+
+  /**
+   * Retrieve the lock types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock types for or
+   *     <b>null</b> to retrieve the lock types for all locales
+   * @return the lock types
+   */
+  @WebMethod(operationName = "GetLockTypes")
+  public List<LockType> getLockTypes(@WebParam(name = "LocaleId") @XmlElement String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getLockTypes(localeId);
+  }
+
+  /**
    * Retrieve the marital statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
@@ -229,6 +255,19 @@ public class PartyReferenceWebService {
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
     return partyReferenceService.getPhysicalAddressPurposes(localeId);
+  }
+
+  /**
+   * Retrieve the physical address roles.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
+   *     roles for or <b>null</b> to retrieve the physical address roles for all locales
+   * @return the physical address roles
+   */
+  @WebMethod(operationName = "GetPhysicalAddressRoles")
+  public List<PhysicalAddressRole> getPhysicalAddressRoles(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return partyReferenceService.getPhysicalAddressRoles(localeId);
   }
 
   /**
@@ -336,6 +375,32 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the role type attribute type constraints.
+   *
+   * @param roleType the code for the role type to retrieve the role type attribute type constraints for
+   *     or <b>null</b> to retrieve the role type attribute type constraints for all role types
+   * @return the role type attribute type constraints
+   */
+  @WebMethod(operationName = "GetRoleTypeAttributeTypeConstraints")
+  public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(
+      @WebParam(name = "RoleType") @XmlElement String roleType) throws ServiceUnavailableException {
+    return partyReferenceService.getRoleTypeAttributeTypeConstraints(roleType);
+  }
+
+  /**
+   * Retrieve the role type preference type constraints.
+   *
+   * @param roleType the code for the role type to retrieve the role type preference type constraints for
+   *     or <b>null</b> to retrieve the role type preference type constraints for all role types
+   * @return the role type preference type constraints
+   */
+  @WebMethod(operationName = "GetRoleTypePreferenceTypeConstraints")
+  public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
+      @WebParam(name = "RoleType") @XmlElement String roleType) throws ServiceUnavailableException {
+    return partyReferenceService.getRoleTypePreferenceTypeConstraints(roleType);
+  }
+
+  /**
    * Retrieve the role types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
@@ -359,6 +424,32 @@ public class PartyReferenceWebService {
   public List<SourceOfFunds> getSourcesOfFunds(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
     return partyReferenceService.getSourcesOfFunds(localeId);
+  }
+
+  /**
+   * Retrieve the status type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     categories for or <b>null</b> to retrieve the status type categories for all locales
+   * @return the status type categories
+   */
+  @WebMethod(operationName = "GetStatusTypeCategories")
+  public List<StatusTypeCategory> getStatusTypeCategories(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return partyReferenceService.getStatusTypeCategories(localeId);
+  }
+
+  /**
+   * Retrieve the status types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status types for
+   *     or <b>null</b> to retrieve the status types for all locales
+   * @return the status types
+   */
+  @WebMethod(operationName = "GetStatusTypes")
+  public List<StatusType> getStatusTypes(@WebParam(name = "LocaleId") @XmlElement String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getStatusTypes(localeId);
   }
 
   /**

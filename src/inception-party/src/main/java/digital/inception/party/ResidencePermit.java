@@ -49,11 +49,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>ResidencePermit</b> class holds the information for a residence permit for a party.
+ * The <b>ResidencePermit</b> class holds the information for a residence permit issued to a person.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A residence permit")
+@Schema(description = "A residence permit issued to a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
 @XmlRootElement(name = "ResidencePermit", namespace = "http://inception.digital/party")

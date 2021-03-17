@@ -178,6 +178,38 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
+   * Retrieve all the lock type categories.
+   *
+   * @return the lock type categories
+   */
+  List<LockTypeCategory> getLockTypeCategories() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the lock type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
+   *     categories for or <b>null</b> to retrieve the lock type categories for all locales
+   * @return the lock type categories
+   */
+  List<LockTypeCategory> getLockTypeCategories(String localeId) throws ServiceUnavailableException;
+
+  /**
+   * Retrieve all the lock types.
+   *
+   * @return the lock types
+   */
+  List<LockType> getLockTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the lock types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock types for or
+   *     <b>null</b> to retrieve the lock types for all locales
+   * @return the lock types
+   */
+  List<LockType> getLockTypes(String localeId) throws ServiceUnavailableException;
+
+  /**
    * Retrieve all the marital statuses.
    *
    * @return the marital statuses
@@ -407,37 +439,37 @@ public interface IPartyReferenceService {
   List<RolePurpose> getRolePurposes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve the role type attribute constraints.
+   * Retrieve the role type attribute type constraints.
    *
-   * @return the role type attribute constraints
+   * @return the role type attribute type constraints
    */
-  List<RoleTypeAttributeConstraint> getRoleTypeAttributeConstraints()
+  List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints()
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve the role type attribute constraints.
+   * Retrieve the role type attribute type constraints.
    *
    * @param roleType the code for the role type to retrieve the attribute constraints for
-   * @return the role type attribute constraints
+   * @return the role type attribute type constraints
    */
-  List<RoleTypeAttributeConstraint> getRoleTypeAttributeConstraints(String roleType)
+  List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(String roleType)
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve the role type preference constraints.
+   * Retrieve the role type preference type constraints.
    *
-   * @return the role type preference constraints
+   * @return the role type preference type constraints
    */
-  List<RoleTypePreferenceConstraint> getRoleTypePreferenceConstraints()
+  List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints()
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve the role type preference constraints.
+   * Retrieve the role type preference type constraints.
    *
    * @param roleType the code for the role type to retrieve the preference constraints for
-   * @return the role type preference constraints
+   * @return the role type preference type constraints
    */
-  List<RoleTypePreferenceConstraint> getRoleTypePreferenceConstraints(String roleType)
+  List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(String roleType)
       throws ServiceUnavailableException;
 
   /**
@@ -471,6 +503,39 @@ public interface IPartyReferenceService {
    * @return the sources of funds
    */
   List<SourceOfFunds> getSourcesOfFunds(String localeId) throws ServiceUnavailableException;
+
+  /**
+   * Retrieve all the status type categories.
+   *
+   * @return the status type categories
+   */
+  List<StatusTypeCategory> getStatusTypeCategories() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the status type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     categories for or <b>null</b> to retrieve the status type categories for all locales
+   * @return the status type categories
+   */
+  List<StatusTypeCategory> getStatusTypeCategories(String localeId)
+      throws ServiceUnavailableException;
+
+  /**
+   * Retrieve all the status types.
+   *
+   * @return the status types
+   */
+  List<StatusType> getStatusTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the status types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status types for
+   *     or <b>null</b> to retrieve the status types for all locales
+   * @return the status types
+   */
+  List<StatusType> getStatusTypes(String localeId) throws ServiceUnavailableException;
 
   /**
    * Retrieve all the tax number types.
@@ -614,6 +679,25 @@ public interface IPartyReferenceService {
    */
   boolean isValidIdentityDocumentType(String partyTypeCode, String identityDocumentTypeCode)
       throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a lock type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param lockTypeCode the code for the lock type
+   * @return <b>true</b> if the code is a valid code for a lock type or <b>false</b> otherwise
+   */
+  boolean isValidLockType(String partyTypeCode, String lockTypeCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a lock type category.
+   *
+   * @param lockTypeCategoryCode the code for the lock type category
+   * @return <b>true</b> if the code is a valid code for a lock type category or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidLockTypeCategory(String lockTypeCategoryCode) throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a marital status.
@@ -783,6 +867,26 @@ public interface IPartyReferenceService {
    * @return <b>true</b> if the code is a valid code for a source of funds or <b>false</b> otherwise
    */
   boolean isValidSourceOfFunds(String sourceOfFundsCode) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a status type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param statusTypeCode the code for the status type
+   * @return <b>true</b> if the code is a valid code for a status type or <b>false</b> otherwise
+   */
+  boolean isValidStatusType(String partyTypeCode, String statusTypeCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a status type category.
+   *
+   * @param statusTypeCategoryCode the code for the status type category
+   * @return <b>true</b> if the code is a valid code for a status type category or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidStatusTypeCategory(String statusTypeCategoryCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a tax number type.

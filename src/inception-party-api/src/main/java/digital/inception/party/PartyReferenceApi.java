@@ -420,6 +420,81 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the lock type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
+   *     categories for or <b>null</b> to retrieve the lock type categories for all locales
+   * @return the lock type categories
+   */
+  @Operation(
+      summary = "Retrieve the lock type categories",
+      description = "Retrieve the lock type categories")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/lock-type-categories",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<LockTypeCategory> getLockTypeCategories(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the lock type categories for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getLockTypeCategories(localeId);
+  }
+
+  /**
+   * Retrieve the lock types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock types for or
+   *     <b>null</b> to retrieve the lock types for all locales
+   * @return the lock types
+   */
+  @Operation(summary = "Retrieve the lock types", description = "Retrieve the lock types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(value = "/lock-types", method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<LockType> getLockTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the lock types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getLockTypes(localeId);
+  }
+
+  /**
    * Retrieve the marital statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
@@ -966,15 +1041,15 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
-   * Retrieve the role type attribute constraints.
+   * Retrieve the role type attribute type constraints.
    *
-   * @param roleType the code for the role type to retrieve the role type attribute constraints for
-   *     or <b>null</b> to retrieve the role type attribute constraints for all role types
-   * @return the role type attribute constraints
+   * @param roleType the code for the role type to retrieve the role type attribute type constraints for
+   *     or <b>null</b> to retrieve the role type attribute type constraints for all role types
+   * @return the role type attribute type constraints
    */
   @Operation(
-      summary = "Retrieve the role type attribute constraints",
-      description = "Retrieve the role type attribute constraints")
+      summary = "Retrieve the role type attribute type constraints",
+      description = "Retrieve the role type attribute type constraints")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -988,20 +1063,59 @@ public class PartyReferenceApi extends SecureApi {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/role-type-attribute-constraints",
+      value = "/role-type-attribute-type-constraints",
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
-  public List<RoleTypeAttributeConstraint> getRoleTypeAttributeConstraints(
+  public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(
       @Parameter(
               name = "roleType",
               description =
-                  "The optional code for the role type to retrieve the role type attribute constraints for")
+                  "The optional code for the role type to retrieve the role type attribute type constraints for")
           @RequestParam(value = "roleType", required = false)
           String roleType)
       throws ServiceUnavailableException {
-    return partyReferenceService.getRoleTypeAttributeConstraints(roleType);
+    return partyReferenceService.getRoleTypeAttributeTypeConstraints(roleType);
+  }
+
+  /**
+   * Retrieve the role type preference type constraints.
+   *
+   * @param roleType the code for the role type to retrieve the role type preference type constraints for
+   *     or <b>null</b> to retrieve the role type preference type constraints for all role types
+   * @return the role type preference type constraints
+   */
+  @Operation(
+      summary = "Retrieve the role type preference type constraints",
+      description = "Retrieve the role type preference type constraints")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/role-type-preference-type-constraints",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
+      @Parameter(
+              name = "roleType",
+              description =
+                  "The optional code for the role type to retrieve the role type preference type constraints for")
+          @RequestParam(value = "roleType", required = false)
+          String roleType)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getRoleTypePreferenceTypeConstraints(roleType);
   }
 
   /**
@@ -1077,6 +1191,84 @@ public class PartyReferenceApi extends SecureApi {
           String localeId)
       throws ServiceUnavailableException {
     return partyReferenceService.getSourcesOfFunds(localeId);
+  }
+
+  /**
+   * Retrieve the status type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     categories for or <b>null</b> to retrieve the status type categories for all locales
+   * @return the status type categories
+   */
+  @Operation(
+      summary = "Retrieve the status type categories",
+      description = "Retrieve the status type categories")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/status-type-categories",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<StatusTypeCategory> getStatusTypeCategories(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the status type categories for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getStatusTypeCategories(localeId);
+  }
+
+  /**
+   * Retrieve the status types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status types for
+   *     or <b>null</b> to retrieve the status types for all locales
+   * @return the status types
+   */
+  @Operation(summary = "Retrieve the status types", description = "Retrieve the status types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/status-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<StatusType> getStatusTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the status types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getStatusTypes(localeId);
   }
 
   /**

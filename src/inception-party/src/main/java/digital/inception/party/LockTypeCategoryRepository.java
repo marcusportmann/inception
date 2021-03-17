@@ -21,13 +21,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>RoleTypePreferenceConstraintRepository</b> interface declares the repository for the <b>
- * RoleTypePreferenceConstraint</b> domain type.
+ * The <b>LockTypeCategoryRepository</b> interface declares the repository for the <b>
+ * LockTypeCategory</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface RoleTypePreferenceConstraintRepository
-    extends JpaRepository<RoleTypePreferenceConstraint, RoleTypePreferenceConstraintId> {
+public interface LockTypeCategoryRepository
+    extends JpaRepository<LockTypeCategory, LockTypeCategoryId> {
 
-  List<RoleTypePreferenceConstraint> findByRoleTypeIgnoreCase(String roleType, Sort sort);
+  List<LockTypeCategory> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }
