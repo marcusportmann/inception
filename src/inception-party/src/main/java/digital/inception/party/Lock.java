@@ -131,6 +131,7 @@ public class Lock implements Serializable {
    */
   public Lock(String type) {
     this.type = type;
+    this.effectiveFrom = LocalDate.now();
   }
 
   /**

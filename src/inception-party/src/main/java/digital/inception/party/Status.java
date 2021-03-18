@@ -131,6 +131,7 @@ public class Status implements Serializable {
    */
   public Status(String type) {
     this.type = type;
+    this.effectiveFrom = LocalDate.now();
   }
 
   /**

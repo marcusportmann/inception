@@ -21,8 +21,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -39,8 +41,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -72,6 +76,25 @@ public class Role implements Serializable {
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
+
+  /** The date the role is effective from. */
+  @Schema(description = "The date the role is effective from", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "EffectiveFrom", required = true)
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  @NotNull
+  @Column(name = "effective_from", nullable = false)
+  private LocalDate effectiveFrom;
+
+  /** The optional date the role is effective to. */
+  @Schema(description = "The optional date the role is effective to")
+  @JsonProperty
+  @XmlElement(name = "EffectiveTo")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  @Column(name = "effective_to")
+  private LocalDate effectiveTo;
 
   /** The party the role is associated with. */
   @Schema(hidden = true)
@@ -117,6 +140,31 @@ public class Role implements Serializable {
    */
   public Role(String type) {
     this.type = type;
+    this.effectiveFrom = LocalDate.now();
+  }
+
+  /**
+   * Constructs a new <b>Role</b>.
+   *
+   * @param type the role type
+   * @param effectiveFrom the date the role is effective from
+   */
+  public Role(String type, LocalDate effectiveFrom) {
+    this.type = type;
+    this.effectiveFrom = effectiveFrom;
+  }
+
+  /**
+   * Constructs a new <b>Role</b>.
+   *
+   * @param type the role type
+   * @param effectiveFrom the date the role is effective from
+   * @param effectiveTo the date the role is effective to
+   */
+  public Role(String type, LocalDate effectiveFrom, LocalDate effectiveTo) {
+    this.type = type;
+    this.effectiveFrom = effectiveFrom;
+    this.effectiveTo = effectiveTo;
   }
 
   /**
@@ -128,6 +176,35 @@ public class Role implements Serializable {
   public Role(String type, String purpose) {
     this.type = type;
     this.purpose = purpose;
+    this.effectiveFrom = LocalDate.now();
+  }
+
+  /**
+   * Constructs a new <b>Role</b>.
+   *
+   * @param type the role type
+   * @param purpose the optional code for the role purpose
+   * @param effectiveFrom the date the role is effective from
+   */
+  public Role(String type, String purpose, LocalDate effectiveFrom) {
+    this.type = type;
+    this.purpose = purpose;
+    this.effectiveFrom = effectiveFrom;
+  }
+
+  /**
+   * Constructs a new <b>Role</b>.
+   *
+   * @param type the role type
+   * @param purpose the optional code for the role purpose
+   * @param effectiveFrom the date the role is effective from
+   * @param effectiveTo the date the role is effective to
+   */
+  public Role(String type, String purpose, LocalDate effectiveFrom, LocalDate effectiveTo) {
+    this.type = type;
+    this.purpose = purpose;
+    this.effectiveFrom = effectiveFrom;
+    this.effectiveTo = effectiveTo;
   }
 
   /**
@@ -162,6 +239,24 @@ public class Role implements Serializable {
    */
   public LocalDateTime getCreated() {
     return created;
+  }
+
+  /**
+   * Returns the date the role is effective from.
+   *
+   * @return the date the role is effective from
+   */
+  public LocalDate getEffectiveFrom() {
+    return effectiveFrom;
+  }
+
+  /**
+   * Returns the optional date the role is effective to.
+   *
+   * @return the optional date the role is effective to
+   */
+  public LocalDate getEffectiveTo() {
+    return effectiveTo;
   }
 
   /**
@@ -210,6 +305,24 @@ public class Role implements Serializable {
   public int hashCode() {
     return (((party == null) || (party.getId() == null)) ? 0 : party.getId().hashCode())
         + ((type == null) ? 0 : type.hashCode());
+  }
+
+  /**
+   * Set the date the role is effective from.
+   *
+   * @param effectiveFrom the date the role is effective from
+   */
+  public void setEffectiveFrom(LocalDate effectiveFrom) {
+    this.effectiveFrom = effectiveFrom;
+  }
+
+  /**
+   * Set the optional date the role is effective to.
+   *
+   * @param effectiveTo the optional date the role is effective to
+   */
+  public void setEffectiveTo(LocalDate effectiveTo) {
+    this.effectiveTo = effectiveTo;
   }
 
   /**

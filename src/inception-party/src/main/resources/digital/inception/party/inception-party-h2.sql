@@ -1156,7 +1156,7 @@ CREATE TABLE party.locks (
   type           VARCHAR(30) NOT NULL,
   updated        TIMESTAMP,
 
-  PRIMARY KEY (party_id, type),
+  PRIMARY KEY (party_id, type, effective_from),
   CONSTRAINT locks_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
@@ -1329,19 +1329,25 @@ COMMENT ON COLUMN party.residence_permits.updated IS 'The date and time the resi
 
 
 CREATE TABLE party.roles (
-  created  TIMESTAMP    NOT NULL,
-  party_id UUID         NOT NULL,
-  purpose  VARCHAR(30),
-  type     VARCHAR(30)  NOT NULL,
-  updated  TIMESTAMP,
+  created        TIMESTAMP    NOT NULL,
+  effective_from DATE         NOT NULL,
+  effective_to   DATE,
+  party_id       UUID         NOT NULL,
+  purpose        VARCHAR(30),
+  type           VARCHAR(30)  NOT NULL,
+  updated        TIMESTAMP,
 
-  PRIMARY KEY (party_id, type),
+  PRIMARY KEY (party_id, type, effective_from),
   CONSTRAINT roles_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
 CREATE INDEX roles_party_id_ix ON party.roles(party_id);
 
 COMMENT ON COLUMN party.roles.created IS 'The date and time the role was created';
+
+COMMENT ON COLUMN party.roles.effective_from IS 'The date that the role is effective from';
+
+COMMENT ON COLUMN party.roles.effective_to IS 'The optional date that the role is effective to';
 
 COMMENT ON COLUMN party.roles.party_id IS 'The Universally Unique Identifier (UUID) for the party the role is associated with';
 
@@ -1360,7 +1366,7 @@ CREATE TABLE party.statuses (
   type           VARCHAR(30) NOT NULL,
   updated        TIMESTAMP,
 
-  PRIMARY KEY (party_id, type),
+  PRIMARY KEY (party_id, type, effective_from),
   CONSTRAINT statuses_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 

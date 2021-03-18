@@ -17,6 +17,7 @@
 package digital.inception.party;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,6 +29,9 @@ import java.util.UUID;
 public class StatusId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The date the status is effective from. */
+  private LocalDate effectiveFrom;
 
   /** The Universally Unique Identifier (UUID) for the party the status is associated with. */
   private UUID party;
@@ -60,7 +64,9 @@ public class StatusId implements Serializable {
 
     StatusId other = (StatusId) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
+    return Objects.equals(party, other.party)
+        && Objects.equals(type, other.type)
+        && Objects.equals(effectiveFrom, other.effectiveFrom);
   }
 
   /**
@@ -70,6 +76,8 @@ public class StatusId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((party == null) ? 0 : party.hashCode())
+        + ((type == null) ? 0 : type.hashCode())
+        + ((effectiveFrom == null) ? 0 : effectiveFrom.hashCode());
   }
 }
