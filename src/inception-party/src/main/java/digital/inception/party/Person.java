@@ -325,7 +325,7 @@ public class Person extends PartyBase implements Serializable {
   @Column(table = "persons", name = "initials", length = 20)
   private String initials;
 
-  /** The optional code for the language for the person. */
+  /** The optional ISO 639-1 alpha-2 code for the language for the person. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "language", length = 30)
   private String language;
@@ -829,11 +829,11 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional code for the language for the person.
+   * Returns the optional ISO 639-1 alpha-2 code for the language for the person.
    *
-   * @return the optional code for the language for the person
+   * @return the optional ISO 639-1 alpha-2 code for the language for the person
    */
-  @Schema(description = "The optional code for the language for the person")
+  @Schema(description = "The optional ISO 639-1 alpha-2 code for the language for the person")
   @JsonProperty
   @XmlElement(name = "Language")
   public String getLanguage() {
@@ -1575,9 +1575,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional code for the language for the person.
+   * Set the optional ISO 639-1 alpha-2 code for the language for the person.
    *
-   * @param language the optional code for the language for the person
+   * @param language the optional ISO 639-1 alpha-2 code for the language for the person
    */
   public void setLanguage(String language) {
     this.language = language;

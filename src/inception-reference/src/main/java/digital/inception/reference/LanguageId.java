@@ -31,7 +31,7 @@ public class LanguageId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the language. */
+  /** The ISO 639-1 alpha-2 code for the language. */
   private String code;
 
   /** The Unicode locale identifier for the language. */
@@ -43,7 +43,7 @@ public class LanguageId implements Serializable {
   /**
    * Constructs a new <b>LanguageId</b>.
    *
-   * @param code the code for the language
+   * @param code the ISO 639-1 alpha-2 code for the language
    * @param localeId the Unicode locale identifier for the language
    */
   public LanguageId(String code, String localeId) {

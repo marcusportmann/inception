@@ -323,6 +323,8 @@ public class LiquibaseChangelogInsertsTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + language.getCode().toUpperCase() + "\"/>");
         System.out.println(
+            "      <column name=\"iso3_code\" value=\"" + language.getIso3Code().toUpperCase() + "\"/>");
+        System.out.println(
             "      <column name=\"locale_id\" value=\"" + language.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + language.getSortIndex() + "\"/>");

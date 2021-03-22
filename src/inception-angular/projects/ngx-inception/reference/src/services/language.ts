@@ -22,7 +22,7 @@
 export class Language {
 
   /**
-   * The code for the language.
+   * The ISO 639-1 alpha-2 code for the language.
    */
   code: string;
 
@@ -30,6 +30,11 @@ export class Language {
    * The description for the language.
    */
   description: string;
+
+  /**
+   * The ISO 639-2 alpha-3 code for the language.
+   */
+  iso3Code: string;
 
   /**
    * The Unicode locale identifier for the language.
@@ -54,16 +59,18 @@ export class Language {
   /**
    * Constructs a new Language.
    *
-   * @param code        The code for the language.
+   * @param code        The ISO 639-1 alpha-2 for the language.
+   * @param iso3Code    The ISO 639-2 alpha-3 code for the language.
    * @param localeId    The Unicode locale identifier for the language.
    * @param sortIndex   The sort index for the language.
    * @param name        The name of the language.
    * @param shortName   The short name for the language.
    * @param description The description for the language.
    */
-  constructor(code: string, localeId: string, sortIndex: number, name: string, shortName: string,
+  constructor(code: string, iso3Code: string, localeId: string, sortIndex: number, name: string, shortName: string,
               description: string) {
     this.code = code;
+    this.iso3Code = iso3Code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;

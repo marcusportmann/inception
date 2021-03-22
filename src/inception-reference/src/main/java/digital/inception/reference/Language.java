@@ -43,12 +43,12 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(
     description = "A systematic use of sounds, characters, symbols or signs to communicate meaning")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "shortName", "description"})
+@JsonPropertyOrder({"code", "iso3Code", "localeId", "sortIndex", "name", "shortName", "description"})
 @XmlRootElement(name = "Language", namespace = "http://inception.digital/reference")
 @XmlType(
     name = "Language",
     namespace = "http://inception.digital/reference",
-    propOrder = {"code", "localeId", "sortIndex", "name", "shortName", "description"})
+    propOrder = {"code", "iso3Code", "localeId", "sortIndex", "name", "shortName", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "languages")
@@ -57,8 +57,8 @@ public class Language implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the language. */
-  @Schema(description = "The code for the language", required = true)
+  /** The ISO 639-1 alpha-2 code for the language. */
+  @Schema(description = "The ISO 639-1 alpha-2 code for the language", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -75,6 +75,16 @@ public class Language implements Serializable {
   @Size(max = 200)
   @Column(name = "description", length = 200, nullable = false)
   private String description;
+
+  /** The ISO 639-2 alpha-3 code for the language. */
+  @Schema(description = "The ISO 639-2 alpha-3 code for the language", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Iso3Code", required = true)
+  @NotNull
+  @Size(min = 3, max = 3)
+  @Id
+  @Column(name = "iso3_code", length = 3, nullable = false)
+  private String iso3Code;
 
   /** The Unicode locale identifier for the language. */
   @Schema(description = "The Unicode locale identifier for the language", required = true)
@@ -141,9 +151,9 @@ public class Language implements Serializable {
   }
 
   /**
-   * Returns the code for the language.
+   * Returns the ISO 639-1 alpha-2 code for the language.
    *
-   * @return the code for the language
+   * @return the ISO 639-1 alpha-2 code for the language
    */
   public String getCode() {
     return code;
@@ -156,6 +166,15 @@ public class Language implements Serializable {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns the ISO 639-2 alpha-3 code for the language.
+   *
+   * @return the ISO 639-2 alpha-3 code for the language
+   */
+  public String getIso3Code() {
+    return iso3Code;
   }
 
   /**
@@ -205,9 +224,9 @@ public class Language implements Serializable {
   }
 
   /**
-   * Set the code for the language.
+   * Set the ISO 639-1 alpha-2 code for the language.
    *
-   * @param code the code for the language
+   * @param code the ISO 639-1 alpha-2 code for the language
    */
   public void setCode(String code) {
     this.code = code;
@@ -220,6 +239,15 @@ public class Language implements Serializable {
    */
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Set the ISO 639-2 alpha-3 code for the language.
+   *
+   * @param iso3Code the ISO 639-2 alpha-3 code for the language
+   */
+  public void setIso3Code(String iso3Code) {
+    this.iso3Code = iso3Code;
   }
 
   /**

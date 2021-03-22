@@ -270,10 +270,11 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the code is a valid code for a language.
+   * Check whether the code is a valid ISO 639-1 alpha-2 code for a language.
    *
    * @param languageCode the code for the language
-   * @return <b>true</b> if the code is a valid code for a language or <b>false</b> otherwise
+   * @return <b>true</b> if the code is a valid ISO 639-1 alpha-2 code for a language or
+   *     <b>false</b> otherwise
    */
   @Override
   public boolean isValidLanguage(String languageCode) throws ServiceUnavailableException {

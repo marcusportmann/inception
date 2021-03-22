@@ -52,7 +52,8 @@
     </createIndex>
 
     <createTable schemaName="reference" tableName="languages" remarks="Languages">
-      <column name="code" type="nvarchar(30)" remarks="The code for the language"/>
+      <column name="code" type="nvarchar(30)" remarks="The ISO 639-1 alpha-2 code for the language"/>
+      <column name="iso3_code" type="nchar(3)" remarks="The ISO 639-2 alpha-3 code for the language"/>
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the language"/>
       <column name="sort_index" type="int" remarks="The sort index for the language"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the language"/>
@@ -61,6 +62,7 @@
     </createTable>
     <addPrimaryKey schemaName="reference" tableName="languages" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="reference" tableName="languages" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="languages" columnName="iso3_code"/>
     <addNotNullConstraint schemaName="reference" tableName="languages" columnName="locale_id"/>
     <addNotNullConstraint schemaName="reference" tableName="languages" columnName="sort_index"/>
     <addNotNullConstraint schemaName="reference" tableName="languages" columnName="name"/>
@@ -2842,14 +2844,16 @@
 
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="AB"/>
+      <column name="iso3_code" value="ABK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="1"/>
-      <column name="name" value="Abkhaz"/>
-      <column name="short_name" value="Abkhaz"/>
-      <column name="description" value="Abkhaz"/>
+      <column name="name" value="Abkhazian"/>
+      <column name="short_name" value="Abkhazian"/>
+      <column name="description" value="Abkhazian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="AF"/>
+      <column name="iso3_code" value="AFR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="2"/>
       <column name="name" value="Afrikaans"/>
@@ -2858,6 +2862,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="AM"/>
+      <column name="iso3_code" value="AMH"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="3"/>
       <column name="name" value="Amharic"/>
@@ -2866,6 +2871,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="AR"/>
+      <column name="iso3_code" value="ARA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="4"/>
       <column name="name" value="Arabic"/>
@@ -2874,6 +2880,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="AY"/>
+      <column name="iso3_code" value="AYM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="5"/>
       <column name="name" value="Aymara"/>
@@ -2882,6 +2889,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="AZ"/>
+      <column name="iso3_code" value="AZE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="6"/>
       <column name="name" value="Azerbaijani"/>
@@ -2890,6 +2898,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="BE"/>
+      <column name="iso3_code" value="BEL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="7"/>
       <column name="name" value="Belarusian"/>
@@ -2898,6 +2907,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="BG"/>
+      <column name="iso3_code" value="BUL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="8"/>
       <column name="name" value="Bulgarian"/>
@@ -2906,6 +2916,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="BI"/>
+      <column name="iso3_code" value="BIS"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="9"/>
       <column name="name" value="Bislama"/>
@@ -2914,6 +2925,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="BN"/>
+      <column name="iso3_code" value="BEN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="10"/>
       <column name="name" value="Bengali"/>
@@ -2922,6 +2934,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="BS"/>
+      <column name="iso3_code" value="BOS"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="11"/>
       <column name="name" value="Bosnian"/>
@@ -2930,6 +2943,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="CS"/>
+      <column name="iso3_code" value="CZE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="12"/>
       <column name="name" value="Czech"/>
@@ -2938,6 +2952,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="DA"/>
+      <column name="iso3_code" value="DAN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="13"/>
       <column name="name" value="Danish"/>
@@ -2946,6 +2961,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="DE"/>
+      <column name="iso3_code" value="DEU"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="14"/>
       <column name="name" value="German"/>
@@ -2954,6 +2970,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="DZ"/>
+      <column name="iso3_code" value="DZO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="15"/>
       <column name="name" value="Dzongkha"/>
@@ -2962,6 +2979,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="EL"/>
+      <column name="iso3_code" value="ELL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="16"/>
       <column name="name" value="Greek"/>
@@ -2970,6 +2988,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="EN"/>
+      <column name="iso3_code" value="ENG"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="17"/>
       <column name="name" value="English"/>
@@ -2978,6 +2997,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ES"/>
+      <column name="iso3_code" value="SPA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="18"/>
       <column name="name" value="Spanish"/>
@@ -2986,6 +3006,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ET"/>
+      <column name="iso3_code" value="EST"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="19"/>
       <column name="name" value="Estonian"/>
@@ -2994,6 +3015,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="FI"/>
+      <column name="iso3_code" value="FIN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="20"/>
       <column name="name" value="Finnish"/>
@@ -3002,6 +3024,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="FJ"/>
+      <column name="iso3_code" value="FIJ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="21"/>
       <column name="name" value="Fijian"/>
@@ -3010,6 +3033,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="FR"/>
+      <column name="iso3_code" value="FRA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="22"/>
       <column name="name" value="French"/>
@@ -3018,6 +3042,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="GN"/>
+      <column name="iso3_code" value="GRN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="23"/>
       <column name="name" value="Guarani"/>
@@ -3026,6 +3051,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="HE"/>
+      <column name="iso3_code" value="HEB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="24"/>
       <column name="name" value="Hebrew"/>
@@ -3034,6 +3060,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="HI"/>
+      <column name="iso3_code" value="HIN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="25"/>
       <column name="name" value="Hindi"/>
@@ -3042,6 +3069,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="HO"/>
+      <column name="iso3_code" value="HMO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="26"/>
       <column name="name" value="Hiri Motu"/>
@@ -3050,6 +3078,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="HR"/>
+      <column name="iso3_code" value="HRV"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="27"/>
       <column name="name" value="Croatian"/>
@@ -3058,6 +3087,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="HT"/>
+      <column name="iso3_code" value="HAT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="28"/>
       <column name="name" value="Haitian Creole"/>
@@ -3066,6 +3096,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="HU"/>
+      <column name="iso3_code" value="HUN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="29"/>
       <column name="name" value="Hungarian"/>
@@ -3074,6 +3105,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="HY"/>
+      <column name="iso3_code" value="HYE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="30"/>
       <column name="name" value="Armenian"/>
@@ -3082,6 +3114,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ID"/>
+      <column name="iso3_code" value="IND"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="31"/>
       <column name="name" value="Indonesian"/>
@@ -3090,6 +3123,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="IS"/>
+      <column name="iso3_code" value="ISL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="32"/>
       <column name="name" value="Icelandic"/>
@@ -3098,6 +3132,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="IT"/>
+      <column name="iso3_code" value="ITA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="33"/>
       <column name="name" value="Italian"/>
@@ -3106,6 +3141,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="JA"/>
+      <column name="iso3_code" value="JPN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="34"/>
       <column name="name" value="Japanese"/>
@@ -3114,6 +3150,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="KA"/>
+      <column name="iso3_code" value="KAT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="35"/>
       <column name="name" value="Georgian"/>
@@ -3122,6 +3159,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="KK"/>
+      <column name="iso3_code" value="KAZ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="36"/>
       <column name="name" value="Kazakh"/>
@@ -3130,6 +3168,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="KM"/>
+      <column name="iso3_code" value="KHM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="37"/>
       <column name="name" value="Khmer"/>
@@ -3138,6 +3177,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="KO"/>
+      <column name="iso3_code" value="KOR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="38"/>
       <column name="name" value="Korean"/>
@@ -3146,6 +3186,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="KY"/>
+      <column name="iso3_code" value="KIR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="39"/>
       <column name="name" value="Kyrgyz"/>
@@ -3154,6 +3195,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="LB"/>
+      <column name="iso3_code" value="LTZ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="40"/>
       <column name="name" value="Luxembourgish"/>
@@ -3162,6 +3204,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="LO"/>
+      <column name="iso3_code" value="LAO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="41"/>
       <column name="name" value="Lao"/>
@@ -3170,6 +3213,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="LT"/>
+      <column name="iso3_code" value="LIT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="42"/>
       <column name="name" value="Lithuanian"/>
@@ -3178,6 +3222,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="LV"/>
+      <column name="iso3_code" value="LAV"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="43"/>
       <column name="name" value="Latvian"/>
@@ -3186,6 +3231,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="MG"/>
+      <column name="iso3_code" value="MLG"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="44"/>
       <column name="name" value="Malagasy"/>
@@ -3194,6 +3240,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="MI"/>
+      <column name="iso3_code" value="MRI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="45"/>
       <column name="name" value="Maori"/>
@@ -3202,6 +3249,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="MK"/>
+      <column name="iso3_code" value="MKD"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="46"/>
       <column name="name" value="Macedonian"/>
@@ -3210,6 +3258,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="MN"/>
+      <column name="iso3_code" value="MON"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="47"/>
       <column name="name" value="Mongolian"/>
@@ -3218,6 +3267,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="MR"/>
+      <column name="iso3_code" value="MAR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="48"/>
       <column name="name" value="Marathi"/>
@@ -3226,6 +3276,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="MS"/>
+      <column name="iso3_code" value="MSA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="49"/>
       <column name="name" value="Malay"/>
@@ -3234,6 +3285,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="MT"/>
+      <column name="iso3_code" value="MLT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="50"/>
       <column name="name" value="Maltese"/>
@@ -3242,6 +3294,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="MY"/>
+      <column name="iso3_code" value="MYA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="51"/>
       <column name="name" value="Burmese"/>
@@ -3250,6 +3303,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ND"/>
+      <column name="iso3_code" value="NDE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="52"/>
       <column name="name" value="Ndebele"/>
@@ -3258,6 +3312,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="NE"/>
+      <column name="iso3_code" value="NEP"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="53"/>
       <column name="name" value="Nepali"/>
@@ -3266,6 +3321,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="NL"/>
+      <column name="iso3_code" value="NLD"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="54"/>
       <column name="name" value="Dutch"/>
@@ -3274,6 +3330,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="NO"/>
+      <column name="iso3_code" value="NOR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="55"/>
       <column name="name" value="Norwegian"/>
@@ -3282,6 +3339,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="NR"/>
+      <column name="iso3_code" value="NBL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="56"/>
       <column name="name" value="Southern Ndebele"/>
@@ -3290,6 +3348,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="NY"/>
+      <column name="iso3_code" value="NYA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="57"/>
       <column name="name" value="Chewa"/>
@@ -3298,6 +3357,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="OS"/>
+      <column name="iso3_code" value="OSS"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="58"/>
       <column name="name" value="Ossetian"/>
@@ -3306,6 +3366,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="PL"/>
+      <column name="iso3_code" value="POL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="59"/>
       <column name="name" value="Polish"/>
@@ -3314,6 +3375,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="PS"/>
+      <column name="iso3_code" value="PUS"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="60"/>
       <column name="name" value="Pashto"/>
@@ -3322,6 +3384,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="PT"/>
+      <column name="iso3_code" value="POR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="61"/>
       <column name="name" value="Portuguese"/>
@@ -3330,6 +3393,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="QU"/>
+      <column name="iso3_code" value="QUE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="62"/>
       <column name="name" value="Quechua"/>
@@ -3338,6 +3402,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="RM"/>
+      <column name="iso3_code" value="ROH"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="63"/>
       <column name="name" value="Romansh"/>
@@ -3346,6 +3411,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="RO"/>
+      <column name="iso3_code" value="RON"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="64"/>
       <column name="name" value="Romanian"/>
@@ -3354,6 +3420,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="RU"/>
+      <column name="iso3_code" value="RUS"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="65"/>
       <column name="name" value="Russian"/>
@@ -3362,6 +3429,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="RW"/>
+      <column name="iso3_code" value="KIN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="66"/>
       <column name="name" value="Kinyarwanda"/>
@@ -3370,6 +3438,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="SE"/>
+      <column name="iso3_code" value="SME"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="67"/>
       <column name="name" value="Northern Sami"/>
@@ -3378,6 +3447,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="SI"/>
+      <column name="iso3_code" value="SIN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="68"/>
       <column name="name" value="Sinhala"/>
@@ -3386,6 +3456,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="SK"/>
+      <column name="iso3_code" value="SLK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="69"/>
       <column name="name" value="Slovak"/>
@@ -3394,6 +3465,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="SL"/>
+      <column name="iso3_code" value="SLV"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="70"/>
       <column name="name" value="Slovenian"/>
@@ -3402,6 +3474,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="SN"/>
+      <column name="iso3_code" value="SNA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="71"/>
       <column name="name" value="Shona"/>
@@ -3410,6 +3483,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="SO"/>
+      <column name="iso3_code" value="SQI"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="72"/>
       <column name="name" value="Somali"/>
@@ -3418,6 +3492,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="SR"/>
+      <column name="iso3_code" value="SRP"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="73"/>
       <column name="name" value="Serbian"/>
@@ -3426,6 +3501,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ST"/>
+      <column name="iso3_code" value="SOT"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="74"/>
       <column name="name" value="Sotho"/>
@@ -3434,6 +3510,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="SV"/>
+      <column name="iso3_code" value="SWE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="75"/>
       <column name="name" value="Swedish"/>
@@ -3442,6 +3519,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="SW"/>
+      <column name="iso3_code" value="SWA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="76"/>
       <column name="name" value="Swahili"/>
@@ -3450,6 +3528,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="TA"/>
+      <column name="iso3_code" value="TAM"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="77"/>
       <column name="name" value="Tamil"/>
@@ -3458,6 +3537,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="TG"/>
+      <column name="iso3_code" value="TGK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="78"/>
       <column name="name" value="Tajik"/>
@@ -3466,6 +3546,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="TH"/>
+      <column name="iso3_code" value="THA"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="79"/>
       <column name="name" value="Thai"/>
@@ -3474,6 +3555,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="TI"/>
+      <column name="iso3_code" value="TIR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="80"/>
       <column name="name" value="Tigrinya"/>
@@ -3482,6 +3564,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="TK"/>
+      <column name="iso3_code" value="TUK"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="81"/>
       <column name="name" value="Turkmen"/>
@@ -3490,6 +3573,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="TN"/>
+      <column name="iso3_code" value="TSN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="82"/>
       <column name="name" value="Tswana"/>
@@ -3498,6 +3582,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="TR"/>
+      <column name="iso3_code" value="TUR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="83"/>
       <column name="name" value="Turkish"/>
@@ -3506,6 +3591,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="TS"/>
+      <column name="iso3_code" value="TSO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="84"/>
       <column name="name" value="Tsonga"/>
@@ -3514,6 +3600,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="UK"/>
+      <column name="iso3_code" value="UKR"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="85"/>
       <column name="name" value="Ukrainian"/>
@@ -3522,6 +3609,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="UR"/>
+      <column name="iso3_code" value="URD"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="86"/>
       <column name="name" value="Urdu"/>
@@ -3530,6 +3618,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="UZ"/>
+      <column name="iso3_code" value="UZB"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="87"/>
       <column name="name" value="Uzbek"/>
@@ -3538,6 +3627,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="VE"/>
+      <column name="iso3_code" value="VEN"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="88"/>
       <column name="name" value="Venda"/>
@@ -3546,6 +3636,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="VI"/>
+      <column name="iso3_code" value="VIE"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="89"/>
       <column name="name" value="Vietnamese"/>
@@ -3554,6 +3645,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="XH"/>
+      <column name="iso3_code" value="XHO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="90"/>
       <column name="name" value="Xhosa"/>
@@ -3562,6 +3654,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ZH"/>
+      <column name="iso3_code" value="ZHO"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="91"/>
       <column name="name" value="Chinese"/>
@@ -3570,6 +3663,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ZU"/>
+      <column name="iso3_code" value="ZUL"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="92"/>
       <column name="name" value="Zulu"/>
@@ -3578,6 +3672,7 @@
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ZZ"/>
+      <column name="iso3_code" value="ZZZ"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="999"/>
       <column name="name" value="Unknown"/>
