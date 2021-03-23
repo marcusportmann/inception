@@ -1182,7 +1182,7 @@ CREATE TABLE party.physical_addresses (
   city                VARCHAR(50),
   complex_name        VARCHAR(50),
   complex_unit_number VARCHAR(20),
-  country             VARCHAR(30)   NOT NULL,
+  country             VARCHAR(2)    NOT NULL,
   created             TIMESTAMP     NOT NULL,
   farm_description    VARCHAR(50),
   farm_name           VARCHAR(50),

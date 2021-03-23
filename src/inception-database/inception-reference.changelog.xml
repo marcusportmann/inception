@@ -52,7 +52,7 @@
     </createIndex>
 
     <createTable schemaName="reference" tableName="languages" remarks="Languages">
-      <column name="code" type="nvarchar(30)" remarks="The ISO 639-1 alpha-2 code for the language"/>
+      <column name="code" type="nvarchar(2)" remarks="The ISO 639-1 alpha-2 code for the language"/>
       <column name="iso3_code" type="nchar(3)" remarks="The ISO 639-2 alpha-3 code for the language"/>
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the language"/>
       <column name="sort_index" type="int" remarks="The sort index for the language"/>

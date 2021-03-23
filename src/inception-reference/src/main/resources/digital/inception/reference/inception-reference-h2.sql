@@ -45,7 +45,7 @@ COMMENT ON COLUMN reference.countries.nationality IS 'The nationality for the co
 
 
 CREATE TABLE reference.languages (
-  code        VARCHAR(30)  NOT NULL,
+  code        VARCHAR(2)  NOT NULL,
   iso3_code   CHAR(3)      NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
@@ -58,9 +58,9 @@ CREATE TABLE reference.languages (
 
 CREATE INDEX languages_locale_id_ix ON reference.languages(locale_id);
 
-COMMENT ON COLUMN reference.languages.code IS 'The code for the language';
+COMMENT ON COLUMN reference.languages.code IS 'The ISO 639-1 alpha-2 code for the language';
 
-COMMENT ON COLUMN reference.languages.iso3_code IS 'The ISO 3166-1 alpha-3 code for the language';
+COMMENT ON COLUMN reference.languages.iso3_code IS 'The ISO 639-2 alpha-3 code for the language';
 
 COMMENT ON COLUMN reference.languages.locale_id IS 'The Unicode locale identifier for the language';
 

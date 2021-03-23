@@ -326,8 +326,8 @@ public class Person extends PartyBase implements Serializable {
   private String initials;
 
   /** The optional ISO 639-1 alpha-2 code for the language for the person. */
-  @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "language", length = 30)
+  @Size(min = 2, max = 2)
+  @Column(table = "persons", name = "language", length = 2)
   private String language;
 
   /** The optional maiden name for the person. */
