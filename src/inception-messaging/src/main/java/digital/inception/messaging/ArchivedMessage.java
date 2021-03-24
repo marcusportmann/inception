@@ -112,11 +112,10 @@ public class ArchivedMessage {
   @Column(name = "data", nullable = false)
   private byte[] data;
 
-  /** The Universally Unique Identifier (UUID) for the device the message originated from. */
+  /** The Universally Unique Identifier (UUID) for the device associated with the message. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) for the device the message "
-              + "originated from",
+          "The Universally Unique Identifier (UUID) for the device associated with the message",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "DeviceId", required = true)
@@ -176,8 +175,8 @@ public class ArchivedMessage {
    * @param id the Universally Unique Identifier (UUID) for the message
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
-   *     from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
+   *     message
    * @param correlationId the optional Universally Unique Identifier (UUID) used to correlate the
    *     message
    * @param created the date and time the message was created
@@ -265,9 +264,9 @@ public class ArchivedMessage {
   }
 
   /**
-   * The Universally Unique Identifier (UUID) for the device the message originated from.
+   * The Universally Unique Identifier (UUID) for the device associated with the message.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the message originated from
+   * @return the Universally Unique Identifier (UUID) for the device associated with the message
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -347,10 +346,10 @@ public class ArchivedMessage {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the device the message originated from.
+   * Set the Universally Unique Identifier (UUID) for the device associated with the message.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
-   *     from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
+   *     message
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;

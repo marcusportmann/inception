@@ -45,7 +45,7 @@ public class MessageTranslator {
             }
           });
 
-  /** The Universally Unique Identifier (UUID) for the device the message originated from. */
+  /** The Universally Unique Identifier (UUID) for the device associated with the message. */
   private final UUID deviceId;
 
   /** The encryption key used to encrypt or decrypt the message data. */
@@ -58,8 +58,8 @@ public class MessageTranslator {
    * Constructs a new <b>MessageTranslator</b>.
    *
    * @param username the username for the username responsible for the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
-   *     from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
+   *     message
    */
   public MessageTranslator(String username, UUID deviceId) {
     this.username = username;
@@ -71,8 +71,8 @@ public class MessageTranslator {
    * Constructs a new <b>MessageTranslator</b>.
    *
    * @param username the username for the user responsible for the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
-   *     from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
+   *     message
    * @param encryptionKey the key used to encrypt or decrypt the message data
    */
   public MessageTranslator(String username, UUID deviceId, byte[] encryptionKey) {

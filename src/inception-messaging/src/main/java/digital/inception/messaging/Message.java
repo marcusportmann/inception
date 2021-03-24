@@ -145,11 +145,10 @@ public class Message {
   @Column(name = "data_hash", length = 100)
   private String dataHash;
 
-  /** The Universally Unique Identifier (UUID) for the device the message originated from. */
+  /** The Universally Unique Identifier (UUID) for the device associated with the message. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) for the device the message "
-              + "originated from",
+          "The Universally Unique Identifier (UUID) for the device associated with the message",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "DeviceId", required = true)
@@ -328,8 +327,8 @@ public class Message {
    *
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
-   *     from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
+   *     message
    * @param priority the message priority
    * @param data the data for the message which is NOT encrypted
    */
@@ -350,8 +349,8 @@ public class Message {
    *
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
-   *     from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
+   *     message
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
    * @param data the data for the message which is NOT encrypted
@@ -379,8 +378,8 @@ public class Message {
    *
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
-   *     from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
+   *     message
    * @param priority the message priority
    * @param data the data for the message which may be encrypted
    * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
@@ -417,8 +416,8 @@ public class Message {
    *
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
-   *     from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
+   *     message
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
    * @param data the data for the message which may be encrypted
@@ -459,8 +458,8 @@ public class Message {
    * @param id the Universally Unique Identifier (UUID) for the message
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
-   *     from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
+   *     message
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
    * @param created the date and time the message was created
@@ -574,9 +573,9 @@ public class Message {
   }
 
   /**
-   * The Universally Unique Identifier (UUID) for the device the message originated from.
+   * The Universally Unique Identifier (UUID) for the device associated with the message.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the message originated from
+   * @return the Universally Unique Identifier (UUID) for the device associated with the message
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -759,10 +758,10 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the device the message originated from.
+   * Set the Universally Unique Identifier (UUID) for the device associated with the message.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
-   *     from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
+   *     message
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;

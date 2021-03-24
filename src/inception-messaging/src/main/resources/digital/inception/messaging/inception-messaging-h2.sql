@@ -72,7 +72,7 @@ COMMENT ON COLUMN messaging.messages.type IS 'The code for the message type';
 
 COMMENT ON COLUMN messaging.messages.username IS 'The username for the user associated with the message';
 
-COMMENT ON COLUMN messaging.messages.device_id IS 'The Universally Unique Identifier (UUID) for the device the message originated from';
+COMMENT ON COLUMN messaging.messages.device_id IS 'The Universally Unique Identifier (UUID) for the device associated with the message';
 
 COMMENT ON COLUMN messaging.messages.correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the message';
 
@@ -84,7 +84,7 @@ COMMENT ON COLUMN messaging.messages.created IS 'The date and time the message w
 
 COMMENT ON COLUMN messaging.messages.data_hash IS 'The hash of the unencrypted data for the message if the message is encrypted';
 
-COMMENT ON COLUMN messaging.messages.encryption_iv IS 'The base-64 encoded initialisation vector for the encryption scheme for the message';
+COMMENT ON COLUMN messaging.messages.encryption_iv IS 'The base-64 encoded initialization vector for the encryption scheme for the message';
 
 COMMENT ON COLUMN messaging.messages.send_attempts IS 'The number of times that the sending of the message was attempted';
 
@@ -151,7 +151,7 @@ COMMENT ON COLUMN messaging.message_parts.message_type IS 'The code for the mess
 
 COMMENT ON COLUMN messaging.message_parts.message_username IS 'The username for the user associated with the original message';
 
-COMMENT ON COLUMN messaging.message_parts.message_device_id IS 'The Universally Unique Identifier (UUID) for the device the original message originated from';
+COMMENT ON COLUMN messaging.message_parts.message_device_id IS 'The Universally Unique Identifier (UUID) for the device associated with the original message';
 
 COMMENT ON COLUMN messaging.message_parts.message_correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the original message';
 
@@ -161,7 +161,7 @@ COMMENT ON COLUMN messaging.message_parts.message_created IS 'The date and time 
 
 COMMENT ON COLUMN messaging.message_parts.message_data_hash IS 'The hash of the unencrypted data for the original message if the message was encrypted';
 
-COMMENT ON COLUMN messaging.message_parts.message_encryption_iv IS 'The base-64 encoded initialisation vector for the encryption scheme for the original message';
+COMMENT ON COLUMN messaging.message_parts.message_encryption_iv IS 'The base-64 encoded initialization vector for the encryption scheme for the original message';
 
 COMMENT ON COLUMN messaging.message_parts.message_checksum IS 'The checksum for the original message';
 
@@ -196,7 +196,7 @@ COMMENT ON COLUMN messaging.archived_messages.type IS 'The code for the message 
 
 COMMENT ON COLUMN messaging.archived_messages.username IS 'The username for the user associated with the message';
 
-COMMENT ON COLUMN messaging.archived_messages.device_id IS 'The Universally Unique Identifier (UUID) for the device the message originated from';
+COMMENT ON COLUMN messaging.archived_messages.device_id IS 'The Universally Unique Identifier (UUID) for the device associated with the message';
 
 COMMENT ON COLUMN messaging.archived_messages.correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the message';
 
