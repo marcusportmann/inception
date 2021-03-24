@@ -90,37 +90,38 @@ public class SystemMessageHandler extends MessageHandler {
    * Process the specified message.
    *
    * @param message the message to process
-   * @return an Optional containing the response message or an empty Optional if no response message exists
+   * @return an Optional containing the response message or an empty Optional if no response message
+   *     exists
    */
   @Override
   public Optional<Message> processMessage(Message message) throws MessageHandlerException {
     // Process a "Authenticate Request" message
-    if (message.getTypeId().equals(AuthenticateRequestData.MESSAGE_TYPE_ID)) {
+    if (message.getType().equals(AuthenticateRequestData.MESSAGE_TYPE)) {
       return Optional.ofNullable(processAuthenticateMessage(message));
     }
 
     // Process a "Check User Exists Request" message
-    else if (message.getTypeId().equals(CheckUserExistsRequestData.MESSAGE_TYPE_ID)) {
+    else if (message.getType().equals(CheckUserExistsRequestData.MESSAGE_TYPE)) {
       return Optional.ofNullable(processCheckUserExistsMessage(message));
     }
 
     // Process a "Test Request" message
-    else if (message.getTypeId().equals(TestRequestData.MESSAGE_TYPE_ID)) {
+    else if (message.getType().equals(TestRequestData.MESSAGE_TYPE)) {
       return Optional.ofNullable(processTestMessage(message));
     }
 
     // Process a "Another Test Request" message
-    else if (message.getTypeId().equals(AnotherTestRequestData.MESSAGE_TYPE_ID)) {
+    else if (message.getType().equals(AnotherTestRequestData.MESSAGE_TYPE)) {
       return Optional.ofNullable(processAnotherTestMessage(message));
     }
 
     // Process a "Submit Error Report Request" message
-    else if (message.getTypeId().equals(SubmitErrorReportRequestData.MESSAGE_TYPE_ID)) {
+    else if (message.getType().equals(SubmitErrorReportRequestData.MESSAGE_TYPE)) {
       return Optional.ofNullable(processSubmitErrorReportRequestMessage(message));
     }
 
     // Process a "Get Code Category Request" message
-    else if (message.getTypeId().equals(GetCodeCategoryRequestData.MESSAGE_TYPE_ID)) {
+    else if (message.getType().equals(GetCodeCategoryRequestData.MESSAGE_TYPE)) {
       return Optional.ofNullable(processGetCodeCategoryRequestMessage(message));
     }
 
@@ -128,7 +129,7 @@ public class SystemMessageHandler extends MessageHandler {
         String.format(
             "Failed to process the unrecognised message (%s) with type (%s) from the user (%s) and "
                 + "device (%s)",
-            message.getId(), message.getTypeId(), message.getUsername(), message.getDeviceId()));
+            message.getId(), message.getType(), message.getUsername(), message.getDeviceId()));
   }
 
   private Message processAnotherTestMessage(Message requestMessage) throws MessageHandlerException {
@@ -152,7 +153,7 @@ public class SystemMessageHandler extends MessageHandler {
       return responseMessage;
     } catch (Throwable e) {
       throw new MessageHandlerException(
-          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
+          String.format("Failed to process the message (%s)", requestMessage.getType()), e);
     }
   }
 
@@ -208,7 +209,7 @@ public class SystemMessageHandler extends MessageHandler {
       return messageTranslator.toMessage(responseData, requestMessage.getCorrelationId());
     } catch (Throwable e) {
       throw new MessageHandlerException(
-          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
+          String.format("Failed to process the message (%s)", requestMessage.getType()), e);
     }
   }
 
@@ -246,7 +247,7 @@ public class SystemMessageHandler extends MessageHandler {
       return messageTranslator.toMessage(responseData);
     } catch (Throwable e) {
       throw new MessageHandlerException(
-          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
+          String.format("Failed to process the message (%s)", requestMessage.getType()), e);
     }
   }
 
@@ -303,7 +304,7 @@ public class SystemMessageHandler extends MessageHandler {
       return messageTranslator.toMessage(responseData);
     } catch (Throwable e) {
       throw new MessageHandlerException(
-          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
+          String.format("Failed to process the message (%s)", requestMessage.getType()), e);
     }
   }
 
@@ -338,7 +339,7 @@ public class SystemMessageHandler extends MessageHandler {
       return messageTranslator.toMessage(responseData);
     } catch (Throwable e) {
       throw new MessageHandlerException(
-          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
+          String.format("Failed to process the message (%s)", requestMessage.getType()), e);
     }
   }
 
@@ -361,7 +362,7 @@ public class SystemMessageHandler extends MessageHandler {
       return responseMessage;
     } catch (Throwable e) {
       throw new MessageHandlerException(
-          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
+          String.format("Failed to process the message (%s)", requestMessage.getType()), e);
     }
   }
 }

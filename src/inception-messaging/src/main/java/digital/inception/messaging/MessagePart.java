@@ -58,9 +58,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
   "sendAttempts",
   "downloadAttempts",
   "messageId",
+  "messageType",
   "messageUsername",
   "messageDeviceId",
-  "messageTypeId",
   "messageCorrelationId",
   "messagePriority",
   "messageCreated",
@@ -82,9 +82,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
       "sendAttempts",
       "downloadAttempts",
       "messageId",
+      "messageType",
       "messageUsername",
       "messageDeviceId",
-      "messageTypeId",
       "messageCorrelationId",
       "messagePriority",
       "messageCreated",
@@ -220,16 +220,14 @@ public class MessagePart {
   @Column(name = "message_priority", nullable = false)
   private MessagePriority messagePriority;
 
-  /** The Universally Unique Identifier (UUID) for the message type for the original message. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the message type for the original message",
-      required = true)
+  /** The code for the message type for the original message. */
+  @Schema(description = "The code for the message type for the original message", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "MessageTypeId", required = true)
+  @XmlElement(name = "MessageType", required = true)
   @NotNull
-  @Column(name = "message_type_id", nullable = false)
-  private UUID messageTypeId;
+  @Size(min = 1, max = 50)
+  @Column(name = "message_type", nullable = false)
+  private String messageType;
 
   /** The username for the user associated with the original message. */
   @Schema(
@@ -316,16 +314,16 @@ public class MessagePart {
         .ifPresent(messageId -> this.messageId = UUID.fromString(messageId));
 
     rootElement
+        .getAttributeValue("messageType")
+        .ifPresent(messageType -> this.messageType = messageType);
+
+    rootElement
         .getAttributeValue("messageUsername")
         .ifPresent(messageUsername -> this.messageUsername = messageUsername);
 
     rootElement
         .getAttributeValue("messageDeviceId")
         .ifPresent(messageDeviceId -> this.messageDeviceId = UUID.fromString(messageDeviceId));
-
-    rootElement
-        .getAttributeValue("messageTypeId")
-        .ifPresent(messageTypeId -> this.messageTypeId = UUID.fromString(messageTypeId));
 
     rootElement
         .getAttributeValue("messageCorrelationId")
@@ -378,11 +376,10 @@ public class MessagePart {
    * @param totalParts the total number of parts in the set of message parts for the original
    *     message
    * @param messageId the Universally Unique Identifier (UUID) for the original message
+   * @param messageType the code for the message type for the original message
    * @param messageUsername the username for the user associated with the original message
    * @param messageDeviceId the Universally Unique Identifier (UUID) for the device the original
    *     message originated from
-   * @param messageTypeId the Universally Unique Identifier (UUID) for the message type for the
-   *     original message
    * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
    *     original message
    * @param messagePriority the priority for the original message
@@ -397,9 +394,9 @@ public class MessagePart {
       int partNo,
       int totalParts,
       UUID messageId,
+      String messageType,
       String messageUsername,
       UUID messageDeviceId,
-      UUID messageTypeId,
       UUID messageCorrelationId,
       MessagePriority messagePriority,
       LocalDateTime messageCreated,
@@ -412,9 +409,9 @@ public class MessagePart {
     this.totalParts = totalParts;
     this.status = MessagePartStatus.INITIALIZED;
     this.messageId = messageId;
+    this.messageType = messageType;
     this.messageUsername = messageUsername;
     this.messageDeviceId = messageDeviceId;
-    this.messageTypeId = messageTypeId;
     this.messageCorrelationId = messageCorrelationId;
     this.messagePriority = messagePriority;
     this.messageCreated = messageCreated;
@@ -435,11 +432,10 @@ public class MessagePart {
    * @param downloadAttempts the number of times that downloading of the message part was attempted
    * @param status the message part status e.g. Initialized, Sending, etc
    * @param messageId the Universally Unique Identifier (UUID) for the original message
+   * @param messageType the code for the message type for the original message
    * @param messageUsername the username for the user associated with the original message
    * @param messageDeviceId the Universally Unique Identifier (UUID) for the device the original
    *     message originated from
-   * @param messageTypeId the Universally Unique Identifier (UUID) for the message type for the
-   *     original message
    * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
    *     original message
    * @param messagePriority the priority for the original message
@@ -459,9 +455,9 @@ public class MessagePart {
       Integer downloadAttempts,
       MessagePartStatus status,
       UUID messageId,
+      String messageType,
       String messageUsername,
       UUID messageDeviceId,
-      UUID messageTypeId,
       UUID messageCorrelationId,
       MessagePriority messagePriority,
       LocalDateTime messageCreated,
@@ -477,9 +473,9 @@ public class MessagePart {
     this.downloadAttempts = downloadAttempts;
     this.status = status;
     this.messageId = messageId;
+    this.messageType = messageType;
     this.messageUsername = messageUsername;
     this.messageDeviceId = messageDeviceId;
-    this.messageTypeId = messageTypeId;
     this.messageCorrelationId = messageCorrelationId;
     this.messagePriority = messagePriority;
     this.messageCreated = messageCreated;
@@ -503,12 +499,12 @@ public class MessagePart {
 
     return rootElement.getName().equals("MessagePart")
         && !((!rootElement.hasAttribute("id"))
+            || (!rootElement.hasAttribute("messageType"))
             || (!rootElement.hasAttribute("partNo"))
             || (!rootElement.hasAttribute("totalParts"))
             || (!rootElement.hasAttribute("messageId"))
             || (!rootElement.hasAttribute("messageUsername"))
             || (!rootElement.hasAttribute("messageDeviceId"))
-            || (!rootElement.hasAttribute("messageTypeId"))
             || (!rootElement.hasAttribute("messagePriority"))
             || (!rootElement.hasAttribute("messageCreated"))
             || (!rootElement.hasAttribute("messageChecksum")));
@@ -652,12 +648,12 @@ public class MessagePart {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the message type for the original message.
+   * Returns the code for the message type for the original message.
    *
-   * @return the Universally Unique Identifier (UUID) for the message type for the original message
+   * @return the code for the message type for the original message
    */
-  public UUID getMessageTypeId() {
-    return messageTypeId;
+  public String getMessageType() {
+    return messageType;
   }
 
   /**
@@ -849,13 +845,12 @@ public class MessagePart {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the message type for the original message.
+   * Set the code for the message type for the original message.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) for the message type for the
-   *     original message
+   * @param messageType the code for the message type for the original message
    */
-  public void setMessageTypeId(UUID messageTypeId) {
-    this.messageTypeId = messageTypeId;
+  public void setMessageType(String messageType) {
+    this.messageType = messageType;
   }
 
   /**
@@ -928,9 +923,9 @@ public class MessagePart {
 
     buffer.append(" status=\"").append(status).append("\"");
     buffer.append(" messageId=\"").append(messageId).append("\"");
+    buffer.append(" messageType=\"").append(messageType).append("\"");
     buffer.append(" messageUsername=\"").append(messageUsername).append("\"");
     buffer.append(" messageDeviceId=\"").append(messageDeviceId).append("\"");
-    buffer.append(" messageTypeId=\"").append(messageTypeId).append("\"");
 
     if (messageCorrelationId != null) {
       buffer.append(" messageCorrelationId=\"").append(messageCorrelationId).append("\"");
@@ -971,9 +966,9 @@ public class MessagePart {
     }
 
     rootElement.setAttribute("messageId", messageId.toString());
+    rootElement.setAttribute("messageType", messageType);
     rootElement.setAttribute("messageUsername", messageUsername);
     rootElement.setAttribute("messageDeviceId", messageDeviceId.toString());
-    rootElement.setAttribute("messageTypeId", messageTypeId.toString());
 
     if (messageCorrelationId != null) {
       rootElement.setAttribute("messageCorrelationId", messageCorrelationId.toString());

@@ -56,9 +56,9 @@ import org.springframework.util.StringUtils;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",
+  "type",
   "username",
   "deviceId",
-  "typeId",
   "correlationId",
   "priority",
   "status",
@@ -77,9 +77,9 @@ import org.springframework.util.StringUtils;
     namespace = "http://inception.digital/messaging",
     propOrder = {
       "id",
+      "type",
       "username",
       "deviceId",
-      "typeId",
       "correlationId",
       "priority",
       "status",
@@ -235,15 +235,14 @@ public class Message {
   @Column(name = "status", nullable = false)
   private MessageStatus status;
 
-  /** The Universally Unique Identifier (UUID) for the message type. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the message type",
-      required = true)
+  /** The code for the message type. */
+  @Schema(description = "The code for the message type", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "TypeId", required = true)
+  @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(name = "type_id", nullable = false)
-  private UUID typeId;
+  @Size(min = 1, max = 50)
+  @Column(name = "type", nullable = false)
+  private String type;
 
   /** The username for the user associated with the message. */
   @Schema(description = "The username for the user associated with the message", required = true)
@@ -268,15 +267,13 @@ public class Message {
 
     rootElement.getAttributeValue("id").ifPresent(id -> this.id = UUID.fromString(id));
 
+    rootElement.getAttributeValue("type").ifPresent(type -> this.type = type);
+
     rootElement.getAttributeValue("username").ifPresent(username -> this.username = username);
 
     rootElement
         .getAttributeValue("deviceId")
         .ifPresent(deviceId -> this.deviceId = UUID.fromString(deviceId));
-
-    rootElement
-        .getAttributeValue("typeId")
-        .ifPresent(typeId -> this.typeId = UUID.fromString(typeId));
 
     rootElement
         .getAttributeValue("correlationId")
@@ -329,19 +326,19 @@ public class Message {
   /**
    * Constructs a new <b>Message</b>.
    *
+   * @param type the code for the message type
    * @param username the username for the user associated with the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
    *     from
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param priority the message priority
    * @param data the data for the message which is NOT encrypted
    */
   public Message(
-      String username, UUID deviceId, UUID typeId, MessagePriority priority, byte[] data) {
+      String type, String username, UUID deviceId, MessagePriority priority, byte[] data) {
     this.id = UuidCreator.getShortPrefixComb();
+    this.type = type;
     this.username = username;
     this.deviceId = deviceId;
-    this.typeId = typeId;
     this.priority = priority;
     this.data = data;
     this.created = LocalDateTime.now();
@@ -351,25 +348,25 @@ public class Message {
   /**
    * Constructs a new <b>Message</b>.
    *
+   * @param type the code for the message type
    * @param username the username for the user associated with the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
    *     from
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
    * @param data the data for the message which is NOT encrypted
    */
   public Message(
+      String type,
       String username,
       UUID deviceId,
-      UUID typeId,
       UUID correlationId,
       MessagePriority priority,
       byte[] data) {
     this.id = UuidCreator.getShortPrefixComb();
+    this.type = type;
     this.username = username;
     this.deviceId = deviceId;
-    this.typeId = typeId;
     this.correlationId = correlationId;
     this.priority = priority;
     this.data = data;
@@ -380,27 +377,27 @@ public class Message {
   /**
    * Constructs a new <b>Message</b>.
    *
+   * @param type the code for the message type
    * @param username the username for the user associated with the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
    *     from
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param priority the message priority
    * @param data the data for the message which may be encrypted
    * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
    * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme
    */
   public Message(
+      String type,
       String username,
       UUID deviceId,
-      UUID typeId,
       MessagePriority priority,
       byte[] data,
       String dataHash,
       String encryptionIV) {
     this.id = UuidCreator.getShortPrefixComb();
+    this.type = type;
     this.username = username;
     this.deviceId = deviceId;
-    this.typeId = typeId;
     this.priority = priority;
     this.data = data;
     this.dataHash = dataHash;
@@ -418,10 +415,10 @@ public class Message {
   /**
    * Constructs a new <b>Message</b>.
    *
+   * @param type the code for the message type
    * @param username the username for the user associated with the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
    *     from
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
    * @param data the data for the message which may be encrypted
@@ -429,18 +426,18 @@ public class Message {
    * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme
    */
   public Message(
+      String type,
       String username,
       UUID deviceId,
-      UUID typeId,
       UUID correlationId,
       MessagePriority priority,
       byte[] data,
       String dataHash,
       String encryptionIV) {
     this.id = UuidCreator.getShortPrefixComb();
+    this.type = type;
     this.username = username;
     this.deviceId = deviceId;
-    this.typeId = typeId;
     this.correlationId = correlationId;
     this.priority = priority;
     this.data = data;
@@ -460,10 +457,10 @@ public class Message {
    * Constructs a new <b>Message</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the message
+   * @param type the code for the message type
    * @param username the username for the user associated with the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
    *     from
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
    * @param created the date and time the message was created
@@ -473,9 +470,9 @@ public class Message {
    */
   public Message(
       UUID id,
+      String type,
       String username,
       UUID deviceId,
-      UUID typeId,
       UUID correlationId,
       MessagePriority priority,
       LocalDateTime created,
@@ -483,9 +480,9 @@ public class Message {
       String dataHash,
       String encryptionIV) {
     this.id = id;
+    this.type = type;
     this.username = username;
     this.deviceId = deviceId;
-    this.typeId = typeId;
     this.correlationId = correlationId;
     this.priority = priority;
     this.status = MessageStatus.INITIALIZED;
@@ -508,10 +505,10 @@ public class Message {
 
     return rootElement.getName().equals("Message")
         && !((!rootElement.hasAttribute("id"))
+            || (!rootElement.hasAttribute("type"))
             || (!rootElement.hasAttribute("username"))
             || (!rootElement.hasAttribute("deviceId"))
             || (!rootElement.hasAttribute("priority"))
-            || (!rootElement.hasAttribute("typeId"))
             || (!rootElement.hasAttribute("created")));
   }
 
@@ -671,12 +668,12 @@ public class Message {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the message type.
+   * Returns the code for the message type.
    *
-   * @return the Universally Unique Identifier (UUID) for the message type
+   * @return the code for the message type
    */
-  public UUID getTypeId() {
-    return typeId;
+  public String getType() {
+    return type;
   }
 
   /**
@@ -858,12 +855,12 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the message type.
+   * Set the code for the message type.
    *
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
+   * @param type the code for the message type
    */
-  public void setTypeId(UUID typeId) {
-    this.typeId = typeId;
+  public void setType(String type) {
+    this.type = type;
   }
 
   /**
@@ -885,9 +882,9 @@ public class Message {
     StringBuilder buffer = new StringBuilder("<Message");
 
     buffer.append(" id=\"").append(id).append("\"");
+    buffer.append(" type=\"").append(type).append("\"");
     buffer.append(" username=\"").append(username).append("\"");
     buffer.append(" deviceId=\"").append(deviceId).append("\"");
-    buffer.append(" typeId=\"").append(typeId).append("\"");
 
     buffer
         .append(" correlationId=\"")
@@ -948,9 +945,9 @@ public class Message {
     Element rootElement = new Element("Message");
 
     rootElement.setAttribute("id", id.toString());
+    rootElement.setAttribute("type", type);
     rootElement.setAttribute("username", username);
     rootElement.setAttribute("deviceId", deviceId.toString());
-    rootElement.setAttribute("typeId", typeId.toString());
 
     if (correlationId != null) {
       rootElement.setAttribute("correlationId", correlationId.toString());

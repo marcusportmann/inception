@@ -22,7 +22,6 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingException;
 import digital.inception.messaging.WbxmlMessageData;
-import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
@@ -38,9 +37,8 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData {
   /** The error code returned when an unknown error occurred. */
   public static final int ERROR_CODE_UNKNOWN_ERROR = -1;
 
-  /** The UUID for the "Get Code Category Response" message. */
-  public static final UUID MESSAGE_TYPE_ID =
-      UUID.fromString("0336b544-91e5-4eb9-81db-3dd94e116c92");
+  /** The message type code for the "Get Code Category Response" message. */
+  public static final String MESSAGE_TYPE = "GetCodeCategoryResponse";
 
   /** The error code returned to indicate success. */
   private static final int ERROR_CODE_SUCCESS = 0;
@@ -62,7 +60,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData {
 
   /** Constructs a new <b>GetCodesResponseData</b>. */
   public GetCodeCategoryResponseData() {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
   }
 
   /**
@@ -71,7 +69,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData {
    * @param codeCategory the data for the code category
    */
   public GetCodeCategoryResponseData(CodeCategoryData codeCategory) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.errorCode = ERROR_CODE_SUCCESS;
     this.errorMessage = ERROR_MESSAGE_SUCCESS;
@@ -85,7 +83,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData {
    * @param errorMessage the error message describing the result of retrieving the code category
    */
   public GetCodeCategoryResponseData(int errorCode, String errorMessage) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;

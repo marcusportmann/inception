@@ -22,7 +22,6 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingException;
 import digital.inception.messaging.WbxmlMessageData;
-import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
@@ -35,16 +34,15 @@ import org.springframework.util.StringUtils;
  */
 public class CheckUserExistsRequestData extends WbxmlMessageData {
 
-  /** The UUID for the "Check User Exists Request" message. */
-  public static final UUID MESSAGE_TYPE_ID =
-      UUID.fromString("cc005e6a-b01b-48eb-98a0-026297be69f3");
+  /** The message type code for the "Check User Exists Request" message. */
+  public static final String MESSAGE_TYPE = "CheckUserExistsRequest";
 
   /** The username for the user. */
   private String username;
 
   /** Constructs a new <b>CheckUserExistsRequestData</b>. */
   public CheckUserExistsRequestData() {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
   }
 
   /**
@@ -53,7 +51,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData {
    * @param username the username for the user
    */
   public CheckUserExistsRequestData(String username) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.username = username;
   }

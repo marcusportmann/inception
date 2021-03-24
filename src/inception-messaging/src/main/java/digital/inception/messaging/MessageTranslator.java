@@ -92,8 +92,7 @@ public class MessageTranslator {
   public static byte[] decryptMessageData(byte[] encryptionKey, byte[] encryptionIV, byte[] data)
       throws MessagingException {
     if ((encryptionKey == null) || (encryptionKey.length == 0)) {
-      throw new MessagingException(
-          "Failed to decrypt the message data: Invalid encryption key");
+      throw new MessagingException("Failed to decrypt the message data: Invalid encryption key");
     }
 
     try {
@@ -120,8 +119,7 @@ public class MessageTranslator {
   public static byte[] encryptMessageData(byte[] encryptionKey, byte[] encryptionIV, byte[] data)
       throws MessagingException {
     if (encryptionKey == null) {
-      throw new MessagingException(
-          "Failed to encrypt the message data: Invalid encryption key");
+      throw new MessagingException("Failed to encrypt the message data: Invalid encryption key");
     }
 
     try {
@@ -171,11 +169,11 @@ public class MessageTranslator {
     }
 
     // Check that the message type for the message data and the specified message match
-    if (!messageData.getMessageTypeId().equals(message.getTypeId())) {
+    if (!messageData.getMessageType().equals(message.getType())) {
       throw new MessagingException(
           String.format(
               "The message type for the message (%s) does not match the message type for the message data (%s)",
-              message.getTypeId(), messageData.getMessageTypeId()));
+              message.getType(), messageData.getMessageType()));
     }
 
     /*
@@ -205,14 +203,14 @@ public class MessageTranslator {
       throw new MessagingException(
           String.format(
               "Failed to create the message with type (%s): A username has not been specified",
-              messageData.getMessageTypeId()));
+              messageData.getMessageType()));
     }
 
     if (deviceId == null) {
       throw new MessagingException(
           String.format(
               "Failed to create the message with type (%s): A device ID has not been specified",
-              messageData.getMessageTypeId()));
+              messageData.getMessageType()));
     }
 
     byte[] data = messageData.toMessageData();
@@ -227,9 +225,9 @@ public class MessageTranslator {
       data = encryptMessageData(encryptionKey, encryptionIV, data);
 
       return new Message(
+          messageData.getMessageType(),
           username,
           deviceId,
-          messageData.getMessageTypeId(),
           correlationId,
           messageData.getMessageTypePriority(),
           data,
@@ -237,9 +235,9 @@ public class MessageTranslator {
           (encryptionIV.length == 0) ? "" : Base64Util.encodeBytes(encryptionIV));
     } else {
       return new Message(
+          messageData.getMessageType(),
           username,
           deviceId,
-          messageData.getMessageTypeId(),
           correlationId,
           messageData.getMessageTypePriority(),
           data);
@@ -266,8 +264,7 @@ public class MessageTranslator {
     try {
       return Base64Util.encodeBytes(threadLocalMessageDigest.get().digest(data));
     } catch (Throwable e) {
-      throw new MessagingException(
-          "Failed to generate the SHA-256 hash for the message data", e);
+      throw new MessagingException("Failed to generate the SHA-256 hash for the message data", e);
     }
   }
 }

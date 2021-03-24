@@ -131,7 +131,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   private int maximumProcessingAttempts;
 
   /** The message handlers. */
-  private Map<UUID, IMessageHandler> messageHandlers;
+  private Map<String, IMessageHandler> messageHandlers;
 
   /**
    * The configuration information for the message handlers read from the messaging configuration
@@ -309,7 +309,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
               "Failed to verify the checksum for the reconstructed message ("
                   + firstMessagePart.getMessageId()
                   + ") with type ("
-                  + firstMessagePart.getMessageTypeId()
+                  + firstMessagePart.getMessageType()
                   + ") "
                   + "from the user ("
                   + firstMessagePart.getMessageUsername()
@@ -330,9 +330,9 @@ public class MessagingService implements IMessagingService, InitializingBean {
         Message message =
             new Message(
                 firstMessagePart.getMessageId(),
+                firstMessagePart.getMessageType(),
                 firstMessagePart.getMessageUsername(),
                 firstMessagePart.getMessageDeviceId(),
-                firstMessagePart.getMessageTypeId(),
                 firstMessagePart.getMessageCorrelationId(),
                 firstMessagePart.getMessagePriority(),
                 firstMessagePart.getMessageCreated(),
@@ -362,7 +362,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   @Override
   public boolean canProcessMessage(Message message) {
-    return messageHandlers.containsKey(message.getTypeId());
+    return messageHandlers.containsKey(message.getType());
   }
 
   /**
@@ -375,7 +375,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   @Override
   public boolean canQueueMessagePartForAssembly(MessagePart messagePart) {
-    return messageHandlers.containsKey(messagePart.getMessageTypeId());
+    return messageHandlers.containsKey(messagePart.getMessageType());
   }
 
   /**
@@ -967,7 +967,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   @Override
   public boolean isArchivableMessage(Message message) {
-    return isArchivableMessage(message.getTypeId());
+    return isArchivableMessage(message.getType());
   }
 
   /**
@@ -978,7 +978,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   @Override
   public boolean isAsynchronousMessage(Message message) {
-    return isAsynchronousMessage(message.getTypeId());
+    return isAsynchronousMessage(message.getType());
   }
 
   /**
@@ -1034,7 +1034,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   @Override
   public boolean isSecureMessage(Message message) {
-    return isSecureMessage(message.getTypeId());
+    return isSecureMessage(message.getType());
   }
 
   /**
@@ -1044,7 +1044,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * @return <b>true</b> if the message should be processed synchronously or <b>false</b> otherwise
    */
   public boolean isSynchronousMessage(Message message) {
-    return isSynchronousMessage(message.getTypeId());
+    return isSynchronousMessage(message.getType());
   }
 
   /**
@@ -1063,17 +1063,17 @@ public class MessagingService implements IMessagingService, InitializingBean {
 
     if (logger.isDebugEnabled()) {
       logger.debug(
-          "Processing message (" + message.getId() + ") with type (" + message.getTypeId() + ")");
+          "Processing message (" + message.getId() + ") with type (" + message.getType() + ")");
     }
 
-    if (!messageHandlers.containsKey(message.getTypeId())) {
+    if (!messageHandlers.containsKey(message.getType())) {
       throw new ServiceUnavailableException(
           "No message handler registered to process messages with type ("
-              + message.getTypeId()
+              + message.getType()
               + ")");
     }
 
-    IMessageHandler messageHandler = messageHandlers.get(message.getTypeId());
+    IMessageHandler messageHandler = messageHandlers.get(message.getType());
 
     try {
       return messageHandler.processMessage(message);
@@ -1082,7 +1082,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
           "Failed to process the message ("
               + message.getId()
               + ") with type ("
-              + message.getTypeId()
+              + message.getType()
               + ")",
           e);
     }
@@ -1156,9 +1156,9 @@ public class MessagingService implements IMessagingService, InitializingBean {
                   i + 1,
                   numberOfParts,
                   message.getId(),
+                  message.getType(),
                   message.getUsername(),
                   message.getDeviceId(),
-                  message.getTypeId(),
                   message.getCorrelationId(),
                   message.getPriority(),
                   message.getCreated(),
@@ -1225,7 +1225,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
           "Queued message ("
               + message.getId()
               + ") with type ("
-              + message.getTypeId()
+              + message.getType()
               + ") for processing");
 
       logger.debug(message.toString());
@@ -1538,20 +1538,20 @@ public class MessagingService implements IMessagingService, InitializingBean {
               messageHandlerConfig.getMessagesConfig();
 
           for (MessageHandlerConfig.MessageConfig messageConfig : messagesConfig) {
-            if (messageHandlers.containsKey(messageConfig.getMessageTypeId())) {
+            if (messageHandlers.containsKey(messageConfig.getMessageType())) {
               IMessageHandler existingMessageHandler =
-                  messageHandlers.get(messageConfig.getMessageTypeId());
+                  messageHandlers.get(messageConfig.getMessageType());
 
               logger.warn(
                   "Failed to register the message handler ("
                       + messageHandler.getClass().getName()
                       + ") for the message type ("
-                      + messageConfig.getMessageTypeId()
+                      + messageConfig.getMessageType()
                       + ") since another message handler ("
                       + existingMessageHandler.getClass().getName()
                       + ") has already been registered to process messages of this type");
             } else {
-              messageHandlers.put(messageConfig.getMessageTypeId(), messageHandler);
+              messageHandlers.put(messageConfig.getMessageType(), messageHandler);
             }
           }
         } else {
@@ -1576,16 +1576,16 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /**
    * Should a message with the specified type be archived?
    *
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
+   * @param type the code for the message type
    * @return <b>true</b> if a message with the specified type should be archived or <b>false</b>
    *     otherwise
    */
-  private boolean isArchivableMessage(UUID typeId) {
+  private boolean isArchivableMessage(String type) {
     // TODO: Add caching of this check
 
     // Check if any of the configured handlers supports archiving of the message
     for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
-      if (messageHandlerConfig.isArchivable(typeId)) {
+      if (messageHandlerConfig.isArchivable(type)) {
         return true;
       }
     }
@@ -1596,16 +1596,16 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /**
    * Can a message with the specified type be processed asynchronously?
    *
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
+   * @param type the code for the message type
    * @return <b>true</b> if a message with the specified type can be processed asynchronously or
    *     <b>false</b> otherwise
    */
-  private boolean isAsynchronousMessage(UUID typeId) {
+  private boolean isAsynchronousMessage(String type) {
     // TODO: Add caching of this check
 
     // Check if any of the configured handlers support the synchronous processing of this message
     for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
-      if (messageHandlerConfig.supportsAsynchronousProcessing(typeId)) {
+      if (messageHandlerConfig.supportsAsynchronousProcessing(type)) {
         return true;
       }
     }
@@ -1616,16 +1616,16 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /**
    * Should a message with the specified type be processed securely?
    *
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
+   * @param type the code for the message type
    * @return <b>true</b> if a message with the specified type should be processed securely or
    *     <b>false</b> otherwise
    */
-  private boolean isSecureMessage(UUID typeId) {
+  private boolean isSecureMessage(String type) {
     // TODO: Add caching of this check
 
     // Check if any of the configured handlers required secure processing of the message type
     for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
-      if (messageHandlerConfig.isSecure(typeId)) {
+      if (messageHandlerConfig.isSecure(type)) {
         return true;
       }
     }
@@ -1636,16 +1636,16 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /**
    * Can a message with the specified type be processed synchronously?
    *
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
+   * @param type the code for the message type
    * @return <b>true</b> if a message with the specified type can be processed synchronously or
    *     <b>false</b> otherwise
    */
-  private boolean isSynchronousMessage(UUID typeId) {
+  private boolean isSynchronousMessage(String type) {
     // TODO: Add caching of this check
 
     // Check if any of the configured handlers support the synchronous processing of this message
     for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
-      if (messageHandlerConfig.supportsSynchronousProcessing(typeId)) {
+      if (messageHandlerConfig.supportsSynchronousProcessing(type)) {
         return true;
       }
     }
@@ -1718,7 +1718,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
                   XmlUtil.getChildElements(messagesElement.get(), "message");
 
               for (Element messageElement : messageElements) {
-                UUID messageType = UUID.fromString(messageElement.getAttribute("type"));
+                String messageType = messageElement.getAttribute("type");
                 boolean isSynchronous =
                     messageElement.getAttribute("isSynchronous").equalsIgnoreCase("Y");
                 boolean isAsynchronous =

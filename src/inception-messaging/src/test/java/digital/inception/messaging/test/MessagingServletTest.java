@@ -159,7 +159,7 @@ public class MessagingServletTest {
       assertEquals(Integer.valueOf(1), message.getDownloadAttempts());
 
       logger.info(
-          "Downloaded message (" + message.getId() + ") with type (" + message.getTypeId() + ")");
+          "Downloaded message (" + message.getId() + ") with type (" + message.getType() + ")");
 
       MessageReceivedResponse messageReceivedResponse =
           sendMessageReceivedRequest(DEVICE_ID, message.getId());
@@ -171,7 +171,7 @@ public class MessagingServletTest {
       AnotherTestResponseData responseData =
           messageTranslator.fromMessage(message, new AnotherTestResponseData());
 
-      assertEquals(AnotherTestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
+      assertEquals(AnotherTestResponseData.MESSAGE_TYPE, responseData.getMessageType());
       assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
       assertEquals("Test Value", responseData.getTestValue());
       assertArrayEquals("Test Data".getBytes(), requestData.getTestData());
@@ -225,7 +225,7 @@ public class MessagingServletTest {
       assertEquals(Integer.valueOf(1), message.getDownloadAttempts());
 
       logger.info(
-          "Downloaded message (" + message.getId() + ") with type (" + message.getTypeId() + ")");
+          "Downloaded message (" + message.getId() + ") with type (" + message.getType() + ")");
 
       MessageReceivedResponse messageReceivedResponse =
           sendMessageReceivedRequest(DEVICE_ID, message.getId());
@@ -237,7 +237,7 @@ public class MessagingServletTest {
       AnotherTestResponseData responseData =
           messageTranslator.fromMessage(message, new AnotherTestResponseData());
 
-      assertEquals(AnotherTestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
+      assertEquals(AnotherTestResponseData.MESSAGE_TYPE, responseData.getMessageType());
       assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
       assertEquals("Test Value", responseData.getTestValue());
       assertArrayEquals("Test Data".getBytes(), requestData.getTestData());
@@ -338,7 +338,7 @@ public class MessagingServletTest {
               + ") with ID ("
               + messagePart.getId()
               + ") and type ("
-              + messagePart.getMessageTypeId()
+              + messagePart.getMessageType()
               + ")");
 
       MessagePartReceivedResponse messagePartReceivedResponse =
@@ -357,9 +357,9 @@ public class MessagingServletTest {
 
     Message reconstructedMessage =
         new Message(
+            messageParts.get(0).getMessageType(),
             messageParts.get(0).getMessageUsername(),
             messageParts.get(0).getMessageDeviceId(),
-            messageParts.get(0).getMessageTypeId(),
             messageParts.get(0).getMessageCorrelationId(),
             messageParts.get(0).getMessagePriority(),
             baos.toByteArray(),
@@ -391,7 +391,7 @@ public class MessagingServletTest {
     TestResponseData responseData =
         messageTranslator.fromMessage(messageResult.getMessage(), new TestResponseData());
 
-    assertEquals(TestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
+    assertEquals(TestResponseData.MESSAGE_TYPE, responseData.getMessageType());
     assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
     assertEquals("Test Value", responseData.getTestValue());
   }
@@ -426,7 +426,7 @@ public class MessagingServletTest {
     AuthenticateResponseData responseData =
         messageTranslator.fromMessage(messageResult.getMessage(), new AuthenticateResponseData());
 
-    assertEquals(AuthenticateResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
+    assertEquals(AuthenticateResponseData.MESSAGE_TYPE, responseData.getMessageType());
     assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
     assertEquals(0, responseData.getErrorCode());
     assertNotNull(responseData.getUserEncryptionKey());
@@ -534,9 +534,9 @@ public class MessagingServletTest {
                   i + 1,
                   numberOfParts,
                   message.getId(),
+                  message.getType(),
                   message.getUsername(),
                   message.getDeviceId(),
-                  message.getTypeId(),
                   message.getCorrelationId(),
                   message.getPriority(),
                   message.getCreated(),
@@ -568,7 +568,7 @@ public class MessagingServletTest {
                     + ") and the device ("
                     + messagePart.getMessageDeviceId()
                     + ") with message type ("
-                    + messagePart.getMessageTypeId()
+                    + messagePart.getMessageType()
                     + ")");
           } else {
             throw new RuntimeException(

@@ -48,9 +48,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",
+  "type",
   "username",
   "deviceId",
-  "typeId",
   "correlationId",
   "created",
   "archived",
@@ -62,9 +62,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     namespace = "http://inception.digital/messaging",
     propOrder = {
       "id",
+      "type",
       "username",
       "deviceId",
-      "typeId",
       "correlationId",
       "created",
       "archived",
@@ -133,15 +133,14 @@ public class ArchivedMessage {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The Universally Unique Identifier (UUID) for the message type. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the message type",
-      required = true)
+  /** The code for the message type. */
+  @Schema(description = "The code for the message type", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "TypeId", required = true)
+  @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(name = "type_id", nullable = false)
-  private UUID typeId;
+  @Size(min = 1, max = 50)
+  @Column(name = "type", nullable = false)
+  private String type;
 
   /** The username for the user associated with the message. */
   @Schema(description = "The username for the user associated with the message", required = true)
@@ -162,9 +161,9 @@ public class ArchivedMessage {
    */
   public ArchivedMessage(Message message) {
     this.id = message.getId();
+    this.type = message.getType();
     this.username = message.getUsername();
     this.deviceId = message.getDeviceId();
-    this.typeId = message.getTypeId();
     this.correlationId = message.getCorrelationId();
     this.created = message.getCreated();
     this.archived = LocalDateTime.now();
@@ -175,10 +174,10 @@ public class ArchivedMessage {
    * Constructs a new <b>ArchivedMessage</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the message
+   * @param type the code for the message type
    * @param username the username for the user associated with the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
    *     from
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param correlationId the optional Universally Unique Identifier (UUID) used to correlate the
    *     message
    * @param created the date and time the message was created
@@ -187,17 +186,17 @@ public class ArchivedMessage {
    */
   public ArchivedMessage(
       UUID id,
+      String type,
       String username,
       UUID deviceId,
-      UUID typeId,
       UUID correlationId,
       LocalDateTime created,
       LocalDateTime archived,
       byte[] data) {
     this.id = id;
+    this.type = type;
     this.username = username;
     this.deviceId = deviceId;
-    this.typeId = typeId;
     this.correlationId = correlationId;
     this.created = created;
     this.archived = archived;
@@ -284,12 +283,12 @@ public class ArchivedMessage {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the message type.
+   * Returns the code for the message type.
    *
-   * @return the Universally Unique Identifier (UUID) for the message type
+   * @return the code for the message type
    */
-  public UUID getTypeId() {
-    return typeId;
+  public String getType() {
+    return type;
   }
 
   /**
@@ -367,12 +366,12 @@ public class ArchivedMessage {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the message type.
+   * Set the code for the message type.
    *
-   * @param typeId the Universally Unique Identifier (UUID) for the message type
+   * @param type the code for the message type
    */
-  public void setTypeId(UUID typeId) {
-    this.typeId = typeId;
+  public void setType(String type) {
+    this.type = type;
   }
 
   /**
@@ -394,9 +393,9 @@ public class ArchivedMessage {
     StringBuilder buffer = new StringBuilder("<ArchivedMessage");
 
     buffer.append(" id=\"").append(id).append("\"");
+    buffer.append(" type=\"").append(type).append("\"");
     buffer.append(" username=\"").append(username).append("\"");
     buffer.append(" deviceId=\"").append(deviceId).append("\"");
-    buffer.append(" typeId=\"").append(typeId).append("\"");
 
     buffer
         .append(" correlationId=\"")

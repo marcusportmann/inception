@@ -162,7 +162,7 @@ public class SystemMessageTest {
     TenantData tenant = tenants.get(0);
 
     assertEquals(SecurityService.ADMINISTRATION_TENANT_ID, tenant.getId());
-    assertEquals("Administration", tenant.getName());
+    assertEquals("Default", tenant.getName());
     assertNotNull(responseData.getUserEncryptionKey());
     assertNotNull(responseData.getUserProperties());
 

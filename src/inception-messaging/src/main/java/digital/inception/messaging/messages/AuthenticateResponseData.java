@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
 
@@ -44,9 +43,8 @@ public class AuthenticateResponseData extends WbxmlMessageData {
   /** The error code returned when an unknown error occurs during authentication. */
   public static final int ERROR_CODE_UNKNOWN_ERROR = -1;
 
-  /** The UUID for the "Authenticate Response" message. */
-  public static final UUID MESSAGE_TYPE_ID =
-      UUID.fromString("82223035-1726-407f-8703-3977708e792c");
+  /** The message type code for the "Authenticate Response" message. */
+  public static final String MESSAGE_TYPE = "AuthenticateResponse";
 
   /** The error code returned when authentication is successful. */
   private static final int ERROR_CODE_SUCCESS = 0;
@@ -77,7 +75,7 @@ public class AuthenticateResponseData extends WbxmlMessageData {
 
   /** Constructs a new <b>AuthenticateResponseData</b>. */
   public AuthenticateResponseData() {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
   }
 
   /**
@@ -87,7 +85,7 @@ public class AuthenticateResponseData extends WbxmlMessageData {
    * @param errorMessage the error message
    */
   public AuthenticateResponseData(int errorCode, String errorMessage) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;
@@ -106,7 +104,7 @@ public class AuthenticateResponseData extends WbxmlMessageData {
    */
   public AuthenticateResponseData(
       List<Tenant> tenants, byte[] userEncryptionKey, Map<String, Object> userProperties) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.errorCode = ERROR_CODE_SUCCESS;
     this.errorMessage = ERROR_MESSAGE_SUCCESS;

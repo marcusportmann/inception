@@ -18,7 +18,6 @@ package digital.inception.messaging;
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
-import java.util.UUID;
 
 /**
  * The <b>WbxmlMessageData</b> class provides the abstract base class from which all WBXML-based
@@ -28,8 +27,8 @@ import java.util.UUID;
  */
 public abstract class WbxmlMessageData {
 
-  /** The UUID for the message type for the message data. */
-  private final UUID messageTypeId;
+  /** The code for the message type for the message data. */
+  private final String messageType;
 
   /** The message priority for the message data. */
   private final MessagePriority messageTypePriority;
@@ -37,11 +36,11 @@ public abstract class WbxmlMessageData {
   /**
    * Constructs a new <b>WbxmlMessageData</b>.
    *
-   * @param messageTypeId the UUID for the message type for the message data
+   * @param messageType the code for the message type for the message data
    * @param messagePriority the message priority for the message data
    */
-  public WbxmlMessageData(UUID messageTypeId, MessagePriority messagePriority) {
-    this.messageTypeId = messageTypeId;
+  public WbxmlMessageData(String messageType, MessagePriority messagePriority) {
+    this.messageType = messageType;
     this.messageTypePriority = messagePriority;
   }
 
@@ -55,12 +54,12 @@ public abstract class WbxmlMessageData {
   public abstract boolean fromMessageData(byte[] messageData) throws MessagingException;
 
   /**
-   * Returns the UUID for the message type for the message data.
+   * Returns the code for the message type for the message data.
    *
-   * @return the UUID for the message type for the message data
+   * @return the code for the message type for the message data
    */
-  public UUID getMessageTypeId() {
-    return messageTypeId;
+  public String getMessageType() {
+    return messageType;
   }
 
   /**

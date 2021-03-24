@@ -39,9 +39,8 @@ import org.springframework.util.StringUtils;
  */
 public class SubmitErrorReportRequestData extends WbxmlMessageData {
 
-  /** The UUID for the "Submit Error Report Request" message. */
-  public static final UUID MESSAGE_TYPE_ID =
-      UUID.fromString("ff638c33-b4f1-4e79-804c-9560da2543d6");
+  /** The message type code for the "Submit Error Report Request" message. */
+  public static final String MESSAGE_TYPE = "SubmitErrorReportRequest";
 
   /** The ID for the application that generated the error report. */
   private String applicationId;
@@ -75,7 +74,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
 
   /** Constructs a new <b>SubmitErrorReportRequestData</b>. */
   public SubmitErrorReportRequestData() {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
   }
 
   /**
@@ -104,7 +103,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
       String who,
       UUID deviceId,
       String data) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.id = id;
     this.applicationId = applicationId;

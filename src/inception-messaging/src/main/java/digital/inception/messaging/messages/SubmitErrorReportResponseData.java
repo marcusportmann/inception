@@ -38,9 +38,8 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
   /** The message returned when a submitted error report is successfully processed. */
   public static final String ERROR_MESSAGE_SUCCESS = "Success";
 
-  /** The UUID for the "Submit Error Report Response" message. */
-  public static final UUID MESSAGE_TYPE_ID =
-      UUID.fromString("8be50cfa-2fb1-4634-9bfa-d01e77eaf766");
+  /** The message type code for the "Submit Error Report Response" message. */
+  public static final String MESSAGE_TYPE = "SubmitErrorReportResponse";
 
   /**
    * The error code indicating the result of processing the submitted error report where a code of
@@ -59,7 +58,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
 
   /** Constructs a new <b>SubmitErrorReportResponseData</b>. */
   public SubmitErrorReportResponseData() {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
   }
 
   /**
@@ -72,7 +71,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
    *     submitted for processing
    */
   public SubmitErrorReportResponseData(int errorCode, String errorMessage, UUID errorReportId) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;

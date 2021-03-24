@@ -8,13 +8,13 @@ CREATE SCHEMA messaging;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE messaging.message_types (
-  id   UUID          NOT NULL,
+  code VARCHAR(50)  NOT NULL,
   name VARCHAR(100) NOT NULL,
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (code)
 );
 
-COMMENT ON COLUMN messaging.message_types.id IS 'The Universally Unique Identifier (UUID) for the message type';
+COMMENT ON COLUMN messaging.message_types.code IS 'The code for the message type';
 
 COMMENT ON COLUMN messaging.message_types.name IS 'The name of the message type';
 
@@ -33,9 +33,9 @@ COMMENT ON COLUMN messaging.message_statuses.name IS 'The name of the message st
 
 CREATE TABLE messaging.messages (
   id                UUID          NOT NULL,
-  username          VARCHAR(100) NOT NULL,
+  type              VARCHAR(50)   NOT NULL,
+  username          VARCHAR(100)  NOT NULL,
   device_id         UUID          NOT NULL,
-  type_id           UUID          NOT NULL,
   correlation_id    UUID,
   priority          INTEGER       NOT NULL,
   status            INTEGER       NOT NULL,
@@ -50,15 +50,15 @@ CREATE TABLE messaging.messages (
   data              BLOB,
 
   PRIMARY KEY (id),
-  CONSTRAINT messages_message_type_fk FOREIGN KEY (type_id) REFERENCES messaging.message_types(id),
+  CONSTRAINT messages_message_type_fk FOREIGN KEY (type) REFERENCES messaging.message_types(code),
   CONSTRAINT messages_message_status_fk FOREIGN KEY (status) REFERENCES messaging.message_statuses(code)
 );
+
+CREATE INDEX messages_type_ix ON messaging.messages(type);
 
 CREATE INDEX messages_username_ix ON messaging.messages(username);
 
 CREATE INDEX messages_device_id_ix ON messaging.messages(device_id);
-
-CREATE INDEX messages_type_id_ix ON messaging.messages(type_id);
 
 CREATE INDEX messages_priority_ix ON messaging.messages(priority);
 
@@ -68,11 +68,11 @@ CREATE INDEX messages_lock_name_ix ON messaging.messages(lock_name);
 
 COMMENT ON COLUMN messaging.messages.id IS 'The Universally Unique Identifier (UUID) for the message';
 
+COMMENT ON COLUMN messaging.messages.type IS 'The code for the message type';
+
 COMMENT ON COLUMN messaging.messages.username IS 'The username for the user associated with the message';
 
 COMMENT ON COLUMN messaging.messages.device_id IS 'The Universally Unique Identifier (UUID) for the device the message originated from';
-
-COMMENT ON COLUMN messaging.messages.type_id IS 'The Universally Unique Identifier (UUID) for the message type';
 
 COMMENT ON COLUMN messaging.messages.correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the message';
 
@@ -107,29 +107,29 @@ CREATE TABLE messaging.message_parts (
   download_attempts      INTEGER,
   status                 INTEGER       NOT NULL,
   message_id             UUID          NOT NULL,
-  message_username       VARCHAR(100) NOT NULL,
+  message_type           VARCHAR(50)   NOT NULL,
+  message_username       VARCHAR(100)  NOT NULL,
   message_device_id      UUID          NOT NULL,
-  message_type_id        UUID          NOT NULL,
   message_correlation_id UUID,
   message_priority       INTEGER       NOT NULL,
   message_created        TIMESTAMP     NOT NULL,
   message_data_hash      VARCHAR(100),
   message_encryption_iv  VARCHAR(100),
-  message_checksum       VARCHAR(100) NOT NULL,
+  message_checksum       VARCHAR(100)  NOT NULL,
   lock_name              VARCHAR(100),
   data                   BLOB,
 
   PRIMARY KEY (id),
-  CONSTRAINT message_parts_message_type_fk FOREIGN KEY (message_type_id) REFERENCES messaging.message_types(id)
+  CONSTRAINT message_parts_message_type_fk FOREIGN KEY (message_type) REFERENCES messaging.message_types(code)
 );
 
 CREATE INDEX message_parts_status_ix ON messaging.message_parts(status);
 
 CREATE INDEX message_parts_message_id_ix ON messaging.message_parts(message_id);
 
-CREATE INDEX message_parts_message_device_id_ix ON messaging.message_parts(message_device_id);
+CREATE INDEX message_parts_message_type_ix ON messaging.message_parts(message_type);
 
-CREATE INDEX message_parts_message_type_id_ix ON messaging.message_parts(message_type_id);
+CREATE INDEX message_parts_message_device_id_ix ON messaging.message_parts(message_device_id);
 
 CREATE INDEX message_parts_lock_name_ix ON messaging.message_parts(lock_name);
 
@@ -147,11 +147,11 @@ COMMENT ON COLUMN messaging.message_parts.status IS 'The message part status e.g
 
 COMMENT ON COLUMN messaging.message_parts.message_id IS 'The Universally Unique Identifier (UUID) for the original message';
 
+COMMENT ON COLUMN messaging.message_parts.message_type IS 'The code for the message type for the original message';
+
 COMMENT ON COLUMN messaging.message_parts.message_username IS 'The username for the user associated with the original message';
 
 COMMENT ON COLUMN messaging.message_parts.message_device_id IS 'The Universally Unique Identifier (UUID) for the device the original message originated from';
-
-COMMENT ON COLUMN messaging.message_parts.message_type_id IS 'The Universally Unique Identifier (UUID) for the message type for the original message';
 
 COMMENT ON COLUMN messaging.message_parts.message_correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the original message';
 
@@ -171,32 +171,32 @@ COMMENT ON COLUMN messaging.message_parts.data IS 'The data for the message part
 
 
 CREATE TABLE messaging.archived_messages (
-  id             UUID          NOT NULL,
+  id             UUID         NOT NULL,
+  type           VARCHAR(50)  NOT NULL,
   username       VARCHAR(100) NOT NULL,
-  device_id      UUID          NOT NULL,
-  type_id        UUID          NOT NULL,
+  device_id      UUID         NOT NULL,
   correlation_id UUID,
-  created        TIMESTAMP     NOT NULL,
-  archived       TIMESTAMP     NOT NULL,
+  created        TIMESTAMP    NOT NULL,
+  archived       TIMESTAMP    NOT NULL,
   data           BLOB,
 
   PRIMARY KEY (id),
-  CONSTRAINT archived_messages_message_type_fk FOREIGN KEY (type_id) REFERENCES messaging.message_types(id)
+  CONSTRAINT archived_messages_message_type_fk FOREIGN KEY (type) REFERENCES messaging.message_types(code)
 );
+
+CREATE INDEX archived_messages_type_ix ON messaging.archived_messages(type);
 
 CREATE INDEX archived_messages_username_ix ON messaging.archived_messages(username);
 
 CREATE INDEX archived_messages_device_id_ix ON messaging.archived_messages(device_id);
 
-CREATE INDEX archived_messages_type_id_ix ON messaging.archived_messages(type_id);
-
 COMMENT ON COLUMN messaging.archived_messages.id IS 'The Universally Unique Identifier (UUID) for the message';
+
+COMMENT ON COLUMN messaging.archived_messages.type IS 'The code for the message type';
 
 COMMENT ON COLUMN messaging.archived_messages.username IS 'The username for the user associated with the message';
 
 COMMENT ON COLUMN messaging.archived_messages.device_id IS 'The Universally Unique Identifier (UUID) for the device the message originated from';
-
-COMMENT ON COLUMN messaging.archived_messages.type_id IS 'The Universally Unique Identifier (UUID) for the message type';
 
 COMMENT ON COLUMN messaging.archived_messages.correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the message';
 
@@ -210,30 +210,30 @@ COMMENT ON COLUMN messaging.archived_messages.data IS 'The data for the message'
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('82223035-1726-407f-8703-3977708e792c', 'AuthenticateResponse');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('cc005e6a-b01b-48eb-98a0-026297be69f3', 'CheckUserExistsRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('a38bd55e-3470-46f1-a96a-a6b08a9adc63', 'CheckUserExistsResponse');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('94d60eb6-a062-492d-b5e7-9fb1f05cf088', 'GetCodeCategoryRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('0336b544-91e5-4eb9-81db-3dd94e116c92', 'GetCodeCategoryResponse');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('a589dc87-2328-4a9b-bdb6-970e55ca2323', 'TestRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('a3bad7ba-f9d4-4403-b54a-cb1f335ebbad', 'TestResponse');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('e9918051-8ebc-48f1-bad7-13c59b550e1a', 'AnotherTestRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('a714a9c6-2914-4498-ab59-64be9991bf37', 'AnotherTestResponse');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('ff638c33-b4f1-4e79-804c-9560da2543d6', 'SubmitErrorReportRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('8be50cfa-2fb1-4634-9bfa-d01e77eaf766', 'SubmitErrorReportResponse');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('AuthenticateRequest', 'Authenticate Request');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('AuthenticateResponse', 'Authenticate Response');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('CheckUserExistsRequest', 'Check User Exists Request');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('CheckUserExistsResponse', 'Check User Exists Response');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('GetCodeCategoryRequest', 'Get Code Category Request');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('GetCodeCategoryResponse', 'Get Code Category Response');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('TestRequest', 'Test Request');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('TestResponse', 'Test Response');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('AnotherTestRequest', 'Another Test Request');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('AnotherTestResponse', 'Another Test Response');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('SubmitErrorReportRequest', 'Submit Error Report Request');
+INSERT INTO messaging.message_types (code, name)
+  VALUES ('SubmitErrorReportResponse', 'Submit Error Report Response');
 
 INSERT INTO messaging.message_statuses (code, name)
   VALUES (0, 'Initialised');

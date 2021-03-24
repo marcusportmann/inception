@@ -16,8 +16,8 @@
 
 package digital.inception.messaging;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -141,8 +141,7 @@ public interface IMessagingService {
    * @param deviceId the Universally Unique Identifier (UUID) for the device
    * @return the user-device encryption key
    */
-  byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId)
-      throws MessagingException;
+  byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId) throws MessagingException;
 
   /**
    * Encrypt the message.
@@ -206,8 +205,8 @@ public interface IMessagingService {
    *
    * <p>The message will be locked to prevent duplicate processing.
    *
-   * @return an Optional containing the next message that has been queued for processing or an empty Optional if no messages are
-   *     currently queued for processing
+   * @return an Optional containing the next message that has been queued for processing or an empty
+   *     Optional if no messages are currently queued for processing
    */
   Optional<Message> getNextMessageQueuedForProcessing() throws ServiceUnavailableException;
 
@@ -266,7 +265,8 @@ public interface IMessagingService {
    * Process the message.
    *
    * @param message the message to process
-   * @return an Optional containing the response message or an empty Optional if no response message exists
+   * @return an Optional containing the response message or an empty Optional if no response message
+   *     exists
    */
   Optional<Message> processMessage(Message message)
       throws InvalidArgumentException, ServiceUnavailableException;

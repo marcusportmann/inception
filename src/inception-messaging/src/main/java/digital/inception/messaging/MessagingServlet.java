@@ -268,7 +268,7 @@ public class MessagingServlet extends HttpServlet {
               MessageResult.ERROR_UNRECOGNISED_TYPE,
               String.format(
                   "Failed to process the message (%s) with the unrecognised type (%s)",
-                  requestMessage.getId(), requestMessage.getTypeId()));
+                  requestMessage.getId(), requestMessage.getType()));
 
       writeResponseDocument(messageResult.toWBXML(), response);
 
@@ -280,7 +280,7 @@ public class MessagingServlet extends HttpServlet {
           String.format(
               "Processing the message (%s) with type (%s) from the user (%s) and the device (%s)",
               requestMessage.getId(),
-              requestMessage.getTypeId(),
+              requestMessage.getType(),
               requestMessage.getUsername(),
               requestMessage.getDeviceId()));
 
@@ -398,7 +398,7 @@ public class MessagingServlet extends HttpServlet {
               String.format(
                   "Synchronous and asynchronous processing are not supported for the message (%s) with "
                       + "type (%s)",
-                  requestMessage.getId(), requestMessage.getTypeId()));
+                  requestMessage.getId(), requestMessage.getType()));
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -507,7 +507,7 @@ public class MessagingServlet extends HttpServlet {
               messagePart.getId(),
               messagePart.getMessageUsername(),
               messagePart.getMessageDeviceId(),
-              messagePart.getMessageTypeId()));
+              messagePart.getMessageType()));
 
       MessagePartResult result =
           new MessagePartResult(
@@ -518,7 +518,7 @@ public class MessagingServlet extends HttpServlet {
                   messagePart.getId(),
                   messagePart.getMessageUsername(),
                   messagePart.getMessageDeviceId(),
-                  messagePart.getMessageTypeId()));
+                  messagePart.getMessageType()));
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -534,7 +534,7 @@ public class MessagingServlet extends HttpServlet {
             messagePart.getMessageId(),
             messagePart.getMessageUsername(),
             messagePart.getMessageDeviceId(),
-            messagePart.getMessageTypeId()));
+            messagePart.getMessageType()));
 
     logger.debug(messagePart.toString());
 
@@ -558,7 +558,7 @@ public class MessagingServlet extends HttpServlet {
               messagePart.getId(),
               messagePart.getMessageUsername(),
               messagePart.getMessageDeviceId(),
-              messagePart.getMessageTypeId()),
+              messagePart.getMessageType()),
           e);
 
       MessagePartResult result =

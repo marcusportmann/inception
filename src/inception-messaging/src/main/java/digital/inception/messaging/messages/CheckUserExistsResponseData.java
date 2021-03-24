@@ -22,7 +22,6 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingException;
 import digital.inception.messaging.WbxmlMessageData;
-import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
@@ -38,9 +37,8 @@ public class CheckUserExistsResponseData extends WbxmlMessageData {
   /** The error code returned when an unknown error occurred. */
   public static final int ERROR_CODE_UNKNOWN_ERROR = -1;
 
-  /** The UUID for the "Check User Exists Response" message. */
-  public static final UUID MESSAGE_TYPE_ID =
-      UUID.fromString("a38bd55e-3470-46f1-a96a-a6b08a9adc63");
+  /** The message type code for the "Check User Exists Response" message. */
+  public static final String MESSAGE_TYPE = "CheckUserExistsResponse";
 
   /** The error code returned to indicate success. */
   private static final int ERROR_CODE_SUCCESS = 0;
@@ -59,7 +57,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData {
 
   /** Constructs a new <b>CheckUserExistsResponseData</b>. */
   public CheckUserExistsResponseData() {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
   }
 
   /**
@@ -68,7 +66,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData {
    * @param userExists <b>true</b> if the user exists or <b>false</b> otherwise
    */
   public CheckUserExistsResponseData(boolean userExists) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.userExists = userExists;
     this.errorCode = ERROR_CODE_SUCCESS;
@@ -82,7 +80,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData {
    * @param errorMessage the error message
    */
   public CheckUserExistsResponseData(int errorCode, String errorMessage) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;

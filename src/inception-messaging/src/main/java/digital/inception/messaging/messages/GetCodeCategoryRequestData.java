@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * The <b>GetCodeCategoryRequestData</b> class manages the data for a "Get Code Category Request"
@@ -43,9 +42,8 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class GetCodeCategoryRequestData extends WbxmlMessageData {
 
-  /** The UUID for the "Get Code Category Request" message. */
-  public static final UUID MESSAGE_TYPE_ID =
-      UUID.fromString("94d60eb6-a062-492d-b5e7-9fb1f05cf088");
+  /** The message type code for the "Get Code Category Request" message. */
+  public static final String MESSAGE_TYPE = "GetCodeCategoryRequest";
 
   /** The ID for the code category to retrieve. */
   private String codeCategoryId;
@@ -61,7 +59,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
 
   /** Constructs a new <b>GetCodeCategoryRequestData</b>. */
   public GetCodeCategoryRequestData() {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
   }
 
   /**
@@ -74,7 +72,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
    */
   public GetCodeCategoryRequestData(
       String codeCategoryId, LocalDateTime lastRetrieved, boolean returnCodesIfCurrent) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.codeCategoryId = codeCategoryId;
     this.lastRetrieved = lastRetrieved;
@@ -96,7 +94,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
       LocalDateTime lastRetrieved,
       Map<String, String> parameters,
       boolean returnCodesIfCurrent) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.codeCategoryId = codeCategoryId;
     this.lastRetrieved = lastRetrieved;

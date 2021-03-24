@@ -22,7 +22,6 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingException;
 import digital.inception.messaging.WbxmlMessageData;
-import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
@@ -34,9 +33,8 @@ import org.springframework.util.StringUtils;
  */
 public class AnotherTestRequestData extends WbxmlMessageData {
 
-  /** The UUID for the "Another Test Request" message. */
-  public static final UUID MESSAGE_TYPE_ID =
-      UUID.fromString("e9918051-8ebc-48f1-bad7-13c59b550e1a");
+  /** The message type code for the "Another Test Request" message. */
+  public static final String MESSAGE_TYPE = "AnotherTestRequest";
 
   /** The test data. */
   private byte[] testData;
@@ -46,7 +44,7 @@ public class AnotherTestRequestData extends WbxmlMessageData {
 
   /** Constructs a new <b>AnotherTestRequestData</b>. */
   public AnotherTestRequestData() {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
   }
 
   /**
@@ -56,7 +54,7 @@ public class AnotherTestRequestData extends WbxmlMessageData {
    * @param testData the test data
    */
   public AnotherTestRequestData(String testValue, byte[] testData) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.testValue = testValue;
     this.testData = testData;

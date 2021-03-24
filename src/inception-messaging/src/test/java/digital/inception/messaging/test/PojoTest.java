@@ -78,7 +78,7 @@ public class PojoTest {
 
   private static final MessageStatus MESSAGE_STATUS = MessageStatus.INITIALIZED;
 
-  private static final UUID MESSAGE_TYPE_ID = UuidCreator.getShortPrefixComb();
+  private static final String MESSAGE_TYPE = "AuthenticateRequest";
 
   private static final LocalDateTime MESSAGE_UPDATED = LocalDateTime.now();
 
@@ -104,9 +104,9 @@ public class PojoTest {
             DOWNLOAD_ATTEMPTS,
             MESSAGE_PART_STATUS,
             MESSAGE_ID,
+            MESSAGE_TYPE,
             USERNAME,
             DEVICE_ID,
-            MESSAGE_TYPE_ID,
             MESSAGE_CORRELATION_ID,
             MESSAGE_PRIORITY,
             MESSAGE_CREATED,
@@ -123,9 +123,9 @@ public class PojoTest {
     assertEquals(DOWNLOAD_ATTEMPTS, messagePart.getDownloadAttempts());
     assertEquals(MESSAGE_PART_STATUS, messagePart.getStatus());
     assertEquals(MESSAGE_ID, messagePart.getMessageId());
+    assertEquals(MESSAGE_TYPE, messagePart.getMessageType());
     assertEquals(USERNAME, messagePart.getMessageUsername());
     assertEquals(DEVICE_ID, messagePart.getMessageDeviceId());
-    assertEquals(MESSAGE_TYPE_ID, messagePart.getMessageTypeId());
     assertEquals(MESSAGE_CORRELATION_ID, messagePart.getMessageCorrelationId());
     assertEquals(MESSAGE_PRIORITY, messagePart.getMessagePriority());
     assertEquals(MESSAGE_CREATED, messagePart.getMessageCreated());
@@ -147,7 +147,7 @@ public class PojoTest {
     anotherMessagePart.setMessageId(MESSAGE_ID);
     anotherMessagePart.setMessageUsername(USERNAME);
     anotherMessagePart.setMessageDeviceId(DEVICE_ID);
-    anotherMessagePart.setMessageTypeId(MESSAGE_TYPE_ID);
+    anotherMessagePart.setMessageType(MESSAGE_TYPE);
     anotherMessagePart.setMessageCorrelationId(MESSAGE_CORRELATION_ID);
     anotherMessagePart.setMessagePriority(MESSAGE_PRIORITY);
     anotherMessagePart.setMessageCreated(MESSAGE_CREATED);
@@ -166,7 +166,7 @@ public class PojoTest {
     assertEquals(MESSAGE_ID, anotherMessagePart.getMessageId());
     assertEquals(USERNAME, anotherMessagePart.getMessageUsername());
     assertEquals(DEVICE_ID, anotherMessagePart.getMessageDeviceId());
-    assertEquals(MESSAGE_TYPE_ID, anotherMessagePart.getMessageTypeId());
+    assertEquals(MESSAGE_TYPE, anotherMessagePart.getMessageType());
     assertEquals(MESSAGE_CORRELATION_ID, anotherMessagePart.getMessageCorrelationId());
     assertEquals(MESSAGE_PRIORITY, anotherMessagePart.getMessagePriority());
     assertEquals(MESSAGE_CREATED, anotherMessagePart.getMessageCreated());
@@ -184,9 +184,9 @@ public class PojoTest {
     Message message =
         new Message(
             MESSAGE_ID,
+            MESSAGE_TYPE,
             USERNAME,
             DEVICE_ID,
-            MESSAGE_TYPE_ID,
             MESSAGE_CORRELATION_ID,
             MESSAGE_PRIORITY,
             MESSAGE_CREATED,
@@ -197,7 +197,7 @@ public class PojoTest {
     assertEquals(MESSAGE_ID, message.getId());
     assertEquals(USERNAME, message.getUsername());
     assertEquals(DEVICE_ID, message.getDeviceId());
-    assertEquals(MESSAGE_TYPE_ID, message.getTypeId());
+    assertEquals(MESSAGE_TYPE, message.getType());
     assertEquals(MESSAGE_CORRELATION_ID, message.getCorrelationId());
     assertEquals(MESSAGE_PRIORITY, message.getPriority());
     assertEquals(MESSAGE_CREATED, message.getCreated());
@@ -210,7 +210,7 @@ public class PojoTest {
     anotherMessage.setId(MESSAGE_ID);
     anotherMessage.setUsername(USERNAME);
     anotherMessage.setDeviceId(DEVICE_ID);
-    anotherMessage.setTypeId(MESSAGE_TYPE_ID);
+    anotherMessage.setType(MESSAGE_TYPE);
     anotherMessage.setCorrelationId(MESSAGE_CORRELATION_ID);
     anotherMessage.setPriority(MESSAGE_PRIORITY);
     anotherMessage.setStatus(MESSAGE_STATUS);
@@ -227,7 +227,7 @@ public class PojoTest {
     assertEquals(MESSAGE_ID, anotherMessage.getId());
     assertEquals(USERNAME, anotherMessage.getUsername());
     assertEquals(DEVICE_ID, anotherMessage.getDeviceId());
-    assertEquals(MESSAGE_TYPE_ID, anotherMessage.getTypeId());
+    assertEquals(MESSAGE_TYPE, anotherMessage.getType());
     assertEquals(MESSAGE_CORRELATION_ID, anotherMessage.getCorrelationId());
     assertEquals(MESSAGE_PRIORITY, anotherMessage.getPriority());
     assertEquals(MESSAGE_STATUS, anotherMessage.getStatus());
@@ -235,7 +235,7 @@ public class PojoTest {
     assertEquals(SEND_ATTEMPTS, anotherMessage.getSendAttempts());
     assertEquals(PROCESS_ATTEMPTS, anotherMessage.getProcessAttempts());
     assertEquals(DOWNLOAD_ATTEMPTS, anotherMessage.getDownloadAttempts());
-    assertEquals(LOCK_NAME, anotherMessage.getLockName());
+    assertEquals(LOCK_NAME, anotherMessage.getLockName().get());
     assertEquals(LAST_PROCESSED, anotherMessage.getLastProcessed());
     assertArrayEquals(MESSAGE_DATA, anotherMessage.getData());
     assertEquals(MESSAGE_ENCRYPTION_IV, anotherMessage.getEncryptionIV());

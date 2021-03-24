@@ -34,9 +34,8 @@ import org.springframework.util.StringUtils;
  */
 public class AuthenticateRequestData extends WbxmlMessageData {
 
-  /** The UUID for the "Authenticate Request" message. */
-  public static final UUID MESSAGE_TYPE_ID =
-      UUID.fromString("d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
+  /** The message type code for the "Authenticate Request" message. */
+  public static final String MESSAGE_TYPE = "AuthenticateRequest";
 
   /**
    * The Universally Unique Identifier (UUID) for the device the authentication request originated
@@ -52,7 +51,7 @@ public class AuthenticateRequestData extends WbxmlMessageData {
 
   /** Constructs a new <b>AuthenticateRequestData</b>. */
   public AuthenticateRequestData() {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
   }
 
   /**
@@ -64,7 +63,7 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    *     request originated from
    */
   public AuthenticateRequestData(String username, String password, UUID deviceId) {
-    super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
+    super(MESSAGE_TYPE, MessagePriority.HIGH);
 
     this.deviceId = deviceId;
     this.password = password;
