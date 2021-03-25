@@ -62,7 +62,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 })
 @XmlRootElement(name = "Job", namespace = "http://inception.digital/sms")
 @XmlType(
-    name = "Job",
+    name = "SMS",
     namespace = "http://inception.digital/sms",
     propOrder = {
       "id",
