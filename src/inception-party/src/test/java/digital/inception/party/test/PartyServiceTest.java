@@ -19,14 +19,18 @@ package digital.inception.party.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.party.Attribute;
+import digital.inception.party.Consent;
 import digital.inception.party.ContactMechanism;
+import digital.inception.party.ContactMechanismRole;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.IPartyService;
 import digital.inception.party.IdentityDocument;
+import digital.inception.party.Lock;
 import digital.inception.party.Organization;
 import digital.inception.party.OrganizationSortBy;
 import digital.inception.party.Organizations;
@@ -43,6 +47,7 @@ import digital.inception.party.PhysicalAddressType;
 import digital.inception.party.Preference;
 import digital.inception.party.ResidencePermit;
 import digital.inception.party.Role;
+import digital.inception.party.Status;
 import digital.inception.party.TaxNumber;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
@@ -68,6 +73,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class},
@@ -102,6 +108,17 @@ public class PartyServiceTest {
             "za_company_registration", "ZA", LocalDate.of(2006, 4, 2), "2006/123456/23"));
 
     organization.addRole(new Role("employer"));
+
+    return organization;
+  }
+
+  private static synchronized Organization getTestBasicOrganizationDetails() {
+    organizationCount++;
+
+    Organization organization =
+        new Organization(
+            UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            "Organization Name " + organizationCount);
 
     return organization;
   }
@@ -154,9 +171,11 @@ public class PartyServiceTest {
 
     person.addAttribute(new Attribute("weight", "80kg"));
 
+    assertTrue(person.hasAttributeWithType("weight"));
+
     assertTrue(
         "Failed to confirm that the person has an attribute with type (weight)",
-        person.hasAttributeType("weight"));
+        person.hasAttributeWithType("weight"));
 
     person.setCountryOfTaxResidence("ZA");
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
@@ -168,12 +187,12 @@ public class PartyServiceTest {
     person.addContactMechanism(
         new ContactMechanism(
             ContactMechanismType.EMAIL_ADDRESS,
-            "personal_email_address",
+            ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
             "giveName@test.com",
             "marketing"));
 
     Optional<ContactMechanism> contactMechanismOptional =
-        person.getContactMechanism(ContactMechanismType.EMAIL_ADDRESS, "marketing");
+        person.getContactMechanismWithTypeAndPurpose(ContactMechanismType.EMAIL_ADDRESS, "marketing");
 
     if (contactMechanismOptional.isEmpty()) {
       fail(
@@ -182,6 +201,15 @@ public class PartyServiceTest {
               + ") and purpose (marketing)");
     }
 
+    contactMechanismOptional =
+        person.getContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS);
+
+    if (contactMechanismOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the contact mechanism for the person with the role ("
+              + ContactMechanismRole.PERSONAL_EMAIL_ADDRESS
+              + ")");
+    }
 
     person.addIdentityDocument(
         new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
@@ -205,6 +233,28 @@ public class PartyServiceTest {
     residentialAddress.setPostalCode("1709");
 
     person.addPhysicalAddress(residentialAddress);
+
+    Optional<PhysicalAddress> physicalAddressOptional =
+        person.getPhysicalAddressWithTypeAndPurpose(
+            PhysicalAddressType.STREET, PhysicalAddressPurpose.CORRESPONDENCE);
+
+    if (physicalAddressOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the physical address for the person with the type ("
+              + PhysicalAddressType.STREET
+              + ") and purpose ("
+              + PhysicalAddressPurpose.CORRESPONDENCE
+              + ")");
+    }
+
+    physicalAddressOptional = person.getPhysicalAddressWithRole(PhysicalAddressRole.RESIDENTIAL);
+
+    if (physicalAddressOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the physical address for the person with the role ("
+              + PhysicalAddressRole.RESIDENTIAL
+              + ")");
+    }
 
     PhysicalAddress correspondenceAddress =
         new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressRole.WORK);
@@ -288,11 +338,8 @@ public class PartyServiceTest {
   private static synchronized Person getTestBasicPersonDetails() {
     personCount++;
 
-    Person person =
-        new Person(
-            UUID.fromString("00000000-0000-0000-0000-000000000000"), "Full Name " + personCount);
-
-    return person;
+    return new Person(
+        UUID.fromString("00000000-0000-0000-0000-000000000000"), "Full Name " + personCount);
   }
 
   /** Test the person functionality. */
@@ -312,6 +359,79 @@ public class PartyServiceTest {
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     partyService.createPerson(person);
+  }
+
+  /** Test the consent functionality. */
+  @Test
+  public void consentTest() throws Exception {
+    // Person consents
+    Person person = getTestBasicPersonDetails();
+
+    person.addConsent(new Consent("marketing"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareConsents(
+        person.getConsentWithType("marketing").get(), retrievedPerson.getConsentWithType("marketing").get());
+
+    assertTrue(retrievedPerson.hasConsentWithType("marketing"));
+
+    person.removeConsentWithType("marketing");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setConsents(Set.of(new Consent("marketing", LocalDate.of(2015, 10, 1))));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization consents
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addConsent(new Consent("marketing"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareConsents(
+        organization.getConsentWithType("marketing").get(),
+        retrievedOrganization.getConsentWithType("marketing").get());
+
+    assertTrue(retrievedOrganization.hasConsentWithType("marketing"));
+
+    organization.removeConsentWithType("marketing");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setConsents(Set.of(new Consent("marketing", LocalDate.of(2016, 5, 1))));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
   }
 
   /** Test the contact mechanism purpose validation functionality. */
@@ -334,12 +454,12 @@ public class PartyServiceTest {
         1,
         personConstraintViolations.size());
 
-    Organization organization = getTestOrganizationDetails();
+    Organization organization = getTestBasicOrganizationDetails();
 
     organization.addContactMechanism(
         new ContactMechanism(
             ContactMechanismType.EMAIL_ADDRESS,
-            "main_email_address",
+            ContactMechanismRole.MAIN_EMAIL_ADDRESS,
             "test@test.com",
             "invalid_purpose"));
 
@@ -369,7 +489,102 @@ public class PartyServiceTest {
 
     comparePersons(foreignPerson, filteredPersons.getPersons().get(0));
 
+    assertTrue(foreignPerson.hasResidencePermitWithType("za_general_work_visa"));
+
+    foreignPerson.removeResidencePermitWithType("za_general_work_visa");
+
+    assertFalse(foreignPerson.hasResidencePermitWithType("za_general_work_visa"));
+
+    foreignPerson.setResidencePermits(
+        Set.of(
+            new ResidencePermit(
+                "za_critical_skills_visa", "ZA", LocalDate.of(2015, 3, 12), "CS1234567890")));
+
+    assertTrue(foreignPerson.hasResidencePermitWithType("za_critical_skills_visa"));
+
     partyService.deletePerson(foreignPerson.getId());
+  }
+
+  /** Test the identityDocument functionality. */
+  @Test
+  public void identityDocumentTest() throws Exception {
+    // Person identity documents
+    Person person = getTestBasicPersonDetails();
+
+    person.addIdentityDocument(
+        new IdentityDocument("za_id_book", "ZA", LocalDate.of(2003, 4, 13), "8904085800089"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareIdentityDocuments(
+        person.getIdentityDocumentWithType("za_id_book").get(),
+        retrievedPerson.getIdentityDocumentWithType("za_id_book").get());
+
+    assertTrue(retrievedPerson.hasIdentityDocumentWithType("za_id_book"));
+
+    person.removeIdentityDocumentWithType("za_id_book");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setIdentityDocuments(
+        Set.of(
+            new IdentityDocument("za_id_card", "ZA", LocalDate.of(2018, 7, 16), "8904085800089")));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization identity documents
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addIdentityDocument(
+        new IdentityDocument(
+            "za_company_registration", "ZA", LocalDate.of(2006, 4, 2), "2006/123456/23"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareIdentityDocuments(
+        organization.getIdentityDocumentWithType("za_company_registration").get(),
+        retrievedOrganization.getIdentityDocumentWithType("za_company_registration").get());
+
+    assertTrue(retrievedOrganization.hasIdentityDocumentWithType("za_company_registration"));
+
+    organization.removeIdentityDocumentWithType("za_company_registration");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setIdentityDocuments(
+        Set.of(
+            new IdentityDocument(
+                "za_company_registration", "ZA", LocalDate.of(2016, 7, 21), "2016/654321/21")));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
   }
 
   /** Test the invalid building address verification functionality. */
@@ -564,7 +779,7 @@ public class PartyServiceTest {
   /** Test the invalid organization attribute test. */
   @Test
   public void invalidOrganizationAttributeTest() {
-    Organization organization = getTestOrganizationDetails();
+    Organization organization = getTestBasicOrganizationDetails();
 
     organization.addAttribute(new Attribute("given_name", "Given Name"));
 
@@ -778,10 +993,88 @@ public class PartyServiceTest {
         constraintViolations.size());
   }
 
+  /** Test the lock functionality. */
+  @Test
+  public void lockTest() throws Exception {
+    // Person locks
+    Person person = getTestBasicPersonDetails();
+
+    person.addLock(new Lock("suspected_fraud"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareLocks(
+        person.getLockWithType("suspected_fraud").get(), retrievedPerson.getLockWithType("suspected_fraud").get());
+
+    assertTrue(retrievedPerson.hasLockWithType("suspected_fraud"));
+
+    person.removeLockWithType("suspected_fraud");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setLocks(Set.of(new Lock("suspected_fraud", LocalDate.of(2015, 10, 1))));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization locks
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addLock(new Lock("suspected_fraud"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareLocks(
+        organization.getLockWithType("suspected_fraud").get(),
+        retrievedOrganization.getLockWithType("suspected_fraud").get());
+
+    assertTrue(retrievedOrganization.hasLockWithType("suspected_fraud"));
+
+    organization.removeLockWithType("suspected_fraud");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setLocks(Set.of(new Lock("suspected_fraud", LocalDate.of(2016, 5, 1))));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
+  }
+
   /** Test the organization functionality. */
   @Test
   public void organizationTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
+
+    assertTrue(organization.hasIdentityDocumentWithType("za_company_registration"));
+
+    organization.setCountryOfTaxResidence("ZA");
+    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     partyService.createOrganization(organization);
 
@@ -805,12 +1098,12 @@ public class PartyServiceTest {
     organization.addContactMechanism(
         new ContactMechanism(
             ContactMechanismType.EMAIL_ADDRESS,
-            "main_email_address",
+            ContactMechanismRole.MAIN_EMAIL_ADDRESS,
             "test@test.com",
             "marketing"));
 
     Optional<ContactMechanism> contactMechanismOptional =
-        organization.getContactMechanism(ContactMechanismType.EMAIL_ADDRESS, "marketing");
+        organization.getContactMechanismWithTypeAndPurpose(ContactMechanismType.EMAIL_ADDRESS, "marketing");
 
     if (contactMechanismOptional.isEmpty()) {
       fail(
@@ -819,8 +1112,21 @@ public class PartyServiceTest {
               + ") and purpose (marketing)");
     }
 
+    contactMechanismOptional =
+        organization.getContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS);
+
+    if (contactMechanismOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the contact mechanism for the organization with the role ("
+              + ContactMechanismRole.MAIN_EMAIL_ADDRESS
+              + ")");
+    }
+
     PhysicalAddress mainAddress =
-        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressRole.MAIN);
+        new PhysicalAddress(
+            PhysicalAddressType.STREET,
+            PhysicalAddressRole.MAIN,
+            Set.of(PhysicalAddressPurpose.CORRESPONDENCE));
     mainAddress.setStreetNumber("1");
     mainAddress.setStreetName("Discovery Place");
     mainAddress.setSuburb("Sandhurst");
@@ -831,9 +1137,31 @@ public class PartyServiceTest {
 
     organization.addPhysicalAddress(mainAddress);
 
+    Optional<PhysicalAddress> physicalAddressOptional =
+        organization.getPhysicalAddressWithTypeAndPurpose(
+            PhysicalAddressType.STREET, PhysicalAddressPurpose.CORRESPONDENCE);
+
+    if (physicalAddressOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the physical address for the organization with the type ("
+              + PhysicalAddressType.STREET
+              + ") and purpose ("
+              + PhysicalAddressPurpose.CORRESPONDENCE
+              + ")");
+    }
+
+    physicalAddressOptional = organization.getPhysicalAddressWithRole(PhysicalAddressRole.MAIN);
+
+    if (physicalAddressOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the physical address for the organization with the role ("
+              + PhysicalAddressRole.MAIN
+              + ")");
+    }
+
     organization.addPreference(new Preference("correspondence_language", "EN"));
 
-    organization.removeRole("employer");
+    organization.removeRoleWithType("employer");
 
     organization.addRole(new Role("vendor"));
 
@@ -946,7 +1274,9 @@ public class PartyServiceTest {
     person.setSurname(person.getSurname() + " Updated");
     person.setTitle("ms");
 
-    person.removeAttribute("weight");
+    person.setCountriesOfTaxResidence(Set.of("GB", "ZA"));
+
+    person.removeAttributeWithType("weight");
 
     person.addAttribute(new Attribute("height", "180cm"));
 
@@ -958,26 +1288,34 @@ public class PartyServiceTest {
 
     person.addAttribute(new Attribute("height", "180cm"));
 
-    person.removeContactMechanism("main_fax_number");
+    person.removeContactMechanismWithRole(ContactMechanismRole.MAIN_FAX_NUMBER);
 
-    person.getContactMechanism("personal_email_address").get().setValue("test.updated@test.com");
+    person
+        .getContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS)
+        .get()
+        .setValue("test.updated@test.com");
 
     person.addContactMechanism(
-        new ContactMechanism(ContactMechanismType.PHONE_NUMBER, "home_phone_number", "0115551234"));
+        new ContactMechanism(
+            ContactMechanismType.PHONE_NUMBER,
+            ContactMechanismRole.HOME_PHONE_NUMBER,
+            "0115551234"));
 
     person.addIdentityDocument(
         new IdentityDocument(
             "passport", "ZA", LocalDate.of(2016, 10, 7), LocalDate.of(2025, 9, 1), "A1234567890"));
 
-    person.removeIdentityDocument("za_id_card");
+    assertTrue(person.hasIdentityDocumentWithType("passport"));
 
-    person.removePreference("correspondence_language");
+    person.removeIdentityDocumentWithType("za_id_card");
+
+    person.removePreferenceWithType("correspondence_language");
 
     person.addPreference(new Preference("time_to_contact", "anytime"));
 
     person.addTaxNumber(new TaxNumber("uk_tax_number", "GB", "987654321"));
 
-    person.removeTaxNumber("za_income_tax_number");
+    person.removeTaxNumberWithType("za_income_tax_number");
 
     partyService.updatePerson(person);
 
@@ -1015,9 +1353,118 @@ public class PartyServiceTest {
     partyService.deletePerson(person.getId());
   }
 
-  /** Test the party physical address functionality. */
+  /** Test the physical address functionality. */
   @Test
   public void physicalAddressTest() throws Exception {
+    // Person physical addresses
+    Person person = getTestBasicPersonDetails();
+
+    PhysicalAddress residentialAddress =
+        new PhysicalAddress(
+            PhysicalAddressType.STREET,
+            PhysicalAddressRole.RESIDENTIAL,
+            Set.of(
+                new String[] {
+                  PhysicalAddressPurpose.BILLING,
+                  PhysicalAddressPurpose.CORRESPONDENCE,
+                  PhysicalAddressPurpose.DELIVERY
+                }));
+    residentialAddress.setStreetNumber("13");
+    residentialAddress.setStreetName("Kraalbessie Avenue");
+    residentialAddress.setSuburb("Weltevreden Park");
+    residentialAddress.setCity("Johannesburg");
+    residentialAddress.setRegion("GP");
+    residentialAddress.setCountry("ZA");
+    residentialAddress.setPostalCode("1709");
+
+    person.addPhysicalAddress(residentialAddress);
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    comparePhysicalAddresses(
+        person.getPhysicalAddressWithRole(PhysicalAddressRole.RESIDENTIAL).get(),
+        retrievedPerson.getPhysicalAddressWithRole(PhysicalAddressRole.RESIDENTIAL).get());
+
+    assertTrue(retrievedPerson.hasPhysicalAddressWithType(PhysicalAddressType.STREET));
+
+    assertTrue(retrievedPerson.hasPhysicalAddressWithRole(PhysicalAddressRole.RESIDENTIAL));
+
+    person.removePhysicalAddressWithRole(PhysicalAddressRole.RESIDENTIAL);
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setPhysicalAddresses(Set.of(residentialAddress));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization physical addresses
+    Organization organization = getTestBasicOrganizationDetails();
+
+    PhysicalAddress mainAddress =
+        new PhysicalAddress(
+            PhysicalAddressType.STREET,
+            PhysicalAddressRole.MAIN,
+            Set.of(PhysicalAddressPurpose.CORRESPONDENCE));
+    mainAddress.setStreetNumber("1");
+    mainAddress.setStreetName("Discovery Place");
+    mainAddress.setSuburb("Sandhurst");
+    mainAddress.setCity("Sandton");
+    mainAddress.setRegion("GP");
+    mainAddress.setCountry("ZA");
+    mainAddress.setPostalCode("2194");
+
+    organization.addPhysicalAddress(mainAddress);
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    comparePhysicalAddresses(
+        organization.getPhysicalAddressWithRole(PhysicalAddressRole.MAIN).get(),
+        retrievedOrganization.getPhysicalAddressWithRole(PhysicalAddressRole.MAIN).get());
+
+    assertTrue(retrievedOrganization.hasPhysicalAddressWithType(PhysicalAddressType.STREET));
+
+    assertTrue(retrievedOrganization.hasPhysicalAddressWithRole(PhysicalAddressRole.MAIN));
+
+    organization.removePhysicalAddressWithRole(PhysicalAddressRole.MAIN);
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setPhysicalAddresses(Set.of(mainAddress));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
+  }
+
+  /** Test the party physical address types functionality. */
+  @Test
+  public void physicalAddressTypesTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     PhysicalAddress buildingAddress =
@@ -1137,9 +1584,9 @@ public class PartyServiceTest {
         39,
         personConstraintViolations.size());
 
-    Organization organization = getTestOrganizationDetails();
+    Organization organization = getTestBasicOrganizationDetails();
 
-    organization.removeIdentityDocument("za_company_registration");
+    organization.removeIdentityDocumentWithType("za_company_registration");
 
     organization.addRole(new Role("test_organization_role"));
 
@@ -1150,6 +1597,154 @@ public class PartyServiceTest {
         "The correct number of constraint violations was not found for the invalid organization",
         12,
         organizationConstraintViolations.size());
+  }
+  
+  /** Test the status functionality. */
+  @Test
+  public void statusTest() throws Exception {
+    // Person statuses
+    Person person = getTestBasicPersonDetails();
+
+    person.addStatus(new Status("fraud_investigation"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareStatuses(
+        person.getStatusWithType("fraud_investigation").get(),
+        retrievedPerson.getStatusWithType("fraud_investigation").get());
+
+    assertTrue(retrievedPerson.hasStatusWithType("fraud_investigation"));
+
+    person.removeStatusWithType("fraud_investigation");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setStatuses(Set.of(new Status("fraud_investigation", LocalDate.of(2015, 10, 1))));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization statuses
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addStatus(new Status("fraud_investigation"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareStatuses(
+        organization.getStatusWithType("fraud_investigation").get(),
+        retrievedOrganization.getStatusWithType("fraud_investigation").get());
+
+    assertTrue(retrievedOrganization.hasStatusWithType("fraud_investigation"));
+
+    organization.removeStatusWithType("fraud_investigation");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setStatuses(Set.of(new Status("fraud_investigation", LocalDate.of(2016, 5, 1))));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
+  }
+
+  /** Test the tax number functionality. */
+  @Test
+  public void taxNumberTest() throws Exception {
+    // Person tax numbers
+    Person person = getTestBasicPersonDetails();
+
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareTaxNumbers(
+        person.getTaxNumberWithType("za_income_tax_number").get(),
+        retrievedPerson.getTaxNumberWithType("za_income_tax_number").get());
+
+    assertTrue(retrievedPerson.hasTaxNumberWithType("za_income_tax_number"));
+
+    person.removeTaxNumberWithType("za_income_tax_number");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "987654321")));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization tax numbers
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareTaxNumbers(
+        organization.getTaxNumberWithType("za_income_tax_number").get(),
+        retrievedOrganization.getTaxNumberWithType("za_income_tax_number").get());
+
+    assertTrue(retrievedOrganization.hasTaxNumberWithType("za_income_tax_number"));
+
+    organization.removeTaxNumberWithType("za_income_tax_number");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "987654321")));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
   }
 
   /** Test the organization validation functionality. */
@@ -1216,6 +1811,110 @@ public class PartyServiceTest {
         attribute2.getStringValue());
   }
 
+  private void compareConsents(Consent consent1, Consent consent2) {
+    assertEquals(
+        "The effective from values for the consents do not match",
+        consent1.getEffectiveFrom(),
+        consent2.getEffectiveFrom());
+
+    assertEquals(
+        "The effective to values for the two consents do not match",
+        consent1.getEffectiveTo(),
+        consent2.getEffectiveTo());
+
+    assertEquals(
+        "The parties for the two consents do not match",
+        consent1.getParty(),
+        consent2.getParty());
+
+    assertEquals(
+        "The types for the two consents do not match",
+        consent1.getType(),
+        consent2.getType());
+  }
+
+  private void compareIdentityDocuments(
+      IdentityDocument identityDocument1, IdentityDocument identityDocument2) {
+    assertEquals(
+        "The countries of issue for the identity documents do not match",
+        identityDocument1.getCountryOfIssue(),
+        identityDocument2.getCountryOfIssue());
+
+    assertEquals(
+        "The dates of expiry for the identity documents do not match",
+        identityDocument1.getDateOfExpiry(),
+        identityDocument2.getDateOfExpiry());
+
+    assertEquals(
+        "The dates of issue for the identity documents do not match",
+        identityDocument1.getDateOfIssue(),
+        identityDocument2.getDateOfIssue());
+
+    assertEquals(
+        "The dates provided for the identity documents do not match",
+        identityDocument1.getDateProvided(),
+        identityDocument2.getDateProvided());
+
+    assertEquals(
+        "The numbers for the identity documents do not match",
+        identityDocument1.getNumber(),
+        identityDocument2.getNumber());
+
+    assertEquals(
+        "The parties for the identity documents do not match",
+        identityDocument1.getParty(),
+        identityDocument2.getParty());
+
+    assertEquals(
+        "The types for the identity documents do not match",
+        identityDocument1.getType(),
+        identityDocument2.getType());
+  }
+
+  private void compareRoles(Role role1, Role role2) {
+    assertEquals(
+        "The effective from values for the roles do not match",
+        role1.getEffectiveFrom(),
+        role2.getEffectiveFrom());
+
+    assertEquals(
+        "The effective to values for the two roles do not match",
+        role1.getEffectiveTo(),
+        role2.getEffectiveTo());
+
+    assertEquals(
+        "The parties for the two roles do not match",
+        role1.getParty(),
+        role2.getParty());
+
+    assertEquals(
+        "The types for the two roles do not match",
+        role1.getType(),
+        role2.getType());
+  }
+
+  private void compareLocks(Lock lock1, Lock lock2) {
+    assertEquals(
+        "The effective from values for the locks do not match",
+        lock1.getEffectiveFrom(),
+        lock2.getEffectiveFrom());
+
+    assertEquals(
+        "The effective to values for the two locks do not match",
+        lock1.getEffectiveTo(),
+        lock2.getEffectiveTo());
+
+    assertEquals(
+        "The parties for the two locks do not match",
+        lock1.getParty(),
+        lock2.getParty());
+
+    assertEquals(
+        "The types for the two locks do not match",
+        lock1.getType(),
+        lock2.getType());
+  }
+
   private void compareOrganizations(Organization organization1, Organization organization2) {
     assertEquals(
         "The countries of tax residence values for the two organizations do not match",
@@ -1259,23 +1958,41 @@ public class PartyServiceTest {
     }
 
     assertEquals(
+        "The number of consents for the two organizations do not match",
+        organization1.getConsents().size(),
+        organization2.getConsents().size());
+
+    for (Consent organization1Consent : organization1.getConsents()) {
+      boolean foundConsent = false;
+
+      for (Consent organization2Consent : organization2.getConsents()) {
+        if (Objects.equals(organization1Consent.getParty(), organization2Consent.getParty())
+            && Objects.equals(organization1Consent.getType(), organization2Consent.getType())) {
+
+          compareConsents(organization1Consent, organization2Consent);
+
+          foundConsent = true;
+        }
+      }
+
+      if (!foundConsent) {
+        fail("Failed to find the consent (" + organization1Consent.getType() + ")");
+      }
+    }
+
+    assertEquals(
         "The number of contact mechanisms for the two organizations do not match",
         organization1.getContactMechanisms().size(),
         organization2.getContactMechanisms().size());
 
-    for (ContactMechanism person1ContactMechanism : organization1.getContactMechanisms()) {
+    for (ContactMechanism organization1ContactMechanism : organization1.getContactMechanisms()) {
       boolean foundContactMechanism = false;
 
-      for (ContactMechanism person2ContactMechanism : organization2.getContactMechanisms()) {
+      for (ContactMechanism organization2ContactMechanism : organization2.getContactMechanisms()) {
+        if (Objects.equals(organization1ContactMechanism.getParty(), organization2ContactMechanism.getParty())
+            && Objects.equals(organization1ContactMechanism.getRole(), organization2ContactMechanism.getRole())) {
 
-        if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
-            && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
-            && Objects.equals(
-                person1ContactMechanism.getRole(), person2ContactMechanism.getRole())) {
-          assertEquals(
-              "The values for the two contact mechanisms do not match",
-              person1ContactMechanism.getValue(),
-              person2ContactMechanism.getValue());
+          compareContactMechanisms(organization1ContactMechanism, organization2ContactMechanism);
 
           foundContactMechanism = true;
         }
@@ -1284,10 +2001,68 @@ public class PartyServiceTest {
       if (!foundContactMechanism) {
         fail(
             "Failed to find the contact mechanism ("
-                + person1ContactMechanism.getType()
+                + organization1ContactMechanism.getType()
                 + ")("
-                + person1ContactMechanism.getRole()
+                + organization1ContactMechanism.getRole()
                 + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of identity documents for the two organizations do not match",
+        organization1.getIdentityDocuments().size(),
+        organization2.getIdentityDocuments().size());
+
+    for (IdentityDocument organization1IdentityDocument : organization1.getIdentityDocuments()) {
+      boolean foundIdentityDocument = false;
+
+      for (IdentityDocument organization2IdentityDocument : organization2.getIdentityDocuments()) {
+        if (organization1IdentityDocument.getType().equals(organization2IdentityDocument.getType())
+            && organization1IdentityDocument
+                .getCountryOfIssue()
+                .equals(organization2IdentityDocument.getCountryOfIssue())
+            && organization1IdentityDocument
+                .getDateOfIssue()
+                .equals(organization2IdentityDocument.getDateOfIssue())) {
+
+          compareIdentityDocuments(organization1IdentityDocument, organization2IdentityDocument);
+
+          foundIdentityDocument = true;
+        }
+      }
+
+      if (!foundIdentityDocument) {
+        fail(
+            "Failed to find the identity document ("
+                + organization1IdentityDocument.getType()
+                + ")("
+                + organization1IdentityDocument.getCountryOfIssue()
+                + ")("
+                + organization1IdentityDocument.getDateOfIssue()
+                + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of locks for the two organizations do not match",
+        organization1.getLocks().size(),
+        organization2.getLocks().size());
+
+    for (Lock organization1Lock : organization1.getLocks()) {
+      boolean foundLock = false;
+
+      for (Lock organization2Lock : organization2.getLocks()) {
+        if (Objects.equals(organization1Lock.getParty(), organization2Lock.getParty())
+            && Objects.equals(organization1Lock.getType(), organization2Lock.getType())) {
+
+          compareLocks(organization1Lock, organization2Lock);
+
+          foundLock = true;
+        }
+      }
+
+      if (!foundLock) {
+        fail("Failed to find the lock (" + organization1Lock.getType() + ")");
       }
     }
 
@@ -1296,22 +2071,23 @@ public class PartyServiceTest {
         organization1.getPhysicalAddresses().size(),
         organization2.getPhysicalAddresses().size());
 
-    for (PhysicalAddress person1PhysicalAddress : organization1.getPhysicalAddresses()) {
+    for (PhysicalAddress organization1PhysicalAddress : organization1.getPhysicalAddresses()) {
       boolean foundPhysicalAddress = false;
 
-      for (PhysicalAddress person2PhysicalAddress : organization2.getPhysicalAddresses()) {
+      for (PhysicalAddress organization2PhysicalAddress : organization2.getPhysicalAddresses()) {
+        if (Objects.equals(
+                organization1PhysicalAddress.getParty(), organization2PhysicalAddress.getParty())
+            && Objects.equals(
+                organization1PhysicalAddress.getId(), organization2PhysicalAddress.getId())) {
 
-        if (Objects.equals(person1PhysicalAddress.getParty(), person2PhysicalAddress.getParty())
-            && Objects.equals(person1PhysicalAddress.getId(), person2PhysicalAddress.getId())) {
-
-          comparePhysicalAddresses(person1PhysicalAddress, person2PhysicalAddress);
+          comparePhysicalAddresses(organization1PhysicalAddress, organization2PhysicalAddress);
 
           foundPhysicalAddress = true;
         }
       }
 
       if (!foundPhysicalAddress) {
-        fail("Failed to find the physical address (" + person1PhysicalAddress.getId() + ")");
+        fail("Failed to find the physical address (" + organization1PhysicalAddress.getId() + ")");
       }
     }
 
@@ -1324,7 +2100,6 @@ public class PartyServiceTest {
       boolean foundPreference = false;
 
       for (Preference organization2Preference : organization2.getPreferences()) {
-
         if (Objects.equals(organization1Preference.getParty(), organization2Preference.getParty())
             && Objects.equals(
                 organization1Preference.getType(), organization2Preference.getType())) {
@@ -1337,6 +2112,58 @@ public class PartyServiceTest {
 
       if (!foundPreference) {
         fail("Failed to find the preference (" + organization1Preference.getType() + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of statuses for the two organizations do not match",
+        organization1.getStatuses().size(),
+        organization2.getStatuses().size());
+
+    for (Status organization1Status : organization1.getStatuses()) {
+      boolean foundStatus = false;
+
+      for (Status organization2Status : organization2.getStatuses()) {
+        if (Objects.equals(organization1Status.getParty(), organization2Status.getParty())
+            && Objects.equals(organization1Status.getType(), organization2Status.getType())) {
+
+          compareStatuses(organization1Status, organization2Status);
+
+          foundStatus = true;
+        }
+      }
+
+      if (!foundStatus) {
+        fail("Failed to find the status (" + organization1Status.getType() + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of tax numbers for the two organizations do not match",
+        organization1.getTaxNumbers().size(),
+        organization2.getTaxNumbers().size());
+
+    for (TaxNumber organization1TaxNumber : organization1.getTaxNumbers()) {
+      boolean foundTaxNumber = false;
+
+      for (TaxNumber organization2TaxNumber : organization2.getTaxNumbers()) {
+        if (organization1TaxNumber.getType().equals(organization2TaxNumber.getType())) {
+
+          assertEquals(
+              "The country of issue for the two tax numbers do not match",
+              organization1TaxNumber.getCountryOfIssue(),
+              organization2TaxNumber.getCountryOfIssue());
+          assertEquals(
+              "The numbers for the two tax numbers do not match",
+              organization1TaxNumber.getNumber(),
+              organization2TaxNumber.getNumber());
+
+          foundTaxNumber = true;
+        }
+      }
+
+      if (!foundTaxNumber) {
+        fail("Failed to find the tax number (" + organization1TaxNumber.getType() + ")");
       }
     }
   }
@@ -1462,7 +2289,6 @@ public class PartyServiceTest {
       boolean foundAttribute = false;
 
       for (Attribute person2Attribute : person2.getAttributes()) {
-
         if (Objects.equals(person1Attribute.getParty(), person2Attribute.getParty())
             && Objects.equals(person1Attribute.getType(), person2Attribute.getType())) {
 
@@ -1478,6 +2304,29 @@ public class PartyServiceTest {
     }
 
     assertEquals(
+        "The number of consents for the two persons do not match",
+        person1.getConsents().size(),
+        person2.getConsents().size());
+
+    for (Consent person1Consent : person1.getConsents()) {
+      boolean foundConsent = false;
+
+      for (Consent person2Consent : person2.getConsents()) {
+        if (Objects.equals(person1Consent.getParty(), person2Consent.getParty())
+            && Objects.equals(person1Consent.getType(), person2Consent.getType())) {
+
+          compareConsents(person1Consent, person2Consent);
+
+          foundConsent = true;
+        }
+      }
+
+      if (!foundConsent) {
+        fail("Failed to find the consent (" + person1Consent.getType() + ")");
+      }
+    }
+
+    assertEquals(
         "The number of contact mechanisms for the two persons do not match",
         person1.getContactMechanisms().size(),
         person2.getContactMechanisms().size());
@@ -1486,15 +2335,10 @@ public class PartyServiceTest {
       boolean foundContactMechanism = false;
 
       for (ContactMechanism person2ContactMechanism : person2.getContactMechanisms()) {
-
         if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
-            && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
-            && Objects.equals(
-                person1ContactMechanism.getRole(), person2ContactMechanism.getRole())) {
-          assertEquals(
-              "The values for the two contact mechanisms do not match",
-              person1ContactMechanism.getValue(),
-              person2ContactMechanism.getValue());
+            && Objects.equals(person1ContactMechanism.getRole(), person2ContactMechanism.getRole())) {
+
+          compareContactMechanisms(person1ContactMechanism, person2ContactMechanism);
 
           foundContactMechanism = true;
         }
@@ -1527,18 +2371,7 @@ public class PartyServiceTest {
                 .getDateOfIssue()
                 .equals(person2IdentityDocument.getDateOfIssue())) {
 
-          assertEquals(
-              "The date of expiry for the two identity documents does not match",
-              person1IdentityDocument.getDateOfExpiry(),
-              person2IdentityDocument.getDateOfExpiry());
-          assertEquals(
-              "The date provided for the two identity documents does not match",
-              person1IdentityDocument.getDateProvided(),
-              person2IdentityDocument.getDateProvided());
-          assertEquals(
-              "The numbers for the two identity documents do not match",
-              person1IdentityDocument.getNumber(),
-              person2IdentityDocument.getNumber());
+          compareIdentityDocuments(person1IdentityDocument, person2IdentityDocument);
 
           foundIdentityDocument = true;
         }
@@ -1557,6 +2390,29 @@ public class PartyServiceTest {
     }
 
     assertEquals(
+        "The number of locks for the two persons do not match",
+        person1.getLocks().size(),
+        person2.getLocks().size());
+
+    for (Lock person1Lock : person1.getLocks()) {
+      boolean foundLock = false;
+
+      for (Lock person2Lock : person2.getLocks()) {
+        if (Objects.equals(person1Lock.getParty(), person2Lock.getParty())
+            && Objects.equals(person1Lock.getType(), person2Lock.getType())) {
+
+          compareLocks(person1Lock, person2Lock);
+
+          foundLock = true;
+        }
+      }
+
+      if (!foundLock) {
+        fail("Failed to find the lock (" + person1Lock.getType() + ")");
+      }
+    }
+
+    assertEquals(
         "The number of physical addresses for the two persons do not match",
         person1.getPhysicalAddresses().size(),
         person2.getPhysicalAddresses().size());
@@ -1565,7 +2421,6 @@ public class PartyServiceTest {
       boolean foundPhysicalAddress = false;
 
       for (PhysicalAddress person2PhysicalAddress : person2.getPhysicalAddresses()) {
-
         if (Objects.equals(person1PhysicalAddress.getParty(), person2PhysicalAddress.getParty())
             && Objects.equals(person1PhysicalAddress.getId(), person2PhysicalAddress.getId())) {
 
@@ -1589,7 +2444,6 @@ public class PartyServiceTest {
       boolean foundPreference = false;
 
       for (Preference person2Preference : person2.getPreferences()) {
-
         if (Objects.equals(person1Preference.getParty(), person2Preference.getParty())
             && Objects.equals(person1Preference.getType(), person2Preference.getType())) {
 
@@ -1672,6 +2526,29 @@ public class PartyServiceTest {
     }
 
     assertEquals(
+        "The number of statuses for the two persons do not match",
+        person1.getStatuses().size(),
+        person2.getStatuses().size());
+
+    for (Status person1Status : person1.getStatuses()) {
+      boolean foundStatus = false;
+
+      for (Status person2Status : person2.getStatuses()) {
+        if (Objects.equals(person1Status.getParty(), person2Status.getParty())
+            && Objects.equals(person1Status.getType(), person2Status.getType())) {
+
+          compareStatuses(person1Status, person2Status);
+
+          foundStatus = true;
+        }
+      }
+
+      if (!foundStatus) {
+        fail("Failed to find the status (" + person1Status.getType() + ")");
+      }
+    }
+
+    assertEquals(
         "The number of tax numbers for the two persons do not match",
         person1.getTaxNumbers().size(),
         person2.getTaxNumbers().size());
@@ -1704,95 +2581,518 @@ public class PartyServiceTest {
   private void comparePhysicalAddresses(
       PhysicalAddress physicalAddress1, PhysicalAddress physicalAddress2) {
     assertEquals(
-        "The building floor values for the two physical addresses do not match",
+        "The building floors for the two physical addresses do not match",
         physicalAddress1.getBuildingFloor(),
         physicalAddress2.getBuildingFloor());
+
     assertEquals(
-        "The building name values for the two physical addresses do not match",
+        "The building names for the two physical addresses do not match",
         physicalAddress1.getBuildingName(),
         physicalAddress2.getBuildingName());
+
     assertEquals(
-        "The building room values for the two physical addresses do not match",
+        "The building rooms for the two physical addresses do not match",
         physicalAddress1.getBuildingRoom(),
         physicalAddress2.getBuildingRoom());
+
     assertEquals(
-        "The city values for the two physical addresses do not match",
+        "The cities for the two physical addresses do not match",
         physicalAddress1.getCity(),
         physicalAddress2.getCity());
+
     assertEquals(
-        "The complex name values for the two physical addresses do not match",
+        "The complex names for the two physical addresses do not match",
         physicalAddress1.getComplexName(),
         physicalAddress2.getComplexName());
+
     assertEquals(
-        "The complex unit number values for the two physical addresses do not match",
+        "The complex units values for the two physical addresses do not match",
         physicalAddress1.getComplexUnitNumber(),
         physicalAddress2.getComplexUnitNumber());
+
     assertEquals(
-        "The farm description values for the two physical addresses do not match",
+        "The farm descriptions for the two physical addresses do not match",
         physicalAddress1.getFarmDescription(),
         physicalAddress2.getFarmDescription());
+
     assertEquals(
-        "The farm name values for the two physical addresses do not match",
+        "The farm names for the two physical addresses do not match",
         physicalAddress1.getFarmName(),
         physicalAddress2.getFarmName());
+
     assertEquals(
-        "The farm number values for the two physical addresses do not match",
+        "The farm numbers for the two physical addresses do not match",
         physicalAddress1.getFarmNumber(),
         physicalAddress2.getFarmNumber());
+
     assertEquals(
         "The line 1 values for the two physical addresses do not match",
         physicalAddress1.getLine1(),
         physicalAddress2.getLine1());
+
     assertEquals(
         "The line 2 values for the two physical addresses do not match",
         physicalAddress1.getLine2(),
         physicalAddress2.getLine2());
+
     assertEquals(
         "The line 3 values for the two physical addresses do not match",
         physicalAddress1.getLine3(),
         physicalAddress2.getLine3());
+
     assertEquals(
-        "The purposes values for the two physical addresses do not match",
+        "The parties for the two physical addresses do not match",
+        physicalAddress1.getParty(),
+        physicalAddress2.getParty());
+
+    assertEquals(
+        "The purposes for the two physical addresses do not match",
         physicalAddress1.getPurposes(),
         physicalAddress2.getPurposes());
+
     assertEquals(
-        "The region values for the two physical addresses do not match",
+        "The regions for the two physical addresses do not match",
         physicalAddress1.getRegion(),
         physicalAddress2.getRegion());
+
     assertEquals(
-        "The site block values for the two physical addresses do not match",
+        "The site blocks for the two physical addresses do not match",
         physicalAddress1.getSiteBlock(),
         physicalAddress2.getSiteBlock());
+
     assertEquals(
-        "The site number values for the two physical addresses do not match",
+        "The site numbers for the two physical addresses do not match",
         physicalAddress1.getSiteNumber(),
         physicalAddress2.getSiteNumber());
+
     assertEquals(
-        "The street name values for the two physical addresses do not match",
+        "The street names for the two physical addresses do not match",
         physicalAddress1.getStreetName(),
         physicalAddress2.getStreetName());
+
     assertEquals(
-        "The street number values for the two physical addresses do not match",
+        "The street numbers for the two physical addresses do not match",
         physicalAddress1.getStreetNumber(),
         physicalAddress2.getStreetNumber());
+
     assertEquals(
-        "The suburb values for the two physical addresses do not match",
+        "The suburbs for the two physical addresses do not match",
         physicalAddress1.getSuburb(),
         physicalAddress2.getSuburb());
+
     assertEquals(
-        "The type values for the two physical addresses do not match",
+        "The types for the two physical addresses do not match",
         physicalAddress1.getType(),
         physicalAddress2.getType());
   }
 
+
+
+
+  private void compareContactMechanisms(ContactMechanism contactMechanism1, ContactMechanism contactMechanism2) {
+    assertEquals(
+        "The parties for the two contact mechanisms do not match",
+        contactMechanism1.getParty(),
+        contactMechanism2.getParty());
+
+    assertEquals(
+        "The purposes for the two contact mechanisms do not match",
+        contactMechanism1.getPurposes(),
+        contactMechanism2.getPurposes());
+
+    assertEquals(
+        "The roles for the two contact mechanisms do not match",
+        contactMechanism1.getRole(),
+        contactMechanism2.getRole());
+
+    assertEquals(
+        "The types for the two contact mechanisms do not match",
+        contactMechanism1.getType(),
+        contactMechanism2.getType());
+
+    assertEquals(
+        "The values for the two contact mechanisms do not match",
+        contactMechanism1.getValue(),
+        contactMechanism2.getValue());
+  }
+
+
+
   private void comparePreferences(Preference preference1, Preference preference2) {
     assertEquals(
-        "The type values for the two preferences do not match",
+        "The parties for the two preferences do not match",
+        preference1.getParty(),
+        preference2.getParty());
+
+    assertEquals(
+        "The types for the two preferences do not match",
         preference1.getType(),
         preference2.getType());
+
     assertEquals(
-        "The value values for the two preferences do not match",
+        "The values for the two preferences do not match",
         preference1.getValue(),
         preference2.getValue());
   }
+
+  private void compareStatuses(Status status1, Status status2) {
+    assertEquals(
+        "The effective from values for the two statuses do not match",
+        status1.getEffectiveFrom(),
+        status2.getEffectiveFrom());
+
+    assertEquals(
+        "The effective to values for the two statuses do not match",
+        status1.getEffectiveTo(),
+        status2.getEffectiveTo());
+
+    assertEquals(
+        "The parties for the two statuses do not match", status1.getParty(), status2.getParty());
+
+    assertEquals(
+        "The types for the two statuses do not match", status1.getType(), status2.getType());
+  }
+
+  private void compareTaxNumbers(TaxNumber taxNumber1, TaxNumber taxNumber2) {
+    assertEquals(
+        "The countries of issue for the two tax numbers do not match",
+        taxNumber1.getCountryOfIssue(),
+        taxNumber2.getCountryOfIssue());
+
+    assertEquals(
+        "The numbers for the two tax numbers do not match",
+        taxNumber1.getNumber(),
+        taxNumber2.getNumber());
+
+    assertEquals(
+        "The parties for the two tax numbers do not match",
+        taxNumber1.getParty(),
+        taxNumber2.getParty());
+
+    assertEquals(
+        "The types for the two tax numbers do not match",
+        taxNumber1.getType(),
+        taxNumber2.getType());
+  }
+
+
+  /** Test the attribute functionality. */
+  @Test
+  public void attributeTest() throws Exception {
+    // Person attributes
+    Person person = getTestBasicPersonDetails();
+
+    person.addAttribute(new Attribute("test_attribute_name", "test_attribute_value"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareAttributes(
+        person.getAttributeWithType("test_attribute_name").get(), retrievedPerson.getAttributeWithType("test_attribute_name").get());
+
+    assertTrue(retrievedPerson.hasAttributeWithType("test_attribute_name"));
+
+    person.removeAttributeWithType("test_attribute_name");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setAttributes(Set.of(new Attribute("test_attribute_name", "test_attribute_value")));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization attributes
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addAttribute(new Attribute("test_attribute_name", "test_attribute_value"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareAttributes(
+        organization.getAttributeWithType("test_attribute_name").get(),
+        retrievedOrganization.getAttributeWithType("test_attribute_name").get());
+
+    assertTrue(retrievedOrganization.hasAttributeWithType("test_attribute_name"));
+
+    organization.removeAttributeWithType("test_attribute_name");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setAttributes(Set.of(new Attribute("test_attribute_name", "test_attribute_value")));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
+  }
+
+
+  /** Test the preference functionality. */
+  @Test
+  public void preferenceTest() throws Exception {
+    // Person preferences
+    Person person = getTestBasicPersonDetails();
+
+    person.addPreference(new Preference("test_preference", "test_preference_value"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    comparePreferences(
+        person.getPreferenceWithType("test_preference").get(), retrievedPerson.getPreferenceWithType("test_preference").get());
+
+    assertTrue(retrievedPerson.hasPreferenceWithType("test_preference"));
+
+    person.removePreferenceWithType("test_preference");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setPreferences(Set.of(new Preference("test_preference", "test_preference_value")));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization preferences
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addPreference(new Preference("test_preference", "test_preference_value"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    comparePreferences(
+        organization.getPreferenceWithType("test_preference").get(),
+        retrievedOrganization.getPreferenceWithType("test_preference").get());
+
+    assertTrue(retrievedOrganization.hasPreferenceWithType("test_preference"));
+
+    organization.removePreferenceWithType("test_preference");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setPreferences(Set.of(new Preference("test_preference", "test_preference_value")));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
+  }
+
+
+
+  /** Test the contactMechanism functionality. */
+  @Test
+  public void contactMechanismTest() throws Exception {
+    // Person contactMechanisms
+    Person person = getTestBasicPersonDetails();
+
+    person.addContactMechanism(new ContactMechanism(
+        ContactMechanismType.EMAIL_ADDRESS,
+        ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
+        "giveName@test.com",
+        "marketing"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareContactMechanisms(
+        person.getContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS).get(), retrievedPerson.getContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS).get());
+
+    assertTrue(retrievedPerson.hasContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS));
+
+    assertTrue(retrievedPerson.hasContactMechanismWithType(ContactMechanismType.EMAIL_ADDRESS));
+
+    person.removeContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS);
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setContactMechanisms(Set.of(new ContactMechanism(
+        ContactMechanismType.EMAIL_ADDRESS,
+        ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
+        "giveName@test.com",
+        "marketing")));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization contactMechanisms
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addContactMechanism(new ContactMechanism(
+        ContactMechanismType.EMAIL_ADDRESS,
+        ContactMechanismRole.MAIN_EMAIL_ADDRESS,
+        "test@test.com",
+        "marketing"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareContactMechanisms(
+        organization.getContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS).get(),
+        retrievedOrganization.getContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS).get());
+
+    assertTrue(retrievedOrganization.hasContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS));
+
+    assertTrue(retrievedOrganization.hasContactMechanismWithType(ContactMechanismType.EMAIL_ADDRESS));
+
+    organization.removeContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS);
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setContactMechanisms(Set.of(new ContactMechanism(
+        ContactMechanismType.EMAIL_ADDRESS,
+        ContactMechanismRole.MAIN_EMAIL_ADDRESS,
+        "test@test.com",
+        "marketing")));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
+  }
+
+
+
+
+
+  /** Test the role functionality. */
+  @Test
+  public void roleTest() throws Exception {
+    // Person roles
+    Person person = getTestBasicPersonDetails();
+
+    person.addRole(new Role("employee"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareRoles(
+        person.getRoleWithType("employee").get(), retrievedPerson.getRoleWithType("employee").get());
+
+    assertTrue(retrievedPerson.hasRoleWithType("employee"));
+
+    person.removeRoleWithType("employee");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setRoles(Set.of(new Role("employee", LocalDate.of(2015, 10, 1))));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization roles
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addRole(new Role("employer"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareRoles(
+        organization.getRoleWithType("employer").get(),
+        retrievedOrganization.getRoleWithType("employer").get());
+
+    assertTrue(retrievedOrganization.hasRoleWithType("employer"));
+
+    organization.removeRoleWithType("employer");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setRoles(Set.of(new Role("employer", LocalDate.of(2016, 5, 1))));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
+  }  
+
 }

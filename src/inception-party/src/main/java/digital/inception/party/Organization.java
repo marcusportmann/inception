@@ -84,6 +84,7 @@ import org.springframework.util.StringUtils;
   "tenantId",
   "name",
   "attributes",
+  "consents",
   "contactMechanisms",
   "identityDocuments",
   "locks",
@@ -103,6 +104,7 @@ import org.springframework.util.StringUtils;
       "tenantId",
       "name",
       "attributes",
+      "consents",
       "contactMechanisms",
       "identityDocuments",
       "locks",
@@ -129,6 +131,15 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<Attribute> attributes = new HashSet<>();
+
+  /** The consents provided by the organization. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<Consent> consents = new HashSet<>();
 
   /** The contact mechanisms for the organization. */
   @Valid
@@ -240,6 +251,20 @@ public class Organization extends PartyBase implements Serializable {
     attribute.setParty(this);
 
     attributes.add(attribute);
+  }
+
+  /**
+   * Add the consent provided by the organization.
+   *
+   * @param consent the organization
+   */
+  public void addConsent(Consent consent) {
+    consents.removeIf(
+        existingConsent -> Objects.equals(existingConsent.getType(), consent.getType()));
+
+    consent.setParty(this);
+
+    consents.add(consent);
   }
 
   /**
@@ -387,7 +412,7 @@ public class Organization extends PartyBase implements Serializable {
    * @return an Optional containing the attribute with the specified type for the organization or an
    *     empty Optional if the attribute could not be found
    */
-  public Optional<Attribute> getAttribute(String type) {
+  public Optional<Attribute> getAttributeWithType(String type) {
     return attributes.stream()
         .filter(attribute -> Objects.equals(attribute.getType(), type))
         .findFirst();
@@ -408,20 +433,28 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Retrieve the contact mechanism with the specified type and purpose for the organization.
+   * Retrieve the consent with the specified type for the organization.
    *
-   * @param type the code for the contact mechanism type
-   * @param purpose the code for the contact mechanism role
-   * @return an Optional containing the contact mechanism with the specified type and purpose for
-   *     the organization or an empty Optional if the contact mechanism could not be found
+   * @param type the code for the consent type
+   * @return an Optional containing the consent with the specified type for the organization or an
+   *     empty Optional if the consent could not be found
    */
-  public Optional<ContactMechanism> getContactMechanism(String type, String purpose) {
-    return contactMechanisms.stream()
-        .filter(
-            contactMechanism ->
-                Objects.equals(contactMechanism.getType(), type)
-                    && contactMechanism.hasPurpose(purpose))
-        .findFirst();
+  public Optional<Consent> getConsentWithType(String type) {
+    return consents.stream().filter(consent -> Objects.equals(consent.getType(), type)).findFirst();
+  }
+
+  /**
+   * Returns the consents provided the organization.
+   *
+   * @return the consents provided by the organization
+   */
+  @Schema(description = "The consents provided by the organization")
+  @JsonProperty
+  @JsonManagedReference("consentReference")
+  @XmlElementWrapper(name = "Consents")
+  @XmlElement(name = "Consent")
+  public Set<Consent> getConsents() {
+    return consents;
   }
 
   /**
@@ -431,9 +464,27 @@ public class Organization extends PartyBase implements Serializable {
    * @return an Optional containing the contact mechanism with the specified role for the
    *     organization or an empty Optional if the contact mechanism could not be found
    */
-  public Optional<ContactMechanism> getContactMechanism(String role) {
+  public Optional<ContactMechanism> getContactMechanismWithRole(String role) {
     return contactMechanisms.stream()
         .filter(contactMechanism -> Objects.equals(contactMechanism.getRole(), role))
+        .findFirst();
+  }
+
+  /**
+   * Retrieve the contact mechanism with the specified type and purpose for the organization.
+   *
+   * @param type the code for the contact mechanism type
+   * @param purpose the code for the contact mechanism role
+   * @return an Optional containing the contact mechanism with the specified type and purpose for
+   *     the organization or an empty Optional if the contact mechanism could not be found
+   */
+  public Optional<ContactMechanism> getContactMechanismWithTypeAndPurpose(
+      String type, String purpose) {
+    return contactMechanisms.stream()
+        .filter(
+            contactMechanism ->
+                Objects.equals(contactMechanism.getType(), type)
+                    && contactMechanism.hasPurpose(purpose))
         .findFirst();
   }
 
@@ -496,6 +547,19 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
+   * Retrieve the identity document with the specified type for the organization.
+   *
+   * @param type the code for the identity document type
+   * @return an Optional containing the identity document with the specified type for the
+   *     organization or an empty optional if the identity document could not be found
+   */
+  public Optional<IdentityDocument> getIdentityDocumentWithType(String type) {
+    return identityDocuments.stream()
+        .filter(identityDocument -> Objects.equals(identityDocument.getType(), type))
+        .findFirst();
+  }
+
+  /**
    * Returns the identity documents for the organization.
    *
    * @return the identity documents for the organization
@@ -516,7 +580,7 @@ public class Organization extends PartyBase implements Serializable {
    * @return an Optional containing the lock with the specified type for the organization or an
    *     empty Optional if the lock could not be found
    */
-  public Optional<Lock> getLock(String type) {
+  public Optional<Lock> getLockWithType(String type) {
     return locks.stream().filter(lock -> Objects.equals(lock.getType(), type)).findFirst();
   }
 
@@ -554,7 +618,7 @@ public class Organization extends PartyBase implements Serializable {
    * @return an Optional containing the first physical address with the specified role for the
    *     organization or an empty Optional if the physical address could not be found
    */
-  public Optional<PhysicalAddress> getPhysicalAddress(String role) {
+  public Optional<PhysicalAddress> getPhysicalAddressWithRole(String role) {
     return physicalAddresses.stream()
         .filter(physicalAddress -> Objects.equals(physicalAddress.getRole(), role))
         .findFirst();
@@ -568,7 +632,8 @@ public class Organization extends PartyBase implements Serializable {
    * @return an Optional containing the first physical address with the specified type and purpose
    *     for the organization or an empty Optional if the physical address could not be found
    */
-  public Optional<PhysicalAddress> getPhysicalAddress(String type, String purpose) {
+  public Optional<PhysicalAddress> getPhysicalAddressWithTypeAndPurpose(
+      String type, String purpose) {
     return physicalAddresses.stream()
         .filter(
             physicalAddress ->
@@ -598,7 +663,7 @@ public class Organization extends PartyBase implements Serializable {
    * @return an Optional containing the preference with the specified type for the organization or
    *     an empty Optional if the preference could not be found
    */
-  public Optional<Preference> getPreference(String type) {
+  public Optional<Preference> getPreferenceWithType(String type) {
     return preferences.stream()
         .filter(preference -> Objects.equals(preference.getType(), type))
         .findFirst();
@@ -626,7 +691,7 @@ public class Organization extends PartyBase implements Serializable {
    * @return an Optional containing the role with the specified type for the organization
    *     independent of a party association or an empty Optional if the role could not be found
    */
-  public Optional<Role> getRole(String type) {
+  public Optional<Role> getRoleWithType(String type) {
     return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst();
   }
 
@@ -651,7 +716,7 @@ public class Organization extends PartyBase implements Serializable {
    * @return an Optional containing the status with the specified type for the organization or an
    *     empty Optional if the status could not be found
    */
-  public Optional<Status> getStatus(String type) {
+  public Optional<Status> getStatusWithType(String type) {
     return statuses.stream().filter(status -> Objects.equals(status.getType(), type)).findFirst();
   }
 
@@ -676,7 +741,7 @@ public class Organization extends PartyBase implements Serializable {
    * @return an Optional containing the tax number with the specified type for the organization or
    *     an empty Optional if the tax number could not be found
    */
-  public Optional<TaxNumber> getTaxNumber(String type) {
+  public Optional<TaxNumber> getTaxNumberWithType(String type) {
     return taxNumbers.stream()
         .filter(taxNumber -> Objects.equals(taxNumber.getType(), type))
         .findFirst();
@@ -743,8 +808,31 @@ public class Organization extends PartyBase implements Serializable {
    * @return <b>true</b>> if the organization has an attribute with the specified type or
    *     <b>false</b> otherwise
    */
-  public boolean hasAttributeType(String type) {
+  public boolean hasAttributeWithType(String type) {
     return attributes.stream().anyMatch(attribute -> Objects.equals(attribute.getType(), type));
+  }
+
+  /**
+   * Returns whether the organization has a consent with the specified type.
+   *
+   * @param type the code for the consent type
+   * @return <b>true</b>> if the organization has a consent with the specified type or <b>false</b>
+   *     otherwise
+   */
+  public boolean hasConsentWithType(String type) {
+    return consents.stream().anyMatch(consent -> Objects.equals(consent.getType(), type));
+  }
+
+  /**
+   * Returns whether the organization has a contact mechanism with the specified role.
+   *
+   * @param role the code for the contact mechanism role
+   * @return <b>true</b>> if the organization has a contact mechanism with the specified role or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasContactMechanismWithRole(String role) {
+    return contactMechanisms.stream()
+        .anyMatch(contactMechanism -> Objects.equals(contactMechanism.getRole(), role));
   }
 
   /**
@@ -754,9 +842,21 @@ public class Organization extends PartyBase implements Serializable {
    * @return <b>true</b>> if the organization has a contact mechanism with the specified type or
    *     <b>false</b> otherwise
    */
-  public boolean hasContactMechanismType(String type) {
+  public boolean hasContactMechanismWithType(String type) {
     return contactMechanisms.stream()
         .anyMatch(contactMechanism -> Objects.equals(contactMechanism.getType(), type));
+  }
+
+  /**
+   * Returns whether the organization has an identity document with the specified type.
+   *
+   * @param type the code for the identity document type
+   * @return <b>true</b>> if the organization has an identity document with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasIdentityDocumentWithType(String type) {
+    return identityDocuments.stream()
+        .anyMatch(identityDocument -> Objects.equals(identityDocument.getType(), type));
   }
 
   /**
@@ -766,7 +866,7 @@ public class Organization extends PartyBase implements Serializable {
    * @return <b>true</b>> if the organization has a lock with the specified type or <b>false</b>
    *     otherwise
    */
-  public boolean hasLockType(String type) {
+  public boolean hasLockWithType(String type) {
     return locks.stream().anyMatch(lock -> Objects.equals(lock.getType(), type));
   }
 
@@ -777,9 +877,43 @@ public class Organization extends PartyBase implements Serializable {
    * @return <b>true</b>> if the organization has a physical address with the specified role or
    *     <b>false</b> otherwise
    */
-  public boolean hasPhysicalAddressRole(String role) {
+  public boolean hasPhysicalAddressWithRole(String role) {
     return physicalAddresses.stream()
         .anyMatch(physicalAddress -> Objects.equals(physicalAddress.getRole(), role));
+  }
+
+  /**
+   * Returns whether the organization has a physical address with the specified type.
+   *
+   * @param type the code for the physical address type
+   * @return <b>true</b>> if the organization has a physical address with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasPhysicalAddressWithType(String type) {
+    return physicalAddresses.stream()
+        .anyMatch(physicalAddress -> Objects.equals(physicalAddress.getType(), type));
+  }
+
+  /**
+   * Returns whether the organization has a preference with the specified type.
+   *
+   * @param type the code for the preference type
+   * @return <b>true</b>> if the organization has a preference with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasPreferenceWithType(String type) {
+    return preferences.stream().anyMatch(preference -> Objects.equals(preference.getType(), type));
+  }
+
+  /**
+   * Returns whether the organization has a role with the specified type.
+   *
+   * @param type the code for the role type
+   * @return <b>true</b>> if the organization has a role with the specified type or <b>false</b>
+   *     otherwise
+   */
+  public boolean hasRoleWithType(String type) {
+    return roles.stream().anyMatch(role -> Objects.equals(role.getType(), type));
   }
 
   /**
@@ -789,8 +923,19 @@ public class Organization extends PartyBase implements Serializable {
    * @return <b>true</b>> if the organization has a status with the specified type or <b>false</b>
    *     otherwise
    */
-  public boolean hasStatusType(String type) {
+  public boolean hasStatusWithType(String type) {
     return statuses.stream().anyMatch(status -> Objects.equals(status.getType(), type));
+  }
+
+  /**
+   * Returns whether the organization has a tax number with the specified type.
+   *
+   * @param type the code for the tax number type
+   * @return <b>true</b>> if the organization has a tax number with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasTaxNumberWithType(String type) {
+    return taxNumbers.stream().anyMatch(taxNumber -> Objects.equals(taxNumber.getType(), type));
   }
 
   /**
@@ -808,21 +953,17 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the code for the attribute type
    */
-  public void removeAttribute(String type) {
+  public void removeAttributeWithType(String type) {
     attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getType(), type));
   }
 
   /**
-   * Remove the contact mechanism with the specified type and purpose for the organization.
+   * Remove the consent with the specified type for the organization.
    *
-   * @param type the code for the contact mechanism type
-   * @param purpose the code for the contact mechanism purpose
+   * @param type the code for the consent type
    */
-  public void removeContactMechanism(String type, String purpose) {
-    contactMechanisms.removeIf(
-        existingContactMechanism ->
-            Objects.equals(existingContactMechanism.getType(), type)
-                && existingContactMechanism.getPurposes().contains(purpose));
+  public void removeConsentWithType(String type) {
+    consents.removeIf(existingConsent -> Objects.equals(existingConsent.getType(), type));
   }
 
   /**
@@ -830,7 +971,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param role the code for the contact mechanism role
    */
-  public void removeContactMechanism(String role) {
+  public void removeContactMechanismWithRole(String role) {
     contactMechanisms.removeIf(
         existingContactMechanism -> Objects.equals(existingContactMechanism.getRole(), role));
   }
@@ -840,7 +981,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the code for the identity document type
    */
-  public void removeIdentityDocument(String type) {
+  public void removeIdentityDocumentWithType(String type) {
     identityDocuments.removeIf(
         existingIdentityDocument -> Objects.equals(existingIdentityDocument.getType(), type));
   }
@@ -850,7 +991,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the code for the lock type
    */
-  public void removeLock(String type) {
+  public void removeLockWithType(String type) {
     locks.removeIf(existingLock -> Objects.equals(existingLock.getType(), type));
   }
 
@@ -859,22 +1000,9 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param role the code for the physical address role
    */
-  public void removePhysicalAddress(String role) {
+  public void removePhysicalAddressWithRole(String role) {
     physicalAddresses.removeIf(
         existingPhysicalAddress -> Objects.equals(existingPhysicalAddress.getRole(), role));
-  }
-
-  /**
-   * Remove any physical addresses with the specified type and purpose for the organization.
-   *
-   * @param type the code for the physical address type
-   * @param purpose the code for the physical address purpose
-   */
-  public void removePhysicalAddress(String type, String purpose) {
-    physicalAddresses.removeIf(
-        existingPhysicalAddress ->
-            Objects.equals(existingPhysicalAddress.getType(), type)
-                && existingPhysicalAddress.getPurposes().contains(purpose));
   }
 
   /**
@@ -882,7 +1010,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the code for the preference type
    */
-  public void removePreference(String type) {
+  public void removePreferenceWithType(String type) {
     preferences.removeIf(existingPreference -> Objects.equals(existingPreference.getType(), type));
   }
 
@@ -891,7 +1019,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the code for role type
    */
-  public void removeRole(String type) {
+  public void removeRoleWithType(String type) {
     roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), type));
   }
 
@@ -900,7 +1028,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the code for the lock type
    */
-  public void removeStatus(String type) {
+  public void removeStatusWithType(String type) {
     statuses.removeIf(existingStatus -> Objects.equals(existingStatus.getType(), type));
   }
 
@@ -909,7 +1037,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the tax number type
    */
-  public void removeTaxNumber(String type) {
+  public void removeTaxNumberWithType(String type) {
     taxNumbers.removeIf(existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), type));
   }
 
@@ -919,8 +1047,20 @@ public class Organization extends PartyBase implements Serializable {
    * @param attributes the attributes for the organization
    */
   public void setAttributes(Set<Attribute> attributes) {
+    attributes.forEach(attribute -> attribute.setParty(this));
     this.attributes.clear();
     this.attributes.addAll(attributes);
+  }
+
+  /**
+   * Set the consents provided by the organization.
+   *
+   * @param consents the consents provided by the organization
+   */
+  public void setConsents(Set<Consent> consents) {
+    consents.forEach(consent -> consent.setParty(this));
+    this.consents.clear();
+    this.consents.addAll(consents);
   }
 
   /**
@@ -929,6 +1069,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param contactMechanisms the contact mechanisms for the organization
    */
   public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
+    contactMechanisms.forEach(contactMechanism -> contactMechanism.setParty(this));
     this.contactMechanisms.clear();
     this.contactMechanisms.addAll(contactMechanisms);
   }
@@ -971,6 +1112,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param identityDocuments the identity documents for the organization
    */
   public void setIdentityDocuments(Set<IdentityDocument> identityDocuments) {
+    identityDocuments.forEach(identityDocument -> identityDocument.setParty(this));
     this.identityDocuments.clear();
     this.identityDocuments.addAll(identityDocuments);
   }
@@ -981,6 +1123,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param locks the locks for the organization
    */
   public void setLocks(Set<Lock> locks) {
+    locks.forEach(lock -> lock.setParty(this));
     this.locks.clear();
     this.locks.addAll(locks);
   }
@@ -1001,6 +1144,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param physicalAddresses the physical addresses for the organization
    */
   public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
+    physicalAddresses.forEach(physicalAddress -> physicalAddress.setParty(this));
     this.physicalAddresses.clear();
     this.physicalAddresses.addAll(physicalAddresses);
   }
@@ -1011,6 +1155,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param preferences the preferences for the organization
    */
   public void setPreferences(Set<Preference> preferences) {
+    preferences.forEach(preference -> preference.setParty(this));
     this.preferences.clear();
     this.preferences.addAll(preferences);
   }
@@ -1021,6 +1166,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param roles the roles
    */
   public void setRoles(Set<Role> roles) {
+    roles.forEach(role -> role.setParty(this));
     this.roles.clear();
     this.roles.addAll(roles);
   }
@@ -1031,6 +1177,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param statuses the statuses for the organization
    */
   public void setStatuses(Set<Status> statuses) {
+    statuses.forEach(status -> status.setParty(this));
     this.statuses.clear();
     this.statuses.addAll(statuses);
   }
@@ -1041,6 +1188,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param taxNumbers the tax numbers for the organization
    */
   public void setTaxNumbers(Set<TaxNumber> taxNumbers) {
+    taxNumbers.forEach(taxNumber -> taxNumber.setParty(this));
     this.taxNumbers.clear();
     this.taxNumbers.addAll(taxNumbers);
   }

@@ -181,6 +181,15 @@ public class Person extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<Attribute> attributes = new HashSet<>();
 
+  /** The consents provided by the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<Consent> consents = new HashSet<>();
+
   /** The contact mechanisms for the person. */
   @Valid
   @OneToMany(
@@ -421,6 +430,20 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Add the consent provided by the person.
+   *
+   * @param consent the consent
+   */
+  public void addConsent(Consent consent) {
+    consents.removeIf(
+        existingConsent -> Objects.equals(existingConsent.getType(), consent.getType()));
+
+    consent.setParty(this);
+
+    consents.add(consent);
+  }
+
+  /**
    * Add the contact mechanism for the person.
    *
    * @param contactMechanism the contact mechanism
@@ -452,7 +475,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Apply the lock to the person. s
+   * Apply the lock to the person.
    *
    * @param lock the lock
    */
@@ -576,7 +599,7 @@ public class Person extends PartyBase implements Serializable {
    * @return an Optional containing the attribute with the specified type for the person or an empty
    *     Optional if the attribute could not be found
    */
-  public Optional<Attribute> getAttribute(String type) {
+  public Optional<Attribute> getAttributeWithType(String type) {
     return attributes.stream()
         .filter(attribute -> Objects.equals(attribute.getType(), type))
         .findFirst();
@@ -597,20 +620,28 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Retrieve the contact mechanism with the specified type and purpose for the person.
+   * Retrieve the consent with the specified type for the person.
    *
-   * @param type the code for the contact mechanism type
-   * @param purpose the code for the contact mechanism role
-   * @return an Optional containing the contact mechanism with the specified type and purpose for
-   *     the person or an empty Optional if the contact mechanism could not be found
+   * @param type the code for the consent type
+   * @return an Optional containing the consent with the specified type for the person or an empty
+   *     Optional if the consent could not be found
    */
-  public Optional<ContactMechanism> getContactMechanism(String type, String purpose) {
-    return contactMechanisms.stream()
-        .filter(
-            contactMechanism ->
-                Objects.equals(contactMechanism.getType(), type)
-                    && contactMechanism.hasPurpose(purpose))
-        .findFirst();
+  public Optional<Consent> getConsentWithType(String type) {
+    return consents.stream().filter(consent -> Objects.equals(consent.getType(), type)).findFirst();
+  }
+
+  /**
+   * Returns the consents provided the person.
+   *
+   * @return the consents provided by the person
+   */
+  @Schema(description = "The consents provided by the person")
+  @JsonProperty
+  @JsonManagedReference("consentReference")
+  @XmlElementWrapper(name = "Consents")
+  @XmlElement(name = "Consent")
+  public Set<Consent> getConsents() {
+    return consents;
   }
 
   /**
@@ -620,9 +651,27 @@ public class Person extends PartyBase implements Serializable {
    * @return an Optional containing the contact mechanism with the specified role for the person or
    *     an empty Optional if the contact mechanism could not be found
    */
-  public Optional<ContactMechanism> getContactMechanism(String role) {
+  public Optional<ContactMechanism> getContactMechanismWithRole(String role) {
     return contactMechanisms.stream()
         .filter(contactMechanism -> Objects.equals(contactMechanism.getRole(), role))
+        .findFirst();
+  }
+
+  /**
+   * Retrieve the contact mechanism with the specified type and purpose for the person.
+   *
+   * @param type the code for the contact mechanism type
+   * @param purpose the code for the contact mechanism role
+   * @return an Optional containing the contact mechanism with the specified type and purpose for
+   *     the person or an empty Optional if the contact mechanism could not be found
+   */
+  public Optional<ContactMechanism> getContactMechanismWithTypeAndPurpose(
+      String type, String purpose) {
+    return contactMechanisms.stream()
+        .filter(
+            contactMechanism ->
+                Objects.equals(contactMechanism.getType(), type)
+                    && contactMechanism.hasPurpose(purpose))
         .findFirst();
   }
 
@@ -803,6 +852,19 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Retrieve the identity document with the specified type for the person.
+   *
+   * @param type the code for the identity document type
+   * @return an Optional containing the identity document with the specified type for the person or
+   *     an empty optional if the identity document could not be found
+   */
+  public Optional<IdentityDocument> getIdentityDocumentWithType(String type) {
+    return identityDocuments.stream()
+        .filter(identityDocument -> Objects.equals(identityDocument.getType(), type))
+        .findFirst();
+  }
+
+  /**
    * Returns the identity documents for the person.
    *
    * @return the identity documents for the person
@@ -847,7 +909,7 @@ public class Person extends PartyBase implements Serializable {
    * @return an Optional containing the lock with the specified type for the person or an empty
    *     Optional if the lock could not be found
    */
-  public Optional<Lock> getLock(String type) {
+  public Optional<Lock> getLockWithType(String type) {
     return locks.stream().filter(lock -> Objects.equals(lock.getType(), type)).findFirst();
   }
 
@@ -954,7 +1016,7 @@ public class Person extends PartyBase implements Serializable {
    * @return an Optional containing the first physical address with the specified role for the
    *     person or an empty Optional if the physical address could not be found
    */
-  public Optional<PhysicalAddress> getPhysicalAddress(String role) {
+  public Optional<PhysicalAddress> getPhysicalAddressWithRole(String role) {
     return physicalAddresses.stream()
         .filter(physicalAddress -> Objects.equals(physicalAddress.getRole(), role))
         .findFirst();
@@ -968,7 +1030,8 @@ public class Person extends PartyBase implements Serializable {
    * @return an Optional containing the first physical address with the specified type and purpose
    *     for the person or an empty Optional if the physical address could not be found
    */
-  public Optional<PhysicalAddress> getPhysicalAddress(String type, String purpose) {
+  public Optional<PhysicalAddress> getPhysicalAddressWithTypeAndPurpose(
+      String type, String purpose) {
     return physicalAddresses.stream()
         .filter(
             physicalAddress ->
@@ -998,7 +1061,7 @@ public class Person extends PartyBase implements Serializable {
    * @return an Optional containing the preference with the specified type for the person or an
    *     empty optional if the preference could not be found
    */
-  public Optional<Preference> getPreference(String type) {
+  public Optional<Preference> getPreferenceWithType(String type) {
     return preferences.stream()
         .filter(preference -> Objects.equals(preference.getType(), type))
         .findFirst();
@@ -1090,7 +1153,7 @@ public class Person extends PartyBase implements Serializable {
    * @return an Optional containing the role with the specified type for the person independent of a
    *     party association or an empty Optional if the role could not be found
    */
-  public Optional<Role> getRole(String type) {
+  public Optional<Role> getRoleWithType(String type) {
     return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst();
   }
 
@@ -1115,7 +1178,7 @@ public class Person extends PartyBase implements Serializable {
    * @return an Optional containing the status with the specified type for the person or an empty
    *     Optional if the status could not be found
    */
-  public Optional<Status> getStatus(String type) {
+  public Optional<Status> getStatusWithType(String type) {
     return statuses.stream().filter(status -> Objects.equals(status.getType(), type)).findFirst();
   }
 
@@ -1152,7 +1215,7 @@ public class Person extends PartyBase implements Serializable {
    * @return an Optional containing the tax number with the specified type for the person or an
    *     empty Optional if the tax number could not be found
    */
-  public Optional<TaxNumber> getTaxNumber(String type) {
+  public Optional<TaxNumber> getTaxNumberWithType(String type) {
     return taxNumbers.stream()
         .filter(taxNumber -> Objects.equals(taxNumber.getType(), type))
         .findFirst();
@@ -1229,8 +1292,31 @@ public class Person extends PartyBase implements Serializable {
    * @return <b>true</b>> if the person has an attribute with the specified type or <b>false</b>
    *     otherwise
    */
-  public boolean hasAttributeType(String type) {
+  public boolean hasAttributeWithType(String type) {
     return attributes.stream().anyMatch(attribute -> Objects.equals(attribute.getType(), type));
+  }
+
+  /**
+   * Returns whether the person has a consent with the specified type.
+   *
+   * @param type the code for the consent type
+   * @return <b>true</b>> if the person has a consent with the specified type or <b>false</b>
+   *     otherwise
+   */
+  public boolean hasConsentWithType(String type) {
+    return consents.stream().anyMatch(consent -> Objects.equals(consent.getType(), type));
+  }
+
+  /**
+   * Returns whether the person has a contact mechanism with the specified role.
+   *
+   * @param role the code for the contact mechanism role
+   * @return <b>true</b>> if the person has a contact mechanism with the specified role or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasContactMechanismWithRole(String role) {
+    return contactMechanisms.stream()
+        .anyMatch(contactMechanism -> Objects.equals(contactMechanism.getRole(), role));
   }
 
   /**
@@ -1240,9 +1326,21 @@ public class Person extends PartyBase implements Serializable {
    * @return <b>true</b>> if the person has a contact mechanism with the specified type or
    *     <b>false</b> otherwise
    */
-  public boolean hasContactMechanismType(String type) {
+  public boolean hasContactMechanismWithType(String type) {
     return contactMechanisms.stream()
         .anyMatch(contactMechanism -> Objects.equals(contactMechanism.getType(), type));
+  }
+
+  /**
+   * Returns whether the person has an identity document with the specified type.
+   *
+   * @param type the code for the identity document type
+   * @return <b>true</b>> if the person has an identity document with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasIdentityDocumentWithType(String type) {
+    return identityDocuments.stream()
+        .anyMatch(identityDocument -> Objects.equals(identityDocument.getType(), type));
   }
 
   /**
@@ -1251,7 +1349,7 @@ public class Person extends PartyBase implements Serializable {
    * @param type the code for the lock type
    * @return <b>true</b>> if the person has a lock with the specified type or <b>false</b> otherwise
    */
-  public boolean hasLockType(String type) {
+  public boolean hasLockWithType(String type) {
     return locks.stream().anyMatch(lock -> Objects.equals(lock.getType(), type));
   }
 
@@ -1262,9 +1360,54 @@ public class Person extends PartyBase implements Serializable {
    * @return <b>true</b>> if the person has a physical address with the specified role or
    *     <b>false</b> otherwise
    */
-  public boolean hasPhysicalAddressRole(String role) {
+  public boolean hasPhysicalAddressWithRole(String role) {
     return physicalAddresses.stream()
         .anyMatch(physicalAddress -> Objects.equals(physicalAddress.getRole(), role));
+  }
+
+  /**
+   * Returns whether the person has a physical address with the specified type.
+   *
+   * @param type the code for the physical address type
+   * @return <b>true</b>> if the person has a physical address with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasPhysicalAddressWithType(String type) {
+    return physicalAddresses.stream()
+        .anyMatch(physicalAddress -> Objects.equals(physicalAddress.getType(), type));
+  }
+
+  /**
+   * Returns whether the person has a preference with the specified type.
+   *
+   * @param type the code for the preference type
+   * @return <b>true</b>> if the person has a preference with the specified type or <b>false</b>
+   *     otherwise
+   */
+  public boolean hasPreferenceWithType(String type) {
+    return preferences.stream().anyMatch(preference -> Objects.equals(preference.getType(), type));
+  }
+
+  /**
+   * Returns whether the person has a residence permit with the specified type.
+   *
+   * @param type the code for the residence permit type
+   * @return <b>true</b>> if the person has a residence permit with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasResidencePermitWithType(String type) {
+    return residencePermits.stream()
+        .anyMatch(residencePermit -> Objects.equals(residencePermit.getType(), type));
+  }
+
+  /**
+   * Returns whether the person has a role with the specified type.
+   *
+   * @param type the code for the role type
+   * @return <b>true</b>> if the person has a role with the specified type or <b>false</b> otherwise
+   */
+  public boolean hasRoleWithType(String type) {
+    return roles.stream().anyMatch(role -> Objects.equals(role.getType(), type));
   }
 
   /**
@@ -1274,8 +1417,19 @@ public class Person extends PartyBase implements Serializable {
    * @return <b>true</b>> if the person has a status with the specified type or <b>false</b>
    *     otherwise
    */
-  public boolean hasStatusType(String type) {
+  public boolean hasStatusWithType(String type) {
     return statuses.stream().anyMatch(status -> Objects.equals(status.getType(), type));
+  }
+
+  /**
+   * Returns whether the person has a tax number with the specified type.
+   *
+   * @param type the code for the tax number type
+   * @return <b>true</b>> if the person has a tax number with the specified type or <b>false</b>
+   *     otherwise
+   */
+  public boolean hasTaxNumberWithType(String type) {
+    return taxNumbers.stream().anyMatch(taxNumber -> Objects.equals(taxNumber.getType(), type));
   }
 
   /**
@@ -1293,21 +1447,17 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param type the code for the attribute type
    */
-  public void removeAttribute(String type) {
+  public void removeAttributeWithType(String type) {
     attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getType(), type));
   }
 
   /**
-   * Remove the contact mechanism with the specified type and purpose for the person.
+   * Remove the consent with the specified type for the person.
    *
-   * @param type the code for the contact mechanism type
-   * @param purpose the code for the contact mechanism purpose
+   * @param type the code for the consent type
    */
-  public void removeContactMechanism(String type, String purpose) {
-    contactMechanisms.removeIf(
-        existingContactMechanism ->
-            Objects.equals(existingContactMechanism.getType(), type)
-                && existingContactMechanism.getPurposes().contains(purpose));
+  public void removeConsentWithType(String type) {
+    consents.removeIf(existingConsent -> Objects.equals(existingConsent.getType(), type));
   }
 
   /**
@@ -1315,7 +1465,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param role the code for the contact mechanism role
    */
-  public void removeContactMechanism(String role) {
+  public void removeContactMechanismWithRole(String role) {
     contactMechanisms.removeIf(
         existingContactMechanism -> Objects.equals(existingContactMechanism.getRole(), role));
   }
@@ -1325,7 +1475,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param type the code for the identity document type
    */
-  public void removeIdentityDocument(String type) {
+  public void removeIdentityDocumentWithType(String type) {
     identityDocuments.removeIf(
         existingIdentityDocument -> Objects.equals(existingIdentityDocument.getType(), type));
   }
@@ -1335,7 +1485,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param type the code for the lock type
    */
-  public void removeLock(String type) {
+  public void removeLockWithType(String type) {
     locks.removeIf(existingLock -> Objects.equals(existingLock.getType(), type));
   }
 
@@ -1344,22 +1494,9 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param role the code for the physical address role
    */
-  public void removePhysicalAddress(String role) {
+  public void removePhysicalAddressWithRole(String role) {
     physicalAddresses.removeIf(
         existingPhysicalAddress -> Objects.equals(existingPhysicalAddress.getRole(), role));
-  }
-
-  /**
-   * Remove any physical addresses with the specified type and purpose for the person.
-   *
-   * @param type the code for the physical address type
-   * @param purpose the code for the physical address purpose
-   */
-  public void removePhysicalAddress(String type, String purpose) {
-    physicalAddresses.removeIf(
-        existingPhysicalAddress ->
-            Objects.equals(existingPhysicalAddress.getType(), type)
-                && existingPhysicalAddress.getPurposes().contains(purpose));
   }
 
   /**
@@ -1367,7 +1504,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param type the code for the preference type
    */
-  public void removePreference(String type) {
+  public void removePreferenceWithType(String type) {
     preferences.removeIf(existingPreference -> Objects.equals(existingPreference.getType(), type));
   }
 
@@ -1376,7 +1513,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param type the code for the residence permit type
    */
-  public void removeResidencePermit(String type) {
+  public void removeResidencePermitWithType(String type) {
     residencePermits.removeIf(
         existingResidencePermit -> Objects.equals(existingResidencePermit.getType(), type));
   }
@@ -1386,7 +1523,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param type the code for role type
    */
-  public void removeRole(String type) {
+  public void removeRoleWithType(String type) {
     roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), type));
   }
 
@@ -1395,7 +1532,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param type the code for the lock type
    */
-  public void removeStatus(String type) {
+  public void removeStatusWithType(String type) {
     statuses.removeIf(existingStatus -> Objects.equals(existingStatus.getType(), type));
   }
 
@@ -1404,7 +1541,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param type the tax number type
    */
-  public void removeTaxNumber(String type) {
+  public void removeTaxNumberWithType(String type) {
     taxNumbers.removeIf(existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), type));
   }
 
@@ -1414,8 +1551,20 @@ public class Person extends PartyBase implements Serializable {
    * @param attributes the attributes for the person
    */
   public void setAttributes(Set<Attribute> attributes) {
+    attributes.forEach(attribute -> attribute.setParty(this));
     this.attributes.clear();
     this.attributes.addAll(attributes);
+  }
+
+  /**
+   * Set the consents provided by the person.
+   *
+   * @param consents the consents provided by the person
+   */
+  public void setConsents(Set<Consent> consents) {
+    consents.forEach(consent -> consent.setParty(this));
+    this.consents.clear();
+    this.consents.addAll(consents);
   }
 
   /**
@@ -1424,6 +1573,7 @@ public class Person extends PartyBase implements Serializable {
    * @param contactMechanisms the contact mechanisms for the person
    */
   public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
+    contactMechanisms.forEach(contactMechanism -> contactMechanism.setParty(this));
     this.contactMechanisms.clear();
     this.contactMechanisms.addAll(contactMechanisms);
   }
@@ -1561,6 +1711,7 @@ public class Person extends PartyBase implements Serializable {
    * @param identityDocuments the identity documents for the person
    */
   public void setIdentityDocuments(Set<IdentityDocument> identityDocuments) {
+    identityDocuments.forEach(identityDocument -> identityDocument.setParty(this));
     this.identityDocuments.clear();
     this.identityDocuments.addAll(identityDocuments);
   }
@@ -1589,6 +1740,7 @@ public class Person extends PartyBase implements Serializable {
    * @param locks the locks for the person
    */
   public void setLocks(Set<Lock> locks) {
+    locks.forEach(lock -> lock.setParty(this));
     this.locks.clear();
     this.locks.addAll(locks);
   }
@@ -1663,6 +1815,7 @@ public class Person extends PartyBase implements Serializable {
    * @param physicalAddresses the physical addresses for the person
    */
   public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
+    physicalAddresses.forEach(physicalAddress -> physicalAddress.setParty(this));
     this.physicalAddresses.clear();
     this.physicalAddresses.addAll(physicalAddresses);
   }
@@ -1673,6 +1826,7 @@ public class Person extends PartyBase implements Serializable {
    * @param preferences the preferences for the person
    */
   public void setPreferences(Set<Preference> preferences) {
+    preferences.forEach(preference -> preference.setParty(this));
     this.preferences.clear();
     this.preferences.addAll(preferences);
   }
@@ -1704,6 +1858,7 @@ public class Person extends PartyBase implements Serializable {
    * @param residencePermits the residence permits for the person
    */
   public void setResidencePermits(Set<ResidencePermit> residencePermits) {
+    preferences.forEach(residencePermit -> residencePermit.setParty(this));
     this.residencePermits.clear();
     this.residencePermits.addAll(residencePermits);
   }
@@ -1732,6 +1887,7 @@ public class Person extends PartyBase implements Serializable {
    * @param roles the roles assigned directly to the person
    */
   public void setRoles(Set<Role> roles) {
+    roles.forEach(role -> role.setParty(this));
     this.roles.clear();
     this.roles.addAll(roles);
   }
@@ -1742,6 +1898,7 @@ public class Person extends PartyBase implements Serializable {
    * @param statuses the statuses for the person
    */
   public void setStatuses(Set<Status> statuses) {
+    statuses.forEach(status -> status.setParty(this));
     this.statuses.clear();
     this.statuses.addAll(statuses);
   }
@@ -1763,6 +1920,7 @@ public class Person extends PartyBase implements Serializable {
    * @param taxNumbers the tax numbers for the person
    */
   public void setTaxNumbers(Set<TaxNumber> taxNumbers) {
+    taxNumbers.forEach(taxNumber -> taxNumber.setParty(this));
     this.taxNumbers.clear();
     this.taxNumbers.addAll(taxNumbers);
   }
@@ -1788,7 +1946,7 @@ public class Person extends PartyBase implements Serializable {
 
   /** Derive the name of the person from the given name, middle name(s) and surname. */
   private void deriveName() {
-    StringBuffer derivedName = new StringBuffer();
+    StringBuilder derivedName = new StringBuilder();
 
     if (StringUtils.hasText(givenName)) {
       derivedName.append(givenName.trim());
@@ -1796,7 +1954,7 @@ public class Person extends PartyBase implements Serializable {
 
     if (StringUtils.hasText(middleNames)) {
       if (derivedName.length() > 0) {
-        derivedName.append(" " + middleNames.trim());
+        derivedName.append(" ").append(middleNames.trim());
       } else {
         derivedName.append(middleNames.trim());
       }
@@ -1804,7 +1962,7 @@ public class Person extends PartyBase implements Serializable {
 
     if (StringUtils.hasText(surname)) {
       if (derivedName.length() > 0) {
-        derivedName.append(" " + surname.trim());
+        derivedName.append(" ").append(surname.trim());
       } else {
         derivedName.append(surname.trim());
       }

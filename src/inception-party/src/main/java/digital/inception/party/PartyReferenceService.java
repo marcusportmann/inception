@@ -47,6 +47,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Party Attribute Type Repository. */
   private final AttributeTypeRepository attributeTypeRepository;
 
+  /** The Consent Type Repository */
+  private final ConsentTypeRepository consentTypeRepository;
+
   /** The Contact Mechanism Purpose Repository. */
   private final ContactMechanismPurposeRepository contactMechanismPurposeRepository;
 
@@ -154,6 +157,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * Constructs a new <b>PartyReferenceService</b>.
    *
    * @param validator the JSR-303 validator
+   * @param consentTypeRepository the Consent Type Repository
    * @param contactMechanismPurposeRepository the Contact Mechanism Purpose Repository
    * @param contactMechanismRoleRepository the Contact Mechanism Role Repository
    * @param contactMechanismTypeRepository the Contact Mechanism Type Repository
@@ -193,6 +197,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    */
   public PartyReferenceService(
       Validator validator,
+      ConsentTypeRepository consentTypeRepository,
       ContactMechanismPurposeRepository contactMechanismPurposeRepository,
       ContactMechanismRoleRepository contactMechanismRoleRepository,
       ContactMechanismTypeRepository contactMechanismTypeRepository,
@@ -228,6 +233,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       TimeToContactRepository timeToContactRepository,
       TitleRepository titleRepository) {
     this.validator = validator;
+    this.consentTypeRepository = consentTypeRepository;
     this.contactMechanismPurposeRepository = contactMechanismPurposeRepository;
     this.contactMechanismRoleRepository = contactMechanismRoleRepository;
     this.contactMechanismTypeRepository = contactMechanismTypeRepository;
@@ -330,6 +336,39 @@ public class PartyReferenceService implements IPartyReferenceService {
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the attribute types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the consent types.
+   *
+   * @return the consent types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'consentTypes.ALL'")
+  public List<ConsentType> getConsentTypes() throws ServiceUnavailableException {
+    return getConsentTypes(null);
+  }
+
+  /**
+   * Retrieve the consent types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the consent types for
+   *     or <b>null</b> to retrieve the consent types for all locales
+   * @return the consent types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'consentTypes.' + #localeId")
+  public List<ConsentType> getConsentTypes(String localeId) throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return consentTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return consentTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the consent types", e);
     }
   }
 
@@ -1464,6 +1503,27 @@ public class PartyReferenceService implements IPartyReferenceService {
         .anyMatch(
             attributeTypeCategory ->
                 attributeTypeCategory.getCode().equals(attributeTypeCategoryCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a consent type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param consentTypeCode the code for the consent type
+   * @return <b>true</b> if the code is a valid code for a consent type or <b>false</b> otherwise
+   */
+  @Override
+  public boolean isValidConsentType(String partyTypeCode, String consentTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(consentTypeCode)) {
+      return false;
+    }
+
+    return self.getConsentTypes().stream()
+        .anyMatch(
+            consentType ->
+                (consentType.getCode().equals(consentTypeCode)
+                    && consentType.isValidForPartyType(partyTypeCode)));
   }
 
   /**

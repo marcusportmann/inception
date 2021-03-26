@@ -62,6 +62,32 @@ COMMENT ON COLUMN party.attribute_types.description IS 'The description for the 
 COMMENT ON COLUMN party.attribute_types.party_types IS 'The comma-delimited list of codes for the party types the attribute type is associated with';
 
 
+CREATE TABLE party.consent_types (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+  party_types VARCHAR(310) NOT NULL,
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX consent_types_locale_id_ix ON party.consent_types(locale_id);
+
+COMMENT ON COLUMN party.consent_types.code IS 'The code for the consent type';
+
+COMMENT ON COLUMN party.consent_types.locale_id IS 'The Unicode locale identifier for the consent type';
+
+COMMENT ON COLUMN party.consent_types.sort_index IS 'The sort index for the consent type';
+
+COMMENT ON COLUMN party.consent_types.name IS 'The name of the consent type';
+
+COMMENT ON COLUMN party.consent_types.description IS 'The description for the consent type';
+
+COMMENT ON COLUMN party.consent_types.party_types IS 'The comma-delimited list of codes for the party types the consent type is associated with';
+
+
 CREATE TABLE party.contact_mechanism_purposes (
   code                    VARCHAR(30)  NOT NULL,
   contact_mechanism_types VARCHAR(310) NOT NULL,
@@ -1082,6 +1108,33 @@ COMMENT ON COLUMN party.attributes.integer_value IS 'The integer value for the a
 COMMENT ON COLUMN party.attributes.string_value IS 'The string value for the attribute';
 
 
+CREATE TABLE party.consents (
+  created        TIMESTAMP   NOT NULL,
+  effective_from DATE        NOT NULL,
+  effective_to   DATE,
+  party_id       UUID        NOT NULL,
+  type           VARCHAR(30) NOT NULL,
+  updated        TIMESTAMP,
+
+  PRIMARY KEY (party_id, type, effective_from),
+  CONSTRAINT consents_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX consents_party_id_ix ON party.consents(party_id);
+
+COMMENT ON COLUMN party.consents.created IS 'The date and time the consent was created';
+
+COMMENT ON COLUMN party.consents.effective_from IS 'The date that the consent is effective from';
+
+COMMENT ON COLUMN party.consents.effective_to IS 'The optional date that the consent is effective to';
+
+COMMENT ON COLUMN party.consents.party_id IS 'The Universally Unique Identifier (UUID) for the party the consent is associated with';
+
+COMMENT ON COLUMN party.consents.type IS 'The code for the consent type';
+
+COMMENT ON COLUMN party.consents.updated IS 'The date and time the consent was last updated';
+
+
 CREATE TABLE party.contact_mechanisms (
   created  TIMESTAMP    NOT NULL,
   party_id UUID         NOT NULL,
@@ -1449,22 +1502,29 @@ INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, 
   VALUES ('anthropometric_measurements', 'en-US', 0, 'Anthropometric Measurements', 'Anthropometric Measurements');
 
 INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('anthropometric_measurements', 'en-ZA', 0, 'Anthropometric Measurements', 'Anthropometric Measurements');
+  VALUES ('anthropometric_measurements', 'en-ZA', 1, 'Anthropometric Measurements', 'Anthropometric Measurements');
 
 
 INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','bmi', 'en-US', 0, 'Body Mass Index', 'Body Mass Index', 'person');
+  VALUES ('anthropometric_measurements','bmi', 'en-US', 101, 'Body Mass Index', 'Body Mass Index', 'person');
 INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','height', 'en-US', 0, 'Height', 'Height', 'person');
+  VALUES ('anthropometric_measurements','height', 'en-US', 102, 'Height', 'Height', 'person');
 INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','weight', 'en-US', 0, 'Weight', 'Weight', 'person');
+  VALUES ('anthropometric_measurements','weight', 'en-US', 103, 'Weight', 'Weight', 'person');
 
 INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','bmi', 'en-ZA', 0, 'Body Mass Index', 'Body Mass Index', 'person');
+  VALUES ('anthropometric_measurements','bmi', 'en-ZA', 101, 'Body Mass Index', 'Body Mass Index', 'person');
 INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','height', 'en-ZA', 0, 'Height', 'Height', 'person');
+  VALUES ('anthropometric_measurements','height', 'en-ZA', 102, 'Height', 'Height', 'person');
 INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','weight', 'en-ZA', 0, 'Weight', 'Weight', 'person');
+  VALUES ('anthropometric_measurements','weight', 'en-ZA', 103, 'Weight', 'Weight', 'person');
+
+
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
+  VALUES ('marketing', 'en-US', 1, 'Marketing Consent', 'Marketing Consent', 'organization,person');
+
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
+  VALUES ('marketing', 'en-ZA', 1, 'Marketing Consent', 'Marketing Consent', 'organization,person');
 
 
 INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, sort_index, name, description, party_types)
@@ -2276,25 +2336,26 @@ INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
 
 
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_organization_role', 'en-US', 101, 'Test Organization Role', 'Test Organization Role', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employer', 'en-US', 102, 'Employer', 'Employer', 'organization');
+  VALUES ('employer', 'en-US', 101, 'Employer', 'Employer', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('vendor', 'en-US', 102, 'Vendor', 'Vendor', 'organization');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test_organization_role', 'en-US', 199, 'Test Organization Role', 'Test Organization Role', 'organization');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('employee', 'en-US', 201, 'Employee', 'Employee', 'person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test_person_role', 'en-US', 299, 'Test Person Role', 'Test Person Role', 'person');
 
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_person_role', 'en-US', 201, 'Test Person Role', 'Test Person Role', 'person');
-
-
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_organization_role', 'en-ZA', 101, 'Test Organization Role', 'Test Organization Role', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employer', 'en-ZA', 102, 'Employer', 'Employer', 'organization');
+  VALUES ('employer', 'en-ZA', 101, 'Employer', 'Employer', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('vendor', 'en-ZA', 102, 'Vendor', 'Vendor', 'organization');
-
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_person_role', 'en-ZA', 201, 'Test Person Role', 'Test Person Role', 'person');
+  VALUES ('test_organization_role', 'en-ZA', 199, 'Test Organization Role', 'Test Organization Role', 'organization');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('employee', 'en-ZA', 201, 'Employee', 'Employee', 'person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test_person_role', 'en-ZA', 299, 'Test Person Role', 'Test Person Role', 'person');
 
 
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)

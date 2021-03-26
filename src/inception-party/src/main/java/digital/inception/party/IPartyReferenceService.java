@@ -62,6 +62,22 @@ public interface IPartyReferenceService {
   List<AttributeType> getAttributeTypes(String localeId) throws ServiceUnavailableException;
 
   /**
+   * Retrieve all the consent types.
+   *
+   * @return the consent types
+   */
+  List<ConsentType> getConsentTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the consent types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the consent types for
+   *     or <b>null</b> to retrieve the consent types for all locales
+   * @return the consent types
+   */
+  List<ConsentType> getConsentTypes(String localeId) throws ServiceUnavailableException;
+
+  /**
    * Retrieve all the contact mechanism purposes.
    *
    * @return the contact mechanism purposes
@@ -603,6 +619,16 @@ public interface IPartyReferenceService {
    *     otherwise
    */
   boolean isValidAttributeTypeCategory(String attributeTypeCategoryCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a consent type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param consentTypeCode the code for the consent type
+   * @return <b>true</b> if the code is a valid code for a consent type or <b>false</b> otherwise
+   */
+  boolean isValidConsentType(String partyTypeCode, String consentTypeCode)
       throws ServiceUnavailableException;
 
   /**

@@ -17,6 +17,7 @@
 package digital.inception.party.constraints;
 
 import digital.inception.party.Attribute;
+import digital.inception.party.Consent;
 import digital.inception.party.ConstraintType;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.IPartyReferenceService;
@@ -96,6 +97,26 @@ public class ValidPersonValidator extends PartyValidator
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPerson.invalidReservedAttributeType.message}")
                   .addPropertyNode("attributes")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+        }
+
+        // Validate consents
+        for (Consent consent : person.getConsents()) {
+          if (StringUtils.hasText(consent.getType())) {
+            if (!getPartyReferenceService()
+                .isValidConsentType(person.getType().code(), consent.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("consentType", consent.getType())
+                  .addMessageParameter("partyType", person.getType().code())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidConsentTypeForPartyType.message}")
+                  .addPropertyNode("consents")
                   .addPropertyNode("type")
                   .inIterable()
                   .addConstraintViolation();
@@ -616,7 +637,7 @@ public class ValidPersonValidator extends PartyValidator
       try {
         if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.MAX_SIZE) {
           Optional<Attribute> attributeOptional =
-              person.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
+              person.getAttributeWithType(roleTypeAttributeTypeConstraint.getAttributeType());
 
           if (attributeOptional.isPresent()) {
             if (!validateMaximumSizeAttributeConstraint(
@@ -628,7 +649,7 @@ public class ValidPersonValidator extends PartyValidator
           }
         } else if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.MIN_SIZE) {
           Optional<Attribute> attributeOptional =
-              person.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
+              person.getAttributeWithType(roleTypeAttributeTypeConstraint.getAttributeType());
 
           if (attributeOptional.isPresent()) {
             if (!validateMinimumSizeAttributeConstraint(
@@ -640,7 +661,7 @@ public class ValidPersonValidator extends PartyValidator
           }
         } else if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.PATTERN) {
           Optional<Attribute> attributeOptional =
-              person.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
+              person.getAttributeWithType(roleTypeAttributeTypeConstraint.getAttributeType());
 
           if (attributeOptional.isPresent()) {
             if (!validatePatternAttributeConstraint(
@@ -652,7 +673,7 @@ public class ValidPersonValidator extends PartyValidator
           }
         } else if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.REFERENCE) {
           Optional<Attribute> attributeOptional =
-              person.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
+              person.getAttributeWithType(roleTypeAttributeTypeConstraint.getAttributeType());
 
           if (attributeOptional.isPresent()) {
             if (!validateReferenceAttributeConstraint(
@@ -665,7 +686,7 @@ public class ValidPersonValidator extends PartyValidator
         } else if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.REQUIRED) {
           switch (roleTypeAttributeTypeConstraint.getAttributeType()) {
             case "contact_mechanism":
-              if (!person.hasContactMechanismType(
+              if (!person.hasContactMechanismWithType(
                   roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())) {
                 hibernateConstraintValidatorContext
                     .addMessageParameter(
@@ -887,7 +908,7 @@ public class ValidPersonValidator extends PartyValidator
               break;
 
             case "physical_address":
-              if (!person.hasPhysicalAddressRole(
+              if (!person.hasPhysicalAddressWithRole(
                   roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())) {
                 hibernateConstraintValidatorContext
                     .addMessageParameter(
@@ -991,7 +1012,7 @@ public class ValidPersonValidator extends PartyValidator
 
             default:
               Optional<Attribute> attributeOptional =
-                  person.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
+                  person.getAttributeWithType(roleTypeAttributeTypeConstraint.getAttributeType());
 
               if (attributeOptional.isEmpty() || (!attributeOptional.get().hasValue())) {
                 hibernateConstraintValidatorContext
@@ -1011,7 +1032,7 @@ public class ValidPersonValidator extends PartyValidator
           }
         } else if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.SIZE) {
           Optional<Attribute> attributeOptional =
-              person.getAttribute(roleTypeAttributeTypeConstraint.getAttributeType());
+              person.getAttributeWithType(roleTypeAttributeTypeConstraint.getAttributeType());
 
           if (attributeOptional.isPresent()) {
             if (!validateSizeAttributeConstraint(
@@ -1054,7 +1075,7 @@ public class ValidPersonValidator extends PartyValidator
       try {
         if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.MAX_SIZE) {
           Optional<Preference> preferenceOptional =
-              person.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
+              person.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
 
           if (preferenceOptional.isPresent()) {
             if (!validateMaximumSizePreferenceConstraint(
@@ -1066,7 +1087,7 @@ public class ValidPersonValidator extends PartyValidator
           }
         } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.MIN_SIZE) {
           Optional<Preference> preferenceOptional =
-              person.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
+              person.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
 
           if (preferenceOptional.isPresent()) {
             if (!validateMinimumSizePreferenceConstraint(
@@ -1078,7 +1099,7 @@ public class ValidPersonValidator extends PartyValidator
           }
         } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.PATTERN) {
           Optional<Preference> preferenceOptional =
-              person.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
+              person.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
 
           if (preferenceOptional.isPresent()) {
             if (!validatePatternPreferenceConstraint(
@@ -1090,7 +1111,7 @@ public class ValidPersonValidator extends PartyValidator
           }
         } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.REFERENCE) {
           Optional<Preference> preferenceOptional =
-              person.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
+              person.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
 
           if (preferenceOptional.isPresent()) {
             if (!validateReferencePreferenceConstraint(
@@ -1102,7 +1123,7 @@ public class ValidPersonValidator extends PartyValidator
           }
         } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.REQUIRED) {
           Optional<Preference> preferenceOptional =
-              person.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
+              person.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
 
           if (preferenceOptional.isEmpty()
               || (!StringUtils.hasText(preferenceOptional.get().getValue()))) {
@@ -1121,7 +1142,7 @@ public class ValidPersonValidator extends PartyValidator
           }
         } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.SIZE) {
           Optional<Preference> preferenceOptional =
-              person.getPreference(roleTypePreferenceTypeConstraint.getPreferenceType());
+              person.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
 
           if (preferenceOptional.isPresent()) {
             if (!validateSizePreferenceConstraint(
