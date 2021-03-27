@@ -17,33 +17,30 @@
 package digital.inception.party.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import digital.inception.party.Attribute;
 import digital.inception.party.AttributeType;
 import digital.inception.party.AttributeTypeCategory;
-import digital.inception.party.ContactMechanism;
+import digital.inception.party.ConsentType;
+import digital.inception.party.ContactMechanismPurpose;
 import digital.inception.party.ContactMechanismRole;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.EmploymentStatus;
 import digital.inception.party.EmploymentType;
 import digital.inception.party.Gender;
 import digital.inception.party.IPartyReferenceService;
-import digital.inception.party.IdentityDocument;
 import digital.inception.party.IdentityDocumentType;
+import digital.inception.party.LockType;
+import digital.inception.party.LockTypeCategory;
 import digital.inception.party.MaritalStatus;
 import digital.inception.party.MarriageType;
 import digital.inception.party.NextOfKinType;
 import digital.inception.party.Occupation;
-import digital.inception.party.Organization;
-import digital.inception.party.Party;
 import digital.inception.party.PartyType;
-import digital.inception.party.Person;
-import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressRole;
 import digital.inception.party.PhysicalAddressType;
-import digital.inception.party.Preference;
 import digital.inception.party.PreferenceType;
 import digital.inception.party.PreferenceTypeCategory;
 import digital.inception.party.Race;
@@ -53,15 +50,16 @@ import digital.inception.party.ResidentialType;
 import digital.inception.party.RolePurpose;
 import digital.inception.party.RoleType;
 import digital.inception.party.RoleTypeAttributeTypeConstraint;
-import digital.inception.party.SourceOfFunds;
-import digital.inception.party.TaxNumber;
+import digital.inception.party.RoleTypePreferenceTypeConstraint;
+import digital.inception.party.SourceOfFundsType;
+import digital.inception.party.StatusType;
+import digital.inception.party.StatusTypeCategory;
 import digital.inception.party.TaxNumberType;
 import digital.inception.party.TimeToContact;
 import digital.inception.party.Title;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
-import java.util.Objects;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,13 +128,56 @@ public class PartyReferenceServiceTest {
         retrievedAttributeTypes.size());
   }
 
+  /** Test the consent type reference functionality. */
+  @Test
+  public void consentTypeTest() throws Exception {
+    List<ConsentType> retrievedConsentTypes = partyReferenceService.getConsentTypes();
+
+    assertEquals(
+        "The correct number of consent types was not retrieved", 10, retrievedConsentTypes.size());
+
+    retrievedConsentTypes = partyReferenceService.getConsentTypes("en-US");
+
+    assertEquals(
+        "The correct number of consent types was not retrieved", 5, retrievedConsentTypes.size());
+  }
+
+  /** Test the contact mechanism purpose functionality. */
+  @Test
+  public void contactMechanismPurposesTest() throws Exception {
+    List<ContactMechanismPurpose> retrievedContactMechanismPurposes =
+        partyReferenceService.getContactMechanismPurposes();
+
+    assertEquals(
+        "The correct number of contact mechanism purposes was not retrieved",
+        6,
+        retrievedContactMechanismPurposes.size());
+
+    retrievedContactMechanismPurposes = partyReferenceService.getContactMechanismPurposes("en-US");
+
+    assertEquals(
+        "The correct number of contact mechanism purposes was not retrieved",
+        3,
+        retrievedContactMechanismPurposes.size());
+  }
+
   /** Test the contact mechanism role functionality. */
   @Test
   public void contactMechanismRolesTest() throws Exception {
     List<ContactMechanismRole> retrievedContactMechanismRoles =
         partyReferenceService.getContactMechanismRoles();
 
+    assertEquals(
+        "The correct number of contact mechanism roles was not retrieved",
+        50,
+        retrievedContactMechanismRoles.size());
+
     retrievedContactMechanismRoles = partyReferenceService.getContactMechanismRoles("en-US");
+
+    assertEquals(
+        "The correct number of contact mechanism roles was not retrieved",
+        25,
+        retrievedContactMechanismRoles.size());
   }
 
   /** Test the contact mechanism type functionality. */
@@ -216,6 +257,39 @@ public class PartyReferenceServiceTest {
         retrievedIdentityDocumentTypes.size());
   }
 
+  /** Test the lock type category reference functionality. */
+  @Test
+  public void lockTypeCategoryTest() throws Exception {
+    List<LockTypeCategory> retrievedLockTypeCategories =
+        partyReferenceService.getLockTypeCategories();
+
+    assertEquals(
+        "The correct number of lock type categories was not retrieved",
+        6,
+        retrievedLockTypeCategories.size());
+
+    retrievedLockTypeCategories = partyReferenceService.getLockTypeCategories("en-US");
+
+    assertEquals(
+        "The correct number of lock type categories was not retrieved",
+        3,
+        retrievedLockTypeCategories.size());
+  }
+
+  /** Test the lock type reference functionality. */
+  @Test
+  public void lockTypeTest() throws Exception {
+    List<LockType> retrievedLockTypes = partyReferenceService.getLockTypes();
+
+    assertEquals(
+        "The correct number of lock types was not retrieved", 6, retrievedLockTypes.size());
+
+    retrievedLockTypes = partyReferenceService.getLockTypes("en-US");
+
+    assertEquals(
+        "The correct number of lock types was not retrieved", 3, retrievedLockTypes.size());
+  }
+
   /** Test the marital status reference functionality. */
   @Test
   public void maritalStatusTest() throws Exception {
@@ -286,7 +360,17 @@ public class PartyReferenceServiceTest {
     List<PhysicalAddressPurpose> retrievedPhysicalAddressPurposes =
         partyReferenceService.getPhysicalAddressPurposes();
 
+    assertEquals(
+        "The correct number of physical address purposes was not retrieved",
+        6,
+        retrievedPhysicalAddressPurposes.size());
+
     retrievedPhysicalAddressPurposes = partyReferenceService.getPhysicalAddressPurposes("en-US");
+
+    assertEquals(
+        "The correct number of physical address purposes was not retrieved",
+        3,
+        retrievedPhysicalAddressPurposes.size());
   }
 
   /** Test the physical address role functionality. */
@@ -295,7 +379,17 @@ public class PartyReferenceServiceTest {
     List<PhysicalAddressRole> retrievedPhysicalAddressRoles =
         partyReferenceService.getPhysicalAddressRoles();
 
+    assertEquals(
+        "The correct number of physical address roles was not retrieved",
+        22,
+        retrievedPhysicalAddressRoles.size());
+
     retrievedPhysicalAddressRoles = partyReferenceService.getPhysicalAddressRoles("en-US");
+
+    assertEquals(
+        "The correct number of physical address roles was not retrieved",
+        11,
+        retrievedPhysicalAddressRoles.size());
   }
 
   /** Test the physical address type functionality. */
@@ -304,7 +398,17 @@ public class PartyReferenceServiceTest {
     List<PhysicalAddressType> retrievedPhysicalAddressTypes =
         partyReferenceService.getPhysicalAddressTypes();
 
+    assertEquals(
+        "The correct number of physical address types was not retrieved",
+        16,
+        retrievedPhysicalAddressTypes.size());
+
     retrievedPhysicalAddressTypes = partyReferenceService.getPhysicalAddressTypes("en-US");
+
+    assertEquals(
+        "The correct number of physical address types was not retrieved",
+        8,
+        retrievedPhysicalAddressTypes.size());
   }
 
   /** Test the preference type category functionality. */
@@ -313,7 +417,17 @@ public class PartyReferenceServiceTest {
     List<PreferenceTypeCategory> retrievedPreferenceTypeCategories =
         partyReferenceService.getPreferenceTypeCategories();
 
+    assertEquals(
+        "The correct number of preference type categories was not retrieved",
+        4,
+        retrievedPreferenceTypeCategories.size());
+
     retrievedPreferenceTypeCategories = partyReferenceService.getPreferenceTypeCategories("en-US");
+
+    assertEquals(
+        "The correct number of preference type categories was not retrieved",
+        2,
+        retrievedPreferenceTypeCategories.size());
   }
 
   /** Test the preference type functionality. */
@@ -407,7 +521,7 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of role type attribute type constraints was not retrieved",
-        46,
+        54,
         retrievedRoleTypeAttributeTypeConstraints.size());
 
     retrievedRoleTypeAttributeTypeConstraints =
@@ -415,7 +529,7 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of role type attribute type constraints was not retrieved",
-        33,
+        41,
         retrievedRoleTypeAttributeTypeConstraints.size());
 
     retrievedRoleTypeAttributeTypeConstraints.stream()
@@ -427,7 +541,39 @@ public class PartyReferenceServiceTest {
             roleTypeAttributeTypeConstraint ->
                 fail(
                     "Found invalid role type attribute type constraint with role type ("
-                        + roleTypeAttributeTypeConstraint.getAttributeType()
+                        + roleTypeAttributeTypeConstraint.getRoleType()
+                        + ")"));
+  }
+
+  /** Test the role type preference type constraint functionality. */
+  @Test
+  public void roleTypePreferenceTypeConstraintTest() throws Exception {
+    List<RoleTypePreferenceTypeConstraint> retrievedRoleTypePreferenceTypeConstraints =
+        partyReferenceService.getRoleTypePreferenceTypeConstraints();
+
+    assertEquals(
+        "The correct number of role type preference type constraints was not retrieved",
+        16,
+        retrievedRoleTypePreferenceTypeConstraints.size());
+
+    retrievedRoleTypePreferenceTypeConstraints =
+        partyReferenceService.getRoleTypePreferenceTypeConstraints("test_person_role");
+
+    assertEquals(
+        "The correct number of role type preference type constraints was not retrieved",
+        12,
+        retrievedRoleTypePreferenceTypeConstraints.size());
+
+    retrievedRoleTypePreferenceTypeConstraints.stream()
+        .filter(
+            roleTypePreferenceTypeConstraint ->
+                !roleTypePreferenceTypeConstraint.getRoleType().equals("test_person_role"))
+        .findFirst()
+        .ifPresent(
+            roleTypeAttributeTypeConstraint ->
+                fail(
+                    "Found invalid role type preference type constraint with role type ("
+                        + roleTypeAttributeTypeConstraint.getRoleType()
                         + ")"));
   }
 
@@ -436,25 +582,65 @@ public class PartyReferenceServiceTest {
   public void roleTypeTest() throws Exception {
     List<RoleType> retrievedRoleTypes = partyReferenceService.getRoleTypes();
 
+    assertEquals(
+        "The correct number of role types was not retrieved", 10, retrievedRoleTypes.size());
+
     retrievedRoleTypes = partyReferenceService.getRoleTypes("en-US");
+
+    assertEquals(
+        "The correct number of role types was not retrieved", 5, retrievedRoleTypes.size());
   }
 
-  /** Test the sources of funds reference functionality. */
+  /** Test the source of funds types reference functionality. */
   @Test
-  public void sourceOfFundsTest() throws Exception {
-    List<SourceOfFunds> retrievedSourceOfFunds = partyReferenceService.getSourcesOfFunds();
+  public void sourceOfFundsTypeTest() throws Exception {
+    List<SourceOfFundsType> retrievedSourceOfFundTypes =
+        partyReferenceService.getSourceOfFundsTypes();
 
     assertEquals(
-        "The correct number of sources of funds was not retrieved",
+        "The correct number of source of funds types was not retrieved",
         38,
-        retrievedSourceOfFunds.size());
+        retrievedSourceOfFundTypes.size());
 
-    retrievedSourceOfFunds = partyReferenceService.getSourcesOfFunds("en-US");
+    retrievedSourceOfFundTypes = partyReferenceService.getSourceOfFundsTypes("en-US");
 
     assertEquals(
-        "The correct number of sources of funds was not retrieved",
+        "The correct number of source of funds types was not retrieved",
         19,
-        retrievedSourceOfFunds.size());
+        retrievedSourceOfFundTypes.size());
+  }
+
+  /** Test the status type category functionality. */
+  @Test
+  public void statusTypeCategoryTest() throws Exception {
+    List<StatusTypeCategory> retrievedStatusTypeCategories =
+        partyReferenceService.getStatusTypeCategories();
+
+    assertEquals(
+        "The correct number of status type categories was not retrieved",
+        6,
+        retrievedStatusTypeCategories.size());
+
+    retrievedStatusTypeCategories = partyReferenceService.getStatusTypeCategories("en-US");
+
+    assertEquals(
+        "The correct number of status type categories was not retrieved",
+        3,
+        retrievedStatusTypeCategories.size());
+  }
+
+  /** Test the status type functionality. */
+  @Test
+  public void statusTypeTest() throws Exception {
+    List<StatusType> retrievedStatusTypes = partyReferenceService.getStatusTypes();
+
+    assertEquals(
+        "The correct number of status types was not retrieved", 6, retrievedStatusTypes.size());
+
+    retrievedStatusTypes = partyReferenceService.getStatusTypes("en-US");
+
+    assertEquals(
+        "The correct number of status types was not retrieved", 3, retrievedStatusTypes.size());
   }
 
   /** Test the tax number type reference functionality. */
@@ -508,552 +694,50 @@ public class PartyReferenceServiceTest {
   /** Test the reference data validity check functionality. */
   @Test
   public void validityTest() throws Exception {
-    partyReferenceService.isValidContactMechanismRole(
-        PartyType.PERSON.code(), ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number");
-    partyReferenceService.isValidContactMechanismType(ContactMechanismType.MOBILE_NUMBER);
-    partyReferenceService.isValidEmploymentStatus("employed");
-    partyReferenceService.isValidEmploymentType("employed", "full_time");
-    partyReferenceService.isValidGender("female");
-    partyReferenceService.isValidIdentityDocumentType(PartyType.PERSON.code(), "passport");
-    partyReferenceService.isValidMaritalStatus("married");
-    partyReferenceService.isValidMarriageType("married", "anc_with_accrual");
+    assertTrue(partyReferenceService.isValidAttributeType(PartyType.PERSON.code(), "height"));
+    assertTrue(partyReferenceService.isValidAttributeTypeCategory("anthropometric_measurements"));
+    assertTrue(partyReferenceService.isValidConsentType("person", "marketing"));
+    assertTrue(
+        partyReferenceService.isValidContactMechanismPurpose(
+            "person", "email_address", "security"));
+    assertTrue(
+        partyReferenceService.isValidContactMechanismRole(
+            PartyType.PERSON.code(), ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number"));
+    assertTrue(
+        partyReferenceService.isValidContactMechanismType(ContactMechanismType.MOBILE_NUMBER));
+    assertTrue(partyReferenceService.isValidEmploymentStatus("employed"));
+    assertTrue(partyReferenceService.isValidEmploymentType("employed", "full_time"));
+    assertTrue(partyReferenceService.isValidGender("female"));
+    assertTrue(
+        partyReferenceService.isValidIdentityDocumentType(PartyType.PERSON.code(), "passport"));
+    assertTrue(partyReferenceService.isValidLockType("person", "suspected_fraud"));
+    assertTrue(partyReferenceService.isValidLockTypeCategory("fraud"));
+    assertTrue(partyReferenceService.isValidMaritalStatus("married"));
+    assertTrue(partyReferenceService.isValidMarriageType("married", "anc_with_accrual"));
     // referenceService.isValidMinorType("minor");
-    partyReferenceService.isValidNextOfKinType("mother");
-    partyReferenceService.isValidOccupation("executive");
-    partyReferenceService.isValidAttributeType(PartyType.PERSON.code(), "height");
-    partyReferenceService.isValidAttributeTypeCategory("anthropometric_measurements");
-    partyReferenceService.isValidRolePurpose("test");
-    partyReferenceService.isValidRoleType(PartyType.PERSON.code(), "test_person_role");
-    partyReferenceService.isValidPhysicalAddressPurpose(PartyType.PERSON.code(), "billing");
-    partyReferenceService.isValidPhysicalAddressRole(
-        PartyType.PERSON.code(), PhysicalAddressRole.RESIDENTIAL);
-    partyReferenceService.isValidPhysicalAddressType("complex");
-    partyReferenceService.isValidPreferenceType(
-        PartyType.ORGANIZATION.code(), "correspondence_language");
-    partyReferenceService.isValidPreferenceTypeCategory("correspondence");
-    partyReferenceService.isValidRace("white");
-    partyReferenceService.isValidResidencePermitType("za_general_work_visa");
-    partyReferenceService.isValidResidencyStatus("permanent_resident");
-    partyReferenceService.isValidResidentialType("owner");
-    partyReferenceService.isValidSourceOfFunds("salary");
-    partyReferenceService.isValidTaxNumberType("person", "za_income_tax_number");
-    partyReferenceService.isValidTimeToContact("anytime");
-    partyReferenceService.isValidTitle("mrs");
-  }
-
-  private void compareAttributes(Attribute attribute1, Attribute attribute2) {
-    assertEquals(
-        "The type values for the two attributes do not match",
-        attribute1.getType(),
-        attribute2.getType());
-    assertEquals(
-        "The string value values for the two attributes do not match",
-        attribute1.getStringValue(),
-        attribute2.getStringValue());
-  }
-
-  private void compareOrganizations(Organization organization1, Organization organization2) {
-    assertEquals(
-        "The countries of tax residence values for the two organizations do not match",
-        organization1.getCountriesOfTaxResidence(),
-        organization2.getCountriesOfTaxResidence());
-    assertEquals(
-        "The ID values for the two organizations do not match",
-        organization1.getId(),
-        organization2.getId());
-    assertEquals(
-        "The name values for the two organizations do not match",
-        organization1.getName(),
-        organization2.getName());
-    assertEquals(
-        "The tenant ID values for the two organizations do not match",
-        organization1.getTenantId(),
-        organization2.getTenantId());
-
-    assertEquals(
-        "The number of attributes for the two organizations do not match",
-        organization1.getAttributes().size(),
-        organization2.getAttributes().size());
-
-    for (Attribute organization1Attribute : organization1.getAttributes()) {
-      boolean foundAttribute = false;
-
-      for (Attribute organization2Attribute : organization2.getAttributes()) {
-
-        if (Objects.equals(organization1Attribute.getParty(), organization2Attribute.getParty())
-            && Objects.equals(organization1Attribute.getType(), organization2Attribute.getType())) {
-
-          compareAttributes(organization1Attribute, organization2Attribute);
-
-          foundAttribute = true;
-        }
-      }
-
-      if (!foundAttribute) {
-        fail("Failed to find the attribute (" + organization1Attribute.getType() + ")");
-      }
-    }
-
-    assertEquals(
-        "The number of contact mechanisms for the two persons do not match",
-        organization1.getContactMechanisms().size(),
-        organization2.getContactMechanisms().size());
-
-    for (ContactMechanism person1ContactMechanism : organization1.getContactMechanisms()) {
-      boolean foundContactMechanism = false;
-
-      for (ContactMechanism person2ContactMechanism : organization2.getContactMechanisms()) {
-
-        if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
-            && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
-            && Objects.equals(
-                person1ContactMechanism.getRole(), person2ContactMechanism.getRole())) {
-          assertEquals(
-              "The values for the two contact mechanisms do not match",
-              person1ContactMechanism.getValue(),
-              person2ContactMechanism.getValue());
-
-          foundContactMechanism = true;
-        }
-      }
-
-      if (!foundContactMechanism) {
-        fail(
-            "Failed to find the contact mechanism ("
-                + person1ContactMechanism.getType()
-                + ")("
-                + person1ContactMechanism.getRole()
-                + ")");
-      }
-    }
-
-    assertEquals(
-        "The number of physical addresses for the two persons do not match",
-        organization1.getPhysicalAddresses().size(),
-        organization2.getPhysicalAddresses().size());
-
-    for (PhysicalAddress person1PhysicalAddress : organization1.getPhysicalAddresses()) {
-      boolean foundPhysicalAddress = false;
-
-      for (PhysicalAddress person2PhysicalAddress : organization2.getPhysicalAddresses()) {
-
-        if (Objects.equals(person1PhysicalAddress.getParty(), person2PhysicalAddress.getParty())
-            && Objects.equals(person1PhysicalAddress.getId(), person2PhysicalAddress.getId())) {
-
-          comparePhysicalAddresses(person1PhysicalAddress, person2PhysicalAddress);
-
-          foundPhysicalAddress = true;
-        }
-      }
-
-      if (!foundPhysicalAddress) {
-        fail("Failed to find the physical address (" + person1PhysicalAddress.getId() + ")");
-      }
-    }
-
-    assertEquals(
-        "The number of preferences for the two organizations do not match",
-        organization1.getPreferences().size(),
-        organization2.getPreferences().size());
-
-    for (Preference organization1Preference : organization1.getPreferences()) {
-      boolean foundPreference = false;
-
-      for (Preference organization2Preference : organization2.getPreferences()) {
-
-        if (Objects.equals(organization1Preference.getParty(), organization2Preference.getParty())
-            && Objects.equals(
-                organization1Preference.getType(), organization2Preference.getType())) {
-
-          comparePreferences(organization1Preference, organization2Preference);
-
-          foundPreference = true;
-        }
-      }
-
-      if (!foundPreference) {
-        fail("Failed to find the preference (" + organization1Preference.getType() + ")");
-      }
-    }
-  }
-
-  private void compareParties(Party party1, Party party2) {
-    assertEquals("The ID values for the two parties do not match", party1.getId(), party2.getId());
-    assertEquals(
-        "The tenant ID values for the two parties do not match",
-        party1.getTenantId(),
-        party2.getTenantId());
-    assertEquals(
-        "The type values for the two parties do not match", party1.getType(), party2.getType());
-    assertEquals(
-        "The name values for the two parties do not match", party1.getName(), party2.getName());
-  }
-
-  private void comparePersons(Person person1, Person person2) {
-    assertEquals(
-        "The countries of tax residence values for the two persons do not match",
-        person1.getCountriesOfTaxResidence(),
-        person2.getCountriesOfTaxResidence());
-    assertEquals(
-        "The country of birth values for the two persons do not match",
-        person1.getCountryOfBirth(),
-        person2.getCountryOfBirth());
-    assertEquals(
-        "The country of residence values for the two persons do not match",
-        person1.getCountryOfResidence(),
-        person2.getCountryOfResidence());
-    assertEquals(
-        "The date of birth values for the two persons do not match",
-        person1.getDateOfBirth(),
-        person2.getDateOfBirth());
-    assertEquals(
-        "The date of death values for the two persons do not match",
-        person1.getDateOfDeath(),
-        person2.getDateOfDeath());
-    assertEquals(
-        "The employment status values for the two persons do not match",
-        person1.getEmploymentStatus(),
-        person2.getEmploymentStatus());
-    assertEquals(
-        "The employment type values for the two persons do not match",
-        person1.getEmploymentType(),
-        person2.getEmploymentType());
-    assertEquals(
-        "The gender values for the two persons do not match",
-        person1.getGender(),
-        person2.getGender());
-    assertEquals(
-        "The given name values for the two persons do not match",
-        person1.getGivenName(),
-        person2.getGivenName());
-    assertEquals(
-        "The ID values for the two persons do not match", person1.getId(), person2.getId());
-    assertEquals(
-        "The initials values for the two persons do not match",
-        person1.getInitials(),
-        person2.getInitials());
-    assertEquals(
-        "The language values for the two persons do not match",
-        person1.getLanguage(),
-        person2.getLanguage());
-    assertEquals(
-        "The maiden name values for the two persons do not match",
-        person1.getMaidenName(),
-        person2.getMaidenName());
-    assertEquals(
-        "The marital status values for the two persons do not match",
-        person1.getMaritalStatus(),
-        person2.getMaritalStatus());
-    assertEquals(
-        "The marriage type values for the two persons do not match",
-        person1.getMarriageType(),
-        person2.getMarriageType());
-    assertEquals(
-        "The middle names values for the two persons do not match",
-        person1.getMiddleNames(),
-        person2.getMiddleNames());
-    assertEquals(
-        "The name values for the two persons do not match", person1.getName(), person2.getName());
-    assertEquals(
-        "The occupation values for the two persons do not match",
-        person1.getOccupation(),
-        person2.getOccupation());
-    assertEquals(
-        "The preferred name values for the two persons do not match",
-        person1.getPreferredName(),
-        person2.getPreferredName());
-    assertEquals(
-        "The race values for the two persons do not match", person1.getRace(), person2.getRace());
-    assertEquals(
-        "The residency status values for the two persons do not match",
-        person1.getResidencyStatus(),
-        person2.getResidencyStatus());
-    assertEquals(
-        "The residential type values for the two persons do not match",
-        person1.getResidentialType(),
-        person2.getResidentialType());
-    assertEquals(
-        "The surname values for the two persons do not match",
-        person1.getSurname(),
-        person2.getSurname());
-    assertEquals(
-        "The tenant ID values for the two persons do not match",
-        person1.getTenantId(),
-        person2.getTenantId());
-    assertEquals(
-        "The title values for the two persons do not match",
-        person1.getTitle(),
-        person2.getTitle());
-
-    assertEquals(
-        "The number of identity documents for the two persons do not match",
-        person1.getIdentityDocuments().size(),
-        person2.getIdentityDocuments().size());
-
-    for (IdentityDocument person1IdentityDocument : person1.getIdentityDocuments()) {
-      boolean foundIdentityDocument = false;
-
-      for (IdentityDocument person2IdentityDocument : person2.getIdentityDocuments()) {
-        if (person1IdentityDocument.getType().equals(person2IdentityDocument.getType())
-            && person1IdentityDocument
-                .getCountryOfIssue()
-                .equals(person2IdentityDocument.getCountryOfIssue())
-            && person1IdentityDocument
-                .getDateOfIssue()
-                .equals(person2IdentityDocument.getDateOfIssue())) {
-
-          assertEquals(
-              "The date of expiry for the two identity documents do not match",
-              person1IdentityDocument.getDateOfExpiry(),
-              person2IdentityDocument.getDateOfExpiry());
-          assertEquals(
-              "The numbers for the two identity documents do not match",
-              person1IdentityDocument.getNumber(),
-              person2IdentityDocument.getNumber());
-
-          foundIdentityDocument = true;
-        }
-      }
-
-      if (!foundIdentityDocument) {
-        fail(
-            "Failed to find the identity document ("
-                + person1IdentityDocument.getType()
-                + ")("
-                + person1IdentityDocument.getCountryOfIssue()
-                + ")("
-                + person1IdentityDocument.getDateOfIssue()
-                + ")");
-      }
-    }
-
-    assertEquals(
-        "The number of tax numbers for the two persons do not match",
-        person1.getTaxNumbers().size(),
-        person2.getTaxNumbers().size());
-
-    for (TaxNumber person1TaxNumber : person1.getTaxNumbers()) {
-      boolean foundTaxNumber = false;
-
-      for (TaxNumber person2TaxNumber : person2.getTaxNumbers()) {
-        if (person1TaxNumber.getType().equals(person2TaxNumber.getType())) {
-
-          assertEquals(
-              "The country of issue for the two tax numbers do not match",
-              person1TaxNumber.getCountryOfIssue(),
-              person2TaxNumber.getCountryOfIssue());
-          assertEquals(
-              "The numbers for the two tax numbers do not match",
-              person1TaxNumber.getNumber(),
-              person2TaxNumber.getNumber());
-
-          foundTaxNumber = true;
-        }
-      }
-
-      if (!foundTaxNumber) {
-        fail("Failed to find the tax number (" + person1TaxNumber.getType() + ")");
-      }
-    }
-
-    assertEquals(
-        "The number of attributes for the two persons do not match",
-        person1.getAttributes().size(),
-        person2.getAttributes().size());
-
-    for (Attribute person1Attribute : person1.getAttributes()) {
-      boolean foundAttribute = false;
-
-      for (Attribute person2Attribute : person2.getAttributes()) {
-
-        if (Objects.equals(person1Attribute.getParty(), person2Attribute.getParty())
-            && Objects.equals(person1Attribute.getType(), person2Attribute.getType())) {
-
-          compareAttributes(person1Attribute, person2Attribute);
-
-          foundAttribute = true;
-        }
-      }
-
-      if (!foundAttribute) {
-        fail("Failed to find the attribute (" + person1Attribute.getType() + ")");
-      }
-    }
-
-    assertEquals(
-        "The number of contact mechanisms for the two persons do not match",
-        person1.getContactMechanisms().size(),
-        person2.getContactMechanisms().size());
-
-    for (ContactMechanism person1ContactMechanism : person1.getContactMechanisms()) {
-      boolean foundContactMechanism = false;
-
-      for (ContactMechanism person2ContactMechanism : person2.getContactMechanisms()) {
-
-        if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
-            && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
-            && Objects.equals(
-                person1ContactMechanism.getRole(), person2ContactMechanism.getRole())) {
-          assertEquals(
-              "The values for the two contact mechanisms do not match",
-              person1ContactMechanism.getValue(),
-              person2ContactMechanism.getValue());
-
-          foundContactMechanism = true;
-        }
-      }
-
-      if (!foundContactMechanism) {
-        fail(
-            "Failed to find the contact mechanism ("
-                + person1ContactMechanism.getType()
-                + ")("
-                + person1ContactMechanism.getRole()
-                + ")");
-      }
-    }
-
-    assertEquals(
-        "The number of physical addresses for the two persons do not match",
-        person1.getPhysicalAddresses().size(),
-        person2.getPhysicalAddresses().size());
-
-    for (PhysicalAddress person1PhysicalAddress : person1.getPhysicalAddresses()) {
-      boolean foundPhysicalAddress = false;
-
-      for (PhysicalAddress person2PhysicalAddress : person2.getPhysicalAddresses()) {
-
-        if (Objects.equals(person1PhysicalAddress.getParty(), person2PhysicalAddress.getParty())
-            && Objects.equals(person1PhysicalAddress.getId(), person2PhysicalAddress.getId())) {
-
-          comparePhysicalAddresses(person1PhysicalAddress, person2PhysicalAddress);
-
-          foundPhysicalAddress = true;
-        }
-      }
-
-      if (!foundPhysicalAddress) {
-        fail("Failed to find the physical address (" + person1PhysicalAddress.getId() + ")");
-      }
-    }
-
-    assertEquals(
-        "The number of preferences for the two persons do not match",
-        person1.getPreferences().size(),
-        person2.getPreferences().size());
-
-    for (Preference person1Preference : person1.getPreferences()) {
-      boolean foundPreference = false;
-
-      for (Preference person2Preference : person2.getPreferences()) {
-
-        if (Objects.equals(person1Preference.getParty(), person2Preference.getParty())
-            && Objects.equals(person1Preference.getType(), person2Preference.getType())) {
-
-          comparePreferences(person1Preference, person2Preference);
-
-          foundPreference = true;
-        }
-      }
-
-      if (!foundPreference) {
-        fail("Failed to find the preference (" + person1Preference.getType() + ")");
-      }
-    }
-  }
-
-  private void comparePhysicalAddresses(
-      PhysicalAddress physicalAddress1, PhysicalAddress physicalAddress2) {
-    assertEquals(
-        "The building floor values for the two physical addresses do not match",
-        physicalAddress1.getBuildingFloor(),
-        physicalAddress2.getBuildingFloor());
-    assertEquals(
-        "The building name values for the two physical addresses do not match",
-        physicalAddress1.getBuildingName(),
-        physicalAddress2.getBuildingName());
-    assertEquals(
-        "The building room values for the two physical addresses do not match",
-        physicalAddress1.getBuildingRoom(),
-        physicalAddress2.getBuildingRoom());
-    assertEquals(
-        "The city values for the two physical addresses do not match",
-        physicalAddress1.getCity(),
-        physicalAddress2.getCity());
-    assertEquals(
-        "The complex name values for the two physical addresses do not match",
-        physicalAddress1.getComplexName(),
-        physicalAddress2.getComplexName());
-    assertEquals(
-        "The complex unit number values for the two physical addresses do not match",
-        physicalAddress1.getComplexUnitNumber(),
-        physicalAddress2.getComplexUnitNumber());
-    assertEquals(
-        "The farm description values for the two physical addresses do not match",
-        physicalAddress1.getFarmDescription(),
-        physicalAddress2.getFarmDescription());
-    assertEquals(
-        "The farm name values for the two physical addresses do not match",
-        physicalAddress1.getFarmName(),
-        physicalAddress2.getFarmName());
-    assertEquals(
-        "The farm number values for the two physical addresses do not match",
-        physicalAddress1.getFarmNumber(),
-        physicalAddress2.getFarmNumber());
-    assertEquals(
-        "The line 1 values for the two physical addresses do not match",
-        physicalAddress1.getLine1(),
-        physicalAddress2.getLine1());
-    assertEquals(
-        "The line 2 values for the two physical addresses do not match",
-        physicalAddress1.getLine2(),
-        physicalAddress2.getLine2());
-    assertEquals(
-        "The line 3 values for the two physical addresses do not match",
-        physicalAddress1.getLine3(),
-        physicalAddress2.getLine3());
-    assertEquals(
-        "The purposes values for the two physical addresses do not match",
-        physicalAddress1.getPurposes(),
-        physicalAddress2.getPurposes());
-    assertEquals(
-        "The region values for the two physical addresses do not match",
-        physicalAddress1.getRegion(),
-        physicalAddress2.getRegion());
-    assertEquals(
-        "The site block values for the two physical addresses do not match",
-        physicalAddress1.getSiteBlock(),
-        physicalAddress2.getSiteBlock());
-    assertEquals(
-        "The site number values for the two physical addresses do not match",
-        physicalAddress1.getSiteNumber(),
-        physicalAddress2.getSiteNumber());
-    assertEquals(
-        "The street name values for the two physical addresses do not match",
-        physicalAddress1.getStreetName(),
-        physicalAddress2.getStreetName());
-    assertEquals(
-        "The street number values for the two physical addresses do not match",
-        physicalAddress1.getStreetNumber(),
-        physicalAddress2.getStreetNumber());
-    assertEquals(
-        "The suburb values for the two physical addresses do not match",
-        physicalAddress1.getSuburb(),
-        physicalAddress2.getSuburb());
-    assertEquals(
-        "The type values for the two physical addresses do not match",
-        physicalAddress1.getType(),
-        physicalAddress2.getType());
-  }
-
-  private void comparePreferences(Preference preference1, Preference preference2) {
-    assertEquals(
-        "The type values for the two preferences do not match",
-        preference1.getType(),
-        preference2.getType());
-    assertEquals(
-        "The value values for the two preferences do not match",
-        preference1.getValue(),
-        preference2.getValue());
+    assertTrue(partyReferenceService.isValidNextOfKinType("mother"));
+    assertTrue(partyReferenceService.isValidOccupation("executive"));
+    assertTrue(
+        partyReferenceService.isValidPhysicalAddressPurpose(PartyType.PERSON.code(), "billing"));
+    assertTrue(
+        partyReferenceService.isValidPhysicalAddressRole(
+            PartyType.PERSON.code(), PhysicalAddressRole.RESIDENTIAL));
+    assertTrue(partyReferenceService.isValidPhysicalAddressType("complex"));
+    assertTrue(
+        partyReferenceService.isValidPreferenceType(
+            PartyType.ORGANIZATION.code(), "correspondence_language"));
+    assertTrue(partyReferenceService.isValidPreferenceTypeCategory("correspondence"));
+    assertTrue(partyReferenceService.isValidRace("white"));
+    assertTrue(partyReferenceService.isValidResidencePermitType("za_general_work_visa"));
+    assertTrue(partyReferenceService.isValidResidencyStatus("permanent_resident"));
+    assertTrue(partyReferenceService.isValidResidentialType("owner"));
+    assertTrue(partyReferenceService.isValidRolePurpose("test"));
+    assertTrue(partyReferenceService.isValidRoleType(PartyType.PERSON.code(), "test_person_role"));
+    assertTrue(partyReferenceService.isValidSourceOfFundsType("salary"));
+    assertTrue(partyReferenceService.isValidStatusType("person", "fraud_investigation"));
+    assertTrue(partyReferenceService.isValidStatusTypeCategory("fraud"));
+    assertTrue(partyReferenceService.isValidTaxNumberType("person", "za_income_tax_number"));
+    assertTrue(partyReferenceService.isValidTimeToContact("anytime"));
+    assertTrue(partyReferenceService.isValidTitle("mrs"));
   }
 }

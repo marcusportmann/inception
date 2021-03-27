@@ -507,42 +507,42 @@
 //
 //  private void compareGroups(Group group1, Group group2) {
 //    assertEquals(
-//        "The description values for the two groups do not match",
+//        "The description values for the groups do not match",
 //        group1.getDescription(),
 //        group2.getDescription());
 //    assertEquals(
-//        "The group name values for the two groups do not match",
+//        "The group name values for the groups do not match",
 //        group1.getName(),
 //        group2.getName());
 //    assertEquals(
-//        "The user directory ID values for the two groups do not match",
+//        "The user directory ID values for the groups do not match",
 //        group1.getUserDirectoryId(),
 //        group2.getUserDirectoryId());
 //  }
 //
 //  private void compareUsers(User user1, User user2) {
 //    assertEquals(
-//        "The status values for the two users do not match", user1.getStatus(), user2.getStatus());
+//        "The status values for the users do not match", user1.getStatus(), user2.getStatus());
 //    assertEquals(
-//        "The e-mail values for the two users do not match", user1.getEmail(), user2.getEmail());
+//        "The e-mail values for the users do not match", user1.getEmail(), user2.getEmail());
 //    assertEquals(
-//        "The name values for the two users do not match",
+//        "The name values for the users do not match",
 //        user1.getName(),
 //        user2.getName());
 //    assertEquals(
-//        "The phone number values for the two users do not match",
+//        "The phone number values for the users do not match",
 //        user1.getPhoneNumber(),
 //        user2.getPhoneNumber());
 //    assertEquals(
-//        "The mobile number values for the two users do not match",
+//        "The mobile number values for the users do not match",
 //        user1.getMobileNumber(),
 //        user2.getMobileNumber());
 //    assertEquals(
-//        "The password attempt values for the two users do not match",
+//        "The password attempt values for the users do not match",
 //        user1.getPasswordAttempts(),
 //        user2.getPasswordAttempts());
 //    assertEquals(
-//        "The username values for the two users do not match",
+//        "The username values for the users do not match",
 //        user1.getUsername(),
 //        user2.getUsername());
 //  }

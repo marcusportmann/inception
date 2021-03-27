@@ -377,8 +377,8 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the role type attribute type constraints.
    *
-   * @param roleType the code for the role type to retrieve the role type attribute type constraints for
-   *     or <b>null</b> to retrieve the role type attribute type constraints for all role types
+   * @param roleType the code for the role type to retrieve the role type attribute type constraints
+   *     for or <b>null</b> to retrieve the role type attribute type constraints for all role types
    * @return the role type attribute type constraints
    */
   @WebMethod(operationName = "GetRoleTypeAttributeTypeConstraints")
@@ -390,8 +390,9 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the role type preference type constraints.
    *
-   * @param roleType the code for the role type to retrieve the role type preference type constraints for
-   *     or <b>null</b> to retrieve the role type preference type constraints for all role types
+   * @param roleType the code for the role type to retrieve the role type preference type
+   *     constraints for or <b>null</b> to retrieve the role type preference type constraints for
+   *     all role types
    * @return the role type preference type constraints
    */
   @WebMethod(operationName = "GetRoleTypePreferenceTypeConstraints")
@@ -414,16 +415,16 @@ public class PartyReferenceWebService {
   }
 
   /**
-   * Retrieve the sources of funds.
+   * Retrieve the source of funds types.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the sources of funds
-   *     for or <b>null</b> to retrieve the sources of funds for all locales
-   * @return the sources of funds
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
+   *     types for or <b>null</b> to retrieve the source of funds types for all locales
+   * @return the source of funds types
    */
-  @WebMethod(operationName = "GetSourcesOfFunds")
-  public List<SourceOfFunds> getSourcesOfFunds(
+  @WebMethod(operationName = "GetSourceOfFundsTypes")
+  public List<SourceOfFundsType> getSourceOfFundsTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getSourcesOfFunds(localeId);
+    return partyReferenceService.getSourceOfFundsTypes(localeId);
   }
 
   /**

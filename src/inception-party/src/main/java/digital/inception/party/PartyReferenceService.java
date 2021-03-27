@@ -129,8 +129,8 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Party Role Type Repository. */
   private final RoleTypeRepository roleTypeRepository;
 
-  /** The Sources of Funds Repository. */
-  private final SourceOfFundsRepository sourceOfFundsRepository;
+  /** The Source of Funds Type Repository. */
+  private final SourceOfFundsTypeRepository sourceOfFundsTypeRepository;
 
   /** The Status Type Category Repository. */
   private final StatusTypeCategoryRepository statusTypeCategoryRepository;
@@ -188,7 +188,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    *     Repository
    * @param roleTypePreferenceTypeConstraintRepository the Role Type Preference Type Constraint
    *     Repository
-   * @param sourceOfFundsRepository the Source Of Funds Repository
+   * @param sourceOfFundsTypeRepository the Source Of Funds Repository
    * @param statusTypeCategoryRepository the Status Type Category Repository
    * @param statusTypeRepository the Status Type Repository
    * @param taxNumberTypeRepository the Tax Number Type Repository
@@ -226,7 +226,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       ResidentialTypeRepository residentialTypeRepository,
       RoleTypeAttributeTypeConstraintRepository roleTypeAttributeTypeConstraintRepository,
       RoleTypePreferenceTypeConstraintRepository roleTypePreferenceTypeConstraintRepository,
-      SourceOfFundsRepository sourceOfFundsRepository,
+      SourceOfFundsTypeRepository sourceOfFundsTypeRepository,
       StatusTypeCategoryRepository statusTypeCategoryRepository,
       StatusTypeRepository statusTypeRepository,
       TaxNumberTypeRepository taxNumberTypeRepository,
@@ -262,7 +262,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.residentialTypeRepository = residentialTypeRepository;
     this.roleTypeAttributeTypeConstraintRepository = roleTypeAttributeTypeConstraintRepository;
     this.roleTypePreferenceTypeConstraintRepository = roleTypePreferenceTypeConstraintRepository;
-    this.sourceOfFundsRepository = sourceOfFundsRepository;
+    this.sourceOfFundsTypeRepository = sourceOfFundsTypeRepository;
     this.statusTypeCategoryRepository = statusTypeCategoryRepository;
     this.statusTypeRepository = statusTypeRepository;
     this.taxNumberTypeRepository = taxNumberTypeRepository;
@@ -1265,35 +1265,36 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the sources of funds.
+   * Retrieve all the source of funds types.
    *
-   * @return the sources of funds
+   * @return the source of funds types
    */
   @Override
-  @Cacheable(value = "reference", key = "'sourcesOfFunds.ALL'")
-  public List<SourceOfFunds> getSourcesOfFunds() throws ServiceUnavailableException {
-    return getSourcesOfFunds(null);
+  @Cacheable(value = "reference", key = "'sourceOfFundsTypes.ALL'")
+  public List<SourceOfFundsType> getSourceOfFundsTypes() throws ServiceUnavailableException {
+    return getSourceOfFundsTypes(null);
   }
 
   /**
-   * Retrieve the sources of funds.
+   * Retrieve the source of funds types.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the sources of funds
-   *     for or <b>null</b> to retrieve the sources of funds for all locales
-   * @return the sources of funds
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
+   *     types for or <b>null</b> to retrieve the source of funds types for all locales
+   * @return the source of funds types
    */
   @Override
-  @Cacheable(value = "reference", key = "'sourcesOfFunds.' + #localeId")
-  public List<SourceOfFunds> getSourcesOfFunds(String localeId) throws ServiceUnavailableException {
+  @Cacheable(value = "reference", key = "'sourceOfFundsTypes.' + #localeId")
+  public List<SourceOfFundsType> getSourceOfFundsTypes(String localeId)
+      throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
-        return sourceOfFundsRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+        return sourceOfFundsTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return sourceOfFundsRepository.findByLocaleIdIgnoreCase(
+        return sourceOfFundsTypeRepository.findByLocaleIdIgnoreCase(
             localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the sources of funds", e);
+      throw new ServiceUnavailableException("Failed to retrieve the source of funds types", e);
     }
   }
 
@@ -2047,19 +2048,21 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Check whether the code is a valid code for a source of funds.
+   * Check whether the code is a valid code for a source of funds type.
    *
-   * @param sourceOfFundsCode the code for the source of funds
-   * @return <b>true</b> if the code is a valid code for a source of funds or <b>false</b> otherwise
+   * @param sourceOfFundsTypeCode the code for the source of funds type
+   * @return <b>true</b> if the code is a valid code for a source of funds type or <b>false</b>
+   *     otherwise
    */
   @Override
-  public boolean isValidSourceOfFunds(String sourceOfFundsCode) throws ServiceUnavailableException {
-    if (!StringUtils.hasText(sourceOfFundsCode)) {
+  public boolean isValidSourceOfFundsType(String sourceOfFundsTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(sourceOfFundsTypeCode)) {
       return false;
     }
 
-    return self.getSourcesOfFunds().stream()
-        .anyMatch(sourceOfFunds -> sourceOfFunds.getCode().equals(sourceOfFundsCode));
+    return self.getSourceOfFundsTypes().stream()
+        .anyMatch(sourceOfFunds -> sourceOfFunds.getCode().equals(sourceOfFundsTypeCode));
   }
 
   /**

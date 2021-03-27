@@ -228,15 +228,15 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Source of funds</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('sourceOfFunds')" required="true" [matAutocomplete]="sourceOfFundsAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #sourceOfFundsAutocomplete="matAutocomplete" [displayWith]="displaySourceOfFunds">
-              <mat-option *ngFor="let sourceOfFunds of filteredSourcesOfFunds$ | async" [value]="sourceOfFunds">
-                {{sourceOfFunds.name}}
+            <mat-label>Source of funds type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('sourceOfFundsType')" required="true" [matAutocomplete]="sourceOfFundsTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #sourceOfFundsTypeAutocomplete="matAutocomplete" [displayWith]="displaySourceOfFundsType">
+              <mat-option *ngFor="let sourceOfFundsType of filteredSourceOfFundsTypes$ | async" [value]="sourceOfFundsType">
+                {{sourceOfFundsType.name}}
               </mat-option>
             </mat-autocomplete>
-            <mat-error *ngIf="partyReferenceForm.controls['sourceOfFunds'].errors && !partyReferenceForm.controls['sourceOfFunds'].untouched">
-              <span *ngIf="partyReferenceForm.controls['sourceOfFunds'].errors?.required">A source of funds is required.</span>
+            <mat-error *ngIf="partyReferenceForm.controls['sourceOfFundsType'].errors && !partyReferenceForm.controls['sourceOfFundsType'].untouched">
+              <span *ngIf="partyReferenceForm.controls['sourceOfFundsType'].errors?.required">A source of funds is required.</span>
             </mat-error>
           </mat-form-field>
         </div>

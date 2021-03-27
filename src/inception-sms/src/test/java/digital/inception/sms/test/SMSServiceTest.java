@@ -162,25 +162,25 @@ public class SMSServiceTest {
   }
 
   private void compareSMSs(SMS sms1, SMS sms2) {
-    assertEquals("The ID values for the two SMSs do not match", sms1.getId(), sms2.getId());
+    assertEquals("The ID values for the SMSs do not match", sms1.getId(), sms2.getId());
     assertEquals(
-        "The mobile number values for the two SMSs do not match",
+        "The mobile number values for the SMSs do not match",
         sms1.getMobileNumber(),
         sms2.getMobileNumber());
     assertEquals(
-        "The message values for the two SMSs do not match", sms1.getMessage(), sms2.getMessage());
+        "The message values for the SMSs do not match", sms1.getMessage(), sms2.getMessage());
     assertEquals(
-        "The status values for the two SMSs do not match", sms1.getStatus(), sms2.getStatus());
+        "The status values for the SMSs do not match", sms1.getStatus(), sms2.getStatus());
     assertEquals(
-        "The send attempts values for the two SMSs do not match",
+        "The send attempts values for the SMSs do not match",
         sms1.getSendAttempts(),
         sms2.getSendAttempts());
     assertEquals(
-        "The lock name values for the two SMSs do not match",
+        "The lock name values for the SMSs do not match",
         sms1.getLockName(),
         sms2.getLockName());
     assertEquals(
-        "The last processed values for the two SMSs do not match",
+        "The last processed values for the SMSs do not match",
         sms1.getLastProcessed(),
         sms2.getLastProcessed());
   }

@@ -1154,15 +1154,15 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
-   * Retrieve the sources of funds.
+   * Retrieve the source of funds types.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the sources of funds
-   *     for or <b>null</b> to retrieve the sources of funds for all locales
-   * @return the sources of funds
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds types
+   *     for or <b>null</b> to retrieve the source of funds types for all locales
+   * @return the source of funds types
    */
   @Operation(
-      summary = "Retrieve the sources of funds",
-      description = "Retrieve the sources of funds")
+      summary = "Retrieve the source of funds types",
+      description = "Retrieve the source of funds types")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -1176,21 +1176,21 @@ public class PartyReferenceApi extends SecureApi {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/sources-of-funds",
+      value = "/source-of-funds-types",
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
-  public List<SourceOfFunds> getSourcesOfFunds(
+  public List<SourceOfFundsType> getSourceOfFundsTypes(
       @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the sources of funds for",
+                  "The optional Unicode locale identifier for the locale to retrieve the source of funds types for",
               example = "en-US")
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return partyReferenceService.getSourcesOfFunds(localeId);
+    return partyReferenceService.getSourceOfFundsTypes(localeId);
   }
 
   /**

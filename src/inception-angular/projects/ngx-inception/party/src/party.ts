@@ -33,6 +33,6 @@ export * from './services/residence-permit-type';
 export * from './services/race';
 export * from './services/residency-status';
 export * from './services/residential-type';
-export * from './services/source-of-funds';
+export * from './services/source-of-funds-type';
 export * from './services/tax-number-type';
 export * from './services/title';

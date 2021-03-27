@@ -35,7 +35,7 @@ import {Race} from "./race";
 import {ResidencePermitType} from "./residence-permit-type";
 import {ResidencyStatus} from "./residency-status";
 import {ResidentialType} from "./residential-type";
-import {SourceOfFunds} from "./source-of-funds";
+import {SourceOfFundsType} from "./source-of-funds-type";
 import {TaxNumberType} from "./tax-number-type";
 import {Title} from "./title";
 
@@ -412,18 +412,18 @@ export class PartyReferenceService {
   }
 
   /**
-   * Retrieve the sources of funds.
+   * Retrieve the source of funds types.
    *
-   * @return The sources of funds.
+   * @return The source of funds types.
    */
-  getSourcesOfFunds(): Observable<SourceOfFunds[]> {
+  getSourceOfFundsTypes(): Observable<SourceOfFundsType[]> {
     let params = new HttpParams();
 
     params = params.append('localeId', this.localeId);
 
-    return this.httpClient.get<SourceOfFunds[]>(this.config.partyReferenceApiUrlPrefix + '/sources-of-funds',
+    return this.httpClient.get<SourceOfFundsType[]>(this.config.partyReferenceApiUrlPrefix + '/source-of-funds-types',
       {params, reportProgress: true})
-    .pipe(map((sourcesOfFunds: SourceOfFunds[]) => {
+    .pipe(map((sourcesOfFunds: SourceOfFundsType[]) => {
       return sourcesOfFunds;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
@@ -432,7 +432,7 @@ export class PartyReferenceService {
         return throwError(new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the sources of funds.', httpErrorResponse));
+      return throwError(new ServiceUnavailableError('Failed to retrieve the source of funds types.', httpErrorResponse));
     }));
   }
 

@@ -84,6 +84,7 @@ public class Role implements Serializable {
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
   @NotNull
+  @Id
   @Column(name = "effective_from", nullable = false)
   private LocalDate effectiveFrom;
 

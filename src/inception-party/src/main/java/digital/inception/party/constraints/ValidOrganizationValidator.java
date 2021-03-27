@@ -563,7 +563,8 @@ public class ValidOrganizationValidator extends PartyValidator
 
           default:
             Optional<Attribute> attributeOptional =
-                organization.getAttributeWithType(roleTypeAttributeTypeConstraint.getAttributeType());
+                organization.getAttributeWithType(
+                    roleTypeAttributeTypeConstraint.getAttributeType());
 
             if (attributeOptional.isEmpty() || (!attributeOptional.get().hasValue())) {
               hibernateConstraintValidatorContext
@@ -611,7 +612,8 @@ public class ValidOrganizationValidator extends PartyValidator
 
       if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.MAX_SIZE) {
         Optional<Preference> preferenceOptional =
-            organization.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
+            organization.getPreferenceWithType(
+                roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isPresent()) {
           if (!validateMaximumSizePreferenceConstraint(
@@ -623,7 +625,8 @@ public class ValidOrganizationValidator extends PartyValidator
         }
       } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.MIN_SIZE) {
         Optional<Preference> preferenceOptional =
-            organization.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
+            organization.getPreferenceWithType(
+                roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isPresent()) {
           if (!validateMinimumSizePreferenceConstraint(
@@ -635,7 +638,8 @@ public class ValidOrganizationValidator extends PartyValidator
         }
       } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.PATTERN) {
         Optional<Preference> preferenceOptional =
-            organization.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
+            organization.getPreferenceWithType(
+                roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isPresent()) {
           if (!validatePatternPreferenceConstraint(
@@ -647,7 +651,8 @@ public class ValidOrganizationValidator extends PartyValidator
         }
       } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.REFERENCE) {
         Optional<Preference> preferenceOptional =
-            organization.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
+            organization.getPreferenceWithType(
+                roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isPresent()) {
           if (!validateReferencePreferenceConstraint(
@@ -659,7 +664,8 @@ public class ValidOrganizationValidator extends PartyValidator
         }
       } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.REQUIRED) {
         Optional<Preference> preferenceOptional =
-            organization.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
+            organization.getPreferenceWithType(
+                roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isEmpty()
             || (!StringUtils.hasText(preferenceOptional.get().getValue()))) {
@@ -678,7 +684,8 @@ public class ValidOrganizationValidator extends PartyValidator
         }
       } else if (roleTypePreferenceTypeConstraint.getType() == ConstraintType.SIZE) {
         Optional<Preference> preferenceOptional =
-            organization.getPreferenceWithType(roleTypePreferenceTypeConstraint.getPreferenceType());
+            organization.getPreferenceWithType(
+                roleTypePreferenceTypeConstraint.getPreferenceType());
 
         if (preferenceOptional.isPresent()) {
           if (!validateSizePreferenceConstraint(

@@ -19,7 +19,7 @@
  *
  * @author Marcus Portmann
  */
-export class SourceOfFunds {
+export class SourceOfFundsType {
 
   /**
    * The code for the source of funds.

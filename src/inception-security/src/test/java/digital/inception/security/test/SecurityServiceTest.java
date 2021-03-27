@@ -1545,93 +1545,93 @@ public class SecurityServiceTest {
 
   private void compareFunctions(Function function1, Function function2) {
     assertEquals(
-        "The code values for the two functions do not match",
+        "The code values for the functions do not match",
         function1.getCode(),
         function2.getCode());
     assertEquals(
-        "The description values for the two functions do not match",
+        "The description values for the functions do not match",
         function1.getDescription(),
         function2.getDescription());
     assertEquals(
-        "The name values for the two functions do not match",
+        "The name values for the functions do not match",
         function1.getName(),
         function2.getName());
   }
 
   private void compareGroups(Group group1, Group group2) {
     assertEquals(
-        "The description values for the two groups do not match",
+        "The description values for the groups do not match",
         group1.getDescription(),
         group2.getDescription());
-    assertEquals("The ID values for the two groups do not match", group1.getId(), group2.getId());
+    assertEquals("The ID values for the groups do not match", group1.getId(), group2.getId());
     assertEquals(
-        "The group name values for the two groups do not match",
+        "The group name values for the groups do not match",
         group1.getName(),
         group2.getName());
     assertEquals(
-        "The user directory ID values for the two groups do not match",
+        "The user directory ID values for the groups do not match",
         group1.getUserDirectoryId(),
         group2.getUserDirectoryId());
   }
 
   private void compareTenants(Tenant tenant1, Tenant tenant2) {
     assertEquals(
-        "The ID values for the two tenants do not match", tenant1.getId(), tenant2.getId());
+        "The ID values for the tenants do not match", tenant1.getId(), tenant2.getId());
     assertEquals(
-        "The name values for the two tenants do not match", tenant1.getName(), tenant2.getName());
+        "The name values for the tenants do not match", tenant1.getName(), tenant2.getName());
   }
 
   private void compareUserDirectories(UserDirectory userDirectory1, UserDirectory userDirectory2) {
     assertEquals(
-        "The ID values for the two user directories do not match",
+        "The ID values for the user directories do not match",
         userDirectory1.getId(),
         userDirectory2.getId());
     assertEquals(
-        "The name values for the two user directories do not match",
+        "The name values for the user directories do not match",
         userDirectory1.getName(),
         userDirectory2.getName());
     assertEquals(
-        "The type ID values for the two user directories do not match",
+        "The type ID values for the user directories do not match",
         userDirectory1.getType(),
         userDirectory2.getType());
     assertEquals(
-        "The configuration values for the two user directories do not match",
+        "The configuration values for the user directories do not match",
         userDirectory1.getConfiguration(),
         userDirectory2.getConfiguration());
   }
 
   private void compareUsers(User user1, User user2, boolean checkPasswordExpiry) {
     assertEquals(
-        "The status values for the two users do not match", user1.getStatus(), user2.getStatus());
+        "The status values for the users do not match", user1.getStatus(), user2.getStatus());
     assertEquals(
-        "The e-mail values for the two users do not match", user1.getEmail(), user2.getEmail());
+        "The e-mail values for the users do not match", user1.getEmail(), user2.getEmail());
     assertEquals(
-        "The name values for the two users do not match", user1.getName(), user2.getName());
+        "The name values for the users do not match", user1.getName(), user2.getName());
     assertEquals(
-        "The preferred name values for the two users do not match",
+        "The preferred name values for the users do not match",
         user1.getPreferredName(),
         user2.getPreferredName());
-    assertEquals("The ID values for the two users do not match", user1.getId(), user2.getId());
+    assertEquals("The ID values for the users do not match", user1.getId(), user2.getId());
     assertEquals(
-        "The phone number values for the two users do not match",
+        "The phone number values for the users do not match",
         user1.getPhoneNumber(),
         user2.getPhoneNumber());
     assertEquals(
-        "The mobile number values for the two users do not match",
+        "The mobile number values for the users do not match",
         user1.getMobileNumber(),
         user2.getMobileNumber());
     assertEquals(
-        "The password attempt values for the two users do not match",
+        "The password attempt values for the users do not match",
         user1.getPasswordAttempts(),
         user2.getPasswordAttempts());
     assertEquals(
-        "The username values for the two users do not match",
+        "The username values for the users do not match",
         user1.getUsername(),
         user2.getUsername());
 
     if (checkPasswordExpiry) {
       assertEqualsToMillisecond(
-          "The password expiry values for the two users do not match",
+          "The password expiry values for the users do not match",
           user1.getPasswordExpiry(),
           user2.getPasswordExpiry());
     }

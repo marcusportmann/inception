@@ -260,7 +260,9 @@ public class Organization extends PartyBase implements Serializable {
    */
   public void addConsent(Consent consent) {
     consents.removeIf(
-        existingConsent -> Objects.equals(existingConsent.getType(), consent.getType()));
+        existingConsent ->
+            Objects.equals(existingConsent.getType(), consent.getType())
+                && Objects.equals(existingConsent.getEffectiveFrom(), consent.getEffectiveFrom()));
 
     consent.setParty(this);
 
@@ -291,7 +293,12 @@ public class Organization extends PartyBase implements Serializable {
   public void addIdentityDocument(IdentityDocument identityDocument) {
     identityDocuments.removeIf(
         existingIdentityDocument ->
-            Objects.equals(existingIdentityDocument.getType(), identityDocument.getType()));
+            Objects.equals(existingIdentityDocument.getType(), identityDocument.getType())
+                && Objects.equals(
+                    existingIdentityDocument.getCountryOfIssue(),
+                    identityDocument.getCountryOfIssue())
+                && Objects.equals(
+                    existingIdentityDocument.getDateOfIssue(), identityDocument.getDateOfIssue()));
 
     identityDocument.setParty(this);
 
@@ -299,12 +306,15 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Apply the lock to the organization. s
+   * Apply the lock to the organization.
    *
    * @param lock the lock
    */
   public void addLock(Lock lock) {
-    locks.removeIf(existingLock -> Objects.equals(existingLock.getType(), lock.getType()));
+    locks.removeIf(
+        existingLock ->
+            Objects.equals(existingLock.getType(), lock.getType())
+                && Objects.equals(existingLock.getEffectiveFrom(), lock.getEffectiveFrom()));
 
     lock.setParty(this);
 
@@ -346,7 +356,10 @@ public class Organization extends PartyBase implements Serializable {
    * @param role the role
    */
   public void addRole(Role role) {
-    roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), role.getType()));
+    roles.removeIf(
+        existingRole ->
+            Objects.equals(existingRole.getType(), role.getType())
+                && Objects.equals(existingRole.getEffectiveFrom(), role.getEffectiveFrom()));
 
     role.setParty(this);
 
@@ -354,12 +367,15 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Assign the status to the organization. s
+   * Assign the status to the organization.
    *
    * @param status the status
    */
   public void addStatus(Status status) {
-    statuses.removeIf(existingStatus -> Objects.equals(existingStatus.getType(), status.getType()));
+    statuses.removeIf(
+        existingStatus ->
+            Objects.equals(existingStatus.getType(), status.getType())
+                && Objects.equals(existingStatus.getEffectiveFrom(), status.getEffectiveFrom()));
 
     status.setParty(this);
 
@@ -503,11 +519,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
-   * organization.
+   * Returns the ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization.
    *
-   * @return the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
-   *     organization
+   * @return the ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization
    */
   @Schema(
       description =
@@ -551,7 +565,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the code for the identity document type
    * @return an Optional containing the identity document with the specified type for the
-   *     organization or an empty optional if the identity document could not be found
+   *     organization or an empty if the identity document could not be found
    */
   public Optional<IdentityDocument> getIdentityDocumentWithType(String type) {
     return identityDocuments.stream()

@@ -505,20 +505,20 @@ public interface IPartyReferenceService {
   List<RoleType> getRoleTypes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the sources of funds.
+   * Retrieve all the source of funds types.
    *
-   * @return the sources of funds
+   * @return the source of funds types
    */
-  List<SourceOfFunds> getSourcesOfFunds() throws ServiceUnavailableException;
+  List<SourceOfFundsType> getSourceOfFundsTypes() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the sources of funds.
+   * Retrieve the source of funds types.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the sources of funds
-   *     for or <b>null</b> to retrieve the sources of funds for all locales
-   * @return the sources of funds
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
+   *     types for or <b>null</b> to retrieve the source of funds types for all locales
+   * @return the source of funds types
    */
-  List<SourceOfFunds> getSourcesOfFunds(String localeId) throws ServiceUnavailableException;
+  List<SourceOfFundsType> getSourceOfFundsTypes(String localeId) throws ServiceUnavailableException;
 
   /**
    * Retrieve all the status type categories.
@@ -887,12 +887,13 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Check whether the code is a valid code for a source of funds.
+   * Check whether the code is a valid code for a source of funds type.
    *
-   * @param sourceOfFundsCode the code for the source of funds
-   * @return <b>true</b> if the code is a valid code for a source of funds or <b>false</b> otherwise
+   * @param sourceOfFundsTypeCode the code for the source of funds type
+   * @return <b>true</b> if the code is a valid code for a source of funds type or <b>false</b>
+   *     otherwise
    */
-  boolean isValidSourceOfFunds(String sourceOfFundsCode) throws ServiceUnavailableException;
+  boolean isValidSourceOfFundsType(String sourceOfFundsTypeCode) throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a status type for the party type.

@@ -456,15 +456,15 @@ public class ConfigServiceTest {
 
   private void compareConfig(Config config1, Config config2) {
     assertEquals(
-        "The key values for the two codes do not match",
+        "The key values for the codes do not match",
         config1.getKey(),
         config2.getKey());
     assertEquals(
-        "The value values for the two codes do not match",
+        "The value values for the codes do not match",
         config1.getValue(),
         config2.getValue());
     assertEquals(
-        "The description values for the two codes do not match",
+        "The description values for the codes do not match",
         config1.getDescription(),
         config2.getDescription());
   }

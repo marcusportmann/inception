@@ -30,6 +30,7 @@ import digital.inception.party.ResidencePermit;
 import digital.inception.party.Role;
 import digital.inception.party.RoleTypeAttributeTypeConstraint;
 import digital.inception.party.RoleTypePreferenceTypeConstraint;
+import digital.inception.party.SourceOfFunds;
 import digital.inception.party.Status;
 import digital.inception.party.TaxNumber;
 import digital.inception.reference.IReferenceService;
@@ -544,6 +545,25 @@ public class ValidPersonValidator extends PartyValidator
                   person, role.getType(), hibernateConstraintValidatorContext)) {
                 isValid = false;
               }
+            }
+          }
+        }
+
+        // Validate sources of funds
+        for (SourceOfFunds sourceOfFunds : person.getSourcesOfFunds()) {
+          if (StringUtils.hasText(sourceOfFunds.getType())) {
+            if (!getPartyReferenceService()
+                .isValidSourceOfFundsType(sourceOfFunds.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("sourceOfFundsType", sourceOfFunds.getType())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidSourceOfFundsType.message}")
+                  .addPropertyNode("sourcesOfFunds")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
             }
           }
         }

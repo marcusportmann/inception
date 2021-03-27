@@ -21,12 +21,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>SourceOfFundsRepository</b> interface declares the repository for the <b>
- * SourceOfFunds</b> domain type.
+ * The <b>SourceOfFundsTypeRepository</b> interface declares the repository for the <b>
+ * SourceOfFundsType</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface SourceOfFundsRepository extends JpaRepository<SourceOfFunds, SourceOfFundsId> {
+public interface SourceOfFundsTypeRepository
+    extends JpaRepository<SourceOfFundsType, SourceOfFundsTypeId> {
 
-  List<SourceOfFunds> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  List<SourceOfFundsType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

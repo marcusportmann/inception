@@ -146,74 +146,74 @@ public class ErrorServiceTest {
   private void compareErrorReportAndErrorReportSummary(
       ErrorReport errorReport, ErrorReportSummary errorReportSummary) {
     assertEquals(
-        "The ID values for the two error reports do not match",
+        "The ID values for the error reports do not match",
         errorReport.getId(),
         errorReportSummary.getId());
     assertEquals(
-        "The application ID values for the two error reports do not match",
+        "The application ID values for the error reports do not match",
         errorReport.getApplicationId(),
         errorReportSummary.getApplicationId());
     assertEquals(
-        "The application version values for the two error reports do not match",
+        "The application version values for the error reports do not match",
         errorReport.getApplicationVersion(),
         errorReportSummary.getApplicationVersion());
     assertEquals(
-        "The description values for the two error reports do not match",
+        "The description values for the error reports do not match",
         errorReport.getDescription(),
         errorReportSummary.getDescription());
     assertEqualsToMillisecond(
-        "The created values for the two error reports do not match",
+        "The created values for the error reports do not match",
         errorReport.getCreated(),
         errorReportSummary.getCreated());
     assertEquals(
-        "The who values for the two error reports do not match",
+        "The who values for the error reports do not match",
         errorReport.getWho(),
         errorReportSummary.getWho());
     assertEquals(
-        "The device ID values for the two error reports do not match",
+        "The device ID values for the error reports do not match",
         errorReport.getDeviceId(),
         errorReportSummary.getDeviceId());
   }
 
   private void compareErrorReports(ErrorReport errorReport1, ErrorReport errorReport2) {
     assertEquals(
-        "The ID values for the two error reports do not match",
+        "The ID values for the error reports do not match",
         errorReport1.getId(),
         errorReport2.getId());
     assertEquals(
-        "The application ID values for the two error reports do not match",
+        "The application ID values for the error reports do not match",
         errorReport1.getApplicationId(),
         errorReport2.getApplicationId());
     assertEquals(
-        "The application version values for the two error reports do not match",
+        "The application version values for the error reports do not match",
         errorReport1.getApplicationVersion(),
         errorReport2.getApplicationVersion());
     assertEquals(
-        "The description values for the two error reports do not match",
+        "The description values for the error reports do not match",
         errorReport1.getDescription(),
         errorReport2.getDescription());
     assertEquals(
-        "The detail values for the two error reports do not match",
+        "The detail values for the error reports do not match",
         errorReport1.getDetail(),
         errorReport2.getDetail());
     assertEqualsToMillisecond(
-        "The created values for the two error reports do not match",
+        "The created values for the error reports do not match",
         errorReport1.getCreated(),
         errorReport2.getCreated());
     assertEquals(
-        "The who values for the two error reports do not match",
+        "The who values for the error reports do not match",
         errorReport1.getWho(),
         errorReport2.getWho());
     assertEquals(
-        "The device ID values for the two error reports do not match",
+        "The device ID values for the error reports do not match",
         errorReport1.getDeviceId(),
         errorReport2.getDeviceId());
     assertEquals(
-        "The feedback values for the two error reports do not match",
+        "The feedback values for the error reports do not match",
         errorReport1.getFeedback(),
         errorReport2.getFeedback());
     assertEquals(
-        "The data values for the two error reports do not match",
+        "The data values for the error reports do not match",
         errorReport1.getData(),
         errorReport2.getData());
   }

@@ -173,30 +173,30 @@ public class MailServiceTest {
   private void compareMailTemplateToMailTemplateSummary(
       MailTemplate mailTemplate, MailTemplateSummary mailTemplateSummary) {
     assertEquals(
-        "The ID values for the two mail template summaries do not match",
+        "The ID values for the mail template summaries do not match",
         mailTemplate.getId(),
         mailTemplateSummary.getId());
     assertEquals(
-        "The name values for the two mail template summaries do not match",
+        "The name values for the mail template summaries do not match",
         mailTemplate.getName(),
         mailTemplateSummary.getName());
   }
 
   private void compareMailTemplates(MailTemplate mailTemplate1, MailTemplate mailTemplate2) {
     assertEquals(
-        "The ID values for the two mail templates do not match",
+        "The ID values for the mail templates do not match",
         mailTemplate1.getId(),
         mailTemplate2.getId());
     assertEquals(
-        "The name values for the two mail templates do not match",
+        "The name values for the mail templates do not match",
         mailTemplate1.getName(),
         mailTemplate2.getName());
     assertEquals(
-        "The content type values for the two mail templates do not match",
+        "The content type values for the mail templates do not match",
         mailTemplate1.getContentType(),
         mailTemplate2.getContentType());
     assertArrayEquals(
-        "The template values for the two mail templates do not match",
+        "The template values for the mail templates do not match",
         mailTemplate1.getTemplate(),
         mailTemplate2.getTemplate());
   }

@@ -304,29 +304,29 @@ public class CodesServiceTest {
 
   private void compareCodeCategories(CodeCategory codeCategory1, CodeCategory codeCategory2) {
     assertEquals(
-        "The ID values for the two code categories do not match",
+        "The ID values for the code categories do not match",
         codeCategory1.getId(),
         codeCategory2.getId());
     assertEquals(
-        "The name values for the two code categories do not match",
+        "The name values for the code categories do not match",
         codeCategory1.getName(),
         codeCategory2.getName());
     assertEquals(
-        "The data values for the two code categories do not match",
+        "The data values for the code categories do not match",
         codeCategory1.getData(),
         codeCategory2.getData());
   }
 
   private void compareCodes(Code code1, Code code2) {
-    assertEquals("The ID values for the two codes do not match", code1.getId(), code2.getId());
+    assertEquals("The ID values for the codes do not match", code1.getId(), code2.getId());
     assertEquals(
-        "The category ID values for the two codes do not match",
+        "The category ID values for the codes do not match",
         code1.getCodeCategoryId(),
         code2.getCodeCategoryId());
     assertEquals(
-        "The name values for the two codes do not match", code1.getName(), code2.getName());
+        "The name values for the codes do not match", code1.getName(), code2.getName());
     assertEquals(
-        "The value values for the two codes do not match", code1.getValue(), code2.getValue());
+        "The value values for the codes do not match", code1.getValue(), code2.getValue());
   }
 
   private void compareCodes(List<Code> codes1, List<Code> codes2) {

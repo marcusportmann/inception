@@ -173,11 +173,11 @@ public class ReportingServiceTest {
   private void compareReportDefinitionToReportDefinitionSummary(
       ReportDefinition reportDefinition, ReportDefinitionSummary reportDefinitionSummary) {
     assertEquals(
-        "The ID values for the two report definition summaries do not match",
+        "The ID values for the report definition summaries do not match",
         reportDefinition.getId(),
         reportDefinitionSummary.getId());
     assertEquals(
-        "The name values for the two report definition summaries do not match",
+        "The name values for the report definition summaries do not match",
         reportDefinition.getName(),
         reportDefinitionSummary.getName());
   }
@@ -185,15 +185,15 @@ public class ReportingServiceTest {
   private void compareReportDefinitions(
       ReportDefinition reportDefinition1, ReportDefinition reportDefinition2) {
     assertEquals(
-        "The ID values for the two report definitions do not match",
+        "The ID values for the report definitions do not match",
         reportDefinition1.getId(),
         reportDefinition2.getId());
     assertEquals(
-        "The name values for the two report definitions do not match",
+        "The name values for the report definitions do not match",
         reportDefinition1.getName(),
         reportDefinition2.getName());
     assertArrayEquals(
-        "The template values for the two report definitions do not match",
+        "The template values for the report definitions do not match",
         reportDefinition1.getTemplate(),
         reportDefinition2.getTemplate());
   }

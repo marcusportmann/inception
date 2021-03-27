@@ -774,7 +774,7 @@ COMMENT ON COLUMN party.role_type_preference_type_constraints.type IS 'The const
 COMMENT ON COLUMN party.role_type_preference_type_constraints.value IS 'The optional value to apply when validating the preference value';
 
 
-CREATE TABLE party.sources_of_funds (
+CREATE TABLE party.source_of_funds_types (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
@@ -784,17 +784,17 @@ CREATE TABLE party.sources_of_funds (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX sources_of_funds_locale_id_ix ON party.sources_of_funds(locale_id);
+CREATE INDEX source_of_funds_types_locale_id_ix ON party.source_of_funds_types(locale_id);
 
-COMMENT ON COLUMN party.sources_of_funds.code IS 'The code for the source of funds';
+COMMENT ON COLUMN party.source_of_funds_types.code IS 'The code for the source of funds type';
 
-COMMENT ON COLUMN party.sources_of_funds.locale_id IS 'The Unicode locale identifier for the source of funds';
+COMMENT ON COLUMN party.source_of_funds_types.locale_id IS 'The Unicode locale identifier for the source of funds type';
 
-COMMENT ON COLUMN party.sources_of_funds.sort_index IS 'The sort index for the source of funds';
+COMMENT ON COLUMN party.source_of_funds_types.sort_index IS 'The sort index for the source of funds type';
 
-COMMENT ON COLUMN party.sources_of_funds.name IS 'The name of the source of funds';
+COMMENT ON COLUMN party.source_of_funds_types.name IS 'The name of the source of funds type';
 
-COMMENT ON COLUMN party.sources_of_funds.description IS 'The description for the source of funds';
+COMMENT ON COLUMN party.source_of_funds_types.description IS 'The description for the source of funds type';
 
 
 CREATE TABLE party.status_type_categories (
@@ -1411,6 +1411,36 @@ COMMENT ON COLUMN party.roles.type IS 'The code for the role type';
 COMMENT ON COLUMN party.roles.updated IS 'The date and time the role was last updated';
 
 
+CREATE TABLE party.sources_of_funds (
+  created        TIMESTAMP   NOT NULL,
+  effective_from DATE        NOT NULL,
+  effective_to   DATE,
+  party_id       UUID        NOT NULL,
+  percentage     INTEGER     NOT NULL,
+  type           VARCHAR(30) NOT NULL,
+  updated        TIMESTAMP,
+
+  PRIMARY KEY (party_id, type, effective_from),
+  CONSTRAINT sources_of_funds_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX sources_of_funds_party_id_ix ON party.sources_of_funds(party_id);
+
+COMMENT ON COLUMN party.sources_of_funds.created IS 'The date and time the source of funds was created';
+
+COMMENT ON COLUMN party.sources_of_funds.effective_from IS 'The date that the source of funds is effective from';
+
+COMMENT ON COLUMN party.sources_of_funds.effective_to IS 'The optional date that the source of funds is effective to';
+
+COMMENT ON COLUMN party.sources_of_funds.party_id IS 'The Universally Unique Identifier (UUID) for the party the source of funds is associated with';
+
+COMMENT ON COLUMN party.sources_of_funds.percentage IS 'The percentage of the total of all sources of funds attributed to this source of funds';
+
+COMMENT ON COLUMN party.sources_of_funds.type IS 'The code for the source of funds type';
+
+COMMENT ON COLUMN party.sources_of_funds.updated IS 'The date and time the source of funds was last updated';
+
+
 CREATE TABLE party.statuses (
   created        TIMESTAMP   NOT NULL,
   effective_from DATE        NOT NULL,
@@ -1521,10 +1551,26 @@ INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, 
 
 
 INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('marketing', 'en-US', 1, 'Marketing Consent', 'Marketing Consent', 'organization,person');
+  VALUES ('accept_ts_and_cs', 'en-US', 1, 'Acceptance of Terms and Conditions', 'Acceptance of Terms and Conditions', 'organization,person');
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
+  VALUES ('credit_check', 'en-US', 2, 'Credit Check Consent', 'Credit Check Consent', 'organization,person');
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
+  VALUES ('external_info', 'en-US', 3, 'Access To External Information', 'Access To External Information', 'organization,person');
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
+  VALUES ('group_data', 'en-US', 4, 'Group Data Consent', 'Group Data Consent', 'organization,person');
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
+  VALUES ('marketing', 'en-US', 5, 'Marketing Consent', 'Marketing Consent', 'organization,person');
 
 INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('marketing', 'en-ZA', 1, 'Marketing Consent', 'Marketing Consent', 'organization,person');
+  VALUES ('accept_ts_and_cs', 'en-ZA', 1, 'Acceptance of Terms and Conditions', 'Acceptance of Terms and Conditions', 'organization,person');
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
+  VALUES ('credit_check', 'en-ZA', 2, 'Credit Check Consent', 'Credit Check Consent', 'organization,person');
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
+  VALUES ('external_info', 'en-ZA', 3, 'Access To External Information', 'Access To External Information', 'organization,person');
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
+  VALUES ('group_data', 'en-ZA', 4, 'Group Data Consent', 'Group Data Consent', 'organization,person');
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
+  VALUES ('marketing', 'en-ZA', 5, 'Marketing Consent', 'Marketing Consent', 'organization,person');
 
 
 INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, sort_index, name, description, party_types)
@@ -2504,82 +2550,82 @@ INSERT INTO party.role_type_preference_type_constraints(role_type, preference_ty
   VALUES ('test_organization_role', 'test_preference', 'pattern', '^[0-9]*$');
 
 
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('salary', 'en-US', 1, 'Salary', 'Salary');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('commission', 'en-US', 2, 'Commission', 'Commission');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('rental_income', 'en-US', 3, 'Rental Income', 'Rental Income');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('investments', 'en-US', 4, 'Investments', 'Investments');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('retirement_annuity', 'en-US', 5, 'Retirement Annuity', 'Retirement Annuity');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('social_grant', 'en-US', 6, 'Social Grant', 'Social Grant');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('inheritance', 'en-US', 7, 'Inheritance', 'Inheritance');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('maintenance', 'en-US', 8, 'Maintenance', 'Maintenance');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('pension', 'en-US', 9, 'Pension', 'Pension');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('donations', 'en-US', 10, 'Donations', 'Donations');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('allowance', 'en-US', 11, 'Allowance', 'Allowance');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('winnings', 'en-US', 12, 'Winnings', 'Winnings');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('owner_draws', 'en-US', 13, 'Owner Draws', 'Owner Draws');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('bonus_incentive', 'en-US', 14, 'Bonus/Incentive', 'Bonus/Incentive');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('bursary', 'en-US', 15, 'Bursary', 'Bursary');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('settlement', 'en-US', 16, 'Settlement', 'Settlement');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('trust', 'en-US', 17, 'Trust', 'Trust');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('other', 'en-US', 18, 'Other', 'Other');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('salary', 'en-ZA', 1, 'Salary', 'Salary');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('commission', 'en-ZA', 2, 'Commission', 'Commission');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('rental_income', 'en-ZA', 3, 'Rental Income', 'Rental Income');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('investments', 'en-ZA', 4, 'Investments', 'Investments');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('retirement_annuity', 'en-ZA', 5, 'Retirement Annuity', 'Retirement Annuity');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('social_grant', 'en-ZA', 6, 'Social Grant', 'Social Grant');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('inheritance', 'en-ZA', 7, 'Inheritance', 'Inheritance');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('maintenance', 'en-ZA', 8, 'Maintenance', 'Maintenance');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('pension', 'en-ZA', 9, 'Pension', 'Pension');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('donations', 'en-ZA', 10, 'Donations', 'Donations');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('allowance', 'en-ZA', 11, 'Allowance', 'Allowance');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('winnings', 'en-ZA', 12, 'Winnings', 'Winnings');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('owner_draws', 'en-ZA', 13, 'Owner Draws', 'Owner Draws');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('bonus_incentive', 'en-ZA', 14, 'Bonus/Incentive', 'Bonus/Incentive');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('bursary', 'en-ZA', 15, 'Bursary', 'Bursary');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('settlement', 'en-ZA', 16, 'Settlement', 'Settlement');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('trust', 'en-ZA', 17, 'Trust', 'Trust');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('other', 'en-ZA', 18, 'Other', 'Other');
-INSERT INTO party.sources_of_funds (code, locale_id, sort_index, name, description)
+INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 

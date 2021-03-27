@@ -226,34 +226,34 @@ public class SchedulerServiceTest {
   }
 
   private void compareJobs(Job job1, Job job2) {
-    assertEquals("The ID values for the two jobs do not match", job1.getId(), job2.getId());
-    assertEquals("The name values for the two jobs do not match", job1.getName(), job2.getName());
+    assertEquals("The ID values for the jobs do not match", job1.getId(), job2.getId());
+    assertEquals("The name values for the jobs do not match", job1.getName(), job2.getName());
     assertEquals(
-        "The scheduling pattern values for the two jobs do not match",
+        "The scheduling pattern values for the jobs do not match",
         job1.getSchedulingPattern(),
         job2.getSchedulingPattern());
     assertEquals(
-        "The job class values for the two jobs do not match",
+        "The job class values for the jobs do not match",
         job1.getJobClass(),
         job2.getJobClass());
     assertEquals(
-        "The is enabled values for the two jobs do not match", job1.isEnabled(), job2.isEnabled());
+        "The is enabled values for the jobs do not match", job1.isEnabled(), job2.isEnabled());
     assertEquals(
-        "The status values for the two jobs do not match", job1.getStatus(), job2.getStatus());
+        "The status values for the jobs do not match", job1.getStatus(), job2.getStatus());
     assertEquals(
-        "The execution attempts values for the two jobs do not match",
+        "The execution attempts values for the jobs do not match",
         job1.getExecutionAttempts(),
         job2.getExecutionAttempts());
     assertEquals(
-        "The lock name values for the two jobs do not match",
+        "The lock name values for the jobs do not match",
         job1.getLockName(),
         job2.getLockName());
     assertEquals(
-        "The last executed values for the two jobs do not match",
+        "The last executed values for the jobs do not match",
         job1.getLastExecuted(),
         job2.getLastExecuted());
     assertEquals(
-        "The number of parameters for the two jobs do not match",
+        "The number of parameters for the jobs do not match",
         job1.getParameters().size(),
         job2.getParameters().size());
 
@@ -263,7 +263,7 @@ public class SchedulerServiceTest {
       for (JobParameter job2Parameter : job2.getParameters()) {
         if (job1Parameter.getName().equalsIgnoreCase(job2Parameter.getName())) {
           assertEquals(
-              "The values for the two job parameters ("
+              "The values for the job parameters ("
                   + job1Parameter.getName()
                   + ") do not match",
               job1Parameter.getValue(),

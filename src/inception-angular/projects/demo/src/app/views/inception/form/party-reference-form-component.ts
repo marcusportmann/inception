@@ -20,8 +20,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {
   ContactMechanismRole, ContactMechanismType, EmploymentStatus, EmploymentType, Gender,
   IdentityDocumentType, MaritalStatus, MarriageType, NextOfKinType, Occupation,
-  PartyReferenceService, Race, ResidencePermitType, ResidencyStatus, ResidentialType, SourceOfFunds,
-  TaxNumberType, Title
+  PartyReferenceService, Race, ResidencePermitType, ResidencyStatus, ResidentialType,
+  SourceOfFundsType, TaxNumberType, Title
 } from "ngx-inception/party";
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime, first, map, startWith} from 'rxjs/operators';
@@ -50,7 +50,7 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
   filteredResidencePermitTypes$: Subject<ResidencePermitType[]> = new ReplaySubject<ResidencePermitType[]>();
   filteredResidencyStatuses$: Subject<ResidencyStatus[]> = new ReplaySubject<ResidencyStatus[]>();
   filteredResidentialTypes$: Subject<ResidentialType[]> = new ReplaySubject<ResidentialType[]>();
-  filteredSourcesOfFunds$: Subject<SourceOfFunds[]> = new ReplaySubject<SourceOfFunds[]>();
+  filteredSourceOfFundsTypes$: Subject<SourceOfFundsType[]> = new ReplaySubject<SourceOfFundsType[]>();
   filteredTaxNumberTypes$: Subject<TaxNumberType[]> = new ReplaySubject<TaxNumberType[]>();
   filteredTitles$: Subject<Title[]> = new ReplaySubject<Title[]>();
   partyReferenceForm: FormGroup;
@@ -78,7 +78,7 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
       residencePermitType: ['', Validators.required],
       residencyStatus: ['', Validators.required],
       residentialType: ['', Validators.required],
-      sourceOfFunds: ['', Validators.required],
+      sourceOfFundsType: ['', Validators.required],
       taxNumberType: ['', Validators.required],
       title: ['', Validators.required]
     });
@@ -196,9 +196,9 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  displaySourceOfFunds(sourceOfFunds: SourceOfFunds): string {
-    if (!!sourceOfFunds) {
-      return sourceOfFunds.name;
+  displaySourceOfFundsType(sourceOfFundsType: SourceOfFundsType): string {
+    if (!!sourceOfFundsType) {
+      return sourceOfFundsType.name;
     } else {
       return '';
     }
@@ -491,19 +491,19 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.partyReferenceService.getSourcesOfFunds().pipe(first()).subscribe((sourceOfFunds: SourceOfFunds[]) => {
-      const sourceOfFundsControl = this.partyReferenceForm.get('sourceOfFunds');
+    this.partyReferenceService.getSourceOfFundsTypes().pipe(first()).subscribe((sourceOfFundsTypes: SourceOfFundsType[]) => {
+      const sourceOfFundsTypeControl = this.partyReferenceForm.get('sourceOfFundsType');
 
-      if (sourceOfFundsControl) {
-        this.subscriptions.add(sourceOfFundsControl.valueChanges.pipe(
+      if (sourceOfFundsTypeControl) {
+        this.subscriptions.add(sourceOfFundsTypeControl.valueChanges.pipe(
           startWith(''),
           debounceTime(500),
-          map((value: string | SourceOfFunds) => {
+          map((value: string | SourceOfFundsType) => {
             if (typeof (value) === 'string') {
-              this.filteredSourcesOfFunds$.next(sourceOfFunds.filter(
+              this.filteredSourceOfFundsTypes$.next(sourceOfFundsTypes.filter(
                 sourceOfFunds => sourceOfFunds.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
             } else {
-              this.filteredSourcesOfFunds$.next(sourceOfFunds.filter(
+              this.filteredSourceOfFundsTypes$.next(sourceOfFundsTypes.filter(
                 sourceOfFunds => sourceOfFunds.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
             }
           })).subscribe());
