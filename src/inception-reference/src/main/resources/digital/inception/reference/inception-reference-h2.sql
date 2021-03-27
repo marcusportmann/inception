@@ -108,6 +108,10 @@ COMMENT ON COLUMN reference.regions.description IS 'The description for the regi
 --
 -- FINISH SIC CODES
 
+-- NOTE: SIC CODES NEED TO HAVE: AN ASSOCIATED COUNTRY (OR MANY COUNTRIES E.G. EU?), DIVISION, MAJOR GROUP, INDUSTYR GROUP (https://en.wikipedia.org/wiki/Standard_Industrial_Classification)
+
+
+
 -- CREATE TABLE reference.standard_industry_codes (
 --   code        VARCHAR(30)  NOT NULL,
 --   locale_id   VARCHAR(10)  NOT NULL,
