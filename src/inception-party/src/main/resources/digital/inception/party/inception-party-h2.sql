@@ -797,6 +797,29 @@ COMMENT ON COLUMN party.source_of_funds_types.name IS 'The name of the source of
 COMMENT ON COLUMN party.source_of_funds_types.description IS 'The description for the source of funds type';
 
 
+CREATE TABLE party.source_of_wealth_types (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX source_of_wealth_types_locale_id_ix ON party.source_of_wealth_types(locale_id);
+
+COMMENT ON COLUMN party.source_of_wealth_types.code IS 'The code for the source of wealth type';
+
+COMMENT ON COLUMN party.source_of_wealth_types.locale_id IS 'The Unicode locale identifier for the source of wealth type';
+
+COMMENT ON COLUMN party.source_of_wealth_types.sort_index IS 'The sort index for the source of wealth type';
+
+COMMENT ON COLUMN party.source_of_wealth_types.name IS 'The name of the source of wealth type';
+
+COMMENT ON COLUMN party.source_of_wealth_types.description IS 'The description for the source of wealth type';
+
+
 CREATE TABLE party.status_type_categories (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
@@ -1112,15 +1135,15 @@ CREATE TABLE party.consents (
   created        TIMESTAMP   NOT NULL,
   effective_from DATE        NOT NULL,
   effective_to   DATE,
-  party_id       UUID        NOT NULL,
+  person_id      UUID        NOT NULL,
   type           VARCHAR(30) NOT NULL,
   updated        TIMESTAMP,
 
-  PRIMARY KEY (party_id, type, effective_from),
-  CONSTRAINT consents_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+  PRIMARY KEY (person_id, type, effective_from),
+  CONSTRAINT consents_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
 );
 
-CREATE INDEX consents_party_id_ix ON party.consents(party_id);
+CREATE INDEX consents_person_id_ix ON party.consents(person_id);
 
 COMMENT ON COLUMN party.consents.created IS 'The date and time the consent was created';
 
@@ -1128,7 +1151,7 @@ COMMENT ON COLUMN party.consents.effective_from IS 'The date that the consent is
 
 COMMENT ON COLUMN party.consents.effective_to IS 'The optional date that the consent is effective to';
 
-COMMENT ON COLUMN party.consents.party_id IS 'The Universally Unique Identifier (UUID) for the party the consent is associated with';
+COMMENT ON COLUMN party.consents.person_id IS 'The Universally Unique Identifier (UUID) for the person the consent is associated with';
 
 COMMENT ON COLUMN party.consents.type IS 'The code for the consent type';
 
@@ -1354,15 +1377,15 @@ CREATE TABLE party.residence_permits (
   date_of_expiry   DATE,
   date_of_issue    DATE        NOT NULL,
   number           VARCHAR(30) NOT NULL,
-  party_id         UUID        NOT NULL,
+  person_id        UUID        NOT NULL,
   type             VARCHAR(30) NOT NULL,
   updated          TIMESTAMP,
 
-  PRIMARY KEY (party_id, type, country_of_issue, date_of_issue),
-  CONSTRAINT residence_permits_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+  PRIMARY KEY (person_id, type, country_of_issue, date_of_issue),
+  CONSTRAINT residence_permits_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
 );
 
-CREATE INDEX residence_permits_party_id_ix ON party.residence_permits(party_id);
+CREATE INDEX residence_permits_person_id_ix ON party.residence_permits(person_id);
 
 COMMENT ON COLUMN party.residence_permits.country_of_issue IS 'The ISO 3166-1 alpha-2 code for the country of issue for the residence permit';
 
@@ -1374,7 +1397,7 @@ COMMENT ON COLUMN party.residence_permits.date_of_issue IS 'The date of issue fo
 
 COMMENT ON COLUMN party.residence_permits.number IS 'The number for the residence permit';
 
-COMMENT ON COLUMN party.residence_permits.party_id IS 'The Universally Unique Identifier (UUID) for the party the residence permit is associated with';
+COMMENT ON COLUMN party.residence_permits.person_id IS 'The Universally Unique Identifier (UUID) for the person the residence permit is associated with';
 
 COMMENT ON COLUMN party.residence_permits.type IS 'The code for the residence permit type';
 
@@ -1415,16 +1438,16 @@ CREATE TABLE party.sources_of_funds (
   created        TIMESTAMP   NOT NULL,
   effective_from DATE        NOT NULL,
   effective_to   DATE,
-  party_id       UUID        NOT NULL,
+  person_id      UUID        NOT NULL,
   percentage     INTEGER     NOT NULL,
   type           VARCHAR(30) NOT NULL,
   updated        TIMESTAMP,
 
-  PRIMARY KEY (party_id, type, effective_from),
-  CONSTRAINT sources_of_funds_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+  PRIMARY KEY (person_id, type, effective_from),
+  CONSTRAINT sources_of_funds_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
 );
 
-CREATE INDEX sources_of_funds_party_id_ix ON party.sources_of_funds(party_id);
+CREATE INDEX sources_of_funds_person_id_ix ON party.sources_of_funds(person_id);
 
 COMMENT ON COLUMN party.sources_of_funds.created IS 'The date and time the source of funds was created';
 
@@ -1432,13 +1455,40 @@ COMMENT ON COLUMN party.sources_of_funds.effective_from IS 'The date that the so
 
 COMMENT ON COLUMN party.sources_of_funds.effective_to IS 'The optional date that the source of funds is effective to';
 
-COMMENT ON COLUMN party.sources_of_funds.party_id IS 'The Universally Unique Identifier (UUID) for the party the source of funds is associated with';
+COMMENT ON COLUMN party.sources_of_funds.person_id IS 'The Universally Unique Identifier (UUID) for the person the source of funds is associated with';
 
 COMMENT ON COLUMN party.sources_of_funds.percentage IS 'The percentage of the total of all sources of funds attributed to this source of funds';
 
 COMMENT ON COLUMN party.sources_of_funds.type IS 'The code for the source of funds type';
 
 COMMENT ON COLUMN party.sources_of_funds.updated IS 'The date and time the source of funds was last updated';
+
+
+CREATE TABLE party.sources_of_wealth (
+  created        TIMESTAMP   NOT NULL,
+  effective_from DATE        NOT NULL,
+  effective_to   DATE,
+  person_id      UUID        NOT NULL,
+  type           VARCHAR(30) NOT NULL,
+  updated        TIMESTAMP,
+
+  PRIMARY KEY (person_id, type, effective_from),
+  CONSTRAINT sources_of_wealth_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
+);
+
+CREATE INDEX sources_of_wealth_person_id_ix ON party.sources_of_wealth(person_id);
+
+COMMENT ON COLUMN party.sources_of_wealth.created IS 'The date and time the source of wealth was created';
+
+COMMENT ON COLUMN party.sources_of_wealth.effective_from IS 'The date that the source of wealth is effective from';
+
+COMMENT ON COLUMN party.sources_of_wealth.effective_to IS 'The optional date that the source of wealth is effective to';
+
+COMMENT ON COLUMN party.sources_of_wealth.person_id IS 'The Universally Unique Identifier (UUID) for the person the source of wealth is associated with';
+
+COMMENT ON COLUMN party.sources_of_wealth.type IS 'The code for the source of wealth type';
+
+COMMENT ON COLUMN party.sources_of_wealth.updated IS 'The date and time the source of wealth was last updated';
 
 
 CREATE TABLE party.statuses (
@@ -1551,26 +1601,10 @@ INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, 
 
 
 INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('accept_ts_and_cs', 'en-US', 1, 'Acceptance of Terms and Conditions', 'Acceptance of Terms and Conditions', 'organization,person');
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('credit_check', 'en-US', 2, 'Credit Check Consent', 'Credit Check Consent', 'organization,person');
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('external_info', 'en-US', 3, 'Access To External Information', 'Access To External Information', 'organization,person');
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('group_data', 'en-US', 4, 'Group Data Consent', 'Group Data Consent', 'organization,person');
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('marketing', 'en-US', 5, 'Marketing Consent', 'Marketing Consent', 'organization,person');
+  VALUES ('marketing', 'en-US', 1, 'Marketing Consent', 'Marketing Consent', 'organization,person');
 
 INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('accept_ts_and_cs', 'en-ZA', 1, 'Acceptance of Terms and Conditions', 'Acceptance of Terms and Conditions', 'organization,person');
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('credit_check', 'en-ZA', 2, 'Credit Check Consent', 'Credit Check Consent', 'organization,person');
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('external_info', 'en-ZA', 3, 'Access To External Information', 'Access To External Information', 'organization,person');
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('group_data', 'en-ZA', 4, 'Group Data Consent', 'Group Data Consent', 'organization,person');
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('marketing', 'en-ZA', 5, 'Marketing Consent', 'Marketing Consent', 'organization,person');
+  VALUES ('marketing', 'en-ZA', 1, 'Marketing Consent', 'Marketing Consent', 'organization,person');
 
 
 INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, sort_index, name, description, party_types)
@@ -2457,6 +2491,10 @@ INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'residential_type', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'sources_of_funds', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'sources_of_wealth', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'surname', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'tax_numbers', 'required');
@@ -2627,6 +2665,21 @@ INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, desc
   VALUES ('other', 'en-ZA', 18, 'Other', 'Other');
 INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+
+
+INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
+  VALUES ('employment', 'en-US', 1, 'Employment', 'Employment');
+INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
+  VALUES ('inheritance', 'en-US', 2, 'Inheritance', 'Inheritance');
+INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
+  VALUES ('investments', 'en-US', 3, 'Investments', 'Investments');
+
+INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
+  VALUES ('employment', 'en-ZA', 1, 'Employment', 'Employment');
+INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
+  VALUES ('inheritance', 'en-ZA', 2, 'Inheritance', 'Inheritance');
+INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
+  VALUES ('investments', 'en-ZA', 3, 'Investments', 'Investments');
 
 
 INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)

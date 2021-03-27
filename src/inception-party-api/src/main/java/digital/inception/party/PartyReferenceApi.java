@@ -145,6 +145,44 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the consent types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the consent types for
+   *     or <b>null</b> to retrieve the consent types for all locales
+   * @return the consent types
+   */
+  @Operation(summary = "Retrieve the consent types", description = "Retrieve the consent types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/consent-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<ConsentType> getConsentTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the consent types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getConsentTypes(localeId);
+  }
+
+  /**
    * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
@@ -1043,8 +1081,8 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the role type attribute type constraints.
    *
-   * @param roleType the code for the role type to retrieve the role type attribute type constraints for
-   *     or <b>null</b> to retrieve the role type attribute type constraints for all role types
+   * @param roleType the code for the role type to retrieve the role type attribute type constraints
+   *     for or <b>null</b> to retrieve the role type attribute type constraints for all role types
    * @return the role type attribute type constraints
    */
   @Operation(
@@ -1082,8 +1120,9 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the role type preference type constraints.
    *
-   * @param roleType the code for the role type to retrieve the role type preference type constraints for
-   *     or <b>null</b> to retrieve the role type preference type constraints for all role types
+   * @param roleType the code for the role type to retrieve the role type preference type
+   *     constraints for or <b>null</b> to retrieve the role type preference type constraints for
+   *     all role types
    * @return the role type preference type constraints
    */
   @Operation(
@@ -1156,8 +1195,8 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the source of funds types.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds types
-   *     for or <b>null</b> to retrieve the source of funds types for all locales
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
+   *     types for or <b>null</b> to retrieve the source of funds types for all locales
    * @return the source of funds types
    */
   @Operation(
@@ -1191,6 +1230,46 @@ public class PartyReferenceApi extends SecureApi {
           String localeId)
       throws ServiceUnavailableException {
     return partyReferenceService.getSourceOfFundsTypes(localeId);
+  }
+
+  /**
+   * Retrieve the source of wealth types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
+   *     types for or <b>null</b> to retrieve the source of wealth types for all locales
+   * @return the source of wealth types
+   */
+  @Operation(
+      summary = "Retrieve the source of wealth types",
+      description = "Retrieve the source of wealth types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/source-of-wealth-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<SourceOfWealthType> getSourceOfWealthTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the source of wealth types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getSourceOfWealthTypes(localeId);
   }
 
   /**

@@ -96,15 +96,6 @@ public class SourceOfFunds implements Serializable {
   @Column(name = "effective_to")
   private LocalDate effectiveTo;
 
-  /** The party the source of funds is associated with. */
-  @Schema(hidden = true)
-  @JsonBackReference("sourceOfFundsReference")
-  @XmlTransient
-  @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "party_id")
-  private PartyBase party;
-
   /** The percentage of the total of all sources of funds attributed to this source of funds. */
   @Schema(
       description =
@@ -115,6 +106,15 @@ public class SourceOfFunds implements Serializable {
   @NotNull
   @Column(name = "percentage", nullable = false)
   private Integer percentage;
+
+  /** The person the source of funds is associated with. */
+  @Schema(hidden = true)
+  @JsonBackReference("sourceOfFundsReference")
+  @XmlTransient
+  @Id
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "person_id")
+  private Person person;
 
   /** The code for the source of funds type. */
   @Schema(description = "The code for the source of funds type", required = true)
@@ -239,7 +239,7 @@ public class SourceOfFunds implements Serializable {
 
     SourceOfFunds other = (SourceOfFunds) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
+    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
   }
 
   /**
@@ -270,22 +270,22 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Returns the party the source of funds is associated with.
-   *
-   * @return the party the source of funds is associated with
-   */
-  @Schema(hidden = true)
-  public PartyBase getParty() {
-    return party;
-  }
-
-  /**
    * Returns the percentage of the total of all sources of funds attributed to this source of funds.
    *
    * @return the percentage of the total of all sources of funds attributed to this source of funds
    */
   public Integer getPercentage() {
     return percentage;
+  }
+
+  /**
+   * Returns the person the source of funds is associated with.
+   *
+   * @return the person the source of funds is associated with
+   */
+  @Schema(hidden = true)
+  public Person getPerson() {
+    return person;
   }
 
   /**
@@ -313,7 +313,7 @@ public class SourceOfFunds implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((party == null) || (party.getId() == null)) ? 0 : party.getId().hashCode())
+    return (((person == null) || (person.getId() == null)) ? 0 : person.getId().hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }
 
@@ -336,16 +336,6 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Set the party the source of funds is associated with.
-   *
-   * @param party the party the source of funds is associated with
-   */
-  @Schema(hidden = true)
-  public void setParty(PartyBase party) {
-    this.party = party;
-  }
-
-  /**
    * Set the percentage of the total of all sources of funds attributed to this source of funds.
    *
    * @param percentage the percentage of the total of all sources of funds attributed to this source
@@ -353,6 +343,16 @@ public class SourceOfFunds implements Serializable {
    */
   public void setPercentage(Integer percentage) {
     this.percentage = percentage;
+  }
+
+  /**
+   * Set the person the source of funds is associated with.
+   *
+   * @param person the person the source of funds is associated with
+   */
+  @Schema(hidden = true)
+  public void setPerson(Person person) {
+    this.person = person;
   }
 
   /**

@@ -33,8 +33,10 @@ public class SourceOfFundsId implements Serializable {
   /** The date the source of funds is effective from. */
   private LocalDate effectiveFrom;
 
-  /** The Universally Unique Identifier (UUID) for the party the source of funds is associated with. */
-  private UUID party;
+  /**
+   * The Universally Unique Identifier (UUID) for the person the source of funds is associated with.
+   */
+  private UUID person;
 
   /** The code for the source of funds type. */
   private String type;
@@ -64,7 +66,7 @@ public class SourceOfFundsId implements Serializable {
 
     SourceOfFundsId other = (SourceOfFundsId) object;
 
-    return Objects.equals(party, other.party)
+    return Objects.equals(person, other.person)
         && Objects.equals(type, other.type)
         && Objects.equals(effectiveFrom, other.effectiveFrom);
   }
@@ -76,7 +78,7 @@ public class SourceOfFundsId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode())
+    return ((person == null) ? 0 : person.hashCode())
         + ((type == null) ? 0 : type.hashCode())
         + ((effectiveFrom == null) ? 0 : effectiveFrom.hashCode());
   }

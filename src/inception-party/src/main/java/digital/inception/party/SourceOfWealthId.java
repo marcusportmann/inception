@@ -22,25 +22,28 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>ConsentId</b> class implements the ID class for the <b>Consent</b> class.
+ * The <b>SourceOfWealthId</b> class implements the ID class for the <b>SourceOfWealth</b> class.
  *
  * @author Marcus Portmann
  */
-public class ConsentId implements Serializable {
+public class SourceOfWealthId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date the consent is effective from. */
+  /** The date the source of wealth is effective from. */
   private LocalDate effectiveFrom;
 
-  /** The Universally Unique Identifier (UUID) for the person the consent is associated with. */
+  /**
+   * The Universally Unique Identifier (UUID) for the person the source of wealth is associated
+   * with.
+   */
   private UUID person;
 
-  /** The code for the consent type. */
+  /** The code for the source of wealth type. */
   private String type;
 
-  /** Constructs a new <b>ConsentId</b>. */
-  public ConsentId() {}
+  /** Constructs a new <b>SourceOfWealthId</b>. */
+  public SourceOfWealthId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -62,7 +65,7 @@ public class ConsentId implements Serializable {
       return false;
     }
 
-    ConsentId other = (ConsentId) object;
+    SourceOfWealthId other = (SourceOfWealthId) object;
 
     return Objects.equals(person, other.person)
         && Objects.equals(type, other.type)

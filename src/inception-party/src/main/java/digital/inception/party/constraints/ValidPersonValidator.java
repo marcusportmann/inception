@@ -31,6 +31,7 @@ import digital.inception.party.Role;
 import digital.inception.party.RoleTypeAttributeTypeConstraint;
 import digital.inception.party.RoleTypePreferenceTypeConstraint;
 import digital.inception.party.SourceOfFunds;
+import digital.inception.party.SourceOfWealth;
 import digital.inception.party.Status;
 import digital.inception.party.TaxNumber;
 import digital.inception.reference.IReferenceService;
@@ -114,9 +115,8 @@ public class ValidPersonValidator extends PartyValidator
                 .isValidConsentType(person.getType().code(), consent.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("consentType", consent.getType())
-                  .addMessageParameter("partyType", person.getType().code())
                   .buildConstraintViolationWithTemplate(
-                      "{digital.inception.party.constraints.ValidPerson.invalidConsentTypeForPartyType.message}")
+                      "{digital.inception.party.constraints.ValidPerson.invalidConsentType.message}")
                   .addPropertyNode("consents")
                   .addPropertyNode("type")
                   .inIterable()
@@ -552,13 +552,30 @@ public class ValidPersonValidator extends PartyValidator
         // Validate sources of funds
         for (SourceOfFunds sourceOfFunds : person.getSourcesOfFunds()) {
           if (StringUtils.hasText(sourceOfFunds.getType())) {
-            if (!getPartyReferenceService()
-                .isValidSourceOfFundsType(sourceOfFunds.getType())) {
+            if (!getPartyReferenceService().isValidSourceOfFundsType(sourceOfFunds.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("sourceOfFundsType", sourceOfFunds.getType())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPerson.invalidSourceOfFundsType.message}")
                   .addPropertyNode("sourcesOfFunds")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+        }
+
+        // Validate sources of wealth
+        for (SourceOfWealth sourceOfWealth : person.getSourcesOfWealth()) {
+          if (StringUtils.hasText(sourceOfWealth.getType())) {
+            if (!getPartyReferenceService().isValidSourceOfWealthType(sourceOfWealth.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("sourceOfWealthType", sourceOfWealth.getType())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidSourceOfWealthType.message}")
+                  .addPropertyNode("sourcesOfWealth")
                   .addPropertyNode("type")
                   .inIterable()
                   .addConstraintViolation();
@@ -989,6 +1006,30 @@ public class ValidPersonValidator extends PartyValidator
                   person.getResidentialType(),
                   "residentialType",
                   "{digital.inception.party.constraints.ValidPerson.residentialTypeRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+            case "sources_of_funds":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getSourcesOfFunds(),
+                  "sourcesOfFunds",
+                  "{digital.inception.party.constraints.ValidPerson.sourceOfFundsRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+            case "sources_of_wealth":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getSourcesOfFunds(),
+                  "sourcesOfWealth",
+                  "{digital.inception.party.constraints.ValidPerson.sourceOfWealthRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {
                 isValid = false;
               }

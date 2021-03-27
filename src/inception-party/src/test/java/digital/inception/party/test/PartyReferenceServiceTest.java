@@ -134,12 +134,12 @@ public class PartyReferenceServiceTest {
     List<ConsentType> retrievedConsentTypes = partyReferenceService.getConsentTypes();
 
     assertEquals(
-        "The correct number of consent types was not retrieved", 10, retrievedConsentTypes.size());
+        "The correct number of consent types was not retrieved", 2, retrievedConsentTypes.size());
 
     retrievedConsentTypes = partyReferenceService.getConsentTypes("en-US");
 
     assertEquals(
-        "The correct number of consent types was not retrieved", 5, retrievedConsentTypes.size());
+        "The correct number of consent types was not retrieved", 1, retrievedConsentTypes.size());
   }
 
   /** Test the contact mechanism purpose functionality. */
@@ -521,7 +521,7 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of role type attribute type constraints was not retrieved",
-        54,
+        56,
         retrievedRoleTypeAttributeTypeConstraints.size());
 
     retrievedRoleTypeAttributeTypeConstraints =
@@ -529,7 +529,7 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of role type attribute type constraints was not retrieved",
-        41,
+        43,
         retrievedRoleTypeAttributeTypeConstraints.size());
 
     retrievedRoleTypeAttributeTypeConstraints.stream()

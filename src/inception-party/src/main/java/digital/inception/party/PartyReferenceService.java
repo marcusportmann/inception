@@ -132,6 +132,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Source of Funds Type Repository. */
   private final SourceOfFundsTypeRepository sourceOfFundsTypeRepository;
 
+  /** The Source of Wealth Type Repository. */
+  private final SourceOfWealthTypeRepository sourceOfWealthTypeRepository;
+
   /** The Status Type Category Repository. */
   private final StatusTypeCategoryRepository statusTypeCategoryRepository;
 
@@ -189,6 +192,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param roleTypePreferenceTypeConstraintRepository the Role Type Preference Type Constraint
    *     Repository
    * @param sourceOfFundsTypeRepository the Source Of Funds Repository
+   * @param sourceOfWealthTypeRepository the Source Of Wealth Repository
    * @param statusTypeCategoryRepository the Status Type Category Repository
    * @param statusTypeRepository the Status Type Repository
    * @param taxNumberTypeRepository the Tax Number Type Repository
@@ -227,6 +231,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       RoleTypeAttributeTypeConstraintRepository roleTypeAttributeTypeConstraintRepository,
       RoleTypePreferenceTypeConstraintRepository roleTypePreferenceTypeConstraintRepository,
       SourceOfFundsTypeRepository sourceOfFundsTypeRepository,
+      SourceOfWealthTypeRepository sourceOfWealthTypeRepository,
       StatusTypeCategoryRepository statusTypeCategoryRepository,
       StatusTypeRepository statusTypeRepository,
       TaxNumberTypeRepository taxNumberTypeRepository,
@@ -263,6 +268,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.roleTypeAttributeTypeConstraintRepository = roleTypeAttributeTypeConstraintRepository;
     this.roleTypePreferenceTypeConstraintRepository = roleTypePreferenceTypeConstraintRepository;
     this.sourceOfFundsTypeRepository = sourceOfFundsTypeRepository;
+    this.sourceOfWealthTypeRepository = sourceOfWealthTypeRepository;
     this.statusTypeCategoryRepository = statusTypeCategoryRepository;
     this.statusTypeRepository = statusTypeRepository;
     this.taxNumberTypeRepository = taxNumberTypeRepository;
@@ -1299,6 +1305,41 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
+   * Retrieve all the source of wealth types.
+   *
+   * @return the source of wealth types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'sourceOfWealthTypes.ALL'")
+  public List<SourceOfWealthType> getSourceOfWealthTypes() throws ServiceUnavailableException {
+    return getSourceOfWealthTypes(null);
+  }
+
+  /**
+   * Retrieve the source of wealth types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
+   *     types for or <b>null</b> to retrieve the source of wealth types for all locales
+   * @return the source of wealth types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'sourceOfWealthTypes.' + #localeId")
+  public List<SourceOfWealthType> getSourceOfWealthTypes(String localeId)
+      throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return sourceOfWealthTypeRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return sourceOfWealthTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the source of wealth types", e);
+    }
+  }
+
+  /**
    * Retrieve all the status type categories.
    *
    * @return the status type categories
@@ -2063,6 +2104,24 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     return self.getSourceOfFundsTypes().stream()
         .anyMatch(sourceOfFunds -> sourceOfFunds.getCode().equals(sourceOfFundsTypeCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a source of wealth type.
+   *
+   * @param sourceOfWealthTypeCode the code for the source of wealth type
+   * @return <b>true</b> if the code is a valid code for a source of wealth type or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidSourceOfWealthType(String sourceOfWealthTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(sourceOfWealthTypeCode)) {
+      return false;
+    }
+
+    return self.getSourceOfWealthTypes().stream()
+        .anyMatch(sourceOfWealth -> sourceOfWealth.getCode().equals(sourceOfWealthTypeCode));
   }
 
   /**

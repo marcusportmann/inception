@@ -521,6 +521,23 @@ public interface IPartyReferenceService {
   List<SourceOfFundsType> getSourceOfFundsTypes(String localeId) throws ServiceUnavailableException;
 
   /**
+   * Retrieve all the source of wealth types.
+   *
+   * @return the source of wealth types
+   */
+  List<SourceOfWealthType> getSourceOfWealthTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the source of wealth types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
+   *     types for or <b>null</b> to retrieve the source of wealth types for all locales
+   * @return the source of wealth types
+   */
+  List<SourceOfWealthType> getSourceOfWealthTypes(String localeId)
+      throws ServiceUnavailableException;
+
+  /**
    * Retrieve all the status type categories.
    *
    * @return the status type categories
@@ -894,6 +911,16 @@ public interface IPartyReferenceService {
    *     otherwise
    */
   boolean isValidSourceOfFundsType(String sourceOfFundsTypeCode) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a source of wealth type.
+   *
+   * @param sourceOfWealthTypeCode the code for the source of wealth type
+   * @return <b>true</b> if the code is a valid code for a source of wealth type or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidSourceOfWealthType(String sourceOfWealthTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a status type for the party type.

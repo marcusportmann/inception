@@ -84,7 +84,6 @@ import org.springframework.util.StringUtils;
   "tenantId",
   "name",
   "attributes",
-  "consents",
   "contactMechanisms",
   "identityDocuments",
   "locks",
@@ -104,7 +103,6 @@ import org.springframework.util.StringUtils;
       "tenantId",
       "name",
       "attributes",
-      "consents",
       "contactMechanisms",
       "identityDocuments",
       "locks",
@@ -131,15 +129,6 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<Attribute> attributes = new HashSet<>();
-
-  /** The consents provided by the organization. */
-  @Valid
-  @OneToMany(
-      mappedBy = "party",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true)
-  private final Set<Consent> consents = new HashSet<>();
 
   /** The contact mechanisms for the organization. */
   @Valid
@@ -251,22 +240,6 @@ public class Organization extends PartyBase implements Serializable {
     attribute.setParty(this);
 
     attributes.add(attribute);
-  }
-
-  /**
-   * Add the consent provided by the organization.
-   *
-   * @param consent the organization
-   */
-  public void addConsent(Consent consent) {
-    consents.removeIf(
-        existingConsent ->
-            Objects.equals(existingConsent.getType(), consent.getType())
-                && Objects.equals(existingConsent.getEffectiveFrom(), consent.getEffectiveFrom()));
-
-    consent.setParty(this);
-
-    consents.add(consent);
   }
 
   /**
@@ -446,31 +419,6 @@ public class Organization extends PartyBase implements Serializable {
   @XmlElement(name = "Attribute")
   public Set<Attribute> getAttributes() {
     return attributes;
-  }
-
-  /**
-   * Retrieve the consent with the specified type for the organization.
-   *
-   * @param type the code for the consent type
-   * @return an Optional containing the consent with the specified type for the organization or an
-   *     empty Optional if the consent could not be found
-   */
-  public Optional<Consent> getConsentWithType(String type) {
-    return consents.stream().filter(consent -> Objects.equals(consent.getType(), type)).findFirst();
-  }
-
-  /**
-   * Returns the consents provided the organization.
-   *
-   * @return the consents provided by the organization
-   */
-  @Schema(description = "The consents provided by the organization")
-  @JsonProperty
-  @JsonManagedReference("consentReference")
-  @XmlElementWrapper(name = "Consents")
-  @XmlElement(name = "Consent")
-  public Set<Consent> getConsents() {
-    return consents;
   }
 
   /**
@@ -827,17 +775,6 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns whether the organization has a consent with the specified type.
-   *
-   * @param type the code for the consent type
-   * @return <b>true</b>> if the organization has a consent with the specified type or <b>false</b>
-   *     otherwise
-   */
-  public boolean hasConsentWithType(String type) {
-    return consents.stream().anyMatch(consent -> Objects.equals(consent.getType(), type));
-  }
-
-  /**
    * Returns whether the organization has a contact mechanism with the specified role.
    *
    * @param role the code for the contact mechanism role
@@ -972,15 +909,6 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Remove the consent with the specified type for the organization.
-   *
-   * @param type the code for the consent type
-   */
-  public void removeConsentWithType(String type) {
-    consents.removeIf(existingConsent -> Objects.equals(existingConsent.getType(), type));
-  }
-
-  /**
    * Remove the contact mechanism with the specified role for the organization.
    *
    * @param role the code for the contact mechanism role
@@ -1064,17 +992,6 @@ public class Organization extends PartyBase implements Serializable {
     attributes.forEach(attribute -> attribute.setParty(this));
     this.attributes.clear();
     this.attributes.addAll(attributes);
-  }
-
-  /**
-   * Set the consents provided by the organization.
-   *
-   * @param consents the consents provided by the organization
-   */
-  public void setConsents(Set<Consent> consents) {
-    consents.forEach(consent -> consent.setParty(this));
-    this.consents.clear();
-    this.consents.addAll(consents);
   }
 
   /**

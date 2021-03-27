@@ -120,6 +120,7 @@ import org.springframework.util.StringUtils;
   "residencePermits",
   "roles",
   "sourcesOfFunds",
+  "sourcesOfWealth",
   "statuses",
   "countriesOfTaxResidence",
   "taxNumbers"
@@ -164,6 +165,7 @@ import org.springframework.util.StringUtils;
       "residencePermits",
       "roles",
       "sourcesOfFunds",
+      "sourcesOfWealth",
       "statuses",
       "countriesOfTaxResidence",
       "taxNumbers"
@@ -188,7 +190,7 @@ public class Person extends PartyBase implements Serializable {
   /** The consents provided by the person. */
   @Valid
   @OneToMany(
-      mappedBy = "party",
+      mappedBy = "person",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
@@ -242,7 +244,7 @@ public class Person extends PartyBase implements Serializable {
   /** The residence permits for the person. */
   @Valid
   @OneToMany(
-      mappedBy = "party",
+      mappedBy = "person",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
@@ -260,11 +262,20 @@ public class Person extends PartyBase implements Serializable {
   /** The sources of funds for the person. */
   @Valid
   @OneToMany(
-      mappedBy = "party",
+      mappedBy = "person",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<SourceOfFunds> sourcesOfFunds = new HashSet<>();
+
+  /** The sources of wealth for the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "person",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<SourceOfWealth> sourcesOfWealth = new HashSet<>();
 
   /** The statuses assigned to the person. */
   @Valid
@@ -451,7 +462,7 @@ public class Person extends PartyBase implements Serializable {
             Objects.equals(existingConsent.getType(), consent.getType())
                 && Objects.equals(existingConsent.getEffectiveFrom(), consent.getEffectiveFrom()));
 
-    consent.setParty(this);
+    consent.setPerson(this);
 
     consents.add(consent);
   }
@@ -543,7 +554,7 @@ public class Person extends PartyBase implements Serializable {
    * @param residencePermit the residence permit
    */
   public void addResidencePermit(ResidencePermit residencePermit) {
-    residencePermit.setParty(this);
+    residencePermit.setPerson(this);
 
     residencePermits.add(residencePermit);
   }
@@ -574,12 +585,28 @@ public class Person extends PartyBase implements Serializable {
         existingSourceOfFunds ->
             Objects.equals(existingSourceOfFunds.getType(), sourceOfFunds.getType())
                 && Objects.equals(
-                    existingSourceOfFunds.getEffectiveFrom(),
-                    existingSourceOfFunds.getEffectiveFrom()));
+                    existingSourceOfFunds.getEffectiveFrom(), sourceOfFunds.getEffectiveFrom()));
 
-    sourceOfFunds.setParty(this);
+    sourceOfFunds.setPerson(this);
 
     sourcesOfFunds.add(sourceOfFunds);
+  }
+
+  /**
+   * Add the source of wealth for the person.
+   *
+   * @param sourceOfWealth the source of wealth
+   */
+  public void addSourceOfWealth(SourceOfWealth sourceOfWealth) {
+    sourcesOfWealth.removeIf(
+        existingSourceOfWealth ->
+            Objects.equals(existingSourceOfWealth.getType(), sourceOfWealth.getType())
+                && Objects.equals(
+                    existingSourceOfWealth.getEffectiveFrom(), sourceOfWealth.getEffectiveFrom()));
+
+    sourceOfWealth.setPerson(this);
+
+    sourcesOfWealth.add(sourceOfWealth);
   }
 
   /**
@@ -1221,6 +1248,19 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Retrieve the source of wealth with the specified type for the person.
+   *
+   * @param type the code for the source of wealth type
+   * @return an Optional containing the source of wealth with the specified type for the person or
+   *     an empty Optional if the source of wealth could not be found
+   */
+  public Optional<SourceOfWealth> getSourceOfWealthWithType(String type) {
+    return sourcesOfWealth.stream()
+        .filter(sourceOfWealth -> Objects.equals(sourceOfWealth.getType(), type))
+        .findFirst();
+  }
+
+  /**
    * Returns the sources of funds for the person.
    *
    * @return the sources of funds for the person
@@ -1232,6 +1272,20 @@ public class Person extends PartyBase implements Serializable {
   @XmlElement(name = "SourceOfFunds")
   public Set<SourceOfFunds> getSourcesOfFunds() {
     return sourcesOfFunds;
+  }
+
+  /**
+   * Returns the sources of wealth for the person.
+   *
+   * @return the sources of wealth for the person
+   */
+  @Schema(description = "The sources of wealth for the person")
+  @JsonProperty
+  @JsonManagedReference("sourceOfWealthReference")
+  @XmlElementWrapper(name = "SourcesOfWealth")
+  @XmlElement(name = "SourceOfWealth")
+  public Set<SourceOfWealth> getSourcesOfWealth() {
+    return sourcesOfWealth;
   }
 
   /**
@@ -1486,6 +1540,18 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns whether the person has a source of wealth with the specified type.
+   *
+   * @param type the code for the source of wealth type
+   * @return <b>true</b>> if the person has a source of wealth with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasSourceOfWealthWithType(String type) {
+    return sourcesOfWealth.stream()
+        .anyMatch(sourceOfWealth -> Objects.equals(sourceOfWealth.getType(), type));
+  }
+
+  /**
    * Returns whether the person has a status with the specified type.
    *
    * @param type the code for the status type
@@ -1613,6 +1679,16 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Remove the source of wealth with the specified type for the person.
+   *
+   * @param type the code for the source of wealth type
+   */
+  public void removeSourceOfWealthWithType(String type) {
+    sourcesOfWealth.removeIf(
+        existingSourceOfWealth -> Objects.equals(existingSourceOfWealth.getType(), type));
+  }
+
+  /**
    * Remove the status with the specified type for the person.
    *
    * @param type the code for the lock type
@@ -1647,7 +1723,7 @@ public class Person extends PartyBase implements Serializable {
    * @param consents the consents provided by the person
    */
   public void setConsents(Set<Consent> consents) {
-    consents.forEach(consent -> consent.setParty(this));
+    consents.forEach(consent -> consent.setPerson(this));
     this.consents.clear();
     this.consents.addAll(consents);
   }
@@ -1981,9 +2057,20 @@ public class Person extends PartyBase implements Serializable {
    * @param sourcesOfFunds the sources of funds for the person
    */
   public void setSourcesOfFunds(Set<SourceOfFunds> sourcesOfFunds) {
-    sourcesOfFunds.forEach(sourceOfFunds -> sourceOfFunds.setParty(this));
+    sourcesOfFunds.forEach(sourceOfFunds -> sourceOfFunds.setPerson(this));
     this.sourcesOfFunds.clear();
     this.sourcesOfFunds.addAll(sourcesOfFunds);
+  }
+
+  /**
+   * Set the source of wealth for the person.
+   *
+   * @param sourcesOfWealth the sources of wealth for the person
+   */
+  public void setSourcesOfWealth(Set<SourceOfWealth> sourcesOfWealth) {
+    sourcesOfWealth.forEach(sourceOfWealth -> sourceOfWealth.setPerson(this));
+    this.sourcesOfWealth.clear();
+    this.sourcesOfWealth.addAll(sourcesOfWealth);
   }
 
   /**

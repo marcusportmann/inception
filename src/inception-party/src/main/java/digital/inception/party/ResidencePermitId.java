@@ -37,9 +37,10 @@ public class ResidencePermitId implements Serializable {
   private LocalDate dateOfIssue;
 
   /**
-   * The Universally Unique Identifier (UUID) for the party the residence permit is associated with.
+   * The Universally Unique Identifier (UUID) for the person the residence permit is associated
+   * with.
    */
-  private UUID party;
+  private UUID person;
 
   /** The code for the residence permit type. */
   private String type;
@@ -69,7 +70,7 @@ public class ResidencePermitId implements Serializable {
 
     ResidencePermitId other = (ResidencePermitId) object;
 
-    return Objects.equals(party, other.party)
+    return Objects.equals(person, other.person)
         && Objects.equals(type, other.type)
         && Objects.equals(countryOfIssue, other.countryOfIssue)
         && Objects.equals(dateOfIssue, other.dateOfIssue);
@@ -82,7 +83,7 @@ public class ResidencePermitId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode())
+    return ((person == null) ? 0 : person.hashCode())
         + ((type == null) ? 0 : type.hashCode())
         + ((countryOfIssue == null) ? 0 : countryOfIssue.hashCode())
         + ((dateOfIssue == null) ? 0 : dateOfIssue.hashCode());

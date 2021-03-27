@@ -17,30 +17,38 @@
 package digital.inception.party;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
- * The <b>ConsentId</b> class implements the ID class for the <b>Consent</b> class.
+ * The <b>SourceOfWealthTypeId</b> class implements the ID class for the <b>SourceOfWealthType</b>
+ * class.
  *
  * @author Marcus Portmann
  */
-public class ConsentId implements Serializable {
+@SuppressWarnings("unused")
+public class SourceOfWealthTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date the consent is effective from. */
-  private LocalDate effectiveFrom;
+  /** The code for the source of wealth type. */
+  private String code;
 
-  /** The Universally Unique Identifier (UUID) for the person the consent is associated with. */
-  private UUID person;
+  /** The Unicode locale identifier for the source of wealth type. */
+  private String localeId;
 
-  /** The code for the consent type. */
-  private String type;
+  /** Constructs a new <b>SourceOfWealthTypeId</b>. */
+  public SourceOfWealthTypeId() {}
 
-  /** Constructs a new <b>ConsentId</b>. */
-  public ConsentId() {}
+  /**
+   * Constructs a new <b>SourceOfWealthTypeId</b>.
+   *
+   * @param code the code for the source of wealth type
+   * @param localeId the Unicode locale identifier for the source of wealth type
+   */
+  public SourceOfWealthTypeId(String code, String localeId) {
+    this.code = code;
+    this.localeId = localeId;
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -62,11 +70,9 @@ public class ConsentId implements Serializable {
       return false;
     }
 
-    ConsentId other = (ConsentId) object;
+    SourceOfWealthTypeId other = (SourceOfWealthTypeId) object;
 
-    return Objects.equals(person, other.person)
-        && Objects.equals(type, other.type)
-        && Objects.equals(effectiveFrom, other.effectiveFrom);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -76,8 +82,6 @@ public class ConsentId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((person == null) ? 0 : person.hashCode())
-        + ((type == null) ? 0 : type.hashCode())
-        + ((effectiveFrom == null) ? 0 : effectiveFrom.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 }

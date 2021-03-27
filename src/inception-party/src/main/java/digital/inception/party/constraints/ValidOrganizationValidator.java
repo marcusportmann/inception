@@ -17,7 +17,6 @@
 package digital.inception.party.constraints;
 
 import digital.inception.party.Attribute;
-import digital.inception.party.Consent;
 import digital.inception.party.ConstraintType;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.IPartyReferenceService;
@@ -92,26 +91,6 @@ public class ValidOrganizationValidator extends PartyValidator
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidOrganization.invalidReservedAttributeType.message}")
                   .addPropertyNode("attributes")
-                  .addPropertyNode("type")
-                  .inIterable()
-                  .addConstraintViolation();
-
-              isValid = false;
-            }
-          }
-        }
-
-        // Validate consents
-        for (Consent consent : organization.getConsents()) {
-          if (StringUtils.hasText(consent.getType())) {
-            if (!getPartyReferenceService()
-                .isValidConsentType(organization.getType().code(), consent.getType())) {
-              hibernateConstraintValidatorContext
-                  .addMessageParameter("consentType", consent.getType())
-                  .addMessageParameter("partyType", organization.getType().code())
-                  .buildConstraintViolationWithTemplate(
-                      "{digital.inception.party.constraints.ValidOrganization.invalidConsentTypeForPartyType.message}")
-                  .addPropertyNode("consents")
                   .addPropertyNode("type")
                   .inIterable()
                   .addConstraintViolation();

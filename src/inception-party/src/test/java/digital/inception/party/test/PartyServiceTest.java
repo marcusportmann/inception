@@ -48,6 +48,7 @@ import digital.inception.party.Preference;
 import digital.inception.party.ResidencePermit;
 import digital.inception.party.Role;
 import digital.inception.party.SourceOfFunds;
+import digital.inception.party.SourceOfWealth;
 import digital.inception.party.Status;
 import digital.inception.party.TaxNumber;
 import digital.inception.test.TestClassRunner;
@@ -190,7 +191,8 @@ public class PartyServiceTest {
             "marketing"));
 
     Optional<ContactMechanism> contactMechanismOptional =
-        person.getContactMechanismWithTypeAndPurpose(ContactMechanismType.EMAIL_ADDRESS, "marketing");
+        person.getContactMechanismWithTypeAndPurpose(
+            ContactMechanismType.EMAIL_ADDRESS, "marketing");
 
     if (contactMechanismOptional.isEmpty()) {
       fail(
@@ -340,6 +342,81 @@ public class PartyServiceTest {
         UUID.fromString("00000000-0000-0000-0000-000000000000"), "Full Name " + personCount);
   }
 
+  /** Test the attribute functionality. */
+  @Test
+  public void attributeTest() throws Exception {
+    // Person attributes
+    Person person = getTestBasicPersonDetails();
+
+    person.addAttribute(new Attribute("test_attribute_name", "test_attribute_value"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareAttributes(
+        person.getAttributeWithType("test_attribute_name").get(),
+        retrievedPerson.getAttributeWithType("test_attribute_name").get());
+
+    assertTrue(retrievedPerson.hasAttributeWithType("test_attribute_name"));
+
+    person.removeAttributeWithType("test_attribute_name");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setAttributes(Set.of(new Attribute("test_attribute_name", "test_attribute_value")));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization attributes
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addAttribute(new Attribute("test_attribute_name", "test_attribute_value"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareAttributes(
+        organization.getAttributeWithType("test_attribute_name").get(),
+        retrievedOrganization.getAttributeWithType("test_attribute_name").get());
+
+    assertTrue(retrievedOrganization.hasAttributeWithType("test_attribute_name"));
+
+    organization.removeAttributeWithType("test_attribute_name");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setAttributes(
+        Set.of(new Attribute("test_attribute_name", "test_attribute_value")));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
+  }
+
   /** Test the person functionality. */
   @Test
   public void basicPersonTest() throws Exception {
@@ -374,7 +451,8 @@ public class PartyServiceTest {
     comparePersons(person, retrievedPerson);
 
     compareConsents(
-        person.getConsentWithType("marketing").get(), retrievedPerson.getConsentWithType("marketing").get());
+        person.getConsentWithType("marketing").get(),
+        retrievedPerson.getConsentWithType("marketing").get());
 
     assertTrue(retrievedPerson.hasConsentWithType("marketing"));
 
@@ -395,41 +473,6 @@ public class PartyServiceTest {
     comparePersons(person, retrievedPerson);
 
     partyService.deletePerson(person.getId());
-
-    // Organization consents
-    Organization organization = getTestBasicOrganizationDetails();
-
-    organization.addConsent(new Consent("marketing"));
-
-    partyService.createOrganization(organization);
-
-    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    compareConsents(
-        organization.getConsentWithType("marketing").get(),
-        retrievedOrganization.getConsentWithType("marketing").get());
-
-    assertTrue(retrievedOrganization.hasConsentWithType("marketing"));
-
-    organization.removeConsentWithType("marketing");
-
-    partyService.updateOrganization(organization);
-
-    retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    organization.setConsents(Set.of(new Consent("marketing", LocalDate.of(2016, 5, 1))));
-
-    partyService.updateOrganization(organization);
-
-    retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    partyService.deleteOrganization(organization.getId());
   }
 
   /** Test the contact mechanism purpose validation functionality. */
@@ -468,6 +511,113 @@ public class PartyServiceTest {
         "The correct number of constraint violations was not found for the invalid organization",
         1,
         organizationConstraintViolations.size());
+  }
+
+  /** Test the contactMechanism functionality. */
+  @Test
+  public void contactMechanismTest() throws Exception {
+    // Person contactMechanisms
+    Person person = getTestBasicPersonDetails();
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
+            "giveName@test.com",
+            "marketing"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareContactMechanisms(
+        person.getContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS).get(),
+        retrievedPerson
+            .getContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS)
+            .get());
+
+    assertTrue(
+        retrievedPerson.hasContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS));
+
+    assertTrue(retrievedPerson.hasContactMechanismWithType(ContactMechanismType.EMAIL_ADDRESS));
+
+    person.removeContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS);
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setContactMechanisms(
+        Set.of(
+            new ContactMechanism(
+                ContactMechanismType.EMAIL_ADDRESS,
+                ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
+                "giveName@test.com",
+                "marketing")));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization contactMechanisms
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismRole.MAIN_EMAIL_ADDRESS,
+            "test@test.com",
+            "marketing"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareContactMechanisms(
+        organization.getContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS).get(),
+        retrievedOrganization
+            .getContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS)
+            .get());
+
+    assertTrue(
+        retrievedOrganization.hasContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS));
+
+    assertTrue(
+        retrievedOrganization.hasContactMechanismWithType(ContactMechanismType.EMAIL_ADDRESS));
+
+    organization.removeContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS);
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setContactMechanisms(
+        Set.of(
+            new ContactMechanism(
+                ContactMechanismType.EMAIL_ADDRESS,
+                ContactMechanismRole.MAIN_EMAIL_ADDRESS,
+                "test@test.com",
+                "marketing")));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
   }
 
   /** Test the foreign person functionality. */
@@ -790,6 +940,36 @@ public class PartyServiceTest {
         constraintViolations.size());
   }
 
+  /** Test the invalid person attribute functionality. */
+  @Test
+  public void invalidPersonAttributeTest() {
+    Person person = getTestBasicPersonDetails();
+
+    person.addAttribute(new Attribute("given_name", "Given Name"));
+
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid person",
+        1,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid person consent functionality. */
+  @Test
+  public void invalidPersonConsentTest() {
+    Person person = getTestBasicPersonDetails();
+
+    person.addConsent(new Consent("invalid_consent"));
+
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid person",
+        1,
+        constraintViolations.size());
+  }
+
   /** Test the invalid person source of funds functionality. */
   @Test
   public void invalidPersonSourceOfFundsTest() {
@@ -805,12 +985,12 @@ public class PartyServiceTest {
         constraintViolations.size());
   }
 
-  /** Test the invalid person attribute functionality. */
+  /** Test the invalid person source of wealth functionality. */
   @Test
-  public void invalidPersonAttributeTest() {
+  public void invalidPersonSourceOfWealthTest() {
     Person person = getTestBasicPersonDetails();
 
-    person.addAttribute(new Attribute("given_name", "Given Name"));
+    person.addSourceOfWealth(new SourceOfWealth("invalid_source_of_wealth"));
 
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
@@ -1021,7 +1201,8 @@ public class PartyServiceTest {
     comparePersons(person, retrievedPerson);
 
     compareLocks(
-        person.getLockWithType("suspected_fraud").get(), retrievedPerson.getLockWithType("suspected_fraud").get());
+        person.getLockWithType("suspected_fraud").get(),
+        retrievedPerson.getLockWithType("suspected_fraud").get());
 
     assertTrue(retrievedPerson.hasLockWithType("suspected_fraud"));
 
@@ -1116,7 +1297,8 @@ public class PartyServiceTest {
             "marketing"));
 
     Optional<ContactMechanism> contactMechanismOptional =
-        organization.getContactMechanismWithTypeAndPurpose(ContactMechanismType.EMAIL_ADDRESS, "marketing");
+        organization.getContactMechanismWithTypeAndPurpose(
+            ContactMechanismType.EMAIL_ADDRESS, "marketing");
 
     if (contactMechanismOptional.isEmpty()) {
       fail(
@@ -1582,6 +1764,154 @@ public class PartyServiceTest {
     partyService.deleteParty(person.getId());
   }
 
+  /** Test the preference functionality. */
+  @Test
+  public void preferenceTest() throws Exception {
+    // Person preferences
+    Person person = getTestBasicPersonDetails();
+
+    person.addPreference(new Preference("test_preference", "test_preference_value"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    comparePreferences(
+        person.getPreferenceWithType("test_preference").get(),
+        retrievedPerson.getPreferenceWithType("test_preference").get());
+
+    assertTrue(retrievedPerson.hasPreferenceWithType("test_preference"));
+
+    person.removePreferenceWithType("test_preference");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setPreferences(Set.of(new Preference("test_preference", "test_preference_value")));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization preferences
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addPreference(new Preference("test_preference", "test_preference_value"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    comparePreferences(
+        organization.getPreferenceWithType("test_preference").get(),
+        retrievedOrganization.getPreferenceWithType("test_preference").get());
+
+    assertTrue(retrievedOrganization.hasPreferenceWithType("test_preference"));
+
+    organization.removePreferenceWithType("test_preference");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setPreferences(Set.of(new Preference("test_preference", "test_preference_value")));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
+  }
+
+  /** Test the role functionality. */
+  @Test
+  public void roleTest() throws Exception {
+    // Person roles
+    Person person = getTestBasicPersonDetails();
+
+    person.addRole(new Role("employee"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareRoles(
+        person.getRoleWithType("employee").get(),
+        retrievedPerson.getRoleWithType("employee").get());
+
+    assertTrue(retrievedPerson.hasRoleWithType("employee"));
+
+    person.removeRoleWithType("employee");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setRoles(Set.of(new Role("employee", LocalDate.of(2015, 10, 1))));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization roles
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addRole(new Role("employer"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareRoles(
+        organization.getRoleWithType("employer").get(),
+        retrievedOrganization.getRoleWithType("employer").get());
+
+    assertTrue(retrievedOrganization.hasRoleWithType("employer"));
+
+    organization.removeRoleWithType("employer");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setRoles(Set.of(new Role("employer", LocalDate.of(2016, 5, 1))));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
+  }
+
   /** Test the role type attribute type constraint functionality. */
   @Test
   public void roleTypeAttributeTypeConstraintTest() {
@@ -1594,7 +1924,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid person",
-        39,
+        41,
         personConstraintViolations.size());
 
     Organization organization = getTestBasicOrganizationDetails();
@@ -1611,7 +1941,83 @@ public class PartyServiceTest {
         12,
         organizationConstraintViolations.size());
   }
-  
+
+  /** Test the sourceOfFunds functionality. */
+  @Test
+  public void sourceOfFundsTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addSourceOfFunds(new SourceOfFunds("salary"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareSourcesOfFunds(
+        person.getSourceOfFundsWithType("salary").get(),
+        retrievedPerson.getSourceOfFundsWithType("salary").get());
+
+    assertTrue(retrievedPerson.hasSourceOfFundsWithType("salary"));
+
+    person.removeSourceOfFundsWithType("salary");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setSourcesOfFunds(Set.of(new SourceOfFunds("salary", LocalDate.of(2015, 10, 1))));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+  }
+
+  /** Test the sourceOfWealth functionality. */
+  @Test
+  public void sourceOfWealthTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addSourceOfWealth(new SourceOfWealth("employment"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareSourcesOfWealth(
+        person.getSourceOfWealthWithType("employment").get(),
+        retrievedPerson.getSourceOfWealthWithType("employment").get());
+
+    assertTrue(retrievedPerson.hasSourceOfWealthWithType("employment"));
+
+    person.removeSourceOfWealthWithType("employment");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setSourcesOfWealth(Set.of(new SourceOfWealth("employment", LocalDate.of(2015, 10, 1))));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+  }
+
   /** Test the status functionality. */
   @Test
   public void statusTest() throws Exception {
@@ -1836,14 +2242,37 @@ public class PartyServiceTest {
         consent2.getEffectiveTo());
 
     assertEquals(
-        "The parties for the consents do not match",
-        consent1.getParty(),
-        consent2.getParty());
+        "The persons for the consents do not match", consent1.getPerson(), consent2.getPerson());
+
+    assertEquals("The types for the consents do not match", consent1.getType(), consent2.getType());
+  }
+
+  private void compareContactMechanisms(
+      ContactMechanism contactMechanism1, ContactMechanism contactMechanism2) {
+    assertEquals(
+        "The parties for the contact mechanisms do not match",
+        contactMechanism1.getParty(),
+        contactMechanism2.getParty());
 
     assertEquals(
-        "The types for the consents do not match",
-        consent1.getType(),
-        consent2.getType());
+        "The purposes for the contact mechanisms do not match",
+        contactMechanism1.getPurposes(),
+        contactMechanism2.getPurposes());
+
+    assertEquals(
+        "The roles for the contact mechanisms do not match",
+        contactMechanism1.getRole(),
+        contactMechanism2.getRole());
+
+    assertEquals(
+        "The types for the contact mechanisms do not match",
+        contactMechanism1.getType(),
+        contactMechanism2.getType());
+
+    assertEquals(
+        "The values for the contact mechanisms do not match",
+        contactMechanism1.getValue(),
+        contactMechanism2.getValue());
   }
 
   private void compareIdentityDocuments(
@@ -1884,28 +2313,6 @@ public class PartyServiceTest {
         identityDocument2.getType());
   }
 
-  private void compareRoles(Role role1, Role role2) {
-    assertEquals(
-        "The effective from values for the roles do not match",
-        role1.getEffectiveFrom(),
-        role2.getEffectiveFrom());
-
-    assertEquals(
-        "The effective to values for the roles do not match",
-        role1.getEffectiveTo(),
-        role2.getEffectiveTo());
-
-    assertEquals(
-        "The parties for the roles do not match",
-        role1.getParty(),
-        role2.getParty());
-
-    assertEquals(
-        "The types for the roles do not match",
-        role1.getType(),
-        role2.getType());
-  }
-
   private void compareLocks(Lock lock1, Lock lock2) {
     assertEquals(
         "The effective from values for the locks do not match",
@@ -1917,15 +2324,9 @@ public class PartyServiceTest {
         lock1.getEffectiveTo(),
         lock2.getEffectiveTo());
 
-    assertEquals(
-        "The parties for the locks do not match",
-        lock1.getParty(),
-        lock2.getParty());
+    assertEquals("The parties for the locks do not match", lock1.getParty(), lock2.getParty());
 
-    assertEquals(
-        "The types for the locks do not match",
-        lock1.getType(),
-        lock2.getType());
+    assertEquals("The types for the locks do not match", lock1.getType(), lock2.getType());
   }
 
   private void compareOrganizations(Organization organization1, Organization organization2) {
@@ -1971,29 +2372,6 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of consents for the organizations do not match",
-        organization1.getConsents().size(),
-        organization2.getConsents().size());
-
-    for (Consent organization1Consent : organization1.getConsents()) {
-      boolean foundConsent = false;
-
-      for (Consent organization2Consent : organization2.getConsents()) {
-        if (Objects.equals(organization1Consent.getParty(), organization2Consent.getParty())
-            && Objects.equals(organization1Consent.getType(), organization2Consent.getType())) {
-
-          compareConsents(organization1Consent, organization2Consent);
-
-          foundConsent = true;
-        }
-      }
-
-      if (!foundConsent) {
-        fail("Failed to find the consent (" + organization1Consent.getType() + ")");
-      }
-    }
-
-    assertEquals(
         "The number of contact mechanisms for the organizations do not match",
         organization1.getContactMechanisms().size(),
         organization2.getContactMechanisms().size());
@@ -2002,8 +2380,10 @@ public class PartyServiceTest {
       boolean foundContactMechanism = false;
 
       for (ContactMechanism organization2ContactMechanism : organization2.getContactMechanisms()) {
-        if (Objects.equals(organization1ContactMechanism.getParty(), organization2ContactMechanism.getParty())
-            && Objects.equals(organization1ContactMechanism.getRole(), organization2ContactMechanism.getRole())) {
+        if (Objects.equals(
+                organization1ContactMechanism.getParty(), organization2ContactMechanism.getParty())
+            && Objects.equals(
+                organization1ContactMechanism.getRole(), organization2ContactMechanism.getRole())) {
 
           compareContactMechanisms(organization1ContactMechanism, organization2ContactMechanism);
 
@@ -2227,15 +2607,12 @@ public class PartyServiceTest {
         person1.getEmploymentType(),
         person2.getEmploymentType());
     assertEquals(
-        "The gender values for the persons do not match",
-        person1.getGender(),
-        person2.getGender());
+        "The gender values for the persons do not match", person1.getGender(), person2.getGender());
     assertEquals(
         "The given name values for the persons do not match",
         person1.getGivenName(),
         person2.getGivenName());
-    assertEquals(
-        "The ID values for the persons do not match", person1.getId(), person2.getId());
+    assertEquals("The ID values for the persons do not match", person1.getId(), person2.getId());
     assertEquals(
         "The initials values for the persons do not match",
         person1.getInitials(),
@@ -2289,9 +2666,7 @@ public class PartyServiceTest {
         person1.getTenantId(),
         person2.getTenantId());
     assertEquals(
-        "The title values for the persons do not match",
-        person1.getTitle(),
-        person2.getTitle());
+        "The title values for the persons do not match", person1.getTitle(), person2.getTitle());
 
     assertEquals(
         "The number of attributes for the persons do not match",
@@ -2325,7 +2700,7 @@ public class PartyServiceTest {
       boolean foundConsent = false;
 
       for (Consent person2Consent : person2.getConsents()) {
-        if (Objects.equals(person1Consent.getParty(), person2Consent.getParty())
+        if (Objects.equals(person1Consent.getPerson(), person2Consent.getPerson())
             && Objects.equals(person1Consent.getType(), person2Consent.getType())) {
 
           compareConsents(person1Consent, person2Consent);
@@ -2349,7 +2724,8 @@ public class PartyServiceTest {
 
       for (ContactMechanism person2ContactMechanism : person2.getContactMechanisms()) {
         if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
-            && Objects.equals(person1ContactMechanism.getRole(), person2ContactMechanism.getRole())) {
+            && Objects.equals(
+                person1ContactMechanism.getRole(), person2ContactMechanism.getRole())) {
 
           compareContactMechanisms(person1ContactMechanism, person2ContactMechanism);
 
@@ -2699,38 +3075,6 @@ public class PartyServiceTest {
         physicalAddress2.getType());
   }
 
-
-
-
-  private void compareContactMechanisms(ContactMechanism contactMechanism1, ContactMechanism contactMechanism2) {
-    assertEquals(
-        "The parties for the contact mechanisms do not match",
-        contactMechanism1.getParty(),
-        contactMechanism2.getParty());
-
-    assertEquals(
-        "The purposes for the contact mechanisms do not match",
-        contactMechanism1.getPurposes(),
-        contactMechanism2.getPurposes());
-
-    assertEquals(
-        "The roles for the contact mechanisms do not match",
-        contactMechanism1.getRole(),
-        contactMechanism2.getRole());
-
-    assertEquals(
-        "The types for the contact mechanisms do not match",
-        contactMechanism1.getType(),
-        contactMechanism2.getType());
-
-    assertEquals(
-        "The values for the contact mechanisms do not match",
-        contactMechanism1.getValue(),
-        contactMechanism2.getValue());
-  }
-
-
-
   private void comparePreferences(Preference preference1, Preference preference2) {
     assertEquals(
         "The parties for the preferences do not match",
@@ -2738,14 +3082,78 @@ public class PartyServiceTest {
         preference2.getParty());
 
     assertEquals(
-        "The types for the preferences do not match",
-        preference1.getType(),
-        preference2.getType());
+        "The types for the preferences do not match", preference1.getType(), preference2.getType());
 
     assertEquals(
         "The values for the preferences do not match",
         preference1.getValue(),
         preference2.getValue());
+  }
+
+  private void compareRoles(Role role1, Role role2) {
+    assertEquals(
+        "The effective from values for the roles do not match",
+        role1.getEffectiveFrom(),
+        role2.getEffectiveFrom());
+
+    assertEquals(
+        "The effective to values for the roles do not match",
+        role1.getEffectiveTo(),
+        role2.getEffectiveTo());
+
+    assertEquals("The parties for the roles do not match", role1.getParty(), role2.getParty());
+
+    assertEquals("The types for the roles do not match", role1.getType(), role2.getType());
+  }
+
+  private void compareSourcesOfFunds(SourceOfFunds sourceOfFunds1, SourceOfFunds sourceOfFunds2) {
+    assertEquals(
+        "The effective from values for the sources of funds do not match",
+        sourceOfFunds1.getEffectiveFrom(),
+        sourceOfFunds2.getEffectiveFrom());
+
+    assertEquals(
+        "The effective to values for the sources of funds do not match",
+        sourceOfFunds1.getEffectiveTo(),
+        sourceOfFunds2.getEffectiveTo());
+
+    assertEquals(
+        "The persons for the sources of funds do not match",
+        sourceOfFunds1.getPerson(),
+        sourceOfFunds2.getPerson());
+
+    assertEquals(
+        "The percentages for the sources of funds do not match",
+        sourceOfFunds1.getPercentage(),
+        sourceOfFunds2.getPercentage());
+
+    assertEquals(
+        "The types for the sources of funds do not match",
+        sourceOfFunds1.getType(),
+        sourceOfFunds2.getType());
+  }
+
+  private void compareSourcesOfWealth(
+      SourceOfWealth sourceOfWealth1, SourceOfWealth sourceOfWealth2) {
+    assertEquals(
+        "The effective from values for the sources of wealth do not match",
+        sourceOfWealth1.getEffectiveFrom(),
+        sourceOfWealth2.getEffectiveFrom());
+
+    assertEquals(
+        "The effective to values for the sources of wealth do not match",
+        sourceOfWealth1.getEffectiveTo(),
+        sourceOfWealth2.getEffectiveTo());
+
+    assertEquals(
+        "The persons for the sources of wealth do not match",
+        sourceOfWealth1.getPerson(),
+        sourceOfWealth2.getPerson());
+
+    assertEquals(
+        "The types for the sources of wealth do not match",
+        sourceOfWealth1.getType(),
+        sourceOfWealth2.getType());
   }
 
   private void compareStatuses(Status status1, Status status2) {
@@ -2762,8 +3170,7 @@ public class PartyServiceTest {
     assertEquals(
         "The parties for the statuses do not match", status1.getParty(), status2.getParty());
 
-    assertEquals(
-        "The types for the statuses do not match", status1.getType(), status2.getType());
+    assertEquals("The types for the statuses do not match", status1.getType(), status2.getType());
   }
 
   private void compareTaxNumbers(TaxNumber taxNumber1, TaxNumber taxNumber2) {
@@ -2783,405 +3190,6 @@ public class PartyServiceTest {
         taxNumber2.getParty());
 
     assertEquals(
-        "The types for the tax numbers do not match",
-        taxNumber1.getType(),
-        taxNumber2.getType());
+        "The types for the tax numbers do not match", taxNumber1.getType(), taxNumber2.getType());
   }
-
-
-  /** Test the attribute functionality. */
-  @Test
-  public void attributeTest() throws Exception {
-    // Person attributes
-    Person person = getTestBasicPersonDetails();
-
-    person.addAttribute(new Attribute("test_attribute_name", "test_attribute_value"));
-
-    partyService.createPerson(person);
-
-    Person retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    compareAttributes(
-        person.getAttributeWithType("test_attribute_name").get(), retrievedPerson.getAttributeWithType("test_attribute_name").get());
-
-    assertTrue(retrievedPerson.hasAttributeWithType("test_attribute_name"));
-
-    person.removeAttributeWithType("test_attribute_name");
-
-    partyService.updatePerson(person);
-
-    retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    person.setAttributes(Set.of(new Attribute("test_attribute_name", "test_attribute_value")));
-
-    partyService.updatePerson(person);
-
-    retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    partyService.deletePerson(person.getId());
-
-    // Organization attributes
-    Organization organization = getTestBasicOrganizationDetails();
-
-    organization.addAttribute(new Attribute("test_attribute_name", "test_attribute_value"));
-
-    partyService.createOrganization(organization);
-
-    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    compareAttributes(
-        organization.getAttributeWithType("test_attribute_name").get(),
-        retrievedOrganization.getAttributeWithType("test_attribute_name").get());
-
-    assertTrue(retrievedOrganization.hasAttributeWithType("test_attribute_name"));
-
-    organization.removeAttributeWithType("test_attribute_name");
-
-    partyService.updateOrganization(organization);
-
-    retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    organization.setAttributes(Set.of(new Attribute("test_attribute_name", "test_attribute_value")));
-
-    partyService.updateOrganization(organization);
-
-    retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    partyService.deleteOrganization(organization.getId());
-  }
-
-
-  /** Test the preference functionality. */
-  @Test
-  public void preferenceTest() throws Exception {
-    // Person preferences
-    Person person = getTestBasicPersonDetails();
-
-    person.addPreference(new Preference("test_preference", "test_preference_value"));
-
-    partyService.createPerson(person);
-
-    Person retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    comparePreferences(
-        person.getPreferenceWithType("test_preference").get(), retrievedPerson.getPreferenceWithType("test_preference").get());
-
-    assertTrue(retrievedPerson.hasPreferenceWithType("test_preference"));
-
-    person.removePreferenceWithType("test_preference");
-
-    partyService.updatePerson(person);
-
-    retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    person.setPreferences(Set.of(new Preference("test_preference", "test_preference_value")));
-
-    partyService.updatePerson(person);
-
-    retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    partyService.deletePerson(person.getId());
-
-    // Organization preferences
-    Organization organization = getTestBasicOrganizationDetails();
-
-    organization.addPreference(new Preference("test_preference", "test_preference_value"));
-
-    partyService.createOrganization(organization);
-
-    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    comparePreferences(
-        organization.getPreferenceWithType("test_preference").get(),
-        retrievedOrganization.getPreferenceWithType("test_preference").get());
-
-    assertTrue(retrievedOrganization.hasPreferenceWithType("test_preference"));
-
-    organization.removePreferenceWithType("test_preference");
-
-    partyService.updateOrganization(organization);
-
-    retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    organization.setPreferences(Set.of(new Preference("test_preference", "test_preference_value")));
-
-    partyService.updateOrganization(organization);
-
-    retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    partyService.deleteOrganization(organization.getId());
-  }
-
-
-
-  /** Test the contactMechanism functionality. */
-  @Test
-  public void contactMechanismTest() throws Exception {
-    // Person contactMechanisms
-    Person person = getTestBasicPersonDetails();
-
-    person.addContactMechanism(new ContactMechanism(
-        ContactMechanismType.EMAIL_ADDRESS,
-        ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
-        "giveName@test.com",
-        "marketing"));
-
-    partyService.createPerson(person);
-
-    Person retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    compareContactMechanisms(
-        person.getContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS).get(), retrievedPerson.getContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS).get());
-
-    assertTrue(retrievedPerson.hasContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS));
-
-    assertTrue(retrievedPerson.hasContactMechanismWithType(ContactMechanismType.EMAIL_ADDRESS));
-
-    person.removeContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS);
-
-    partyService.updatePerson(person);
-
-    retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    person.setContactMechanisms(Set.of(new ContactMechanism(
-        ContactMechanismType.EMAIL_ADDRESS,
-        ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
-        "giveName@test.com",
-        "marketing")));
-
-    partyService.updatePerson(person);
-
-    retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    partyService.deletePerson(person.getId());
-
-    // Organization contactMechanisms
-    Organization organization = getTestBasicOrganizationDetails();
-
-    organization.addContactMechanism(new ContactMechanism(
-        ContactMechanismType.EMAIL_ADDRESS,
-        ContactMechanismRole.MAIN_EMAIL_ADDRESS,
-        "test@test.com",
-        "marketing"));
-
-    partyService.createOrganization(organization);
-
-    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    compareContactMechanisms(
-        organization.getContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS).get(),
-        retrievedOrganization.getContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS).get());
-
-    assertTrue(retrievedOrganization.hasContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS));
-
-    assertTrue(retrievedOrganization.hasContactMechanismWithType(ContactMechanismType.EMAIL_ADDRESS));
-
-    organization.removeContactMechanismWithRole(ContactMechanismRole.MAIN_EMAIL_ADDRESS);
-
-    partyService.updateOrganization(organization);
-
-    retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    organization.setContactMechanisms(Set.of(new ContactMechanism(
-        ContactMechanismType.EMAIL_ADDRESS,
-        ContactMechanismRole.MAIN_EMAIL_ADDRESS,
-        "test@test.com",
-        "marketing")));
-
-    partyService.updateOrganization(organization);
-
-    retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    partyService.deleteOrganization(organization.getId());
-  }
-
-
-
-
-
-  /** Test the role functionality. */
-  @Test
-  public void roleTest() throws Exception {
-    // Person roles
-    Person person = getTestBasicPersonDetails();
-
-    person.addRole(new Role("employee"));
-
-    partyService.createPerson(person);
-
-    Person retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    compareRoles(
-        person.getRoleWithType("employee").get(), retrievedPerson.getRoleWithType("employee").get());
-
-    assertTrue(retrievedPerson.hasRoleWithType("employee"));
-
-    person.removeRoleWithType("employee");
-
-    partyService.updatePerson(person);
-
-    retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    person.setRoles(Set.of(new Role("employee", LocalDate.of(2015, 10, 1))));
-
-    partyService.updatePerson(person);
-
-    retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    partyService.deletePerson(person.getId());
-
-    // Organization roles
-    Organization organization = getTestBasicOrganizationDetails();
-
-    organization.addRole(new Role("employer"));
-
-    partyService.createOrganization(organization);
-
-    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    compareRoles(
-        organization.getRoleWithType("employer").get(),
-        retrievedOrganization.getRoleWithType("employer").get());
-
-    assertTrue(retrievedOrganization.hasRoleWithType("employer"));
-
-    organization.removeRoleWithType("employer");
-
-    partyService.updateOrganization(organization);
-
-    retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    organization.setRoles(Set.of(new Role("employer", LocalDate.of(2016, 5, 1))));
-
-    partyService.updateOrganization(organization);
-
-    retrievedOrganization = partyService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    partyService.deleteOrganization(organization.getId());
-  }
-
-
-
-
-
-
-
-
-
-
-  /** Test the sourceOfFunds functionality. */
-  @Test
-  public void sourceOfFundsTest() throws Exception {
-    Person person = getTestBasicPersonDetails();
-
-    person.addSourceOfFunds(new SourceOfFunds("salary"));
-
-    partyService.createPerson(person);
-
-    Person retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    compareSourcesOfFunds(
-        person.getSourceOfFundsWithType("salary").get(),
-        retrievedPerson.getSourceOfFundsWithType("salary").get());
-
-    assertTrue(retrievedPerson.hasSourceOfFundsWithType("salary"));
-
-    person.removeSourceOfFundsWithType("salary");
-
-    partyService.updatePerson(person);
-
-    retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    person.setSourcesOfFunds(Set.of(new SourceOfFunds("salary", LocalDate.of(2015, 10, 1))));
-
-    partyService.updatePerson(person);
-
-    retrievedPerson = partyService.getPerson(person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    partyService.deletePerson(person.getId());
-  }
-
-
-
-  private void compareSourcesOfFunds(SourceOfFunds sourceOfFunds1, SourceOfFunds sourceOfFunds2) {
-    assertEquals(
-        "The effective from values for the sources of funds do not match",
-        sourceOfFunds1.getEffectiveFrom(),
-        sourceOfFunds2.getEffectiveFrom());
-
-    assertEquals(
-        "The effective to values for the sources of funds do not match",
-        sourceOfFunds1.getEffectiveTo(),
-        sourceOfFunds2.getEffectiveTo());
-
-    assertEquals(
-        "The parties for the sources of funds do not match",
-        sourceOfFunds1.getParty(),
-        sourceOfFunds2.getParty());
-
-    assertEquals(
-        "The percentages for the sources of funds do not match",
-        sourceOfFunds1.getPercentage(),
-        sourceOfFunds2.getPercentage());
-
-    assertEquals(
-        "The types for the sources of funds do not match",
-        sourceOfFunds1.getType(),
-        sourceOfFunds2.getType());
-  }
-
 }

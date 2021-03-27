@@ -76,6 +76,19 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the consent types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the consent types for
+   *     or <b>null</b> to retrieve the consent types for all locales
+   * @return the consent types
+   */
+  @WebMethod(operationName = "GetConsentTypes")
+  public List<ConsentType> getConsentTypes(@WebParam(name = "LocaleId") @XmlElement String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getConsentTypes(localeId);
+  }
+
+  /**
    * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
@@ -425,6 +438,19 @@ public class PartyReferenceWebService {
   public List<SourceOfFundsType> getSourceOfFundsTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
     return partyReferenceService.getSourceOfFundsTypes(localeId);
+  }
+
+  /**
+   * Retrieve the source of wealth types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
+   *     types for or <b>null</b> to retrieve the source of wealth types for all locales
+   * @return the source of wealth types
+   */
+  @WebMethod(operationName = "GetSourceOfWealthTypes")
+  public List<SourceOfWealthType> getSourceOfWealthTypes(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return partyReferenceService.getSourceOfWealthTypes(localeId);
   }
 
   /**

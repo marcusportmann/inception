@@ -117,14 +117,14 @@ public class ResidencePermit implements Serializable {
   @Column(name = "number", length = 30, nullable = false)
   private String number;
 
-  /** The party the residence permit is associated with. */
+  /** The person the residence permit is associated with. */
   @Schema(hidden = true)
   @JsonBackReference("residencePermitReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "party_id")
-  private PartyBase party;
+  @JoinColumn(name = "person_id")
+  private Person person;
 
   /** The code for the residence permit type. */
   @Schema(description = "The code for the residence permit type", required = true)
@@ -207,7 +207,7 @@ public class ResidencePermit implements Serializable {
 
     ResidencePermit other = (ResidencePermit) object;
 
-    return Objects.equals(party, other.party)
+    return Objects.equals(person, other.person)
         && Objects.equals(type, other.type)
         && Objects.equals(countryOfIssue, other.countryOfIssue)
         && Objects.equals(dateOfIssue, other.dateOfIssue);
@@ -259,13 +259,13 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Returns the party the residence permit is associated with.
+   * Returns the person the residence permit is associated with.
    *
-   * @return the party the residence permit is associated with
+   * @return the person the residence permit is associated with
    */
   @Schema(hidden = true)
-  public PartyBase getParty() {
-    return party;
+  public Person getPerson() {
+    return person;
   }
 
   /**
@@ -293,7 +293,7 @@ public class ResidencePermit implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode())
+    return ((person == null) ? 0 : person.hashCode())
         + ((type == null) ? 0 : type.hashCode())
         + ((countryOfIssue == null) ? 0 : countryOfIssue.hashCode())
         + ((dateOfIssue == null) ? 0 : dateOfIssue.hashCode());
@@ -337,13 +337,13 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Set the party the residence permit is associated with.
+   * Set the person the residence permit is associated with.
    *
-   * @param party the party the residence permit is associated with
+   * @param person the person the residence permit is associated with
    */
   @Schema(hidden = true)
-  public void setParty(PartyBase party) {
-    this.party = party;
+  public void setPerson(Person person) {
+    this.person = person;
   }
 
   /**
