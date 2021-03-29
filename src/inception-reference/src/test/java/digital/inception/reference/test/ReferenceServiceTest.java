@@ -17,13 +17,12 @@
 package digital.inception.reference.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import digital.inception.reference.Country;
 import digital.inception.reference.IReferenceService;
 import digital.inception.reference.Language;
 import digital.inception.reference.Region;
-import digital.inception.reference.VerificationMethod;
-import digital.inception.reference.VerificationStatus;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
@@ -144,48 +143,8 @@ public class ReferenceServiceTest {
   /** Test the reference validity check functionality. */
   @Test
   public void validityTest() throws Exception {
-    referenceService.isValidCountry("ZA");
-    referenceService.isValidLanguage("EN");
-    referenceService.isValidRegion("EC");
-    referenceService.isValidVerificationMethod("system");
-    referenceService.isValidVerificationStatus("complete");
-  }
-
-  /** Test the verification method functionality. */
-  @Test
-  public void verificationMethodTest() throws Exception {
-    List<VerificationMethod> retrievedVerificationMethods =
-        referenceService.getVerificationMethods();
-
-    assertEquals(
-        "The correct number of verification methods was not retrieved",
-        6,
-        retrievedVerificationMethods.size());
-
-    retrievedVerificationMethods = referenceService.getVerificationMethods("en-US");
-
-    assertEquals(
-        "The correct number of verification methods was not retrieved",
-        3,
-        retrievedVerificationMethods.size());
-  }
-
-  /** Test the verification status functionality. */
-  @Test
-  public void verificationStatusTest() throws Exception {
-    List<VerificationStatus> retrievedVerificationStatuses =
-        referenceService.getVerificationStatuses();
-
-    assertEquals(
-        "The correct number of verification statuses was not retrieved",
-        10,
-        retrievedVerificationStatuses.size());
-
-    retrievedVerificationStatuses = referenceService.getVerificationStatuses("en-US");
-
-    assertEquals(
-        "The correct number of verification statuses was not retrieved",
-        5,
-        retrievedVerificationStatuses.size());
+    assertTrue(referenceService.isValidCountry("ZA"));
+    assertTrue(referenceService.isValidLanguage("EN"));
+    assertTrue(referenceService.isValidRegion("EC"));
   }
 }

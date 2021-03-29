@@ -22,8 +22,6 @@ import digital.inception.reference.Country;
 import digital.inception.reference.IReferenceService;
 import digital.inception.reference.Language;
 import digital.inception.reference.Region;
-import digital.inception.reference.VerificationMethod;
-import digital.inception.reference.VerificationStatus;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.util.Comparator;
@@ -93,8 +91,6 @@ public class LiquibaseChangelogInsertsTest {
     //    boolean createTaxNumberTypeInserts = createLiquibaseInserts && false;
     //    boolean createTimeToContactInserts = createLiquibaseInserts && false;
     //    boolean createTitleInserts = createLiquibaseInserts && false;
-    boolean createVerificationMethodInserts = createLiquibaseInserts && false;
-    boolean createVerificationStatusInserts = createLiquibaseInserts && false;
 
     //    if (createContactMechanismTypeInserts) {
     //      for (ContactMechanismType contactMechanismType :
@@ -181,7 +177,8 @@ public class LiquibaseChangelogInsertsTest {
 
         System.out.println("<insert schemaName=\"reference\" tableName=\"countries\">");
         System.out.println("  <column name=\"code\" value=\"" + country.getCode() + "\"/>");
-        System.out.println("  <column name=\"iso3_code\" value=\"" + country.getIso3Code() + "\"/>");
+        System.out.println(
+            "  <column name=\"iso3_code\" value=\"" + country.getIso3Code() + "\"/>");
         System.out.println(
             "  <column name=\"locale_id\" value=\"" + country.getLocaleId() + "\"/>");
         System.out.println("  <column name=\"sort_index\" value=\"" + counter + "\"/>");
@@ -323,7 +320,9 @@ public class LiquibaseChangelogInsertsTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + language.getCode().toUpperCase() + "\"/>");
         System.out.println(
-            "      <column name=\"iso3_code\" value=\"" + language.getIso3Code().toUpperCase() + "\"/>");
+            "      <column name=\"iso3_code\" value=\""
+                + language.getIso3Code().toUpperCase()
+                + "\"/>");
         System.out.println(
             "      <column name=\"locale_id\" value=\"" + language.getLocaleId() + "\"/>");
         System.out.println(
@@ -931,61 +930,5 @@ public class LiquibaseChangelogInsertsTest {
     //
     //      System.out.println();
     //    }
-
-    if (createVerificationMethodInserts) {
-      for (VerificationMethod verificationMethod :
-          referenceService.getVerificationMethods("en-US")) {
-
-        System.out.println(
-            "    <insert schemaName=\"reference\" tableName=\"verification_methods\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + verificationMethod.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\""
-                + verificationMethod.getLocaleId()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + verificationMethod.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + verificationMethod.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + verificationMethod.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-
-      System.out.println();
-    }
-
-    if (createVerificationStatusInserts) {
-      for (VerificationStatus verificationStatus :
-          referenceService.getVerificationStatuses("en-US")) {
-
-        System.out.println(
-            "    <insert schemaName=\"reference\" tableName=\"verification_statuses\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + verificationStatus.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\""
-                + verificationStatus.getLocaleId()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + verificationStatus.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + verificationStatus.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + verificationStatus.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-
-      System.out.println();
-    }
   }
 }

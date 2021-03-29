@@ -43,6 +43,7 @@ import digital.inception.party.PhysicalAddressRole;
 import digital.inception.party.PhysicalAddressType;
 import digital.inception.party.PreferenceType;
 import digital.inception.party.PreferenceTypeCategory;
+import digital.inception.party.QualificationType;
 import digital.inception.party.Race;
 import digital.inception.party.ResidencePermitType;
 import digital.inception.party.ResidencyStatus;
@@ -354,6 +355,22 @@ public class PartyReferenceServiceTest {
         "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
   }
 
+
+  /** Test the qualification type reference functionality. */
+  @Test
+  public void qualificationTypeTest() throws Exception {
+    List<QualificationType> retrievedQualificationTypes = partyReferenceService.getQualificationTypes();
+
+    assertEquals(
+        "The correct number of qualification types was not retrieved", 28, retrievedQualificationTypes.size());
+
+    retrievedQualificationTypes = partyReferenceService.getQualificationTypes("en-US");
+
+    assertEquals(
+        "The correct number of qualification types was not retrieved", 14, retrievedQualificationTypes.size());
+  }
+
+
   /** Test the physical address purpose functionality. */
   @Test
   public void physicalAddressPurposeTest() throws Exception {
@@ -521,7 +538,7 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of role type attribute type constraints was not retrieved",
-        56,
+        57,
         retrievedRoleTypeAttributeTypeConstraints.size());
 
     retrievedRoleTypeAttributeTypeConstraints =
@@ -529,7 +546,7 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of role type attribute type constraints was not retrieved",
-        43,
+        44,
         retrievedRoleTypeAttributeTypeConstraints.size());
 
     retrievedRoleTypeAttributeTypeConstraints.stream()
@@ -696,7 +713,7 @@ public class PartyReferenceServiceTest {
   public void validityTest() throws Exception {
     assertTrue(partyReferenceService.isValidAttributeType(PartyType.PERSON.code(), "height"));
     assertTrue(partyReferenceService.isValidAttributeTypeCategory("anthropometric_measurements"));
-    assertTrue(partyReferenceService.isValidConsentType("person", "marketing"));
+    assertTrue(partyReferenceService.isValidConsentType("marketing"));
     assertTrue(
         partyReferenceService.isValidContactMechanismPurpose(
             "person", "email_address", "security"));
@@ -727,6 +744,7 @@ public class PartyReferenceServiceTest {
         partyReferenceService.isValidPreferenceType(
             PartyType.ORGANIZATION.code(), "correspondence_language"));
     assertTrue(partyReferenceService.isValidPreferenceTypeCategory("correspondence"));
+    assertTrue(partyReferenceService.isValidQualificationType("doctoral_degree"));
     assertTrue(partyReferenceService.isValidRace("white"));
     assertTrue(partyReferenceService.isValidResidencePermitType("za_general_work_visa"));
     assertTrue(partyReferenceService.isValidResidencyStatus("permanent_resident"));

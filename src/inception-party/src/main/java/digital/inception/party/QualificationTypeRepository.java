@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package digital.inception.reference;
+package digital.inception.party;
 
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>VerificationMethodRepository</b> interface declares the repository for the <b>
- * VerificationMethod</b> domain type.
+ * The <b>QualificationTypeRepository</b> interface declares the repository for the <b>
+ * QualificationType</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface VerificationMethodRepository
-    extends JpaRepository<VerificationMethod, VerificationMethodId> {
+public interface QualificationTypeRepository
+    extends JpaRepository<QualificationType, QualificationTypeId> {
 
-  List<VerificationMethod> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  List<QualificationType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

@@ -16,14 +16,11 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,9 +33,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import org.springframework.util.StringUtils;
 
 /**
  * The <b>ConsentType</b> class holds the information for a consent type.
@@ -47,12 +42,12 @@ import org.springframework.util.StringUtils;
  */
 @Schema(description = "A type of consent")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "ConsentType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "ConsentType",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "consent_types")
@@ -98,14 +93,6 @@ public class ConsentType implements Serializable {
   @Size(min = 1, max = 50)
   @Column(name = "name", length = 50, nullable = false)
   private String name;
-
-  /** The comma-delimited codes for the party types the consent type is associated with. */
-  @JsonIgnore
-  @XmlTransient
-  @NotNull
-  @Size(min = 1, max = 310)
-  @Column(name = "party_types", length = 310, nullable = false)
-  private String partyTypes;
 
   /** The sort index for the consent type. */
   @Schema(description = "The sort index for the consent type", required = true)
@@ -180,20 +167,6 @@ public class ConsentType implements Serializable {
   }
 
   /**
-   * Returns the codes for the party types the consent type is associated with.
-   *
-   * @return the codes for the party types the consent type is associated with
-   */
-  @Schema(
-      description = "The codes for the party types the consent type is associated with",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "PartyTypes", required = true)
-  public String[] getPartyTypes() {
-    return StringUtils.commaDelimitedListToStringArray(partyTypes);
-  }
-
-  /**
    * Returns the sort index for the consent type.
    *
    * @return the sort index for the consent type
@@ -210,17 +183,6 @@ public class ConsentType implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Returns whether the consent type is valid for the party type.
-   *
-   * @param partyTypeCode the party type code
-   * @return <b>true</b> if the consent type is valid for the party type or <b>false</b> otherwise
-   */
-  public boolean isValidForPartyType(String partyTypeCode) {
-    return Arrays.stream(getPartyTypes())
-        .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }
 
   /**
@@ -257,25 +219,6 @@ public class ConsentType implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * Set the codes for the party types the consent type is associated with.
-   *
-   * @param partyTypes the codes for the party types the consent type is associated with
-   */
-  public void setPartyTypes(String[] partyTypes) {
-    this.partyTypes = StringUtils.arrayToCommaDelimitedString(partyTypes);
-  }
-
-  /**
-   * Set the codes for the party types the consent type is associated with.
-   *
-   * @param partyTypes the codes for the party types the consent type is associated with
-   */
-  @JsonIgnore
-  public void setPartyTypes(Collection<String> partyTypes) {
-    this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
   }
 
   /**

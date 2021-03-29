@@ -374,6 +374,22 @@ public interface IPartyReferenceService {
   List<PreferenceType> getPreferenceTypes(String localeId) throws ServiceUnavailableException;
 
   /**
+   * Retrieve all the qualification types.
+   *
+   * @return the qualification types
+   */
+  List<QualificationType> getQualificationTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the qualification types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
+   *     types for or <b>null</b> to retrieve the qualification types for all locales
+   * @return the qualification types
+   */
+  List<QualificationType> getQualificationTypes(String localeId) throws ServiceUnavailableException;
+
+  /**
    * Retrieve all the races.
    *
    * @return the races
@@ -639,14 +655,12 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Check whether the code is a valid code for a consent type for the party type.
+   * Check whether the code is a valid code for a consent type.
    *
-   * @param partyTypeCode the party type code
    * @param consentTypeCode the code for the consent type
    * @return <b>true</b> if the code is a valid code for a consent type or <b>false</b> otherwise
    */
-  boolean isValidConsentType(String partyTypeCode, String consentTypeCode)
-      throws ServiceUnavailableException;
+  boolean isValidConsentType(String consentTypeCode) throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a contact mechanism purpose for the party type.
@@ -848,6 +862,15 @@ public interface IPartyReferenceService {
    */
   boolean isValidPreferenceTypeCategory(String preferenceTypeCategoryCode)
       throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a qualification type.
+   *
+   * @param qualificationTypeCode the code for the qualification type
+   * @return <b>true</b> if the code is a valid code for a qualification type or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidQualificationType(String qualificationTypeCode) throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a race.

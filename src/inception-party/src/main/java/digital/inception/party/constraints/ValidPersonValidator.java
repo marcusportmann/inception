@@ -112,7 +112,7 @@ public class ValidPersonValidator extends PartyValidator
         for (Consent consent : person.getConsents()) {
           if (StringUtils.hasText(consent.getType())) {
             if (!getPartyReferenceService()
-                .isValidConsentType(person.getType().code(), consent.getType())) {
+                .isValidConsentType(consent.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("consentType", consent.getType())
                   .buildConstraintViolationWithTemplate(
@@ -445,6 +445,19 @@ public class ValidPersonValidator extends PartyValidator
               isValid = false;
             }
           }
+        }
+
+        // Validate highest qualification
+        if (StringUtils.hasText(person.getHighestQualificationType())
+            && (!getPartyReferenceService().isValidQualificationType(person.getHighestQualificationType()))) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("highestQualificationType", person.getHighestQualificationType())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPerson.invalidHighestQualificationType.message}")
+              .addPropertyNode("highestQualificationType")
+              .addConstraintViolation();
+
+          isValid = false;
         }
 
         // Validate race
@@ -860,12 +873,12 @@ public class ValidPersonValidator extends PartyValidator
 
               break;
 
-            case "language":
+            case "highest_qualification_type":
               if (!validateRequiredAttributeConstraint(
                   roleType,
-                  person.getLanguage(),
-                  "language",
-                  "{digital.inception.party.constraints.ValidPerson.languageRequiredForRoleType.message}",
+                  person.getHighestQualificationType(),
+                  "highestQualificationType",
+                  "{digital.inception.party.constraints.ValidPerson.highestQualificationTypeRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {
                 isValid = false;
               }
@@ -890,6 +903,18 @@ public class ValidPersonValidator extends PartyValidator
                   person.getInitials(),
                   "initials",
                   "{digital.inception.party.constraints.ValidPerson.initialsRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+            case "language":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getLanguage(),
+                  "language",
+                  "{digital.inception.party.constraints.ValidPerson.languageRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {
                 isValid = false;
               }
@@ -1027,7 +1052,7 @@ public class ValidPersonValidator extends PartyValidator
             case "sources_of_wealth":
               if (!validateRequiredAttributeConstraint(
                   roleType,
-                  person.getSourcesOfFunds(),
+                  person.getSourcesOfWealth(),
                   "sourcesOfWealth",
                   "{digital.inception.party.constraints.ValidPerson.sourceOfWealthRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {

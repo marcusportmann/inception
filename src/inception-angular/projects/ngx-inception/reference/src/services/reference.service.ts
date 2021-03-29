@@ -24,8 +24,6 @@ import {catchError, map} from 'rxjs/operators';
 import {Country} from './country';
 import {Language} from './language';
 import {Region} from './region';
-import {VerificationMethod} from './verification-method';
-import {VerificationStatus} from './verification-status';
 
 /**
  * The Reference Service implementation.
@@ -121,56 +119,6 @@ export class ReferenceService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to retrieve the regions.', httpErrorResponse));
-    }));
-  }
-
-  /**
-   * Retrieve the verification methods.
-   *
-   * @return The verification methods.
-   */
-  getVerificationMethods(): Observable<VerificationMethod[]> {
-    let params = new HttpParams();
-
-    params = params.append('localeId', this.localeId);
-
-    return this.httpClient.get<VerificationMethod[]>(this.config.referenceApiUrlPrefix + '/verification-methods',
-      {params, reportProgress: true})
-    .pipe(map((verificationMethods: VerificationMethod[]) => {
-      return verificationMethods;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
-
-      return throwError(new ServiceUnavailableError('Failed to retrieve the verification methods.', httpErrorResponse));
-    }));
-  }
-
-  /**
-   * Retrieve the verification statuses.
-   *
-   * @return The verification statuses.
-   */
-  getVerificationStatuses(): Observable<VerificationStatus[]> {
-    let params = new HttpParams();
-
-    params = params.append('localeId', this.localeId);
-
-    return this.httpClient.get<VerificationStatus[]>(this.config.referenceApiUrlPrefix + '/verification-statuses',
-      {params, reportProgress: true})
-    .pipe(map((verificationStatuses: VerificationStatus[]) => {
-      return verificationStatuses;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
-
-      return throwError(new ServiceUnavailableError('Failed to retrieve the verification statuses.', httpErrorResponse));
     }));
   }
 }

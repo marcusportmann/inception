@@ -68,7 +68,6 @@ CREATE TABLE party.consent_types (
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
-  party_types VARCHAR(310) NOT NULL,
 
   PRIMARY KEY (code, locale_id)
 );
@@ -84,8 +83,6 @@ COMMENT ON COLUMN party.consent_types.sort_index IS 'The sort index for the cons
 COMMENT ON COLUMN party.consent_types.name IS 'The name of the consent type';
 
 COMMENT ON COLUMN party.consent_types.description IS 'The description for the consent type';
-
-COMMENT ON COLUMN party.consent_types.party_types IS 'The comma-delimited list of codes for the party types the consent type is associated with';
 
 
 CREATE TABLE party.contact_mechanism_purposes (
@@ -589,6 +586,29 @@ COMMENT ON COLUMN party.physical_address_roles.description IS 'The description f
 COMMENT ON COLUMN party.physical_address_roles.party_types IS 'The comma-delimited list of codes for the party types the physical address role is associated with';
 
 
+CREATE TABLE party.qualification_types (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX qualification_types_locale_id_ix ON party.qualification_types(locale_id);
+
+COMMENT ON COLUMN party.qualification_types.code IS 'The code for the qualification type';
+
+COMMENT ON COLUMN party.qualification_types.locale_id IS 'The Unicode locale identifier for the qualification type';
+
+COMMENT ON COLUMN party.qualification_types.sort_index IS 'The sort index for the qualification type';
+
+COMMENT ON COLUMN party.qualification_types.name IS 'The name of the qualification type';
+
+COMMENT ON COLUMN party.qualification_types.description IS 'The description for the qualification type';
+
+
 CREATE TABLE party.races (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
@@ -1019,9 +1039,10 @@ CREATE TABLE party.persons (
   employment_type            VARCHAR(30),
   gender                     VARCHAR(30),
   given_name                 VARCHAR(100),
-  language                   VARCHAR(30),
+  highest_qualification_type VARCHAR(30),
   id                         UUID          NOT NULL,
   initials                   VARCHAR(20),
+  language                   VARCHAR(30),  
   maiden_name                VARCHAR(100),
   marital_status             VARCHAR(30),
   marriage_type              VARCHAR(30),
@@ -1042,57 +1063,59 @@ CREATE TABLE party.persons (
 
 CREATE INDEX persons_date_of_birth_ix ON party.persons(date_of_birth);
 
-COMMENT ON COLUMN party.persons.countries_of_citizenship IS 'The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of citizenship for the person';
+COMMENT ON COLUMN party.persons.countries_of_citizenship IS 'The comma-delimited ISO 3166-1 alpha-2 codes for the countries of citizenship for the person';
 
-COMMENT ON COLUMN party.persons.countries_of_tax_residence IS 'The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the person';
+COMMENT ON COLUMN party.persons.countries_of_tax_residence IS 'The comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the person';
 
-COMMENT ON COLUMN party.persons.country_of_birth IS 'The optional code for the country of birth for the person';
+COMMENT ON COLUMN party.persons.country_of_birth IS 'The code for the country of birth for the person';
 
-COMMENT ON COLUMN party.persons.country_of_residence IS 'The optional code for the country of residence for the person';
+COMMENT ON COLUMN party.persons.country_of_residence IS 'The code for the country of residence for the person';
 
-COMMENT ON COLUMN party.persons.date_of_birth IS 'The optional date of birth for the person';
+COMMENT ON COLUMN party.persons.date_of_birth IS 'The date of birth for the person';
 
-COMMENT ON COLUMN party.persons.date_of_death IS 'The optional date of death for the person';
+COMMENT ON COLUMN party.persons.date_of_death IS 'The date of death for the person';
 
-COMMENT ON COLUMN party.persons.employment_status IS 'The optional code for the employment status for the person';
+COMMENT ON COLUMN party.persons.employment_status IS 'The code for the employment status for the person';
 
-COMMENT ON COLUMN party.persons.employment_type IS 'The optional code for the employment type for the person';
+COMMENT ON COLUMN party.persons.employment_type IS 'The code for the employment type for the person';
 
-COMMENT ON COLUMN party.persons.gender IS 'The optional code for the gender for the person';
+COMMENT ON COLUMN party.persons.gender IS 'The code for the gender for the person';
 
-COMMENT ON COLUMN party.persons.given_name IS 'The optional given name for the person';
+COMMENT ON COLUMN party.persons.given_name IS 'The given name for the person';
+
+COMMENT ON COLUMN party.persons.highest_qualification_type IS 'The code for the highest qualification type for the person';
 
 COMMENT ON COLUMN party.persons.id IS 'The Universally Unique Identifier (UUID) for the person';
 
-COMMENT ON COLUMN party.persons.initials IS 'The optional initials for the person';
+COMMENT ON COLUMN party.persons.initials IS 'The initials for the person';
 
-COMMENT ON COLUMN party.persons.language IS 'The optional code for the language for the person';
+COMMENT ON COLUMN party.persons.language IS 'The code for the language for the person';
 
-COMMENT ON COLUMN party.persons.maiden_name IS 'The optional maiden name for the person';
+COMMENT ON COLUMN party.persons.maiden_name IS 'The maiden name for the person';
 
-COMMENT ON COLUMN party.persons.marital_status IS 'The optional code for the marital status for the person';
+COMMENT ON COLUMN party.persons.marital_status IS 'The code for the marital status for the person';
 
-COMMENT ON COLUMN party.persons.marriage_type IS 'The optional code for the marriage type for the person if the person is married';
+COMMENT ON COLUMN party.persons.marriage_type IS 'The code for the marriage type for the person if the person is married';
 
-COMMENT ON COLUMN party.persons.middle_names IS 'The optional middle names for the person';
+COMMENT ON COLUMN party.persons.middle_names IS 'The middle names for the person';
 
-COMMENT ON COLUMN party.persons.occupation IS 'The optional code for the occupation for the person';
+COMMENT ON COLUMN party.persons.occupation IS 'The code for the occupation for the person';
 
-COMMENT ON COLUMN party.persons.preferred_name IS 'The optional preferred name for the person';
+COMMENT ON COLUMN party.persons.preferred_name IS 'The preferred name for the person';
 
-COMMENT ON COLUMN party.persons.race IS 'The optional code for the race for the person';
+COMMENT ON COLUMN party.persons.race IS 'The code for the race for the person';
 
-COMMENT ON COLUMN party.persons.residency_status IS 'The optional code for the residency status for the person';
+COMMENT ON COLUMN party.persons.residency_status IS 'The code for the residency status for the person';
 
-COMMENT ON COLUMN party.persons.residential_type IS 'The optional code for the residential type for the person';
+COMMENT ON COLUMN party.persons.residential_type IS 'The code for the residential type for the person';
 
-COMMENT ON COLUMN party.persons.surname IS 'The optional surname for the person';
+COMMENT ON COLUMN party.persons.surname IS 'The surname for the person';
 
-COMMENT ON COLUMN party.persons.tax_number IS 'The optional tax number for the person';
+COMMENT ON COLUMN party.persons.tax_number IS 'The tax number for the person';
 
-COMMENT ON COLUMN party.persons.tax_number_type IS 'The optional code for the tax number type for the person';
+COMMENT ON COLUMN party.persons.tax_number_type IS 'The code for the tax number type for the person';
 
-COMMENT ON COLUMN party.persons.title IS 'The optional code for the title for the person';
+COMMENT ON COLUMN party.persons.title IS 'The code for the title for the person';
 
 
 CREATE TABLE party.attributes (
@@ -1600,11 +1623,11 @@ INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, 
   VALUES ('anthropometric_measurements','weight', 'en-ZA', 103, 'Weight', 'Weight', 'person');
 
 
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('marketing', 'en-US', 1, 'Marketing Consent', 'Marketing Consent', 'organization,person');
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description)
+  VALUES ('marketing', 'en-US', 1, 'Marketing Consent', 'Marketing Consent');
 
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description, party_types)
-  VALUES ('marketing', 'en-ZA', 1, 'Marketing Consent', 'Marketing Consent', 'organization,person');
+INSERT INTO party.consent_types(code, locale_id, sort_index, name, description)
+  VALUES ('marketing', 'en-ZA', 1, 'Marketing Consent', 'Marketing Consent');
 
 
 INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, sort_index, name, description, party_types)
@@ -2288,6 +2311,66 @@ INSERT INTO party.preference_types (category, code, locale_id, sort_index, name,
   VALUES ('test','test_size', 'en-ZA', 9905, 'Test Size', 'Test Size', 'organization,person');
 
 
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('below_grade10', 'en-US', 1, 'Below Grade 10', 'Below Grade 10');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('grade10', 'en-US', 2, 'Grade 10', 'Grade 10');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('national_senior_certificate', 'en-US', 3, 'National Senior Certificate', 'National Senior Certificate');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('higher_certificate', 'en-US', 4, 'Higher Certificate', 'Higher Certificate');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('diploma', 'en-US', 5, 'Diploma', 'Diploma');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('advanced_diploma', 'en-US', 6, 'Advanced Diploma', 'Advanced Diploma');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('bachelors_degree', 'en-US', 7, 'Bachelor''s Degree', 'Bachelor''s Degree');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('graduate_certificate', 'en-US', 8, 'Graduate Certificate', 'Graduate Certificate');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('graduate_diploma', 'en-US', 9, 'Graduate Diploma', 'Graduate Diploma');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('masters_degree', 'en-US', 10, 'Master''s Degree', 'Master''s Degree');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('doctoral_degree', 'en-US', 11, 'Doctoral Degree', 'Doctoral Degree');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('professional_registration', 'en-US', 50, 'Professional Registration', 'Professional Registration');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('other_certificate', 'en-US', 98, 'Other Certificate', 'Other Certificate');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('other_qualification', 'en-US', 99, 'Other Qualification', 'Other Qualification');
+
+
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('below_grade10', 'en-ZA', 1, 'Below Grade 10', 'Below Grade 10');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('grade10', 'en-ZA', 2, 'Grade 10', 'Grade 10');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('national_senior_certificate', 'en-ZA', 3, 'National Senior Certificate', 'National Senior Certificate');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('higher_certificate', 'en-ZA', 4, 'Higher Certificate', 'Higher Certificate');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('diploma', 'en-ZA', 5, 'Diploma', 'Diploma');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('advanced_diploma', 'en-ZA', 6, 'Advanced Diploma', 'Advanced Diploma');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('bachelors_degree', 'en-ZA', 7, 'Bachelor''s Degree', 'Bachelor''s Degree');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('graduate_certificate', 'en-ZA', 8, 'Graduate Certificate', 'Graduate Certificate');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('graduate_diploma', 'en-ZA', 9, 'Graduate Diploma', 'Graduate Diploma');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('masters_degree', 'en-ZA', 10, 'Master''s Degree', 'Master''s Degree');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('doctoral_degree', 'en-ZA', 11, 'Doctoral Degree', 'Doctoral Degree');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('professional_registration', 'en-ZA', 50, 'Professional Registration', 'Professional Registration');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('other_certificate', 'en-ZA', 98, 'Other Certificate', 'Other Certificate');
+INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
+  VALUES ('other_qualification', 'en-ZA', 99, 'Other Qualification', 'Other Qualification');
+
+
 INSERT INTO party.races (code, locale_id, sort_index, name, description)
   VALUES ('black', 'en-US', 1, 'Black', 'Black');
 INSERT INTO party.races (code, locale_id, sort_index, name, description)
@@ -2466,6 +2549,8 @@ INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type
   VALUES ('test_person_role', 'gender', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'given_name', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'highest_qualification_type', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'identity_documents', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)

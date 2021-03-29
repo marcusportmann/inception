@@ -19,5 +19,3 @@ export * from './services/reference.service';
 export * from './services/country';
 export * from './services/language';
 export * from './services/region';
-export * from './services/verification-method';
-export * from './services/verification-status';

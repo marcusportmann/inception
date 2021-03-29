@@ -14,38 +14,37 @@
  * limitations under the License.
  */
 
-package digital.inception.reference;
+package digital.inception.party;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>VerificationMethodId</b> class implements the ID class for the <b>VerificationMethod</b>
- * class.
+ * The <b>QualificationTypeId</b> class implements the ID class for the <b>QualificationType</b> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class VerificationMethodId implements Serializable {
+public class QualificationTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the verification method. */
+  /** The code for the qualification type. */
   private String code;
 
-  /** The Unicode locale identifier for the verification method. */
+  /** The Unicode locale identifier for the qualification type. */
   private String localeId;
 
-  /** Constructs a new <b>VerificationMethodId</b>. */
-  public VerificationMethodId() {}
+  /** Constructs a new <b>QualificationTypeId</b>. */
+  public QualificationTypeId() {}
 
   /**
-   * Constructs a new <b>VerificationMethodId</b>.
+   * Constructs a new <b>QualificationTypeId</b>.
    *
-   * @param code the code for the verification method
-   * @param localeId the Unicode locale identifier for the verification method
+   * @param code the code for the qualification type
+   * @param localeId the Unicode locale identifier for the qualification type
    */
-  public VerificationMethodId(String code, String localeId) {
+  public QualificationTypeId(String code, String localeId) {
     this.code = code;
     this.localeId = localeId;
   }
@@ -70,7 +69,7 @@ public class VerificationMethodId implements Serializable {
       return false;
     }
 
-    VerificationMethodId other = (VerificationMethodId) object;
+    QualificationTypeId other = (QualificationTypeId) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }

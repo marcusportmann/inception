@@ -36,8 +36,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   filteredCountries$: Subject<Country[]> = new ReplaySubject<Country[]>();
   filteredLanguages$: Subject<Language[]> = new ReplaySubject<Language[]>();
   filteredRegions$: Subject<Region[]> = new ReplaySubject<Region[]>();
-  filteredVerificationMethods$: Subject<VerificationMethod[]> = new ReplaySubject<VerificationMethod[]>();
-  filteredVerificationStatuses$: Subject<VerificationStatus[]> = new ReplaySubject<VerificationStatus[]>();
   referenceForm: FormGroup;
   private subscriptions: Subscription = new Subscription();
 
@@ -50,9 +48,7 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       // tslint:disable-next-line
       country: ['', Validators.required],
       language: ['', Validators.required],
-      region: ['', Validators.required],
-      verificationMethod: ['', Validators.required],
-      verificationStatus: ['', Validators.required]
+      region: ['', Validators.required]
     });
   }
 
@@ -75,22 +71,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   displayRegion(region: Region): string {
     if (!!region) {
       return region.name;
-    } else {
-      return '';
-    }
-  }
-
-  displayVerificationMethod(verificationMethod: VerificationMethod): string {
-    if (!!verificationMethod) {
-      return verificationMethod.name;
-    } else {
-      return '';
-    }
-  }
-
-  displayVerificationStatus(verificationStatus: VerificationStatus): string {
-    if (!!verificationStatus) {
-      return verificationStatus.name;
     } else {
       return '';
     }
@@ -157,52 +137,12 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
           })).subscribe());
       }
     });
-
-    this.referenceService.getVerificationMethods().pipe(first()).subscribe((verificationMethods: VerificationMethod[]) => {
-      const verificationMethodControl = this.referenceForm.get('verificationMethod');
-
-      if (verificationMethodControl) {
-        this.subscriptions.add(verificationMethodControl.valueChanges.pipe(
-          startWith(''),
-          debounceTime(500),
-          map((value: string | VerificationMethod) => {
-            if (typeof (value) === 'string') {
-              this.filteredVerificationMethods$.next(verificationMethods.filter(
-                verificationMethod => verificationMethod.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
-            } else {
-              this.filteredVerificationMethods$.next(verificationMethods.filter(
-                verificationMethod => verificationMethod.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
-            }
-          })).subscribe());
-      }
-    });
-
-    this.referenceService.getVerificationStatuses().pipe(first()).subscribe((verificationStatuses: VerificationStatus[]) => {
-      const verificationStatusControl = this.referenceForm.get('verificationStatus');
-
-      if (verificationStatusControl) {
-        this.subscriptions.add(verificationStatusControl.valueChanges.pipe(
-          startWith(''),
-          debounceTime(500),
-          map((value: string | VerificationStatus) => {
-            if (typeof (value) === 'string') {
-              this.filteredVerificationStatuses$.next(verificationStatuses.filter(
-                verificationStatus => verificationStatus.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
-            } else {
-              this.filteredVerificationStatuses$.next(verificationStatuses.filter(
-                verificationStatus => verificationStatus.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
-            }
-          })).subscribe());
-      }
-    });
   }
 
   ok(): void {
     console.log('Country = ', this.referenceForm.get('country')!.value);
     console.log('Language = ', this.referenceForm.get('language')!.value);
     console.log('Region = ', this.referenceForm.get('region')!.value);
-    console.log('Verification Method = ', this.referenceForm.get('verificationMethod')!.value);
-    console.log('Verification Status = ', this.referenceForm.get('verificationStatus')!.value);
   }
 
 }

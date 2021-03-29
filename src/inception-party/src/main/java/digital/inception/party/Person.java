@@ -97,6 +97,7 @@ import org.springframework.util.StringUtils;
   "employmentType",
   "gender",
   "givenName",
+  "highestQualificationType",
   "initials",
   "language",
   "maidenName",
@@ -142,6 +143,7 @@ import org.springframework.util.StringUtils;
       "employmentType",
       "gender",
       "givenName",
+      "highestQualificationType",
       "initials",
       "language",
       "maidenName",
@@ -350,6 +352,11 @@ public class Person extends PartyBase implements Serializable {
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "given_name", length = 100)
   private String givenName;
+
+  /** The code for the highest qualification type for the person. */
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "highest_qualification_type", length = 30)
+  private String highestQualificationType;
 
   /** The initials for the person. */
   @Size(min = 1, max = 20)
@@ -901,6 +908,18 @@ public class Person extends PartyBase implements Serializable {
   @XmlElement(name = "GivenName")
   public String getGivenName() {
     return givenName;
+  }
+
+  /**
+   * Returns the code for the highest qualification type for the person.
+   *
+   * @return the code for the highest qualification type for the person
+   */
+  @Schema(description = "The code for the highest qualification type for the person")
+  @JsonProperty
+  @XmlElement(name = "HighestQualificationType")
+  public String getHighestQualificationType() {
+    return highestQualificationType;
   }
 
   /**
@@ -1854,6 +1873,15 @@ public class Person extends PartyBase implements Serializable {
     this.givenName = givenName;
 
     deriveName();
+  }
+
+  /**
+   * Set the code for the highest qualification type for the person.
+   *
+   * @param highestQualificationType the code for the highest qualification type for the person
+   */
+  public void setHighestQualificationType(String highestQualificationType) {
+    this.highestQualificationType = highestQualificationType;
   }
 
   /**

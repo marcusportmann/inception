@@ -90,6 +90,7 @@ public class Attribute implements Serializable {
     "employment_type",
     "gender",
     "given_name",
+    "highest_qualification_type",
     "id",
     "identity_documents",
     "initials",

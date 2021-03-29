@@ -1924,7 +1924,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid person",
-        41,
+        42,
         personConstraintViolations.size());
 
     Organization organization = getTestBasicOrganizationDetails();

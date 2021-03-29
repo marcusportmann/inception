@@ -87,30 +87,4 @@ public class ReferenceWebService {
       throws ServiceUnavailableException {
     return referenceService.getRegions(localeId);
   }
-
-  /**
-   * Retrieve the verification methods.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the verification
-   *     methods for or <b>null</b> to retrieve the verification methods for all locales
-   * @return the verification methods
-   */
-  @WebMethod(operationName = "GetVerificationMethods")
-  public List<VerificationMethod> getVerificationMethods(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return referenceService.getVerificationMethods(localeId);
-  }
-
-  /**
-   * Retrieve the verification statuses.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the verification
-   *     statuses for or <b>null</b> to retrieve the verification statuses for all locales
-   * @return the verification statuses
-   */
-  @WebMethod(operationName = "GetVerificationStatuses")
-  public List<VerificationStatus> getVerificationStatuses(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return referenceService.getVerificationStatuses(localeId);
-  }
 }

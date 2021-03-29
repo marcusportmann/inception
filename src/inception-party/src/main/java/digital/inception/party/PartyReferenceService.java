@@ -104,6 +104,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Preference Type Repository */
   private final PreferenceTypeRepository preferenceTypeRepository;
 
+  /** The Qualification Type Repository. */
+  private final QualificationTypeRepository qualificationTypeRepository;
+
   /** The Race Repository. */
   private final RaceRepository raceRepository;
 
@@ -160,6 +163,8 @@ public class PartyReferenceService implements IPartyReferenceService {
    * Constructs a new <b>PartyReferenceService</b>.
    *
    * @param validator the JSR-303 validator
+   * @param attributeTypeCategoryRepository the Attribute Type Category Repository
+   * @param attributeTypeRepository the Attribute Type Repository
    * @param consentTypeRepository the Consent Type Repository
    * @param contactMechanismPurposeRepository the Contact Mechanism Purpose Repository
    * @param contactMechanismRoleRepository the Contact Mechanism Role Repository
@@ -174,19 +179,18 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param marriageTypeRepository the Marriage Type Repository
    * @param nextOfKinTypeRepository the Next Of Kin Repository
    * @param occupationRepository the Occupation Repository
-   * @param attributeTypeCategoryRepository the Party Attribute Type Category Repository
-   * @param attributeTypeRepository the Party Attribute Type Repository
-   * @param rolePurposeRepository the Party Role Purpose Repository
-   * @param roleTypeRepository the Party Role Type Repository
    * @param physicalAddressPurposeRepository the Physical Address Purpose Repository
    * @param physicalAddressRoleRepository the Physical Address Role Repository
    * @param physicalAddressTypeRepository the Physical Address Type Repository
    * @param preferenceTypeCategoryRepository the Preference Type Category Repository
    * @param preferenceTypeRepository the Preference Type Repository
+   * @param qualificationTypeRepository the Qualification Type Repository
    * @param raceRepository the Race Repository
    * @param residencePermitTypeRepository the Residence Permit Type Repository
    * @param residencyStatusRepository the Residency Status Repository
    * @param residentialTypeRepository the Residential Type Repository
+   * @param rolePurposeRepository the Party Role Purpose Repository
+   * @param roleTypeRepository the Party Role Type Repository
    * @param roleTypeAttributeTypeConstraintRepository the Role Type Attribute Type Constraint
    *     Repository
    * @param roleTypePreferenceTypeConstraintRepository the Role Type Preference Type Constraint
@@ -201,6 +205,8 @@ public class PartyReferenceService implements IPartyReferenceService {
    */
   public PartyReferenceService(
       Validator validator,
+      AttributeTypeCategoryRepository attributeTypeCategoryRepository,
+      AttributeTypeRepository attributeTypeRepository,
       ConsentTypeRepository consentTypeRepository,
       ContactMechanismPurposeRepository contactMechanismPurposeRepository,
       ContactMechanismRoleRepository contactMechanismRoleRepository,
@@ -215,19 +221,18 @@ public class PartyReferenceService implements IPartyReferenceService {
       MarriageTypeRepository marriageTypeRepository,
       NextOfKinTypeRepository nextOfKinTypeRepository,
       OccupationRepository occupationRepository,
-      AttributeTypeCategoryRepository attributeTypeCategoryRepository,
-      AttributeTypeRepository attributeTypeRepository,
-      RolePurposeRepository rolePurposeRepository,
-      RoleTypeRepository roleTypeRepository,
       PhysicalAddressPurposeRepository physicalAddressPurposeRepository,
       PhysicalAddressRoleRepository physicalAddressRoleRepository,
       PhysicalAddressTypeRepository physicalAddressTypeRepository,
       PreferenceTypeCategoryRepository preferenceTypeCategoryRepository,
       PreferenceTypeRepository preferenceTypeRepository,
+      QualificationTypeRepository qualificationTypeRepository,
       RaceRepository raceRepository,
       ResidencePermitTypeRepository residencePermitTypeRepository,
       ResidencyStatusRepository residencyStatusRepository,
       ResidentialTypeRepository residentialTypeRepository,
+      RolePurposeRepository rolePurposeRepository,
+      RoleTypeRepository roleTypeRepository,
       RoleTypeAttributeTypeConstraintRepository roleTypeAttributeTypeConstraintRepository,
       RoleTypePreferenceTypeConstraintRepository roleTypePreferenceTypeConstraintRepository,
       SourceOfFundsTypeRepository sourceOfFundsTypeRepository,
@@ -238,6 +243,8 @@ public class PartyReferenceService implements IPartyReferenceService {
       TimeToContactRepository timeToContactRepository,
       TitleRepository titleRepository) {
     this.validator = validator;
+    this.attributeTypeCategoryRepository = attributeTypeCategoryRepository;
+    this.attributeTypeRepository = attributeTypeRepository;
     this.consentTypeRepository = consentTypeRepository;
     this.contactMechanismPurposeRepository = contactMechanismPurposeRepository;
     this.contactMechanismRoleRepository = contactMechanismRoleRepository;
@@ -252,19 +259,18 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.marriageTypeRepository = marriageTypeRepository;
     this.nextOfKinTypeRepository = nextOfKinTypeRepository;
     this.occupationRepository = occupationRepository;
-    this.attributeTypeCategoryRepository = attributeTypeCategoryRepository;
-    this.attributeTypeRepository = attributeTypeRepository;
-    this.rolePurposeRepository = rolePurposeRepository;
-    this.roleTypeRepository = roleTypeRepository;
     this.physicalAddressPurposeRepository = physicalAddressPurposeRepository;
     this.physicalAddressRoleRepository = physicalAddressRoleRepository;
     this.physicalAddressTypeRepository = physicalAddressTypeRepository;
     this.preferenceTypeCategoryRepository = preferenceTypeCategoryRepository;
     this.preferenceTypeRepository = preferenceTypeRepository;
+    this.qualificationTypeRepository = qualificationTypeRepository;
     this.raceRepository = raceRepository;
     this.residencePermitTypeRepository = residencePermitTypeRepository;
     this.residencyStatusRepository = residencyStatusRepository;
     this.residentialTypeRepository = residentialTypeRepository;
+    this.rolePurposeRepository = rolePurposeRepository;
+    this.roleTypeRepository = roleTypeRepository;
     this.roleTypeAttributeTypeConstraintRepository = roleTypeAttributeTypeConstraintRepository;
     this.roleTypePreferenceTypeConstraintRepository = roleTypePreferenceTypeConstraintRepository;
     this.sourceOfFundsTypeRepository = sourceOfFundsTypeRepository;
@@ -997,6 +1003,40 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
+   * Retrieve all the qualification types.
+   *
+   * @return the qualification types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'qualificationTypes.ALL'")
+  public List<QualificationType> getQualificationTypes() throws ServiceUnavailableException {
+    return getQualificationTypes(null);
+  }
+
+  /**
+   * Retrieve the qualification types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
+   *     types for or <b>null</b> to retrieve the qualification types for all locales
+   * @return the qualification types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'qualificationTypes.' + #localeId")
+  public List<QualificationType> getQualificationTypes(String localeId)
+      throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return qualificationTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return qualificationTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the qualification types", e);
+    }
+  }
+
+  /**
    * Retrieve all the races.
    *
    * @return the races
@@ -1548,24 +1588,19 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Check whether the code is a valid code for a consent type for the party type.
+   * Check whether the code is a valid code for a consent type.
    *
-   * @param partyTypeCode the party type code
    * @param consentTypeCode the code for the consent type
    * @return <b>true</b> if the code is a valid code for a consent type or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidConsentType(String partyTypeCode, String consentTypeCode)
-      throws ServiceUnavailableException {
+  public boolean isValidConsentType(String consentTypeCode) throws ServiceUnavailableException {
     if (!StringUtils.hasText(consentTypeCode)) {
       return false;
     }
 
     return self.getConsentTypes().stream()
-        .anyMatch(
-            consentType ->
-                (consentType.getCode().equals(consentTypeCode)
-                    && consentType.isValidForPartyType(partyTypeCode)));
+        .anyMatch(consentType -> consentType.getCode().equals(consentTypeCode));
   }
 
   /**
@@ -1979,6 +2014,24 @@ public class PartyReferenceService implements IPartyReferenceService {
         .anyMatch(
             preferenceTypeCategory ->
                 preferenceTypeCategory.getCode().equals(preferenceTypeCategoryCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a qualification type.
+   *
+   * @param qualificationTypeCode the code for the qualification type
+   * @return <b>true</b> if the code is a valid code for a qualification type or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidQualificationType(String qualificationTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(qualificationTypeCode)) {
+      return false;
+    }
+
+    return self.getQualificationTypes().stream()
+        .anyMatch(qualificationType -> qualificationType.getCode().equals(qualificationTypeCode));
   }
 
   /**

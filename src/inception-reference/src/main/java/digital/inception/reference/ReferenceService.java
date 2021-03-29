@@ -51,12 +51,6 @@ public class ReferenceService implements IReferenceService {
   /** The JSR-303 validator. */
   private final Validator validator;
 
-  /** The Verification Method Repository. */
-  private final VerificationMethodRepository verificationMethodRepository;
-
-  /** The Verification Status Repository. */
-  private final VerificationStatusRepository verificationStatusRepository;
-
   /** The internal reference to the Reference Service to enable caching. */
   @Resource private IReferenceService self;
 
@@ -67,22 +61,16 @@ public class ReferenceService implements IReferenceService {
    * @param countryRepository the Country Repository
    * @param languageRepository the Language Repository
    * @param regionRepository the Region Repository
-   * @param verificationMethodRepository the Verification Method Repository
-   * @param verificationStatusRepository the Verification Status Repository
    */
   public ReferenceService(
       Validator validator,
       CountryRepository countryRepository,
       LanguageRepository languageRepository,
-      RegionRepository regionRepository,
-      VerificationMethodRepository verificationMethodRepository,
-      VerificationStatusRepository verificationStatusRepository) {
+      RegionRepository regionRepository) {
     this.validator = validator;
     this.countryRepository = countryRepository;
     this.languageRepository = languageRepository;
     this.regionRepository = regionRepository;
-    this.verificationMethodRepository = verificationMethodRepository;
-    this.verificationStatusRepository = verificationStatusRepository;
   }
 
   /**
@@ -185,76 +173,6 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Retrieve all the verification methods.
-   *
-   * @return the verification methods
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'verificationMethods.ALL'")
-  public List<VerificationMethod> getVerificationMethods() throws ServiceUnavailableException {
-    return getVerificationMethods(null);
-  }
-
-  /**
-   * Retrieve the verification methods.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the verification
-   *     methods for or <b>null</b> to retrieve the verification methods for all locales
-   * @return the verification methods
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'verificationMethods.' + #localeId")
-  public List<VerificationMethod> getVerificationMethods(String localeId)
-      throws ServiceUnavailableException {
-    try {
-      if (!StringUtils.hasText(localeId)) {
-        return verificationMethodRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return verificationMethodRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the verification methods", e);
-    }
-  }
-
-  /**
-   * Retrieve all the verification statuses.
-   *
-   * @return the verification statuses
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'verificationStatuses.ALL'")
-  public List<VerificationStatus> getVerificationStatuses() throws ServiceUnavailableException {
-    return getVerificationStatuses(null);
-  }
-
-  /**
-   * Retrieve the verification statuses.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the verification
-   *     statuses for or <b>null</b> to retrieve the verification statuses for all locales
-   * @return the verification statuses
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'verificationStatuses.' + #localeId")
-  public List<VerificationStatus> getVerificationStatuses(String localeId)
-      throws ServiceUnavailableException {
-    try {
-      if (!StringUtils.hasText(localeId)) {
-        return verificationStatusRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return verificationStatusRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the verification statuses", e);
-    }
-  }
-
-  /**
    * Check whether the code is a valid code for a country.
    *
    * @param countryCode the code for the country
@@ -299,43 +217,5 @@ public class ReferenceService implements IReferenceService {
     }
 
     return self.getRegions().stream().anyMatch(region -> region.getCode().equals(regionCode));
-  }
-
-  /**
-   * Check whether the code is a valid code for a verification method.
-   *
-   * @param verificationMethodCode the code for the verification method
-   * @return <b>true</b> if the code is a valid code for a verification method or <b>false</b>
-   *     otherwise
-   */
-  @Override
-  public boolean isValidVerificationMethod(String verificationMethodCode)
-      throws ServiceUnavailableException {
-    if (!StringUtils.hasText(verificationMethodCode)) {
-      return false;
-    }
-
-    return self.getVerificationMethods().stream()
-        .anyMatch(
-            verificationMethod -> verificationMethod.getCode().equals(verificationMethodCode));
-  }
-
-  /**
-   * Check whether the code is a valid code for a verification status.
-   *
-   * @param verificationStatusCode the code for the verification status
-   * @return <b>true</b> if the code is a valid code for a verification status or <b>false</b>
-   *     otherwise
-   */
-  @Override
-  public boolean isValidVerificationStatus(String verificationStatusCode)
-      throws ServiceUnavailableException {
-    if (!StringUtils.hasText(verificationStatusCode)) {
-      return false;
-    }
-
-    return self.getVerificationStatuses().stream()
-        .anyMatch(
-            verificationStatus -> verificationStatus.getCode().equals(verificationStatusCode));
   }
 }

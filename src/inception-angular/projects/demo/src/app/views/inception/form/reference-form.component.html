@@ -49,38 +49,6 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm">
-          <mat-form-field>
-            <mat-label>Verification method</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('verificationMethod')" required="true" [matAutocomplete]="verificationMethodAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #verificationMethodAutocomplete="matAutocomplete" [displayWith]="displayVerificationMethod">
-              <mat-option *ngFor="let verificationMethod of filteredVerificationMethods$ | async" [value]="verificationMethod">
-                {{verificationMethod.name}}
-              </mat-option>
-            </mat-autocomplete>
-            <mat-error *ngIf="referenceForm.controls['verificationMethod'].errors && !referenceForm.controls['verificationMethod'].untouched">
-              <span *ngIf="referenceForm.controls['verificationMethod'].errors?.required">A verification method is required.</span>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm">
-          <mat-form-field>
-            <mat-label>Verification status</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('verificationStatus')" required="true" [matAutocomplete]="verificationStatusAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #verificationStatusAutocomplete="matAutocomplete" [displayWith]="displayVerificationStatus">
-              <mat-option *ngFor="let verificationStatus of filteredVerificationStatuses$ | async" [value]="verificationStatus">
-                {{verificationStatus.name}}
-              </mat-option>
-            </mat-autocomplete>
-            <mat-error *ngIf="referenceForm.controls['verificationStatus'].errors && !referenceForm.controls['verificationStatus'].untouched">
-              <span *ngIf="referenceForm.controls['verificationStatus'].errors?.required">A verification status is required.</span>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
     </mat-card-content>
     <mat-card-actions class="align-right">
       <button type="button" mat-flat-button color="link">Cancel</button>

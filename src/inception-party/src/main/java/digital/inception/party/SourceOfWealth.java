@@ -55,12 +55,12 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A source of wealth for a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "effectiveFrom", "effectiveTo", "percentage"})
+@JsonPropertyOrder({"type", "effectiveFrom", "effectiveTo"})
 @XmlRootElement(name = "SourceOfWealth", namespace = "http://inception.digital/party")
 @XmlType(
     name = "SourceOfWealth",
     namespace = "http://inception.digital/party",
-    propOrder = {"type", "effectiveFrom", "effectiveTo", "percentage"})
+    propOrder = {"type", "effectiveFrom", "effectiveTo"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "sources_of_wealth")

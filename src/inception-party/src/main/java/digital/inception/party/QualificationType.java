@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.reference;
+package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,28 +36,33 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>VerificationMethod</b> class holds the information for a verification status.
+ * The <b>QualificationType</b> class holds the information for a qualification type.
+ * <p>
+ * @see <a href="https://www.mastersportal.com/articles/1953/should-i-study-a-postgraduate-certificate-or-a-graduate-diploma-abroad.html">Should I Study a Postgraduate Certificate or a Graduate Diploma Abroad?</a>
+ * @see <a href="https://desbt.qld.gov.au/training/training-careers/about/qualifications">Australian Qualification Types</a>
+ * @see <a href="https://www.studylink.govt.nz/about-studylink/glossary/qualification-types.html#null">New Zealand Qualification Types</a>
+ * @see <a href="https://www.skillsportal.co.za/content/6-academic-qualifications-you-need-know">South African Academic Qualification Types</a>
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A verification status for an item of information")
+@Schema(description = "A qualification type")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "VerificationStatus", namespace = "http://inception.digital/reference")
+@XmlRootElement(name = "QualificationType", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "VerificationStatus",
-    namespace = "http://inception.digital/reference",
+    name = "QualificationType",
+    namespace = "http://inception.digital/party",
     propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "reference", name = "verification_statuses")
-@IdClass(VerificationStatusId.class)
-public class VerificationStatus implements Serializable {
+@Table(schema = "party", name = "qualification_types")
+@IdClass(QualificationTypeId.class)
+public class QualificationType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the verification status. */
-  @Schema(description = "The code for the verification status", required = true)
+  /** The code for the qualification type. */
+  @Schema(description = "The code for the qualification type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -66,8 +71,8 @@ public class VerificationStatus implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the verification status. */
-  @Schema(description = "The description for the verification status", required = true)
+  /** The description for the qualification type. */
+  @Schema(description = "The description for the qualification type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -75,10 +80,8 @@ public class VerificationStatus implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the verification status. */
-  @Schema(
-      description = "The Unicode locale identifier for the verification status",
-      required = true)
+  /** The Unicode locale identifier for the qualification type. */
+  @Schema(description = "The Unicode locale identifier for the qualification type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -87,8 +90,8 @@ public class VerificationStatus implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the verification status. */
-  @Schema(description = "The name of the verification status", required = true)
+  /** The name of the qualification type. */
+  @Schema(description = "The name of the qualification type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -96,16 +99,16 @@ public class VerificationStatus implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the verification status. */
-  @Schema(description = "The sort index for the verification status", required = true)
+  /** The sort index for the qualification type. */
+  @Schema(description = "The sort index for the qualification type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>VerificationStatus</b>. */
-  public VerificationStatus() {}
+  /** Constructs a new <b>QualificationType</b>. */
+  public QualificationType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -127,51 +130,51 @@ public class VerificationStatus implements Serializable {
       return false;
     }
 
-    VerificationStatus other = (VerificationStatus) object;
+    QualificationType other = (QualificationType) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the verification status.
+   * Returns the code for the qualification type.
    *
-   * @return the code for the verification status
+   * @return the code for the qualification type
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the verification status.
+   * Returns the description for the qualification type.
    *
-   * @return the description for the verification status
+   * @return the description for the qualification type
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the verification status.
+   * Returns the Unicode locale identifier for the qualification type.
    *
-   * @return the Unicode locale identifier for the verification status
+   * @return the Unicode locale identifier for the qualification type
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the verification status.
+   * Returns the name of the qualification type.
    *
-   * @return the name of the verification status
+   * @return the name of the qualification type
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the verification status.
+   * Returns the sort index for the qualification type.
    *
-   * @return the sort index for the verification status
+   * @return the sort index for the qualification type
    */
   public Integer getSortIndex() {
     return sortIndex;
@@ -188,45 +191,45 @@ public class VerificationStatus implements Serializable {
   }
 
   /**
-   * Set the code for the verification status.
+   * Set the code for the qualification type.
    *
-   * @param code the code for the verification status
+   * @param code the code for the qualification type
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the verification status.
+   * Set the description for the qualification type.
    *
-   * @param description the description for the verification status
+   * @param description the description for the qualification type
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the verification status.
+   * Set the Unicode locale identifier for the qualification type.
    *
-   * @param localeId the Unicode locale identifier for the verification status
+   * @param localeId the Unicode locale identifier for the qualification type
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the verification status.
+   * Set the name of the qualification type.
    *
-   * @param name the name of the verification status
+   * @param name the name of the qualification type
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the verification status.
+   * Set the sort index for the qualification type.
    *
-   * @param sortIndex the sort index for the verification status
+   * @param sortIndex the sort index for the qualification type
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
