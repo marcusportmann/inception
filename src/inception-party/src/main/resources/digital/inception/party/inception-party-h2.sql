@@ -1392,6 +1392,39 @@ COMMENT ON COLUMN party.identity_documents.type IS 'The code for the identity do
 COMMENT ON COLUMN party.identity_documents.updated IS 'The date and time the identity document was last updated';
 
 
+CREATE TABLE party.language_proficiencies (
+  created      TIMESTAMP   NOT NULL,
+  person_id    UUID        NOT NULL,
+  language     VARCHAR(30) NOT NULL,
+  listen_level VARCHAR(15) NOT NULL,
+  read_level   VARCHAR(15) NOT NULL,
+  speak_level  VARCHAR(15) NOT NULL,
+  updated      TIMESTAMP,
+  write_level  VARCHAR(15) NOT NULL,
+
+  PRIMARY KEY (person_id, language),
+  CONSTRAINT language_proficiencies_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
+);
+
+CREATE INDEX language_proficiencies_person_id_ix ON party.language_proficiencies(person_id);
+
+COMMENT ON COLUMN party.language_proficiencies.created IS 'The date and time the language proficiency was created';
+
+COMMENT ON COLUMN party.language_proficiencies.person_id IS 'The Universally Unique Identifier (UUID) for the person the language proficiency is associated with';
+
+COMMENT ON COLUMN party.language_proficiencies.language IS 'The ISO 639-1 alpha-2 code for the language';
+
+COMMENT ON COLUMN party.language_proficiencies.listen_level IS 'The listen proficiency level for the language';
+
+COMMENT ON COLUMN party.language_proficiencies.read_level IS 'The read proficiency level for the language';
+
+COMMENT ON COLUMN party.language_proficiencies.speak_level IS 'The speak proficiency level for the language';
+
+COMMENT ON COLUMN party.language_proficiencies.updated IS 'The date and time the language proficiency was last updated';
+
+COMMENT ON COLUMN party.language_proficiencies.write_level IS 'The write proficiency level for the language';
+
+
 CREATE TABLE party.locks (
   created        TIMESTAMP   NOT NULL,
   effective_from DATE        NOT NULL,

@@ -32,6 +32,8 @@ import digital.inception.party.Education;
 import digital.inception.party.Employment;
 import digital.inception.party.IPartyService;
 import digital.inception.party.IdentityDocument;
+import digital.inception.party.LanguageProficiency;
+import digital.inception.party.LanguageProficiencyLevel;
 import digital.inception.party.Lock;
 import digital.inception.party.Organization;
 import digital.inception.party.OrganizationSortBy;
@@ -1091,6 +1093,24 @@ public class PartyServiceTest {
         constraintViolations.size());
   }
 
+  /** Test the invalid language proficiency verification functionality. */
+  @Test
+  public void invalidLanguageProficiencyTest() {
+    Person person = getTestBasicPersonDetails();
+
+    LanguageProficiency languageProficiency = new LanguageProficiency();
+    languageProficiency.setLanguage("XX");
+
+    person.addLanguageProficiency(languageProficiency);
+
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the person with an invalid language proficiency",
+        5,
+        constraintViolations.size());
+  }
+
   /** Test the invalid organization attribute test. */
   @Test
   public void invalidOrganizationAttributeTest() {
@@ -1351,6 +1371,57 @@ public class PartyServiceTest {
         "The correct number of constraint violations was not found for the invalid unstructured address",
         16,
         constraintViolations.size());
+  }
+
+  /** Test the language proficiency functionality. */
+  @Test
+  public void languageProficiencyTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addLanguageProficiency(
+        new LanguageProficiency(
+            "EN",
+            LanguageProficiencyLevel.PROFICIENT,
+            LanguageProficiencyLevel.ADVANCED,
+            LanguageProficiencyLevel.INTERMEDIATE,
+            LanguageProficiencyLevel.ELEMENTARY));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    assertTrue(retrievedPerson.hasLanguageProficiencyWithLanguage("EN"));
+
+    compareLanguageProficiencies(
+        person.getLanguageProficiencyWithLanguage("EN").get(),
+        retrievedPerson.getLanguageProficiencyWithLanguage("EN").get());
+
+    person.removeLanguageProficiencyWithLanguage("EN");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setLanguageProficiencies(
+        Set.of(
+            new LanguageProficiency(
+                "EN",
+                LanguageProficiencyLevel.PROFICIENT,
+                LanguageProficiencyLevel.ADVANCED,
+                LanguageProficiencyLevel.INTERMEDIATE,
+                LanguageProficiencyLevel.ELEMENTARY)));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
   }
 
   /** Test the lock functionality. */
@@ -2621,6 +2692,39 @@ public class PartyServiceTest {
         "The types for the identity documents do not match",
         identityDocument1.getType(),
         identityDocument2.getType());
+  }
+
+  private void compareLanguageProficiencies(
+      LanguageProficiency languageProficiency1, LanguageProficiency languageProficiency2) {
+    assertEquals(
+        "The languages for the language proficiencies do not match",
+        languageProficiency1.getLanguage(),
+        languageProficiency2.getLanguage());
+
+    assertEquals(
+        "The listen levels for the language proficiencies do not match",
+        languageProficiency1.getListenLevel(),
+        languageProficiency2.getListenLevel());
+
+    assertEquals(
+        "The persons for the language proficiencies do not match",
+        languageProficiency1.getPerson(),
+        languageProficiency2.getPerson());
+
+    assertEquals(
+        "The read levels for the language proficiencies do not match",
+        languageProficiency1.getReadLevel(),
+        languageProficiency2.getReadLevel());
+
+    assertEquals(
+        "The speak levels for the language proficiencies do not match",
+        languageProficiency1.getSpeakLevel(),
+        languageProficiency2.getSpeakLevel());
+
+    assertEquals(
+        "The write levels for the language proficiencies do not match",
+        languageProficiency1.getWriteLevel(),
+        languageProficiency2.getWriteLevel());
   }
 
   private void compareLocks(Lock lock1, Lock lock2) {

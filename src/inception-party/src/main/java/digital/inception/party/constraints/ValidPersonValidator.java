@@ -24,6 +24,7 @@ import digital.inception.party.Education;
 import digital.inception.party.Employment;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
+import digital.inception.party.LanguageProficiency;
 import digital.inception.party.Lock;
 import digital.inception.party.Person;
 import digital.inception.party.PhysicalAddress;
@@ -439,6 +440,24 @@ public class ValidPersonValidator extends PartyValidator
               .addConstraintViolation();
 
           isValid = false;
+        }
+
+        // Validate language proficiencies
+        for (LanguageProficiency languageProficiency : person.getLanguageProficiencies()) {
+          if (StringUtils.hasText(languageProficiency.getLanguage())) {
+            if (!getReferenceService().isValidLanguage(languageProficiency.getLanguage())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("language", languageProficiency.getLanguage())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidLanguageForLanguageProficiency.message}")
+                  .addPropertyNode("languageProficiencies")
+                  .addPropertyNode("language")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
         }
 
         // Validate locks

@@ -37,17 +37,6 @@ public class ContactMechanismPurposeId implements Serializable {
   private String localeId;
 
   /**
-   * Constructs a new <b>ContactMechanismPurposeId</b>.
-   *
-   * @param code the code for the contact mechanism purpose
-   * @param localeId the Unicode locale identifier for the contact mechanism purpose
-   */
-  public ContactMechanismPurposeId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
-
-  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare

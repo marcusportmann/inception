@@ -38,17 +38,6 @@ public class LanguageId implements Serializable {
   private String localeId;
 
   /**
-   * Constructs a new <b>LanguageId</b>.
-   *
-   * @param code the ISO 639-1 alpha-2 code for the language
-   * @param localeId the Unicode locale identifier for the language
-   */
-  public LanguageId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
-
-  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare

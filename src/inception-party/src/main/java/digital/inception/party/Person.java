@@ -240,6 +240,15 @@ public class Person extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<IdentityDocument> identityDocuments = new HashSet<>();
 
+  /** The language proficiencies for the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "person",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<LanguageProficiency> languageProficiencies = new HashSet<>();
+
   /** The locks applied to the person. */
   @Valid
   @OneToMany(
@@ -568,6 +577,22 @@ public class Person extends PartyBase implements Serializable {
     identityDocument.setParty(this);
 
     identityDocuments.add(identityDocument);
+  }
+
+  /**
+   * Add the language proficiency for the person.
+   *
+   * @param languageProficiency the language proficiency
+   */
+  public void addLanguageProficiency(LanguageProficiency languageProficiency) {
+    languageProficiencies.removeIf(
+        existingLanguageProficiency ->
+            Objects.equals(
+                existingLanguageProficiency.getLanguage(), languageProficiency.getLanguage()));
+
+    languageProficiency.setPerson(this);
+
+    languageProficiencies.add(languageProficiency);
   }
 
   /**
@@ -1117,6 +1142,33 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns the language proficiencies for the person.
+   *
+   * @return the language proficiencies for the person
+   */
+  @Schema(description = "The language proficiencies for the person")
+  @JsonProperty
+  @JsonManagedReference("languageProficiencyReference")
+  @XmlElementWrapper(name = "LanguageProficiencies")
+  @XmlElement(name = "LanguageProficiency")
+  public Set<LanguageProficiency> getLanguageProficiencies() {
+    return languageProficiencies;
+  }
+
+  /**
+   * Retrieve the language proficiency with the specified language for the person.
+   *
+   * @param language the ISO 639-1 alpha-2 code for the language
+   * @return an Optional containing the language proficiency with the specified language for the
+   *     person or an empty Optional if the language proficiency could not be found
+   */
+  public Optional<LanguageProficiency> getLanguageProficiencyWithLanguage(String language) {
+    return languageProficiencies.stream()
+        .filter(languageProficiency -> Objects.equals(languageProficiency.getLanguage(), language))
+        .findFirst();
+  }
+
+  /**
    * Retrieve the lock with the specified type for the person.
    *
    * @param type the code for the lock type
@@ -1569,7 +1621,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has an attribute with the specified type.
    *
    * @param type the code for the attribute type
-   * @return <b>true</b>> if the person has an attribute with the specified type or <b>false</b>
+   * @return <b>true</b> if the person has an attribute with the specified type or <b>false</b>
    *     otherwise
    */
   public boolean hasAttributeWithType(String type) {
@@ -1580,7 +1632,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a consent with the specified type.
    *
    * @param type the code for the consent type
-   * @return <b>true</b>> if the person has a consent with the specified type or <b>false</b>
+   * @return <b>true</b> if the person has a consent with the specified type or <b>false</b>
    *     otherwise
    */
   public boolean hasConsentWithType(String type) {
@@ -1591,7 +1643,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a contact mechanism with the specified role.
    *
    * @param role the code for the contact mechanism role
-   * @return <b>true</b>> if the person has a contact mechanism with the specified role or
+   * @return <b>true</b> if the person has a contact mechanism with the specified role or
    *     <b>false</b> otherwise
    */
   public boolean hasContactMechanismWithRole(String role) {
@@ -1603,7 +1655,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a contact mechanism with the specified type.
    *
    * @param type the code for the contact mechanism type
-   * @return <b>true</b>> if the person has a contact mechanism with the specified type or
+   * @return <b>true</b> if the person has a contact mechanism with the specified type or
    *     <b>false</b> otherwise
    */
   public boolean hasContactMechanismWithType(String type) {
@@ -1615,7 +1667,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has an identity document with the specified type.
    *
    * @param type the code for the identity document type
-   * @return <b>true</b>> if the person has an identity document with the specified type or
+   * @return <b>true</b> if the person has an identity document with the specified type or
    *     <b>false</b> otherwise
    */
   public boolean hasIdentityDocumentWithType(String type) {
@@ -1624,10 +1676,23 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns whether the person has a language proficiency with the specified language.
+   *
+   * @param language the ISO 639-1 alpha-2 code for the language
+   * @return <b>true</b> if the person has a language proficiency with the specified language or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasLanguageProficiencyWithLanguage(String language) {
+    return languageProficiencies.stream()
+        .anyMatch(
+            languageProficiency -> Objects.equals(languageProficiency.getLanguage(), language));
+  }
+
+  /**
    * Returns whether the person has a lock with the specified type.
    *
    * @param type the code for the lock type
-   * @return <b>true</b>> if the person has a lock with the specified type or <b>false</b> otherwise
+   * @return <b>true</b> if the person has a lock with the specified type or <b>false</b> otherwise
    */
   public boolean hasLockWithType(String type) {
     return locks.stream().anyMatch(lock -> Objects.equals(lock.getType(), type));
@@ -1637,7 +1702,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a physical address with the specified role.
    *
    * @param role the code for the physical address role
-   * @return <b>true</b>> if the person has a physical address with the specified role or
+   * @return <b>true</b> if the person has a physical address with the specified role or
    *     <b>false</b> otherwise
    */
   public boolean hasPhysicalAddressWithRole(String role) {
@@ -1649,7 +1714,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a physical address with the specified type.
    *
    * @param type the code for the physical address type
-   * @return <b>true</b>> if the person has a physical address with the specified type or
+   * @return <b>true</b> if the person has a physical address with the specified type or
    *     <b>false</b> otherwise
    */
   public boolean hasPhysicalAddressWithType(String type) {
@@ -1661,7 +1726,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a preference with the specified type.
    *
    * @param type the code for the preference type
-   * @return <b>true</b>> if the person has a preference with the specified type or <b>false</b>
+   * @return <b>true</b> if the person has a preference with the specified type or <b>false</b>
    *     otherwise
    */
   public boolean hasPreferenceWithType(String type) {
@@ -1672,7 +1737,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a residence permit with the specified type.
    *
    * @param type the code for the residence permit type
-   * @return <b>true</b>> if the person has a residence permit with the specified type or
+   * @return <b>true</b> if the person has a residence permit with the specified type or
    *     <b>false</b> otherwise
    */
   public boolean hasResidencePermitWithType(String type) {
@@ -1684,7 +1749,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a role with the specified type.
    *
    * @param type the code for the role type
-   * @return <b>true</b>> if the person has a role with the specified type or <b>false</b> otherwise
+   * @return <b>true</b> if the person has a role with the specified type or <b>false</b> otherwise
    */
   public boolean hasRoleWithType(String type) {
     return roles.stream().anyMatch(role -> Objects.equals(role.getType(), type));
@@ -1694,8 +1759,8 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a source of funds with the specified type.
    *
    * @param type the code for the source of funds type
-   * @return <b>true</b>> if the person has a source of funds with the specified type or
-   *     <b>false</b> otherwise
+   * @return <b>true</b> if the person has a source of funds with the specified type or <b>false</b>
+   *     otherwise
    */
   public boolean hasSourceOfFundsWithType(String type) {
     return sourcesOfFunds.stream()
@@ -1706,7 +1771,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a source of wealth with the specified type.
    *
    * @param type the code for the source of wealth type
-   * @return <b>true</b>> if the person has a source of wealth with the specified type or
+   * @return <b>true</b> if the person has a source of wealth with the specified type or
    *     <b>false</b> otherwise
    */
   public boolean hasSourceOfWealthWithType(String type) {
@@ -1718,7 +1783,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a status with the specified type.
    *
    * @param type the code for the status type
-   * @return <b>true</b>> if the person has a status with the specified type or <b>false</b>
+   * @return <b>true</b> if the person has a status with the specified type or <b>false</b>
    *     otherwise
    */
   public boolean hasStatusWithType(String type) {
@@ -1729,7 +1794,7 @@ public class Person extends PartyBase implements Serializable {
    * Returns whether the person has a tax number with the specified type.
    *
    * @param type the code for the tax number type
-   * @return <b>true</b>> if the person has a tax number with the specified type or <b>false</b>
+   * @return <b>true</b> if the person has a tax number with the specified type or <b>false</b>
    *     otherwise
    */
   public boolean hasTaxNumberWithType(String type) {
@@ -1810,6 +1875,17 @@ public class Person extends PartyBase implements Serializable {
   public void removeIdentityDocumentWithType(String type) {
     identityDocuments.removeIf(
         existingIdentityDocument -> Objects.equals(existingIdentityDocument.getType(), type));
+  }
+
+  /**
+   * Remove the language proficiency with the specified language for the person.
+   *
+   * @param language the ISO 639-1 alpha-2 code for the language
+   */
+  public void removeLanguageProficiencyWithLanguage(String language) {
+    languageProficiencies.removeIf(
+        existingLanguageProficiency ->
+            Objects.equals(existingLanguageProficiency.getLanguage(), language));
   }
 
   /**
@@ -2142,6 +2218,17 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setLanguage(String language) {
     this.language = language;
+  }
+
+  /**
+   * Set the language proficiencies for the person.
+   *
+   * @param languageProficiencies the language proficiencies for the person
+   */
+  public void setLanguageProficiencies(Set<LanguageProficiency> languageProficiencies) {
+    languageProficiencies.forEach(languageProficiency -> languageProficiency.setPerson(this));
+    this.languageProficiencies.clear();
+    this.languageProficiencies.addAll(languageProficiencies);
   }
 
   /**

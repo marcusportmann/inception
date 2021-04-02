@@ -767,7 +767,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has an attribute with the specified type.
    *
    * @param type the code for the attribute type
-   * @return <b>true</b>> if the organization has an attribute with the specified type or
+   * @return <b>true</b> if the organization has an attribute with the specified type or
    *     <b>false</b> otherwise
    */
   public boolean hasAttributeWithType(String type) {
@@ -778,7 +778,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a contact mechanism with the specified role.
    *
    * @param role the code for the contact mechanism role
-   * @return <b>true</b>> if the organization has a contact mechanism with the specified role or
+   * @return <b>true</b> if the organization has a contact mechanism with the specified role or
    *     <b>false</b> otherwise
    */
   public boolean hasContactMechanismWithRole(String role) {
@@ -790,7 +790,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a contact mechanism with the specified type.
    *
    * @param type the code for the contact mechanism type
-   * @return <b>true</b>> if the organization has a contact mechanism with the specified type or
+   * @return <b>true</b> if the organization has a contact mechanism with the specified type or
    *     <b>false</b> otherwise
    */
   public boolean hasContactMechanismWithType(String type) {
@@ -802,7 +802,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has an identity document with the specified type.
    *
    * @param type the code for the identity document type
-   * @return <b>true</b>> if the organization has an identity document with the specified type or
+   * @return <b>true</b> if the organization has an identity document with the specified type or
    *     <b>false</b> otherwise
    */
   public boolean hasIdentityDocumentWithType(String type) {
@@ -814,7 +814,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a lock with the specified type.
    *
    * @param type the code for the lock type
-   * @return <b>true</b>> if the organization has a lock with the specified type or <b>false</b>
+   * @return <b>true</b> if the organization has a lock with the specified type or <b>false</b>
    *     otherwise
    */
   public boolean hasLockWithType(String type) {
@@ -825,7 +825,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a physical address with the specified role.
    *
    * @param role the code for the physical address role
-   * @return <b>true</b>> if the organization has a physical address with the specified role or
+   * @return <b>true</b> if the organization has a physical address with the specified role or
    *     <b>false</b> otherwise
    */
   public boolean hasPhysicalAddressWithRole(String role) {
@@ -837,7 +837,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a physical address with the specified type.
    *
    * @param type the code for the physical address type
-   * @return <b>true</b>> if the organization has a physical address with the specified type or
+   * @return <b>true</b> if the organization has a physical address with the specified type or
    *     <b>false</b> otherwise
    */
   public boolean hasPhysicalAddressWithType(String type) {
@@ -849,7 +849,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a preference with the specified type.
    *
    * @param type the code for the preference type
-   * @return <b>true</b>> if the organization has a preference with the specified type or
+   * @return <b>true</b> if the organization has a preference with the specified type or
    *     <b>false</b> otherwise
    */
   public boolean hasPreferenceWithType(String type) {
@@ -860,7 +860,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a role with the specified type.
    *
    * @param type the code for the role type
-   * @return <b>true</b>> if the organization has a role with the specified type or <b>false</b>
+   * @return <b>true</b> if the organization has a role with the specified type or <b>false</b>
    *     otherwise
    */
   public boolean hasRoleWithType(String type) {
@@ -871,7 +871,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a status with the specified type.
    *
    * @param type the code for the status type
-   * @return <b>true</b>> if the organization has a status with the specified type or <b>false</b>
+   * @return <b>true</b> if the organization has a status with the specified type or <b>false</b>
    *     otherwise
    */
   public boolean hasStatusWithType(String type) {
@@ -882,7 +882,7 @@ public class Organization extends PartyBase implements Serializable {
    * Returns whether the organization has a tax number with the specified type.
    *
    * @param type the code for the tax number type
-   * @return <b>true</b>> if the organization has a tax number with the specified type or
+   * @return <b>true</b> if the organization has a tax number with the specified type or
    *     <b>false</b> otherwise
    */
   public boolean hasTaxNumberWithType(String type) {

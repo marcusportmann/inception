@@ -14,29 +14,31 @@
  * limitations under the License.
  */
 
-package digital.inception.reference;
+package digital.inception.party;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
- * The <b>RegionId</b> class implements the ID class for the <b>Region</b> class.
+ * The <b>LanguageProficiencyId</b> class implements the ID class for the <b>LanguageProficiency</b>
+ * class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class RegionId implements Serializable {
+public class LanguageProficiencyId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ISO 3166-2 subdivision code for the region. */
-  private String code;
+  /** The ISO 639-1 alpha-2 code for the language. */
+  private String language;
 
-  /** The ISO 3166-1 alpha-2 code for the country the region is associated with. */
-  private String country;
-
-  /** The Unicode locale identifier for the region. */
-  private String localeId;
+  /**
+   * The Universally Unique Identifier (UUID) for the person the language proficiency is associated
+   * with.
+   */
+  private UUID person;
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -58,11 +60,9 @@ public class RegionId implements Serializable {
       return false;
     }
 
-    RegionId other = (RegionId) object;
+    LanguageProficiencyId other = (LanguageProficiencyId) object;
 
-    return Objects.equals(country, other.country)
-        && Objects.equals(code, other.code)
-        && Objects.equals(localeId, other.localeId);
+    return Objects.equals(person, other.person) && Objects.equals(language, other.language);
   }
 
   /**
@@ -72,8 +72,7 @@ public class RegionId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((country == null) ? 0 : country.hashCode())
-        + ((code == null) ? 0 : code.hashCode())
-        + ((localeId == null) ? 0 : localeId.hashCode());
+    return ((person == null) ? 0 : person.hashCode())
+        + ((language == null) ? 0 : language.hashCode());
   }
 }

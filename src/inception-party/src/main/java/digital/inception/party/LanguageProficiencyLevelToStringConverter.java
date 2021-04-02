@@ -17,24 +17,25 @@
 package digital.inception.party;
 
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>StringToConstraintTypeConverter</b> class implements the Spring converter that
- * converts a <b>String</b> type into a <b>ConstraintType</b> type.
+ * The <b>LanguageProficiencyLevelToStringConverter</b> class implements the Spring converter that
+ * converts a <b>LanguageProficiencyLevel</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
 @Component
-@ReadingConverter
-public class StringToConstraintTypeConverter implements Converter<String, ConstraintType> {
+@WritingConverter
+public class LanguageProficiencyLevelToStringConverter
+    implements Converter<LanguageProficiencyLevel, String> {
 
-  /** Constructs a new <b>StringToConstraintTypeConverter</b>. */
-  public StringToConstraintTypeConverter() {}
+  /** Constructs a new <b>LanguageProficiencyLevelToStringConverter</b>. */
+  public LanguageProficiencyLevelToStringConverter() {}
 
   @Override
-  public ConstraintType convert(String source) {
-    return ConstraintType.fromCode(source);
+  public String convert(LanguageProficiencyLevel source) {
+    return source.code();
   }
 }

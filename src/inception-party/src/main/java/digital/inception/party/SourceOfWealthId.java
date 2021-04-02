@@ -43,9 +43,6 @@ public class SourceOfWealthId implements Serializable {
   /** The code for the source of wealth type. */
   private String type;
 
-  /** Constructs a new <b>SourceOfWealthId</b>. */
-  public SourceOfWealthId() {}
-
   /**
    * Indicates whether some other object is "equal to" this one.
    *
