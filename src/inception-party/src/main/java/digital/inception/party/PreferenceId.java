@@ -25,6 +25,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings({"UnusedDeclaration"})
 public class PreferenceId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -34,9 +35,6 @@ public class PreferenceId implements Serializable {
 
   /** The code for the preference type. */
   private String type;
-
-  /** Constructs a new <b>PreferenceId</b>. */
-  public PreferenceId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.

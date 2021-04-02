@@ -20,11 +20,12 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>QualificationTypeId</b> class implements the ID class for the <b>QualificationType</b> class.
+ * The <b>QualificationTypeId</b> class implements the ID class for the <b>QualificationType</b>
+ * class.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class QualificationTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -34,20 +35,6 @@ public class QualificationTypeId implements Serializable {
 
   /** The Unicode locale identifier for the qualification type. */
   private String localeId;
-
-  /** Constructs a new <b>QualificationTypeId</b>. */
-  public QualificationTypeId() {}
-
-  /**
-   * Constructs a new <b>QualificationTypeId</b>.
-   *
-   * @param code the code for the qualification type
-   * @param localeId the Unicode locale identifier for the qualification type
-   */
-  public QualificationTypeId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

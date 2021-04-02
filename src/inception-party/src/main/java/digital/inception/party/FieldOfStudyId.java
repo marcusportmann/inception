@@ -17,37 +17,23 @@
 package digital.inception.party;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
- * The <b>IdentityDocumentId</b> class implements the ID class for the <b>IdentityDocument</b>
- * class.
+ * The <b>FieldOfStudyId</b> class implements the ID class for the <b>FieldOfStudy</b> class.
  *
  * @author Marcus Portmann
  */
-public class IdentityDocumentId implements Serializable {
+@SuppressWarnings({"UnusedDeclaration"})
+public class FieldOfStudyId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ISO 3166-1 alpha-2 code for the country of issue for the identity document. */
-  private String countryOfIssue;
+  /** The code for the field of study. */
+  private String code;
 
-  /** The date of issue for the identity document. */
-  private LocalDate dateOfIssue;
-
-  /**
-   * The Universally Unique Identifier (UUID) for the party the identity document is associated
-   * with.
-   */
-  private UUID party;
-
-  /** The code for the identity document type. */
-  private String type;
-
-  /** Constructs a new <b>IdentityDocumentId</b>. */
-  public IdentityDocumentId() {}
+  /** The Unicode locale identifier for the field of study. */
+  private String localeId;
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -69,12 +55,9 @@ public class IdentityDocumentId implements Serializable {
       return false;
     }
 
-    IdentityDocumentId other = (IdentityDocumentId) object;
+    FieldOfStudyId other = (FieldOfStudyId) object;
 
-    return Objects.equals(party, other.party)
-        && Objects.equals(type, other.type)
-        && Objects.equals(countryOfIssue, other.countryOfIssue)
-        && Objects.equals(dateOfIssue, other.dateOfIssue);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -84,9 +67,6 @@ public class IdentityDocumentId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode())
-        + ((type == null) ? 0 : type.hashCode())
-        + ((countryOfIssue == null) ? 0 : countryOfIssue.hashCode())
-        + ((dateOfIssue == null) ? 0 : dateOfIssue.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 }

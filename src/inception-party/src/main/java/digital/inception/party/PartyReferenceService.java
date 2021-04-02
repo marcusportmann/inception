@@ -65,6 +65,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Employment Type Repository. */
   private final EmploymentTypeRepository employmentTypeRepository;
 
+  /** The Field Of Study Repository */
+  private final FieldOfStudyRepository fieldOfStudyRepository;
+
   /** The Gender Repository. */
   private final GenderRepository genderRepository;
 
@@ -171,6 +174,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param contactMechanismTypeRepository the Contact Mechanism Type Repository
    * @param employmentStatusRepository the Employment Status Repository
    * @param employmentTypeRepository the Employment Type Repository
+   * @param fieldOfStudyRepository the Field Of Study Repository
    * @param genderRepository the Gender Repository
    * @param identityDocumentTypeRepository the Identity Document Type Repository
    * @param lockTypeCategoryRepository the Lock Type Category Repository
@@ -213,6 +217,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       ContactMechanismTypeRepository contactMechanismTypeRepository,
       EmploymentStatusRepository employmentStatusRepository,
       EmploymentTypeRepository employmentTypeRepository,
+      FieldOfStudyRepository fieldOfStudyRepository,
       GenderRepository genderRepository,
       IdentityDocumentTypeRepository identityDocumentTypeRepository,
       LockTypeCategoryRepository lockTypeCategoryRepository,
@@ -251,6 +256,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.contactMechanismTypeRepository = contactMechanismTypeRepository;
     this.employmentStatusRepository = employmentStatusRepository;
     this.employmentTypeRepository = employmentTypeRepository;
+    this.fieldOfStudyRepository = fieldOfStudyRepository;
     this.genderRepository = genderRepository;
     this.identityDocumentTypeRepository = identityDocumentTypeRepository;
     this.lockTypeCategoryRepository = lockTypeCategoryRepository;
@@ -555,6 +561,39 @@ public class PartyReferenceService implements IPartyReferenceService {
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the employment types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the fields of study.
+   *
+   * @return the fields of study
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'fieldsOfStudy.ALL'")
+  public List<FieldOfStudy> getFieldsOfStudy() throws ServiceUnavailableException {
+    return getFieldsOfStudy(null);
+  }
+
+  /**
+   * Retrieve the fields of study.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
+   *     types for or <b>null</b> to retrieve the fields of study for all locales
+   * @return the fields of study
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'fieldsOfStudy.' + #localeId")
+  public List<FieldOfStudy> getFieldsOfStudy(String localeId) throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return fieldOfStudyRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return fieldOfStudyRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the fields of study", e);
     }
   }
 
@@ -1714,6 +1753,40 @@ public class PartyReferenceService implements IPartyReferenceService {
             employmentType ->
                 (employmentType.getCode().equals(employmentTypeCode)
                     && employmentType.getEmploymentStatus().equals(employmentStatusCode)));
+  }
+
+  /**
+   * Check whether the code is a valid code for an employment type.
+   *
+   * @param employmentTypeCode the code for the employment type
+   * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidEmploymentType(String employmentTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(employmentTypeCode)) {
+      return false;
+    }
+
+    return self.getEmploymentTypes().stream()
+        .anyMatch(employmentType -> employmentType.getCode().equals(employmentTypeCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a field of study.
+   *
+   * @param fieldOfStudyCode the code for the field of study
+   * @return <b>true</b> if the code is a valid code for a field of study or <b>false</b> otherwise
+   */
+  @Override
+  public boolean isValidFieldOfStudy(String fieldOfStudyCode) throws ServiceUnavailableException {
+    if (!StringUtils.hasText(fieldOfStudyCode)) {
+      return false;
+    }
+
+    return self.getFieldsOfStudy().stream()
+        .anyMatch(fieldOfStudy -> fieldOfStudy.getCode().equals(fieldOfStudyCode));
   }
 
   /**

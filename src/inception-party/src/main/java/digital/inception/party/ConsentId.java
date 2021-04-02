@@ -26,6 +26,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings({"UnusedDeclaration"})
 public class ConsentId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -38,9 +39,6 @@ public class ConsentId implements Serializable {
 
   /** The code for the consent type. */
   private String type;
-
-  /** Constructs a new <b>ConsentId</b>. */
-  public ConsentId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.

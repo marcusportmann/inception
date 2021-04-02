@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class CountryId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -34,20 +34,6 @@ public class CountryId implements Serializable {
 
   /** The Unicode locale identifier for the country. */
   private String localeId;
-
-  /** Constructs a new <b>CountryId</b>. */
-  public CountryId() {}
-
-  /**
-   * Constructs a new <b>CountryId</b>.
-   *
-   * @param code the ISO 3166-1 alpha-2 code for the country
-   * @param localeId the Unicode locale identifier for the country
-   */
-  public CountryId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

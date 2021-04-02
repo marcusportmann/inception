@@ -106,10 +106,10 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
   private ConstraintType type;
 
   /**
-   * The optional value to apply when validating the attribute value, e.g. the length, the regular
-   * expression pattern, etc.
+   * The value to apply when validating the attribute value, e.g. the length, the regular expression
+   * pattern, etc.
    */
-  @Schema(description = "The optional value to apply when validating the attribute value")
+  @Schema(description = "The value to apply when validating the attribute value")
   @JsonProperty
   @XmlElement(name = "Value")
   @Size(max = 1000)
@@ -122,7 +122,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
    * @param roleType the code for the role type
    * @param attributeType the code for the attribute type
    * @param type the constraint type
-   * @param value the optional value to apply when validating the attribute value
+   * @param value the value to apply when validating the attribute value
    */
   public RoleTypeAttributeTypeConstraint(
       String roleType, String attributeType, ConstraintType type, String value) {
@@ -136,7 +136,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
    * @param attributeType the code for the attribute type
    * @param attributeTypeQualifier the qualifier for the attribute type
    * @param type the constraint type
-   * @param value the optional value to apply when validating the attribute value
+   * @param value the value to apply when validating the attribute value
    */
   public RoleTypeAttributeTypeConstraint(
       String roleType,
@@ -259,10 +259,10 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
   }
 
   /**
-   * Returns the optional value to apply when validating the attribute value, e.g. the length, the
-   * regular expression pattern, etc.
+   * Returns the value to apply when validating the attribute value, e.g. the length, the regular
+   * expression pattern, etc.
    *
-   * @return the optional value to apply when validating the attribute value
+   * @return the value to apply when validating the attribute value
    */
   public String getValue() {
     return value;

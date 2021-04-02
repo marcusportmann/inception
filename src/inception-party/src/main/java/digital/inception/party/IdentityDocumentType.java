@@ -87,9 +87,9 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The optional code for the country of issue for the identity document type. */
+  /** The code for the country of issue for the identity document type. */
   @Schema(
-      description = "The optional code for the country of issue for the identity document type",
+      description = "The code for the country of issue for the identity document type",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
@@ -184,9 +184,9 @@ public class IdentityDocumentType implements Serializable {
   }
 
   /**
-   * Returns the optional code for the country of issue for the identity document type.
+   * Returns the code for the country of issue for the identity document type.
    *
-   * @return the optional code for the country of issue for the identity document type
+   * @return the code for the country of issue for the identity document type
    */
   public String getCountryOfIssue() {
     return countryOfIssue;

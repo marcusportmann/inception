@@ -21,17 +21,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -51,20 +52,25 @@ import org.hibernate.annotations.UpdateTimestamp;
 /**
  * The <b>ResidencePermit</b> class holds the information for a residence permit issued to a person.
  *
+ * <p>The primary key for the residence permit entity (ID) is a surrogate key to support the
+ * management of related data in one or more external stores, e.g. an image of the residence permit
+ * stored in an enterprise content management repository. This approach allows an entity to be
+ * modified without impacting the related data's referential integrity, for example, when correcting
+ * an error that occurred during the initial capture of the information for a residence permit.
+ *
  * @author Marcus Portmann
  */
 @Schema(description = "A residence permit issued to a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
+@JsonPropertyOrder({"id", "type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
 @XmlRootElement(name = "ResidencePermit", namespace = "http://inception.digital/party")
 @XmlType(
     name = "ResidencePermit",
     namespace = "http://inception.digital/party",
-    propOrder = {"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
+    propOrder = {"id", "type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "residence_permits")
-@IdClass(ResidencePermitId.class)
 public class ResidencePermit implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -77,7 +83,6 @@ public class ResidencePermit implements Serializable {
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
   @Size(min = 2, max = 2)
-  @Id
   @Column(name = "country_of_issue", length = 2, nullable = false)
   private String countryOfIssue;
 
@@ -88,8 +93,8 @@ public class ResidencePermit implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The optional date of expiry for the residence permit. */
-  @Schema(description = "The optional date of expiry for the residence permit")
+  /** The date of expiry for the residence permit. */
+  @Schema(description = "The date of expiry for the residence permit")
   @JsonProperty
   @XmlElement(name = "DateOfExpiry")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -104,9 +109,19 @@ public class ResidencePermit implements Serializable {
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
   @NotNull
-  @Id
   @Column(name = "date_of_issue", nullable = false)
   private LocalDate dateOfIssue;
+
+  /** The Universally Unique Identifier (UUID) for the residence permit. */
+  @Schema(
+      description = "The Universally Unique Identifier (UUID) for the residence permit",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /** The number for the residence permit. */
   @Schema(description = "The number for the residence permit", required = true)
@@ -121,7 +136,6 @@ public class ResidencePermit implements Serializable {
   @Schema(hidden = true)
   @JsonBackReference("residencePermitReference")
   @XmlTransient
-  @Id
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "person_id")
   private Person person;
@@ -132,7 +146,6 @@ public class ResidencePermit implements Serializable {
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Size(min = 1, max = 30)
-  @Id
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
@@ -156,6 +169,7 @@ public class ResidencePermit implements Serializable {
    * @param number the number for the residence permit
    */
   public ResidencePermit(String type, String countryOfIssue, LocalDate dateOfIssue, String number) {
+    this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
     this.countryOfIssue = countryOfIssue;
     this.dateOfIssue = dateOfIssue;
@@ -169,7 +183,7 @@ public class ResidencePermit implements Serializable {
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the residence
    *     permit
    * @param dateOfIssue the date of issue for the residence permit
-   * @param dateOfExpiry the optional date of expiry for the residence permit
+   * @param dateOfExpiry the date of expiry for the residence permit
    * @param number thge number for the residence permit
    */
   public ResidencePermit(
@@ -178,6 +192,7 @@ public class ResidencePermit implements Serializable {
       LocalDate dateOfIssue,
       LocalDate dateOfExpiry,
       String number) {
+    this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
     this.countryOfIssue = countryOfIssue;
     this.dateOfIssue = dateOfIssue;
@@ -207,10 +222,7 @@ public class ResidencePermit implements Serializable {
 
     ResidencePermit other = (ResidencePermit) object;
 
-    return Objects.equals(person, other.person)
-        && Objects.equals(type, other.type)
-        && Objects.equals(countryOfIssue, other.countryOfIssue)
-        && Objects.equals(dateOfIssue, other.dateOfIssue);
+    return Objects.equals(id, other.id);
   }
 
   /**
@@ -232,9 +244,9 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Returns the optional date of expiry for the residence permit.
+   * Returns the date of expiry for the residence permit.
    *
-   * @return the optional date of expiry for the residence permit
+   * @return the date of expiry for the residence permit
    */
   public LocalDate getDateOfExpiry() {
     return dateOfExpiry;
@@ -247,6 +259,15 @@ public class ResidencePermit implements Serializable {
    */
   public LocalDate getDateOfIssue() {
     return dateOfIssue;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) for the residence permit.
+   *
+   * @return the Universally Unique Identifier (UUID) for the residence permit
+   */
+  public UUID getId() {
+    return id;
   }
 
   /**
@@ -293,10 +314,7 @@ public class ResidencePermit implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((person == null) ? 0 : person.hashCode())
-        + ((type == null) ? 0 : type.hashCode())
-        + ((countryOfIssue == null) ? 0 : countryOfIssue.hashCode())
-        + ((dateOfIssue == null) ? 0 : dateOfIssue.hashCode());
+    return (id == null) ? 0 : id.hashCode();
   }
 
   /**
@@ -325,6 +343,15 @@ public class ResidencePermit implements Serializable {
    */
   public void setDateOfIssue(LocalDate dateOfIssue) {
     this.dateOfIssue = dateOfIssue;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the residence permit.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the residence permit
+   */
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**

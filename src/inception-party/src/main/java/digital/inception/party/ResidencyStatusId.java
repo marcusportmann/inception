@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class ResidencyStatusId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -34,20 +34,6 @@ public class ResidencyStatusId implements Serializable {
 
   /** The Unicode locale identifier for the residency status. */
   private String localeId;
-
-  /** Constructs a new <b>ResidencyStatusId</b>. */
-  public ResidencyStatusId() {}
-
-  /**
-   * Constructs a new <b>ResidencyStatusId</b>.
-   *
-   * @param code the code for the residency status
-   * @param localeId the Unicode locale identifier for the residency status
-   */
-  public ResidencyStatusId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

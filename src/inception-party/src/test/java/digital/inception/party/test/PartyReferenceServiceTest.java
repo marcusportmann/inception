@@ -28,6 +28,7 @@ import digital.inception.party.ContactMechanismRole;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.EmploymentStatus;
 import digital.inception.party.EmploymentType;
+import digital.inception.party.FieldOfStudy;
 import digital.inception.party.Gender;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocumentType;
@@ -371,6 +372,22 @@ public class PartyReferenceServiceTest {
   }
 
 
+  /** Test the field of study reference functionality. */
+  @Test
+  public void fieldOfStudyTest() throws Exception {
+    List<FieldOfStudy> retrievedFieldsOfStudy = partyReferenceService.getFieldsOfStudy();
+
+    assertEquals(
+        "The correct number of fields of study was not retrieved", 382, retrievedFieldsOfStudy.size());
+
+    retrievedFieldsOfStudy = partyReferenceService.getFieldsOfStudy("en-US");
+
+    assertEquals(
+        "The correct number of fields of study was not retrieved", 191, retrievedFieldsOfStudy.size());
+  }
+
+
+
   /** Test the physical address purpose functionality. */
   @Test
   public void physicalAddressPurposeTest() throws Exception {
@@ -538,7 +555,7 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of role type attribute type constraints was not retrieved",
-        57,
+        60,
         retrievedRoleTypeAttributeTypeConstraints.size());
 
     retrievedRoleTypeAttributeTypeConstraints =
@@ -546,7 +563,7 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         "The correct number of role type attribute type constraints was not retrieved",
-        44,
+        47,
         retrievedRoleTypeAttributeTypeConstraints.size());
 
     retrievedRoleTypeAttributeTypeConstraints.stream()

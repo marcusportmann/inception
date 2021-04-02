@@ -26,7 +26,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class LanguageId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -36,9 +36,6 @@ public class LanguageId implements Serializable {
 
   /** The Unicode locale identifier for the language. */
   private String localeId;
-
-  /** Constructs a new <b>LanguageId</b>. */
-  public LanguageId() {}
 
   /**
    * Constructs a new <b>LanguageId</b>.

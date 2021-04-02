@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class RolePurposeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -34,20 +34,6 @@ public class RolePurposeId implements Serializable {
 
   /** The Unicode locale identifier for the role purpose. */
   private String localeId;
-
-  /** Constructs a new <b>RolePurposeId</b>. */
-  public RolePurposeId() {}
-
-  /**
-   * Constructs a new <b>RolePurposeId</b>.
-   *
-   * @param code the code for the role purpose
-   * @param localeId the Unicode locale identifier for the role purpose
-   */
-  public RolePurposeId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

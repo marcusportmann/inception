@@ -99,8 +99,8 @@ public class User implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The optional e-mail address for the user. */
-  @Schema(description = "The optional e-mail address for the user")
+  /** The e-mail address for the user. */
+  @Schema(description = "The e-mail address for the user")
   @JsonProperty
   @XmlElement(name = "Email")
   @Size(max = 100)
@@ -130,8 +130,8 @@ public class User implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The optional international format mobile number for the user. */
-  @Schema(description = "The optional international format mobile number for the user")
+  /** The international format mobile number for the user. */
+  @Schema(description = "The international format mobile number for the user")
   @JsonProperty
   @XmlElement(name = "MobileNumber")
   @Size(max = 100)
@@ -198,16 +198,16 @@ public class User implements Serializable {
   @Column(name = "password_expiry", nullable = false)
   private LocalDateTime passwordExpiry;
 
-  /** The optional phone number for the user. */
-  @Schema(description = "The optional phone number for the user")
+  /** The phone number for the user. */
+  @Schema(description = "The phone number for the user")
   @JsonProperty
   @XmlElement(name = "PhoneNumber")
   @Size(max = 100)
   @Column(name = "phone_number", length = 100)
   private String phoneNumber;
 
-  /** The optional preferred name for the user. */
-  @Schema(description = "The optional preferred name for the user")
+  /** The preferred name for the user. */
+  @Schema(description = "The preferred name for the user")
   @JsonProperty
   @XmlElement(name = "PreferredName")
   @Size(max = 100)
@@ -290,9 +290,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns optional the e-mail address for the user.
+   * Returns the e-mail address for the user.
    *
-   * @return the optional e-mail address for the user
+   * @return the e-mail address for the user
    */
   public String getEmail() {
     return email;
@@ -317,9 +317,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the optional international format mobile number for the user.
+   * Returns the international format mobile number for the user.
    *
-   * @return the optional international format mobile number for the user
+   * @return the international format mobile number for the user
    */
   public String getMobileNumber() {
     return mobileNumber;
@@ -364,18 +364,18 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the optional phone number for the user.
+   * Returns the phone number for the user.
    *
-   * @return the optional phone number for the user
+   * @return the phone number for the user
    */
   public String getPhoneNumber() {
     return phoneNumber;
   }
 
   /**
-   * Returns the optional preferred name for the user.
+   * Returns the preferred name for the user.
    *
-   * @return the optional preferred name for the user
+   * @return the preferred name for the user
    */
   public String getPreferredName() {
     return preferredName;

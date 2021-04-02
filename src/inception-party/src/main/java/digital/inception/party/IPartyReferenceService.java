@@ -161,6 +161,22 @@ public interface IPartyReferenceService {
   List<EmploymentType> getEmploymentTypes(String localeId) throws ServiceUnavailableException;
 
   /**
+   * Retrieve all the fields of study.
+   *
+   * @return the fields of study
+   */
+  List<FieldOfStudy> getFieldsOfStudy() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the fields of study.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
+   *     types for or <b>null</b> to retrieve the fields of study for all locales
+   * @return the fields of study
+   */
+  List<FieldOfStudy> getFieldsOfStudy(String localeId) throws ServiceUnavailableException;
+
+  /**
    * Retrieve all the genders.
    *
    * @return the genders
@@ -717,6 +733,23 @@ public interface IPartyReferenceService {
    */
   boolean isValidEmploymentType(String employmentStatusCode, String employmentTypeCode)
       throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for an employment type.
+   *
+   * @param employmentTypeCode the code for the employment type
+   * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidEmploymentType(String employmentTypeCode) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a field of study.
+   *
+   * @param fieldOfStudyCode the code for the field of study
+   * @return <b>true</b> if the code is a valid code for a field of study or <b>false</b> otherwise
+   */
+  boolean isValidFieldOfStudy(String fieldOfStudyCode) throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a gender.

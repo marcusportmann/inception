@@ -36,41 +36,28 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>QualificationType</b> class holds the information for a qualification type.
+ * The <b>FieldOfStudy</b> class holds the information for a field of study.
  *
- * <p>
- *
- * @see <a
- *     href="https://www.mastersportal.com/articles/1953/should-i-study-a-postgraduate-certificate-or-a-graduate-diploma-abroad.html">Should
- *     I Study a Postgraduate Certificate or a Graduate Diploma Abroad?</a>
- * @see <a href="https://desbt.qld.gov.au/training/training-careers/about/qualifications">Australian
- *     Qualification Types</a>
- * @see <a
- *     href="https://www.studylink.govt.nz/about-studylink/glossary/qualification-types.html#null">New
- *     Zealand Qualification Types</a>
- * @see <a
- *     href="https://www.skillsportal.co.za/content/6-academic-qualifications-you-need-know">South
- *     African Academic Qualification Types</a>
  * @author Marcus Portmann
  */
-@Schema(description = "A qualification type")
+@Schema(description = "A field of study")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "fieldOfStudy"})
-@XmlRootElement(name = "QualificationType", namespace = "http://inception.digital/party")
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
+@XmlRootElement(name = "FieldOfStudy", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "QualificationType",
+    name = "FieldOfStudy",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "sortIndex", "name", "description", "fieldOfStudy"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "qualification_types")
-@IdClass(QualificationTypeId.class)
-public class QualificationType implements Serializable {
+@Table(schema = "party", name = "fields_of_study")
+@IdClass(FieldOfStudyId.class)
+public class FieldOfStudy implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the qualification type. */
-  @Schema(description = "The code for the qualification type", required = true)
+  /** The code for the field of study. */
+  @Schema(description = "The code for the field of study", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -79,8 +66,8 @@ public class QualificationType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the qualification type. */
-  @Schema(description = "The description for the qualification type", required = true)
+  /** The description for the field of study. */
+  @Schema(description = "The description for the field of study", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -88,16 +75,8 @@ public class QualificationType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The code for the field of study for the qualification type. */
-  @Schema(description = "The code for the field of study for the qualification type")
-  @JsonProperty
-  @XmlElement(name = "FieldOfStudy")
-  @Size(min = 1, max = 30)
-  @Column(name = "field_of_study", length = 30)
-  private String fieldOfStudy;
-
-  /** The Unicode locale identifier for the qualification type. */
-  @Schema(description = "The Unicode locale identifier for the qualification type", required = true)
+  /** The Unicode locale identifier for the field of study. */
+  @Schema(description = "The Unicode locale identifier for the field of study", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -106,8 +85,8 @@ public class QualificationType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the qualification type. */
-  @Schema(description = "The name of the qualification type", required = true)
+  /** The name of the field of study. */
+  @Schema(description = "The name of the field of study", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -115,16 +94,16 @@ public class QualificationType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the qualification type. */
-  @Schema(description = "The sort index for the qualification type", required = true)
+  /** The sort index for the field of study. */
+  @Schema(description = "The sort index for the field of study", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>QualificationType</b>. */
-  public QualificationType() {}
+  /** Constructs a new <b>FieldOfStudy</b>. */
+  public FieldOfStudy() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -146,60 +125,51 @@ public class QualificationType implements Serializable {
       return false;
     }
 
-    QualificationType other = (QualificationType) object;
+    FieldOfStudy other = (FieldOfStudy) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the qualification type.
+   * Returns the code for the field of study.
    *
-   * @return the code for the qualification type
+   * @return the code for the field of study
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the qualification type.
+   * Returns the description for the field of study.
    *
-   * @return the description for the qualification type
+   * @return the description for the field of study
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the code for the field of study for the qualification type.
+   * Returns the Unicode locale identifier for the field of study.
    *
-   * @return the code for the field of study for the qualification type
-   */
-  public String getFieldOfStudy() {
-    return fieldOfStudy;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the qualification type.
-   *
-   * @return the Unicode locale identifier for the qualification type
+   * @return the Unicode locale identifier for the field of study
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the qualification type.
+   * Returns the name of the field of study.
    *
-   * @return the name of the qualification type
+   * @return the name of the field of study
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the qualification type.
+   * Returns the sort index for the field of study.
    *
-   * @return the sort index for the qualification type
+   * @return the sort index for the field of study
    */
   public Integer getSortIndex() {
     return sortIndex;
@@ -216,54 +186,45 @@ public class QualificationType implements Serializable {
   }
 
   /**
-   * Set the code for the qualification type.
+   * Set the code for the field of study.
    *
-   * @param code the code for the qualification type
+   * @param code the code for the field of study
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the qualification type.
+   * Set the description for the field of study.
    *
-   * @param description the description for the qualification type
+   * @param description the description for the field of study
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the code for the field of study for the qualification type.
+   * Set the Unicode locale identifier for the field of study.
    *
-   * @param fieldOfStudy the code for the field of study for the qualification type
-   */
-  public void setFieldOfStudy(String fieldOfStudy) {
-    this.fieldOfStudy = fieldOfStudy;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the qualification type.
-   *
-   * @param localeId the Unicode locale identifier for the qualification type
+   * @param localeId the Unicode locale identifier for the field of study
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the qualification type.
+   * Set the name of the field of study.
    *
-   * @param name the name of the qualification type
+   * @param name the name of the field of study
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the qualification type.
+   * Set the sort index for the field of study.
    *
-   * @param sortIndex the sort index for the qualification type
+   * @param sortIndex the sort index for the field of study
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

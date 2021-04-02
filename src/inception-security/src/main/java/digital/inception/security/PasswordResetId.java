@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class PasswordResetId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -35,20 +35,6 @@ public class PasswordResetId implements Serializable {
 
   /** The username for the user associated with the password reset. */
   private String username;
-
-  /** Constructs a new <b>PasswordResetId</b>. */
-  public PasswordResetId() {}
-
-  /**
-   * Constructs a new <b>CodeId</b>.
-   *
-   * @param username the username for the user associated with the password reset
-   * @param requested the date and time the password reset was requested
-   */
-  public PasswordResetId(String username, LocalDateTime requested) {
-    this.username = username;
-    this.requested = requested;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

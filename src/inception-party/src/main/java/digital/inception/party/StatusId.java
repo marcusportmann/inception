@@ -26,6 +26,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings({"UnusedDeclaration"})
 public class StatusId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -38,9 +39,6 @@ public class StatusId implements Serializable {
 
   /** The code for the status type. */
   private String type;
-
-  /** Constructs a new <b>StatusId</b>. */
-  public StatusId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.

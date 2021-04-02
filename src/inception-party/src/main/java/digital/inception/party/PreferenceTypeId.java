@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class PreferenceTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -34,20 +34,6 @@ public class PreferenceTypeId implements Serializable {
 
   /** The Unicode locale identifier for the preference type. */
   private String localeId;
-
-  /** Constructs a new <b>PreferenceTypeId</b>. */
-  public PreferenceTypeId() {}
-
-  /**
-   * Constructs a new <b>PreferenceTypeId</b>.
-   *
-   * @param code the code for the preference type
-   * @param localeId the Unicode locale identifier for the preference type
-   */
-  public PreferenceTypeId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

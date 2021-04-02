@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class RegionId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -37,9 +37,6 @@ public class RegionId implements Serializable {
 
   /** The Unicode locale identifier for the region. */
   private String localeId;
-
-  /** Constructs a new <b>RegionId</b>. */
-  public RegionId() {}
 
   /**
    * Constructs a new <b>RegionId</b>.

@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class IdentityDocumentTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -35,20 +35,6 @@ public class IdentityDocumentTypeId implements Serializable {
 
   /** The Unicode locale identifier for the identity document type. */
   private String localeId;
-
-  /** Constructs a new <b>IdentityDocumentTypeId</b>. */
-  public IdentityDocumentTypeId() {}
-
-  /**
-   * Constructs a new <b>IdentityDocumentTypeId</b>.
-   *
-   * @param code the code for the identity document type
-   * @param localeId the Unicode locale identifier for the identity document type
-   */
-  public IdentityDocumentTypeId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

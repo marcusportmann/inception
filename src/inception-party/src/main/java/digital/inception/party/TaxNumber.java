@@ -21,15 +21,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -52,20 +53,25 @@ import org.hibernate.annotations.UpdateTimestamp;
  * type, it is included here to eliminate the additional join. The additional join will also be
  * problematic if the reference data is stored in a separate database.
  *
+ * <p>The primary key for the tax number entity (ID) is a surrogate key to support the management of
+ * related data in one or more external stores, e.g. an image of a person's tax certificate stored
+ * in an enterprise content management repository. This approach allows an entity to be modified
+ * without impacting the related data's referential integrity, for example, when correcting an error
+ * that occurred during the initial capture of the information for a tax number.
+ *
  * @author Marcus Portmann
  */
 @Schema(description = "A tax number for an organization or person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"countryOfIssue", "type", "number"})
+@JsonPropertyOrder({"id", "countryOfIssue", "type", "number"})
 @XmlRootElement(name = "TaxNumber", namespace = "http://inception.digital/party")
 @XmlType(
     name = "TaxNumber",
     namespace = "http://inception.digital/party",
-    propOrder = {"countryOfIssue", "type", "number"})
+    propOrder = {"id", "countryOfIssue", "type", "number"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "tax_numbers")
-@IdClass(TaxNumberId.class)
 public class TaxNumber implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -88,6 +94,17 @@ public class TaxNumber implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
+  /** The Universally Unique Identifier (UUID) for the tax number. */
+  @Schema(
+      description = "The Universally Unique Identifier (UUID) for the tax number",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
+
   /** The tax number. */
   @Schema(description = "The tax number", required = true)
   @JsonProperty(required = true)
@@ -101,7 +118,6 @@ public class TaxNumber implements Serializable {
   @Schema(hidden = true)
   @JsonBackReference("taxNumberReference")
   @XmlTransient
-  @Id
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "party_id")
   private PartyBase party;
@@ -112,7 +128,6 @@ public class TaxNumber implements Serializable {
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Size(min = 1, max = 30)
-  @Id
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
@@ -134,6 +149,7 @@ public class TaxNumber implements Serializable {
    * @param number the tax number
    */
   public TaxNumber(String type, String countryOfIssue, String number) {
+    this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
     this.countryOfIssue = countryOfIssue;
     this.number = number;
@@ -161,7 +177,7 @@ public class TaxNumber implements Serializable {
 
     TaxNumber other = (TaxNumber) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
+    return Objects.equals(id, other.id);
   }
 
   /**
@@ -180,6 +196,15 @@ public class TaxNumber implements Serializable {
    */
   public LocalDateTime getCreated() {
     return created;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) for the tax number.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tax number
+   */
+  public UUID getId() {
+    return id;
   }
 
   /**
@@ -226,8 +251,7 @@ public class TaxNumber implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((party == null) || (party.getId() == null)) ? 0 : party.getId().hashCode())
-        + ((type == null) ? 0 : type.hashCode());
+    return (id == null) ? 0 : id.hashCode();
   }
 
   /**
@@ -237,6 +261,15 @@ public class TaxNumber implements Serializable {
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the tax number.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the tax number
+   */
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**

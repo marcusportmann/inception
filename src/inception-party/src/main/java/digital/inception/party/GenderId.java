@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class GenderId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -34,20 +34,6 @@ public class GenderId implements Serializable {
 
   /** The Unicode locale identifier for the gender. */
   private String localeId;
-
-  /** Constructs a new <b>GenderId</b>. */
-  public GenderId() {}
-
-  /**
-   * Constructs a new <b>GenderId</b>.
-   *
-   * @param code the code for the gender
-   * @param localeId the Unicode locale identifier for the gender
-   */
-  public GenderId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

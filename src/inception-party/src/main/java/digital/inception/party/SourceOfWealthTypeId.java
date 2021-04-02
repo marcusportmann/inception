@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class SourceOfWealthTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -35,20 +35,6 @@ public class SourceOfWealthTypeId implements Serializable {
 
   /** The Unicode locale identifier for the source of wealth type. */
   private String localeId;
-
-  /** Constructs a new <b>SourceOfWealthTypeId</b>. */
-  public SourceOfWealthTypeId() {}
-
-  /**
-   * Constructs a new <b>SourceOfWealthTypeId</b>.
-   *
-   * @param code the code for the source of wealth type
-   * @param localeId the Unicode locale identifier for the source of wealth type
-   */
-  public SourceOfWealthTypeId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

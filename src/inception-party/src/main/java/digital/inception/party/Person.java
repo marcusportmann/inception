@@ -102,6 +102,7 @@ import org.springframework.util.StringUtils;
   "language",
   "maidenName",
   "maritalStatus",
+  "maritalStatusDate",
   "marriageType",
   "middleNames",
   "occupation",
@@ -114,6 +115,8 @@ import org.springframework.util.StringUtils;
   "attributes",
   "consents",
   "contactMechanisms",
+  "educations",
+  "employments",
   "identityDocuments",
   "locks",
   "physicalAddresses",
@@ -148,6 +151,7 @@ import org.springframework.util.StringUtils;
       "language",
       "maidenName",
       "maritalStatus",
+      "maritalStatusDate",
       "marriageType",
       "middleNames",
       "occupation",
@@ -160,6 +164,8 @@ import org.springframework.util.StringUtils;
       "attributes",
       "consents",
       "contactMechanisms",
+      "educations",
+      "employments",
       "identityDocuments",
       "locks",
       "physicalAddresses",
@@ -206,6 +212,24 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
+
+  /** The educations obtained by the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "person",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<Education> educations = new HashSet<>();
+
+  /** The employments obtained by the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "person",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<Employment> employments = new HashSet<>();
 
   /** The identity documents for the person. */
   @Valid
@@ -378,6 +402,10 @@ public class Person extends PartyBase implements Serializable {
   @Column(table = "persons", name = "marital_status", length = 30)
   private String maritalStatus;
 
+  /** The date for the marital status for the person. */
+  @Column(table = "persons", name = "marital_status_date")
+  private LocalDate maritalStatusDate;
+
   /** The code for the marriage type for the person if the person is married. */
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "marriage_type", length = 30)
@@ -491,11 +519,43 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Add the education obtained by the person.
+   *
+   * @param education the education
+   */
+  public void addEducation(Education education) {
+    educations.removeIf(
+        existingEducation -> Objects.equals(existingEducation.getId(), education.getId()));
+
+    education.setPerson(this);
+
+    educations.add(education);
+  }
+
+  /**
+   * Add the employment for the person.
+   *
+   * @param employment the employment
+   */
+  public void addEmployment(Employment employment) {
+    employments.removeIf(
+        existingEmployment -> Objects.equals(existingEmployment.getId(), employment.getId()));
+
+    employment.setPerson(this);
+
+    employments.add(employment);
+  }
+
+  /**
    * Add the identity document for the person.
    *
    * @param identityDocument the identity document
    */
   public void addIdentityDocument(IdentityDocument identityDocument) {
+    identityDocuments.removeIf(
+        existingIdentityDocument ->
+            Objects.equals(existingIdentityDocument.getId(), identityDocument.getId()));
+
     identityDocuments.removeIf(
         existingIdentityDocument ->
             Objects.equals(existingIdentityDocument.getType(), identityDocument.getType())
@@ -561,6 +621,19 @@ public class Person extends PartyBase implements Serializable {
    * @param residencePermit the residence permit
    */
   public void addResidencePermit(ResidencePermit residencePermit) {
+    residencePermits.removeIf(
+        existingResidencePermit ->
+            Objects.equals(existingResidencePermit.getId(), residencePermit.getId()));
+
+    residencePermits.removeIf(
+        existingResidencePermit ->
+            Objects.equals(existingResidencePermit.getType(), residencePermit.getType())
+                && Objects.equals(
+                    existingResidencePermit.getCountryOfIssue(),
+                    residencePermit.getCountryOfIssue())
+                && Objects.equals(
+                    existingResidencePermit.getDateOfIssue(), residencePermit.getDateOfIssue()));
+
     residencePermit.setPerson(this);
 
     residencePermits.add(residencePermit);
@@ -639,6 +712,9 @@ public class Person extends PartyBase implements Serializable {
    */
   public void addTaxNumber(TaxNumber taxNumber) {
     taxNumbers.removeIf(
+        existingTaxNumber -> Objects.equals(existingTaxNumber.getId(), taxNumber.getId()));
+
+    taxNumbers.removeIf(
         existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), taxNumber.getType()));
 
     taxNumber.setParty(this);
@@ -710,7 +786,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the consents provided the person.
+   * Returns the consents provided by the person.
    *
    * @return the consents provided by the person
    */
@@ -863,6 +939,33 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Retrieve the education with the specified ID for the person.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the education
+   * @return an Optional containing the education with the specified ID for the person or an empty
+   *     if the education could not be found
+   */
+  public Optional<Education> getEducationWithId(UUID id) {
+    return educations.stream()
+        .filter(education -> Objects.equals(education.getId(), id))
+        .findFirst();
+  }
+
+  /**
+   * Returns the educations obtained the person.
+   *
+   * @return the educations obtained by the person
+   */
+  @Schema(description = "The educations obtained by the person")
+  @JsonProperty
+  @JsonManagedReference("eductionReference")
+  @XmlElementWrapper(name = "Educations")
+  @XmlElement(name = "Education")
+  public Set<Education> getEducations() {
+    return educations;
+  }
+
+  /**
    * Returns the code for the employment status for the person.
    *
    * @return the code for the employment status for the person
@@ -884,6 +987,33 @@ public class Person extends PartyBase implements Serializable {
   @XmlElement(name = "EmploymentType")
   public String getEmploymentType() {
     return employmentType;
+  }
+
+  /**
+   * Retrieve the employment with the specified ID for the person.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the employment
+   * @return an Optional containing the employment with the specified ID for the person or an empty
+   *     if the employment could not be found
+   */
+  public Optional<Employment> getEmploymentWithId(UUID id) {
+    return employments.stream()
+        .filter(employment -> Objects.equals(employment.getId(), id))
+        .findFirst();
+  }
+
+  /**
+   * Returns the employments for the person.
+   *
+   * @return the employments for by the person
+   */
+  @Schema(description = "The employments for the person")
+  @JsonProperty
+  @JsonManagedReference("employmentReference")
+  @XmlElementWrapper(name = "Employments")
+  @XmlElement(name = "Employment")
+  public Set<Employment> getEmployments() {
+    return employments;
   }
 
   /**
@@ -1033,6 +1163,20 @@ public class Person extends PartyBase implements Serializable {
   @XmlElement(name = "MaritalStatus")
   public String getMaritalStatus() {
     return maritalStatus;
+  }
+
+  /**
+   * Returns the date for the marital status for the person.
+   *
+   * @return the date for the marital status for the person
+   */
+  @Schema(description = "The date for the marital status for the person")
+  @JsonProperty
+  @XmlElement(name = "MaritalStatusDate")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  public LocalDate getMaritalStatusDate() {
+    return maritalStatusDate;
   }
 
   /**
@@ -1631,6 +1775,34 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Remove the education with the specified ID for the person.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the education
+   */
+  public void removeEducationWithId(UUID id) {
+    educations.removeIf(existingEducation -> Objects.equals(existingEducation.getId(), id));
+  }
+
+  /**
+   * Remove the employment with the specified ID for the person.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the employment
+   */
+  public void removeEmploymentWithId(UUID id) {
+    employments.removeIf(existingEmployment -> Objects.equals(existingEmployment.getId(), id));
+  }
+
+  /**
+   * Remove the identity document with the specified ID for the person.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the identity document
+   */
+  public void removeIdentityDocumentWithId(UUID id) {
+    identityDocuments.removeIf(
+        existingIdentityDocument -> Objects.equals(existingIdentityDocument.getId(), id));
+  }
+
+  /**
    * Remove the identity document with the specified type for the person.
    *
    * @param type the code for the identity document type
@@ -1650,6 +1822,16 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Remove the physical address with the specified ID for the person.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the physical address
+   */
+  public void removePhysicalAddressWithId(UUID id) {
+    physicalAddresses.removeIf(
+        existingPhysicalAddress -> Objects.equals(existingPhysicalAddress.getId(), id));
+  }
+
+  /**
    * Remove any physical addresses with the specified role for the person.
    *
    * @param role the code for the physical address role
@@ -1666,6 +1848,15 @@ public class Person extends PartyBase implements Serializable {
    */
   public void removePreferenceWithType(String type) {
     preferences.removeIf(existingPreference -> Objects.equals(existingPreference.getType(), type));
+  }
+
+  /**
+   * Remove the residence permit with the specified ID for the person.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the residence permit
+   */
+  public void removeResidencePermitWithId(UUID id) {
+    residencePermits.removeIf(residencePermit -> Objects.equals(residencePermit.getId(), id));
   }
 
   /**
@@ -1714,6 +1905,15 @@ public class Person extends PartyBase implements Serializable {
    */
   public void removeStatusWithType(String type) {
     statuses.removeIf(existingStatus -> Objects.equals(existingStatus.getType(), type));
+  }
+
+  /**
+   * Remove the tax number with the specified ID for the person.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the tax number
+   */
+  public void removeTaxNumberWithId(UUID id) {
+    taxNumbers.removeIf(existingTaxNumber -> Objects.equals(existingTaxNumber.getId(), id));
   }
 
   /**
@@ -1838,6 +2038,17 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Set the educations obtained by the person.
+   *
+   * @param educations the educations obtained by the person
+   */
+  public void setEducations(Set<Education> educations) {
+    educations.forEach(education -> education.setPerson(this));
+    this.educations.clear();
+    this.educations.addAll(educations);
+  }
+
+  /**
    * Set the code for the employment status for the person.
    *
    * @param employmentStatus the code for the employment status for the person
@@ -1853,6 +2064,17 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setEmploymentType(String employmentType) {
     this.employmentType = employmentType;
+  }
+
+  /**
+   * Set the employments for the person.
+   *
+   * @param employments the employments for the person
+   */
+  public void setEmployments(Set<Employment> employments) {
+    employments.forEach(employment -> employment.setPerson(this));
+    this.employments.clear();
+    this.employments.addAll(employments);
   }
 
   /**
@@ -1949,6 +2171,15 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setMaritalStatus(String maritalStatus) {
     this.maritalStatus = maritalStatus;
+  }
+
+  /**
+   * Set the date for the marital status for the person.
+   *
+   * @param maritalStatusDate the date for the marital status for the person
+   */
+  public void setMaritalStatusDate(LocalDate maritalStatusDate) {
+    this.maritalStatusDate = maritalStatusDate;
   }
 
   /**

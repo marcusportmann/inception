@@ -154,6 +154,19 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the fields of study.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
+   *     for or <b>null</b> to retrieve the fields of study for all locales
+   * @return the fields of study
+   */
+  @WebMethod(operationName = "GetFieldsOfStudy")
+  public List<FieldOfStudy> getFieldsOfStudy(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return partyReferenceService.getFieldsOfStudy(localeId);
+  }
+
+  /**
    * Retrieve the genders.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
@@ -320,6 +333,19 @@ public class PartyReferenceWebService {
   public List<PreferenceType> getPreferenceTypes(
       @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
     return partyReferenceService.getPreferenceTypes(localeId);
+  }
+
+  /**
+   * Retrieve the qualification types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
+   *     types for or <b>null</b> to retrieve the qualification types for all locales
+   * @return the qualification types
+   */
+  @WebMethod(operationName = "GetQualificationTypes")
+  public List<QualificationType> getQualificationTypes(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return partyReferenceService.getQualificationTypes(localeId);
   }
 
   /**

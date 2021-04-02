@@ -98,7 +98,7 @@ public class ContactMechanism implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /** The optional comma-delimited codes for the contact mechanism purposes. */
+  /** The comma-delimited codes for the contact mechanism purposes. */
   @JsonIgnore
   @XmlTransient
   @Column(name = "purposes", length = 310)
@@ -273,9 +273,9 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Returns the optional codes for the contact mechanism purposes.
+   * Returns the codes for the contact mechanism purposes.
    *
-   * @return the optional codes for the contact mechanism purposes
+   * @return the codes for the contact mechanism purposes
    */
   @Schema(description = "The codes for the contact mechanism purposes", required = true)
   @JsonProperty(required = true)

@@ -130,13 +130,13 @@ COMMENT ON COLUMN security.users.status IS 'The status for the user';
 
 COMMENT ON COLUMN security.users.name IS 'The name of the user';
 
-COMMENT ON COLUMN security.users.preferred_name IS 'The optional preferred name for the user';
+COMMENT ON COLUMN security.users.preferred_name IS 'The preferred name for the user';
 
-COMMENT ON COLUMN security.users.phone_number IS 'The optional phone number for the user';
+COMMENT ON COLUMN security.users.phone_number IS 'The phone number for the user';
 
-COMMENT ON COLUMN security.users.mobile_number IS 'The optional mobile number for the user';
+COMMENT ON COLUMN security.users.mobile_number IS 'The mobile number for the user';
 
-COMMENT ON COLUMN security.users.email IS 'The optional e-mail address for the user';
+COMMENT ON COLUMN security.users.email IS 'The e-mail address for the user';
 
 COMMENT ON COLUMN security.users.password IS 'The password for the user';
 

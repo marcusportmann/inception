@@ -383,6 +383,44 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the fields of study.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
+   *     for or <b>null</b> to retrieve the fields of study for all locales
+   * @return the fields of study
+   */
+  @Operation(summary = "Retrieve the fields of study", description = "Retrieve the fields of study")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/fields-of-study",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<FieldOfStudy> getFieldsOfStudy(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the fields of study for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getFieldsOfStudy(localeId);
+  }
+
+  /**
    * Retrieve the genders.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
@@ -883,6 +921,46 @@ public class PartyReferenceApi extends SecureApi {
           String localeId)
       throws ServiceUnavailableException {
     return partyReferenceService.getPreferenceTypes(localeId);
+  }
+
+  /**
+   * Retrieve the qualification types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
+   *     types for or <b>null</b> to retrieve the qualification types for all locales
+   * @return the qualification types
+   */
+  @Operation(
+      summary = "Retrieve the qualification types",
+      description = "Retrieve the qualification types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/qualification-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<QualificationType> getQualificationTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the qualification types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getQualificationTypes(localeId);
   }
 
   /**

@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class RoleTypeAttributeTypeConstraintId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -41,37 +41,6 @@ public class RoleTypeAttributeTypeConstraintId implements Serializable {
 
   /** The constraint type. */
   private ConstraintType type;
-
-  /** Constructs a new <b>RoleTypeAttributeTypeConstraintId</b>. */
-  public RoleTypeAttributeTypeConstraintId() {}
-
-  /**
-   * Constructs a new <b>RoleTypeAttributeTypeConstraintId</b>.
-   *
-   * @param roleType the code for the role type
-   * @param attributeType the code for the attribute type
-   * @param attributeTypeQualifier the qualifier for the attribute type
-   * @param type the constraint type
-   */
-  public RoleTypeAttributeTypeConstraintId(
-      String roleType, String attributeType, String attributeTypeQualifier, ConstraintType type) {
-    this.roleType = roleType;
-    this.attributeType = attributeType;
-    this.attributeTypeQualifier = attributeTypeQualifier;
-    this.type = type;
-  }
-
-  /**
-   * Constructs a new <b>RoleTypeAttributeTypeConstraintId</b>.
-   *
-   * @param roleType the code for the role type
-   * @param attributeType the code for the attribute type
-   * @param type the constraint type
-   */
-  public RoleTypeAttributeTypeConstraintId(
-      String roleType, String attributeType, ConstraintType type) {
-    this(roleType, attributeType, "", type);
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

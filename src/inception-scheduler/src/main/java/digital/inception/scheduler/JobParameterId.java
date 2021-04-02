@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"unused"})
+@SuppressWarnings({"UnusedDeclaration"})
 public class JobParameterId implements Serializable {
 
   /** The job the job parameter is associated with. */
@@ -32,9 +32,6 @@ public class JobParameterId implements Serializable {
 
   /** The name of the job parameter. */
   private String name;
-
-  /** Constructs a new <b>JobParameterId</b>. */
-  public JobParameterId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.

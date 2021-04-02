@@ -26,6 +26,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings({"UnusedDeclaration"})
 public class SourceOfWealthId implements Serializable {
 
   private static final long serialVersionUID = 1000000;

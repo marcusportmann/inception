@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class StatusTypeCategoryId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -35,20 +35,6 @@ public class StatusTypeCategoryId implements Serializable {
 
   /** The Unicode locale identifier for the status type category. */
   private String localeId;
-
-  /** Constructs a new <b>StatusTypeCategoryId</b>. */
-  public StatusTypeCategoryId() {}
-
-  /**
-   * Constructs a new <b>StatusTypeCategoryId</b>.
-   *
-   * @param code the code for the status type category
-   * @param localeId the Unicode locale identifier for the status type category
-   */
-  public StatusTypeCategoryId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

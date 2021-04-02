@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class AttributeTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -34,20 +34,6 @@ public class AttributeTypeId implements Serializable {
 
   /** The Unicode locale identifier for the attribute type. */
   private String localeId;
-
-  /** Constructs a new <b>AttributeTypeId</b>. */
-  public AttributeTypeId() {}
-
-  /**
-   * Constructs a new <b>AttributeTypeId</b>.
-   *
-   * @param code the code for the attribute type
-   * @param localeId the Unicode locale identifier for the attribute type
-   */
-  public AttributeTypeId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

@@ -24,6 +24,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings({"UnusedDeclaration"})
 public class CodeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;

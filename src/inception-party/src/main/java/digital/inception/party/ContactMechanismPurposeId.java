@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class ContactMechanismPurposeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -35,9 +35,6 @@ public class ContactMechanismPurposeId implements Serializable {
 
   /** The Unicode locale identifier for the contact mechanism purpose. */
   private String localeId;
-
-  /** Constructs a new <b>ContactMechanismPurposeId</b>. */
-  public ContactMechanismPurposeId() {}
 
   /**
    * Constructs a new <b>ContactMechanismPurposeId</b>.

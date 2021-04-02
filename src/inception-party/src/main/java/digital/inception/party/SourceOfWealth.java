@@ -87,8 +87,8 @@ public class SourceOfWealth implements Serializable {
   @Column(name = "effective_from", nullable = false)
   private LocalDate effectiveFrom;
 
-  /** The optional date the source of wealth is effective to. */
-  @Schema(description = "The optional date the source of wealth is effective to")
+  /** The date the source of wealth is effective to. */
+  @Schema(description = "The date the source of wealth is effective to")
   @JsonProperty
   @XmlElement(name = "EffectiveTo")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -203,9 +203,9 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Returns the optional date the source of wealth is effective to.
+   * Returns the date the source of wealth is effective to.
    *
-   * @return the optional date the source of wealth is effective to
+   * @return the date the source of wealth is effective to
    */
   public LocalDate getEffectiveTo() {
     return effectiveTo;
@@ -260,9 +260,9 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Set the optional date the source of wealth is effective to.
+   * Set the date the source of wealth is effective to.
    *
-   * @param effectiveTo the optional date the source of wealth is effective to
+   * @param effectiveTo the date the source of wealth is effective to
    */
   public void setEffectiveTo(LocalDate effectiveTo) {
     this.effectiveTo = effectiveTo;

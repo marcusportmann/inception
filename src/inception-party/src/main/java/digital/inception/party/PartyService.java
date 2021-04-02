@@ -160,9 +160,6 @@ public class PartyService implements IPartyService {
     } catch (DuplicatePersonException e) {
       throw e;
     } catch (Throwable e) {
-
-      logger.error("ERROR: " + e.getMessage(), e);
-
       throw new ServiceUnavailableException(
           "Failed to create the person (" + person.getId() + ")", e);
     }

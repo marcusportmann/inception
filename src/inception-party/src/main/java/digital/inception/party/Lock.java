@@ -87,8 +87,8 @@ public class Lock implements Serializable {
   @Column(name = "effective_from", nullable = false)
   private LocalDate effectiveFrom;
 
-  /** The optional date the lock is effective to. */
-  @Schema(description = "The optional date the lock is effective to")
+  /** The date the lock is effective to. */
+  @Schema(description = "The date the lock is effective to")
   @JsonProperty
   @XmlElement(name = "EffectiveTo")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -203,9 +203,9 @@ public class Lock implements Serializable {
   }
 
   /**
-   * Returns the optional date the lock is effective to.
+   * Returns the date the lock is effective to.
    *
-   * @return the optional date the lock is effective to
+   * @return the date the lock is effective to
    */
   public LocalDate getEffectiveTo() {
     return effectiveTo;
@@ -260,9 +260,9 @@ public class Lock implements Serializable {
   }
 
   /**
-   * Set the optional date the lock is effective to.
+   * Set the date the lock is effective to.
    *
-   * @param effectiveTo the optional date the lock is effective to
+   * @param effectiveTo the date the lock is effective to
    */
   public void setEffectiveTo(LocalDate effectiveTo) {
     this.effectiveTo = effectiveTo;

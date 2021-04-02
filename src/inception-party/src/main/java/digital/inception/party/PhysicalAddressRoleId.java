@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class PhysicalAddressRoleId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -35,20 +35,6 @@ public class PhysicalAddressRoleId implements Serializable {
 
   /** The Unicode locale identifier for the physical address role. */
   private String localeId;
-
-  /** Constructs a new <b>PhysicalAddressRoleId</b>. */
-  public PhysicalAddressRoleId() {}
-
-  /**
-   * Constructs a new <b>PhysicalAddressRoleId</b>.
-   *
-   * @param code the code for the physical address role
-   * @param localeId the Unicode locale identifier for the physical address role
-   */
-  public PhysicalAddressRoleId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

@@ -20,6 +20,8 @@ import digital.inception.party.Attribute;
 import digital.inception.party.Consent;
 import digital.inception.party.ConstraintType;
 import digital.inception.party.ContactMechanism;
+import digital.inception.party.Education;
+import digital.inception.party.Employment;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.Lock;
@@ -111,8 +113,7 @@ public class ValidPersonValidator extends PartyValidator
         // Validate consents
         for (Consent consent : person.getConsents()) {
           if (StringUtils.hasText(consent.getType())) {
-            if (!getPartyReferenceService()
-                .isValidConsentType(consent.getType())) {
+            if (!getPartyReferenceService().isValidConsentType(consent.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("consentType", consent.getType())
                   .buildConstraintViolationWithTemplate(
@@ -239,6 +240,55 @@ public class ValidPersonValidator extends PartyValidator
           isValid = false;
         }
 
+        // Validate educations
+        for (Education education : person.getEducations()) {
+          if (StringUtils.hasText(education.getInstitutionCountry())) {
+            if (!getReferenceService().isValidCountry(education.getInstitutionCountry())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("institutionCountry", education.getInstitutionCountry())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidInstitutionCountryForEducation.message}")
+                  .addPropertyNode("educations")
+                  .addPropertyNode("institutionCountry")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+
+          if (StringUtils.hasText(education.getQualificationType())) {
+            if (!getPartyReferenceService()
+                .isValidQualificationType(education.getQualificationType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("qualificationType", education.getQualificationType())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidQualificationTypeForEducation.message}")
+                  .addPropertyNode("educations")
+                  .addPropertyNode("qualificationType")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+
+          if (StringUtils.hasText(education.getFieldOfStudy())) {
+            if (!getPartyReferenceService().isValidFieldOfStudy(education.getFieldOfStudy())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("fieldOfStudy", education.getFieldOfStudy())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidFieldOfStudyForEducation.message}")
+                  .addPropertyNode("educations")
+                  .addPropertyNode("fieldOfStudy")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+        }
+
         // Validate employment status
         if (StringUtils.hasText(person.getEmploymentStatus())
             && (!getPartyReferenceService()
@@ -267,6 +317,55 @@ public class ValidPersonValidator extends PartyValidator
           isValid = false;
         }
 
+        // Validate employments
+        for (Employment employment : person.getEmployments()) {
+          if (StringUtils.hasText(employment.getEmployerAddressCountry())) {
+            if (!getReferenceService().isValidCountry(employment.getEmployerAddressCountry())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter(
+                      "employerAddressCountry", employment.getEmployerAddressCountry())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidEmployerAddressCountryForEmployment.message}")
+                  .addPropertyNode("employments")
+                  .addPropertyNode("employerAddressCountry")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+
+          if (StringUtils.hasText(employment.getOccupation())) {
+            if (!getPartyReferenceService().isValidOccupation(employment.getOccupation())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("occupation", employment.getOccupation())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidOccupationForEmployment.message}")
+                  .addPropertyNode("employments")
+                  .addPropertyNode("occupation")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+
+          if (StringUtils.hasText(employment.getType())) {
+            if (!getPartyReferenceService().isValidEmploymentType(employment.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("employmentType", employment.getType())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidEmploymentTypeForEmployment.message}")
+                  .addPropertyNode("employments")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+        }
+
         // Validate gender
         if (StringUtils.hasText(person.getGender())
             && (!getPartyReferenceService().isValidGender(person.getGender()))) {
@@ -275,6 +374,20 @@ public class ValidPersonValidator extends PartyValidator
               .buildConstraintViolationWithTemplate(
                   "{digital.inception.party.constraints.ValidPerson.invalidGender.message}")
               .addPropertyNode("gender")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+
+        // Validate highest qualification type
+        if (StringUtils.hasText(person.getHighestQualificationType())
+            && (!getPartyReferenceService()
+                .isValidQualificationType(person.getHighestQualificationType()))) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("highestQualificationType", person.getHighestQualificationType())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPerson.invalidHighestQualificationType.message}")
+              .addPropertyNode("highestQualificationType")
               .addConstraintViolation();
 
           isValid = false;
@@ -445,19 +558,6 @@ public class ValidPersonValidator extends PartyValidator
               isValid = false;
             }
           }
-        }
-
-        // Validate highest qualification
-        if (StringUtils.hasText(person.getHighestQualificationType())
-            && (!getPartyReferenceService().isValidQualificationType(person.getHighestQualificationType()))) {
-          hibernateConstraintValidatorContext
-              .addMessageParameter("highestQualificationType", person.getHighestQualificationType())
-              .buildConstraintViolationWithTemplate(
-                  "{digital.inception.party.constraints.ValidPerson.invalidHighestQualificationType.message}")
-              .addPropertyNode("highestQualificationType")
-              .addConstraintViolation();
-
-          isValid = false;
         }
 
         // Validate race
@@ -825,6 +925,30 @@ public class ValidPersonValidator extends PartyValidator
 
               break;
 
+            case "educations":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getEducations(),
+                  "educations",
+                  "{digital.inception.party.constraints.ValidPerson.educationRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+            case "employments":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getEmployments(),
+                  "employments",
+                  "{digital.inception.party.constraints.ValidPerson.employmentRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
             case "employment_status":
               if (!validateRequiredAttributeConstraint(
                   roleType,
@@ -927,6 +1051,18 @@ public class ValidPersonValidator extends PartyValidator
                   person.getMaritalStatus(),
                   "maritalStatus",
                   "{digital.inception.party.constraints.ValidPerson.maritalStatusRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+            case "marital_status_date":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getMaritalStatusDate(),
+                  "maritalStatusDate",
+                  "{digital.inception.party.constraints.ValidPerson.maritalStatusDateRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {
                 isValid = false;
               }

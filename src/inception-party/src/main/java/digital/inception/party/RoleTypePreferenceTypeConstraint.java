@@ -96,10 +96,10 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
   private ConstraintType type;
 
   /**
-   * The optional value to apply when validating the preference value, e.g. the length, the regular
+   * The value to apply when validating the preference value, e.g. the length, the regular
    * expression pattern, etc.
    */
-  @Schema(description = "The optional value to apply when validating the preference value")
+  @Schema(description = "The value to apply when validating the preference value")
   @JsonProperty
   @XmlElement(name = "Value")
   @Size(max = 1000)
@@ -112,7 +112,7 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
    * @param roleType the code for the role type
    * @param preferenceType the code for the preference type
    * @param type the constraint type
-   * @param value the optional value to apply when validating the preference value
+   * @param value the value to apply when validating the preference value
    */
   public RoleTypePreferenceTypeConstraint(
       String roleType, String preferenceType, ConstraintType type, String value) {
@@ -207,10 +207,10 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
   }
 
   /**
-   * Returns the optional value to apply when validating the preference value, e.g. the length, the
-   * regular expression pattern, etc.
+   * Returns the value to apply when validating the preference value, e.g. the length, the regular
+   * expression pattern, etc.
    *
-   * @return the optional value to apply when validating the preference value
+   * @return the value to apply when validating the preference value
    */
   public String getValue() {
     return value;

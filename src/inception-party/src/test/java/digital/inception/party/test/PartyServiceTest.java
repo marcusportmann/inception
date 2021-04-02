@@ -28,6 +28,8 @@ import digital.inception.party.Consent;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.ContactMechanismRole;
 import digital.inception.party.ContactMechanismType;
+import digital.inception.party.Education;
+import digital.inception.party.Employment;
 import digital.inception.party.IPartyService;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.Lock;
@@ -210,6 +212,15 @@ public class PartyServiceTest {
               + ContactMechanismRole.PERSONAL_EMAIL_ADDRESS
               + ")");
     }
+
+    person.addEducation(
+        new Education(
+            "ZA",
+            "University of the Witwatersrand",
+            "bachelors_degree",
+            "Bachelor of Science in Electrical Engineering",
+            1998,
+            "electrical_engineering"));
 
     person.addIdentityDocument(
         new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
@@ -439,7 +450,6 @@ public class PartyServiceTest {
   /** Test the consent functionality. */
   @Test
   public void consentTest() throws Exception {
-    // Person consents
     Person person = getTestBasicPersonDetails();
 
     person.addConsent(new Consent("marketing"));
@@ -618,6 +628,112 @@ public class PartyServiceTest {
     compareOrganizations(organization, retrievedOrganization);
 
     partyService.deleteOrganization(organization.getId());
+  }
+
+  /** Test the education functionality. */
+  @Test
+  public void educationTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    Education education = new Education();
+    education.setId(UuidCreator.getShortPrefixComb());
+    education.setInstitutionCountry("ZA");
+    education.setInstitutionName("University of the Witwatersrand");
+    education.setQualificationType("bachelors_degree");
+    education.setQualificationName("Bachelor of Science in Electrical Engineering");
+    education.setQualificationYear(1998);
+    education.setFieldOfStudy("electrical_engineering");
+    education.setFirstYearAttended(1994);
+    education.setLastYearAttended(1998);
+
+    person.addEducation(education);
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    assertTrue(retrievedPerson.getEducationWithId(education.getId()).isPresent());
+
+    compareEducations(
+        person.getEducationWithId(education.getId()).get(),
+        retrievedPerson.getEducationWithId(education.getId()).get());
+
+    person.removeEducationWithId(education.getId());
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setEducations(
+        Set.of(new Education("Northcliff High School", "national_senior_certificate", 1993)));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+  }
+
+  /** Test the employment functionality. */
+  @Test
+  public void employmentTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    Employment employment = new Employment();
+    employment.setId(UuidCreator.getShortPrefixComb());
+    employment.setEmployerName("Discovery");
+    employment.setEmployerPhoneNumber("+27 11 324 5000");
+    employment.setEmployerEmailAddress("contactus@discovery.co.za");
+    employment.setEmployerContactPerson("Joe Bloggs");
+    employment.setEmployerAddressLine1("3rd Floor Grove");
+    employment.setEmployerAddressLine2("1 Discovery Place");
+    employment.setEmployerAddressSuburb("Sandhurst");
+    employment.setEmployerAddressCity("Sandton");
+    employment.setEmployerAddressRegion("GP");
+    employment.setEmployerAddressCountry("ZA");
+    employment.setEmployerAddressPostalCode("2196");
+    employment.setStartDate(LocalDate.of(2017, 2, 1));
+    employment.setEndDate(LocalDate.of(2020, 4, 30));
+    employment.setType("full_time");
+    employment.setOccupation("executive");
+
+    person.addEmployment(employment);
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    assertTrue(retrievedPerson.getEmploymentWithId(employment.getId()).isPresent());
+
+    compareEmployments(
+        person.getEmploymentWithId(employment.getId()).get(),
+        retrievedPerson.getEmploymentWithId(employment.getId()).get());
+
+    person.removeEmploymentWithId(employment.getId());
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setEmployments(Set.of(new Employment("Absa", LocalDate.of(2020, 5, 1))));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
   }
 
   /** Test the foreign person functionality. */
@@ -825,6 +941,57 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid complex address",
+        14,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid education verification functionality. */
+  @Test
+  public void invalidEducationTest() {
+    Person person = getTestBasicPersonDetails();
+
+    person.setHighestQualificationType("invalid_qualification_type");
+
+    person.addEducation(
+        new Education(
+            "XX", null, "invalid_qualification_type", "", null, "invalid_field_of_study"));
+
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the person with an invalid education",
+        7,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid employment verification functionality. */
+  @Test
+  public void invalidEmploymentTest() {
+    Person person = getTestBasicPersonDetails();
+
+    person.addEmployment(
+        new Employment(
+            null,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "XX",
+            "",
+            null,
+            null,
+            "invalid_employment_type",
+            "invalid_occupation"));
+
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the person with an invalid employment",
         14,
         constraintViolations.size());
   }
@@ -1479,6 +1646,7 @@ public class PartyServiceTest {
     attribute.setBooleanValue(true);
     attribute.setDateValue(LocalDate.now());
     attribute.setDoubleValue(123.456);
+    attribute.setIntegerValue(777);
     attribute.setStringValue("String Value");
 
     person.addAttribute(new Attribute("height", "180cm"));
@@ -1924,7 +2092,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid person",
-        42,
+        45,
         personConstraintViolations.size());
 
     Organization organization = getTestBasicOrganizationDetails();
@@ -2275,6 +2443,143 @@ public class PartyServiceTest {
         contactMechanism2.getValue());
   }
 
+  private void compareEducations(Education education1, Education education2) {
+    assertEquals(
+        "The fields of study for the educations do not match",
+        education1.getFieldOfStudy(),
+        education2.getFieldOfStudy());
+
+    assertEquals(
+        "The first year attended for the educations do not match",
+        education1.getFirstYearAttended(),
+        education2.getFirstYearAttended());
+
+    assertEquals("The ID for the educations do not match", education1.getId(), education2.getId());
+
+    assertEquals(
+        "The institution countries for the educations do not match",
+        education1.getInstitutionCountry(),
+        education2.getInstitutionCountry());
+
+    assertEquals(
+        "The institution names for the educations do not match",
+        education1.getInstitutionName(),
+        education2.getInstitutionName());
+
+    assertEquals(
+        "The last year attended for the educations do not match",
+        education1.getLastYearAttended(),
+        education2.getLastYearAttended());
+
+    assertEquals(
+        "The persons for the educations do not match",
+        education1.getPerson(),
+        education2.getPerson());
+
+    assertEquals(
+        "The qualification names for the educations do not match",
+        education1.getQualificationName(),
+        education2.getQualificationName());
+
+    assertEquals(
+        "The qualification types for the educations do not match",
+        education1.getQualificationType(),
+        education2.getQualificationType());
+
+    assertEquals(
+        "The qualification years for the educations do not match",
+        education1.getQualificationYear(),
+        education2.getQualificationYear());
+  }
+
+  private void compareEmployments(Employment employment1, Employment employment2) {
+    assertEquals(
+        "The employer address cities for the employments do not match",
+        employment1.getEmployerAddressCity(),
+        employment2.getEmployerAddressCity());
+
+    assertEquals(
+        "The employer address countries for the employments do not match",
+        employment1.getEmployerAddressCountry(),
+        employment2.getEmployerAddressCountry());
+
+    assertEquals(
+        "The employer address line 1 values for the employments do not match",
+        employment1.getEmployerAddressLine1(),
+        employment2.getEmployerAddressLine1());
+
+    assertEquals(
+        "The employer address line 2 values for the employments do not match",
+        employment1.getEmployerAddressLine2(),
+        employment2.getEmployerAddressLine2());
+
+    assertEquals(
+        "The employer address line 3 values for the employments do not match",
+        employment1.getEmployerAddressLine3(),
+        employment2.getEmployerAddressLine3());
+
+    assertEquals(
+        "The employer address postal codes for the employments do not match",
+        employment1.getEmployerAddressPostalCode(),
+        employment2.getEmployerAddressPostalCode());
+
+    assertEquals(
+        "The employer address regions for the employments do not match",
+        employment1.getEmployerAddressRegion(),
+        employment2.getEmployerAddressRegion());
+
+    assertEquals(
+        "The employer address suburbs for the employments do not match",
+        employment1.getEmployerAddressSuburb(),
+        employment2.getEmployerAddressSuburb());
+
+    assertEquals(
+        "The employer contact persons for the employments do not match",
+        employment1.getEmployerContactPerson(),
+        employment2.getEmployerContactPerson());
+
+    assertEquals(
+        "The employer e-mail addresses for the employments do not match",
+        employment1.getEmployerEmailAddress(),
+        employment2.getEmployerEmailAddress());
+
+    assertEquals(
+        "The employer names for the employments do not match",
+        employment1.getEmployerName(),
+        employment2.getEmployerName());
+
+    assertEquals(
+        "The employer phone numbers for the employments do not match",
+        employment1.getEmployerPhoneNumber(),
+        employment2.getEmployerPhoneNumber());
+
+    assertEquals(
+        "The end dates for the employments do not match",
+        employment1.getEndDate(),
+        employment2.getEndDate());
+
+    assertEquals(
+        "The IDs for the employments do not match", employment1.getId(), employment2.getId());
+
+    assertEquals(
+        "The occupations for the employments do not match",
+        employment1.getOccupation(),
+        employment2.getOccupation());
+
+    assertEquals(
+        "The persons for the employments do not match",
+        employment1.getPerson(),
+        employment2.getPerson());
+
+    assertEquals(
+        "The start dates for the employments do not match",
+        employment1.getStartDate(),
+        employment2.getStartDate());
+
+    assertEquals(
+        "The types for the employments do not match", employment1.getType(), employment2.getType());
+  }
+
   private void compareIdentityDocuments(
       IdentityDocument identityDocument1, IdentityDocument identityDocument2) {
     assertEquals(
@@ -2296,6 +2601,11 @@ public class PartyServiceTest {
         "The dates provided for the identity documents do not match",
         identityDocument1.getDateProvided(),
         identityDocument2.getDateProvided());
+
+    assertEquals(
+        "The IDs for the identity documents do not match",
+        identityDocument1.getId(),
+        identityDocument2.getId());
 
     assertEquals(
         "The numbers for the identity documents do not match",
@@ -2410,13 +2720,7 @@ public class PartyServiceTest {
       boolean foundIdentityDocument = false;
 
       for (IdentityDocument organization2IdentityDocument : organization2.getIdentityDocuments()) {
-        if (organization1IdentityDocument.getType().equals(organization2IdentityDocument.getType())
-            && organization1IdentityDocument
-                .getCountryOfIssue()
-                .equals(organization2IdentityDocument.getCountryOfIssue())
-            && organization1IdentityDocument
-                .getDateOfIssue()
-                .equals(organization2IdentityDocument.getDateOfIssue())) {
+        if (organization1IdentityDocument.getId().equals(organization2IdentityDocument.getId())) {
 
           compareIdentityDocuments(organization1IdentityDocument, organization2IdentityDocument);
 
@@ -2540,7 +2844,7 @@ public class PartyServiceTest {
       boolean foundTaxNumber = false;
 
       for (TaxNumber organization2TaxNumber : organization2.getTaxNumbers()) {
-        if (organization1TaxNumber.getType().equals(organization2TaxNumber.getType())) {
+        if (organization1TaxNumber.getId().equals(organization2TaxNumber.getId())) {
 
           assertEquals(
               "The country of issue for the tax numbers do not match",
@@ -2550,6 +2854,10 @@ public class PartyServiceTest {
               "The numbers for the tax numbers do not match",
               organization1TaxNumber.getNumber(),
               organization2TaxNumber.getNumber());
+          assertEquals(
+              "The types for the tax numbers do not match",
+              organization1TaxNumber.getType(),
+              organization2TaxNumber.getType());
 
           foundTaxNumber = true;
         }
@@ -2564,109 +2872,101 @@ public class PartyServiceTest {
   private void compareParties(Party party1, Party party2) {
     assertEquals("The ID values for the parties do not match", party1.getId(), party2.getId());
     assertEquals(
-        "The tenant ID values for the parties do not match",
-        party1.getTenantId(),
-        party2.getTenantId());
-    assertEquals(
-        "The type values for the parties do not match", party1.getType(), party2.getType());
-    assertEquals(
-        "The name values for the parties do not match", party1.getName(), party2.getName());
+        "The tenant IDs for the parties do not match", party1.getTenantId(), party2.getTenantId());
+    assertEquals("The types for the parties do not match", party1.getType(), party2.getType());
+    assertEquals("The names for the parties do not match", party1.getName(), party2.getName());
   }
 
   private void comparePersons(Person person1, Person person2) {
     assertEquals(
-        "The countries of citizenship values for the persons do not match",
+        "The countries of citizenship for the persons do not match",
         person1.getCountriesOfCitizenship(),
         person2.getCountriesOfCitizenship());
     assertEquals(
-        "The countries of tax residence values for the persons do not match",
+        "The countries of tax residence for the persons do not match",
         person1.getCountriesOfTaxResidence(),
         person2.getCountriesOfTaxResidence());
     assertEquals(
-        "The country of birth values for the persons do not match",
+        "The countries of birth for the persons do not match",
         person1.getCountryOfBirth(),
         person2.getCountryOfBirth());
     assertEquals(
-        "The country of residence values for the persons do not match",
+        "The countries of residence for the persons do not match",
         person1.getCountryOfResidence(),
         person2.getCountryOfResidence());
     assertEquals(
-        "The date of birth values for the persons do not match",
+        "The dates of birth for the persons do not match",
         person1.getDateOfBirth(),
         person2.getDateOfBirth());
     assertEquals(
-        "The date of death values for the persons do not match",
+        "The dates of death for the persons do not match",
         person1.getDateOfDeath(),
         person2.getDateOfDeath());
     assertEquals(
-        "The employment status values for the persons do not match",
+        "The employment statuses for the persons do not match",
         person1.getEmploymentStatus(),
         person2.getEmploymentStatus());
     assertEquals(
-        "The employment type values for the persons do not match",
+        "The employment types for the persons do not match",
         person1.getEmploymentType(),
         person2.getEmploymentType());
     assertEquals(
-        "The gender values for the persons do not match", person1.getGender(), person2.getGender());
+        "The genders for the persons do not match", person1.getGender(), person2.getGender());
     assertEquals(
-        "The given name values for the persons do not match",
+        "The given names for the persons do not match",
         person1.getGivenName(),
         person2.getGivenName());
-    assertEquals("The ID values for the persons do not match", person1.getId(), person2.getId());
+    assertEquals("The IDs for the persons do not match", person1.getId(), person2.getId());
     assertEquals(
-        "The initials values for the persons do not match",
-        person1.getInitials(),
-        person2.getInitials());
+        "The initials for the persons do not match", person1.getInitials(), person2.getInitials());
     assertEquals(
-        "The language values for the persons do not match",
-        person1.getLanguage(),
-        person2.getLanguage());
+        "The languages for the persons do not match", person1.getLanguage(), person2.getLanguage());
     assertEquals(
-        "The maiden name values for the persons do not match",
+        "The maiden names for the persons do not match",
         person1.getMaidenName(),
         person2.getMaidenName());
     assertEquals(
-        "The marital status values for the persons do not match",
+        "The marital statuses for the persons do not match",
         person1.getMaritalStatus(),
         person2.getMaritalStatus());
     assertEquals(
-        "The marriage type values for the persons do not match",
+        "The marital status dates for the persons do not match",
+        person1.getMaritalStatusDate(),
+        person2.getMaritalStatusDate());
+    assertEquals(
+        "The marriage types for the persons do not match",
         person1.getMarriageType(),
         person2.getMarriageType());
     assertEquals(
-        "The middle names values for the persons do not match",
+        "The middle names for the persons do not match",
         person1.getMiddleNames(),
         person2.getMiddleNames());
+    assertEquals("The names for the persons do not match", person1.getName(), person2.getName());
     assertEquals(
-        "The name values for the persons do not match", person1.getName(), person2.getName());
-    assertEquals(
-        "The occupation values for the persons do not match",
+        "The occupations for the persons do not match",
         person1.getOccupation(),
         person2.getOccupation());
     assertEquals(
-        "The preferred name values for the persons do not match",
+        "The preferred names for the persons do not match",
         person1.getPreferredName(),
         person2.getPreferredName());
     assertEquals(
         "The race values for the persons do not match", person1.getRace(), person2.getRace());
     assertEquals(
-        "The residency status values for the persons do not match",
+        "The residency statuses for the persons do not match",
         person1.getResidencyStatus(),
         person2.getResidencyStatus());
     assertEquals(
-        "The residential type values for the persons do not match",
+        "The residential types for the persons do not match",
         person1.getResidentialType(),
         person2.getResidentialType());
     assertEquals(
-        "The surname values for the persons do not match",
-        person1.getSurname(),
-        person2.getSurname());
+        "The surnames for the persons do not match", person1.getSurname(), person2.getSurname());
     assertEquals(
-        "The tenant ID values for the persons do not match",
+        "The tenant IDs for the persons do not match",
         person1.getTenantId(),
         person2.getTenantId());
-    assertEquals(
-        "The title values for the persons do not match", person1.getTitle(), person2.getTitle());
+    assertEquals("The titles for the persons do not match", person1.getTitle(), person2.getTitle());
 
     assertEquals(
         "The number of attributes for the persons do not match",
@@ -2744,6 +3044,50 @@ public class PartyServiceTest {
     }
 
     assertEquals(
+        "The number of educations for the persons do not match",
+        person1.getEducations().size(),
+        person2.getEducations().size());
+
+    for (Education person1Education : person1.getEducations()) {
+      boolean foundEducation = false;
+
+      for (Education person2Education : person2.getEducations()) {
+        if (person1Education.getId().equals(person2Education.getId())) {
+
+          compareEducations(person1Education, person2Education);
+
+          foundEducation = true;
+        }
+      }
+
+      if (!foundEducation) {
+        fail("Failed to find the education (" + person1Education.getId() + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of employments for the persons do not match",
+        person1.getEmployments().size(),
+        person2.getEmployments().size());
+
+    for (Employment person1Employment : person1.getEmployments()) {
+      boolean foundEmployment = false;
+
+      for (Employment person2Employment : person2.getEmployments()) {
+        if (person1Employment.getId().equals(person2Employment.getId())) {
+
+          compareEmployments(person1Employment, person2Employment);
+
+          foundEmployment = true;
+        }
+      }
+
+      if (!foundEmployment) {
+        fail("Failed to find the employment (" + person1Employment.getId() + ")");
+      }
+    }
+
+    assertEquals(
         "The number of identity documents for the persons do not match",
         person1.getIdentityDocuments().size(),
         person2.getIdentityDocuments().size());
@@ -2752,13 +3096,7 @@ public class PartyServiceTest {
       boolean foundIdentityDocument = false;
 
       for (IdentityDocument person2IdentityDocument : person2.getIdentityDocuments()) {
-        if (person1IdentityDocument.getType().equals(person2IdentityDocument.getType())
-            && person1IdentityDocument
-                .getCountryOfIssue()
-                .equals(person2IdentityDocument.getCountryOfIssue())
-            && person1IdentityDocument
-                .getDateOfIssue()
-                .equals(person2IdentityDocument.getDateOfIssue())) {
+        if (person1IdentityDocument.getId().equals(person2IdentityDocument.getId())) {
 
           compareIdentityDocuments(person1IdentityDocument, person2IdentityDocument);
 
@@ -2767,14 +3105,7 @@ public class PartyServiceTest {
       }
 
       if (!foundIdentityDocument) {
-        fail(
-            "Failed to find the identity document ("
-                + person1IdentityDocument.getType()
-                + ")("
-                + person1IdentityDocument.getCountryOfIssue()
-                + ")("
-                + person1IdentityDocument.getDateOfIssue()
-                + ")");
+        fail("Failed to find the identity document (" + person1IdentityDocument.getId() + ")");
       }
     }
 
@@ -2856,36 +3187,16 @@ public class PartyServiceTest {
       boolean foundResidencePermit = false;
 
       for (ResidencePermit person2ResidencePermit : person2.getResidencePermits()) {
-        if (person1ResidencePermit.getType().equals(person2ResidencePermit.getType())
-            && person1ResidencePermit
-                .getCountryOfIssue()
-                .equals(person2ResidencePermit.getCountryOfIssue())
-            && person1ResidencePermit
-                .getDateOfIssue()
-                .equals(person2ResidencePermit.getDateOfIssue())) {
+        if (person1ResidencePermit.getId().equals(person2ResidencePermit.getId())) {
 
-          assertEquals(
-              "The date of expiry for the residence permits do not match",
-              person1ResidencePermit.getDateOfExpiry(),
-              person2ResidencePermit.getDateOfExpiry());
-          assertEquals(
-              "The numbers for the residence permits do not match",
-              person1ResidencePermit.getNumber(),
-              person2ResidencePermit.getNumber());
+          compareResidencePermits(person1ResidencePermit, person2ResidencePermit);
 
           foundResidencePermit = true;
         }
       }
 
       if (!foundResidencePermit) {
-        fail(
-            "Failed to find the residence permit ("
-                + person1ResidencePermit.getType()
-                + ")("
-                + person1ResidencePermit.getCountryOfIssue()
-                + ")("
-                + person1ResidencePermit.getDateOfIssue()
-                + ")");
+        fail("Failed to find the residence permit (" + person1ResidencePermit.getId() + ")");
       }
     }
 
@@ -2946,7 +3257,7 @@ public class PartyServiceTest {
       boolean foundTaxNumber = false;
 
       for (TaxNumber person2TaxNumber : person2.getTaxNumbers()) {
-        if (person1TaxNumber.getType().equals(person2TaxNumber.getType())) {
+        if (person1TaxNumber.getId().equals(person2TaxNumber.getId())) {
 
           assertEquals(
               "The country of issue for the tax numbers do not match",
@@ -2956,6 +3267,10 @@ public class PartyServiceTest {
               "The numbers for the tax numbers do not match",
               person1TaxNumber.getNumber(),
               person2TaxNumber.getNumber());
+          assertEquals(
+              "The types for the tax numbers do not match",
+              person1TaxNumber.getType(),
+              person2TaxNumber.getType());
 
           foundTaxNumber = true;
         }
@@ -3088,6 +3403,44 @@ public class PartyServiceTest {
         "The values for the preferences do not match",
         preference1.getValue(),
         preference2.getValue());
+  }
+
+  private void compareResidencePermits(
+      ResidencePermit residencePermit1, ResidencePermit residencePermit2) {
+    assertEquals(
+        "The countries of issue for the residence permits do not match",
+        residencePermit1.getCountryOfIssue(),
+        residencePermit2.getCountryOfIssue());
+
+    assertEquals(
+        "The dates of expiry for the residence permits do not match",
+        residencePermit1.getDateOfExpiry(),
+        residencePermit2.getDateOfExpiry());
+
+    assertEquals(
+        "The dates of issue for the residence permits do not match",
+        residencePermit1.getDateOfIssue(),
+        residencePermit2.getDateOfIssue());
+
+    assertEquals(
+        "The IDs for the residence permits do not match",
+        residencePermit1.getId(),
+        residencePermit2.getId());
+
+    assertEquals(
+        "The numbers for the residence permits do not match",
+        residencePermit1.getNumber(),
+        residencePermit2.getNumber());
+
+    assertEquals(
+        "The persons for the residence permits do not match",
+        residencePermit1.getPerson(),
+        residencePermit1.getPerson());
+
+    assertEquals(
+        "The types for the residence permits do not match",
+        residencePermit1.getType(),
+        residencePermit2.getType());
   }
 
   private void compareRoles(Role role1, Role role2) {

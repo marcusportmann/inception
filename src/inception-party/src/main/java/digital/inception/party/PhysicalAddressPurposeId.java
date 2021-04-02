@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class PhysicalAddressPurposeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -35,20 +35,6 @@ public class PhysicalAddressPurposeId implements Serializable {
 
   /** The Unicode locale identifier for the physical address purpose. */
   private String localeId;
-
-  /** Constructs a new <b>PhysicalAddressPurposeId</b>. */
-  public PhysicalAddressPurposeId() {}
-
-  /**
-   * Constructs a new <b>PhysicalAddressPurposeId</b>.
-   *
-   * @param code the code for the physical address purpose
-   * @param localeId the Unicode locale identifier for the physical address purpose
-   */
-  public PhysicalAddressPurposeId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

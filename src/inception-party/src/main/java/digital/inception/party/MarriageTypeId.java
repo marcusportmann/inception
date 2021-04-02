@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class MarriageTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -37,22 +37,6 @@ public class MarriageTypeId implements Serializable {
 
   /** The code for the marital status the marriage type is associated with. */
   private String maritalStatus;
-
-  /** Constructs a new <b>MarriageTypeId</b>. */
-  public MarriageTypeId() {}
-
-  /**
-   * Constructs a new <b>MarriageTypeId</b>.
-   *
-   * @param maritalStatus the code for the marital status the marriage type is associated with
-   * @param code the code for the marital status
-   * @param localeId the Unicode locale identifier for the marital status
-   */
-  public MarriageTypeId(String maritalStatus, String code, String localeId) {
-    this.maritalStatus = maritalStatus;
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

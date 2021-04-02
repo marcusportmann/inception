@@ -26,6 +26,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings({"UnusedDeclaration"})
 public class VehicleAttributeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -38,9 +39,6 @@ public class VehicleAttributeId implements Serializable {
    * with.
    */
   private UUID vehicle;
-
-  /** Constructs a new <b>VehicleAttributeId</b>. */
-  public VehicleAttributeId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.

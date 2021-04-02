@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class LockTypeCategoryId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -35,20 +35,6 @@ public class LockTypeCategoryId implements Serializable {
 
   /** The Unicode locale identifier for the lock type category. */
   private String localeId;
-
-  /** Constructs a new <b>LockTypeCategoryId</b>. */
-  public LockTypeCategoryId() {}
-
-  /**
-   * Constructs a new <b>LockTypeCategoryId</b>.
-   *
-   * @param code the code for the lock type category
-   * @param localeId the Unicode locale identifier for the lock type category
-   */
-  public LockTypeCategoryId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

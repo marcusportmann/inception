@@ -88,8 +88,8 @@ public class Role implements Serializable {
   @Column(name = "effective_from", nullable = false)
   private LocalDate effectiveFrom;
 
-  /** The optional date the role is effective to. */
-  @Schema(description = "The optional date the role is effective to")
+  /** The date the role is effective to. */
+  @Schema(description = "The date the role is effective to")
   @JsonProperty
   @XmlElement(name = "EffectiveTo")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -106,8 +106,8 @@ public class Role implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /** The optional code for the role purpose. */
-  @Schema(description = "The optional code for the role purpose")
+  /** The code for the role purpose. */
+  @Schema(description = "The code for the role purpose")
   @JsonProperty
   @XmlElement(name = "Purpose")
   @Size(min = 1, max = 30)
@@ -172,7 +172,7 @@ public class Role implements Serializable {
    * Constructs a new <b>Role</b>.
    *
    * @param type the role type
-   * @param purpose the optional code for the role purpose
+   * @param purpose the code for the role purpose
    */
   public Role(String type, String purpose) {
     this.type = type;
@@ -184,7 +184,7 @@ public class Role implements Serializable {
    * Constructs a new <b>Role</b>.
    *
    * @param type the role type
-   * @param purpose the optional code for the role purpose
+   * @param purpose the code for the role purpose
    * @param effectiveFrom the date the role is effective from
    */
   public Role(String type, String purpose, LocalDate effectiveFrom) {
@@ -197,7 +197,7 @@ public class Role implements Serializable {
    * Constructs a new <b>Role</b>.
    *
    * @param type the role type
-   * @param purpose the optional code for the role purpose
+   * @param purpose the code for the role purpose
    * @param effectiveFrom the date the role is effective from
    * @param effectiveTo the date the role is effective to
    */
@@ -252,9 +252,9 @@ public class Role implements Serializable {
   }
 
   /**
-   * Returns the optional date the role is effective to.
+   * Returns the date the role is effective to.
    *
-   * @return the optional date the role is effective to
+   * @return the date the role is effective to
    */
   public LocalDate getEffectiveTo() {
     return effectiveTo;
@@ -271,9 +271,9 @@ public class Role implements Serializable {
   }
 
   /**
-   * Returns the optional code for the role purpose.
+   * Returns the code for the role purpose.
    *
-   * @return the optional code for the role purpose
+   * @return the code for the role purpose
    */
   public String getPurpose() {
     return purpose;
@@ -318,9 +318,9 @@ public class Role implements Serializable {
   }
 
   /**
-   * Set the optional date the role is effective to.
+   * Set the date the role is effective to.
    *
-   * @param effectiveTo the optional date the role is effective to
+   * @param effectiveTo the date the role is effective to
    */
   public void setEffectiveTo(LocalDate effectiveTo) {
     this.effectiveTo = effectiveTo;

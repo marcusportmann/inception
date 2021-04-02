@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class ContactMechanismRoleId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -38,23 +38,6 @@ public class ContactMechanismRoleId implements Serializable {
 
   /** The Unicode locale identifier for the contact mechanism role. */
   private String localeId;
-
-  /** Constructs a new <b>ContactMechanismRoleId</b>. */
-  public ContactMechanismRoleId() {}
-
-  /**
-   * Constructs a new <b>ContactMechanismRoleId</b>.
-   *
-   * @param contactMechanismType the code for the contact mechanism type the contact mechanism role
-   *     is associated with
-   * @param code the code for the contact mechanism role
-   * @param localeId the Unicode locale identifier for the contact mechanism role
-   */
-  public ContactMechanismRoleId(String contactMechanismType, String code, String localeId) {
-    this.contactMechanismType = contactMechanismType;
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

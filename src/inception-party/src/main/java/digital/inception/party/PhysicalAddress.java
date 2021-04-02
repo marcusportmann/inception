@@ -56,6 +56,14 @@ import org.springframework.util.StringUtils;
  * The <b>PhysicalAddress</b> class holds the information for a physical address for an organization
  * or person.
  *
+ * <p>The primary key for the physical address (ID) is a surrogate key to enable multiple physical
+ * addresses with the same type and role for a single organization or person. The surrogate key also
+ * supports the management of related data in one or more external stores, e.g. an image of the
+ * proof of residential address in an enterprise content management repository. This approach allows
+ * an entity to be modified without impacting the related data's referential integrity, for example,
+ * when correcting an error that occurred during the initial capture of the information for a
+ * physical address.
+ *
  * @author Marcus Portmann
  */
 @Schema(description = "A physical address for an organization or person")
@@ -128,8 +136,8 @@ public class PhysicalAddress implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The optional building floor for the physical address. */
-  @Schema(description = "The optional building floor for the physical address")
+  /** The building floor for the physical address. */
+  @Schema(description = "The building floor for the physical address")
   @JsonProperty
   @XmlElement(name = "BuildingFloor")
   @Size(max = 20)
@@ -152,8 +160,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "building_name", length = 50)
   private String buildingName;
 
-  /** The optional building room for the physical address. */
-  @Schema(description = "The optional building room for the physical address")
+  /** The building room for the physical address. */
+  @Schema(description = "The building room for the physical address")
   @JsonProperty
   @XmlElement(name = "BuildingRoom")
   @Size(max = 30)
@@ -223,8 +231,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The optional farm description for the physical address. */
-  @Schema(description = "The optional farm description for the physical address")
+  /** The farm description for the physical address. */
+  @Schema(description = "The farm description for the physical address")
   @JsonProperty
   @XmlElement(name = "FarmDescription")
   @Size(max = 50)
@@ -234,8 +242,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "farm_description", length = 50)
   private String farmDescription;
 
-  /** The optional farm name for the physical address. */
-  @Schema(description = "The optional farm name for the physical address")
+  /** The farm name for the physical address. */
+  @Schema(description = "The farm name for the physical address")
   @JsonProperty
   @XmlElement(name = "FarmName")
   @Size(max = 50)
@@ -268,8 +276,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The optional GPS latitude for the physical address. */
-  @Schema(description = "The optional GPS latitude for the physical address")
+  /** The GPS latitude for the physical address. */
+  @Schema(description = "The GPS latitude for the physical address")
   @JsonProperty
   @XmlElement(name = "Latitude")
   @Size(max = 50)
@@ -295,8 +303,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "line1", length = 100)
   private String line1;
 
-  /** The optional address line 2 for the physical address. */
-  @Schema(description = "The optional address line 2 for the physical address")
+  /** The address line 2 for the physical address. */
+  @Schema(description = "The address line 2 for the physical address")
   @JsonProperty
   @XmlElement(name = "Line2")
   @Size(max = 100)
@@ -306,8 +314,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "line2", length = 100)
   private String line2;
 
-  /** The optional address line 3 for the physical address. */
-  @Schema(description = "The optional address line 3 for the physical address")
+  /** The address line 3 for the physical address. */
+  @Schema(description = "The address line 3 for the physical address")
   @JsonProperty
   @XmlElement(name = "Line3")
   @Size(max = 100)
@@ -317,8 +325,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "line3", length = 100)
   private String line3;
 
-  /** The optional GPS longitude for the physical address. */
-  @Schema(description = "The optional GPS longitude for the physical address")
+  /** The GPS longitude for the physical address. */
+  @Schema(description = "The GPS longitude for the physical address")
   @JsonProperty
   @XmlElement(name = "Longitude")
   @Size(max = 50)
@@ -347,16 +355,14 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "postal_code", length = 30)
   private String postalCode;
 
-  /** The optional comma-delimited codes for the physical address purposes. */
+  /** The comma-delimited codes for the physical address purposes. */
   @JsonIgnore
   @XmlTransient
   @Column(name = "purposes", length = 310)
   private String purposes;
 
-  /** The optional ISO 3166-2 subdivision code for the region for the physical address. */
-  @Schema(
-      description =
-          "The optional ISO 3166-2 subdivision code for the region for the physical address")
+  /** The ISO 3166-2 subdivision code for the region for the physical address. */
+  @Schema(description = "The ISO 3166-2 subdivision code for the region for the physical address")
   @JsonProperty
   @XmlElement(name = "Region")
   @Size(min = 2, max = 3)
@@ -439,8 +445,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "street_number", length = 30)
   private String streetNumber;
 
-  /** The optional suburb for the physical address. */
-  @Schema(description = "The optional suburb for the physical address")
+  /** The suburb for the physical address. */
+  @Schema(description = "The suburb for the physical address")
   @JsonProperty
   @XmlElement(name = "Suburb")
   @Size(min = 1, max = 50)
@@ -550,9 +556,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the optional building floor for the physical address.
+   * Returns the building floor for the physical address.
    *
-   * @return the optional building floor for the physical address
+   * @return the building floor for the physical address
    */
   public String getBuildingFloor() {
     return buildingFloor;
@@ -568,9 +574,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the optional building room for the physical address.
+   * Returns the building room for the physical address.
    *
-   * @return the optional building room for the physical address
+   * @return the building room for the physical address
    */
   public String getBuildingRoom() {
     return buildingRoom;
@@ -622,18 +628,18 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the optional farm description for the physical address.
+   * Returns the farm description for the physical address.
    *
-   * @return the optional farm description for the physical address
+   * @return the farm description for the physical address
    */
   public String getFarmDescription() {
     return farmDescription;
   }
 
   /**
-   * Returns the optional farm name for the physical address.
+   * Returns the farm name for the physical address.
    *
-   * @return the optional farm name for the physical address
+   * @return the farm name for the physical address
    */
   public String getFarmName() {
     return farmName;
@@ -658,9 +664,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the optional GPS latitude for the physical address.
+   * Returns the GPS latitude for the physical address.
    *
-   * @return the optional GPS latitude for the physical address
+   * @return the GPS latitude for the physical address
    */
   public String getLatitude() {
     return latitude;
@@ -676,27 +682,27 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the optional address line 2 for the physical address.
+   * Returns the address line 2 for the physical address.
    *
-   * @return the optional address line 2 for the physical address
+   * @return the address line 2 for the physical address
    */
   public String getLine2() {
     return line2;
   }
 
   /**
-   * Returns the optional address line 3 for the physical address.
+   * Returns the address line 3 for the physical address.
    *
-   * @return the optional address line 3 for the physical address
+   * @return the address line 3 for the physical address
    */
   public String getLine3() {
     return line3;
   }
 
   /**
-   * Returns the optional GPS longitude for the physical address.
+   * Returns the GPS longitude for the physical address.
    *
-   * @return the optional GPS longitude for the physical address
+   * @return the GPS longitude for the physical address
    */
   public String getLongitude() {
     return longitude;
@@ -722,9 +728,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the optional codes for the physical address purposes.
+   * Returns the codes for the physical address purposes.
    *
-   * @return the optional codes for the physical address purposes
+   * @return the codes for the physical address purposes
    */
   @Schema(description = "The codes for the physical address purposes", required = true)
   @JsonProperty(required = true)
@@ -739,9 +745,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the optional ISO 3166-2 subdivision code for the region for the physical address.
+   * Returns the ISO 3166-2 subdivision code for the region for the physical address.
    *
-   * @return the optional ISO 3166-2 subdivision code for the region for the physical address
+   * @return the ISO 3166-2 subdivision code for the region for the physical address
    */
   public String getRegion() {
     return region;
@@ -793,9 +799,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the optional suburb for the physical address.
+   * Returns the suburb for the physical address.
    *
-   * @return the optional suburb for the physical address
+   * @return the suburb for the physical address
    */
   public String getSuburb() {
     return suburb;
@@ -830,9 +836,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the optional building floor for the physical address.
+   * Set the building floor for the physical address.
    *
-   * @param buildingFloor the optional building floor for the physical address
+   * @param buildingFloor the building floor for the physical address
    */
   public void setBuildingFloor(String buildingFloor) {
     this.buildingFloor = buildingFloor;
@@ -848,9 +854,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the optional building room for the physical address.
+   * Set the building room for the physical address.
    *
-   * @param buildingRoom the optional building room for the physical address
+   * @param buildingRoom the building room for the physical address
    */
   public void setBuildingRoom(String buildingRoom) {
     this.buildingRoom = buildingRoom;
@@ -893,18 +899,18 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the optional farm description for the physical address.
+   * Set the farm description for the physical address.
    *
-   * @param farmDescription the optional farm description for the physical address
+   * @param farmDescription the farm description for the physical address
    */
   public void setFarmDescription(String farmDescription) {
     this.farmDescription = farmDescription;
   }
 
   /**
-   * Set the optional farm name for the physical address.
+   * Set the farm name for the physical address.
    *
-   * @param farmName the optional farm name for the physical address
+   * @param farmName the farm name for the physical address
    */
   public void setFarmName(String farmName) {
     this.farmName = farmName;
@@ -929,9 +935,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the optional GPS latitude for the physical address.
+   * Set the GPS latitude for the physical address.
    *
-   * @param latitude the optional GPS latitude for the physical address
+   * @param latitude the GPS latitude for the physical address
    */
   public void setLatitude(String latitude) {
     this.latitude = latitude;
@@ -947,27 +953,27 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the optional address line 2 for the physical address.
+   * Set the address line 2 for the physical address.
    *
-   * @param line2 the optional address line 2 for the physical address
+   * @param line2 the address line 2 for the physical address
    */
   public void setLine2(String line2) {
     this.line2 = line2;
   }
 
   /**
-   * Set the optional address line 3 for the physical address.
+   * Set the address line 3 for the physical address.
    *
-   * @param line3 the optional address line 3 for the physical address
+   * @param line3 the address line 3 for the physical address
    */
   public void setLine3(String line3) {
     this.line3 = line3;
   }
 
   /**
-   * Set the optional GPS longitude for the physical address.
+   * Set the GPS longitude for the physical address.
    *
-   * @param longitude the optional GPS longitude for the physical address
+   * @param longitude the GPS longitude for the physical address
    */
   public void setLongitude(String longitude) {
     this.longitude = longitude;
@@ -993,9 +999,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the optional codes for the physical address purposes.
+   * Set the codes for the physical address purposes.
    *
-   * @param purposes the optional codes for the physical address purposes
+   * @param purposes the codes for the physical address purposes
    */
   public void setPurposes(Set<String> purposes) {
     if ((purposes != null) && (purposes.size() > 0)) {
@@ -1006,9 +1012,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the optional ISO 3166-2 subdivision code for the region for the physical address.
+   * Set the ISO 3166-2 subdivision code for the region for the physical address.
    *
-   * @param region the optional ISO 3166-2 subdivision code for the region for the physical address
+   * @param region the ISO 3166-2 subdivision code for the region for the physical address
    */
   public void setRegion(String region) {
     this.region = region;
@@ -1060,9 +1066,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the optional suburb for the physical address.
+   * Set the suburb for the physical address.
    *
-   * @param suburb optional suburb for the physical address
+   * @param suburb suburb for the physical address
    */
   public void setSuburb(String suburb) {
     this.suburb = suburb;

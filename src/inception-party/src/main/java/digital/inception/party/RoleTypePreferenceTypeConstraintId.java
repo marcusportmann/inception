@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class RoleTypePreferenceTypeConstraintId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -38,23 +38,6 @@ public class RoleTypePreferenceTypeConstraintId implements Serializable {
 
   /** The constraint type. */
   private ConstraintType type;
-
-  /** Constructs a new <b>RoleTypePreferenceTypeConstraintId</b>. */
-  public RoleTypePreferenceTypeConstraintId() {}
-
-  /**
-   * Constructs a new <b>RoleTypePreferenceTypeConstraintId</b>.
-   *
-   * @param roleType the code for the role type
-   * @param preferenceType the code for the preference type
-   * @param type the constraint type
-   */
-  public RoleTypePreferenceTypeConstraintId(
-      String roleType, String preferenceType, ConstraintType type) {
-    this.roleType = roleType;
-    this.preferenceType = preferenceType;
-    this.type = type;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

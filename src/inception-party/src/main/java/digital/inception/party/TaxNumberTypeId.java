@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnusedDeclaration"})
 public class TaxNumberTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -34,20 +34,6 @@ public class TaxNumberTypeId implements Serializable {
 
   /** The Unicode locale identifier for the tax number type. */
   private String localeId;
-
-  /** Constructs a new <b>TaxNumberTypeId</b>. */
-  public TaxNumberTypeId() {}
-
-  /**
-   * Constructs a new <b>TaxNumberTypeId</b>.
-   *
-   * @param code the code for the tax number type
-   * @param localeId the Unicode locale identifier for the tax number type
-   */
-  public TaxNumberTypeId(String code, String localeId) {
-    this.code = code;
-    this.localeId = localeId;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
