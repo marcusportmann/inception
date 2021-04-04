@@ -1064,6 +1064,19 @@ public class ValidPersonValidator extends PartyValidator
 
               break;
 
+            case "language_proficiencies":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getContactMechanisms(),
+                  "languageProficiencies",
+                  "{digital.inception.party.constraints.ValidPerson.languageProficiencyRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+
             case "marital_status":
               if (!validateRequiredAttributeConstraint(
                   roleType,

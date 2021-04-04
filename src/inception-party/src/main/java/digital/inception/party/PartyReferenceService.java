@@ -20,9 +20,6 @@ import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
-import javax.validation.Validator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -35,11 +32,10 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Service
-@SuppressWarnings("unused")
 public class PartyReferenceService implements IPartyReferenceService {
 
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(PartyReferenceService.class);
+  /** The default locale ID. */
+  public static final String DEFAULT_LOCALE_ID = "en-US";
 
   /** The Party Attribute Type Category Repository. */
   private final AttributeTypeCategoryRepository attributeTypeCategoryRepository;
@@ -156,16 +152,12 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Title Repository. */
   private final TitleRepository titleRepository;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /** The internal reference to the Party Reference Service to enable caching. */
   @Resource private IPartyReferenceService self;
 
   /**
    * Constructs a new <b>PartyReferenceService</b>.
    *
-   * @param validator the JSR-303 validator
    * @param attributeTypeCategoryRepository the Attribute Type Category Repository
    * @param attributeTypeRepository the Attribute Type Repository
    * @param consentTypeRepository the Consent Type Repository
@@ -208,7 +200,6 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param titleRepository the Title Repository
    */
   public PartyReferenceService(
-      Validator validator,
       AttributeTypeCategoryRepository attributeTypeCategoryRepository,
       AttributeTypeRepository attributeTypeRepository,
       ConsentTypeRepository consentTypeRepository,
@@ -247,7 +238,6 @@ public class PartyReferenceService implements IPartyReferenceService {
       TaxNumberTypeRepository taxNumberTypeRepository,
       TimeToContactRepository timeToContactRepository,
       TitleRepository titleRepository) {
-    this.validator = validator;
     this.attributeTypeCategoryRepository = attributeTypeCategoryRepository;
     this.attributeTypeRepository = attributeTypeRepository;
     this.consentTypeRepository = consentTypeRepository;
@@ -289,18 +279,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the attribute type categories.
-   *
-   * @return the attribute type categories
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'attributeTypeCategories.ALL'")
-  public List<AttributeTypeCategory> getAttributeTypeCategories()
-      throws ServiceUnavailableException {
-    return getAttributeTypeCategories(null);
-  }
-
-  /**
    * Retrieve the attribute type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
@@ -322,17 +300,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the attribute type categories", e);
     }
-  }
-
-  /**
-   * Retrieve all the attribute types.
-   *
-   * @return the attribute types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'attributeTypes.ALL'")
-  public List<AttributeType> getAttributeTypes() throws ServiceUnavailableException {
-    return getAttributeTypes(null);
   }
 
   /**
@@ -358,17 +325,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the consent types.
-   *
-   * @return the consent types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'consentTypes.ALL'")
-  public List<ConsentType> getConsentTypes() throws ServiceUnavailableException {
-    return getConsentTypes(null);
-  }
-
-  /**
    * Retrieve the consent types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the consent types for
@@ -388,18 +344,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the consent types", e);
     }
-  }
-
-  /**
-   * Retrieve all the contact mechanism purposes.
-   *
-   * @return the contact mechanism purposes
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'contactMechanismPurposes.ALL'")
-  public List<ContactMechanismPurpose> getContactMechanismPurposes()
-      throws ServiceUnavailableException {
-    return getContactMechanismPurposes(null);
   }
 
   /**
@@ -427,17 +371,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the contact mechanism roles.
-   *
-   * @return the contact mechanism roles
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'contactMechanismRoles.ALL'")
-  public List<ContactMechanismRole> getContactMechanismRoles() throws ServiceUnavailableException {
-    return getContactMechanismRoles(null);
-  }
-
-  /**
    * Retrieve the contact mechanism roles.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
@@ -459,17 +392,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the contact mechanism roles", e);
     }
-  }
-
-  /**
-   * Retrieve all the contact mechanism types.
-   *
-   * @return the contact mechanism types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'contactMechanismTypes.ALL'")
-  public List<ContactMechanismType> getContactMechanismTypes() throws ServiceUnavailableException {
-    return getContactMechanismTypes(null);
   }
 
   /**
@@ -497,17 +419,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the employment statuses.
-   *
-   * @return the employment statuses
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'employmentStatuses.ALL'")
-  public List<EmploymentStatus> getEmploymentStatuses() throws ServiceUnavailableException {
-    return getEmploymentStatuses(null);
-  }
-
-  /**
    * Retrieve the employment statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment
@@ -528,17 +439,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the employment statuses", e);
     }
-  }
-
-  /**
-   * Retrieve all the employment types.
-   *
-   * @return the employment types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'employmentTypes.ALL'")
-  public List<EmploymentType> getEmploymentTypes() throws ServiceUnavailableException {
-    return getEmploymentTypes(null);
   }
 
   /**
@@ -565,17 +465,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the fields of study.
-   *
-   * @return the fields of study
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'fieldsOfStudy.ALL'")
-  public List<FieldOfStudy> getFieldsOfStudy() throws ServiceUnavailableException {
-    return getFieldsOfStudy(null);
-  }
-
-  /**
    * Retrieve the fields of study.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
@@ -598,17 +487,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the genders.
-   *
-   * @return the genders
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'genders.ALL'")
-  public List<Gender> getGenders() throws ServiceUnavailableException {
-    return getGenders(null);
-  }
-
-  /**
    * Retrieve the genders.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
@@ -628,17 +506,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the genders", e);
     }
-  }
-
-  /**
-   * Retrieve all the identity document types.
-   *
-   * @return the identity document types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'identityDocumentTypes.ALL'")
-  public List<IdentityDocumentType> getIdentityDocumentTypes() throws ServiceUnavailableException {
-    return getIdentityDocumentTypes(null);
   }
 
   /**
@@ -666,17 +533,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the lock type categories.
-   *
-   * @return the lock type categories
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'lockTypeCategories.ALL'")
-  public List<LockTypeCategory> getLockTypeCategories() throws ServiceUnavailableException {
-    return getLockTypeCategories(null);
-  }
-
-  /**
    * Retrieve the lock type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
@@ -700,17 +556,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the lock types.
-   *
-   * @return the lock types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'lockTypes.ALL'")
-  public List<LockType> getLockTypes() throws ServiceUnavailableException {
-    return getLockTypes(null);
-  }
-
-  /**
    * Retrieve the lock types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock types for or
@@ -730,17 +575,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the lock types", e);
     }
-  }
-
-  /**
-   * Retrieve all the marital statuses.
-   *
-   * @return the marital statuses
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'maritalStatuses.ALL'")
-  public List<MaritalStatus> getMaritalStatuses() throws ServiceUnavailableException {
-    return getMaritalStatuses(null);
   }
 
   /**
@@ -767,17 +601,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the marriage types.
-   *
-   * @return the marriage types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'marriageTypes.ALL'")
-  public List<MarriageType> getMarriageTypes() throws ServiceUnavailableException {
-    return getMarriageTypes(null);
-  }
-
-  /**
    * Retrieve the marriage types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marriage types for
@@ -797,17 +620,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the marriage types", e);
     }
-  }
-
-  /**
-   * Retrieve all the next of kin types.
-   *
-   * @return the next of kin types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'nextOfKinTypes.ALL'")
-  public List<NextOfKinType> getNextOfKinTypes() throws ServiceUnavailableException {
-    return getNextOfKinTypes(null);
   }
 
   /**
@@ -833,17 +645,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the occupations.
-   *
-   * @return the occupations
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'occupations.ALL'")
-  public List<Occupation> getOccupations() throws ServiceUnavailableException {
-    return getOccupations(null);
-  }
-
-  /**
    * Retrieve the occupations.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for or
@@ -863,18 +664,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the occupations", e);
     }
-  }
-
-  /**
-   * Retrieve all the physical address purposes.
-   *
-   * @return the physical address purposes
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'physicalAddressPurposes.ALL'")
-  public List<PhysicalAddressPurpose> getPhysicalAddressPurposes()
-      throws ServiceUnavailableException {
-    return getPhysicalAddressPurposes(null);
   }
 
   /**
@@ -902,17 +691,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the physical address roles.
-   *
-   * @return the physical address roles
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'physicalAddressRoles.ALL'")
-  public List<PhysicalAddressRole> getPhysicalAddressRoles() throws ServiceUnavailableException {
-    return getPhysicalAddressRoles(null);
-  }
-
-  /**
    * Retrieve the physical address roles.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
@@ -934,17 +712,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the physical address roles", e);
     }
-  }
-
-  /**
-   * Retrieve all the physical address types.
-   *
-   * @return the physical address types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'physicalAddressTypes.ALL'")
-  public List<PhysicalAddressType> getPhysicalAddressTypes() throws ServiceUnavailableException {
-    return getPhysicalAddressTypes(null);
   }
 
   /**
@@ -972,18 +739,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the preference type categories.
-   *
-   * @return the preference type categories
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'preferenceTypeCategories.ALL'")
-  public List<PreferenceTypeCategory> getPreferenceTypeCategories()
-      throws ServiceUnavailableException {
-    return getPreferenceTypeCategories(null);
-  }
-
-  /**
    * Retrieve the preference type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
@@ -1005,17 +760,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the preference type categories", e);
     }
-  }
-
-  /**
-   * Retrieve all the preference types.
-   *
-   * @return the preference types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'preferenceTypes.ALL'")
-  public List<PreferenceType> getPreferenceTypes() throws ServiceUnavailableException {
-    return getPreferenceTypes(null);
   }
 
   /**
@@ -1042,17 +786,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the qualification types.
-   *
-   * @return the qualification types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'qualificationTypes.ALL'")
-  public List<QualificationType> getQualificationTypes() throws ServiceUnavailableException {
-    return getQualificationTypes(null);
-  }
-
-  /**
    * Retrieve the qualification types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
@@ -1076,17 +809,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the races.
-   *
-   * @return the races
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'races.ALL'")
-  public List<Race> getRaces() throws ServiceUnavailableException {
-    return getRaces(null);
-  }
-
-  /**
    * Retrieve the races.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the races for or
@@ -1106,17 +828,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the races", e);
     }
-  }
-
-  /**
-   * Retrieve all the residence permit types.
-   *
-   * @return the residence permit types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'residencePermitTypes.ALL'")
-  public List<ResidencePermitType> getResidencePermitTypes() throws ServiceUnavailableException {
-    return getResidencePermitTypes(null);
   }
 
   /**
@@ -1144,17 +855,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the residency statuses.
-   *
-   * @return the residency statuses
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'residencyStatuses.ALL'")
-  public List<ResidencyStatus> getResidencyStatuses() throws ServiceUnavailableException {
-    return getResidencyStatuses(null);
-  }
-
-  /**
    * Retrieve the residency statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residency statuses
@@ -1178,17 +878,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the residential types.
-   *
-   * @return the residential types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'residentialTypes.ALL'")
-  public List<ResidentialType> getResidentialTypes() throws ServiceUnavailableException {
-    return getResidentialTypes(null);
-  }
-
-  /**
    * Retrieve the residential types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residential types
@@ -1209,17 +898,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the residential types", e);
     }
-  }
-
-  /**
-   * Retrieve all the role purposes.
-   *
-   * @return the role purposes
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'rolePurposes.ALL'")
-  public List<RolePurpose> getRolePurposes() throws ServiceUnavailableException {
-    return getRolePurposes(null);
   }
 
   /**
@@ -1317,17 +995,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the role types.
-   *
-   * @return the role types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'roleTypes.ALL'")
-  public List<RoleType> getRoleTypes() throws ServiceUnavailableException {
-    return getRoleTypes(null);
-  }
-
-  /**
    * Retrieve the role types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
@@ -1347,17 +1014,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the role types", e);
     }
-  }
-
-  /**
-   * Retrieve all the source of funds types.
-   *
-   * @return the source of funds types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'sourceOfFundsTypes.ALL'")
-  public List<SourceOfFundsType> getSourceOfFundsTypes() throws ServiceUnavailableException {
-    return getSourceOfFundsTypes(null);
   }
 
   /**
@@ -1381,17 +1037,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the source of funds types", e);
     }
-  }
-
-  /**
-   * Retrieve all the source of wealth types.
-   *
-   * @return the source of wealth types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'sourceOfWealthTypes.ALL'")
-  public List<SourceOfWealthType> getSourceOfWealthTypes() throws ServiceUnavailableException {
-    return getSourceOfWealthTypes(null);
   }
 
   /**
@@ -1419,17 +1064,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the status type categories.
-   *
-   * @return the status type categories
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'statusTypeCategories.ALL'")
-  public List<StatusTypeCategory> getStatusTypeCategories() throws ServiceUnavailableException {
-    return getStatusTypeCategories(null);
-  }
-
-  /**
    * Retrieve the status type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
@@ -1451,17 +1085,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the status type categories", e);
     }
-  }
-
-  /**
-   * Retrieve all the status types.
-   *
-   * @return the status types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'statusTypes.ALL'")
-  public List<StatusType> getStatusTypes() throws ServiceUnavailableException {
-    return getStatusTypes(null);
   }
 
   /**
@@ -1487,17 +1110,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the tax number types.
-   *
-   * @return the tax number types
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'taxNumberTypes.ALL'")
-  public List<TaxNumberType> getTaxNumberTypes() throws ServiceUnavailableException {
-    return getTaxNumberTypes(null);
-  }
-
-  /**
    * Retrieve the tax number types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the tax number types
@@ -1520,17 +1132,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve all the times to contact.
-   *
-   * @return the times to contact
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'timesToContact.ALL'")
-  public List<TimeToContact> getTimesToContact() throws ServiceUnavailableException {
-    return getTimesToContact(null);
-  }
-
-  /**
    * Retrieve the times to contact.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
@@ -1550,17 +1151,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the times to contact", e);
     }
-  }
-
-  /**
-   * Retrieve all the titles.
-   *
-   * @return the titles
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'titles.ALL'")
-  public List<Title> getTitles() throws ServiceUnavailableException {
-    return getTitles(null);
   }
 
   /**
@@ -1599,7 +1189,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getAttributeTypes().stream()
+    return self.getAttributeTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             attributeType ->
                 (attributeType.getCode().equals(attributeTypeCode)
@@ -1620,7 +1210,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getAttributeTypeCategories().stream()
+    return self.getAttributeTypeCategories(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             attributeTypeCategory ->
                 attributeTypeCategory.getCode().equals(attributeTypeCategoryCode));
@@ -1638,7 +1228,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getConsentTypes().stream()
+    return self.getConsentTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(consentType -> consentType.getCode().equals(consentTypeCode));
   }
 
@@ -1659,7 +1249,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getContactMechanismPurposes().stream()
+    return self.getContactMechanismPurposes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             contactMechanismPurpose ->
                 (contactMechanismPurpose.isValidForPartyType(partyTypeCode)
@@ -1685,7 +1275,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getContactMechanismRoles().stream()
+    return self.getContactMechanismRoles(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             contactMechanismRole ->
                 (contactMechanismRole.isValidForPartyType(partyTypeCode)
@@ -1709,7 +1299,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getContactMechanismTypes().stream()
+    return self.getContactMechanismTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             contactMechanismType ->
                 contactMechanismType.getCode().equals(contactMechanismTypeCode));
@@ -1729,7 +1319,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getEmploymentStatuses().stream()
+    return self.getEmploymentStatuses(DEFAULT_LOCALE_ID).stream()
         .anyMatch(employmentStatus -> employmentStatus.getCode().equals(employmentStatusCode));
   }
 
@@ -1748,7 +1338,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getEmploymentTypes().stream()
+    return self.getEmploymentTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             employmentType ->
                 (employmentType.getCode().equals(employmentTypeCode)
@@ -1769,7 +1359,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getEmploymentTypes().stream()
+    return self.getEmploymentTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(employmentType -> employmentType.getCode().equals(employmentTypeCode));
   }
 
@@ -1785,7 +1375,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getFieldsOfStudy().stream()
+    return self.getFieldsOfStudy(DEFAULT_LOCALE_ID).stream()
         .anyMatch(fieldOfStudy -> fieldOfStudy.getCode().equals(fieldOfStudyCode));
   }
 
@@ -1801,7 +1391,8 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getGenders().stream().anyMatch(gender -> gender.getCode().equals(genderCode));
+    return self.getGenders(DEFAULT_LOCALE_ID).stream()
+        .anyMatch(gender -> gender.getCode().equals(genderCode));
   }
 
   /**
@@ -1819,7 +1410,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getIdentityDocumentTypes().stream()
+    return self.getIdentityDocumentTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             identityDocumentType ->
                 (identityDocumentType.getCode().equals(identityDocumentTypeCode)
@@ -1840,7 +1431,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getLockTypes().stream()
+    return self.getLockTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             lockType ->
                 (lockType.getCode().equals(lockTypeCode)
@@ -1861,7 +1452,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getLockTypeCategories().stream()
+    return self.getLockTypeCategories(DEFAULT_LOCALE_ID).stream()
         .anyMatch(lockTypeCategory -> lockTypeCategory.getCode().equals(lockTypeCategoryCode));
   }
 
@@ -1877,7 +1468,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getMaritalStatuses().stream()
+    return self.getMaritalStatuses(DEFAULT_LOCALE_ID).stream()
         .anyMatch(maritalStatus -> maritalStatus.getCode().equals(maritalStatusCode));
   }
 
@@ -1897,7 +1488,7 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     // Find marriage types for the specified marital status
     List<MarriageType> marriageTypes =
-        self.getMarriageTypes().stream()
+        self.getMarriageTypes(DEFAULT_LOCALE_ID).stream()
             .filter(marriageType -> marriageType.getMaritalStatus().equals(maritalStatusCode))
             .collect(Collectors.toList());
 
@@ -1926,7 +1517,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getNextOfKinTypes().stream()
+    return self.getNextOfKinTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(nextOfKinType -> nextOfKinType.getCode().equals(nextOfKinTypeCode));
   }
 
@@ -1942,7 +1533,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getOccupations().stream()
+    return self.getOccupations(DEFAULT_LOCALE_ID).stream()
         .anyMatch(occupation -> occupation.getCode().equals(occupationCode));
   }
 
@@ -1961,7 +1552,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPhysicalAddressPurposes().stream()
+    return self.getPhysicalAddressPurposes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             physicalAddressPurpose ->
                 (physicalAddressPurpose.getCode().equals(physicalAddressPurposeCode)
@@ -1982,7 +1573,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPhysicalAddressPurposes().stream()
+    return self.getPhysicalAddressPurposes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             physicalAddressPurpose ->
                 physicalAddressPurpose.getCode().equals(physicalAddressPurposeCode));
@@ -2003,7 +1594,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPhysicalAddressRoles().stream()
+    return self.getPhysicalAddressRoles(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             physicalAddressRole ->
                 (physicalAddressRole.getCode().equals(physicalAddressRoleCode)
@@ -2024,7 +1615,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPhysicalAddressRoles().stream()
+    return self.getPhysicalAddressRoles(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             physicalAddressRole -> physicalAddressRole.getCode().equals(physicalAddressRoleCode));
   }
@@ -2043,7 +1634,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPhysicalAddressTypes().stream()
+    return self.getPhysicalAddressTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             physicalAddressType -> physicalAddressType.getCode().equals(physicalAddressTypeCode));
   }
@@ -2062,7 +1653,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPreferenceTypes().stream()
+    return self.getPreferenceTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             preferenceType ->
                 (preferenceType.getCode().equals(preferenceTypeCode)
@@ -2083,7 +1674,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPreferenceTypeCategories().stream()
+    return self.getPreferenceTypeCategories(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             preferenceTypeCategory ->
                 preferenceTypeCategory.getCode().equals(preferenceTypeCategoryCode));
@@ -2103,7 +1694,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getQualificationTypes().stream()
+    return self.getQualificationTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(qualificationType -> qualificationType.getCode().equals(qualificationTypeCode));
   }
 
@@ -2119,7 +1710,8 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getRaces().stream().anyMatch(race -> race.getCode().equals(raceCode));
+    return self.getRaces(DEFAULT_LOCALE_ID).stream()
+        .anyMatch(race -> race.getCode().equals(raceCode));
   }
 
   /**
@@ -2136,7 +1728,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getResidencePermitTypes().stream()
+    return self.getResidencePermitTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             residencePermitType -> residencePermitType.getCode().equals(residencePermitTypeCode));
   }
@@ -2155,7 +1747,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getResidencyStatuses().stream()
+    return self.getResidencyStatuses(DEFAULT_LOCALE_ID).stream()
         .anyMatch(residencyStatus -> residencyStatus.getCode().equals(residencyStatusCode));
   }
 
@@ -2173,7 +1765,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getResidentialTypes().stream()
+    return self.getResidentialTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(residentialType -> residentialType.getCode().equals(residentialTypeCode));
   }
 
@@ -2189,7 +1781,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getRolePurposes().stream()
+    return self.getRolePurposes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(rolePurpose -> rolePurpose.getCode().equals(rolePurposeCode));
   }
 
@@ -2207,7 +1799,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getRoleTypes().stream()
+    return self.getRoleTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             roleType ->
                 (roleType.getCode().equals(roleTypeCode)
@@ -2228,7 +1820,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getSourceOfFundsTypes().stream()
+    return self.getSourceOfFundsTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(sourceOfFunds -> sourceOfFunds.getCode().equals(sourceOfFundsTypeCode));
   }
 
@@ -2246,7 +1838,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getSourceOfWealthTypes().stream()
+    return self.getSourceOfWealthTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(sourceOfWealth -> sourceOfWealth.getCode().equals(sourceOfWealthTypeCode));
   }
 
@@ -2264,7 +1856,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getStatusTypes().stream()
+    return self.getStatusTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             statusType ->
                 (statusType.getCode().equals(statusTypeCode)
@@ -2285,7 +1877,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getStatusTypeCategories().stream()
+    return self.getStatusTypeCategories(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             statusTypeCategory -> statusTypeCategory.getCode().equals(statusTypeCategoryCode));
   }
@@ -2304,7 +1896,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getTaxNumberTypes().stream()
+    return self.getTaxNumberTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             taxNumberType ->
                 taxNumberType.getCode().equals(taxNumberTypeCode)
@@ -2323,7 +1915,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getTimesToContact().stream()
+    return self.getTimesToContact(DEFAULT_LOCALE_ID).stream()
         .anyMatch(timeToContact -> timeToContact.getCode().equals(timeToContactCode));
   }
 
@@ -2339,6 +1931,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getTitles().stream().anyMatch(title -> title.getCode().equals(titleCode));
+    return self.getTitles(DEFAULT_LOCALE_ID).stream()
+        .anyMatch(title -> title.getCode().equals(titleCode));
   }
 }

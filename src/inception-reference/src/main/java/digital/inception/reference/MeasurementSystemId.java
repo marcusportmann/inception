@@ -10,7 +10,7 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * See the License for the specific measurement system governing permissions and
  * limitations under the License.
  */
 
@@ -20,19 +20,19 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>LanguageId</b> class implements the ID class for the <b>Language</b> class.
+ * The <b>MeasurementSystemId</b> class implements the ID class for the <b>MeasurementSystem</b> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class LanguageId implements Serializable {
+public class MeasurementSystemId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ISO 639-1 alpha-2 code for the language. */
+  /** The ISO code for the measurement system. */
   private String code;
 
-  /** The Unicode locale identifier for the language. */
+  /** The Unicode locale identifier for the measurement system. */
   private String localeId;
 
   /**
@@ -55,7 +55,7 @@ public class LanguageId implements Serializable {
       return false;
     }
 
-    LanguageId other = (LanguageId) object;
+    MeasurementSystemId other = (MeasurementSystemId) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }

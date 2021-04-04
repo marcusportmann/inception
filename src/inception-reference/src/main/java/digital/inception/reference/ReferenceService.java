@@ -17,11 +17,13 @@
 package digital.inception.reference;
 
 import digital.inception.core.service.ServiceUnavailableException;
+import java.time.ZoneId;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
-import javax.validation.Validator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -36,8 +38,8 @@ import org.springframework.util.StringUtils;
 @Service
 public class ReferenceService implements IReferenceService {
 
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(ReferenceService.class);
+  /** The default locale ID. */
+  public static final String DEFAULT_LOCALE_ID = "en-US";
 
   /** The Country repository. */
   private final CountryRepository countryRepository;
@@ -45,11 +47,11 @@ public class ReferenceService implements IReferenceService {
   /** The Language Repository. */
   private final LanguageRepository languageRepository;
 
+  /** The Measurement System Repository. */
+  private final MeasurementSystemRepository measurementSystemRepository;
+
   /** The Region Repository. */
   private final RegionRepository regionRepository;
-
-  /** The JSR-303 validator. */
-  private final Validator validator;
 
   /** The internal reference to the Reference Service to enable caching. */
   @Resource private IReferenceService self;
@@ -57,31 +59,20 @@ public class ReferenceService implements IReferenceService {
   /**
    * Constructs a new <b>ReferenceService</b>.
    *
-   * @param validator the JSR-303 validator
    * @param countryRepository the Country Repository
    * @param languageRepository the Language Repository
+   * @param measurementSystemRepository the Measurement System Repository
    * @param regionRepository the Region Repository
    */
   public ReferenceService(
-      Validator validator,
       CountryRepository countryRepository,
       LanguageRepository languageRepository,
+      MeasurementSystemRepository measurementSystemRepository,
       RegionRepository regionRepository) {
-    this.validator = validator;
     this.countryRepository = countryRepository;
     this.languageRepository = languageRepository;
+    this.measurementSystemRepository = measurementSystemRepository;
     this.regionRepository = regionRepository;
-  }
-
-  /**
-   * Retrieve all the countries.
-   *
-   * @return the countries
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'countries.ALL'")
-  public List<Country> getCountries() throws ServiceUnavailableException {
-    return getCountries(null);
   }
 
   /**
@@ -107,17 +98,6 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Retrieve all the languages.
-   *
-   * @return the languages
-   */
-  @Override
-  @Cacheable(value = "reference", key = "'languages.ALL'")
-  public List<Language> getLanguages() throws ServiceUnavailableException {
-    return getLanguages(null);
-  }
-
-  /**
    * Retrieve the languages.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the languages for or
@@ -140,14 +120,26 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Retrieve all the regions.
+   * Retrieve the measurement systems.
    *
-   * @return the regions
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
+   *     systems for or <b>null</b> to retrieve the measurement systems for all locales
+   * @return the measurement systems
    */
   @Override
-  @Cacheable(value = "reference", key = "'regions.ALL'")
-  public List<Region> getRegions() throws ServiceUnavailableException {
-    return getRegions(null);
+  @Cacheable(value = "reference", key = "'measurementSystems.' + #localeId")
+  public List<MeasurementSystem> getMeasurementSystems(String localeId)
+      throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return measurementSystemRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return measurementSystemRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the measurement systems", e);
+    }
   }
 
   /**
@@ -173,6 +165,38 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
+   * Retrieve the time zones.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the time zones for or
+   *     <b>null</b> to retrieve the time zones for all locales
+   * @return the time zones
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'timeZones.' + #localeId")
+  public List<TimeZone> getTimeZones(String localeId) throws ServiceUnavailableException {
+    try {
+      List<TimeZone> timeZones = new ArrayList<>();
+
+      int sortIndex = 1;
+
+      Locale locale = Locale.forLanguageTag(localeId);
+
+      for (String zoneId :
+          ZoneId.getAvailableZoneIds().stream().sorted().collect(Collectors.toList())) {
+        String zoneName = ZoneId.of(zoneId).getDisplayName(TextStyle.FULL_STANDALONE, locale);
+
+        timeZones.add(new TimeZone(zoneId, localeId, zoneName, zoneName, sortIndex));
+
+        sortIndex++;
+      }
+
+      return timeZones;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the time zones", e);
+    }
+  }
+
+  /**
    * Check whether the code is a valid code for a country.
    *
    * @param countryCode the code for the country
@@ -184,7 +208,8 @@ public class ReferenceService implements IReferenceService {
       return false;
     }
 
-    return self.getCountries().stream().anyMatch(country -> country.getCode().equals(countryCode));
+    return self.getCountries(DEFAULT_LOCALE_ID).stream()
+        .anyMatch(country -> country.getCode().equals(countryCode));
   }
 
   /**
@@ -200,8 +225,26 @@ public class ReferenceService implements IReferenceService {
       return false;
     }
 
-    return self.getLanguages().stream()
+    return self.getLanguages(DEFAULT_LOCALE_ID).stream()
         .anyMatch(language -> language.getCode().equals(languageCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a measurement system.
+   *
+   * @param measurementSystemCode the code for the measurement system
+   * @return <b>true</b> if the code is a valid code for a measurement system or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidMeasurementSystem(String measurementSystemCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(measurementSystemCode)) {
+      return false;
+    }
+
+    return self.getMeasurementSystems(DEFAULT_LOCALE_ID).stream()
+        .anyMatch(measurementSystem -> measurementSystem.getCode().equals(measurementSystemCode));
   }
 
   /**
@@ -216,6 +259,28 @@ public class ReferenceService implements IReferenceService {
       return false;
     }
 
-    return self.getRegions().stream().anyMatch(region -> region.getCode().equals(regionCode));
+    return self.getRegions(DEFAULT_LOCALE_ID).stream()
+        .anyMatch(region -> region.getCode().equals(regionCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a time zone.
+   *
+   * @param timeZoneCode the code for the time zone
+   * @return <b>true</b> if the code is a valid code for a time zone or <b>false</b> otherwise
+   */
+  @Override
+  public boolean isValidTimeZone(String timeZoneCode) {
+    if (!StringUtils.hasText(timeZoneCode)) {
+      return false;
+    }
+
+    try {
+      //noinspection ResultOfMethodCallIgnored
+      ZoneId.of(timeZoneCode);
+      return true;
+    } catch (Throwable ignored) {
+      return false;
+    }
   }
 }

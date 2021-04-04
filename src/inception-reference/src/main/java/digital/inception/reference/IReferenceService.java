@@ -28,13 +28,6 @@ import java.util.List;
 public interface IReferenceService {
 
   /**
-   * Retrieve all the countries.
-   *
-   * @return the countries
-   */
-  List<Country> getCountries() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the countries.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the countries for or
@@ -42,13 +35,6 @@ public interface IReferenceService {
    * @return the countries
    */
   List<Country> getCountries(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the languages.
-   *
-   * @return the languages
-   */
-  List<Language> getLanguages() throws ServiceUnavailableException;
 
   /**
    * Retrieve the languages.
@@ -60,11 +46,13 @@ public interface IReferenceService {
   List<Language> getLanguages(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the regions.
+   * Retrieve the measurement systems.
    *
-   * @return the regions
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
+   *     systems for or <b>null</b> to retrieve the measurement systems for all locales
+   * @return the measurement systems
    */
-  List<Region> getRegions() throws ServiceUnavailableException;
+  List<MeasurementSystem> getMeasurementSystems(String localeId) throws ServiceUnavailableException;
 
   /**
    * Retrieve the regions.
@@ -74,6 +62,15 @@ public interface IReferenceService {
    * @return the regions
    */
   List<Region> getRegions(String localeId) throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the time zones.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the time zones for or
+   *     <b>null</b> to retrieve the time zones for all locales
+   * @return the time zones
+   */
+  List<TimeZone> getTimeZones(String localeId) throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a country.
@@ -93,10 +90,27 @@ public interface IReferenceService {
   boolean isValidLanguage(String languageCode) throws ServiceUnavailableException;
 
   /**
+   * Check whether the code is a valid code for a measurement system.
+   *
+   * @param measurementSystemCode the code for the measurement system
+   * @return <b>true</b> if the code is a valid code for a measurement system or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidMeasurementSystem(String measurementSystemCode) throws ServiceUnavailableException;
+
+  /**
    * Check whether the code is a valid code for a region.
    *
    * @param regionCode the code for the region
    * @return <b>true</b> if the code is a valid code for a region or <b>false</b> otherwise
    */
   boolean isValidRegion(String regionCode) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a time zone.
+   *
+   * @param timeZoneCode the code for the time zone
+   * @return <b>true</b> if the code is a valid code for a time zone or <b>false</b> otherwise
+   */
+  boolean isValidTimeZone(String timeZoneCode) throws ServiceUnavailableException;
 }

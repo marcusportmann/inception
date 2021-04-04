@@ -38,6 +38,7 @@ import digital.inception.party.MaritalStatus;
 import digital.inception.party.MarriageType;
 import digital.inception.party.NextOfKinType;
 import digital.inception.party.Occupation;
+import digital.inception.party.PartyReferenceService;
 import digital.inception.party.PartyType;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressRole;
@@ -97,14 +98,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void attributeTypeCategoryTest() throws Exception {
     List<AttributeTypeCategory> retrievedAttributeTypeCategories =
-        partyReferenceService.getAttributeTypeCategories();
-
-    assertEquals(
-        "The correct number of attribute type categories was not retrieved",
-        2,
-        retrievedAttributeTypeCategories.size());
-
-    retrievedAttributeTypeCategories = partyReferenceService.getAttributeTypeCategories("en-US");
+        partyReferenceService.getAttributeTypeCategories(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of attribute type categories was not retrieved",
@@ -115,14 +109,7 @@ public class PartyReferenceServiceTest {
   /** Test the attribute type reference functionality. */
   @Test
   public void attributeTypeTest() throws Exception {
-    List<AttributeType> retrievedAttributeTypes = partyReferenceService.getAttributeTypes();
-
-    assertEquals(
-        "The correct number of attribute types was not retrieved",
-        6,
-        retrievedAttributeTypes.size());
-
-    retrievedAttributeTypes = partyReferenceService.getAttributeTypes("en-US");
+    List<AttributeType> retrievedAttributeTypes = partyReferenceService.getAttributeTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of attribute types was not retrieved",
@@ -133,12 +120,7 @@ public class PartyReferenceServiceTest {
   /** Test the consent type reference functionality. */
   @Test
   public void consentTypeTest() throws Exception {
-    List<ConsentType> retrievedConsentTypes = partyReferenceService.getConsentTypes();
-
-    assertEquals(
-        "The correct number of consent types was not retrieved", 2, retrievedConsentTypes.size());
-
-    retrievedConsentTypes = partyReferenceService.getConsentTypes("en-US");
+    List<ConsentType> retrievedConsentTypes = partyReferenceService.getConsentTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of consent types was not retrieved", 1, retrievedConsentTypes.size());
@@ -148,14 +130,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void contactMechanismPurposesTest() throws Exception {
     List<ContactMechanismPurpose> retrievedContactMechanismPurposes =
-        partyReferenceService.getContactMechanismPurposes();
-
-    assertEquals(
-        "The correct number of contact mechanism purposes was not retrieved",
-        6,
-        retrievedContactMechanismPurposes.size());
-
-    retrievedContactMechanismPurposes = partyReferenceService.getContactMechanismPurposes("en-US");
+        partyReferenceService.getContactMechanismPurposes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of contact mechanism purposes was not retrieved",
@@ -167,14 +142,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void contactMechanismRolesTest() throws Exception {
     List<ContactMechanismRole> retrievedContactMechanismRoles =
-        partyReferenceService.getContactMechanismRoles();
-
-    assertEquals(
-        "The correct number of contact mechanism roles was not retrieved",
-        50,
-        retrievedContactMechanismRoles.size());
-
-    retrievedContactMechanismRoles = partyReferenceService.getContactMechanismRoles("en-US");
+        partyReferenceService.getContactMechanismRoles(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of contact mechanism roles was not retrieved",
@@ -186,23 +154,16 @@ public class PartyReferenceServiceTest {
   @Test
   public void contactMechanismTypeTest() throws Exception {
     List<ContactMechanismType> retrievedContactMechanismTypes =
-        partyReferenceService.getContactMechanismTypes();
+        partyReferenceService.getContactMechanismTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
-    retrievedContactMechanismTypes = partyReferenceService.getContactMechanismTypes("en-US");
+    // TODO: Check results
   }
 
   /** Test the employment status reference functionality. */
   @Test
   public void employmentStatusTest() throws Exception {
     List<EmploymentStatus> retrievedEmploymentStatuses =
-        partyReferenceService.getEmploymentStatuses();
-
-    assertEquals(
-        "The correct number of employment statuses was not retrieved",
-        6,
-        retrievedEmploymentStatuses.size());
-
-    retrievedEmploymentStatuses = partyReferenceService.getEmploymentStatuses("en-US");
+        partyReferenceService.getEmploymentStatuses(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of employment statuses was not retrieved",
@@ -213,14 +174,7 @@ public class PartyReferenceServiceTest {
   /** Test the employment type reference functionality. */
   @Test
   public void employmentTypeTest() throws Exception {
-    List<EmploymentType> retrievedEmploymentTypes = partyReferenceService.getEmploymentTypes();
-
-    assertEquals(
-        "The correct number of employment types was not retrieved",
-        22,
-        retrievedEmploymentTypes.size());
-
-    retrievedEmploymentTypes = partyReferenceService.getEmploymentTypes("en-US");
+    List<EmploymentType> retrievedEmploymentTypes = partyReferenceService.getEmploymentTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of employment types was not retrieved",
@@ -231,11 +185,7 @@ public class PartyReferenceServiceTest {
   /** Test the gender reference functionality. */
   @Test
   public void genderTest() throws Exception {
-    List<Gender> retrievedGenders = partyReferenceService.getGenders();
-
-    assertEquals("The correct number of genders was not retrieved", 10, retrievedGenders.size());
-
-    retrievedGenders = partyReferenceService.getGenders("en-US");
+    List<Gender> retrievedGenders = partyReferenceService.getGenders(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals("The correct number of genders was not retrieved", 5, retrievedGenders.size());
   }
@@ -244,14 +194,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void identityDocumentTypeTest() throws Exception {
     List<IdentityDocumentType> retrievedIdentityDocumentTypes =
-        partyReferenceService.getIdentityDocumentTypes();
-
-    assertEquals(
-        "The correct number of identity document types was not retrieved",
-        10,
-        retrievedIdentityDocumentTypes.size());
-
-    retrievedIdentityDocumentTypes = partyReferenceService.getIdentityDocumentTypes("en-US");
+        partyReferenceService.getIdentityDocumentTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of identity document types was not retrieved",
@@ -263,30 +206,20 @@ public class PartyReferenceServiceTest {
   @Test
   public void lockTypeCategoryTest() throws Exception {
     List<LockTypeCategory> retrievedLockTypeCategories =
-        partyReferenceService.getLockTypeCategories();
-
-    assertEquals(
-        "The correct number of lock type categories was not retrieved",
-        6,
-        retrievedLockTypeCategories.size());
-
-    retrievedLockTypeCategories = partyReferenceService.getLockTypeCategories("en-US");
+        partyReferenceService.getLockTypeCategories(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of lock type categories was not retrieved",
         3,
         retrievedLockTypeCategories.size());
+
+    retrievedLockTypeCategories = partyReferenceService.getLockTypeCategories("en-US");
   }
 
   /** Test the lock type reference functionality. */
   @Test
   public void lockTypeTest() throws Exception {
-    List<LockType> retrievedLockTypes = partyReferenceService.getLockTypes();
-
-    assertEquals(
-        "The correct number of lock types was not retrieved", 6, retrievedLockTypes.size());
-
-    retrievedLockTypes = partyReferenceService.getLockTypes("en-US");
+    List<LockType> retrievedLockTypes = partyReferenceService.getLockTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of lock types was not retrieved", 3, retrievedLockTypes.size());
@@ -295,30 +228,21 @@ public class PartyReferenceServiceTest {
   /** Test the marital status reference functionality. */
   @Test
   public void maritalStatusTest() throws Exception {
-    List<MaritalStatus> retrievedMaritalStatuses = partyReferenceService.getMaritalStatuses();
-
-    assertEquals(
-        "The correct number of marital statuses was not retrieved",
-        12,
-        retrievedMaritalStatuses.size());
-
-    retrievedMaritalStatuses = partyReferenceService.getMaritalStatuses("en-US");
+    List<MaritalStatus> retrievedMaritalStatuses = partyReferenceService.getMaritalStatuses(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of marital statuses was not retrieved",
         6,
         retrievedMaritalStatuses.size());
+
+    retrievedMaritalStatuses = partyReferenceService.getMaritalStatuses("en-US");
+
   }
 
   /** Test the marriage type reference functionality. */
   @Test
   public void marriageTypeTest() throws Exception {
-    List<MarriageType> retrievedMarriageTypes = partyReferenceService.getMarriageTypes();
-
-    assertEquals(
-        "The correct number of marriage types was not retrieved", 8, retrievedMarriageTypes.size());
-
-    retrievedMarriageTypes = partyReferenceService.getMarriageTypes("en-US");
+    List<MarriageType> retrievedMarriageTypes = partyReferenceService.getMarriageTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of marriage types was not retrieved", 4, retrievedMarriageTypes.size());
@@ -327,30 +251,20 @@ public class PartyReferenceServiceTest {
   /** Test the next of kin type reference functionality. */
   @Test
   public void nextOfKinTypeTest() throws Exception {
-    List<NextOfKinType> retrievedNextOfKinTypes = partyReferenceService.getNextOfKinTypes();
-
-    assertEquals(
-        "The correct number of next of kin types was not retrieved",
-        34,
-        retrievedNextOfKinTypes.size());
-
-    retrievedNextOfKinTypes = partyReferenceService.getNextOfKinTypes("en-US");
+    List<NextOfKinType> retrievedNextOfKinTypes = partyReferenceService.getNextOfKinTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of next of kin types was not retrieved",
         17,
         retrievedNextOfKinTypes.size());
+
+    retrievedNextOfKinTypes = partyReferenceService.getNextOfKinTypes("en-US");
   }
 
   /** Test the occupation reference functionality. */
   @Test
   public void occupationTest() throws Exception {
-    List<Occupation> retrievedOccupations = partyReferenceService.getOccupations();
-
-    assertEquals(
-        "The correct number of occupations was not retrieved", 58, retrievedOccupations.size());
-
-    retrievedOccupations = partyReferenceService.getOccupations("en-US");
+    List<Occupation> retrievedOccupations = partyReferenceService.getOccupations(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
@@ -360,12 +274,7 @@ public class PartyReferenceServiceTest {
   /** Test the qualification type reference functionality. */
   @Test
   public void qualificationTypeTest() throws Exception {
-    List<QualificationType> retrievedQualificationTypes = partyReferenceService.getQualificationTypes();
-
-    assertEquals(
-        "The correct number of qualification types was not retrieved", 28, retrievedQualificationTypes.size());
-
-    retrievedQualificationTypes = partyReferenceService.getQualificationTypes("en-US");
+    List<QualificationType> retrievedQualificationTypes = partyReferenceService.getQualificationTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of qualification types was not retrieved", 14, retrievedQualificationTypes.size());
@@ -375,15 +284,12 @@ public class PartyReferenceServiceTest {
   /** Test the field of study reference functionality. */
   @Test
   public void fieldOfStudyTest() throws Exception {
-    List<FieldOfStudy> retrievedFieldsOfStudy = partyReferenceService.getFieldsOfStudy();
-
-    assertEquals(
-        "The correct number of fields of study was not retrieved", 382, retrievedFieldsOfStudy.size());
-
-    retrievedFieldsOfStudy = partyReferenceService.getFieldsOfStudy("en-US");
+    List<FieldOfStudy> retrievedFieldsOfStudy = partyReferenceService.getFieldsOfStudy(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of fields of study was not retrieved", 191, retrievedFieldsOfStudy.size());
+
+    retrievedFieldsOfStudy = partyReferenceService.getFieldsOfStudy("en-US");
   }
 
 
@@ -392,14 +298,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void physicalAddressPurposeTest() throws Exception {
     List<PhysicalAddressPurpose> retrievedPhysicalAddressPurposes =
-        partyReferenceService.getPhysicalAddressPurposes();
-
-    assertEquals(
-        "The correct number of physical address purposes was not retrieved",
-        6,
-        retrievedPhysicalAddressPurposes.size());
-
-    retrievedPhysicalAddressPurposes = partyReferenceService.getPhysicalAddressPurposes("en-US");
+        partyReferenceService.getPhysicalAddressPurposes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of physical address purposes was not retrieved",
@@ -411,14 +310,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void physicalAddressRoleTest() throws Exception {
     List<PhysicalAddressRole> retrievedPhysicalAddressRoles =
-        partyReferenceService.getPhysicalAddressRoles();
-
-    assertEquals(
-        "The correct number of physical address roles was not retrieved",
-        22,
-        retrievedPhysicalAddressRoles.size());
-
-    retrievedPhysicalAddressRoles = partyReferenceService.getPhysicalAddressRoles("en-US");
+        partyReferenceService.getPhysicalAddressRoles(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of physical address roles was not retrieved",
@@ -430,14 +322,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void physicalAddressTypeTest() throws Exception {
     List<PhysicalAddressType> retrievedPhysicalAddressTypes =
-        partyReferenceService.getPhysicalAddressTypes();
-
-    assertEquals(
-        "The correct number of physical address types was not retrieved",
-        16,
-        retrievedPhysicalAddressTypes.size());
-
-    retrievedPhysicalAddressTypes = partyReferenceService.getPhysicalAddressTypes("en-US");
+        partyReferenceService.getPhysicalAddressTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of physical address types was not retrieved",
@@ -449,14 +334,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void preferenceTypeCategoryTest() throws Exception {
     List<PreferenceTypeCategory> retrievedPreferenceTypeCategories =
-        partyReferenceService.getPreferenceTypeCategories();
-
-    assertEquals(
-        "The correct number of preference type categories was not retrieved",
-        4,
-        retrievedPreferenceTypeCategories.size());
-
-    retrievedPreferenceTypeCategories = partyReferenceService.getPreferenceTypeCategories("en-US");
+        partyReferenceService.getPreferenceTypeCategories(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of preference type categories was not retrieved",
@@ -467,19 +345,18 @@ public class PartyReferenceServiceTest {
   /** Test the preference type functionality. */
   @Test
   public void preferenceTypeTest() throws Exception {
-    List<PreferenceType> retrievedPreferenceTypes = partyReferenceService.getPreferenceTypes();
+    List<PreferenceType> retrievedPreferenceTypes = partyReferenceService.getPreferenceTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
-    retrievedPreferenceTypes = partyReferenceService.getPreferenceTypes("en-US");
+    assertEquals(
+        "The correct number of preference types was not retrieved",
+        2,
+        retrievedPreferenceTypes.size());
   }
 
   /** Test the race reference functionality. */
   @Test
   public void raceTest() throws Exception {
-    List<Race> retrievedRaces = partyReferenceService.getRaces();
-
-    assertEquals("The correct number of races was not retrieved", 12, retrievedRaces.size());
-
-    retrievedRaces = partyReferenceService.getRaces("en-US");
+    List<Race> retrievedRaces = partyReferenceService.getRaces(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals("The correct number of races was not retrieved", 6, retrievedRaces.size());
   }
@@ -488,14 +365,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void residencePermitTypeTest() throws Exception {
     List<ResidencePermitType> retrievedResidencePermitTypes =
-        partyReferenceService.getResidencePermitTypes();
-
-    assertEquals(
-        "The correct number of residence permit types was not retrieved",
-        18,
-        retrievedResidencePermitTypes.size());
-
-    retrievedResidencePermitTypes = partyReferenceService.getResidencePermitTypes("en-US");
+        partyReferenceService.getResidencePermitTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of residence permit types was not retrieved",
@@ -506,14 +376,7 @@ public class PartyReferenceServiceTest {
   /** Test the residency status reference functionality. */
   @Test
   public void residencyStatusTest() throws Exception {
-    List<ResidencyStatus> retrievedResidencyStatuses = partyReferenceService.getResidencyStatuses();
-
-    assertEquals(
-        "The correct number of residency statuses was not retrieved",
-        10,
-        retrievedResidencyStatuses.size());
-
-    retrievedResidencyStatuses = partyReferenceService.getResidencyStatuses("en-US");
+    List<ResidencyStatus> retrievedResidencyStatuses = partyReferenceService.getResidencyStatuses(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of residency statuses was not retrieved",
@@ -524,14 +387,7 @@ public class PartyReferenceServiceTest {
   /** Test the residential type reference functionality. */
   @Test
   public void residentialTypeTest() throws Exception {
-    List<ResidentialType> retrievedResidentialTypes = partyReferenceService.getResidentialTypes();
-
-    assertEquals(
-        "The correct number of residential types was not retrieved",
-        14,
-        retrievedResidentialTypes.size());
-
-    retrievedResidentialTypes = partyReferenceService.getResidentialTypes("en-US");
+    List<ResidentialType> retrievedResidentialTypes = partyReferenceService.getResidentialTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of residential types was not retrieved",
@@ -542,9 +398,9 @@ public class PartyReferenceServiceTest {
   /** Test the role purpose functionality. */
   @Test
   public void rolePurposeTest() throws Exception {
-    List<RolePurpose> retrievedRolePurposes = partyReferenceService.getRolePurposes();
+    List<RolePurpose> retrievedRolePurposes = partyReferenceService.getRolePurposes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
-    retrievedRolePurposes = partyReferenceService.getRolePurposes("en-US");
+    // TODO: Check results
   }
 
   /** Test the role type attribute type constraint functionality. */
@@ -614,12 +470,7 @@ public class PartyReferenceServiceTest {
   /** Test the role type functionality. */
   @Test
   public void roleTypeTest() throws Exception {
-    List<RoleType> retrievedRoleTypes = partyReferenceService.getRoleTypes();
-
-    assertEquals(
-        "The correct number of role types was not retrieved", 10, retrievedRoleTypes.size());
-
-    retrievedRoleTypes = partyReferenceService.getRoleTypes("en-US");
+    List<RoleType> retrievedRoleTypes = partyReferenceService.getRoleTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of role types was not retrieved", 5, retrievedRoleTypes.size());
@@ -629,14 +480,7 @@ public class PartyReferenceServiceTest {
   @Test
   public void sourceOfFundsTypeTest() throws Exception {
     List<SourceOfFundsType> retrievedSourceOfFundTypes =
-        partyReferenceService.getSourceOfFundsTypes();
-
-    assertEquals(
-        "The correct number of source of funds types was not retrieved",
-        38,
-        retrievedSourceOfFundTypes.size());
-
-    retrievedSourceOfFundTypes = partyReferenceService.getSourceOfFundsTypes("en-US");
+        partyReferenceService.getSourceOfFundsTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of source of funds types was not retrieved",
@@ -648,30 +492,18 @@ public class PartyReferenceServiceTest {
   @Test
   public void statusTypeCategoryTest() throws Exception {
     List<StatusTypeCategory> retrievedStatusTypeCategories =
-        partyReferenceService.getStatusTypeCategories();
+        partyReferenceService.getStatusTypeCategories(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of status type categories was not retrieved",
         6,
-        retrievedStatusTypeCategories.size());
-
-    retrievedStatusTypeCategories = partyReferenceService.getStatusTypeCategories("en-US");
-
-    assertEquals(
-        "The correct number of status type categories was not retrieved",
-        3,
         retrievedStatusTypeCategories.size());
   }
 
   /** Test the status type functionality. */
   @Test
   public void statusTypeTest() throws Exception {
-    List<StatusType> retrievedStatusTypes = partyReferenceService.getStatusTypes();
-
-    assertEquals(
-        "The correct number of status types was not retrieved", 6, retrievedStatusTypes.size());
-
-    retrievedStatusTypes = partyReferenceService.getStatusTypes("en-US");
+    List<StatusType> retrievedStatusTypes = partyReferenceService.getStatusTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of status types was not retrieved", 3, retrievedStatusTypes.size());
@@ -680,14 +512,7 @@ public class PartyReferenceServiceTest {
   /** Test the tax number type reference functionality. */
   @Test
   public void taxNumberTypeTest() throws Exception {
-    List<TaxNumberType> retrievedTaxNumberTypes = partyReferenceService.getTaxNumberTypes();
-
-    assertEquals(
-        "The correct number of tax number types was not retrieved",
-        14,
-        retrievedTaxNumberTypes.size());
-
-    retrievedTaxNumberTypes = partyReferenceService.getTaxNumberTypes("en-US");
+    List<TaxNumberType> retrievedTaxNumberTypes = partyReferenceService.getTaxNumberTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of tax number types was not retrieved",
@@ -698,14 +523,7 @@ public class PartyReferenceServiceTest {
   /** Test the time to contact functionality. */
   @Test
   public void timeToContactTest() throws Exception {
-    List<TimeToContact> retrievedTimesToContact = partyReferenceService.getTimesToContact();
-
-    assertEquals(
-        "The correct number of times to contact was not retrieved",
-        10,
-        retrievedTimesToContact.size());
-
-    retrievedTimesToContact = partyReferenceService.getTimesToContact("en-US");
+    List<TimeToContact> retrievedTimesToContact = partyReferenceService.getTimesToContact(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of times to contact was not retrieved",
@@ -716,11 +534,7 @@ public class PartyReferenceServiceTest {
   /** Test the title reference functionality. */
   @Test
   public void titleTest() throws Exception {
-    List<Title> retrievedTitles = partyReferenceService.getTitles();
-
-    assertEquals("The correct number of titles was not retrieved", 24, retrievedTitles.size());
-
-    retrievedTitles = partyReferenceService.getTitles("en-US");
+    List<Title> retrievedTitles = partyReferenceService.getTitles(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals("The correct number of titles was not retrieved", 12, retrievedTitles.size());
   }

@@ -30,6 +30,7 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -93,11 +94,12 @@ public class ReferenceApi extends SecureApi {
               name = "localeId",
               description =
                   "The optional Unicode locale identifier for the locale to retrieve the countries for",
-              example = "en-US")
+              example = ReferenceService.DEFAULT_LOCALE_ID)
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return referenceService.getCountries(localeId);
+    return referenceService.getCountries(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
   }
 
   /**
@@ -128,11 +130,53 @@ public class ReferenceApi extends SecureApi {
               name = "localeId",
               description =
                   "The optional Unicode locale identifier for the locale to retrieve the languages for",
-              example = "en-US")
+              example = ReferenceService.DEFAULT_LOCALE_ID)
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return referenceService.getLanguages(localeId);
+    return referenceService.getLanguages(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
+   * Retrieve the measurement systems.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
+   *     systems for or <b>null</b> to retrieve the measurement systems for all locales
+   * @return the measurement systems
+   */
+  @Operation(
+      summary = "Retrieve the measurement systems",
+      description = "Retrieve the measurement systems")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/measurement-systems",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<MeasurementSystem> getMeasurementSystems(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the measurement systems for",
+              example = ReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return referenceService.getMeasurementSystems(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
   }
 
   /**
@@ -163,10 +207,53 @@ public class ReferenceApi extends SecureApi {
               name = "localeId",
               description =
                   "The optional Unicode locale identifier for the locale to retrieve the regions for",
-              example = "en-US")
+              example = ReferenceService.DEFAULT_LOCALE_ID)
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ServiceUnavailableException {
-    return referenceService.getRegions(localeId);
+    return referenceService.getRegions(
+        StringUtils.hasText(
+                StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID)
+            ? localeId
+            : ReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
+   * Retrieve the time zones.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the time zone for or
+   *     <b>null</b> to retrieve the time zones for all locales
+   * @return the time zones
+   */
+  @Operation(summary = "Retrieve the time zones", description = "Retrieve the time zones")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/time-zones",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<TimeZone> getTimeZones(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the time zones for",
+              example = ReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return referenceService.getTimeZones(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
   }
 }

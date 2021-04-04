@@ -22,7 +22,10 @@ import static org.junit.Assert.assertTrue;
 import digital.inception.reference.Country;
 import digital.inception.reference.IReferenceService;
 import digital.inception.reference.Language;
+import digital.inception.reference.MeasurementSystem;
+import digital.inception.reference.ReferenceService;
 import digital.inception.reference.Region;
+import digital.inception.reference.TimeZone;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
@@ -60,38 +63,13 @@ public class ReferenceServiceTest {
   /** Test the country reference functionality. */
   @Test
   public void countryTest() throws Exception {
-    List<Country> retrievedCountries = referenceService.getCountries();
+    List<Country> retrievedCountries =
+        referenceService.getCountries(ReferenceService.DEFAULT_LOCALE_ID);
 
     Country retrievedCountry = retrievedCountries.get(0);
 
     assertEquals(
-        "The correct number of countries was not retrieved", 492, retrievedCountries.size());
-
-    assertEquals(
-        "The correct code was not retrieved for the country", "AF", retrievedCountry.getCode());
-    assertEquals(
-        "The correct locale was not retrieved for the country",
-        "en-US",
-        retrievedCountry.getLocaleId());
-    assertEquals(
-        "The correct name was not retrieved for the country",
-        "Afghanistan",
-        retrievedCountry.getName());
-    assertEquals(
-        "The correct short name was not retrieved for the country",
-        "Afghanistan",
-        retrievedCountry.getName());
-    assertEquals(
-        "The correct description was not retrieved for the country",
-        "Afghanistan",
-        retrievedCountry.getName());
-
-    retrievedCountries = referenceService.getCountries("en-US");
-
-    assertEquals(
         "The correct number of countries was not retrieved", 246, retrievedCountries.size());
-
-    retrievedCountry = retrievedCountries.get(0);
 
     assertEquals(
         "The correct code was not retrieved for the country", "AF", retrievedCountry.getCode());
@@ -117,27 +95,41 @@ public class ReferenceServiceTest {
   @Test
   public void languageTest() throws Exception {
 
-    List<Language> retrievedLanguages = referenceService.getLanguages();
-
-    assertEquals(
-        "The correct number of languages was not retrieved", 186, retrievedLanguages.size());
-
-    retrievedLanguages = referenceService.getLanguages("en-US");
+    List<Language> retrievedLanguages =
+        referenceService.getLanguages(ReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         "The correct number of languages was not retrieved", 93, retrievedLanguages.size());
   }
 
+  /** Test the measurement systems reference functionality. */
+  @Test
+  public void measurementSystemsTest() throws Exception {
+    List<MeasurementSystem> retrievedMeasurementSystems =
+        referenceService.getMeasurementSystems(ReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        "The correct number of measurement systems was not retrieved",
+        3,
+        retrievedMeasurementSystems.size());
+  }
+
   /** Test the region reference functionality. */
   @Test
   public void regionTest() throws Exception {
-    List<Region> retrievedRegions = referenceService.getRegions();
-
-    assertEquals("The correct number of regions was not retrieved", 18, retrievedRegions.size());
-
-    retrievedRegions = referenceService.getRegions("en-US");
+    List<Region> retrievedRegions = referenceService.getRegions(ReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals("The correct number of regions was not retrieved", 9, retrievedRegions.size());
+  }
+
+  /** Test the time zone reference functionality. */
+  @Test
+  public void timeZoneTest() throws Exception {
+    List<TimeZone> retrievedTimeZones =
+        referenceService.getTimeZones(ReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        "The correct number of time zones was not retrieved", 600, retrievedTimeZones.size());
   }
 
   /** Test the reference validity check functionality. */
@@ -145,6 +137,8 @@ public class ReferenceServiceTest {
   public void validityTest() throws Exception {
     assertTrue(referenceService.isValidCountry("ZA"));
     assertTrue(referenceService.isValidLanguage("EN"));
+    assertTrue(referenceService.isValidMeasurementSystem("metric"));
+    assertTrue(referenceService.isValidTimeZone("Africa/Johannesburg"));
     assertTrue(referenceService.isValidRegion("EC"));
   }
 }

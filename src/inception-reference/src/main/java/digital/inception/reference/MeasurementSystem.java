@@ -10,7 +10,7 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * See the License for the specific measurement system governing permissions and
  * limitations under the License.
  */
 
@@ -36,31 +36,34 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Language</b> class holds the information for a language.
+ * The <b>MeasurementSystem</b> class holds the information for a system of measurement.
  *
- * <p>See: https://en.wikipedia.org/wiki/List_of_official_languages_by_country_and_territory
+ * <p>A system of measurement is a collection of units of measurement and rules relating them to
+ * each other. Systems of measurement have historically been important, regulated and defined for
+ * the purposes of science and commerce. Systems of measurement in use include the International
+ * System of Units (SI), the modern form of the metric system, the British imperial system, and the
+ * United States customary system.
  *
  * @author Marcus Portmann
  */
-@Schema(
-    description = "A systematic use of sounds, characters, symbols or signs to communicate meaning")
+@Schema(description = "A system of measurement")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "iso3Code", "localeId", "sortIndex", "name", "shortName", "description"})
-@XmlRootElement(name = "Language", namespace = "http://inception.digital/reference")
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
+@XmlRootElement(name = "MeasurementSystem", namespace = "http://inception.digital/reference")
 @XmlType(
-    name = "Language",
+    name = "MeasurementSystem",
     namespace = "http://inception.digital/reference",
-    propOrder = {"code", "iso3Code", "localeId", "sortIndex", "name", "shortName", "description"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "reference", name = "languages")
-@IdClass(LanguageId.class)
-public class Language implements Serializable {
+@Table(schema = "reference", name = "measurement_systems")
+@IdClass(MeasurementSystemId.class)
+public class MeasurementSystem implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ISO 639-1 alpha-2 code for the language. */
-  @Schema(description = "The ISO 639-1 alpha-2 code for the language", required = true)
+  /** The code for the measurement system. */
+  @Schema(description = "The code for the measurement system", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -69,8 +72,8 @@ public class Language implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the language. */
-  @Schema(description = "The description for the language", required = true)
+  /** The description for the measurement system. */
+  @Schema(description = "The description for the measurement system", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -78,18 +81,8 @@ public class Language implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The ISO 639-2 alpha-3 code for the language. */
-  @Schema(description = "The ISO 639-2 alpha-3 code for the language", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Iso3Code", required = true)
-  @NotNull
-  @Size(min = 3, max = 3)
-  @Id
-  @Column(name = "iso3_code", length = 3, nullable = false)
-  private String iso3Code;
-
-  /** The Unicode locale identifier for the language. */
-  @Schema(description = "The Unicode locale identifier for the language", required = true)
+  /** The Unicode locale identifier for the measurement system. */
+  @Schema(description = "The Unicode locale identifier for the measurement system", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -98,8 +91,8 @@ public class Language implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the language. */
-  @Schema(description = "The name of the language", required = true)
+  /** The name of the measurement system. */
+  @Schema(description = "The name of the measurement system", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -107,25 +100,16 @@ public class Language implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The short name for the language. */
-  @Schema(description = "The short name for the language", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "ShortName", required = true)
-  @NotNull
-  @Size(max = 50)
-  @Column(name = "short_name", length = 50, nullable = false)
-  private String shortName;
-
-  /** The sort index for the language. */
-  @Schema(description = "The sort index for the language", required = true)
+  /** The sort index for the measurement system. */
+  @Schema(description = "The sort index for the measurement system", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>Language</b>. */
-  public Language() {}
+  /** Constructs a new <b>MeasurementSystem</b>. */
+  public MeasurementSystem() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -147,69 +131,51 @@ public class Language implements Serializable {
       return false;
     }
 
-    Language other = (Language) object;
+    MeasurementSystem other = (MeasurementSystem) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the ISO 639-1 alpha-2 code for the language.
+   * Returns the code for the measurement system.
    *
-   * @return the ISO 639-1 alpha-2 code for the language
+   * @return the code for the measurement system
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the language.
+   * Returns the description for the measurement system.
    *
-   * @return the description for the language
+   * @return the description for the measurement system
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the ISO 639-2 alpha-3 code for the language.
+   * Returns the Unicode locale identifier for the measurement system.
    *
-   * @return the ISO 639-2 alpha-3 code for the language
-   */
-  public String getIso3Code() {
-    return iso3Code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the language.
-   *
-   * @return the Unicode locale identifier for the language
+   * @return the Unicode locale identifier for the measurement system
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the language.
+   * Returns the name of the measurement system.
    *
-   * @return the name of the language
+   * @return the name of the measurement system
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the short name for the language.
+   * Returns the sort index for the measurement system.
    *
-   * @return the short name for the language
-   */
-  public String getShortName() {
-    return shortName;
-  }
-
-  /**
-   * Returns the sort index for the language.
-   *
-   * @return the sort index for the language
+   * @return the sort index for the measurement system
    */
   public Integer getSortIndex() {
     return sortIndex;
@@ -226,63 +192,45 @@ public class Language implements Serializable {
   }
 
   /**
-   * Set the ISO 639-1 alpha-2 code for the language.
+   * Set the code for the measurement system.
    *
-   * @param code the ISO 639-1 alpha-2 code for the language
+   * @param code the code for the measurement system
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the language.
+   * Set the description for the measurement system.
    *
-   * @param description the description for the language
+   * @param description the description for the measurement system
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the ISO 639-2 alpha-3 code for the language.
+   * Set the Unicode locale identifier for the measurement system.
    *
-   * @param iso3Code the ISO 639-2 alpha-3 code for the language
-   */
-  public void setIso3Code(String iso3Code) {
-    this.iso3Code = iso3Code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the language.
-   *
-   * @param localeId the Unicode locale identifier for the language
+   * @param localeId the Unicode locale identifier for the measurement system
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the language.
+   * Set the name of the measurement system.
    *
-   * @param name the name of the language
+   * @param name the name of the measurement system
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the short name for the language.
+   * Set the sort index for the measurement system.
    *
-   * @param shortDescription the short name for the language
-   */
-  public void setShortName(String shortDescription) {
-    this.shortName = shortDescription;
-  }
-
-  /**
-   * Set the sort index for the language.
-   *
-   * @param sortIndex the sort index for the language
+   * @param sortIndex the sort index for the measurement system
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

@@ -97,6 +97,7 @@ public class Attribute implements Serializable {
     "identity_documents",
     "initials",
     "language",
+    "language_proficiencies",
     "locks",
     "maiden_name",
     "marital_status",

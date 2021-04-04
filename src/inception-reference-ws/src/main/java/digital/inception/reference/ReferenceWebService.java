@@ -23,6 +23,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>ReferenceWebService</b> class.
@@ -59,7 +60,8 @@ public class ReferenceWebService {
   @WebMethod(operationName = "GetCountries")
   public List<Country> getCountries(@WebParam(name = "LocaleId") @XmlElement String localeId)
       throws ServiceUnavailableException {
-    return referenceService.getCountries(localeId);
+    return referenceService.getCountries(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
   }
 
   /**
@@ -72,7 +74,22 @@ public class ReferenceWebService {
   @WebMethod(operationName = "GetLanguages")
   public List<Language> getLanguages(@WebParam(name = "LocaleId") @XmlElement String localeId)
       throws ServiceUnavailableException {
-    return referenceService.getLanguages(localeId);
+    return referenceService.getLanguages(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
+   * Retrieve the measurement systems.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
+   *     systems for or <b>null</b> to retrieve the measurement systems for all locales
+   * @return the measurement systems
+   */
+  @WebMethod(operationName = "GetMeasurementSystems")
+  public List<MeasurementSystem> getMeasurementSystems(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return referenceService.getMeasurementSystems(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
   }
 
   /**
@@ -85,6 +102,21 @@ public class ReferenceWebService {
   @WebMethod(operationName = "GetRegions")
   public List<Region> getRegions(@WebParam(name = "LocaleId") @XmlElement String localeId)
       throws ServiceUnavailableException {
-    return referenceService.getRegions(localeId);
+    return referenceService.getRegions(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
+   * Retrieve the time zones.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the time zones for or
+   *     <b>null</b> to retrieve the time zones for all locales
+   * @return the time zones
+   */
+  @WebMethod(operationName = "GetTimeZones")
+  public List<TimeZone> getTimeZones(@WebParam(name = "LocaleId") @XmlElement String localeId)
+      throws ServiceUnavailableException {
+    return referenceService.getTimeZones(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
   }
 }

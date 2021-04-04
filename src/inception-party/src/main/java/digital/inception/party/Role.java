@@ -50,11 +50,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * The <b>Role</b> class holds the information for a role assigned directly to an organization or
- * person.
+ * person, which may or may not be time based.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A role assigned directly to an organization or person")
+@Schema(description = "A role assigned directly to an organization or person, which may or may not be time based")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "purpose", "effectiveFrom", "effectiveTo"})
 @XmlRootElement(name = "Role", namespace = "http://inception.digital/party")
@@ -78,14 +78,12 @@ public class Role implements Serializable {
   private LocalDateTime created;
 
   /** The date the role is effective from. */
-  @Schema(description = "The date the role is effective from", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "EffectiveFrom", required = true)
+  @Schema(description = "The date the role is effective from")
+  @JsonProperty
+  @XmlElement(name = "EffectiveFrom")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @NotNull
-  @Id
-  @Column(name = "effective_from", nullable = false)
+  @Column(name = "effective_from")
   private LocalDate effectiveFrom;
 
   /** The date the role is effective to. */
@@ -141,7 +139,6 @@ public class Role implements Serializable {
    */
   public Role(String type) {
     this.type = type;
-    this.effectiveFrom = LocalDate.now();
   }
 
   /**
@@ -177,7 +174,6 @@ public class Role implements Serializable {
   public Role(String type, String purpose) {
     this.type = type;
     this.purpose = purpose;
-    this.effectiveFrom = LocalDate.now();
   }
 
   /**

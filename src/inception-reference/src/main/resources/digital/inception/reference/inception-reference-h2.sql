@@ -73,6 +73,29 @@ COMMENT ON COLUMN reference.languages.short_name IS 'The short name for the lang
 COMMENT ON COLUMN reference.languages.description IS 'The description for the language';
 
 
+CREATE TABLE reference.measurement_systems (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX measurement_systems_locale_id_ix ON reference.measurement_systems(locale_id);
+
+COMMENT ON COLUMN reference.measurement_systems.code IS 'The code for the measurement system';
+
+COMMENT ON COLUMN reference.measurement_systems.locale_id IS 'The Unicode locale identifier for the measurement system';
+
+COMMENT ON COLUMN reference.measurement_systems.sort_index IS 'The sort index for the measurement system';
+
+COMMENT ON COLUMN reference.measurement_systems.name IS 'The name of the measurement system';
+
+COMMENT ON COLUMN reference.measurement_systems.description IS 'The description for the measurement system';
+
+
 CREATE TABLE reference.regions (
   country     CHAR(2)      NOT NULL,
   code        VARCHAR(3)   NOT NULL,
@@ -1499,6 +1522,21 @@ INSERT INTO reference.languages (code, iso3_code, locale_id, sort_index, name, s
   VALUES ('ZU', 'ZUL' , 'en-ZA', 92, 'Zulu', 'Zulu', 'Zulu');
 INSERT INTO reference.languages (code, iso3_code, locale_id, sort_index, name, short_name, description)
   VALUES ('ZZ', 'ZZZ' , 'en-ZA', 999, 'Unknown', 'Unknown', 'Unknown');
+
+
+INSERT INTO reference.measurement_systems (code, locale_id, sort_index, name, description)
+  VALUES ('metric', 'en-US', 1, 'Metric', 'Metric');
+INSERT INTO reference.measurement_systems (code, locale_id, sort_index, name, description)
+  VALUES ('imperial', 'en-US', 2, 'British Imperial', 'British Imperial');
+INSERT INTO reference.measurement_systems (code, locale_id, sort_index, name, description)
+  VALUES ('customary', 'en-US', 3, 'United States Customary', 'United States Customary');
+
+INSERT INTO reference.measurement_systems (code, locale_id, sort_index, name, description)
+  VALUES ('metric', 'en-ZA', 1, 'Metric', 'Metric');
+INSERT INTO reference.measurement_systems (code, locale_id, sort_index, name, description)
+  VALUES ('imperial', 'en-ZA', 2, 'British Imperial', 'British Imperial');
+INSERT INTO reference.measurement_systems (code, locale_id, sort_index, name, description)
+  VALUES ('customary', 'en-ZA', 3, 'United States Customary', 'United States Customary');
 
 
 INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)

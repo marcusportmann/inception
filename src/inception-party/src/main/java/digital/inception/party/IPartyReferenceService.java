@@ -25,15 +25,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public interface IPartyReferenceService {
-
-  /**
-   * Retrieve all the attribute type categories.
-   *
-   * @return the attribute type categories
-   */
-  List<AttributeTypeCategory> getAttributeTypeCategories() throws ServiceUnavailableException;
 
   /**
    * Retrieve the attribute type categories.
@@ -46,13 +38,6 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the attribute types.
-   *
-   * @return the attribute types
-   */
-  List<AttributeType> getAttributeTypes() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the attribute types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute types
@@ -62,13 +47,6 @@ public interface IPartyReferenceService {
   List<AttributeType> getAttributeTypes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the consent types.
-   *
-   * @return the consent types
-   */
-  List<ConsentType> getConsentTypes() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the consent types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the consent types for
@@ -76,13 +54,6 @@ public interface IPartyReferenceService {
    * @return the consent types
    */
   List<ConsentType> getConsentTypes(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the contact mechanism purposes.
-   *
-   * @return the contact mechanism purposes
-   */
-  List<ContactMechanismPurpose> getContactMechanismPurposes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the contact mechanism purposes.
@@ -95,13 +66,6 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the contact mechanism roles.
-   *
-   * @return the contact mechanism roles
-   */
-  List<ContactMechanismRole> getContactMechanismRoles() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the contact mechanism roles.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
@@ -110,13 +74,6 @@ public interface IPartyReferenceService {
    */
   List<ContactMechanismRole> getContactMechanismRoles(String localeId)
       throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the contact mechanism types.
-   *
-   * @return the contact mechanism types
-   */
-  List<ContactMechanismType> getContactMechanismTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the contact mechanism types.
@@ -129,13 +86,6 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the employment statuses.
-   *
-   * @return the employment statuses
-   */
-  List<EmploymentStatus> getEmploymentStatuses() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the employment statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment
@@ -143,13 +93,6 @@ public interface IPartyReferenceService {
    * @return the employment statuses
    */
   List<EmploymentStatus> getEmploymentStatuses(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the employment types.
-   *
-   * @return the employment types
-   */
-  List<EmploymentType> getEmploymentTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the employment types.
@@ -161,13 +104,6 @@ public interface IPartyReferenceService {
   List<EmploymentType> getEmploymentTypes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the fields of study.
-   *
-   * @return the fields of study
-   */
-  List<FieldOfStudy> getFieldsOfStudy() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the fields of study.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
@@ -177,13 +113,6 @@ public interface IPartyReferenceService {
   List<FieldOfStudy> getFieldsOfStudy(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the genders.
-   *
-   * @return the genders
-   */
-  List<Gender> getGenders() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the genders.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
@@ -191,13 +120,6 @@ public interface IPartyReferenceService {
    * @return the genders
    */
   List<Gender> getGenders(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the identity document types.
-   *
-   * @return the identity document types
-   */
-  List<IdentityDocumentType> getIdentityDocumentTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the identity document types.
@@ -210,13 +132,6 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the lock type categories.
-   *
-   * @return the lock type categories
-   */
-  List<LockTypeCategory> getLockTypeCategories() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the lock type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
@@ -224,13 +139,6 @@ public interface IPartyReferenceService {
    * @return the lock type categories
    */
   List<LockTypeCategory> getLockTypeCategories(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the lock types.
-   *
-   * @return the lock types
-   */
-  List<LockType> getLockTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the lock types.
@@ -242,13 +150,6 @@ public interface IPartyReferenceService {
   List<LockType> getLockTypes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the marital statuses.
-   *
-   * @return the marital statuses
-   */
-  List<MaritalStatus> getMaritalStatuses() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the marital statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
@@ -256,13 +157,6 @@ public interface IPartyReferenceService {
    * @return the marital statuses
    */
   List<MaritalStatus> getMaritalStatuses(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the marriage types.
-   *
-   * @return the marriage types
-   */
-  List<MarriageType> getMarriageTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the marriage types.
@@ -274,13 +168,6 @@ public interface IPartyReferenceService {
   List<MarriageType> getMarriageTypes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the next of kin types.
-   *
-   * @return the next of kin types
-   */
-  List<NextOfKinType> getNextOfKinTypes() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the next of kin types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin types
@@ -290,13 +177,6 @@ public interface IPartyReferenceService {
   List<NextOfKinType> getNextOfKinTypes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the occupations.
-   *
-   * @return the occupations
-   */
-  List<Occupation> getOccupations() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the occupations.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for or
@@ -304,13 +184,6 @@ public interface IPartyReferenceService {
    * @return the occupations
    */
   List<Occupation> getOccupations(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the physical address purposes.
-   *
-   * @return the physical address purposes
-   */
-  List<PhysicalAddressPurpose> getPhysicalAddressPurposes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the physical address purposes.
@@ -323,13 +196,6 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the physical address roles.
-   *
-   * @return the physical address roles
-   */
-  List<PhysicalAddressRole> getPhysicalAddressRoles() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the physical address roles.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
@@ -338,13 +204,6 @@ public interface IPartyReferenceService {
    */
   List<PhysicalAddressRole> getPhysicalAddressRoles(String localeId)
       throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the physical address types.
-   *
-   * @return the physical address types
-   */
-  List<PhysicalAddressType> getPhysicalAddressTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the physical address types.
@@ -357,13 +216,6 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the preference type categories.
-   *
-   * @return the preference type categories
-   */
-  List<PreferenceTypeCategory> getPreferenceTypeCategories() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the preference type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
@@ -372,13 +224,6 @@ public interface IPartyReferenceService {
    */
   List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
       throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the preference types.
-   *
-   * @return the preference types
-   */
-  List<PreferenceType> getPreferenceTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the preference types.
@@ -390,13 +235,6 @@ public interface IPartyReferenceService {
   List<PreferenceType> getPreferenceTypes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the qualification types.
-   *
-   * @return the qualification types
-   */
-  List<QualificationType> getQualificationTypes() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the qualification types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
@@ -406,13 +244,6 @@ public interface IPartyReferenceService {
   List<QualificationType> getQualificationTypes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the races.
-   *
-   * @return the races
-   */
-  List<Race> getRaces() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the races.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the races for or
@@ -420,13 +251,6 @@ public interface IPartyReferenceService {
    * @return the races
    */
   List<Race> getRaces(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the residence permit types.
-   *
-   * @return the residence permit types
-   */
-  List<ResidencePermitType> getResidencePermitTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the residence permit types.
@@ -439,13 +263,6 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the residency statuses.
-   *
-   * @return the residency statuses
-   */
-  List<ResidencyStatus> getResidencyStatuses() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the residency statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residency statuses
@@ -455,13 +272,6 @@ public interface IPartyReferenceService {
   List<ResidencyStatus> getResidencyStatuses(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the residential types.
-   *
-   * @return the residential types
-   */
-  List<ResidentialType> getResidentialTypes() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the residential types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residential types
@@ -469,13 +279,6 @@ public interface IPartyReferenceService {
    * @return the residential types
    */
   List<ResidentialType> getResidentialTypes(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the role purposes.
-   *
-   * @return the role purposes
-   */
-  List<RolePurpose> getRolePurposes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the role purposes.
@@ -521,13 +324,6 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the role types.
-   *
-   * @return the role types
-   */
-  List<RoleType> getRoleTypes() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the role types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
@@ -537,13 +333,6 @@ public interface IPartyReferenceService {
   List<RoleType> getRoleTypes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the source of funds types.
-   *
-   * @return the source of funds types
-   */
-  List<SourceOfFundsType> getSourceOfFundsTypes() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the source of funds types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
@@ -551,13 +340,6 @@ public interface IPartyReferenceService {
    * @return the source of funds types
    */
   List<SourceOfFundsType> getSourceOfFundsTypes(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the source of wealth types.
-   *
-   * @return the source of wealth types
-   */
-  List<SourceOfWealthType> getSourceOfWealthTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the source of wealth types.
@@ -570,13 +352,6 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the status type categories.
-   *
-   * @return the status type categories
-   */
-  List<StatusTypeCategory> getStatusTypeCategories() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the status type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
@@ -585,13 +360,6 @@ public interface IPartyReferenceService {
    */
   List<StatusTypeCategory> getStatusTypeCategories(String localeId)
       throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the status types.
-   *
-   * @return the status types
-   */
-  List<StatusType> getStatusTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the status types.
@@ -603,13 +371,6 @@ public interface IPartyReferenceService {
   List<StatusType> getStatusTypes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the tax number types.
-   *
-   * @return the tax number types
-   */
-  List<TaxNumberType> getTaxNumberTypes() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the tax number types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the tax number types
@@ -619,13 +380,6 @@ public interface IPartyReferenceService {
   List<TaxNumberType> getTaxNumberTypes(String localeId) throws ServiceUnavailableException;
 
   /**
-   * Retrieve all the times to contact.
-   *
-   * @return the times to contact
-   */
-  List<TimeToContact> getTimesToContact() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the times to contact.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
@@ -633,13 +387,6 @@ public interface IPartyReferenceService {
    * @return the times to contact
    */
   List<TimeToContact> getTimesToContact(String localeId) throws ServiceUnavailableException;
-
-  /**
-   * Retrieve all the titles.
-   *
-   * @return the titles
-   */
-  List<Title> getTitles() throws ServiceUnavailableException;
 
   /**
    * Retrieve the titles.

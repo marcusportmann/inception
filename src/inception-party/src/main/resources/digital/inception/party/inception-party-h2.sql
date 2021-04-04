@@ -1074,6 +1074,7 @@ CREATE TABLE party.persons (
   marital_status             VARCHAR(30),
   marital_status_date        DATE,
   marriage_type              VARCHAR(30),
+  measurement_system         VARCHAR(30),
   middle_names               VARCHAR(100),
   occupation                 VARCHAR(30),
   preferred_name             VARCHAR(100),
@@ -1126,6 +1127,8 @@ COMMENT ON COLUMN party.persons.marital_status IS 'The code for the marital stat
 COMMENT ON COLUMN party.persons.marital_status_date IS 'The date for the marital status for the person';
 
 COMMENT ON COLUMN party.persons.marriage_type IS 'The code for the marriage type for the person if the person is married';
+
+COMMENT ON COLUMN party.persons.measurement_system IS 'The code for the measurement system for the person';
 
 COMMENT ON COLUMN party.persons.middle_names IS 'The middle names for the person';
 
@@ -1610,14 +1613,14 @@ COMMENT ON COLUMN party.residence_permits.updated IS 'The date and time the resi
 
 CREATE TABLE party.roles (
   created        TIMESTAMP    NOT NULL,
-  effective_from DATE         NOT NULL,
+  effective_from DATE,
   effective_to   DATE,
   party_id       UUID         NOT NULL,
   purpose        VARCHAR(30),
   type           VARCHAR(30)  NOT NULL,
   updated        TIMESTAMP,
 
-  PRIMARY KEY (party_id, type, effective_from),
+  PRIMARY KEY (party_id, type),
   CONSTRAINT roles_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
@@ -3512,6 +3515,8 @@ INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type
   VALUES ('test_person_role', 'initials', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'language', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'language_proficiencies', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'marital_status', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
