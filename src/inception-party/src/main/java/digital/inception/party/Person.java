@@ -104,6 +104,7 @@ import org.springframework.util.StringUtils;
   "maritalStatus",
   "maritalStatusDate",
   "marriageType",
+  "measurementSystem",
   "middleNames",
   "occupation",
   "preferredName",
@@ -111,6 +112,7 @@ import org.springframework.util.StringUtils;
   "residencyStatus",
   "residentialType",
   "surname",
+  "timeZone",
   "title",
   "attributes",
   "consents",
@@ -154,6 +156,7 @@ import org.springframework.util.StringUtils;
       "maritalStatus",
       "maritalStatusDate",
       "marriageType",
+      "measurementSystem",
       "middleNames",
       "occupation",
       "preferredName",
@@ -161,6 +164,7 @@ import org.springframework.util.StringUtils;
       "residencyStatus",
       "residentialType",
       "surname",
+      "timeZone",
       "title",
       "attributes",
       "consents",
@@ -422,6 +426,10 @@ public class Person extends PartyBase implements Serializable {
   @Column(table = "persons", name = "marriage_type", length = 30)
   private String marriageType;
 
+  /** The code for the measurement system for the person. */
+  @Column(table = "persons", name = "measurement_system", length = 30)
+  private MeasurementSystem measurementSystem;
+
   /** The middle names for the person. */
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "middle_names", length = 100)
@@ -461,6 +469,11 @@ public class Person extends PartyBase implements Serializable {
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "surname", length = 100)
   private String surname;
+
+  /** The time zone ID for the person. */
+  @Size(min = 1, max = 50)
+  @Column(table = "persons", name = "time_zone", length = 50)
+  private String timeZone;
 
   /** The code for the title for the person. */
   @Size(min = 1, max = 30)
@@ -1246,6 +1259,18 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns the code for the measurement system for the person.
+   *
+   * @return the code for the measurement system for the person
+   */
+  @Schema(description = "The code for the measurement system for the person")
+  @JsonProperty
+  @XmlElement(name = "MeasurementSystem")
+  public MeasurementSystem getMeasurementSystem() {
+    return measurementSystem;
+  }
+
+  /**
    * Returns the middle names for the person.
    *
    * @return the middle names for the person
@@ -1582,6 +1607,18 @@ public class Person extends PartyBase implements Serializable {
   @XmlElement(name = "TenantId", required = true)
   public UUID getTenantId() {
     return super.getTenantId();
+  }
+
+  /**
+   * Returns the time zone ID for the person.
+   *
+   * @return the time zone ID for the person
+   */
+  @Schema(description = "The time zone ID for the person")
+  @JsonProperty
+  @XmlElement(name = "TimeZone")
+  public String getTimeZone() {
+    return timeZone;
   }
 
   /**
@@ -2281,6 +2318,15 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Set the code for the measurement system for the person.
+   *
+   * @param measurementSystem the code for the measurement system for the person
+   */
+  public void setMeasurementSystem(MeasurementSystem measurementSystem) {
+    this.measurementSystem = measurementSystem;
+  }
+
+  /**
    * Set the middle names for the person.
    *
    * @param middleNames the middle names for the person
@@ -2462,6 +2508,15 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setTenantId(UUID tenantId) {
     super.setTenantId(tenantId);
+  }
+
+  /**
+   * Set the time zone ID for the person.
+   *
+   * @param timeZone the time zone ID for the person
+   */
+  public void setTimeZone(String timeZone) {
+    this.timeZone = timeZone;
   }
 
   /**

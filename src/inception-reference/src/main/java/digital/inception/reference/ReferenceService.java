@@ -16,9 +16,9 @@
 
 package digital.inception.reference;
 
+import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
 import digital.inception.core.service.ServiceUnavailableException;
 import java.time.ZoneId;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -181,14 +181,25 @@ public class ReferenceService implements IReferenceService {
 
       Locale locale = Locale.forLanguageTag(localeId);
 
-      for (String zoneId :
-          ZoneId.getAvailableZoneIds().stream().sorted().collect(Collectors.toList())) {
-        String zoneName = ZoneId.of(zoneId).getDisplayName(TextStyle.FULL_STANDALONE, locale);
+      int maxLength = 0;
 
-        timeZones.add(new TimeZone(zoneId, localeId, zoneName, zoneName, sortIndex));
+      for (String timeZoneId :
+          com.ibm.icu.util.TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL, null, null)
+              .stream()
+              .filter(timeZoneId -> (!timeZoneId.startsWith("SystemV")))
+              .filter(timeZoneId -> (timeZoneId.contains("/")))
+              .collect(Collectors.toList())) {
+
+        maxLength = Math.max(maxLength, timeZoneId.length());
+
+        String zoneName = com.ibm.icu.util.TimeZone.getTimeZone(timeZoneId).getDisplayName(locale);
+
+        timeZones.add(new TimeZone(timeZoneId, localeId, zoneName, zoneName, sortIndex));
 
         sortIndex++;
       }
+
+      System.out.println("maxLength = " + maxLength);
 
       return timeZones;
     } catch (Throwable e) {

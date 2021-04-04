@@ -37,24 +37,16 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A time zone")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"id", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "TimeZone", namespace = "http://inception.digital/reference")
 @XmlType(
     name = "TimeZone",
     namespace = "http://inception.digital/reference",
-    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
+    propOrder = {"id", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TimeZone implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The code for the time zone. */
-  @Schema(description = "The code for the time zone", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Code", required = true)
-  @NotNull
-  @Size(min = 1, max = 30)
-  private String code;
 
   /** The description for the time zone. */
   @Schema(description = "The description for the time zone", required = true)
@@ -63,6 +55,14 @@ public class TimeZone implements Serializable {
   @NotNull
   @Size(max = 200)
   private String description;
+
+  /** The ID for the time zone. */
+  @Schema(description = "The ID for the time zone", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
+  @Size(min = 1, max = 50)
+  private String id;
 
   /** The Unicode locale identifier for the time zone. */
   @Schema(description = "The Unicode locale identifier for the time zone", required = true)
@@ -93,15 +93,14 @@ public class TimeZone implements Serializable {
   /**
    * Constructs a new <b>TimeZone</b>.
    *
-   * @param code the code for the time zone
+   * @param id the ID for the time zone
    * @param localeId the Unicode locale identifier for the time zone
    * @param name the name of the time zone
    * @param description the description for the time zone
    * @param sortIndex the sort index for the time zone
    */
-  public TimeZone(
-      String code, String localeId, String name, String description, Integer sortIndex) {
-    this.code = code;
+  public TimeZone(String id, String localeId, String name, String description, Integer sortIndex) {
+    this.id = id;
     this.localeId = localeId;
     this.name = name;
     this.description = description;
@@ -130,16 +129,7 @@ public class TimeZone implements Serializable {
 
     TimeZone other = (TimeZone) object;
 
-    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
-  }
-
-  /**
-   * Returns the code for the time zone.
-   *
-   * @return the code for the time zone
-   */
-  public String getCode() {
-    return code;
+    return Objects.equals(id, other.id) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -149,6 +139,15 @@ public class TimeZone implements Serializable {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns the ID for the time zone.
+   *
+   * @return the ID for the time zone
+   */
+  public String getId() {
+    return id;
   }
 
   /**
@@ -185,16 +184,7 @@ public class TimeZone implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the time zone.
-   *
-   * @param code the code for the time zone
-   */
-  public void setCode(String code) {
-    this.code = code;
+    return ((id == null) ? 0 : id.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
@@ -204,6 +194,15 @@ public class TimeZone implements Serializable {
    */
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Set the ID for the time zone.
+   *
+   * @param id the ID for the time zone
+   */
+  public void setId(String id) {
+    this.id = id;
   }
 
   /**

@@ -27,6 +27,13 @@
       <optional>true</optional>
     </dependency>
 
+    <!-- Dependencies -->
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>68.2</version>
+    </dependency>
+
     <!-- Test Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>

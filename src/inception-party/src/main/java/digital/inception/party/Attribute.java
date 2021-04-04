@@ -120,6 +120,7 @@ public class Attribute implements Serializable {
     "surname",
     "tax_numbers",
     "tenant_id",
+    "time_zone",
     "title"
   };
 

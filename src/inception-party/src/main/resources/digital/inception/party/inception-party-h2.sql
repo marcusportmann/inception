@@ -1084,6 +1084,7 @@ CREATE TABLE party.persons (
   surname                    VARCHAR(100),
   tax_number                 VARCHAR(30),
   tax_number_type            VARCHAR(30),
+  time_zone                  VARCHAR(50),
   title                      VARCHAR(30),
 
   PRIMARY KEY (id),
@@ -1147,6 +1148,8 @@ COMMENT ON COLUMN party.persons.surname IS 'The surname for the person';
 COMMENT ON COLUMN party.persons.tax_number IS 'The tax number for the person';
 
 COMMENT ON COLUMN party.persons.tax_number_type IS 'The code for the tax number type for the person';
+
+COMMENT ON COLUMN party.persons.time_zone IS 'The time zone ID for the person';
 
 COMMENT ON COLUMN party.persons.title IS 'The code for the title for the person';
 
@@ -3524,6 +3527,8 @@ INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'marriage_type', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'measurement_system', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'occupation', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'physical_addresses', 'required');
@@ -3545,6 +3550,8 @@ INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type
   VALUES ('test_person_role', 'surname', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'tax_numbers', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'time_zone', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'title', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)

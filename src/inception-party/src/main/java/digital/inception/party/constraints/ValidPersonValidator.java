@@ -772,6 +772,19 @@ public class ValidPersonValidator extends PartyValidator
           }
         }
 
+        // Validate time zone
+        if (StringUtils.hasText(person.getTimeZone())
+            && (!getReferenceService().isValidTimeZone(person.getTimeZone()))) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("timeZone", person.getTimeZone())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPerson.invalidTimeZone.message}")
+              .addPropertyNode("timeZone")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+
         // Validate title
         if (StringUtils.hasText(person.getTitle())
             && (!getPartyReferenceService().isValidTitle(person.getTitle()))) {
@@ -1113,6 +1126,18 @@ public class ValidPersonValidator extends PartyValidator
 
               break;
 
+            case "measurement_system":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getMeasurementSystem(),
+                  "measurementSystem",
+                  "{digital.inception.party.constraints.ValidPerson.measurementSystemRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
             case "occupation":
               if (!validateRequiredAttributeConstraint(
                   roleType,
@@ -1247,6 +1272,18 @@ public class ValidPersonValidator extends PartyValidator
                   person.getTaxNumbers(),
                   "taxNumbers",
                   "{digital.inception.party.constraints.ValidPerson.taxNumberRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+            case "time_zone":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getTimeZone(),
+                  "timeZone",
+                  "{digital.inception.party.constraints.ValidPerson.timeZoneRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {
                 isValid = false;
               }

@@ -35,6 +35,7 @@ import digital.inception.party.IdentityDocument;
 import digital.inception.party.LanguageProficiency;
 import digital.inception.party.LanguageProficiencyLevel;
 import digital.inception.party.Lock;
+import digital.inception.party.MeasurementSystem;
 import digital.inception.party.Organization;
 import digital.inception.party.OrganizationSortBy;
 import digital.inception.party.Organizations;
@@ -159,10 +160,12 @@ public class PartyServiceTest {
     if (isMarried) {
       person.setMaritalStatus("married");
       person.setMarriageType("anc_with_accrual");
+      person.setMaritalStatusDate(LocalDate.of(2015, 10, 10));
     } else {
       person.setMaritalStatus("single");
     }
 
+    person.setMeasurementSystem(MeasurementSystem.METRIC);
     person.setMiddleNames("MiddleName" + personCount);
     person.setOccupation("professional_legal");
     person.setPreferredName("PreferredName" + personCount);
@@ -170,6 +173,7 @@ public class PartyServiceTest {
     person.setResidencyStatus("permanent_resident");
     person.setResidentialType("renter");
     person.setSurname("Surname" + personCount);
+    person.setTimeZone("Africa/Johannesburg");
     person.setTitle("mrs");
 
     person.addAttribute(new Attribute("weight", "80kg"));
@@ -1187,6 +1191,21 @@ public class PartyServiceTest {
         constraintViolations.size());
   }
 
+  /** Test the invalid person time zone functionality. */
+  @Test
+  public void invalidPersonTimeZoneTest() {
+    Person person = getTestBasicPersonDetails();
+
+    person.setTimeZone("invalid_time_zone");
+
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid person",
+        1,
+        constraintViolations.size());
+  }
+
   /** Test the invalid physical address purpose for party type verification functionality. */
   @Test
   public void invalidPhysicalAddressPurposeForPartyTypeTest() {
@@ -2163,7 +2182,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid person",
-        46,
+        48,
         personConstraintViolations.size());
 
     Organization organization = getTestBasicOrganizationDetails();
@@ -3042,6 +3061,10 @@ public class PartyServiceTest {
         person1.getMarriageType(),
         person2.getMarriageType());
     assertEquals(
+        "The measurement systems for the persons do not match",
+        person1.getMeasurementSystem(),
+        person2.getMeasurementSystem());
+    assertEquals(
         "The middle names for the persons do not match",
         person1.getMiddleNames(),
         person2.getMiddleNames());
@@ -3070,6 +3093,10 @@ public class PartyServiceTest {
         "The tenant IDs for the persons do not match",
         person1.getTenantId(),
         person2.getTenantId());
+    assertEquals(
+        "The time zones for the persons do not match",
+        person1.getTimeZone(),
+        person2.getTimeZone());
     assertEquals("The titles for the persons do not match", person1.getTitle(), person2.getTitle());
 
     assertEquals(
