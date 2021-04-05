@@ -36,34 +36,28 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>MeasurementSystem</b> class holds the information for a system of measurement.
- *
- * <p>A system of measurement is a collection of units of measurement and rules relating them to
- * each other. Systems of measurement have historically been important, regulated and defined for
- * the purposes of science and commerce. Systems of measurement in use include the International
- * System of Units (SI), the modern form of the metric system, the British imperial system, and the
- * United States customary system.
+ * The <b>MeasurementUnitType</b> class holds the information for a measurement unit type.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A system of measurement")
+@Schema(description = "A type of unit of measurement")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "MeasurementSystem", namespace = "http://inception.digital/reference")
+@XmlRootElement(name = "MeasurementUnitType", namespace = "http://inception.digital/reference")
 @XmlType(
-    name = "MeasurementSystem",
+    name = "MeasurementUnitType",
     namespace = "http://inception.digital/reference",
     propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "reference", name = "measurement_systems")
-@IdClass(MeasurementSystemId.class)
-public class MeasurementSystem implements Serializable {
+@Table(schema = "reference", name = "measurement_unit_types")
+@IdClass(MeasurementUnitTypeId.class)
+public class MeasurementUnitType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the measurement system. */
-  @Schema(description = "The code for the measurement system", required = true)
+  /** The code for the measurement unit type. */
+  @Schema(description = "The code for the measurement unit type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -72,8 +66,8 @@ public class MeasurementSystem implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the measurement system. */
-  @Schema(description = "The description for the measurement system", required = true)
+  /** The description for the measurement unit type. */
+  @Schema(description = "The description for the measurement unit type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -81,8 +75,10 @@ public class MeasurementSystem implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the measurement system. */
-  @Schema(description = "The Unicode locale identifier for the measurement system", required = true)
+  /** The Unicode locale identifier for the measurement unit type. */
+  @Schema(
+      description = "The Unicode locale identifier for the measurement unit type",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -91,8 +87,8 @@ public class MeasurementSystem implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the measurement system. */
-  @Schema(description = "The name of the measurement system", required = true)
+  /** The name of the measurement unit type. */
+  @Schema(description = "The name of the measurement unit type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -100,16 +96,16 @@ public class MeasurementSystem implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the measurement system. */
-  @Schema(description = "The sort index for the measurement system", required = true)
+  /** The sort index for the measurement unit type. */
+  @Schema(description = "The sort index for the measurement unit type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>MeasurementSystem</b>. */
-  public MeasurementSystem() {}
+  /** Constructs a new <b>MeasurementUnitType</b>. */
+  public MeasurementUnitType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -131,51 +127,51 @@ public class MeasurementSystem implements Serializable {
       return false;
     }
 
-    MeasurementSystem other = (MeasurementSystem) object;
+    MeasurementUnitType other = (MeasurementUnitType) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the measurement system.
+   * Returns the code for the measurement unit type.
    *
-   * @return the code for the measurement system
+   * @return the code for the measurement unit type
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the measurement system.
+   * Returns the description for the measurement unit type.
    *
-   * @return the description for the measurement system
+   * @return the description for the measurement unit type
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the measurement system.
+   * Returns the Unicode locale identifier for the measurement unit type.
    *
-   * @return the Unicode locale identifier for the measurement system
+   * @return the Unicode locale identifier for the measurement unit type
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the measurement system.
+   * Returns the name of the measurement unit type.
    *
-   * @return the name of the measurement system
+   * @return the name of the measurement unit type
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the measurement system.
+   * Returns the sort index for the measurement unit type.
    *
-   * @return the sort index for the measurement system
+   * @return the sort index for the measurement unit type
    */
   public Integer getSortIndex() {
     return sortIndex;
@@ -192,45 +188,45 @@ public class MeasurementSystem implements Serializable {
   }
 
   /**
-   * Set the code for the measurement system.
+   * Set the code for the measurement unit type.
    *
-   * @param code the code for the measurement system
+   * @param code the code for the measurement unit type
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the measurement system.
+   * Set the description for the measurement unit type.
    *
-   * @param description the description for the measurement system
+   * @param description the description for the measurement unit type
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the measurement system.
+   * Set the Unicode locale identifier for the measurement unit type.
    *
-   * @param localeId the Unicode locale identifier for the measurement system
+   * @param localeId the Unicode locale identifier for the measurement unit type
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the measurement system.
+   * Set the name of the measurement unit type.
    *
-   * @param name the name of the measurement system
+   * @param name the name of the measurement unit type
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the measurement system.
+   * Set the sort index for the measurement unit type.
    *
-   * @param sortIndex the sort index for the measurement system
+   * @param sortIndex the sort index for the measurement unit type
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

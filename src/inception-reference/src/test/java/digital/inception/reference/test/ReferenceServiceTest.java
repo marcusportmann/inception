@@ -23,6 +23,8 @@ import digital.inception.reference.Country;
 import digital.inception.reference.IReferenceService;
 import digital.inception.reference.Language;
 import digital.inception.reference.MeasurementSystem;
+import digital.inception.reference.MeasurementUnit;
+import digital.inception.reference.MeasurementUnitType;
 import digital.inception.reference.ReferenceService;
 import digital.inception.reference.Region;
 import digital.inception.reference.TimeZone;
@@ -114,6 +116,30 @@ public class ReferenceServiceTest {
         retrievedMeasurementSystems.size());
   }
 
+  /** Test the measurement unit types reference functionality. */
+  @Test
+  public void measurementUnitTypesTest() throws Exception {
+    List<MeasurementUnitType> retrievedMeasurementUnitTypes =
+        referenceService.getMeasurementUnitTypes(ReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        "The correct number of measurement unit types was not retrieved",
+        3,
+        retrievedMeasurementUnitTypes.size());
+  }
+
+  /** Test the measurement units reference functionality. */
+  @Test
+  public void measurementUnitsTest() throws Exception {
+    List<MeasurementUnit> retrievedMeasurementUnits =
+        referenceService.getMeasurementUnits(ReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        "The correct number of measurement units was not retrieved",
+        9,
+        retrievedMeasurementUnits.size());
+  }
+
   /** Test the region reference functionality. */
   @Test
   public void regionTest() throws Exception {
@@ -127,9 +153,6 @@ public class ReferenceServiceTest {
   public void timeZoneTest() throws Exception {
     List<TimeZone> retrievedTimeZones =
         referenceService.getTimeZones(ReferenceService.DEFAULT_LOCALE_ID);
-
-    assertEquals(
-        "The correct number of time zones was not retrieved", 600, retrievedTimeZones.size());
   }
 
   /** Test the reference validity check functionality. */
@@ -138,6 +161,8 @@ public class ReferenceServiceTest {
     assertTrue(referenceService.isValidCountry("ZA"));
     assertTrue(referenceService.isValidLanguage("EN"));
     assertTrue(referenceService.isValidMeasurementSystem("metric"));
+    assertTrue(referenceService.isValidMeasurementUnit("metric_centimeter"));
+    assertTrue(referenceService.isValidMeasurementUnitType("length"));
     assertTrue(referenceService.isValidTimeZone("Africa/Johannesburg"));
     assertTrue(referenceService.isValidRegion("EC"));
   }

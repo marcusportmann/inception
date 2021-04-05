@@ -180,6 +180,88 @@ public class ReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the measurement unit types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
+   *     systems for or <b>null</b> to retrieve the measurement unit types for all locales
+   * @return the measurement unit types
+   */
+  @Operation(
+      summary = "Retrieve the measurement unit types",
+      description = "Retrieve the measurement unit types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/measurement-unit-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<MeasurementUnitType> getMeasurementUnitTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the measurement unit types for",
+              example = ReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return referenceService.getMeasurementUnitTypes(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
+   * Retrieve the measurement units.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
+   *     systems for or <b>null</b> to retrieve the measurement units for all locales
+   * @return the measurement units
+   */
+  @Operation(
+      summary = "Retrieve the measurement units",
+      description = "Retrieve the measurement units")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/measurement-units",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<MeasurementUnit> getMeasurementUnits(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the measurement units for",
+              example = ReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return referenceService.getMeasurementUnits(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
    * Retrieve the regions.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the regions for or
@@ -238,10 +320,7 @@ public class ReferenceApi extends SecureApi {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(
-      value = "/time-zones",
-      method = RequestMethod.GET,
-      produces = "application/json")
+  @RequestMapping(value = "/time-zones", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<TimeZone> getTimeZones(

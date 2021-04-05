@@ -50,6 +50,12 @@ public class ReferenceService implements IReferenceService {
   /** The Measurement System Repository. */
   private final MeasurementSystemRepository measurementSystemRepository;
 
+  /** The Measurement Unit Repository. */
+  private final MeasurementUnitRepository measurementUnitRepository;
+
+  /** The Measurement Unit Type Repository. */
+  private final MeasurementUnitTypeRepository measurementUnitTypeRepository;
+
   /** The Region Repository. */
   private final RegionRepository regionRepository;
 
@@ -62,16 +68,22 @@ public class ReferenceService implements IReferenceService {
    * @param countryRepository the Country Repository
    * @param languageRepository the Language Repository
    * @param measurementSystemRepository the Measurement System Repository
+   * @param measurementUnitRepository the Measurement Unit Type Repository
+   * @param measurementUnitTypeRepository the Measurement Unit Type Repository
    * @param regionRepository the Region Repository
    */
   public ReferenceService(
       CountryRepository countryRepository,
       LanguageRepository languageRepository,
       MeasurementSystemRepository measurementSystemRepository,
+      MeasurementUnitRepository measurementUnitRepository,
+      MeasurementUnitTypeRepository measurementUnitTypeRepository,
       RegionRepository regionRepository) {
     this.countryRepository = countryRepository;
     this.languageRepository = languageRepository;
     this.measurementSystemRepository = measurementSystemRepository;
+    this.measurementUnitRepository = measurementUnitRepository;
+    this.measurementUnitTypeRepository = measurementUnitTypeRepository;
     this.regionRepository = regionRepository;
   }
 
@@ -139,6 +151,53 @@ public class ReferenceService implements IReferenceService {
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the measurement systems", e);
+    }
+  }
+
+  /**
+   * Retrieve the measurement unit types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
+   *     types for or <b>null</b> to retrieve the measurement unit types for all locales
+   * @return the measurement unit types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'measurementUnitTypes.' + #localeId")
+  public List<MeasurementUnitType> getMeasurementUnitTypes(String localeId)
+      throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return measurementUnitTypeRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return measurementUnitTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the measurement unit types", e);
+    }
+  }
+
+  /**
+   * Retrieve the measurement units.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement units
+   *     for or <b>null</b> to retrieve the measurement units for all locales
+   * @return the measurement units
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'measurementUnits.' + #localeId")
+  public List<MeasurementUnit> getMeasurementUnits(String localeId)
+      throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return measurementUnitRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return measurementUnitRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the measurement units", e);
     }
   }
 
@@ -256,6 +315,43 @@ public class ReferenceService implements IReferenceService {
 
     return self.getMeasurementSystems(DEFAULT_LOCALE_ID).stream()
         .anyMatch(measurementSystem -> measurementSystem.getCode().equals(measurementSystemCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a measurement unit.
+   *
+   * @param measurementUnitCode the code for the measurement unit
+   * @return <b>true</b> if the code is a valid code for a measurement unit or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidMeasurementUnit(String measurementUnitCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(measurementUnitCode)) {
+      return false;
+    }
+
+    return self.getMeasurementUnits(DEFAULT_LOCALE_ID).stream()
+        .anyMatch(measurementUnit -> measurementUnit.getCode().equals(measurementUnitCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a measurement unit type.
+   *
+   * @param measurementUnitTypeCode the code for the measurement unit type
+   * @return <b>true</b> if the code is a valid code for a measurement unit type or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidMeasurementUnitType(String measurementUnitTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(measurementUnitTypeCode)) {
+      return false;
+    }
+
+    return self.getMeasurementUnitTypes(DEFAULT_LOCALE_ID).stream()
+        .anyMatch(
+            measurementUnitType -> measurementUnitType.getCode().equals(measurementUnitTypeCode));
   }
 
   /**

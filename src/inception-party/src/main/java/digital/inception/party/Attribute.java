@@ -62,13 +62,22 @@ import org.springframework.util.StringUtils;
   "dateValue",
   "doubleValue",
   "integerValue",
-  "stringValue"
+  "stringValue",
+  "unit"
 })
 @XmlRootElement(name = "Attribute", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Attribute",
     namespace = "http://inception.digital/party",
-    propOrder = {"type", "booleanValue", "dateValue", "doubleValue", "integerValue", "stringValue"})
+    propOrder = {
+      "type",
+      "booleanValue",
+      "dateValue",
+      "doubleValue",
+      "integerValue",
+      "stringValue",
+      "unit"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "attributes")
@@ -190,6 +199,13 @@ public class Attribute implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
+  /** The measurement unit for the attribute. */
+  @Schema(description = "The measurement unit for the attribute")
+  @JsonProperty
+  @XmlElement(name = "Unit")
+  @Column(name = "unit", length = 30)
+  private MeasurementUnit unit;
+
   /** The date and time the attribute was last updated. */
   @JsonIgnore
   @XmlTransient
@@ -262,6 +278,32 @@ public class Attribute implements Serializable {
   public Attribute(String type, Integer integerValue) {
     this.type = type;
     this.integerValue = integerValue;
+  }
+
+  /**
+   * Constructs a new <b>Attribute</b>.
+   *
+   * @param type the attribute type
+   * @param integerValue the integer value for the attribute
+   * @param unit the measurement unit for the attribute
+   */
+  public Attribute(String type, Integer integerValue, MeasurementUnit unit) {
+    this.type = type;
+    this.integerValue = integerValue;
+    this.unit = unit;
+  }
+
+  /**
+   * Constructs a new <b>Attribute</b>.
+   *
+   * @param type the attribute type
+   * @param doubleValue the double value for the attribute
+   * @param unit the measurement unit for the attribute
+   */
+  public Attribute(String type, double doubleValue, MeasurementUnit unit) {
+    this.type = type;
+    this.doubleValue = doubleValue;
+    this.unit = unit;
   }
 
   /**
@@ -363,6 +405,15 @@ public class Attribute implements Serializable {
   }
 
   /**
+   * Returns the measurement unit for the attribute.
+   *
+   * @return the measurement unit for the attribute
+   */
+  public MeasurementUnit getUnit() {
+    return unit;
+  }
+
+  /**
    * Returns the date and time the attribute was last updated.
    *
    * @return the date and time the attribute was last updated
@@ -457,5 +508,14 @@ public class Attribute implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * Set the measurement unit for the attribute.
+   *
+   * @param unit the measurement unit for the attribute
+   */
+  public void setUnit(MeasurementUnit unit) {
+    this.unit = unit;
   }
 }

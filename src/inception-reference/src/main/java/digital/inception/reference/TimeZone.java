@@ -10,7 +10,7 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific time zone governing permissions and
+ * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
@@ -32,6 +32,11 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * The <b>TimeZone</b> class holds the information for a time zone.
+ *
+ * <p>A time zone is a region of the globe that observes a uniform standard time for legal,
+ * commercial, and social purposes. Time zones tend to follow the boundaries of countries and their
+ * subdivisions instead of strictly following longitude, because it is convenient for areas in close
+ * commercial or other communication to keep the same time.
  *
  * @author Marcus Portmann
  */

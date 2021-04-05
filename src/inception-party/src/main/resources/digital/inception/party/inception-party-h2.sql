@@ -1164,6 +1164,7 @@ CREATE TABLE party.attributes (
   double_value  DOUBLE,
   integer_value INTEGER,
   string_value  VARCHAR(200),
+  unit          VARCHAR(30),
 
   PRIMARY KEY (party_id, type),
   CONSTRAINT attributes_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
@@ -1188,6 +1189,8 @@ COMMENT ON COLUMN party.attributes.double_value IS 'The double value for the att
 COMMENT ON COLUMN party.attributes.integer_value IS 'The integer value for the attribute';
 
 COMMENT ON COLUMN party.attributes.string_value IS 'The string value for the attribute';
+
+COMMENT ON COLUMN party.attributes.unit IS 'The code for the measurement unit for the attribute';
 
 
 CREATE TABLE party.consents (

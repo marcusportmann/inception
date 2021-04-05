@@ -54,7 +54,9 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A role assigned directly to an organization or person, which may or may not be time based")
+@Schema(
+    description =
+        "A role assigned directly to an organization or person, which may or may not be time based")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "purpose", "effectiveFrom", "effectiveTo"})
 @XmlRootElement(name = "Role", namespace = "http://inception.digital/party")

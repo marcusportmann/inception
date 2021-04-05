@@ -20,19 +20,19 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MeasurementSystemId</b> class implements the ID class for the <b>MeasurementSystem</b> class.
+ * The <b>MeasurementUnitId</b> class implements the ID class for the <b>MeasurementUnit</b> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class MeasurementSystemId implements Serializable {
+public class MeasurementUnitId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ISO code for the measurement system. */
+  /** The ISO code for the measurement unit. */
   private String code;
 
-  /** The Unicode locale identifier for the measurement system. */
+  /** The Unicode locale identifier for the measurement unit. */
   private String localeId;
 
   /**
@@ -55,7 +55,7 @@ public class MeasurementSystemId implements Serializable {
       return false;
     }
 
-    MeasurementSystemId other = (MeasurementSystemId) object;
+    MeasurementUnitId other = (MeasurementUnitId) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }

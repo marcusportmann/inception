@@ -113,4 +113,47 @@ public interface IReferenceService {
    * @return <b>true</b> if the code is a valid code for a time zone or <b>false</b> otherwise
    */
   boolean isValidTimeZone(String timeZoneCode) throws ServiceUnavailableException;
+
+
+
+  /**
+   * Retrieve the measurement unit types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
+   *     unit types for or <b>null</b> to retrieve the measurement unit types for all locales
+   * @return the measurement unit types
+   */
+  List<MeasurementUnitType> getMeasurementUnitTypes(String localeId) throws ServiceUnavailableException;
+
+
+  /**
+   * Retrieve the measurement units.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
+   *     units for or <b>null</b> to retrieve the measurement units for all locales
+   * @return the measurement units
+   */
+  List<MeasurementUnit> getMeasurementUnits(String localeId) throws ServiceUnavailableException;
+
+
+  /**
+   * Check whether the code is a valid code for a measurement unit.
+   *
+   * @param measurementUnitCode the code for the measurement unit
+   * @return <b>true</b> if the code is a valid code for a measurement unit or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidMeasurementUnit(String measurementUnitCode) throws ServiceUnavailableException;
+
+
+  /**
+   * Check whether the code is a valid code for a measurement unit type.
+   *
+   * @param measurementUnitTypeCode the code for the measurement unit  type
+   * @return <b>true</b> if the code is a valid code for a measurement unit type or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidMeasurementUnitType(String measurementUnitTypeCode) throws ServiceUnavailableException;
+
+
 }

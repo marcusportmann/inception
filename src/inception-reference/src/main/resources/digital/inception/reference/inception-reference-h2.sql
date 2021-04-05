@@ -96,6 +96,60 @@ COMMENT ON COLUMN reference.measurement_systems.name IS 'The name of the measure
 COMMENT ON COLUMN reference.measurement_systems.description IS 'The description for the measurement system';
 
 
+CREATE TABLE reference.measurement_unit_types (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX measurement_unit_types_locale_id_ix ON reference.measurement_unit_types(locale_id);
+
+COMMENT ON COLUMN reference.measurement_unit_types.code IS 'The code for the measurement unit type';
+
+COMMENT ON COLUMN reference.measurement_unit_types.locale_id IS 'The Unicode locale identifier for the measurement unit type';
+
+COMMENT ON COLUMN reference.measurement_unit_types.sort_index IS 'The sort index for the measurement unit type';
+
+COMMENT ON COLUMN reference.measurement_unit_types.name IS 'The name of the measurement unit type';
+
+COMMENT ON COLUMN reference.measurement_unit_types.description IS 'The description for the measurement unit type';
+
+
+CREATE TABLE reference.measurement_units (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+  system      VARCHAR(30)  NOT NULL,
+  type        VARCHAR(30)  NOT NULL,
+
+  PRIMARY KEY (code, locale_id),
+  CONSTRAINT measurement_units_measurement_system_fk FOREIGN KEY (system, locale_id) REFERENCES reference.measurement_systems(code, locale_id) ON DELETE CASCADE,
+  CONSTRAINT measurement_units_measurement_unit_type_fk FOREIGN KEY (type, locale_id) REFERENCES reference.measurement_unit_types(code, locale_id) ON DELETE CASCADE
+);
+
+CREATE INDEX measurement_units_locale_id_ix ON reference.measurement_units(locale_id);
+
+COMMENT ON COLUMN reference.measurement_units.code IS 'The code for the measurement unit';
+
+COMMENT ON COLUMN reference.measurement_units.locale_id IS 'The Unicode locale identifier for the measurement unit';
+
+COMMENT ON COLUMN reference.measurement_units.sort_index IS 'The sort index for the measurement unit';
+
+COMMENT ON COLUMN reference.measurement_units.name IS 'The name of the measurement unit';
+
+COMMENT ON COLUMN reference.measurement_units.description IS 'The description for the measurement unit';
+
+COMMENT ON COLUMN reference.measurement_units.system IS 'The code for the measurement system';
+
+COMMENT ON COLUMN reference.measurement_units.type IS 'The code for the measurement unit type';
+
+
 CREATE TABLE reference.regions (
   country     CHAR(2)      NOT NULL,
   code        VARCHAR(3)   NOT NULL,
@@ -1537,6 +1591,60 @@ INSERT INTO reference.measurement_systems (code, locale_id, sort_index, name, de
   VALUES ('imperial', 'en-ZA', 2, 'British Imperial', 'British Imperial');
 INSERT INTO reference.measurement_systems (code, locale_id, sort_index, name, description)
   VALUES ('customary', 'en-ZA', 3, 'United States Customary', 'United States Customary');
+
+
+INSERT INTO reference.measurement_unit_types(code, locale_id, sort_index, name, description)
+  VALUES ('length', 'en-US', 1, 'Length', 'Length');
+INSERT INTO reference.measurement_unit_types(code, locale_id, sort_index, name, description)
+  VALUES ('mass', 'en-US', 2, 'Mass', 'Mass');
+INSERT INTO reference.measurement_unit_types(code, locale_id, sort_index, name, description)
+  VALUES ('volume', 'en-US', 2, 'Volume', 'Volume');
+
+INSERT INTO reference.measurement_unit_types(code, locale_id, sort_index, name, description)
+  VALUES ('length', 'en-ZA', 1, 'Length', 'Length');
+INSERT INTO reference.measurement_unit_types(code, locale_id, sort_index, name, description)
+  VALUES ('mass', 'en-ZA', 2, 'Mass', 'Mass');
+INSERT INTO reference.measurement_unit_types(code, locale_id, sort_index, name, description)
+  VALUES ('volume', 'en-ZA', 2, 'Volume', 'Volume');
+
+
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('metric_centimeter', 'en-US', 101, 'Centimeter', 'Centimeter', 'metric', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('metric_meter', 'en-US', 102, 'Meter', 'Meter', 'metric', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('metric_kilogram', 'en-US', 103, 'Kilogram', 'Kilogram', 'metric', 'mass');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('imperial_inch', 'en-US', 201, 'Inch', 'Inch', 'imperial', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('imperial_foot', 'en-US', 202, 'Foot', 'Foot', 'imperial', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('imperial_pound', 'en-US', 203, 'Pound', 'Pound', 'imperial', 'mass');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('customary_inch', 'en-US', 301, 'Inch', 'Inch', 'customary', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('customary_foot', 'en-US', 302, 'Foot', 'Foot', 'customary', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('customary_pound', 'en-US', 303, 'Pound', 'Pound', 'customary', 'mass');
+
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('metric_centimeter', 'en-ZA', 101, 'Centimeter', 'Centimeter', 'metric', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('metric_meter', 'en-ZA', 102, 'Meter', 'Meter', 'metric', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('metric_kilogram', 'en-ZA', 103, 'Kilogram', 'Kilogram', 'metric', 'mass');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('imperial_inch', 'en-ZA', 201, 'Inch', 'Inch', 'imperial', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('imperial_foot', 'en-ZA', 202, 'Foot', 'Foot', 'imperial', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('imperial_pound', 'en-ZA', 203, 'Pound', 'Pound', 'imperial', 'mass');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('customary_inch', 'en-ZA', 301, 'Inch', 'Inch', 'customary', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('customary_foot', 'en-ZA', 302, 'Foot', 'Foot', 'customary', 'length');
+INSERT INTO reference.measurement_units(code, locale_id, sort_index, name, description, system, type)
+  VALUES ('customary_pound', 'en-ZA', 303, 'Pound', 'Pound', 'customary', 'mass');
 
 
 INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)

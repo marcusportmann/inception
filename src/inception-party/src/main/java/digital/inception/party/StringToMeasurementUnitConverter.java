@@ -21,20 +21,20 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>StringToConstraintTypeConverter</b> class implements the Spring converter that converts a
- * <b>String</b> type into a <b>ConstraintType</b> type.
+ * The <b>StringToMeasurementUnitConverter</b> class implements the Spring converter that converts a
+ * <b>String</b> type into a <b>MeasurementUnit</b> type.
  *
  * @author Marcus Portmann
  */
 @Component
 @ReadingConverter
-public class StringToConstraintTypeConverter implements Converter<String, ConstraintType> {
+public class StringToMeasurementUnitConverter implements Converter<String, MeasurementUnit> {
 
-  /** Constructs a new <b>StringToConstraintTypeConverter</b>. */
-  public StringToConstraintTypeConverter() {}
+  /** Constructs a new <b>StringToMeasurementUnitConverter</b>. */
+  public StringToMeasurementUnitConverter() {}
 
   @Override
-  public ConstraintType convert(String source) {
-    return ConstraintType.fromCode(source);
+  public MeasurementUnit convert(String source) {
+    return MeasurementUnit.fromCode(source);
   }
 }

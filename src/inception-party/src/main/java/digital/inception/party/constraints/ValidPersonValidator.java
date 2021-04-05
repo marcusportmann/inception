@@ -1089,7 +1089,6 @@ public class ValidPersonValidator extends PartyValidator
 
               break;
 
-
             case "marital_status":
               if (!validateRequiredAttributeConstraint(
                   roleType,

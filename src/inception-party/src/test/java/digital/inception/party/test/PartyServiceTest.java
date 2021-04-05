@@ -36,6 +36,7 @@ import digital.inception.party.LanguageProficiency;
 import digital.inception.party.LanguageProficiencyLevel;
 import digital.inception.party.Lock;
 import digital.inception.party.MeasurementSystem;
+import digital.inception.party.MeasurementUnit;
 import digital.inception.party.Organization;
 import digital.inception.party.OrganizationSortBy;
 import digital.inception.party.Organizations;
@@ -176,7 +177,7 @@ public class PartyServiceTest {
     person.setTimeZone("Africa/Johannesburg");
     person.setTitle("mrs");
 
-    person.addAttribute(new Attribute("weight", "80kg"));
+    person.addAttribute(new Attribute("weight", 80, MeasurementUnit.METRIC_KILOGRAM));
 
     assertTrue(person.hasAttributeWithType("weight"));
 
@@ -1730,7 +1731,7 @@ public class PartyServiceTest {
 
     person.removeAttributeWithType("weight");
 
-    person.addAttribute(new Attribute("height", "180cm"));
+    person.addAttribute(new Attribute("height", 180, MeasurementUnit.METRIC_CENTIMETER));
 
     Attribute attribute = new Attribute("complex_attribute");
     attribute.setBooleanValue(true);
@@ -1739,7 +1740,7 @@ public class PartyServiceTest {
     attribute.setIntegerValue(777);
     attribute.setStringValue("String Value");
 
-    person.addAttribute(new Attribute("height", "180cm"));
+    person.addAttribute(new Attribute("height", 180, MeasurementUnit.METRIC_CENTIMETER));
 
     person.removeContactMechanismWithRole(ContactMechanismRole.MAIN_FAX_NUMBER);
 
@@ -2486,6 +2487,10 @@ public class PartyServiceTest {
         "The string value values for the attributes do not match",
         attribute1.getStringValue(),
         attribute2.getStringValue());
+    assertEquals(
+        "The units for the attributes do not match",
+        attribute1.getUnit(),
+        attribute2.getUnit());
   }
 
   private void compareConsents(Consent consent1, Consent consent2) {

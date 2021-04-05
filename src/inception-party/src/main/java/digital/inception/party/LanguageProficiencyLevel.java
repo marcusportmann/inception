@@ -84,7 +84,9 @@ public enum LanguageProficiencyLevel {
 
       default:
         throw new RuntimeException(
-            "Failed to determine the language proficiency level with the invalid code (" + code + ")");
+            "Failed to determine the language proficiency level with the invalid code ("
+                + code
+                + ")");
     }
   }
 

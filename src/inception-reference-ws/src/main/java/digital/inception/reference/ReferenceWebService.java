@@ -93,6 +93,34 @@ public class ReferenceWebService {
   }
 
   /**
+   * Retrieve the measurement unit types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
+   *     systems for or <b>null</b> to retrieve the measurement unit types for all locales
+   * @return the measurement unit types
+   */
+  @WebMethod(operationName = "GetMeasurementUnitTypes")
+  public List<MeasurementUnitType> getMeasurementUnitTypes(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return referenceService.getMeasurementUnitTypes(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
+   * Retrieve the measurement units.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
+   *     systems for or <b>null</b> to retrieve the measurement units for all locales
+   * @return the measurement units
+   */
+  @WebMethod(operationName = "GetMeasurementUnits")
+  public List<MeasurementUnit> getMeasurementUnits(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return referenceService.getMeasurementUnits(
+        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
    * Retrieve the regions.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the regions for or
