@@ -26,9 +26,15 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * The <b>MeasurementSystem</b> enumeration defines the measurement systems.
  *
+ * <p>A system of measurement is a collection of units of measurement and rules relating them to
+ * each other. Systems of measurement have historically been important, regulated and defined for
+ * the purposes of science and commerce. Systems of measurement in use include the International
+ * System of Units (SI), the modern form of the metric system, the British imperial system, and the
+ * United States customary system.
+ *
  * @author Marcus Portmann
  */
-@Schema(description = "A measurement system")
+@Schema(description = "A system of measurement")
 @XmlEnum
 @XmlType(name = "MeasurementSystem", namespace = "http://inception.digital/party")
 public enum MeasurementSystem {
