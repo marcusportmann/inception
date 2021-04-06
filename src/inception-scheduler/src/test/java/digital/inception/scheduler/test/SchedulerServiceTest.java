@@ -16,23 +16,24 @@
 
 package digital.inception.scheduler.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.scheduler.ISchedulerService;
 import digital.inception.scheduler.Job;
 import digital.inception.scheduler.JobNotFoundException;
 import digital.inception.scheduler.JobParameter;
 import digital.inception.scheduler.JobStatus;
-import digital.inception.test.TestClassRunner;
+import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -43,7 +44,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
-@RunWith(TestClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
@@ -138,14 +140,14 @@ public class SchedulerServiceTest {
 
     String retrievedJobName = schedulerService.getJobName(job.getId());
 
-    assertEquals("The correct job name was not retrieved", retrievedJobName, job.getName());
+    assertEquals(retrievedJobName, job.getName(), "The correct job name was not retrieved");
 
     List<Job> afterRetrievedJobs = schedulerService.getJobs();
 
     assertEquals(
-        "The correct number of jobs was not retrieved",
         beforeRetrievedJobs.size() + 1,
-        afterRetrievedJobs.size());
+        afterRetrievedJobs.size(),
+        "The correct number of jobs was not retrieved");
 
     boolean foundJob = false;
 
@@ -199,9 +201,9 @@ public class SchedulerServiceTest {
     retrievedJob = schedulerService.getJob(job.getId());
 
     assertEquals(
-        "The status for the job (" + job.getId() + ") is incorrect",
         JobStatus.SCHEDULED,
-        retrievedJob.getStatus());
+        retrievedJob.getStatus(),
+        "The status for the job (" + job.getId() + ") is incorrect");
 
     job.removeParameter(job.getParameters().iterator().next().getName());
 
@@ -226,36 +228,31 @@ public class SchedulerServiceTest {
   }
 
   private void compareJobs(Job job1, Job job2) {
-    assertEquals("The ID values for the jobs do not match", job1.getId(), job2.getId());
-    assertEquals("The name values for the jobs do not match", job1.getName(), job2.getName());
+    assertEquals(job1.getId(), job2.getId(), "The ID values for the jobs do not match");
+    assertEquals(job1.getName(), job2.getName(), "The name values for the jobs do not match");
     assertEquals(
-        "The scheduling pattern values for the jobs do not match",
         job1.getSchedulingPattern(),
-        job2.getSchedulingPattern());
+        job2.getSchedulingPattern(),
+        "The scheduling pattern values for the jobs do not match");
     assertEquals(
-        "The job class values for the jobs do not match",
-        job1.getJobClass(),
-        job2.getJobClass());
+        job1.getJobClass(), job2.getJobClass(), "The job class values for the jobs do not match");
     assertEquals(
-        "The is enabled values for the jobs do not match", job1.isEnabled(), job2.isEnabled());
+        job1.isEnabled(), job2.isEnabled(), "The is enabled values for the jobs do not match");
+    assertEquals(job1.getStatus(), job2.getStatus(), "The status values for the jobs do not match");
     assertEquals(
-        "The status values for the jobs do not match", job1.getStatus(), job2.getStatus());
-    assertEquals(
-        "The execution attempts values for the jobs do not match",
         job1.getExecutionAttempts(),
-        job2.getExecutionAttempts());
+        job2.getExecutionAttempts(),
+        "The execution attempts values for the jobs do not match");
     assertEquals(
-        "The lock name values for the jobs do not match",
-        job1.getLockName(),
-        job2.getLockName());
+        job1.getLockName(), job2.getLockName(), "The lock name values for the jobs do not match");
     assertEquals(
-        "The last executed values for the jobs do not match",
         job1.getLastExecuted(),
-        job2.getLastExecuted());
+        job2.getLastExecuted(),
+        "The last executed values for the jobs do not match");
     assertEquals(
-        "The number of parameters for the jobs do not match",
         job1.getParameters().size(),
-        job2.getParameters().size());
+        job2.getParameters().size(),
+        "The number of parameters for the jobs do not match");
 
     for (JobParameter job1Parameter : job1.getParameters()) {
       boolean foundParameter = false;
@@ -263,11 +260,9 @@ public class SchedulerServiceTest {
       for (JobParameter job2Parameter : job2.getParameters()) {
         if (job1Parameter.getName().equalsIgnoreCase(job2Parameter.getName())) {
           assertEquals(
-              "The values for the job parameters ("
-                  + job1Parameter.getName()
-                  + ") do not match",
               job1Parameter.getValue(),
-              job2Parameter.getValue());
+              job2Parameter.getValue(),
+              "The values for the job parameters (" + job1Parameter.getName() + ") do not match");
 
           foundParameter = true;
         }

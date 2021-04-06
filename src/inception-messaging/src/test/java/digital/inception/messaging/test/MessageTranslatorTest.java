@@ -16,11 +16,11 @@
 
 package digital.inception.messaging.test;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.messaging.MessageTranslator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * The <b>MessagingServiceTest</b> class contains the implementation of the JUnit tests for the

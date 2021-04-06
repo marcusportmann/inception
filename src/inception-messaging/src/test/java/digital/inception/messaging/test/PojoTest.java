@@ -16,8 +16,8 @@
 
 package digital.inception.messaging.test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.util.Base64Util;
@@ -29,7 +29,7 @@ import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessageStatus;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * The <b>PojoTest</b> class contains the implementation of the JUnit tests for the POJOs that form

@@ -16,14 +16,15 @@
 
 package digital.inception.application.test;
 
-import digital.inception.test.TestClassRunner;
+import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -33,9 +34,10 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /** The <b>TransactionManagerTest</b> class. */
-@RunWith(TestClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
-    classes = {TestConfiguration.class},
+    classes = {TestConfiguration.class, ApplicationTestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {

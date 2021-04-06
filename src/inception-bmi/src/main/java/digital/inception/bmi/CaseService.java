@@ -34,6 +34,7 @@ import org.camunda.bpm.engine.repository.CaseDefinition;
 import org.camunda.bpm.engine.repository.CaseDefinitionQuery;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
+import org.camunda.bpm.engine.repository.DeploymentWithDefinitions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -78,8 +79,6 @@ public class CaseService implements ICaseService {
       CaseDefinitionQuery caseDefinitionQuery =
           processEngine.getRepositoryService().createCaseDefinitionQuery();
       caseDefinitionQuery.caseDefinitionKey(caseDefinitionId).latestVersion();
-
-      caseDefinitionQuery.count();
 
       return caseDefinitionQuery.count() > 0;
     } catch (Throwable e) {

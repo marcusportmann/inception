@@ -17,16 +17,17 @@
 package digital.inception.messaging.test;
 
 import digital.inception.messaging.IMessagingService;
-import digital.inception.test.TestClassRunner;
+import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -38,7 +39,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-@RunWith(TestClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})

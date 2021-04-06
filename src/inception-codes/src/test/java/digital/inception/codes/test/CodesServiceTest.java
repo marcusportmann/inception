@@ -16,26 +16,27 @@
 
 package digital.inception.codes.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
 import digital.inception.codes.ICodesService;
-import digital.inception.test.TestClassRunner;
+import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -46,7 +47,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
-@RunWith(TestClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
@@ -115,9 +117,9 @@ public class CodesServiceTest {
     String retrievedCodeCategoryName = codesService.getCodeCategoryName(codeCategory.getId());
 
     assertEquals(
-        "The correct code category name was not retrieved",
         codeCategory.getName(),
-        retrievedCodeCategoryName);
+        retrievedCodeCategoryName,
+        "The correct code category name was not retrieved");
 
     codeCategory.setName(codeCategory.getName() + " Updated");
 
@@ -175,7 +177,7 @@ public class CodesServiceTest {
   public void codeProviderTest() throws Exception {
     CodeCategory retrievedCodeCategory = codesService.getCodeCategory("TestCodeCategory");
 
-    assertNotNull("The code category is null", retrievedCodeCategory);
+    assertNotNull(retrievedCodeCategory, "The code category is null");
   }
 
   /** Test the code functionality. */
@@ -201,7 +203,7 @@ public class CodesServiceTest {
 
     String retrievedCodeName = codesService.getCodeName(codeCategory.getId(), code.getId());
 
-    assertEquals("The correct code name was not retrieved", code.getName(), retrievedCodeName);
+    assertEquals(code.getName(), retrievedCodeName, "The correct code name was not retrieved");
 
     code.setName("Updated " + code.getName());
     code.setValue("Updated " + code.getValue());
@@ -286,47 +288,45 @@ public class CodesServiceTest {
     List<CodeCategory> retrievedCodeCategories = codesService.getCodeCategories();
 
     assertEquals(
-        "The correct number of code categories was not retrieved",
         1,
-        retrievedCodeCategories.size());
+        retrievedCodeCategories.size(),
+        "The correct number of code categories was not retrieved");
 
     compareCodeCategories(codeCategory, retrievedCodeCategories.get(0));
 
     retrievedCodeCategories = codesService.getCodeCategories();
 
     assertEquals(
-        "The correct number of code categories was not retrieved",
         1,
-        retrievedCodeCategories.size());
+        retrievedCodeCategories.size(),
+        "The correct number of code categories was not retrieved");
 
     compareCodeCategories(codeCategory, retrievedCodeCategories.get(0));
   }
 
   private void compareCodeCategories(CodeCategory codeCategory1, CodeCategory codeCategory2) {
     assertEquals(
-        "The ID values for the code categories do not match",
         codeCategory1.getId(),
-        codeCategory2.getId());
+        codeCategory2.getId(),
+        "The ID values for the code categories do not match");
     assertEquals(
-        "The name values for the code categories do not match",
         codeCategory1.getName(),
-        codeCategory2.getName());
+        codeCategory2.getName(),
+        "The name values for the code categories do not match");
     assertEquals(
-        "The data values for the code categories do not match",
         codeCategory1.getData(),
-        codeCategory2.getData());
+        codeCategory2.getData(),
+        "The data values for the code categories do not match");
   }
 
   private void compareCodes(Code code1, Code code2) {
-    assertEquals("The ID values for the codes do not match", code1.getId(), code2.getId());
+    assertEquals(code1.getId(), code2.getId(), "The ID values for the codes do not match");
     assertEquals(
-        "The category ID values for the codes do not match",
         code1.getCodeCategoryId(),
-        code2.getCodeCategoryId());
-    assertEquals(
-        "The name values for the codes do not match", code1.getName(), code2.getName());
-    assertEquals(
-        "The value values for the codes do not match", code1.getValue(), code2.getValue());
+        code2.getCodeCategoryId(),
+        "The category ID values for the codes do not match");
+    assertEquals(code1.getName(), code2.getName(), "The name values for the codes do not match");
+    assertEquals(code1.getValue(), code2.getValue(), "The value values for the codes do not match");
   }
 
   private void compareCodes(List<Code> codes1, List<Code> codes2) {

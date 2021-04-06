@@ -16,71 +16,54 @@
 
 package digital.inception.test;
 
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.util.Map;
+import java.util.Optional;
 import javax.sql.XAConnection;
 import javax.transaction.Transaction;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.InitializationError;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.LoggerFactory;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * The <b>TestClassRunner</b> class implements the JUnit runner that provides support for JUnit test
- * classes that test the capabilities provided by or dependent on the <b>Inception</b> framework.
+ * The <b>InceptionExtension</b> class.
  *
  * @author Marcus Portmann
  */
-public class TestClassRunner extends SpringJUnit4ClassRunner {
+public class InceptionExtension implements AfterEachCallback {
 
-  /**
-   * Constructs a new <b>TestClassRunner</b>.
-   *
-   * @param testClass the JUnit test class to run
-   */
-  public TestClassRunner(Class<?> testClass) throws InitializationError {
-    super(testClass);
-  }
+  /** Constructs a new <b>InceptionExtension</b>. */
+  public InceptionExtension() {}
 
-  /**
-   * Run the tests for this runner.
-   *
-   * @param notifier the run notifier that will be notified of events while tests are being run
-   */
   @Override
-  public void run(RunNotifier notifier) {
-    super.run(notifier);
-  }
+  public void afterEach(ExtensionContext context) throws Exception {
+    Optional<Method> testMethodOptional = context.getTestMethod();
 
-  /**
-   * Run the child test for this runner.
-   *
-   * @param method the test method being run
-   * @param notifier the run notifier that will be notified of events while tests are being run
-   */
-  @Override
-  protected void runChild(FrameworkMethod method, RunNotifier notifier) {
-    super.runChild(method, notifier);
+    if (testMethodOptional.isPresent()) {
+      checkForActiveTransactions(
+          testMethodOptional.get(), TransactionManagerProxy.getActiveTransactionStackTraces());
 
-    checkForActiveTransactions(method, TransactionManagerProxy.getActiveTransactionStackTraces());
+      checkForActiveTransactions(
+          testMethodOptional.get(), UserTransactionProxy.getActiveTransactionStackTraces());
 
-    checkForActiveTransactions(method, UserTransactionProxy.getActiveTransactionStackTraces());
+      checkForOpenDatabaseConnections(
+          testMethodOptional.get(), DataSourceProxy.getActiveDatabaseConnections());
 
-    checkForOpenDatabaseConnections(method, DataSourceProxy.getActiveDatabaseConnections());
-
-    checkForOpenXADatabaseConnections(method, XADataSourceProxy.getActiveXADatabaseConnections());
+      checkForOpenXADatabaseConnections(
+          testMethodOptional.get(), XADataSourceProxy.getActiveXADatabaseConnections());
+    }
   }
 
   private void checkForActiveTransactions(
-      FrameworkMethod method, Map<Transaction, StackTraceElement[]> activeTransactionStackTraces) {
+      Method method, Map<Transaction, StackTraceElement[]> activeTransactionStackTraces) {
     for (Transaction transaction : activeTransactionStackTraces.keySet()) {
       StackTraceElement[] stackTrace = activeTransactionStackTraces.get(transaction);
 
       for (int i = 0; i < stackTrace.length; i++) {
         if (stackTrace[i].getMethodName().equals("begin")
             && (stackTrace[i].getLineNumber() != -1)) {
-          LoggerFactory.getLogger(TestClassRunner.class)
+          LoggerFactory.getLogger(InceptionExtension.class)
               .warn(
                   "Failed to successfully execute the test ("
                       + method.getName()
@@ -114,13 +97,13 @@ public class TestClassRunner extends SpringJUnit4ClassRunner {
   }
 
   private void checkForOpenDatabaseConnections(
-      FrameworkMethod method, Map<Connection, StackTraceElement[]> activeDatabaseConnections) {
+      Method method, Map<Connection, StackTraceElement[]> activeDatabaseConnections) {
     for (Connection connection : activeDatabaseConnections.keySet()) {
       StackTraceElement[] stackTrace = activeDatabaseConnections.get(connection);
 
       for (int i = 0; i < stackTrace.length; i++) {
         if (stackTrace[i].getMethodName().equals("getConnection")) {
-          LoggerFactory.getLogger(TestClassRunner.class)
+          LoggerFactory.getLogger(InceptionExtension.class)
               .warn(
                   "Failed to successfully execute the test ("
                       + method.getName()
@@ -154,13 +137,13 @@ public class TestClassRunner extends SpringJUnit4ClassRunner {
   }
 
   private void checkForOpenXADatabaseConnections(
-      FrameworkMethod method, Map<XAConnection, StackTraceElement[]> activeXADatabaseConnections) {
+      Method method, Map<XAConnection, StackTraceElement[]> activeXADatabaseConnections) {
     for (XAConnection connection : activeXADatabaseConnections.keySet()) {
       StackTraceElement[] stackTrace = activeXADatabaseConnections.get(connection);
 
       for (int i = 0; i < stackTrace.length; i++) {
         if (stackTrace[i].getMethodName().equals("getXAConnection")) {
-          LoggerFactory.getLogger(TestClassRunner.class)
+          LoggerFactory.getLogger(InceptionExtension.class)
               .warn(
                   "Failed to successfully execute the test ("
                       + method.getName()

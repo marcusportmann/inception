@@ -16,10 +16,10 @@
 
 package digital.inception.party.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
@@ -57,7 +57,7 @@ import digital.inception.party.SourceOfFunds;
 import digital.inception.party.SourceOfWealth;
 import digital.inception.party.Status;
 import digital.inception.party.TaxNumber;
-import digital.inception.test.TestClassRunner;
+import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -65,12 +65,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.ConstraintViolation;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -82,7 +83,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  * @author Marcus Portmann
  */
 @SuppressWarnings("OptionalGetWithoutIsPresent")
-@RunWith(TestClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
@@ -182,8 +184,8 @@ public class PartyServiceTest {
     assertTrue(person.hasAttributeWithType("weight"));
 
     assertTrue(
-        "Failed to confirm that the person has an attribute with type (weight)",
-        person.hasAttributeWithType("weight"));
+        person.hasAttributeWithType("weight"),
+        "Failed to confirm that the person has an attribute with type (weight)");
 
     person.setCountryOfTaxResidence("ZA");
     person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
@@ -508,9 +510,9 @@ public class PartyServiceTest {
         partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid person",
         1,
-        personConstraintViolations.size());
+        personConstraintViolations.size(),
+        "Failed to confirm that the person has an attribute with type (weight)");
 
     Organization organization = getTestBasicOrganizationDetails();
 
@@ -525,9 +527,9 @@ public class PartyServiceTest {
         partyService.validateOrganization(organization);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid organization",
         1,
-        organizationConstraintViolations.size());
+        organizationConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid organization");
   }
 
   /** Test the contactMechanism functionality. */
@@ -754,9 +756,9 @@ public class PartyServiceTest {
         partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
-        "The correct number of filtered persons was not retrieved",
         1,
-        filteredPersons.getPersons().size());
+        filteredPersons.getPersons().size(),
+        "The correct number of filtered persons was not retrieved");
 
     comparePersons(foreignPerson, filteredPersons.getPersons().get(0));
 
@@ -868,9 +870,9 @@ public class PartyServiceTest {
         partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid building address",
         5,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid building address");
 
     // Validate a fully populated invalid address
     invalidAddress =
@@ -899,9 +901,9 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid building address",
         13,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid building address");
   }
 
   /** Test the invalid complex address verification functionality. */
@@ -916,9 +918,9 @@ public class PartyServiceTest {
         partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid complex address",
         6,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid complex address");
 
     // Validate a fully populated invalid address
     invalidAddress =
@@ -947,9 +949,9 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid complex address",
         14,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid complex address");
   }
 
   /** Test the invalid education verification functionality. */
@@ -966,9 +968,9 @@ public class PartyServiceTest {
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the person with an invalid education",
         7,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the person with an invalid education");
   }
 
   /** Test the invalid employment verification functionality. */
@@ -998,9 +1000,9 @@ public class PartyServiceTest {
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the person with an invalid employment",
         14,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the person with an invalid employment");
   }
 
   /** Test the invalid farm address verification functionality. */
@@ -1015,9 +1017,9 @@ public class PartyServiceTest {
         partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid farm address",
         3,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid farm address");
 
     // Validate a fully populated invalid address
     invalidAddress = new PhysicalAddress(PhysicalAddressType.FARM, PhysicalAddressRole.HOME);
@@ -1045,9 +1047,9 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid farm address",
         13,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid farm address");
   }
 
   /** Test the invalid international address verification functionality. */
@@ -1062,9 +1064,9 @@ public class PartyServiceTest {
         partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid international address",
         3,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid international address");
 
     // Validate a fully populated invalid address
     invalidAddress =
@@ -1093,9 +1095,9 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid international address",
         16,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid international address");
   }
 
   /** Test the invalid language proficiency verification functionality. */
@@ -1111,9 +1113,9 @@ public class PartyServiceTest {
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the person with an invalid language proficiency",
         5,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the person with an invalid language proficiency");
   }
 
   /** Test the invalid organization attribute test. */
@@ -1122,14 +1124,15 @@ public class PartyServiceTest {
     Organization organization = getTestBasicOrganizationDetails();
 
     organization.addAttribute(new Attribute("given_name", "Given Name"));
+    organization.addAttribute(new Attribute("invalid_attribute", "Invalid Attribute"));
 
     Set<ConstraintViolation<Organization>> constraintViolations =
         partyService.validateOrganization(organization);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid organization",
-        1,
-        constraintViolations.size());
+        2,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid organization");
   }
 
   /** Test the invalid person attribute functionality. */
@@ -1138,13 +1141,15 @@ public class PartyServiceTest {
     Person person = getTestBasicPersonDetails();
 
     person.addAttribute(new Attribute("given_name", "Given Name"));
+    person.addAttribute(new Attribute("invalid_attribute", "Invalid Attribute"));
+    person.addAttribute(new Attribute("weight", 80, MeasurementUnit.CUSTOMARY_FOOT));
 
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid person",
-        1,
-        constraintViolations.size());
+        3,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid person");
   }
 
   /** Test the invalid person consent functionality. */
@@ -1157,9 +1162,9 @@ public class PartyServiceTest {
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid person",
         1,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid person");
   }
 
   /** Test the invalid person source of funds functionality. */
@@ -1172,9 +1177,9 @@ public class PartyServiceTest {
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid person",
         1,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid person");
   }
 
   /** Test the invalid person source of wealth functionality. */
@@ -1187,9 +1192,9 @@ public class PartyServiceTest {
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid person",
         1,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid person");
   }
 
   /** Test the invalid person time zone functionality. */
@@ -1202,9 +1207,9 @@ public class PartyServiceTest {
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid person",
         1,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid person");
   }
 
   /** Test the invalid physical address purpose for party type verification functionality. */
@@ -1227,9 +1232,9 @@ public class PartyServiceTest {
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid physical address role for the party",
         1,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid physical address role for the party");
   }
 
   /** Test the invalid physical address type verification functionality. */
@@ -1245,9 +1250,9 @@ public class PartyServiceTest {
         partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid physical address",
         3,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid physical address");
   }
 
   /** Test the invalid site address verification functionality. */
@@ -1262,9 +1267,9 @@ public class PartyServiceTest {
         partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid site address",
         5,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid site address");
 
     // Validate a fully populated invalid address
     invalidAddress = new PhysicalAddress(PhysicalAddressType.SITE, PhysicalAddressRole.RESIDENTIAL);
@@ -1292,9 +1297,9 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid site address",
         14,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid site address");
   }
 
   /** Test the invalid street address verification functionality. */
@@ -1309,9 +1314,9 @@ public class PartyServiceTest {
         partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid street address",
         4,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid street address");
 
     // Validate a fully populated invalid address
     invalidAddress =
@@ -1340,9 +1345,9 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid street address",
         16,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid street address");
   }
 
   /** Test the invalid unstructured address verification functionality. */
@@ -1357,9 +1362,9 @@ public class PartyServiceTest {
         partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid unstructured address",
         3,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid unstructured address");
 
     // Validate a fully populated invalid address
     invalidAddress =
@@ -1388,9 +1393,9 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid unstructured address",
         16,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid unstructured address");
   }
 
   /** Test the language proficiency functionality. */
@@ -1534,9 +1539,9 @@ public class PartyServiceTest {
         partyService.getOrganizations("", OrganizationSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
-        "The correct number of filtered organizations was not retrieved",
         1,
-        filteredOrganizations.getOrganizations().size());
+        filteredOrganizations.getOrganizations().size(),
+        "The correct number of filtered organizations was not retrieved");
 
     compareOrganizations(organization, filteredOrganizations.getOrganizations().get(0));
 
@@ -1624,18 +1629,18 @@ public class PartyServiceTest {
         partyService.getOrganizations("", OrganizationSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
-        "The correct number of filtered organizations was not retrieved",
         1,
-        filteredOrganizations.getOrganizations().size());
+        filteredOrganizations.getOrganizations().size(),
+        "The correct number of filtered organizations was not retrieved");
 
     compareOrganizations(organization, filteredOrganizations.getOrganizations().get(0));
 
     Parties filteredParties = partyService.getParties("", SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
-        "The correct number of filtered parties was not retrieved",
         1,
-        filteredParties.getParties().size());
+        filteredParties.getParties().size(),
+        "The correct number of filtered parties was not retrieved");
 
     Organization retrievedOrganization = partyService.getOrganization(organization.getId());
 
@@ -1658,9 +1663,9 @@ public class PartyServiceTest {
     Parties filteredParties = partyService.getParties("", SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
-        "The correct number of filtered parties was not retrieved",
         2,
-        filteredParties.getParties().size());
+        filteredParties.getParties().size(),
+        "The correct number of filtered parties was not retrieved");
 
     partyService.deleteParty(person.getId());
 
@@ -1680,9 +1685,9 @@ public class PartyServiceTest {
         partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
-        "The correct number of filtered persons was not retrieved",
         1,
-        filteredPersons.getPersons().size());
+        filteredPersons.getPersons().size(),
+        "The correct number of filtered parties was not retrieved");
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
@@ -1696,9 +1701,9 @@ public class PartyServiceTest {
         partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
-        "The correct number of filtered persons was not retrieved",
         1,
-        filteredPersons.getPersons().size());
+        filteredPersons.getPersons().size(),
+        "The correct number of filtered persons was not retrieved");
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
@@ -1777,9 +1782,9 @@ public class PartyServiceTest {
         partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
-        "The correct number of filtered persons was not retrieved",
         1,
-        filteredPersons.getPersons().size());
+        filteredPersons.getPersons().size(),
+        "The correct number of filtered persons was not retrieved");
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
@@ -1787,9 +1792,9 @@ public class PartyServiceTest {
         partyService.getPersons("Updated", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
-        "The correct number of filtered persons was not retrieved",
         1,
-        filteredPersons.getPersons().size());
+        filteredPersons.getPersons().size(),
+        "The correct number of filtered persons was not retrieved");
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
@@ -1800,9 +1805,9 @@ public class PartyServiceTest {
     Parties filteredParties = partyService.getParties("", SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
-        "The correct number of filtered parties was not retrieved",
         1,
-        filteredParties.getParties().size());
+        filteredParties.getParties().size(),
+        "The correct number of filtered parties was not retrieved");
 
     partyService.deletePerson(person.getId());
   }
@@ -2010,9 +2015,9 @@ public class PartyServiceTest {
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found",
         0,
-        constraintViolations.size());
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found");
 
     partyService.createPerson(person);
 
@@ -2182,9 +2187,9 @@ public class PartyServiceTest {
         partyService.validatePerson(person);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid person",
         48,
-        personConstraintViolations.size());
+        personConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid person");
 
     Organization organization = getTestBasicOrganizationDetails();
 
@@ -2196,9 +2201,9 @@ public class PartyServiceTest {
         partyService.validateOrganization(organization);
 
     assertEquals(
-        "The correct number of constraint violations was not found for the invalid organization",
         12,
-        organizationConstraintViolations.size());
+        organizationConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid organization");
   }
 
   /** Test the sourceOfFunds functionality. */
@@ -2464,331 +2469,286 @@ public class PartyServiceTest {
 
   private void compareAttributes(Attribute attribute1, Attribute attribute2) {
     assertEquals(
-        "The type values for the attributes do not match",
         attribute1.getType(),
-        attribute2.getType());
+        attribute2.getType(),
+        "The type values for the attributes do not match");
     assertEquals(
-        "The boolean value values for the attributes do not match",
         attribute1.getBooleanValue(),
-        attribute2.getBooleanValue());
+        attribute2.getBooleanValue(),
+        "The boolean value values for the attributes do not match");
     assertEquals(
-        "The date value values for the attributes do not match",
         attribute1.getDateValue(),
-        attribute2.getDateValue());
+        attribute2.getDateValue(),
+        "The date value values for the attributes do not match");
     assertEquals(
-        "The double value values for the attributes do not match",
         attribute1.getDoubleValue(),
-        attribute2.getDoubleValue());
+        attribute2.getDoubleValue(),
+        "The double value values for the attributes do not match");
     assertEquals(
-        "The integer value values for the attributes do not match",
         attribute1.getIntegerValue(),
-        attribute2.getIntegerValue());
+        attribute2.getIntegerValue(),
+        "The integer value values for the attributes do not match");
     assertEquals(
-        "The string value values for the attributes do not match",
         attribute1.getStringValue(),
-        attribute2.getStringValue());
+        attribute2.getStringValue(),
+        "The string value values for the attributes do not match");
     assertEquals(
-        "The units for the attributes do not match",
         attribute1.getUnit(),
-        attribute2.getUnit());
+        attribute2.getUnit(),
+        "The unit values for the attributes do not match");
   }
 
   private void compareConsents(Consent consent1, Consent consent2) {
     assertEquals(
-        "The effective from values for the consents do not match",
         consent1.getEffectiveFrom(),
-        consent2.getEffectiveFrom());
-
+        consent2.getEffectiveFrom(),
+        "The effective from values for the consents do not match");
     assertEquals(
-        "The effective to values for the consents do not match",
         consent1.getEffectiveTo(),
-        consent2.getEffectiveTo());
-
+        consent2.getEffectiveTo(),
+        "The effective to values for the consents do not match");
     assertEquals(
-        "The persons for the consents do not match", consent1.getPerson(), consent2.getPerson());
-
-    assertEquals("The types for the consents do not match", consent1.getType(), consent2.getType());
+        consent1.getPerson(), consent2.getPerson(), "The persons for the consents do not match");
+    assertEquals(consent1.getType(), consent2.getType(), "The types for the consents do not match");
   }
 
   private void compareContactMechanisms(
       ContactMechanism contactMechanism1, ContactMechanism contactMechanism2) {
     assertEquals(
-        "The parties for the contact mechanisms do not match",
         contactMechanism1.getParty(),
-        contactMechanism2.getParty());
-
+        contactMechanism2.getParty(),
+        "The party values for the contact mechanisms do not match");
     assertEquals(
-        "The purposes for the contact mechanisms do not match",
         contactMechanism1.getPurposes(),
-        contactMechanism2.getPurposes());
-
+        contactMechanism2.getPurposes(),
+        "The purpose values for the contact mechanisms do not match");
     assertEquals(
-        "The roles for the contact mechanisms do not match",
         contactMechanism1.getRole(),
-        contactMechanism2.getRole());
-
+        contactMechanism2.getRole(),
+        "The role values for the contact mechanisms do not match");
     assertEquals(
-        "The types for the contact mechanisms do not match",
         contactMechanism1.getType(),
-        contactMechanism2.getType());
-
+        contactMechanism2.getType(),
+        "The type values for the contact mechanisms do not match");
     assertEquals(
-        "The values for the contact mechanisms do not match",
         contactMechanism1.getValue(),
-        contactMechanism2.getValue());
+        contactMechanism2.getValue(),
+        "The value values for the contact mechanisms do not match");
   }
 
   private void compareEducations(Education education1, Education education2) {
     assertEquals(
-        "The fields of study for the educations do not match",
         education1.getFieldOfStudy(),
-        education2.getFieldOfStudy());
-
+        education2.getFieldOfStudy(),
+        "The field of study values for the educations do not match");
     assertEquals(
-        "The first year attended for the educations do not match",
         education1.getFirstYearAttended(),
-        education2.getFirstYearAttended());
-
-    assertEquals("The ID for the educations do not match", education1.getId(), education2.getId());
-
+        education2.getFirstYearAttended(),
+        "The first year attended values for the educations do not match");
     assertEquals(
-        "The institution countries for the educations do not match",
+        education1.getId(), education2.getId(), "The ID values for the educations do not match");
+    assertEquals(
         education1.getInstitutionCountry(),
-        education2.getInstitutionCountry());
-
+        education2.getInstitutionCountry(),
+        "The institution country values for the educations do not match");
     assertEquals(
-        "The institution names for the educations do not match",
         education1.getInstitutionName(),
-        education2.getInstitutionName());
-
+        education2.getInstitutionName(),
+        "The institution name values for the educations do not match");
     assertEquals(
-        "The last year attended for the educations do not match",
         education1.getLastYearAttended(),
-        education2.getLastYearAttended());
-
+        education2.getLastYearAttended(),
+        "The last year attended values for the educations do not match");
     assertEquals(
-        "The persons for the educations do not match",
         education1.getPerson(),
-        education2.getPerson());
-
+        education2.getPerson(),
+        "The person values for the educations do not match");
     assertEquals(
-        "The qualification names for the educations do not match",
         education1.getQualificationName(),
-        education2.getQualificationName());
-
+        education2.getQualificationName(),
+        "The qualification name values for the educations do not match");
     assertEquals(
-        "The qualification types for the educations do not match",
         education1.getQualificationType(),
-        education2.getQualificationType());
-
+        education2.getQualificationType(),
+        "The qualification type values for the educations do not match");
     assertEquals(
-        "The qualification years for the educations do not match",
         education1.getQualificationYear(),
-        education2.getQualificationYear());
+        education2.getQualificationYear(),
+        "The qualification year values for the educations do not match");
   }
 
   private void compareEmployments(Employment employment1, Employment employment2) {
     assertEquals(
-        "The employer address cities for the employments do not match",
         employment1.getEmployerAddressCity(),
-        employment2.getEmployerAddressCity());
-
+        employment2.getEmployerAddressCity(),
+        "The employer address city values for the employments do not match");
     assertEquals(
-        "The employer address countries for the employments do not match",
         employment1.getEmployerAddressCountry(),
-        employment2.getEmployerAddressCountry());
-
+        employment2.getEmployerAddressCountry(),
+        "The employer address country values for the employments do not match");
     assertEquals(
-        "The employer address line 1 values for the employments do not match",
         employment1.getEmployerAddressLine1(),
-        employment2.getEmployerAddressLine1());
-
+        employment2.getEmployerAddressLine1(),
+        "The employer address line 1 values for the employments do not match");
     assertEquals(
-        "The employer address line 2 values for the employments do not match",
         employment1.getEmployerAddressLine2(),
-        employment2.getEmployerAddressLine2());
-
+        employment2.getEmployerAddressLine2(),
+        "The employer address line 2 values for the employments do not match");
     assertEquals(
-        "The employer address line 3 values for the employments do not match",
         employment1.getEmployerAddressLine3(),
-        employment2.getEmployerAddressLine3());
-
+        employment2.getEmployerAddressLine3(),
+        "The employer address line 3 values for the employments do not match");
     assertEquals(
-        "The employer address postal codes for the employments do not match",
         employment1.getEmployerAddressPostalCode(),
-        employment2.getEmployerAddressPostalCode());
-
+        employment2.getEmployerAddressPostalCode(),
+        "The employer address postal code values for the employments do not match");
     assertEquals(
-        "The employer address regions for the employments do not match",
         employment1.getEmployerAddressRegion(),
-        employment2.getEmployerAddressRegion());
-
+        employment2.getEmployerAddressRegion(),
+        "The employer address region values for the employments do not match");
     assertEquals(
-        "The employer address suburbs for the employments do not match",
         employment1.getEmployerAddressSuburb(),
-        employment2.getEmployerAddressSuburb());
-
+        employment2.getEmployerAddressSuburb(),
+        "The employer address suburb values for the employments do not match");
     assertEquals(
-        "The employer contact persons for the employments do not match",
         employment1.getEmployerContactPerson(),
-        employment2.getEmployerContactPerson());
-
+        employment2.getEmployerContactPerson(),
+        "The employer contact person values for the employments do not match");
     assertEquals(
-        "The employer e-mail addresses for the employments do not match",
         employment1.getEmployerEmailAddress(),
-        employment2.getEmployerEmailAddress());
-
+        employment2.getEmployerEmailAddress(),
+        "The employer e-mail address values for the employments do not match");
     assertEquals(
-        "The employer names for the employments do not match",
         employment1.getEmployerName(),
-        employment2.getEmployerName());
-
+        employment2.getEmployerName(),
+        "The employer name values for the employments do not match");
     assertEquals(
-        "The employer phone numbers for the employments do not match",
         employment1.getEmployerPhoneNumber(),
-        employment2.getEmployerPhoneNumber());
-
+        employment2.getEmployerPhoneNumber(),
+        "The employer phone number values for the employments do not match");
     assertEquals(
-        "The end dates for the employments do not match",
         employment1.getEndDate(),
-        employment2.getEndDate());
-
+        employment2.getEndDate(),
+        "The end date values for the employments do not match");
     assertEquals(
-        "The IDs for the employments do not match", employment1.getId(), employment2.getId());
-
+        employment1.getId(), employment2.getId(), "The ID values for the employments do not match");
     assertEquals(
-        "The occupations for the employments do not match",
         employment1.getOccupation(),
-        employment2.getOccupation());
-
+        employment2.getOccupation(),
+        "The occupation values for the employments do not match");
     assertEquals(
-        "The persons for the employments do not match",
         employment1.getPerson(),
-        employment2.getPerson());
-
+        employment2.getPerson(),
+        "The person values for the employments do not match");
     assertEquals(
-        "The start dates for the employments do not match",
         employment1.getStartDate(),
-        employment2.getStartDate());
-
+        employment2.getStartDate(),
+        "The start date values for the employments do not match");
     assertEquals(
-        "The types for the employments do not match", employment1.getType(), employment2.getType());
+        employment1.getType(),
+        employment2.getType(),
+        "The type values for the employments do not match");
   }
 
   private void compareIdentityDocuments(
       IdentityDocument identityDocument1, IdentityDocument identityDocument2) {
     assertEquals(
-        "The countries of issue for the identity documents do not match",
         identityDocument1.getCountryOfIssue(),
-        identityDocument2.getCountryOfIssue());
-
+        identityDocument2.getCountryOfIssue(),
+        "The country of issue values for the identity documents do not match");
     assertEquals(
-        "The dates of expiry for the identity documents do not match",
         identityDocument1.getDateOfExpiry(),
-        identityDocument2.getDateOfExpiry());
-
+        identityDocument2.getDateOfExpiry(),
+        "The date of expiry values for the identity documents do not match");
     assertEquals(
-        "The dates of issue for the identity documents do not match",
         identityDocument1.getDateOfIssue(),
-        identityDocument2.getDateOfIssue());
-
+        identityDocument2.getDateOfIssue(),
+        "The date of issue values for the identity documents do not match");
     assertEquals(
-        "The dates provided for the identity documents do not match",
         identityDocument1.getDateProvided(),
-        identityDocument2.getDateProvided());
-
+        identityDocument2.getDateProvided(),
+        "The date provided values for the identity documents do not match");
     assertEquals(
-        "The IDs for the identity documents do not match",
         identityDocument1.getId(),
-        identityDocument2.getId());
-
+        identityDocument2.getId(),
+        "The ID values for the identity documents do not match");
     assertEquals(
-        "The numbers for the identity documents do not match",
         identityDocument1.getNumber(),
-        identityDocument2.getNumber());
-
+        identityDocument2.getNumber(),
+        "The number values for the identity documents do not match");
     assertEquals(
-        "The parties for the identity documents do not match",
         identityDocument1.getParty(),
-        identityDocument2.getParty());
-
+        identityDocument2.getParty(),
+        "The party values for the identity documents do not match");
     assertEquals(
-        "The types for the identity documents do not match",
         identityDocument1.getType(),
-        identityDocument2.getType());
+        identityDocument2.getType(),
+        "The type values for the identity documents do not match");
   }
 
   private void compareLanguageProficiencies(
       LanguageProficiency languageProficiency1, LanguageProficiency languageProficiency2) {
     assertEquals(
-        "The languages for the language proficiencies do not match",
         languageProficiency1.getLanguage(),
-        languageProficiency2.getLanguage());
-
+        languageProficiency2.getLanguage(),
+        "The language values for the language proficiencies do not match");
     assertEquals(
-        "The listen levels for the language proficiencies do not match",
         languageProficiency1.getListenLevel(),
-        languageProficiency2.getListenLevel());
-
+        languageProficiency2.getListenLevel(),
+        "The listen level values for the language proficiencies do not match");
     assertEquals(
-        "The persons for the language proficiencies do not match",
         languageProficiency1.getPerson(),
-        languageProficiency2.getPerson());
-
+        languageProficiency2.getPerson(),
+        "The person values for the language proficiencies do not match");
     assertEquals(
-        "The read levels for the language proficiencies do not match",
         languageProficiency1.getReadLevel(),
-        languageProficiency2.getReadLevel());
-
+        languageProficiency2.getReadLevel(),
+        "The read level values for the language proficiencies do not match");
     assertEquals(
-        "The speak levels for the language proficiencies do not match",
         languageProficiency1.getSpeakLevel(),
-        languageProficiency2.getSpeakLevel());
-
+        languageProficiency2.getSpeakLevel(),
+        "The speak level values for the language proficiencies do not match");
     assertEquals(
-        "The write levels for the language proficiencies do not match",
         languageProficiency1.getWriteLevel(),
-        languageProficiency2.getWriteLevel());
+        languageProficiency2.getWriteLevel(),
+        "The write level values for the language proficiencies do not match");
   }
 
   private void compareLocks(Lock lock1, Lock lock2) {
     assertEquals(
-        "The effective from values for the locks do not match",
         lock1.getEffectiveFrom(),
-        lock2.getEffectiveFrom());
-
+        lock2.getEffectiveFrom(),
+        "The effective from values for the locks do not match");
     assertEquals(
-        "The effective to values for the locks do not match",
         lock1.getEffectiveTo(),
-        lock2.getEffectiveTo());
-
-    assertEquals("The parties for the locks do not match", lock1.getParty(), lock2.getParty());
-
-    assertEquals("The types for the locks do not match", lock1.getType(), lock2.getType());
+        lock2.getEffectiveTo(),
+        "The effective to values for the locks do not match");
+    assertEquals(lock1.getParty(), lock2.getParty(), "The party values for the locks do not match");
+    assertEquals(lock1.getType(), lock2.getType(), "The type values for the locks do not match");
   }
 
   private void compareOrganizations(Organization organization1, Organization organization2) {
     assertEquals(
-        "The countries of tax residence values for the organizations do not match",
         organization1.getCountriesOfTaxResidence(),
-        organization2.getCountriesOfTaxResidence());
+        organization2.getCountriesOfTaxResidence(),
+        "The countries of tax residence values for the organizations do not match");
     assertEquals(
-        "The ID values for the organizations do not match",
         organization1.getId(),
-        organization2.getId());
+        organization2.getId(),
+        "The ID values for the organizations do not match");
     assertEquals(
-        "The name values for the organizations do not match",
         organization1.getName(),
-        organization2.getName());
+        organization2.getName(),
+        "The name values for the organizations do not match");
     assertEquals(
-        "The tenant ID values for the organizations do not match",
         organization1.getTenantId(),
-        organization2.getTenantId());
+        organization2.getTenantId(),
+        "The tenant ID values for the organizations do not match");
 
     assertEquals(
-        "The number of attributes for the organizations do not match",
         organization1.getAttributes().size(),
-        organization2.getAttributes().size());
+        organization2.getAttributes().size(),
+        "The number of attributes for the organizations do not match");
 
     for (Attribute organization1Attribute : organization1.getAttributes()) {
       boolean foundAttribute = false;
@@ -2810,9 +2770,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of contact mechanisms for the organizations do not match",
         organization1.getContactMechanisms().size(),
-        organization2.getContactMechanisms().size());
+        organization2.getContactMechanisms().size(),
+        "The number of contact mechanisms for the organizations do not match");
 
     for (ContactMechanism organization1ContactMechanism : organization1.getContactMechanisms()) {
       boolean foundContactMechanism = false;
@@ -2840,9 +2800,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of identity documents for the organizations do not match",
         organization1.getIdentityDocuments().size(),
-        organization2.getIdentityDocuments().size());
+        organization2.getIdentityDocuments().size(),
+        "The number of identity documents for the organizations do not match");
 
     for (IdentityDocument organization1IdentityDocument : organization1.getIdentityDocuments()) {
       boolean foundIdentityDocument = false;
@@ -2869,9 +2829,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of locks for the organizations do not match",
         organization1.getLocks().size(),
-        organization2.getLocks().size());
+        organization2.getLocks().size(),
+        "The number of locks for the organizations do not match");
 
     for (Lock organization1Lock : organization1.getLocks()) {
       boolean foundLock = false;
@@ -2892,9 +2852,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of physical addresses for the organizations do not match",
         organization1.getPhysicalAddresses().size(),
-        organization2.getPhysicalAddresses().size());
+        organization2.getPhysicalAddresses().size(),
+        "The number of physical addresses for the organizations do not match");
 
     for (PhysicalAddress organization1PhysicalAddress : organization1.getPhysicalAddresses()) {
       boolean foundPhysicalAddress = false;
@@ -2917,9 +2877,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of preferences for the organizations do not match",
         organization1.getPreferences().size(),
-        organization2.getPreferences().size());
+        organization2.getPreferences().size(),
+        "The number of preferences for the organizations do not match");
 
     for (Preference organization1Preference : organization1.getPreferences()) {
       boolean foundPreference = false;
@@ -2941,9 +2901,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of statuses for the organizations do not match",
         organization1.getStatuses().size(),
-        organization2.getStatuses().size());
+        organization2.getStatuses().size(),
+        "The number of statuses for the organizations do not match");
 
     for (Status organization1Status : organization1.getStatuses()) {
       boolean foundStatus = false;
@@ -2964,9 +2924,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of tax numbers for the organizations do not match",
         organization1.getTaxNumbers().size(),
-        organization2.getTaxNumbers().size());
+        organization2.getTaxNumbers().size(),
+        "The number of tax numbers for the organizations do not match");
 
     for (TaxNumber organization1TaxNumber : organization1.getTaxNumbers()) {
       boolean foundTaxNumber = false;
@@ -2975,17 +2935,17 @@ public class PartyServiceTest {
         if (organization1TaxNumber.getId().equals(organization2TaxNumber.getId())) {
 
           assertEquals(
-              "The country of issue for the tax numbers do not match",
               organization1TaxNumber.getCountryOfIssue(),
-              organization2TaxNumber.getCountryOfIssue());
+              organization2TaxNumber.getCountryOfIssue(),
+              "The country of issue values for the tax numbers do not match");
           assertEquals(
-              "The numbers for the tax numbers do not match",
               organization1TaxNumber.getNumber(),
-              organization2TaxNumber.getNumber());
+              organization2TaxNumber.getNumber(),
+              "The number values for the tax numbers do not match");
           assertEquals(
-              "The types for the tax numbers do not match",
               organization1TaxNumber.getType(),
-              organization2TaxNumber.getType());
+              organization2TaxNumber.getType(),
+              "The type values for the tax numbers do not match");
 
           foundTaxNumber = true;
         }
@@ -2998,116 +2958,128 @@ public class PartyServiceTest {
   }
 
   private void compareParties(Party party1, Party party2) {
-    assertEquals("The ID values for the parties do not match", party1.getId(), party2.getId());
+    assertEquals(party1.getId(), party2.getId(), "The ID values for the parties do not match");
     assertEquals(
-        "The tenant IDs for the parties do not match", party1.getTenantId(), party2.getTenantId());
-    assertEquals("The types for the parties do not match", party1.getType(), party2.getType());
-    assertEquals("The names for the parties do not match", party1.getName(), party2.getName());
+        party1.getTenantId(),
+        party2.getTenantId(),
+        "The tenant ID values for the parties do not match");
+    assertEquals(
+        party1.getType(), party2.getType(), "The type values for the parties do not match");
+    assertEquals(
+        party1.getName(), party2.getName(), "The name values for the parties do not match");
   }
 
   private void comparePersons(Person person1, Person person2) {
     assertEquals(
-        "The countries of citizenship for the persons do not match",
         person1.getCountriesOfCitizenship(),
-        person2.getCountriesOfCitizenship());
+        person2.getCountriesOfCitizenship(),
+        "The countries of citizenship values for the persons do not match");
     assertEquals(
-        "The countries of tax residence for the persons do not match",
         person1.getCountriesOfTaxResidence(),
-        person2.getCountriesOfTaxResidence());
+        person2.getCountriesOfTaxResidence(),
+        "The countries of tax residence values for the persons do not match");
     assertEquals(
-        "The countries of birth for the persons do not match",
         person1.getCountryOfBirth(),
-        person2.getCountryOfBirth());
+        person2.getCountryOfBirth(),
+        "The country of birth values for the persons do not match");
     assertEquals(
-        "The countries of residence for the persons do not match",
         person1.getCountryOfResidence(),
-        person2.getCountryOfResidence());
+        person2.getCountryOfResidence(),
+        "The country of residence values for the persons do not match");
     assertEquals(
-        "The dates of birth for the persons do not match",
         person1.getDateOfBirth(),
-        person2.getDateOfBirth());
+        person2.getDateOfBirth(),
+        "The date of birth values for the persons do not match");
     assertEquals(
-        "The dates of death for the persons do not match",
         person1.getDateOfDeath(),
-        person2.getDateOfDeath());
+        person2.getDateOfDeath(),
+        "The date of death values for the persons do not match");
     assertEquals(
-        "The employment statuses for the persons do not match",
         person1.getEmploymentStatus(),
-        person2.getEmploymentStatus());
+        person2.getEmploymentStatus(),
+        "The employment status values for the persons do not match");
     assertEquals(
-        "The employment types for the persons do not match",
         person1.getEmploymentType(),
-        person2.getEmploymentType());
+        person2.getEmploymentType(),
+        "The employment type values for the persons do not match");
     assertEquals(
-        "The genders for the persons do not match", person1.getGender(), person2.getGender());
+        person1.getGender(), person2.getGender(), "The gender values for the persons do not match");
     assertEquals(
-        "The given names for the persons do not match",
         person1.getGivenName(),
-        person2.getGivenName());
-    assertEquals("The IDs for the persons do not match", person1.getId(), person2.getId());
+        person2.getGivenName(),
+        "The given name values for the persons do not match");
+    assertEquals(person1.getId(), person2.getId(), "The ID values for the persons do not match");
     assertEquals(
-        "The initials for the persons do not match", person1.getInitials(), person2.getInitials());
+        person1.getInitials(),
+        person2.getInitials(),
+        "The initials values for the persons do not match");
     assertEquals(
-        "The languages for the persons do not match", person1.getLanguage(), person2.getLanguage());
+        person1.getLanguage(),
+        person2.getLanguage(),
+        "The language values for the persons do not match");
     assertEquals(
-        "The maiden names for the persons do not match",
         person1.getMaidenName(),
-        person2.getMaidenName());
+        person2.getMaidenName(),
+        "The maiden name values for the persons do not match");
     assertEquals(
-        "The marital statuses for the persons do not match",
         person1.getMaritalStatus(),
-        person2.getMaritalStatus());
+        person2.getMaritalStatus(),
+        "The marital status values for the persons do not match");
     assertEquals(
-        "The marital status dates for the persons do not match",
         person1.getMaritalStatusDate(),
-        person2.getMaritalStatusDate());
+        person2.getMaritalStatusDate(),
+        "The marital status date values for the persons do not match");
     assertEquals(
-        "The marriage types for the persons do not match",
         person1.getMarriageType(),
-        person2.getMarriageType());
+        person2.getMarriageType(),
+        "The marriage type values for the persons do not match");
     assertEquals(
-        "The measurement systems for the persons do not match",
         person1.getMeasurementSystem(),
-        person2.getMeasurementSystem());
+        person2.getMeasurementSystem(),
+        "The measurement system values for the persons do not match");
     assertEquals(
-        "The middle names for the persons do not match",
         person1.getMiddleNames(),
-        person2.getMiddleNames());
-    assertEquals("The names for the persons do not match", person1.getName(), person2.getName());
+        person2.getMiddleNames(),
+        "The middle names values for the persons do not match");
     assertEquals(
-        "The occupations for the persons do not match",
+        person1.getName(), person2.getName(), "The name values for the persons do not match");
+    assertEquals(
         person1.getOccupation(),
-        person2.getOccupation());
+        person2.getOccupation(),
+        "The occupation values for the persons do not match");
     assertEquals(
-        "The preferred names for the persons do not match",
         person1.getPreferredName(),
-        person2.getPreferredName());
+        person2.getPreferredName(),
+        "The preferred name values for the persons do not match");
     assertEquals(
-        "The race values for the persons do not match", person1.getRace(), person2.getRace());
+        person1.getRace(), person2.getRace(), "The race values for the persons do not match");
     assertEquals(
-        "The residency statuses for the persons do not match",
         person1.getResidencyStatus(),
-        person2.getResidencyStatus());
+        person2.getResidencyStatus(),
+        "The residency status values for the persons do not match");
     assertEquals(
-        "The residential types for the persons do not match",
         person1.getResidentialType(),
-        person2.getResidentialType());
+        person2.getResidentialType(),
+        "The residential type values for the persons do not match");
     assertEquals(
-        "The surnames for the persons do not match", person1.getSurname(), person2.getSurname());
+        person1.getSurname(),
+        person2.getSurname(),
+        "The surname values for the persons do not match");
     assertEquals(
-        "The tenant IDs for the persons do not match",
         person1.getTenantId(),
-        person2.getTenantId());
+        person2.getTenantId(),
+        "The tenant ID values for the persons do not match");
     assertEquals(
-        "The time zones for the persons do not match",
         person1.getTimeZone(),
-        person2.getTimeZone());
-    assertEquals("The titles for the persons do not match", person1.getTitle(), person2.getTitle());
+        person2.getTimeZone(),
+        "The time zone values for the persons do not match");
+    assertEquals(
+        person1.getTitle(), person2.getTitle(), "The title values for the persons do not match");
 
     assertEquals(
-        "The number of attributes for the persons do not match",
         person1.getAttributes().size(),
-        person2.getAttributes().size());
+        person2.getAttributes().size(),
+        "The number of attributes for the persons do not match");
 
     for (Attribute person1Attribute : person1.getAttributes()) {
       boolean foundAttribute = false;
@@ -3128,9 +3100,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of consents for the persons do not match",
         person1.getConsents().size(),
-        person2.getConsents().size());
+        person2.getConsents().size(),
+        "The number of consents for the persons do not match");
 
     for (Consent person1Consent : person1.getConsents()) {
       boolean foundConsent = false;
@@ -3151,9 +3123,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of contact mechanisms for the persons do not match",
         person1.getContactMechanisms().size(),
-        person2.getContactMechanisms().size());
+        person2.getContactMechanisms().size(),
+        "The number of contact mechanisms for the persons do not match");
 
     for (ContactMechanism person1ContactMechanism : person1.getContactMechanisms()) {
       boolean foundContactMechanism = false;
@@ -3180,9 +3152,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of educations for the persons do not match",
         person1.getEducations().size(),
-        person2.getEducations().size());
+        person2.getEducations().size(),
+        "The number of educations for the persons do not match");
 
     for (Education person1Education : person1.getEducations()) {
       boolean foundEducation = false;
@@ -3202,9 +3174,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of employments for the persons do not match",
         person1.getEmployments().size(),
-        person2.getEmployments().size());
+        person2.getEmployments().size(),
+        "The number of employments for the persons do not match");
 
     for (Employment person1Employment : person1.getEmployments()) {
       boolean foundEmployment = false;
@@ -3224,9 +3196,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of identity documents for the persons do not match",
         person1.getIdentityDocuments().size(),
-        person2.getIdentityDocuments().size());
+        person2.getIdentityDocuments().size(),
+        "The number of identity documents for the persons do not match");
 
     for (IdentityDocument person1IdentityDocument : person1.getIdentityDocuments()) {
       boolean foundIdentityDocument = false;
@@ -3246,9 +3218,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of locks for the persons do not match",
         person1.getLocks().size(),
-        person2.getLocks().size());
+        person2.getLocks().size(),
+        "The number of locks for the persons do not match");
 
     for (Lock person1Lock : person1.getLocks()) {
       boolean foundLock = false;
@@ -3269,9 +3241,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of physical addresses for the persons do not match",
         person1.getPhysicalAddresses().size(),
-        person2.getPhysicalAddresses().size());
+        person2.getPhysicalAddresses().size(),
+        "The number of physical addresses for the persons do not match");
 
     for (PhysicalAddress person1PhysicalAddress : person1.getPhysicalAddresses()) {
       boolean foundPhysicalAddress = false;
@@ -3292,9 +3264,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of preferences for the persons do not match",
         person1.getPreferences().size(),
-        person2.getPreferences().size());
+        person2.getPreferences().size(),
+        "The number of preferences for the persons do not match");
 
     for (Preference person1Preference : person1.getPreferences()) {
       boolean foundPreference = false;
@@ -3315,9 +3287,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of residence permits for the persons do not match",
         person1.getResidencePermits().size(),
-        person2.getResidencePermits().size());
+        person2.getResidencePermits().size(),
+        "The number of residence permits for the persons do not match");
 
     for (ResidencePermit person1ResidencePermit : person1.getResidencePermits()) {
       boolean foundResidencePermit = false;
@@ -3337,9 +3309,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of roles for the persons do not match",
         person1.getRoles().size(),
-        person2.getRoles().size());
+        person2.getRoles().size(),
+        "The number of roles for the persons do not match");
 
     for (Role person1Role : person1.getRoles()) {
       boolean foundRole = false;
@@ -3348,9 +3320,9 @@ public class PartyServiceTest {
         if (person1Role.getType().equals(person2Role.getType())) {
 
           assertEquals(
-              "The purpose for the roles do not match",
               person1Role.getPurpose(),
-              person2Role.getPurpose());
+              person2Role.getPurpose(),
+              "The purpose values for the roles do not match");
 
           foundRole = true;
         }
@@ -3362,9 +3334,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of statuses for the persons do not match",
         person1.getStatuses().size(),
-        person2.getStatuses().size());
+        person2.getStatuses().size(),
+        "The number of statuses for the persons do not match");
 
     for (Status person1Status : person1.getStatuses()) {
       boolean foundStatus = false;
@@ -3385,9 +3357,9 @@ public class PartyServiceTest {
     }
 
     assertEquals(
-        "The number of tax numbers for the persons do not match",
         person1.getTaxNumbers().size(),
-        person2.getTaxNumbers().size());
+        person2.getTaxNumbers().size(),
+        "The number of tax numbers for the persons do not match");
 
     for (TaxNumber person1TaxNumber : person1.getTaxNumbers()) {
       boolean foundTaxNumber = false;
@@ -3395,18 +3367,7 @@ public class PartyServiceTest {
       for (TaxNumber person2TaxNumber : person2.getTaxNumbers()) {
         if (person1TaxNumber.getId().equals(person2TaxNumber.getId())) {
 
-          assertEquals(
-              "The country of issue for the tax numbers do not match",
-              person1TaxNumber.getCountryOfIssue(),
-              person2TaxNumber.getCountryOfIssue());
-          assertEquals(
-              "The numbers for the tax numbers do not match",
-              person1TaxNumber.getNumber(),
-              person2TaxNumber.getNumber());
-          assertEquals(
-              "The types for the tax numbers do not match",
-              person1TaxNumber.getType(),
-              person2TaxNumber.getType());
+          compareTaxNumbers(person1TaxNumber, person2TaxNumber);
 
           foundTaxNumber = true;
         }
@@ -3421,264 +3382,228 @@ public class PartyServiceTest {
   private void comparePhysicalAddresses(
       PhysicalAddress physicalAddress1, PhysicalAddress physicalAddress2) {
     assertEquals(
-        "The building floors for the physical addresses do not match",
         physicalAddress1.getBuildingFloor(),
-        physicalAddress2.getBuildingFloor());
-
+        physicalAddress2.getBuildingFloor(),
+        "The building floor values for the physical addresses do not match");
     assertEquals(
-        "The building names for the physical addresses do not match",
         physicalAddress1.getBuildingName(),
-        physicalAddress2.getBuildingName());
-
+        physicalAddress2.getBuildingName(),
+        "The building name values for the physical addresses do not match");
     assertEquals(
-        "The building rooms for the physical addresses do not match",
         physicalAddress1.getBuildingRoom(),
-        physicalAddress2.getBuildingRoom());
-
+        physicalAddress2.getBuildingRoom(),
+        "The building room values for the physical addresses do not match");
     assertEquals(
-        "The cities for the physical addresses do not match",
         physicalAddress1.getCity(),
-        physicalAddress2.getCity());
-
+        physicalAddress2.getCity(),
+        "The city values for the physical addresses do not match");
     assertEquals(
-        "The complex names for the physical addresses do not match",
         physicalAddress1.getComplexName(),
-        physicalAddress2.getComplexName());
-
+        physicalAddress2.getComplexName(),
+        "The complex name values for the physical addresses do not match");
     assertEquals(
-        "The complex units values for the physical addresses do not match",
         physicalAddress1.getComplexUnitNumber(),
-        physicalAddress2.getComplexUnitNumber());
-
+        physicalAddress2.getComplexUnitNumber(),
+        "The complex unit number values for the physical addresses do not match");
     assertEquals(
-        "The farm descriptions for the physical addresses do not match",
         physicalAddress1.getFarmDescription(),
-        physicalAddress2.getFarmDescription());
-
+        physicalAddress2.getFarmDescription(),
+        "The farm description values for the physical addresses do not match");
     assertEquals(
-        "The farm names for the physical addresses do not match",
         physicalAddress1.getFarmName(),
-        physicalAddress2.getFarmName());
-
+        physicalAddress2.getFarmName(),
+        "The farm name values for the physical addresses do not match");
     assertEquals(
-        "The farm numbers for the physical addresses do not match",
         physicalAddress1.getFarmNumber(),
-        physicalAddress2.getFarmNumber());
-
+        physicalAddress2.getFarmNumber(),
+        "The farm number values for the physical addresses do not match");
     assertEquals(
-        "The line 1 values for the physical addresses do not match",
         physicalAddress1.getLine1(),
-        physicalAddress2.getLine1());
-
+        physicalAddress2.getLine1(),
+        "The line 1 values for the physical addresses do not match");
     assertEquals(
-        "The line 2 values for the physical addresses do not match",
         physicalAddress1.getLine2(),
-        physicalAddress2.getLine2());
-
+        physicalAddress2.getLine2(),
+        "The line 2 values for the physical addresses do not match");
     assertEquals(
-        "The line 3 values for the physical addresses do not match",
         physicalAddress1.getLine3(),
-        physicalAddress2.getLine3());
-
+        physicalAddress2.getLine3(),
+        "The line 3 values for the physical addresses do not match");
     assertEquals(
-        "The parties for the physical addresses do not match",
         physicalAddress1.getParty(),
-        physicalAddress2.getParty());
-
+        physicalAddress2.getParty(),
+        "The party values for the physical addresses do not match");
     assertEquals(
-        "The purposes for the physical addresses do not match",
         physicalAddress1.getPurposes(),
-        physicalAddress2.getPurposes());
-
+        physicalAddress2.getPurposes(),
+        "The purpose values for the physical addresses do not match");
     assertEquals(
-        "The regions for the physical addresses do not match",
         physicalAddress1.getRegion(),
-        physicalAddress2.getRegion());
-
+        physicalAddress2.getRegion(),
+        "The region values for the physical addresses do not match");
     assertEquals(
-        "The site blocks for the physical addresses do not match",
         physicalAddress1.getSiteBlock(),
-        physicalAddress2.getSiteBlock());
-
+        physicalAddress2.getSiteBlock(),
+        "The site block values for the physical addresses do not match");
     assertEquals(
-        "The site numbers for the physical addresses do not match",
         physicalAddress1.getSiteNumber(),
-        physicalAddress2.getSiteNumber());
-
+        physicalAddress2.getSiteNumber(),
+        "The site number values for the physical addresses do not match");
     assertEquals(
-        "The street names for the physical addresses do not match",
         physicalAddress1.getStreetName(),
-        physicalAddress2.getStreetName());
-
+        physicalAddress2.getStreetName(),
+        "The street name values for the physical addresses do not match");
     assertEquals(
-        "The street numbers for the physical addresses do not match",
         physicalAddress1.getStreetNumber(),
-        physicalAddress2.getStreetNumber());
-
+        physicalAddress2.getStreetNumber(),
+        "The street number values for the physical addresses do not match");
     assertEquals(
-        "The suburbs for the physical addresses do not match",
         physicalAddress1.getSuburb(),
-        physicalAddress2.getSuburb());
-
+        physicalAddress2.getSuburb(),
+        "The suburb values for the physical addresses do not match");
     assertEquals(
-        "The types for the physical addresses do not match",
         physicalAddress1.getType(),
-        physicalAddress2.getType());
+        physicalAddress2.getType(),
+        "The type values for the physical addresses do not match");
   }
 
   private void comparePreferences(Preference preference1, Preference preference2) {
     assertEquals(
-        "The parties for the preferences do not match",
         preference1.getParty(),
-        preference2.getParty());
-
+        preference2.getParty(),
+        "The party values for the preferences do not match");
     assertEquals(
-        "The types for the preferences do not match", preference1.getType(), preference2.getType());
-
+        preference1.getType(),
+        preference2.getType(),
+        "The type values for the preferences do not match");
     assertEquals(
-        "The values for the preferences do not match",
         preference1.getValue(),
-        preference2.getValue());
+        preference2.getValue(),
+        "The value values for the preferences do not match");
   }
 
   private void compareResidencePermits(
       ResidencePermit residencePermit1, ResidencePermit residencePermit2) {
     assertEquals(
-        "The countries of issue for the residence permits do not match",
         residencePermit1.getCountryOfIssue(),
-        residencePermit2.getCountryOfIssue());
-
+        residencePermit2.getCountryOfIssue(),
+        "The country of issue values for the residence permits do not match");
     assertEquals(
-        "The dates of expiry for the residence permits do not match",
         residencePermit1.getDateOfExpiry(),
-        residencePermit2.getDateOfExpiry());
-
+        residencePermit2.getDateOfExpiry(),
+        "The date of expiry values for the residence permits do not match");
     assertEquals(
-        "The dates of issue for the residence permits do not match",
         residencePermit1.getDateOfIssue(),
-        residencePermit2.getDateOfIssue());
-
+        residencePermit2.getDateOfIssue(),
+        "The date of issue values for the residence permits do not match");
     assertEquals(
-        "The IDs for the residence permits do not match",
         residencePermit1.getId(),
-        residencePermit2.getId());
-
+        residencePermit2.getId(),
+        "The ID values for the residence permits do not match");
     assertEquals(
-        "The numbers for the residence permits do not match",
         residencePermit1.getNumber(),
-        residencePermit2.getNumber());
-
+        residencePermit2.getNumber(),
+        "The number values for the residence permits do not match");
     assertEquals(
-        "The persons for the residence permits do not match",
         residencePermit1.getPerson(),
-        residencePermit1.getPerson());
-
+        residencePermit1.getPerson(),
+        "The person values for the residence permits do not match");
     assertEquals(
-        "The types for the residence permits do not match",
         residencePermit1.getType(),
-        residencePermit2.getType());
+        residencePermit2.getType(),
+        "The type values for the residence permits do not match");
   }
 
   private void compareRoles(Role role1, Role role2) {
     assertEquals(
-        "The effective from values for the roles do not match",
         role1.getEffectiveFrom(),
-        role2.getEffectiveFrom());
-
+        role2.getEffectiveFrom(),
+        "The effective from values for the roles do not match");
     assertEquals(
-        "The effective to values for the roles do not match",
         role1.getEffectiveTo(),
-        role2.getEffectiveTo());
-
-    assertEquals("The parties for the roles do not match", role1.getParty(), role2.getParty());
-
-    assertEquals("The types for the roles do not match", role1.getType(), role2.getType());
+        role2.getEffectiveTo(),
+        "The effective to values for the roles do not match");
+    assertEquals(role1.getParty(), role2.getParty(), "The party values for the roles do not match");
+    assertEquals(role1.getType(), role2.getType(), "The type values for the roles do not match");
   }
 
   private void compareSourcesOfFunds(SourceOfFunds sourceOfFunds1, SourceOfFunds sourceOfFunds2) {
     assertEquals(
-        "The effective from values for the sources of funds do not match",
         sourceOfFunds1.getEffectiveFrom(),
-        sourceOfFunds2.getEffectiveFrom());
-
+        sourceOfFunds2.getEffectiveFrom(),
+        "The effective from values for the sources of funds do not match");
     assertEquals(
-        "The effective to values for the sources of funds do not match",
         sourceOfFunds1.getEffectiveTo(),
-        sourceOfFunds2.getEffectiveTo());
-
+        sourceOfFunds2.getEffectiveTo(),
+        "The effective to values for the sources of funds do not match");
     assertEquals(
-        "The persons for the sources of funds do not match",
         sourceOfFunds1.getPerson(),
-        sourceOfFunds2.getPerson());
-
+        sourceOfFunds2.getPerson(),
+        "The person values for the sources of funds do not match");
     assertEquals(
-        "The percentages for the sources of funds do not match",
         sourceOfFunds1.getPercentage(),
-        sourceOfFunds2.getPercentage());
-
+        sourceOfFunds2.getPercentage(),
+        "The percentage values for the sources of funds do not match");
     assertEquals(
-        "The types for the sources of funds do not match",
         sourceOfFunds1.getType(),
-        sourceOfFunds2.getType());
+        sourceOfFunds2.getType(),
+        "The type values for the sources of funds do not match");
   }
 
   private void compareSourcesOfWealth(
       SourceOfWealth sourceOfWealth1, SourceOfWealth sourceOfWealth2) {
     assertEquals(
-        "The effective from values for the sources of wealth do not match",
         sourceOfWealth1.getEffectiveFrom(),
-        sourceOfWealth2.getEffectiveFrom());
+        sourceOfWealth2.getEffectiveFrom(),
+        "The effective from values for the sources of wealth do not match");
 
     assertEquals(
-        "The effective to values for the sources of wealth do not match",
         sourceOfWealth1.getEffectiveTo(),
-        sourceOfWealth2.getEffectiveTo());
+        sourceOfWealth2.getEffectiveTo(),
+        "The effective to values for the sources of wealth do not match");
 
     assertEquals(
-        "The persons for the sources of wealth do not match",
         sourceOfWealth1.getPerson(),
-        sourceOfWealth2.getPerson());
+        sourceOfWealth2.getPerson(),
+        "The person values for the sources of wealth do not match");
 
     assertEquals(
-        "The types for the sources of wealth do not match",
         sourceOfWealth1.getType(),
-        sourceOfWealth2.getType());
+        sourceOfWealth2.getType(),
+        "The type values for the sources of wealth do not match");
   }
 
   private void compareStatuses(Status status1, Status status2) {
     assertEquals(
-        "The effective from values for the statuses do not match",
         status1.getEffectiveFrom(),
-        status2.getEffectiveFrom());
-
+        status2.getEffectiveFrom(),
+        "The effective from values for the statuses do not match");
     assertEquals(
-        "The effective to values for the statuses do not match",
         status1.getEffectiveTo(),
-        status2.getEffectiveTo());
-
+        status2.getEffectiveTo(),
+        "The effective to values for the statuses do not match");
     assertEquals(
-        "The parties for the statuses do not match", status1.getParty(), status2.getParty());
-
-    assertEquals("The types for the statuses do not match", status1.getType(), status2.getType());
+        status1.getParty(), status2.getParty(), "The party values for the statuses do not match");
+    assertEquals(
+        status1.getType(), status2.getType(), "The type valuess for the statuses do not match");
   }
 
   private void compareTaxNumbers(TaxNumber taxNumber1, TaxNumber taxNumber2) {
     assertEquals(
-        "The countries of issue for the tax numbers do not match",
         taxNumber1.getCountryOfIssue(),
-        taxNumber2.getCountryOfIssue());
-
+        taxNumber2.getCountryOfIssue(),
+        "The country of issue values for the tax numbers do not match");
     assertEquals(
-        "The numbers for the tax numbers do not match",
         taxNumber1.getNumber(),
-        taxNumber2.getNumber());
-
+        taxNumber2.getNumber(),
+        "The number values for the tax numbers do not match");
     assertEquals(
-        "The parties for the tax numbers do not match",
         taxNumber1.getParty(),
-        taxNumber2.getParty());
-
+        taxNumber2.getParty(),
+        "The party values for the tax numbers do not match");
     assertEquals(
-        "The types for the tax numbers do not match", taxNumber1.getType(), taxNumber2.getType());
+        taxNumber1.getType(),
+        taxNumber2.getType(),
+        "The type values for the tax numbers do not match");
   }
 }

@@ -493,6 +493,7 @@
 
   <modules>
     <!-- Inception Modules -->
+    <module>inception-api</module>
     <module>inception-application</module>
     <module>inception-audit</module>
     <module>inception-bmi</module>
@@ -525,7 +526,6 @@
     <module>inception-reporting</module>
     <module>inception-reporting-api</module>
     <module>inception-reporting-ws</module>
-    <module>inception-api</module>
     <module>inception-oauth2-authorization-server</module>
     <module>inception-oauth2-resource-server</module>
     <module>inception-scheduler</module>

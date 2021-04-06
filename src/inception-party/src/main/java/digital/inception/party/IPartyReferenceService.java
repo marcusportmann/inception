@@ -555,6 +555,17 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
+   * Check whether the measurement unit is valid for the attribute type with the specified code.
+   *
+   * @param attributeTypeCode the code for the attribute type
+   * @param measurementUnit the measurement unit
+   * @return <b>true</b> if the measurement unit is valid for the attribute type with the specified
+   *     code or <b>false</b> otherwise
+   */
+  boolean isValidMeasurementUnitForAttributeType(
+      String attributeTypeCode, MeasurementUnit measurementUnit) throws ServiceUnavailableException;
+
+  /**
    * Check whether the code is a valid code for a next of kin type.
    *
    * @param nextOfKinTypeCode the code for the next of kin type

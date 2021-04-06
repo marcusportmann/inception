@@ -16,24 +16,25 @@
 
 package digital.inception.sms.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.sms.ISMSService;
 import digital.inception.sms.SMS;
 import digital.inception.sms.SMSStatus;
-import digital.inception.test.TestClassRunner;
+import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.Optional;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -45,7 +46,8 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@RunWith(TestClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
@@ -129,14 +131,14 @@ public class SMSServiceTest {
     smsQueuedForSendingOptional.ifPresent(
         smsQueuedForSending -> {
           assertEquals(
-              "The send attempts for the SMS is not correct",
               Integer.valueOf(1),
-              smsQueuedForSending.getSendAttempts());
+              smsQueuedForSending.getSendAttempts(),
+              "The send attempts for the SMS is not correct");
 
           assertEquals(
-              "The status for the SMS is not correct",
               SMSStatus.SENDING,
-              smsQueuedForSending.getStatus());
+              smsQueuedForSending.getStatus(),
+              "The status for the SMS is not correct");
         });
 
     smsService.resetSMSLocks(SMSStatus.SENDING, SMSStatus.FAILED);
@@ -144,44 +146,41 @@ public class SMSServiceTest {
     retrievedSMS = smsService.getSMS(sms.getId());
 
     assertEquals(
-        "The status for the SMS is not correct", SMSStatus.FAILED, retrievedSMS.getStatus());
-    assertNull("The lock name for the SMS is not null", retrievedSMS.getLockName());
+        SMSStatus.FAILED, retrievedSMS.getStatus(), "The status for the SMS is not correct");
+    assertNull(retrievedSMS.getLockName(), "The lock name for the SMS is not null");
 
     smsService.setSMSStatus(sms.getId(), SMSStatus.SENT);
 
     retrievedSMS = smsService.getSMS(sms.getId());
 
-    assertEquals("The status for the SMS is not correct", SMSStatus.SENT, retrievedSMS.getStatus());
+    assertEquals(SMSStatus.SENT, retrievedSMS.getStatus(), "The status for the SMS is not correct");
 
     smsService.unlockSMS(sms.getId(), SMSStatus.FAILED);
 
     retrievedSMS = smsService.getSMS(sms.getId());
 
     assertEquals(
-        "The status for the SMS is not correct", SMSStatus.FAILED, retrievedSMS.getStatus());
+        SMSStatus.FAILED, retrievedSMS.getStatus(), "The status for the SMS is not correct");
   }
 
   private void compareSMSs(SMS sms1, SMS sms2) {
-    assertEquals("The ID values for the SMSs do not match", sms1.getId(), sms2.getId());
+    assertEquals(sms1.getId(), sms2.getId(), "The ID values for the SMSs do not match");
     assertEquals(
-        "The mobile number values for the SMSs do not match",
         sms1.getMobileNumber(),
-        sms2.getMobileNumber());
+        sms2.getMobileNumber(),
+        "The mobile number values for the SMSs do not match");
     assertEquals(
-        "The message values for the SMSs do not match", sms1.getMessage(), sms2.getMessage());
+        sms1.getMessage(), sms2.getMessage(), "The message values for the SMSs do not match");
+    assertEquals(sms1.getStatus(), sms2.getStatus(), "The status values for the SMSs do not match");
     assertEquals(
-        "The status values for the SMSs do not match", sms1.getStatus(), sms2.getStatus());
-    assertEquals(
-        "The send attempts values for the SMSs do not match",
         sms1.getSendAttempts(),
-        sms2.getSendAttempts());
+        sms2.getSendAttempts(),
+        "The send attempts values for the SMSs do not match");
     assertEquals(
-        "The lock name values for the SMSs do not match",
-        sms1.getLockName(),
-        sms2.getLockName());
+        sms1.getLockName(), sms2.getLockName(), "The lock name values for the SMSs do not match");
     assertEquals(
-        "The last processed values for the SMSs do not match",
         sms1.getLastProcessed(),
-        sms2.getLastProcessed());
+        sms2.getLastProcessed(),
+        "The last processed values for the SMSs do not match");
   }
 }

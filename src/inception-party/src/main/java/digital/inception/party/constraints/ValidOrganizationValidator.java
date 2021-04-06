@@ -84,6 +84,8 @@ public class ValidOrganizationValidator extends PartyValidator
       try {
         // Validate attributes
         for (Attribute attribute : organization.getAttributes()) {
+          boolean isReservedAttribute = false;
+
           for (String reservedAttributeTypeCode : Attribute.RESERVED_ATTRIBUTE_TYPE_CODES) {
             if (reservedAttributeTypeCode.equalsIgnoreCase(attribute.getType())) {
               hibernateConstraintValidatorContext
@@ -95,7 +97,41 @@ public class ValidOrganizationValidator extends PartyValidator
                   .inIterable()
                   .addConstraintViolation();
 
+              isReservedAttribute = true;
               isValid = false;
+              break;
+            }
+          }
+          if (!isReservedAttribute) {
+            if (!getPartyReferenceService()
+                .isValidAttributeType(organization.getType().code(), attribute.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("attributeType", attribute.getType())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidAttributeType.message}")
+                  .addPropertyNode("attributes")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            } else {
+              if (!getPartyReferenceService()
+                  .isValidMeasurementUnitForAttributeType(
+                      attribute.getType(), attribute.getUnit())) {
+                hibernateConstraintValidatorContext
+                    .addMessageParameter(
+                        "unit", (attribute.getUnit() != null) ? attribute.getUnit().code() : "")
+                    .addMessageParameter("attributeType", attribute.getType())
+                    .buildConstraintViolationWithTemplate(
+                        "{digital.inception.party.constraints.ValidOrganization.invalidUnitForAttributeType.message}")
+                    .addPropertyNode("attributes")
+                    .addPropertyNode("unit")
+                    .inIterable()
+                    .addConstraintViolation();
+
+                isValid = false;
+              }
             }
           }
         }

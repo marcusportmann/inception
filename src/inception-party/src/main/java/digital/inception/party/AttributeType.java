@@ -54,13 +54,23 @@ import org.springframework.util.StringUtils;
   "sortIndex",
   "name",
   "description",
-  "partyTypes"
+  "partyTypes",
+  "unitType"
 })
 @XmlRootElement(name = "AttributeType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "AttributeType",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "category", "localeId", "sortIndex", "name", "description", "partyTypes"})
+    propOrder = {
+      "code",
+      "category",
+      "localeId",
+      "sortIndex",
+      "name",
+      "description",
+      "partyTypes",
+      "unitType"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "attribute_types")
@@ -134,6 +144,13 @@ public class AttributeType implements Serializable {
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
+
+  /** The measurement unit type for the attribute type. */
+  @Schema(description = "The measurement unit type for the attribute type")
+  @JsonProperty
+  @XmlElement(name = "UnitType")
+  @Column(name = "unit_type", length = 30)
+  private MeasurementUnitType unitType;
 
   /** Constructs a new <b>AttributeType</b>. */
   public AttributeType() {}
@@ -232,6 +249,15 @@ public class AttributeType implements Serializable {
   }
 
   /**
+   * Returns the measurement unit type for the attribute type.
+   *
+   * @return the measurement unit type for the attribute type
+   */
+  public MeasurementUnitType getUnitType() {
+    return unitType;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -323,5 +349,14 @@ public class AttributeType implements Serializable {
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the measurement unit type for the attribute type.
+   *
+   * @param unitType the measurement unit type for the attribute type
+   */
+  public void setUnitType(MeasurementUnitType unitType) {
+    this.unitType = unitType;
   }
 }

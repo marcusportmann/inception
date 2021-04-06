@@ -16,22 +16,23 @@
 
 package digital.inception.config.test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.config.Config;
 import digital.inception.config.IConfigService;
-import digital.inception.test.TestClassRunner;
+import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -42,7 +43,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
-@RunWith(TestClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
@@ -107,11 +109,9 @@ public class ConfigServiceTest {
     byte[] value = configService.getBinary(TEST_BINARY_KEY);
 
     assertArrayEquals(
-        "The required Binary value was not retrieved for the config key ("
-            + TEST_BINARY_KEY
-            + ")",
         TEST_BINARY_VALUE,
-        value);
+        value,
+        "The required Binary value was not retrieved for the config key (" + TEST_BINARY_KEY + ")");
 
     configService.setConfig(
         TEST_BINARY_KEY, TEST_BINARY_UPDATED_VALUE, TEST_DESCRIPTION + " Updated");
@@ -123,20 +123,20 @@ public class ConfigServiceTest {
     value = configService.getBinary(TEST_BINARY_KEY);
 
     assertArrayEquals(
+        TEST_BINARY_UPDATED_VALUE,
+        value,
         "The required updated Binary value was not retrieved for the config key ("
             + TEST_BINARY_KEY
-            + ")",
-        TEST_BINARY_UPDATED_VALUE,
-        value);
+            + ")");
 
     value = configService.getBinary(TEST_BINARY_KEY, new byte[0]);
 
     assertArrayEquals(
+        TEST_BINARY_UPDATED_VALUE,
+        value,
         "The required updated Binary value was not retrieved for the config key ("
             + TEST_BINARY_KEY
-            + ")",
-        TEST_BINARY_UPDATED_VALUE,
-        value);
+            + ")");
   }
 
   /** Test the <b>Boolean</b> config. */
@@ -149,42 +149,38 @@ public class ConfigServiceTest {
     configService.setConfig(TEST_BOOLEAN_KEY, TEST_BOOLEAN_VALUE, TEST_DESCRIPTION);
 
     if (!configService.keyExists(TEST_BOOLEAN_KEY)) {
-      fail(
-          "Failed to confirm that the Boolean config key (" + TEST_BOOLEAN_KEY + ") exists");
+      fail("Failed to confirm that the Boolean config key (" + TEST_BOOLEAN_KEY + ") exists");
     }
 
     boolean value = configService.getBoolean(TEST_BOOLEAN_KEY);
 
     assertEquals(
+        TEST_BOOLEAN_VALUE,
+        value,
         "The required Boolean value was not retrieved for the config key ("
             + TEST_BOOLEAN_KEY
-            + ")",
-        TEST_BOOLEAN_VALUE,
-        value);
+            + ")");
 
     boolean booleanValue = configService.getBoolean(TEST_BOOLEAN_KEY, false);
 
     assertEquals(
-        "The required double value was not retrieved for the config key ("
-            + booleanValue
-            + ")",
         TEST_BOOLEAN_VALUE,
-        booleanValue);
+        booleanValue,
+        "The required double value was not retrieved for the config key (" + booleanValue + ")");
 
     configService.setConfig(TEST_BOOLEAN_KEY, false, TEST_DESCRIPTION + " Updated");
 
     if (!configService.keyExists(TEST_BOOLEAN_KEY)) {
-      fail(
-          "Failed to confirm that the Boolean config key (" + TEST_BOOLEAN_KEY + ") exists");
+      fail("Failed to confirm that the Boolean config key (" + TEST_BOOLEAN_KEY + ") exists");
     }
 
     value = configService.getBoolean(TEST_BOOLEAN_KEY);
 
     assertFalse(
+        value,
         "The required updated Boolean value was not retrieved for the config key ("
             + TEST_BOOLEAN_KEY
-            + ")",
-        value);
+            + ")");
   }
 
   /** Test the <b>Config</b> config. */
@@ -200,19 +196,16 @@ public class ConfigServiceTest {
     config.setValue(TEST_CONFIGURATION_VALUE);
     config.setDescription(TEST_DESCRIPTION);
 
-    configService.setConfig(
-        config.getKey(), config.getValue(), config.getDescription());
+    configService.setConfig(config.getKey(), config.getValue(), config.getDescription());
 
-    Config retrievedConfig =
-        configService.getConfig(TEST_CONFIGURATION_KEY);
+    Config retrievedConfig = configService.getConfig(TEST_CONFIGURATION_KEY);
 
     compareConfig(config, retrievedConfig);
 
     config.setValue(TEST_CONFIGURATION_VALUE + " Updated");
     config.setDescription(TEST_DESCRIPTION + " Updated");
 
-    configService.setConfig(
-        config.getKey(), config.getValue(), config.getDescription());
+    configService.setConfig(config.getKey(), config.getValue(), config.getDescription());
 
     retrievedConfig = configService.getConfig(TEST_CONFIGURATION_KEY);
 
@@ -241,22 +234,18 @@ public class ConfigServiceTest {
     Double value = configService.getDouble(TEST_DOUBLE_KEY);
 
     assertEquals(
-        "The required Double value was not retrieved for the config key ("
-            + TEST_DOUBLE_KEY
-            + ")",
         TEST_DOUBLE_VALUE,
         value,
-        0.0);
+        0.0,
+        "The required Double value was not retrieved for the config key (" + TEST_DOUBLE_KEY + ")");
 
     double doubleValue = configService.getDouble(TEST_DOUBLE_KEY, 666.666);
 
     assertEquals(
-        "The required double value was not retrieved for the config key ("
-            + doubleValue
-            + ")",
         TEST_DOUBLE_VALUE,
         doubleValue,
-        0.0);
+        0.0,
+        "The required double value was not retrieved for the config key (" + doubleValue + ")");
 
     configService.setConfig(
         TEST_DOUBLE_KEY, TEST_DOUBLE_VALUE + 1.1, TEST_DESCRIPTION + " Updated");
@@ -268,12 +257,12 @@ public class ConfigServiceTest {
     value = configService.getDouble(TEST_DOUBLE_KEY);
 
     assertEquals(
-        "The required updated Double value was not retrieved for the config key ("
-            + TEST_DOUBLE_KEY
-            + ")",
         TEST_DOUBLE_VALUE + 1.1,
         value,
-        0.0);
+        0.0,
+        "The required updated Double value was not retrieved for the config key ("
+            + TEST_DOUBLE_KEY
+            + ")");
   }
 
   /** Test the filtered configs. */
@@ -285,18 +274,15 @@ public class ConfigServiceTest {
       fail("Failed to confirm that the config key (" + TEST_FILTERED_KEY + ") exists");
     }
 
-    List<Config> filteredConfigs =
-        configService.getFilteredConfigs("testfiltered");
+    List<Config> filteredConfigs = configService.getFilteredConfigs("testfiltered");
 
     assertEquals(
-        "The required number of filtered configs was not retrieved",
-        1,
-        filteredConfigs.size());
+        1, filteredConfigs.size(), "The required number of filtered configs was not retrieved");
 
     assertEquals(
-        "The required filtered configs (" + TEST_STRING_VALUE + ") was not retrieved",
         TEST_STRING_VALUE,
-        filteredConfigs.get(0).getValue());
+        filteredConfigs.get(0).getValue(),
+        "The required filtered configs (" + TEST_STRING_VALUE + ") was not retrieved");
   }
 
   /** Test the <b>Integer</b> config. */
@@ -309,44 +295,42 @@ public class ConfigServiceTest {
     configService.setConfig(TEST_INTEGER_KEY, TEST_INTEGER_VALUE, TEST_DESCRIPTION);
 
     if (!configService.keyExists(TEST_INTEGER_KEY)) {
-      fail(
-          "Failed to confirm that the Integer config key (" + TEST_INTEGER_KEY + ") exists");
+      fail("Failed to confirm that the Integer config key (" + TEST_INTEGER_KEY + ") exists");
     }
 
     Integer value = configService.getInteger(TEST_INTEGER_KEY);
 
     assertEquals(
+        TEST_INTEGER_VALUE,
+        value,
         "The required Integer value was not retrieved for the Integer config key ("
             + TEST_INTEGER_KEY
-            + ")",
-        TEST_INTEGER_VALUE,
-        value);
+            + ")");
 
     int integerValue = configService.getInteger(TEST_INTEGER_KEY, 666);
 
     assertEquals(
+        (int) TEST_INTEGER_VALUE,
+        integerValue,
         "The required integer value was not retrieved for the Integer config key ("
             + TEST_INTEGER_KEY
-            + ")",
-        (int) TEST_INTEGER_VALUE,
-        integerValue);
+            + ")");
 
     configService.setConfig(
         TEST_INTEGER_KEY, TEST_INTEGER_VALUE + 1, TEST_DESCRIPTION + " Updated");
 
     if (!configService.keyExists(TEST_INTEGER_KEY)) {
-      fail(
-          "Failed to confirm that the Integer config key (" + TEST_INTEGER_KEY + ") exists");
+      fail("Failed to confirm that the Integer config key (" + TEST_INTEGER_KEY + ") exists");
     }
 
     value = configService.getInteger(TEST_INTEGER_KEY);
 
     assertEquals(
+        TEST_INTEGER_VALUE + 1,
+        value.intValue(),
         "The required updated Integer value was not retrieved for the config key ("
             + TEST_INTEGER_KEY
-            + ")",
-        TEST_INTEGER_VALUE + 1,
-        value.intValue());
+            + ")");
   }
 
   /** Test the <b>Long</b> config. */
@@ -365,23 +349,22 @@ public class ConfigServiceTest {
     Long value = configService.getLong(TEST_LONG_KEY);
 
     assertEquals(
+        TEST_LONG_VALUE,
+        value,
         "The required Long value was not retrieved for the Long config key ("
             + TEST_LONG_KEY
-            + ")",
-        TEST_LONG_VALUE,
-        value);
+            + ")");
 
     Long longValue = configService.getLong(TEST_LONG_KEY, 666);
 
     assertEquals(
+        TEST_LONG_VALUE,
+        longValue,
         "The required Long value was not retrieved for the Long config key ("
             + TEST_LONG_KEY
-            + ")",
-        TEST_LONG_VALUE,
-        longValue);
+            + ")");
 
-    configService.setConfig(
-        TEST_LONG_KEY, TEST_LONG_VALUE + 1, TEST_DESCRIPTION + " Updated");
+    configService.setConfig(TEST_LONG_KEY, TEST_LONG_VALUE + 1, TEST_DESCRIPTION + " Updated");
 
     if (!configService.keyExists(TEST_LONG_KEY)) {
       fail("Failed to confirm that the Long config key (" + TEST_LONG_KEY + ") exists");
@@ -390,11 +373,11 @@ public class ConfigServiceTest {
     value = configService.getLong(TEST_LONG_KEY);
 
     assertEquals(
+        TEST_LONG_VALUE + 1L,
+        value.longValue(),
         "The required updated Long value was not retrieved for the config key ("
             + TEST_LONG_KEY
-            + ")",
-        TEST_LONG_VALUE + 1L,
-        value.longValue());
+            + ")");
   }
 
   /** Test the <b>String</b> config. */
@@ -413,11 +396,11 @@ public class ConfigServiceTest {
     String value = configService.getString(TEST_STRING_KEY);
 
     assertEquals(
+        TEST_STRING_VALUE,
+        value,
         "The required String value was not retrieved for the String config key ("
             + TEST_STRING_KEY
-            + ")",
-        TEST_STRING_VALUE,
-        value);
+            + ")");
 
     configService.setConfig(
         TEST_STRING_KEY, TEST_STRING_VALUE + "Updated", TEST_DESCRIPTION + " Updated");
@@ -429,19 +412,16 @@ public class ConfigServiceTest {
     value = configService.getString(TEST_STRING_KEY);
 
     assertEquals(
+        TEST_STRING_VALUE + "Updated",
+        value,
         "The required updated String value was not retrieved for the config key ("
             + TEST_STRING_KEY
-            + ")",
-        TEST_STRING_VALUE + "Updated",
-        value);
+            + ")");
 
     configService.deleteConfig(TEST_STRING_KEY);
 
     if (configService.keyExists(TEST_STRING_KEY)) {
-      fail(
-          "Failed to confirm that the String config key ("
-              + TEST_STRING_KEY
-              + ") does not exist");
+      fail("Failed to confirm that the String config key (" + TEST_STRING_KEY + ") does not exist");
     }
 
     value = configService.getString(TEST_STRING_KEY, "DEFAULT VALUE");
@@ -455,17 +435,12 @@ public class ConfigServiceTest {
   }
 
   private void compareConfig(Config config1, Config config2) {
+    assertEquals(config1.getKey(), config2.getKey(), "The key values for the codes do not match");
     assertEquals(
-        "The key values for the codes do not match",
-        config1.getKey(),
-        config2.getKey());
+        config1.getValue(), config2.getValue(), "The value values for the codes do not match");
     assertEquals(
-        "The value values for the codes do not match",
-        config1.getValue(),
-        config2.getValue());
-    assertEquals(
-        "The description values for the codes do not match",
         config1.getDescription(),
-        config2.getDescription());
+        config2.getDescription(),
+        "The description values for the codes do not match");
   }
 }

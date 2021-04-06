@@ -685,7 +685,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
       throw new UserDirectoryNotFoundException(user.getUserDirectoryId());
     }
 
-    if (getUserDirectoryIdForUser(user.getUsername()) != null) {
+    if (getUserDirectoryIdForUser(user.getUsername()).isPresent()) {
       throw new DuplicateUserException(user.getUsername());
     }
 

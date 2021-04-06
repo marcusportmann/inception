@@ -95,6 +95,8 @@ public class ValidPersonValidator extends PartyValidator
       try {
         // Validate attributes
         for (Attribute attribute : person.getAttributes()) {
+          boolean isReservedAttribute = false;
+
           for (String reservedAttributeTypeCode : Attribute.RESERVED_ATTRIBUTE_TYPE_CODES) {
             if (reservedAttributeTypeCode.equalsIgnoreCase(attribute.getType())) {
               hibernateConstraintValidatorContext
@@ -106,7 +108,42 @@ public class ValidPersonValidator extends PartyValidator
                   .inIterable()
                   .addConstraintViolation();
 
+              isReservedAttribute = true;
               isValid = false;
+              break;
+            }
+          }
+
+          if (!isReservedAttribute) {
+            if (!getPartyReferenceService()
+                .isValidAttributeType(person.getType().code(), attribute.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("attributeType", attribute.getType())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidAttributeType.message}")
+                  .addPropertyNode("attributes")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            } else {
+              if (!getPartyReferenceService()
+                  .isValidMeasurementUnitForAttributeType(
+                      attribute.getType(), attribute.getUnit())) {
+                hibernateConstraintValidatorContext
+                    .addMessageParameter(
+                        "unit", (attribute.getUnit() != null) ? attribute.getUnit().code() : "")
+                    .addMessageParameter("attributeType", attribute.getType())
+                    .buildConstraintViolationWithTemplate(
+                        "{digital.inception.party.constraints.ValidPerson.invalidUnitForAttributeType.message}")
+                    .addPropertyNode("attributes")
+                    .addPropertyNode("unit")
+                    .inIterable()
+                    .addConstraintViolation();
+
+                isValid = false;
+              }
             }
           }
         }

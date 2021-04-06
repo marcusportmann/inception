@@ -16,6 +16,7 @@
 
 package digital.inception.application.test;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,8 +29,10 @@ import javax.persistence.Table;
  * @author Marcus Portmann
  */
 @Entity
-@Table(schema = "TEST", name = "TEST_DATA")
-public class TestData {
+@Table(schema = "test", name = "test_data")
+public class TestData implements Serializable {
+
+  private static final long serialVersionUID = 1000000;
 
   /** The ID. */
   @Id

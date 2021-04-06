@@ -38,6 +38,7 @@ CREATE TABLE party.attribute_types (
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
   party_types VARCHAR(310) NOT NULL,
+  unit_type   VARCHAR(30),
 
   PRIMARY KEY (code, locale_id),
   CONSTRAINT attribute_types_attribute_type_category_fk FOREIGN KEY (category, locale_id) REFERENCES party.attribute_type_categories(code, locale_id) ON DELETE CASCADE
@@ -60,6 +61,8 @@ COMMENT ON COLUMN party.attribute_types.name IS 'The name of the attribute type'
 COMMENT ON COLUMN party.attribute_types.description IS 'The description for the attribute type';
 
 COMMENT ON COLUMN party.attribute_types.party_types IS 'The comma-delimited list of codes for the party types the attribute type is associated with';
+
+COMMENT ON COLUMN party.attribute_types.unit_type IS 'The code for the measurement unit type for the attribute type';
 
 
 CREATE TABLE party.consent_types (
@@ -1795,25 +1798,33 @@ COMMENT ON COLUMN party.tax_numbers.updated IS 'The date and time the tax number
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('anthropometric_measurements', 'en-US', 0, 'Anthropometric Measurements', 'Anthropometric Measurements');
+  VALUES ('anthropometric_measurements', 'en-US', 1, 'Anthropometric Measurements', 'Anthropometric Measurements');
+INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-US', 666, 'Test', 'Test');
 
 INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
   VALUES ('anthropometric_measurements', 'en-ZA', 1, 'Anthropometric Measurements', 'Anthropometric Measurements');
+INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-ZA', 666, 'Test', 'Test');
 
 
 INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('anthropometric_measurements','bmi', 'en-US', 101, 'Body Mass Index', 'Body Mass Index', 'person');
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types, unit_type)
+  VALUES ('anthropometric_measurements','height', 'en-US', 102, 'Height', 'Height', 'person', 'length');
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types, unit_type)
+  VALUES ('anthropometric_measurements','weight', 'en-US', 103, 'Weight', 'Weight', 'person', 'mass');
 INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','height', 'en-US', 102, 'Height', 'Height', 'person');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','weight', 'en-US', 103, 'Weight', 'Weight', 'person');
+  VALUES ('test','test_attribute_name', 'en-US', 66601, 'Test Attribute Name', 'Test Attribute Name', 'organization,person');
 
 INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('anthropometric_measurements','bmi', 'en-ZA', 101, 'Body Mass Index', 'Body Mass Index', 'person');
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types, unit_type)
+  VALUES ('anthropometric_measurements','height', 'en-ZA', 102, 'Height', 'Height', 'person', 'length');
+INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types, unit_type)
+  VALUES ('anthropometric_measurements','weight', 'en-ZA', 103, 'Weight', 'Weight', 'person', 'mass');
 INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','height', 'en-ZA', 102, 'Height', 'Height', 'person');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','weight', 'en-ZA', 103, 'Weight', 'Weight', 'person');
+  VALUES ('test','test_attribute_name', 'en-ZA', 66601, 'Test Attribute Name', 'Test Attribute Name', 'organization,person');
 
 
 INSERT INTO party.consent_types(code, locale_id, sort_index, name, description)
@@ -2844,14 +2855,14 @@ INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, descri
 INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
   VALUES ('kyc', 'en-US', 2, 'KYC', 'Know Your Customer');
 INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-US', 99, 'Test Lock Category', 'Test Lock Category');
+  VALUES ('test', 'en-US', 666, 'Test Lock Category', 'Test Lock Category');
 
 INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
   VALUES ('fraud', 'en-ZA', 1, 'Fraud', 'Fraud');
 INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
   VALUES ('kyc', 'en-ZA', 2, 'KYC', 'Know Your Customer');
 INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-ZA', 99, 'Test Lock Category', 'Test Lock Category');
+  VALUES ('test', 'en-ZA', 666, 'Test Lock Category', 'Test Lock Category');
 
 
 INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
@@ -2859,14 +2870,14 @@ INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, descri
 INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('kyc', 'kyc_unverified', 'en-US', 201, 'KYC Unverified', 'KYC Unverified', 'organization,person');
 INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test', 'test', 'en-US', 9901, 'Test Lock', 'Test Lock', 'organization,person');
+  VALUES ('test', 'test', 'en-US', 66601, 'Test Lock', 'Test Lock', 'organization,person');
 
 INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('fraud', 'suspected_fraud', 'en-ZA', 101, 'Suspected Fraud', 'Suspected Fraud', 'organization,person');
 INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('kyc', 'kyc_unverified', 'en-ZA', 201, 'KYC Unverified', 'KYC Unverified', 'organization,person');
 INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test', 'test', 'en-ZA', 9901, 'Test Lock', 'Test Lock', 'organization,person');
+  VALUES ('test', 'test', 'en-ZA', 66601, 'Test Lock', 'Test Lock', 'organization,person');
 
 
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
@@ -3224,12 +3235,12 @@ INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, des
 INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
   VALUES ('correspondence', 'en-US', 1, 'Correspondence', 'Correspondence');
 INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-US', 99, 'Test', 'Test');
+  VALUES ('test', 'en-US', 666, 'Test', 'Test');
 
 INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
   VALUES ('correspondence', 'en-ZA', 1, 'Correspondence', 'Correspondence');
 INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-ZA', 99, 'Test', 'Test');
+  VALUES ('test', 'en-ZA', 666, 'Test', 'Test');
 
 
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
@@ -3241,15 +3252,15 @@ INSERT INTO party.preference_types (category, code, locale_id, sort_index, name,
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('correspondence','time_to_contact', 'en-US', 104, 'Time To Contact', 'Suitable Time To Contact', 'person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_contact_mechanism_type', 'en-US', 9901, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
+  VALUES ('test','test_contact_mechanism_type', 'en-US', 66601, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_country', 'en-US', 9902, 'Test Country', 'Test Country', 'organization,person');
+  VALUES ('test','test_country', 'en-US', 66602, 'Test Country', 'Test Country', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_language', 'en-US', 9903, 'Test Language', 'Test Language', 'organization,person');
+  VALUES ('test','test_language', 'en-US', 66603, 'Test Language', 'Test Language', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_preference', 'en-US', 9904, 'Test Preference', 'Test Preference', 'organization,person');
+  VALUES ('test','test_preference', 'en-US', 66604, 'Test Preference', 'Test Preference', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_size', 'en-US', 9905, 'Test Size', 'Test Size', 'organization,person');
+  VALUES ('test','test_size', 'en-US', 66605, 'Test Size', 'Test Size', 'organization,person');
 
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('correspondence','contact_person', 'en-ZA', 101, 'Contact Person', 'Contact Person', 'organization');
@@ -3260,15 +3271,15 @@ INSERT INTO party.preference_types (category, code, locale_id, sort_index, name,
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('correspondence', 'time_to_contact', 'en-ZA', 104, 'Time To Contact', 'Suitable Time To Contact', 'person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_contact_mechanism_type', 'en-ZA', 9901, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
+  VALUES ('test','test_contact_mechanism_type', 'en-ZA', 66601, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_country', 'en-ZA', 9902, 'Test Country', 'Test Country', 'organization,person');
+  VALUES ('test','test_country', 'en-ZA', 66602, 'Test Country', 'Test Country', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_language', 'en-ZA', 9903, 'Test Language', 'Test Language', 'organization,person');
+  VALUES ('test','test_language', 'en-ZA', 66603, 'Test Language', 'Test Language', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_preference', 'en-ZA', 9904, 'Test Preference', 'Test Preference', 'organization,person');
+  VALUES ('test','test_preference', 'en-ZA', 66604, 'Test Preference', 'Test Preference', 'organization,person');
 INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_size', 'en-ZA', 9905, 'Test Size', 'Test Size', 'organization,person');
+  VALUES ('test','test_size', 'en-ZA', 66605, 'Test Size', 'Test Size', 'organization,person');
 
 
 INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
@@ -3452,10 +3463,10 @@ INSERT INTO party.residential_types (code, locale_id, sort_index, name, descript
 
 
 INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-US', 1, 'Test', 'Test');
+  VALUES ('test', 'en-US', 666, 'Test', 'Test');
 
 INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-ZA', 1, 'Test', 'Test');
+  VALUES ('test', 'en-ZA', 666, 'Test', 'Test');
 
 
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
@@ -3463,22 +3474,22 @@ INSERT INTO party.role_types (code, locale_id, sort_index, name, description, pa
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('vendor', 'en-US', 102, 'Vendor', 'Vendor', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_organization_role', 'en-US', 199, 'Test Organization Role', 'Test Organization Role', 'organization');
+  VALUES ('test_organization_role', 'en-US', 66601, 'Test Organization Role', 'Test Organization Role', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('employee', 'en-US', 201, 'Employee', 'Employee', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_person_role', 'en-US', 299, 'Test Person Role', 'Test Person Role', 'person');
+  VALUES ('test_person_role', 'en-US', 66602, 'Test Person Role', 'Test Person Role', 'person');
 
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('employer', 'en-ZA', 101, 'Employer', 'Employer', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('vendor', 'en-ZA', 102, 'Vendor', 'Vendor', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_organization_role', 'en-ZA', 199, 'Test Organization Role', 'Test Organization Role', 'organization');
+  VALUES ('test_organization_role', 'en-ZA', 66601, 'Test Organization Role', 'Test Organization Role', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('employee', 'en-ZA', 201, 'Employee', 'Employee', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_person_role', 'en-ZA', 299, 'Test Person Role', 'Test Person Role', 'person');
+  VALUES ('test_person_role', 'en-ZA', 66602, 'Test Person Role', 'Test Person Role', 'person');
 
 
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
@@ -3744,14 +3755,14 @@ INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, desc
 INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
   VALUES ('kyc', 'en-US', 2, 'KYC', 'Know Your Customer');
 INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-US', 99, 'Test', 'Test');
+  VALUES ('test', 'en-US', 666, 'Test', 'Test');
 
 INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
   VALUES ('fraud', 'en-ZA', 1, 'Fraud', 'Fraud');
 INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
   VALUES ('kyc', 'en-ZA', 2, 'KYC', 'Know Your Customer');
 INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-ZA', 99, 'Test', 'Test');
+  VALUES ('test', 'en-ZA', 666, 'Test', 'Test');
 
 
 INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
@@ -3759,14 +3770,14 @@ INSERT INTO party.status_types(category, code, locale_id, sort_index, name, desc
 INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('kyc', 'kyc_verified', 'en-US', 201, 'KYC Verified', 'KYC Verified', 'organization,person');
 INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test', 'test', 'en-US', 9901, 'Test Status', 'Test Status', 'organization,person');
+  VALUES ('test', 'test', 'en-US', 66601, 'Test Status', 'Test Status', 'organization,person');
 
 INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('fraud', 'fraud_investigation', 'en-ZA', 101, 'Fraud Investigation', 'Fraud Investigation', 'organization,person');
 INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
   VALUES ('kyc', 'kyc_verified', 'en-ZA', 201, 'KYC Verified', 'KYC Verified', 'organization,person');
 INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test', 'test', 'en-ZA', 9901, 'Test Status', 'Test Status', 'organization,person');
+  VALUES ('test', 'test', 'en-ZA', 66601, 'Test Status', 'Test Status', 'organization,person');
 
 
 INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)

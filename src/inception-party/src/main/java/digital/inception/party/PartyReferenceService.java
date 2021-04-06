@@ -18,6 +18,7 @@ package digital.inception.party;
 
 import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.cache.annotation.Cacheable;
@@ -1192,7 +1193,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getAttributeTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             attributeType ->
-                (attributeType.getCode().equals(attributeTypeCode)
+                (Objects.equals(attributeType.getCode(), attributeTypeCode)
                     && attributeType.isValidForPartyType(partyTypeCode)));
   }
 
@@ -1213,7 +1214,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getAttributeTypeCategories(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             attributeTypeCategory ->
-                attributeTypeCategory.getCode().equals(attributeTypeCategoryCode));
+                Objects.equals(attributeTypeCategory.getCode(), attributeTypeCategoryCode));
   }
 
   /**
@@ -1229,7 +1230,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getConsentTypes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(consentType -> consentType.getCode().equals(consentTypeCode));
+        .anyMatch(consentType -> Objects.equals(consentType.getCode(), consentTypeCode));
   }
 
   /**
@@ -1255,7 +1256,8 @@ public class PartyReferenceService implements IPartyReferenceService {
                 (contactMechanismPurpose.isValidForPartyType(partyTypeCode)
                     && contactMechanismPurpose.isValidForContactMechanismType(
                         contactMechanismTypeCode)
-                    && contactMechanismPurpose.getCode().equals(contactMechanismPurposeCode)));
+                    && Objects.equals(
+                        contactMechanismPurpose.getCode(), contactMechanismPurposeCode)));
   }
 
   /**
@@ -1282,7 +1284,7 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && contactMechanismRole
                         .getContactMechanismType()
                         .equals(contactMechanismTypeCode)
-                    && contactMechanismRole.getCode().equals(contactMechanismRoleCode)));
+                    && Objects.equals(contactMechanismRole.getCode(), contactMechanismRoleCode)));
   }
 
   /**
@@ -1302,7 +1304,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getContactMechanismTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             contactMechanismType ->
-                contactMechanismType.getCode().equals(contactMechanismTypeCode));
+                Objects.equals(contactMechanismType.getCode(), contactMechanismTypeCode));
   }
 
   /**
@@ -1320,7 +1322,8 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getEmploymentStatuses(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(employmentStatus -> employmentStatus.getCode().equals(employmentStatusCode));
+        .anyMatch(
+            employmentStatus -> Objects.equals(employmentStatus.getCode(), employmentStatusCode));
   }
 
   /**
@@ -1341,8 +1344,8 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getEmploymentTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             employmentType ->
-                (employmentType.getCode().equals(employmentTypeCode)
-                    && employmentType.getEmploymentStatus().equals(employmentStatusCode)));
+                (Objects.equals(employmentType.getCode(), employmentTypeCode)
+                    && Objects.equals(employmentType.getEmploymentStatus(), employmentStatusCode)));
   }
 
   /**
@@ -1360,7 +1363,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getEmploymentTypes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(employmentType -> employmentType.getCode().equals(employmentTypeCode));
+        .anyMatch(employmentType -> Objects.equals(employmentType.getCode(), employmentTypeCode));
   }
 
   /**
@@ -1376,7 +1379,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getFieldsOfStudy(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(fieldOfStudy -> fieldOfStudy.getCode().equals(fieldOfStudyCode));
+        .anyMatch(fieldOfStudy -> Objects.equals(fieldOfStudy.getCode(), fieldOfStudyCode));
   }
 
   /**
@@ -1392,7 +1395,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getGenders(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(gender -> gender.getCode().equals(genderCode));
+        .anyMatch(gender -> Objects.equals(gender.getCode(), genderCode));
   }
 
   /**
@@ -1413,7 +1416,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getIdentityDocumentTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             identityDocumentType ->
-                (identityDocumentType.getCode().equals(identityDocumentTypeCode)
+                (Objects.equals(identityDocumentType.getCode(), identityDocumentTypeCode)
                     && identityDocumentType.isValidForPartyType(partyTypeCode)));
   }
 
@@ -1434,7 +1437,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getLockTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             lockType ->
-                (lockType.getCode().equals(lockTypeCode)
+                (Objects.equals(lockType.getCode(), lockTypeCode)
                     && lockType.isValidForPartyType(partyTypeCode)));
   }
 
@@ -1453,7 +1456,8 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getLockTypeCategories(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(lockTypeCategory -> lockTypeCategory.getCode().equals(lockTypeCategoryCode));
+        .anyMatch(
+            lockTypeCategory -> Objects.equals(lockTypeCategory.getCode(), lockTypeCategoryCode));
   }
 
   /**
@@ -1469,7 +1473,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getMaritalStatuses(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(maritalStatus -> maritalStatus.getCode().equals(maritalStatusCode));
+        .anyMatch(maritalStatus -> Objects.equals(maritalStatus.getCode(), maritalStatusCode));
   }
 
   /**
@@ -1489,7 +1493,8 @@ public class PartyReferenceService implements IPartyReferenceService {
     // Find marriage types for the specified marital status
     List<MarriageType> marriageTypes =
         self.getMarriageTypes(DEFAULT_LOCALE_ID).stream()
-            .filter(marriageType -> marriageType.getMaritalStatus().equals(maritalStatusCode))
+            .filter(
+                marriageType -> Objects.equals(marriageType.getMaritalStatus(), maritalStatusCode))
             .collect(Collectors.toList());
 
     // If we have marriage types for the specified marital status then check if one matches
@@ -1497,11 +1502,35 @@ public class PartyReferenceService implements IPartyReferenceService {
       return marriageTypes.stream()
           .anyMatch(
               marriageType ->
-                  (marriageType.getCode().equals(marriageTypeCode)
-                      && marriageType.getMaritalStatus().equals(maritalStatusCode)));
+                  (Objects.equals(marriageType.getCode(), marriageTypeCode)
+                      && Objects.equals(marriageType.getMaritalStatus(), maritalStatusCode)));
     } else {
       return true;
     }
+  }
+
+  /**
+   * Check whether the measurement unit is valid for the attribute type with the specified code.
+   *
+   * @param attributeTypeCode the code for the attribute type
+   * @param measurementUnit the measurement unit
+   * @return <b>true</b> if the measurement unit is valid for the attribute type with the specified
+   *     code or <b>false</b> otherwise
+   */
+  public boolean isValidMeasurementUnitForAttributeType(
+      String attributeTypeCode, MeasurementUnit measurementUnit)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(attributeTypeCode)) {
+      return false;
+    }
+
+    return self.getAttributeTypes(DEFAULT_LOCALE_ID).stream()
+        .anyMatch(
+            attributeType ->
+                (Objects.equals(attributeType.getCode(), attributeTypeCode)
+                    && Objects.equals(
+                        attributeType.getUnitType(),
+                        (measurementUnit == null) ? null : measurementUnit.getType())));
   }
 
   /**
@@ -1518,7 +1547,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getNextOfKinTypes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(nextOfKinType -> nextOfKinType.getCode().equals(nextOfKinTypeCode));
+        .anyMatch(nextOfKinType -> Objects.equals(nextOfKinType.getCode(), nextOfKinTypeCode));
   }
 
   /**
@@ -1534,7 +1563,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getOccupations(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(occupation -> occupation.getCode().equals(occupationCode));
+        .anyMatch(occupation -> Objects.equals(occupation.getCode(), occupationCode));
   }
 
   /**
@@ -1555,7 +1584,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getPhysicalAddressPurposes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             physicalAddressPurpose ->
-                (physicalAddressPurpose.getCode().equals(physicalAddressPurposeCode)
+                (Objects.equals(physicalAddressPurpose.getCode(), physicalAddressPurposeCode)
                     && physicalAddressPurpose.isValidForPartyType(partyTypeCode)));
   }
 
@@ -1576,7 +1605,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getPhysicalAddressPurposes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             physicalAddressPurpose ->
-                physicalAddressPurpose.getCode().equals(physicalAddressPurposeCode));
+                Objects.equals(physicalAddressPurpose.getCode(), physicalAddressPurposeCode));
   }
 
   /**
@@ -1597,7 +1626,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getPhysicalAddressRoles(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             physicalAddressRole ->
-                (physicalAddressRole.getCode().equals(physicalAddressRoleCode)
+                (Objects.equals(physicalAddressRole.getCode(), physicalAddressRoleCode)
                     && physicalAddressRole.isValidForPartyType(partyTypeCode)));
   }
 
@@ -1617,7 +1646,8 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     return self.getPhysicalAddressRoles(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
-            physicalAddressRole -> physicalAddressRole.getCode().equals(physicalAddressRoleCode));
+            physicalAddressRole ->
+                Objects.equals(physicalAddressRole.getCode(), physicalAddressRoleCode));
   }
 
   /**
@@ -1636,7 +1666,8 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     return self.getPhysicalAddressTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
-            physicalAddressType -> physicalAddressType.getCode().equals(physicalAddressTypeCode));
+            physicalAddressType ->
+                Objects.equals(physicalAddressType.getCode(), physicalAddressTypeCode));
   }
 
   /**
@@ -1656,7 +1687,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getPreferenceTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             preferenceType ->
-                (preferenceType.getCode().equals(preferenceTypeCode)
+                (Objects.equals(preferenceType.getCode(), preferenceTypeCode)
                     && preferenceType.isValidForPartyType(partyTypeCode)));
   }
 
@@ -1677,7 +1708,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getPreferenceTypeCategories(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             preferenceTypeCategory ->
-                preferenceTypeCategory.getCode().equals(preferenceTypeCategoryCode));
+                Objects.equals(preferenceTypeCategory.getCode(), preferenceTypeCategoryCode));
   }
 
   /**
@@ -1695,7 +1726,9 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getQualificationTypes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(qualificationType -> qualificationType.getCode().equals(qualificationTypeCode));
+        .anyMatch(
+            qualificationType ->
+                Objects.equals(qualificationType.getCode(), qualificationTypeCode));
   }
 
   /**
@@ -1711,7 +1744,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getRaces(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(race -> race.getCode().equals(raceCode));
+        .anyMatch(race -> Objects.equals(race.getCode(), raceCode));
   }
 
   /**
@@ -1730,7 +1763,8 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     return self.getResidencePermitTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
-            residencePermitType -> residencePermitType.getCode().equals(residencePermitTypeCode));
+            residencePermitType ->
+                Objects.equals(residencePermitType.getCode(), residencePermitTypeCode));
   }
 
   /**
@@ -1748,7 +1782,8 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getResidencyStatuses(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(residencyStatus -> residencyStatus.getCode().equals(residencyStatusCode));
+        .anyMatch(
+            residencyStatus -> Objects.equals(residencyStatus.getCode(), residencyStatusCode));
   }
 
   /**
@@ -1766,7 +1801,8 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getResidentialTypes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(residentialType -> residentialType.getCode().equals(residentialTypeCode));
+        .anyMatch(
+            residentialType -> Objects.equals(residentialType.getCode(), residentialTypeCode));
   }
 
   /**
@@ -1782,7 +1818,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getRolePurposes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(rolePurpose -> rolePurpose.getCode().equals(rolePurposeCode));
+        .anyMatch(rolePurpose -> Objects.equals(rolePurpose.getCode(), rolePurposeCode));
   }
 
   /**
@@ -1802,7 +1838,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getRoleTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             roleType ->
-                (roleType.getCode().equals(roleTypeCode)
+                (Objects.equals(roleType.getCode(), roleTypeCode)
                     && roleType.isValidForPartyType(partyTypeCode)));
   }
 
@@ -1821,7 +1857,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getSourceOfFundsTypes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(sourceOfFunds -> sourceOfFunds.getCode().equals(sourceOfFundsTypeCode));
+        .anyMatch(sourceOfFunds -> Objects.equals(sourceOfFunds.getCode(), sourceOfFundsTypeCode));
   }
 
   /**
@@ -1839,7 +1875,8 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getSourceOfWealthTypes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(sourceOfWealth -> sourceOfWealth.getCode().equals(sourceOfWealthTypeCode));
+        .anyMatch(
+            sourceOfWealth -> Objects.equals(sourceOfWealth.getCode(), sourceOfWealthTypeCode));
   }
 
   /**
@@ -1859,7 +1896,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getStatusTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             statusType ->
-                (statusType.getCode().equals(statusTypeCode)
+                (Objects.equals(statusType.getCode(), statusTypeCode)
                     && statusType.isValidForPartyType(partyTypeCode)));
   }
 
@@ -1879,7 +1916,8 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     return self.getStatusTypeCategories(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
-            statusTypeCategory -> statusTypeCategory.getCode().equals(statusTypeCategoryCode));
+            statusTypeCategory ->
+                Objects.equals(statusTypeCategory.getCode(), statusTypeCategoryCode));
   }
 
   /**
@@ -1899,7 +1937,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     return self.getTaxNumberTypes(DEFAULT_LOCALE_ID).stream()
         .anyMatch(
             taxNumberType ->
-                taxNumberType.getCode().equals(taxNumberTypeCode)
+                Objects.equals(taxNumberType.getCode(), taxNumberTypeCode)
                     && taxNumberType.isValidForPartyType(partyTypeCode));
   }
 
@@ -1916,7 +1954,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getTimesToContact(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(timeToContact -> timeToContact.getCode().equals(timeToContactCode));
+        .anyMatch(timeToContact -> Objects.equals(timeToContact.getCode(), timeToContactCode));
   }
 
   /**
@@ -1932,6 +1970,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
 
     return self.getTitles(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(title -> title.getCode().equals(titleCode));
+        .anyMatch(title -> Objects.equals(title.getCode(), titleCode));
   }
 }

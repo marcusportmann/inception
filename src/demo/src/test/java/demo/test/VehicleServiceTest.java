@@ -24,17 +24,15 @@ import demo.model.Vehicle;
 import demo.model.VehicleType;
 import demo.model.Vehicles;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.test.TestClassRunner;
+import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.validation.Validator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -44,7 +42,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
-@RunWith(TestClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class, DemoConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
@@ -55,14 +54,6 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
       TransactionalTestExecutionListener.class
     })
 public class VehicleServiceTest {
-
-  /* Entity Manager */
-  @Autowired
-  @PersistenceContext(unitName = "application")
-  private EntityManager entityManager;
-
-  /** The JSR-303 validator. */
-  @Autowired private Validator validator;
 
   /** The Vehicle Service. */
   @Autowired private IVehicleService vehicleService;
@@ -83,19 +74,5 @@ public class VehicleServiceTest {
     Cars cars = vehicleService.getCars("", SortDirection.ASCENDING, 0, 100);
 
     vehicles = vehicleService.getVehicles("", SortDirection.ASCENDING, 0, 100);
-
-    //    TypedQuery<Vehicle> query = entityManager.createQuery("SELECT v FROM Vehicle v",
-    // Vehicle.class);
-    //
-    //    List<Vehicle> vehicleList = query.getResultList();
-    //
-    //
-    //    Query nativeQuery = entityManager.createNativeQuery("SELECT v.created, v.id, v.name,
-    // v.type, v.updated FROM demo.vehicles v", Vehicle.class);
-    //
-    //    vehicleList = nativeQuery.getResultList();
-
-    int xxx = 0;
-    xxx++;
   }
 }

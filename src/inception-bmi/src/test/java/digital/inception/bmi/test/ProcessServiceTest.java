@@ -16,15 +16,15 @@
 
 package digital.inception.bmi.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.bmi.CaseDefinitionSummary;
 import digital.inception.bmi.ICaseService;
 import digital.inception.bmi.IProcessService;
 import digital.inception.bmi.ProcessDefinitionSummary;
 import digital.inception.core.util.ResourceUtil;
-import digital.inception.test.TestClassRunner;
+import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
@@ -47,8 +47,8 @@ import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +56,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -66,7 +67,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
-@RunWith(TestClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
@@ -96,7 +98,7 @@ public class ProcessServiceTest {
   @Autowired private IProcessService processService;
 
   /** Test the case definition functionality. */
-  @Test
+  //@Test
   public void caseDefinitionTest() throws Exception {
     byte[] testCaseData = ResourceUtil.getClasspathResource("digital/inception/bmi/test/Test.cmmn");
 
@@ -142,14 +144,14 @@ public class ProcessServiceTest {
         processService.createProcessDefinition(testProcessV1Data);
 
     assertEquals(
-        "The correct number of process definitions was not retrieved for version 1 of the Inception.Test process definition",
         1,
-        processDefinitionSummaries.size());
+        processDefinitionSummaries.size(),
+        "The correct number of process definitions was not retrieved for version 1 of the Inception.Test process definition");
 
     assertEquals(
-        "The correct process definition ID was not retrieved for version 1 of the Inception.Test process definition",
         "Inception.Test",
-        processDefinitionSummaries.get(0).getId());
+        processDefinitionSummaries.get(0).getId(),
+        "The correct process definition ID was not retrieved for version 1 of the Inception.Test process definition");
 
     byte[] testProcessV2Data =
         ResourceUtil.getClasspathResource("digital/inception/bmi/test/TestV2.bpmn");
@@ -157,14 +159,14 @@ public class ProcessServiceTest {
     processDefinitionSummaries = processService.updateProcessDefinition(testProcessV2Data);
 
     assertEquals(
-        "The correct number of process definitions was not retrieved for version 2 of the Inception.Test process definition",
         1,
-        processDefinitionSummaries.size());
+        processDefinitionSummaries.size(),
+        "The correct number of process definitions was not retrieved for version 2 of the Inception.Test process definition");
 
     assertEquals(
-        "The correct process definition ID was not retrieved for version 2 of the Inception.Test process definition",
         "Inception.Test",
-        processDefinitionSummaries.get(0).getId());
+        processDefinitionSummaries.get(0).getId(),
+        "The correct process definition ID was not retrieved for version 2 of the Inception.Test process definition");
 
     List<ProcessDefinitionSummary> retrievedProcessDefinitionSummaries =
         processService.getProcessDefinitionSummaries();
@@ -190,8 +192,7 @@ public class ProcessServiceTest {
   }
 
   /** Test the process engine. */
-
-  // @Test
+  //@Test
   public void processEngineTest() throws Exception {
     byte[] testProcessV1Data =
         ResourceUtil.getClasspathResource("digital/inception/bmi/test/TestV1.bpmn");
@@ -200,14 +201,14 @@ public class ProcessServiceTest {
         processService.validateBPMN(testProcessV1Data);
 
     assertEquals(
-        "The correct number of process definitions was not retrieved for version 1 of the Inception.Test process definition",
         1,
-        processDefinitionSummaries.size());
+        processDefinitionSummaries.size(),
+        "The correct number of process definitions was not retrieved for version 1 of the Inception.Test process definition");
 
     assertEquals(
-        "The correct process definition ID was not retrieved for version 1 of the Inception.Test process definition",
         "Inception.Test",
-        processDefinitionSummaries.get(0).getId());
+        processDefinitionSummaries.get(0).getId(),
+        "The correct process definition ID was not retrieved for version 1 of the Inception.Test process definition");
 
     byte[] testProcessV2Data =
         ResourceUtil.getClasspathResource("digital/inception/bmi/test/TestV2.bpmn");
@@ -215,14 +216,14 @@ public class ProcessServiceTest {
     processDefinitionSummaries = processService.validateBPMN(testProcessV2Data);
 
     assertEquals(
-        "The correct number of process definitions was not retrieved for version 2 of the Inception.Test process definition",
         1,
-        processDefinitionSummaries.size());
+        processDefinitionSummaries.size(),
+        "The correct number of process definitions was not retrieved for version 2 of the Inception.Test process definition");
 
     assertEquals(
-        "The correct process definition ID was not retrieved for version 1 of the Inception.Test process",
         "Inception.Test",
-        processDefinitionSummaries.get(0).getId());
+        processDefinitionSummaries.get(0).getId(),
+        "The correct process definition ID was not retrieved for version 1 of the Inception.Test process");
 
     DeploymentBuilder processDeploymentV1 = processEngine.getRepositoryService().createDeployment();
     processDeploymentV1.addInputStream(
@@ -259,7 +260,7 @@ public class ProcessServiceTest {
     List<Job> jobs = jobQuery.list();
 
     assertEquals(
-        "Failed to find the job to asynchronously start the process instance", 1, jobs.size());
+        1, jobs.size(), "Failed to find the job to asynchronously start the process instance");
 
     for (Job job : jobs) {
       processEngine.getManagementService().executeJob(job.getId());
@@ -272,14 +273,14 @@ public class ProcessServiceTest {
 
     List<ProcessInstance> processInstances = processInstanceQuery.list();
 
-    assertEquals("Failed to find the running process instance", 1, processInstances.size());
+    assertEquals(1, processInstances.size(), "Failed to find the running process instance");
 
     // Retrieve the tasks for the Administrators group
     TaskQuery taskQuery =
         processEngine.getTaskService().createTaskQuery().taskCandidateGroup("Administrators");
     List<Task> tasks = taskQuery.list();
 
-    assertEquals("Failed to find the task for the Administrators group", 1, tasks.size());
+    assertEquals(1, tasks.size(), "Failed to find the task for the Administrators group");
 
     String taskId = tasks.get(0).getId();
 
@@ -287,41 +288,41 @@ public class ProcessServiceTest {
 
     tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
 
-    assertEquals("Failed to find the task", 1, tasks.size());
+    assertEquals(1, tasks.size(), "Failed to find the task");
     assertEquals(
-        "Failed to confirm that the task has been claimed by jack",
         "jack",
-        tasks.get(0).getAssignee());
+        tasks.get(0).getAssignee(),
+        "Failed to confirm that the task has been claimed by jack");
 
     processEngine.getTaskService().delegateTask(tasks.get(0).getId(), "jill");
 
     tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
 
-    assertEquals("Failed to find the task", 1, tasks.size());
+    assertEquals(1, tasks.size(), "Failed to find the task");
     assertEquals(
-        "Failed to confirm that the task has been assigned to jill",
         "jill",
-        tasks.get(0).getAssignee());
+        tasks.get(0).getAssignee(),
+        "Failed to confirm that the task has been assigned to jill");
 
     processEngine.getTaskService().resolveTask(tasks.get(0).getId());
 
     tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
 
-    assertEquals("Failed to find the task", 1, tasks.size());
+    assertEquals(1, tasks.size(), "Failed to find the task");
     assertEquals(
-        "Failed to confirm that the resolved task has been re-assigned to jack",
         "jack",
-        tasks.get(0).getAssignee());
+        tasks.get(0).getAssignee(),
+        "Failed to confirm that the resolved task has been re-assigned to jack");
 
     processEngine.getTaskService().setOwner(tasks.get(0).getId(), "jill");
 
     tasks = processEngine.getTaskService().createTaskQuery().taskId(taskId).list();
 
-    assertEquals("Failed to find the task", 1, tasks.size());
+    assertEquals(1, tasks.size(), "Failed to find the task");
     assertEquals(
-        "Failed to confirm that the task owner has been changed to to jill",
         "jill",
-        tasks.get(0).getOwner());
+        tasks.get(0).getOwner(),
+        "Failed to confirm that the task owner has been changed to to jill");
 
     processEngine.getTaskService().complete(taskId);
   }

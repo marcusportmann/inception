@@ -16,7 +16,7 @@
 
 package digital.inception.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -31,17 +31,17 @@ public class Assert {
   /**
    * Asserts that two LocalDateTime values are equal.
    *
-   * @param message the for message for the AssertionError
    * @param expected the expected value
    * @param actual the value to check
+   * @param message the for message for the AssertionError
    */
   public static void assertEqualsToMillisecond(
-      String message, LocalDateTime expected, LocalDateTime actual) {
+      LocalDateTime expected, LocalDateTime actual, String message) {
     if ((expected != null) && (actual != null)) {
       assertEquals(
-          message, expected.truncatedTo(ChronoUnit.MILLIS), actual.truncatedTo(ChronoUnit.MILLIS));
+          expected.truncatedTo(ChronoUnit.MILLIS), actual.truncatedTo(ChronoUnit.MILLIS), message);
     } else {
-      assertEquals(message, expected, actual);
+      assertEquals(expected, actual, message);
     }
   }
 }

@@ -105,6 +105,7 @@ public class TestConfiguration {
     // Core modules
     "digital/inception/core/inception-core-h2.sql",
     "digital/inception/application/inception-application-h2.sql",
+    "digital/inception/test/inception-test-h2.sql",
     // Utility modules
     "digital/inception/audit/inception-audit-h2.sql",
     "digital/inception/bmi/inception-bmi-h2.sql",

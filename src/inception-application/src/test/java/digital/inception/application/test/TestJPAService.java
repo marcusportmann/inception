@@ -39,7 +39,7 @@ public class TestJPAService implements ITestJPAService {
   private final PlatformTransactionManager transactionManager;
 
   /* Entity Manager */
-  @PersistenceContext(unitName = "application")
+  @PersistenceContext(unitName = "applicationTest")
   private EntityManager entityManager;
 
   /**

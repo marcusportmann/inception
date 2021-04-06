@@ -16,10 +16,10 @@
 
 package digital.inception.mail.test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.mail.IMailService;
@@ -27,18 +27,19 @@ import digital.inception.mail.MailTemplate;
 import digital.inception.mail.MailTemplateContentType;
 import digital.inception.mail.MailTemplateNotFoundException;
 import digital.inception.mail.MailTemplateSummary;
-import digital.inception.test.TestClassRunner;
+import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -49,7 +50,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
-@RunWith(TestClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
@@ -94,14 +96,14 @@ public class MailServiceTest {
 
     boolean mailTemplateExists = mailService.mailTemplateExists(mailTemplate.getId());
 
-    assertTrue("The mail template does not exist", mailTemplateExists);
+    assertTrue(mailTemplateExists, "The mail template does not exist");
 
     String retrievedMailTemplateName = mailService.getMailTemplateName(mailTemplate.getId());
 
     assertEquals(
-        "The correct mail template name was not retrieved",
         mailTemplate.getName(),
-        retrievedMailTemplateName);
+        retrievedMailTemplateName,
+        "The correct mail template name was not retrieved");
 
     mailTemplate.setName("Updated " + mailTemplate.getName());
 
@@ -113,11 +115,11 @@ public class MailServiceTest {
 
     mailTemplateExists = mailService.mailTemplateExists(mailTemplate.getId());
 
-    assertTrue("The updated mail template does not exist", mailTemplateExists);
+    assertTrue(mailTemplateExists, "The updated mail template does not exist");
 
     List<MailTemplate> mailTemplates = mailService.getMailTemplates();
 
-    assertEquals("The correct number of mail templates was not retrieved", 1, mailTemplates.size());
+    assertEquals(1, mailTemplates.size(), "The correct number of mail templates was not retrieved");
 
     compareMailTemplates(mailTemplate, mailTemplates.get(0));
 
@@ -129,9 +131,9 @@ public class MailServiceTest {
     List<MailTemplateSummary> mailTemplateSummaries = mailService.getMailTemplateSummaries();
 
     assertEquals(
-        "The correct number of mail template summaries was not retrieved",
         1,
-        mailTemplateSummaries.size());
+        mailTemplateSummaries.size(),
+        "The correct number of mail template summaries was not retrieved");
 
     compareMailTemplateToMailTemplateSummary(mailTemplate, mailTemplateSummaries.get(0));
 
@@ -173,31 +175,30 @@ public class MailServiceTest {
   private void compareMailTemplateToMailTemplateSummary(
       MailTemplate mailTemplate, MailTemplateSummary mailTemplateSummary) {
     assertEquals(
-        "The ID values for the mail template summaries do not match",
+
         mailTemplate.getId(),
-        mailTemplateSummary.getId());
+        mailTemplateSummary.getId(), "The ID values for the mail template summaries do not match");
     assertEquals(
-        "The name values for the mail template summaries do not match",
         mailTemplate.getName(),
-        mailTemplateSummary.getName());
+        mailTemplateSummary.getName(), "The name values for the mail template summaries do not match");
   }
 
   private void compareMailTemplates(MailTemplate mailTemplate1, MailTemplate mailTemplate2) {
     assertEquals(
-        "The ID values for the mail templates do not match",
         mailTemplate1.getId(),
-        mailTemplate2.getId());
+        mailTemplate2.getId(),
+        "The ID values for the mail templates do not match");
     assertEquals(
-        "The name values for the mail templates do not match",
         mailTemplate1.getName(),
-        mailTemplate2.getName());
+        mailTemplate2.getName(),
+        "The name values for the mail templates do not match");
     assertEquals(
-        "The content type values for the mail templates do not match",
         mailTemplate1.getContentType(),
-        mailTemplate2.getContentType());
+        mailTemplate2.getContentType(),
+        "The content type values for the mail templates do not match");
     assertArrayEquals(
-        "The template values for the mail templates do not match",
         mailTemplate1.getTemplate(),
-        mailTemplate2.getTemplate());
+        mailTemplate2.getTemplate(),
+        "The template values for the mail templates do not match");
   }
 }

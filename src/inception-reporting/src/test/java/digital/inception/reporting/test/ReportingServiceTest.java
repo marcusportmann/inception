@@ -16,29 +16,30 @@
 
 package digital.inception.reporting.test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.reporting.IReportingService;
 import digital.inception.reporting.ReportDefinition;
 import digital.inception.reporting.ReportDefinitionNotFoundException;
 import digital.inception.reporting.ReportDefinitionSummary;
-import digital.inception.test.TestClassRunner;
+import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -49,7 +50,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  *
  * @author Marcus Portmann
  */
-@RunWith(TestClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
@@ -114,15 +116,15 @@ public class ReportingServiceTest {
     boolean reportDefinitionExists =
         reportingService.reportDefinitionExists(reportDefinition.getId());
 
-    assertTrue("The report definition does not exist", reportDefinitionExists);
+    assertTrue(reportDefinitionExists, "The report definition does not exist");
 
     String retrievedReportDefinitionName =
         reportingService.getReportDefinitionName(reportDefinition.getId());
 
     assertEquals(
-        "The correct report definition name was not retrieved",
         reportDefinition.getName(),
-        retrievedReportDefinitionName);
+        retrievedReportDefinitionName,
+        "The correct report definition name was not retrieved");
 
     reportDefinition.setName("Updated " + reportDefinition.getName());
 
@@ -134,12 +136,12 @@ public class ReportingServiceTest {
 
     reportDefinitionExists = reportingService.reportDefinitionExists(reportDefinition.getId());
 
-    assertTrue("The updated report definition does not exist", reportDefinitionExists);
+    assertTrue(reportDefinitionExists, "The updated report definition does not exist");
 
     List<ReportDefinition> reportDefinitions = reportingService.getReportDefinitions();
 
     assertEquals(
-        "The correct number of report definitions was not retrieved", 1, reportDefinitions.size());
+        1, reportDefinitions.size(), "The correct number of report definitions was not retrieved");
 
     compareReportDefinitions(reportDefinition, reportDefinitions.get(0));
 
@@ -153,9 +155,9 @@ public class ReportingServiceTest {
         reportingService.getReportDefinitionSummaries();
 
     assertEquals(
-        "The correct number of report definition summaries was not retrieved",
         1,
-        reportDefinitionSummaries.size());
+        reportDefinitionSummaries.size(),
+        "The correct number of report definition summaries was not retrieved");
 
     compareReportDefinitionToReportDefinitionSummary(
         reportDefinition, reportDefinitionSummaries.get(0));
@@ -173,28 +175,28 @@ public class ReportingServiceTest {
   private void compareReportDefinitionToReportDefinitionSummary(
       ReportDefinition reportDefinition, ReportDefinitionSummary reportDefinitionSummary) {
     assertEquals(
-        "The ID values for the report definition summaries do not match",
         reportDefinition.getId(),
-        reportDefinitionSummary.getId());
+        reportDefinitionSummary.getId(),
+        "The ID values for the report definition summaries do not match");
     assertEquals(
-        "The name values for the report definition summaries do not match",
         reportDefinition.getName(),
-        reportDefinitionSummary.getName());
+        reportDefinitionSummary.getName(),
+        "The name values for the report definition summaries do not match");
   }
 
   private void compareReportDefinitions(
       ReportDefinition reportDefinition1, ReportDefinition reportDefinition2) {
     assertEquals(
-        "The ID values for the report definitions do not match",
         reportDefinition1.getId(),
-        reportDefinition2.getId());
+        reportDefinition2.getId(),
+        "The ID values for the report definitions do not match");
     assertEquals(
-        "The name values for the report definitions do not match",
         reportDefinition1.getName(),
-        reportDefinition2.getName());
+        reportDefinition2.getName(),
+        "The name values for the report definitions do not match");
     assertArrayEquals(
-        "The template values for the report definitions do not match",
         reportDefinition1.getTemplate(),
-        reportDefinition2.getTemplate());
+        reportDefinition2.getTemplate(),
+        "The template values for the report definitions do not match");
   }
 }
