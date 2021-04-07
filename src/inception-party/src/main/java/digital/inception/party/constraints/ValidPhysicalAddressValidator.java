@@ -84,6 +84,7 @@ public class ValidPhysicalAddressValidator
     | Line 1               | Invalid   | Invalid  | Invalid  | Required      | Required | Invalid  | Invalid  | Required     |
     | Line 2               | Invalid   | Invalid  | Invalid  | Optional      | Optional | Invalid  | Invalid  | Optional     |
     | Line 3               | Invalid   | Invalid  | Invalid  | Optional      | Optional | Invalid  | Invalid  | Optional     |
+    | Line 4               | Invalid   | Invalid  | Invalid  | Optional      | Optional | Invalid  | Invalid  | Optional     |
     | Postal Code Required | Required  | Required | Required | Required      | Required | Required | Required | Required     |
     | Region               | Optional  | Optional | Optional | Optional      | Optional | Optional | Optional | Optional     |
     | Site Block           | Invalid   | Invalid  | Invalid  | Invalid       | Invalid  | Required | Invalid  | Invalid      |
@@ -573,6 +574,16 @@ public class ValidPhysicalAddressValidator
 
               isValid = false;
             }
+
+            if (StringUtils.hasText(physicalAddress.getLine4())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.line4NotSupported.message}")
+                  .addPropertyNode("line4")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
           }
 
           if (StringUtils.hasText(physicalAddress.getCountry())
@@ -587,6 +598,7 @@ public class ValidPhysicalAddressValidator
             isValid = false;
           }
         }
+
         for (String purpose : physicalAddress.getPurposes()) {
           if (!partyReferenceService.isValidPhysicalAddressPurpose(purpose)) {
             hibernateConstraintValidatorContext
@@ -640,6 +652,7 @@ Farm Number,Invalid,Invalid,Required,Required,Invalid,Invalid,Invalid,Invalid
 Line 1,Invalid,Invalid,Invalid,Required,Required,Invalid,Invalid,Required
 Line 2,Invalid,Invalid,Invalid,Optional,Optional,Invalid,Invalid,Optional
 Line 3,Invalid,Invalid,Invalid,Optional,Optional,Invalid,Invalid,Optional
+Line 4,Invalid,Invalid,Invalid,Optional,Optional,Invalid,Invalid,Optional
 Postal Code Required,Required,Required,Required,Required,Required,Required,Required,Required
 Region,Optional,Optional,Optional,Optional,Optional,Optional,Optional,Optional
 Site Block,Invalid,Invalid,Invalid,Invalid,Invalid,Required,Invalid,Invalid

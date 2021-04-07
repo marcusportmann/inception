@@ -126,6 +126,7 @@ import org.springframework.util.StringUtils;
   "preferences",
   "residencePermits",
   "roles",
+  "segmentAllocations",
   "sourcesOfFunds",
   "sourcesOfWealth",
   "statuses",
@@ -178,6 +179,7 @@ import org.springframework.util.StringUtils;
       "preferences",
       "residencePermits",
       "roles",
+      "segmentAllocations",
       "sourcesOfFunds",
       "sourcesOfWealth",
       "statuses",
@@ -299,6 +301,15 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<Role> roles = new HashSet<>();
+
+  /** The segment allocations for the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<SegmentAllocation> segmentAllocations = new HashSet<>();
 
   /** The sources of funds for the person. */
   @Valid
@@ -517,9 +528,7 @@ public class Person extends PartyBase implements Serializable {
    */
   public void addConsent(Consent consent) {
     consents.removeIf(
-        existingConsent ->
-            Objects.equals(existingConsent.getType(), consent.getType())
-                && Objects.equals(existingConsent.getEffectiveFrom(), consent.getEffectiveFrom()));
+        existingConsent -> Objects.equals(existingConsent.getType(), consent.getType()));
 
     consent.setPerson(this);
 
@@ -534,8 +543,7 @@ public class Person extends PartyBase implements Serializable {
   public void addContactMechanism(ContactMechanism contactMechanism) {
     contactMechanisms.removeIf(
         existingContactMechanism ->
-            Objects.equals(existingContactMechanism.getType(), contactMechanism.getType())
-                && Objects.equals(existingContactMechanism.getRole(), contactMechanism.getRole()));
+            Objects.equals(existingContactMechanism.getType(), contactMechanism.getType()));
 
     contactMechanism.setParty(this);
 
@@ -616,10 +624,7 @@ public class Person extends PartyBase implements Serializable {
    * @param lock the lock
    */
   public void addLock(Lock lock) {
-    locks.removeIf(
-        existingLock ->
-            Objects.equals(existingLock.getType(), lock.getType())
-                && Objects.equals(existingLock.getEffectiveFrom(), lock.getEffectiveFrom()));
+    locks.removeIf(existingLock -> Objects.equals(existingLock.getType(), lock.getType()));
 
     lock.setParty(this);
 
@@ -685,14 +690,26 @@ public class Person extends PartyBase implements Serializable {
    * @param role the role
    */
   public void addRole(Role role) {
-    roles.removeIf(
-        existingRole ->
-            Objects.equals(existingRole.getType(), role.getType())
-                && Objects.equals(existingRole.getEffectiveFrom(), role.getEffectiveFrom()));
+    roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), role.getType()));
 
     role.setParty(this);
 
     roles.add(role);
+  }
+
+  /**
+   * Add the segment allocation to the person.
+   *
+   * @param segmentAllocation the segment allocation
+   */
+  public void addSegmentAllocation(SegmentAllocation segmentAllocation) {
+    segmentAllocations.removeIf(
+        existingSegmentAllocation ->
+            Objects.equals(existingSegmentAllocation.getSegment(), segmentAllocation.getSegment()));
+
+    segmentAllocation.setParty(this);
+
+    segmentAllocations.add(segmentAllocation);
   }
 
   /**
@@ -703,9 +720,7 @@ public class Person extends PartyBase implements Serializable {
   public void addSourceOfFunds(SourceOfFunds sourceOfFunds) {
     sourcesOfFunds.removeIf(
         existingSourceOfFunds ->
-            Objects.equals(existingSourceOfFunds.getType(), sourceOfFunds.getType())
-                && Objects.equals(
-                    existingSourceOfFunds.getEffectiveFrom(), sourceOfFunds.getEffectiveFrom()));
+            Objects.equals(existingSourceOfFunds.getType(), sourceOfFunds.getType()));
 
     sourceOfFunds.setPerson(this);
 
@@ -720,9 +735,7 @@ public class Person extends PartyBase implements Serializable {
   public void addSourceOfWealth(SourceOfWealth sourceOfWealth) {
     sourcesOfWealth.removeIf(
         existingSourceOfWealth ->
-            Objects.equals(existingSourceOfWealth.getType(), sourceOfWealth.getType())
-                && Objects.equals(
-                    existingSourceOfWealth.getEffectiveFrom(), sourceOfWealth.getEffectiveFrom()));
+            Objects.equals(existingSourceOfWealth.getType(), sourceOfWealth.getType()));
 
     sourceOfWealth.setPerson(this);
 
@@ -735,10 +748,7 @@ public class Person extends PartyBase implements Serializable {
    * @param status the status
    */
   public void addStatus(Status status) {
-    statuses.removeIf(
-        existingStatus ->
-            Objects.equals(existingStatus.getType(), status.getType())
-                && Objects.equals(existingStatus.getEffectiveFrom(), status.getEffectiveFrom()));
+    statuses.removeIf(existingStatus -> Objects.equals(existingStatus.getType(), status.getType()));
 
     status.setParty(this);
 
@@ -1477,6 +1487,33 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Retrieve the segment allocation with the specified segment for the person.
+   *
+   * @param segment the code for the segment
+   * @return an Optional containing the segment allocation with the specified segment for the person
+   *     or an empty Optional if the segment allocation could not be found
+   */
+  public Optional<SegmentAllocation> getSegmentAllocationWithSegment(String segment) {
+    return segmentAllocations.stream()
+        .filter(segmentAllocation -> Objects.equals(segmentAllocation.getSegment(), segment))
+        .findFirst();
+  }
+
+  /**
+   * Returns the segment allocations for the person.
+   *
+   * @return the segment allocations for the person
+   */
+  @Schema(description = "The segment allocations for the person")
+  @JsonProperty
+  @JsonManagedReference("segmentAllocationReference")
+  @XmlElementWrapper(name = "SegmentAllocations")
+  @XmlElement(name = "SegmentAllocation")
+  public Set<SegmentAllocation> getSegmentAllocations() {
+    return segmentAllocations;
+  }
+
+  /**
    * Retrieve the source of funds with the specified type for the person.
    *
    * @param type the code for the source of funds type
@@ -1994,6 +2031,16 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Remove the segment allocation with the specified segment for the person.
+   *
+   * @param segment the code for the segment
+   */
+  public void removeSegmentAllocationWithSegment(String segment) {
+    segmentAllocations.removeIf(
+        segmentAllocation -> Objects.equals(segmentAllocation.getSegment(), segment));
+  }
+
+  /**
    * Remove the source of funds with the specified type for the person.
    *
    * @param type the code for the source of funds type
@@ -2443,6 +2490,17 @@ public class Person extends PartyBase implements Serializable {
     roles.forEach(role -> role.setParty(this));
     this.roles.clear();
     this.roles.addAll(roles);
+  }
+
+  /**
+   * Set the segment allocations for the person.
+   *
+   * @param segmentAllocations the segment allocations for the person
+   */
+  public void setSegmentAllocations(Set<SegmentAllocation> segmentAllocations) {
+    segmentAllocations.forEach(segmentAllocation -> segmentAllocation.setParty(this));
+    this.segmentAllocations.clear();
+    this.segmentAllocations.addAll(segmentAllocations);
   }
 
   /**

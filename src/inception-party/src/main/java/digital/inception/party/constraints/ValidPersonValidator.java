@@ -33,6 +33,7 @@ import digital.inception.party.ResidencePermit;
 import digital.inception.party.Role;
 import digital.inception.party.RoleTypeAttributeTypeConstraint;
 import digital.inception.party.RoleTypePreferenceTypeConstraint;
+import digital.inception.party.SegmentAllocation;
 import digital.inception.party.SourceOfFunds;
 import digital.inception.party.SourceOfWealth;
 import digital.inception.party.Status;
@@ -714,6 +715,24 @@ public class ValidPersonValidator extends PartyValidator
                   person, role.getType(), hibernateConstraintValidatorContext)) {
                 isValid = false;
               }
+            }
+          }
+        }
+
+        // Validate segment allocations
+        for (SegmentAllocation segmentAllocation : person.getSegmentAllocations()) {
+          if (StringUtils.hasText(segmentAllocation.getSegment())) {
+            if (!getPartyReferenceService().isValidSegment(segmentAllocation.getSegment())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("segment", segmentAllocation.getSegment())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidSegmentForSegmentAllocation.message}")
+                  .addPropertyNode("segmentAllocations")
+                  .addPropertyNode("segment")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
             }
           }
         }

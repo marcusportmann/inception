@@ -87,6 +87,7 @@ import org.springframework.util.StringUtils;
   "line1",
   "line2",
   "line3",
+  "line4",
   "suburb",
   "city",
   "region",
@@ -119,6 +120,7 @@ import org.springframework.util.StringUtils;
       "line1",
       "line2",
       "line3",
+      "line4",
       "suburb",
       "city",
       "region",
@@ -324,6 +326,17 @@ public class PhysicalAddress implements Serializable {
       regexp = "^[\\pL\\pN-' ]*$")
   @Column(name = "line3", length = 100)
   private String line3;
+
+  /** The address line 4 for the physical address. */
+  @Schema(description = "The address line 4 for the physical address")
+  @JsonProperty
+  @XmlElement(name = "Line4")
+  @Size(max = 100)
+  @Pattern(
+      message = "{digital.inception.party.PhysicalAddress.Line4.Pattern.message}",
+      regexp = "^[\\pL\\pN-' ]*$")
+  @Column(name = "line4", length = 100)
+  private String line4;
 
   /** The GPS longitude for the physical address. */
   @Schema(description = "The GPS longitude for the physical address")
@@ -700,6 +713,15 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
+   * Returns the address line 4 for the physical address.
+   *
+   * @return the address line 4 for the physical address
+   */
+  public String getLine4() {
+    return line4;
+  }
+
+  /**
    * Returns the GPS longitude for the physical address.
    *
    * @return the GPS longitude for the physical address
@@ -968,6 +990,15 @@ public class PhysicalAddress implements Serializable {
    */
   public void setLine3(String line3) {
     this.line3 = line3;
+  }
+
+  /**
+   * Set the address line 4 for the physical address.
+   *
+   * @param line4 the address line 4 for the physical address
+   */
+  public void setLine4(String line4) {
+    this.line4 = line4;
   }
 
   /**

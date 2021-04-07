@@ -484,6 +484,20 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the segments.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segments for or
+   *     <b>null</b> to retrieve the segments for all locales
+   * @return the segments
+   */
+  @WebMethod(operationName = "GetSegments")
+  public List<Segment> getSegments(@WebParam(name = "LocaleId") @XmlElement String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getSegments(
+        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
    * Retrieve the source of funds types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds

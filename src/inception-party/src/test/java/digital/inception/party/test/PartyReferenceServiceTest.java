@@ -54,6 +54,7 @@ import digital.inception.party.RolePurpose;
 import digital.inception.party.RoleType;
 import digital.inception.party.RoleTypeAttributeTypeConstraint;
 import digital.inception.party.RoleTypePreferenceTypeConstraint;
+import digital.inception.party.Segment;
 import digital.inception.party.SourceOfFundsType;
 import digital.inception.party.StatusType;
 import digital.inception.party.StatusTypeCategory;
@@ -540,6 +541,18 @@ public class PartyReferenceServiceTest {
         "The correct number of tax number types was not retrieved");
   }
 
+  /** Test the segment reference functionality. */
+  @Test
+  public void segmentTest() throws Exception {
+    List<Segment> retrievedSegments =
+        partyReferenceService.getSegments(PartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        2,
+        retrievedSegments.size(),
+        "The correct number of segments was not retrieved");
+  }
+
   /** Test the time to contact functionality. */
   @Test
   public void timeToContactTest() throws Exception {
@@ -604,6 +617,7 @@ public class PartyReferenceServiceTest {
     assertTrue(partyReferenceService.isValidResidentialType("owner"));
     assertTrue(partyReferenceService.isValidRolePurpose("test"));
     assertTrue(partyReferenceService.isValidRoleType(PartyType.PERSON.code(), "test_person_role"));
+    assertTrue(partyReferenceService.isValidSegment("test_person_segment"));
     assertTrue(partyReferenceService.isValidSourceOfFundsType("salary"));
     assertTrue(partyReferenceService.isValidStatusType("person", "fraud_investigation"));
     assertTrue(partyReferenceService.isValidStatusTypeCategory("fraud"));

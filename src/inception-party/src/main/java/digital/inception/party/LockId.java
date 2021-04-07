@@ -17,7 +17,6 @@
 package digital.inception.party;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,9 +29,6 @@ import java.util.UUID;
 public class LockId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date the lock is effective from. */
-  private LocalDate effectiveFrom;
 
   /** The Universally Unique Identifier (UUID) for the party the lock is associated with. */
   private UUID party;
@@ -62,9 +58,7 @@ public class LockId implements Serializable {
 
     LockId other = (LockId) object;
 
-    return Objects.equals(party, other.party)
-        && Objects.equals(type, other.type)
-        && Objects.equals(effectiveFrom, other.effectiveFrom);
+    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
@@ -74,8 +68,6 @@ public class LockId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode())
-        + ((type == null) ? 0 : type.hashCode())
-        + ((effectiveFrom == null) ? 0 : effectiveFrom.hashCode());
+    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 }

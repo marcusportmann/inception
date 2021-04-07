@@ -1301,6 +1301,42 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the segments.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segments for or
+   *     <b>null</b> to retrieve the segments for all locales
+   * @return the segments
+   */
+  @Operation(summary = "Retrieve the segments", description = "Retrieve the segments")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(value = "/segments", method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<Segment> getSegments(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the segments for",
+              example = PartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getSegments(
+        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
    * Retrieve the source of funds types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds

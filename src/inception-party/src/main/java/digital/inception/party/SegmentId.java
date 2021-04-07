@@ -18,25 +18,22 @@ package digital.inception.party;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
- * The <b>SourceOfFundsId</b> class implements the ID class for the <b>SourceOfFunds</b> class.
+ * The <b>SegmentId</b> class implements the ID class for the <b>Segment</b> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class SourceOfFundsId implements Serializable {
+public class SegmentId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the person the source of funds is associated with.
-   */
-  private UUID person;
+  /** The code for the segment. */
+  private String code;
 
-  /** The code for the source of funds type. */
-  private String type;
+  /** The Unicode locale identifier for the segment. */
+  private String localeId;
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -58,9 +55,9 @@ public class SourceOfFundsId implements Serializable {
       return false;
     }
 
-    SourceOfFundsId other = (SourceOfFundsId) object;
+    SegmentId other = (SegmentId) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -70,6 +67,6 @@ public class SourceOfFundsId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((person == null) ? 0 : person.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 }

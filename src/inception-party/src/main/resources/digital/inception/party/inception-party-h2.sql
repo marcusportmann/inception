@@ -824,6 +824,32 @@ COMMENT ON COLUMN party.role_type_preference_type_constraints.type IS 'The const
 COMMENT ON COLUMN party.role_type_preference_type_constraints.value IS 'The value to apply when validating the preference value';
 
 
+CREATE TABLE party.segments (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+  party_types VARCHAR(310) NOT NULL,
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX segments_locale_id_ix ON party.segments(locale_id);
+
+COMMENT ON COLUMN party.segments.code IS 'The code for the segment';
+
+COMMENT ON COLUMN party.segments.locale_id IS 'The Unicode locale identifier for the segment';
+
+COMMENT ON COLUMN party.segments.sort_index IS 'The sort index for the segment';
+
+COMMENT ON COLUMN party.segments.name IS 'The name of the segment';
+
+COMMENT ON COLUMN party.segments.description IS 'The description for the segment';
+
+COMMENT ON COLUMN party.segments.party_types IS 'The comma-delimited list of codes for the party types the segment is associated with';
+
+
 CREATE TABLE party.source_of_funds_types (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
@@ -1198,13 +1224,13 @@ COMMENT ON COLUMN party.attributes.unit IS 'The code for the measurement unit fo
 
 CREATE TABLE party.consents (
   created        TIMESTAMP   NOT NULL,
-  effective_from DATE        NOT NULL,
+  effective_from DATE,
   effective_to   DATE,
   person_id      UUID        NOT NULL,
   type           VARCHAR(30) NOT NULL,
   updated        TIMESTAMP,
 
-  PRIMARY KEY (person_id, type, effective_from),
+  PRIMARY KEY (person_id, type),
   CONSTRAINT consents_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
 );
 
@@ -1439,13 +1465,13 @@ COMMENT ON COLUMN party.language_proficiencies.write_level IS 'The write profici
 
 CREATE TABLE party.locks (
   created        TIMESTAMP   NOT NULL,
-  effective_from DATE        NOT NULL,
+  effective_from DATE,
   effective_to   DATE,
   party_id       UUID        NOT NULL,
   type           VARCHAR(30) NOT NULL,
   updated        TIMESTAMP,
 
-  PRIMARY KEY (party_id, type, effective_from),
+  PRIMARY KEY (party_id, type),
   CONSTRAINT locks_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
@@ -1481,6 +1507,7 @@ CREATE TABLE party.physical_addresses (
   line1               VARCHAR(100),
   line2               VARCHAR(100),
   line3               VARCHAR(100),
+  line4               VARCHAR(100),
   longitude           VARCHAR(50),
   party_id            UUID          NOT NULL,
   postal_code         VARCHAR(30)   NOT NULL,
@@ -1530,6 +1557,8 @@ COMMENT ON COLUMN party.physical_addresses.line1 IS 'The address line 1 for the 
 COMMENT ON COLUMN party.physical_addresses.line2 IS 'The address line 2 for the physical address';
 
 COMMENT ON COLUMN party.physical_addresses.line3 IS 'The address line 3 for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.line4 IS 'The address line 4 for the physical address';
 
 COMMENT ON COLUMN party.physical_addresses.latitude IS 'The GPS latitude for the physical address';
 
@@ -1650,16 +1679,43 @@ COMMENT ON COLUMN party.roles.type IS 'The code for the role type';
 COMMENT ON COLUMN party.roles.updated IS 'The date and time the role was last updated';
 
 
+CREATE TABLE party.segment_allocations (
+  created        TIMESTAMP   NOT NULL,
+  effective_from DATE,
+  effective_to   DATE,
+  party_id       UUID        NOT NULL,
+  segment        VARCHAR(30) NOT NULL,
+  updated        TIMESTAMP,
+
+  PRIMARY KEY (party_id, segment),
+  CONSTRAINT segment_allocations_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX segment_allocations_party_id_ix ON party.segment_allocations(party_id);
+
+COMMENT ON COLUMN party.segment_allocations.created IS 'The date and time the segment allocation was created';
+
+COMMENT ON COLUMN party.segment_allocations.effective_from IS 'The date that the segment allocation is effective from';
+
+COMMENT ON COLUMN party.segment_allocations.effective_to IS 'The date that the segment allocation is effective to';
+
+COMMENT ON COLUMN party.segment_allocations.party_id IS 'The Universally Unique Identifier (UUID) for the party the segment allocation is associated with';
+
+COMMENT ON COLUMN party.segment_allocations.segment IS 'The code for the segment';
+
+COMMENT ON COLUMN party.segment_allocations.updated IS 'The date and time the segment allocation was last updated';
+
+
 CREATE TABLE party.sources_of_funds (
   created        TIMESTAMP   NOT NULL,
-  effective_from DATE        NOT NULL,
+  effective_from DATE,
   effective_to   DATE,
   person_id      UUID        NOT NULL,
   percentage     INTEGER     NOT NULL,
   type           VARCHAR(30) NOT NULL,
   updated        TIMESTAMP,
 
-  PRIMARY KEY (person_id, type, effective_from),
+  PRIMARY KEY (person_id, type),
   CONSTRAINT sources_of_funds_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
 );
 
@@ -1682,13 +1738,13 @@ COMMENT ON COLUMN party.sources_of_funds.updated IS 'The date and time the sourc
 
 CREATE TABLE party.sources_of_wealth (
   created        TIMESTAMP   NOT NULL,
-  effective_from DATE        NOT NULL,
+  effective_from DATE,
   effective_to   DATE,
   person_id      UUID        NOT NULL,
   type           VARCHAR(30) NOT NULL,
   updated        TIMESTAMP,
 
-  PRIMARY KEY (person_id, type, effective_from),
+  PRIMARY KEY (person_id, type),
   CONSTRAINT sources_of_wealth_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
 );
 
@@ -1709,13 +1765,13 @@ COMMENT ON COLUMN party.sources_of_wealth.updated IS 'The date and time the sour
 
 CREATE TABLE party.statuses (
   created        TIMESTAMP   NOT NULL,
-  effective_from DATE        NOT NULL,
+  effective_from DATE,
   effective_to   DATE,
   party_id       UUID        NOT NULL,
   type           VARCHAR(30) NOT NULL,
   updated        TIMESTAMP,
 
-  PRIMARY KEY (party_id, type, effective_from),
+  PRIMARY KEY (party_id, type),
   CONSTRAINT statuses_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
@@ -3654,6 +3710,17 @@ INSERT INTO party.role_type_preference_type_constraints(role_type, preference_ty
   VALUES ('test_organization_role', 'test_preference', 'max_size', '20');
 INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_organization_role', 'test_preference', 'pattern', '^[0-9]*$');
+
+
+INSERT INTO party.segments (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test_organization_segment', 'en-US', 66601, 'Test Organization Segment', 'Test Organization Segment', 'organization');
+INSERT INTO party.segments (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test_person_segment', 'en-US', 66602, 'Test Person Segment', 'Test Person Segment', 'person');
+
+INSERT INTO party.segments (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test_organization_segment', 'en-ZA', 66601, 'Test Organization Segment', 'Test Organization Segment', 'organization');
+INSERT INTO party.segments (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('test_person_segment', 'en-ZA', 66602, 'Test Person Segment', 'Test Person Segment', 'person');
 
 
 INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)

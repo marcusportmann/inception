@@ -77,14 +77,12 @@ public class Status implements Serializable {
   private LocalDateTime created;
 
   /** The date the status is effective from. */
-  @Schema(description = "The date the status is effective from", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "EffectiveFrom", required = true)
+  @Schema(description = "The date the status is effective from")
+  @JsonProperty
+  @XmlElement(name = "EffectiveFrom")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @NotNull
-  @Id
-  @Column(name = "effective_from", nullable = false)
+  @Column(name = "effective_from")
   private LocalDate effectiveFrom;
 
   /** The date the status is effective to. */
@@ -132,7 +130,6 @@ public class Status implements Serializable {
    */
   public Status(String type) {
     this.type = type;
-    this.effectiveFrom = LocalDate.now();
   }
 
   /**

@@ -49,36 +49,36 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>Consent</b> class holds the information for a consent provided by an organization or
- * person.
+ * The <b>SegmentAllocation</b> class holds the information for the allocation of an organization or
+ * person to a segment.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A consent provided by a person")
+@Schema(description = "An allocation of an organization or person to a segment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "effectiveFrom", "effectiveTo"})
-@XmlRootElement(name = "Consent", namespace = "http://inception.digital/party")
+@JsonPropertyOrder({"segment", "effectiveFrom", "effectiveTo"})
+@XmlRootElement(name = "SegmentAllocation", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "Consent",
+    name = "SegmentAllocation",
     namespace = "http://inception.digital/party",
-    propOrder = {"type", "effectiveFrom", "effectiveTo"})
+    propOrder = {"segment", "effectiveFrom", "effectiveTo"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "consents")
-@IdClass(ConsentId.class)
-public class Consent implements Serializable {
+@Table(schema = "party", name = "segment_allocations")
+@IdClass(SegmentAllocationId.class)
+public class SegmentAllocation implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the consent was created. */
+  /** The date and time the segment allocation was created. */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The date the consent is effective from. */
-  @Schema(description = "The date the consent is effective from")
+  /** The date the segment allocation is effective from. */
+  @Schema(description = "The date the segment allocation is effective from")
   @JsonProperty
   @XmlElement(name = "EffectiveFrom")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -86,8 +86,8 @@ public class Consent implements Serializable {
   @Column(name = "effective_from")
   private LocalDate effectiveFrom;
 
-  /** The date the consent is effective to. */
-  @Schema(description = "The date the consent is effective to")
+  /** The date the segment allocation is effective to. */
+  @Schema(description = "The date the segment allocation is effective to")
   @JsonProperty
   @XmlElement(name = "EffectiveTo")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -95,64 +95,64 @@ public class Consent implements Serializable {
   @Column(name = "effective_to")
   private LocalDate effectiveTo;
 
-  /** The person the consent is associated with. */
+  /** The party the segment allocation is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference("consentReference")
+  @JsonBackReference("segmentAllocationReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "person_id")
-  private Person person;
+  @JoinColumn(name = "party_id")
+  private PartyBase party;
 
-  /** The code for the consent type. */
-  @Schema(description = "The code for the consent type", required = true)
+  /** The code for the segment. */
+  @Schema(description = "The code for the segment", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
+  @XmlElement(name = "Segment", required = true)
   @NotNull
   @Size(min = 1, max = 30)
   @Id
-  @Column(name = "type", length = 30, nullable = false)
-  private String type;
+  @Column(name = "segment", length = 30, nullable = false)
+  private String segment;
 
-  /** The date and time the consent was last updated. */
+  /** The date and time the segment allocation was last updated. */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <b>Consent</b>. */
-  public Consent() {}
+  /** Constructs a new <b>SegmentAllocation</b>. */
+  public SegmentAllocation() {}
 
   /**
-   * Constructs a new <b>Consent</b>.
+   * Constructs a new <b>SegmentAllocation</b>.
    *
-   * @param type the consent type
+   * @param segment the segment
    */
-  public Consent(String type) {
-    this.type = type;
+  public SegmentAllocation(String segment) {
+    this.segment = segment;
   }
 
   /**
-   * Constructs a new <b>Consent</b>.
+   * Constructs a new <b>SegmentAllocation</b>.
    *
-   * @param type the consent type
-   * @param effectiveFrom the date the consent is effective from
+   * @param segment the segment
+   * @param effectiveFrom the date the segment allocation is effective from
    */
-  public Consent(String type, LocalDate effectiveFrom) {
-    this.type = type;
+  public SegmentAllocation(String segment, LocalDate effectiveFrom) {
+    this.segment = segment;
     this.effectiveFrom = effectiveFrom;
   }
 
   /**
-   * Constructs a new <b>Consent</b>.
+   * Constructs a new <b>SegmentAllocation</b>.
    *
-   * @param type the consent type
-   * @param effectiveFrom the date the consent is effective from
-   * @param effectiveTo the date the consent is effective to
+   * @param segment the segment
+   * @param effectiveFrom the date the segment allocation is effective from
+   * @param effectiveTo the date the segment allocation is effective to
    */
-  public Consent(String type, LocalDate effectiveFrom, LocalDate effectiveTo) {
-    this.type = type;
+  public SegmentAllocation(String segment, LocalDate effectiveFrom, LocalDate effectiveTo) {
+    this.segment = segment;
     this.effectiveFrom = effectiveFrom;
     this.effectiveTo = effectiveTo;
   }
@@ -177,61 +177,61 @@ public class Consent implements Serializable {
       return false;
     }
 
-    Consent other = (Consent) object;
+    SegmentAllocation other = (SegmentAllocation) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
+    return Objects.equals(party, other.party) && Objects.equals(segment, other.segment);
   }
 
   /**
-   * Returns the date and time the consent was created.
+   * Returns the date and time the segment allocation was created.
    *
-   * @return the date and time the consent was created
+   * @return the date and time the segment allocation was created
    */
   public LocalDateTime getCreated() {
     return created;
   }
 
   /**
-   * Returns the date the consent is effective from.
+   * Returns the date the segment allocation is effective from.
    *
-   * @return the date the consent is effective from
+   * @return the date the segment allocation is effective from
    */
   public LocalDate getEffectiveFrom() {
     return effectiveFrom;
   }
 
   /**
-   * Returns the date the consent is effective to.
+   * Returns the date the segment allocation is effective to.
    *
-   * @return the date the consent is effective to
+   * @return the date the segment allocation is effective to
    */
   public LocalDate getEffectiveTo() {
     return effectiveTo;
   }
 
   /**
-   * Returns the person the consent is associated with.
+   * Returns the party the segment allocation is associated with.
    *
-   * @return the person the consent is associated with
+   * @return the party the segment allocation is associated with
    */
   @Schema(hidden = true)
-  public Person getPerson() {
-    return person;
+  public PartyBase getParty() {
+    return party;
   }
 
   /**
-   * Returns the code for the consent type.
+   * Returns the code for the segment.
    *
-   * @return the code for the consent type
+   * @return the code for the segment
    */
-  public String getType() {
-    return type;
+  public String getSegment() {
+    return segment;
   }
 
   /**
-   * Returns the date and time the consent was last updated.
+   * Returns the date and time the segment allocation was last updated.
    *
-   * @return the date and time the consent was last updated
+   * @return the date and time the segment allocation was last updated
    */
   public LocalDateTime getUpdated() {
     return updated;
@@ -244,44 +244,44 @@ public class Consent implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((person == null) || (person.getId() == null)) ? 0 : person.getId().hashCode())
-        + ((type == null) ? 0 : type.hashCode());
+    return (((party == null) || (party.getId() == null)) ? 0 : party.getId().hashCode())
+        + ((segment == null) ? 0 : segment.hashCode());
   }
 
   /**
-   * Set the date the consent is effective from.
+   * Set the date the segment allocation is effective from.
    *
-   * @param effectiveFrom the date the consent is effective from
+   * @param effectiveFrom the date the segment allocation is effective from
    */
   public void setEffectiveFrom(LocalDate effectiveFrom) {
     this.effectiveFrom = effectiveFrom;
   }
 
   /**
-   * Set the date the consent is effective to.
+   * Set the date the segment allocation is effective to.
    *
-   * @param effectiveTo the date the consent is effective to
+   * @param effectiveTo the date the segment allocation is effective to
    */
   public void setEffectiveTo(LocalDate effectiveTo) {
     this.effectiveTo = effectiveTo;
   }
 
   /**
-   * Set the person the consent is associated with.
+   * Set the party the segment allocation is associated with.
    *
-   * @param person the person the consent is associated with
+   * @param party the party the segment allocation is associated with
    */
   @Schema(hidden = true)
-  public void setPerson(Person person) {
-    this.person = person;
+  public void setParty(PartyBase party) {
+    this.party = party;
   }
 
   /**
-   * Set the code for the consent type.
+   * Set the code for the segment.
    *
-   * @param type the code for the consent type
+   * @param segment the code for the segment
    */
-  public void setType(String type) {
-    this.type = type;
+  public void setSegment(String segment) {
+    this.segment = segment;
   }
 }

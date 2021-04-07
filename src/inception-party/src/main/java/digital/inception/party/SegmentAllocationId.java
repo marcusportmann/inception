@@ -21,22 +21,24 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>SourceOfFundsId</b> class implements the ID class for the <b>SourceOfFunds</b> class.
+ * The <b>SegmentAllocationId</b> class implements the ID class for the <b>SegmentAllocation</b>
+ * class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class SourceOfFundsId implements Serializable {
+public class SegmentAllocationId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) for the person the source of funds is associated with.
+   * The Universally Unique Identifier (UUID) for the party the segment allocation is associated
+   * with.
    */
-  private UUID person;
+  private UUID party;
 
-  /** The code for the source of funds type. */
-  private String type;
+  /** The code for the segment. */
+  private String segment;
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -58,9 +60,9 @@ public class SourceOfFundsId implements Serializable {
       return false;
     }
 
-    SourceOfFundsId other = (SourceOfFundsId) object;
+    SegmentAllocationId other = (SegmentAllocationId) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
+    return Objects.equals(party, other.party) && Objects.equals(segment, other.segment);
   }
 
   /**
@@ -70,6 +72,6 @@ public class SourceOfFundsId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((person == null) ? 0 : person.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((party == null) ? 0 : party.hashCode()) + ((segment == null) ? 0 : segment.hashCode());
   }
 }

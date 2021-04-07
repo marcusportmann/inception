@@ -132,6 +132,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Party Role Type Repository. */
   private final RoleTypeRepository roleTypeRepository;
 
+  /** The Segment Repository. */
+  private final SegmentRepository segmentRepository;
+
   /** The Source of Funds Type Repository. */
   private final SourceOfFundsTypeRepository sourceOfFundsTypeRepository;
 
@@ -192,6 +195,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    *     Repository
    * @param roleTypePreferenceTypeConstraintRepository the Role Type Preference Type Constraint
    *     Repository
+   * @param segmentRepository the Segment Repository
    * @param sourceOfFundsTypeRepository the Source Of Funds Repository
    * @param sourceOfWealthTypeRepository the Source Of Wealth Repository
    * @param statusTypeCategoryRepository the Status Type Category Repository
@@ -232,6 +236,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       RoleTypeRepository roleTypeRepository,
       RoleTypeAttributeTypeConstraintRepository roleTypeAttributeTypeConstraintRepository,
       RoleTypePreferenceTypeConstraintRepository roleTypePreferenceTypeConstraintRepository,
+      SegmentRepository segmentRepository,
       SourceOfFundsTypeRepository sourceOfFundsTypeRepository,
       SourceOfWealthTypeRepository sourceOfWealthTypeRepository,
       StatusTypeCategoryRepository statusTypeCategoryRepository,
@@ -270,6 +275,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.roleTypeRepository = roleTypeRepository;
     this.roleTypeAttributeTypeConstraintRepository = roleTypeAttributeTypeConstraintRepository;
     this.roleTypePreferenceTypeConstraintRepository = roleTypePreferenceTypeConstraintRepository;
+    this.segmentRepository = segmentRepository;
     this.sourceOfFundsTypeRepository = sourceOfFundsTypeRepository;
     this.sourceOfWealthTypeRepository = sourceOfWealthTypeRepository;
     this.statusTypeCategoryRepository = statusTypeCategoryRepository;
@@ -1014,6 +1020,28 @@ public class PartyReferenceService implements IPartyReferenceService {
       }
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the role types", e);
+    }
+  }
+
+  /**
+   * Retrieve the segments.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segments for or
+   *     <b>null</b> to retrieve the segments for all locales
+   * @return the segments
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'segments.' + #localeId")
+  public List<Segment> getSegments(String localeId) throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return segmentRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return segmentRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the segments", e);
     }
   }
 
@@ -1840,6 +1868,22 @@ public class PartyReferenceService implements IPartyReferenceService {
             roleType ->
                 (Objects.equals(roleType.getCode(), roleTypeCode)
                     && roleType.isValidForPartyType(partyTypeCode)));
+  }
+
+  /**
+   * Check whether the code is a valid code for a segment.
+   *
+   * @param segmentCode the code for the segment
+   * @return <b>true</b> if the code is a valid code for a segment or <b>false</b> otherwise
+   */
+  @Override
+  public boolean isValidSegment(String segmentCode) throws ServiceUnavailableException {
+    if (!StringUtils.hasText(segmentCode)) {
+      return false;
+    }
+
+    return self.getSegments(DEFAULT_LOCALE_ID).stream()
+        .anyMatch(segment -> Objects.equals(segment.getCode(), segmentCode));
   }
 
   /**

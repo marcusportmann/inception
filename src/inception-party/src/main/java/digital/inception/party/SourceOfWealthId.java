@@ -17,7 +17,6 @@
 package digital.inception.party;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,9 +29,6 @@ import java.util.UUID;
 public class SourceOfWealthId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date the source of wealth is effective from. */
-  private LocalDate effectiveFrom;
 
   /**
    * The Universally Unique Identifier (UUID) for the person the source of wealth is associated
@@ -65,9 +61,7 @@ public class SourceOfWealthId implements Serializable {
 
     SourceOfWealthId other = (SourceOfWealthId) object;
 
-    return Objects.equals(person, other.person)
-        && Objects.equals(type, other.type)
-        && Objects.equals(effectiveFrom, other.effectiveFrom);
+    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
   }
 
   /**
@@ -77,8 +71,6 @@ public class SourceOfWealthId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((person == null) ? 0 : person.hashCode())
-        + ((type == null) ? 0 : type.hashCode())
-        + ((effectiveFrom == null) ? 0 : effectiveFrom.hashCode());
+    return ((person == null) ? 0 : person.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 }

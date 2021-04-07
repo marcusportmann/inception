@@ -77,14 +77,12 @@ public class SourceOfFunds implements Serializable {
   private LocalDateTime created;
 
   /** The date the source of funds is effective from. */
-  @Schema(description = "The date the source of funds is effective from", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "EffectiveFrom", required = true)
+  @Schema(description = "The date the source of funds is effective from")
+  @JsonProperty
+  @XmlElement(name = "EffectiveFrom")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @NotNull
-  @Id
-  @Column(name = "effective_from", nullable = false)
+  @Column(name = "effective_from")
   private LocalDate effectiveFrom;
 
   /** The date the source of funds is effective to. */
@@ -143,7 +141,6 @@ public class SourceOfFunds implements Serializable {
    */
   public SourceOfFunds(String type) {
     this.type = type;
-    this.effectiveFrom = LocalDate.now();
     this.percentage = 100;
   }
 
@@ -156,7 +153,6 @@ public class SourceOfFunds implements Serializable {
    */
   public SourceOfFunds(String type, int percentage) {
     this.type = type;
-    this.effectiveFrom = LocalDate.now();
     this.percentage = percentage;
   }
 

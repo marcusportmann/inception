@@ -333,6 +333,15 @@ public interface IPartyReferenceService {
   List<RoleType> getRoleTypes(String localeId) throws ServiceUnavailableException;
 
   /**
+   * Retrieve the segments.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segments for or
+   *     <b>null</b> to retrieve the segments for all locales
+   * @return the segments
+   */
+  List<Segment> getSegments(String localeId) throws ServiceUnavailableException;
+
+  /**
    * Retrieve the source of funds types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
@@ -716,6 +725,14 @@ public interface IPartyReferenceService {
    */
   boolean isValidRoleType(String partyTypeCode, String roleTypeCode)
       throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a segment.
+   *
+   * @param segmentCode the code for the segment
+   * @return <b>true</b> if the code is a valid code for a segment or <b>false</b> otherwise
+   */
+  boolean isValidSegment(String segmentCode) throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a source of funds type.

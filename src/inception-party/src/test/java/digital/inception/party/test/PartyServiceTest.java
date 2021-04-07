@@ -53,6 +53,7 @@ import digital.inception.party.PhysicalAddressType;
 import digital.inception.party.Preference;
 import digital.inception.party.ResidencePermit;
 import digital.inception.party.Role;
+import digital.inception.party.SegmentAllocation;
 import digital.inception.party.SourceOfFunds;
 import digital.inception.party.SourceOfWealth;
 import digital.inception.party.Status;
@@ -890,6 +891,7 @@ public class PartyServiceTest {
     invalidAddress.setLine1("Line 1");
     invalidAddress.setLine2("Line 2");
     invalidAddress.setLine3("Line 3");
+    invalidAddress.setLine4("Line 4");
     invalidAddress.setPostalCode("Postal Code");
     invalidAddress.setRegion("Region");
     invalidAddress.setSiteBlock("Site Block");
@@ -901,7 +903,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        13,
+        14,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid building address");
   }
@@ -938,6 +940,7 @@ public class PartyServiceTest {
     invalidAddress.setLine1("Line 1");
     invalidAddress.setLine2("Line 2");
     invalidAddress.setLine3("Line 3");
+    invalidAddress.setLine4("Line 4");
     invalidAddress.setPostalCode("Postal Code");
     invalidAddress.setRegion("Region");
     invalidAddress.setSiteBlock("Site Block");
@@ -949,7 +952,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        14,
+        15,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid complex address");
   }
@@ -1036,6 +1039,7 @@ public class PartyServiceTest {
     invalidAddress.setLine1("Line 1");
     invalidAddress.setLine2("Line 2");
     invalidAddress.setLine3("Line 3");
+    invalidAddress.setLine4("Line 4");
     invalidAddress.setPostalCode("Postal Code");
     invalidAddress.setRegion("Region");
     invalidAddress.setSiteBlock("Site Block");
@@ -1047,7 +1051,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        13,
+        14,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid farm address");
   }
@@ -1084,6 +1088,7 @@ public class PartyServiceTest {
     invalidAddress.setLine1("Line 1");
     invalidAddress.setLine2("Line 2");
     invalidAddress.setLine3("Line 3");
+    invalidAddress.setLine4("Line 4");
     invalidAddress.setPostalCode("Postal Code");
     invalidAddress.setRegion("Region");
     invalidAddress.setSiteBlock("Site Block");
@@ -1135,6 +1140,22 @@ public class PartyServiceTest {
         "The correct number of constraint violations was not found for the invalid organization");
   }
 
+  /** Test the invalid organization segment allocation test. */
+  @Test
+  public void invalidOrganizationSegmentAllocationTest() {
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addSegmentAllocation(new SegmentAllocation("invalid_segment_allocation"));
+
+    Set<ConstraintViolation<Organization>> constraintViolations =
+        partyService.validateOrganization(organization);
+
+    assertEquals(
+        1,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid organization");
+  }
+
   /** Test the invalid person attribute functionality. */
   @Test
   public void invalidPersonAttributeTest() {
@@ -1158,6 +1179,21 @@ public class PartyServiceTest {
     Person person = getTestBasicPersonDetails();
 
     person.addConsent(new Consent("invalid_consent"));
+
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+
+    assertEquals(
+        1,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid person");
+  }
+
+  /** Test the invalid person segment allocation test. */
+  @Test
+  public void invalidPersonSegmentAllocationTest() {
+    Person person = getTestBasicPersonDetails();
+
+    person.addSegmentAllocation(new SegmentAllocation("invalid_segment_allocation"));
 
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
@@ -1286,6 +1322,7 @@ public class PartyServiceTest {
     invalidAddress.setLine1("Line 1");
     invalidAddress.setLine2("Line 2");
     invalidAddress.setLine3("Line 3");
+    invalidAddress.setLine4("Line 4");
     invalidAddress.setPostalCode("Postal Code");
     invalidAddress.setRegion("Region");
     invalidAddress.setSiteBlock("Site Block");
@@ -1297,7 +1334,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        14,
+        15,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid site address");
   }
@@ -1334,6 +1371,7 @@ public class PartyServiceTest {
     invalidAddress.setLine1("Line 1");
     invalidAddress.setLine2("Line 2");
     invalidAddress.setLine3("Line 3");
+    invalidAddress.setLine4("Line 4");
     invalidAddress.setPostalCode("Postal Code");
     invalidAddress.setRegion("Region");
     invalidAddress.setSiteBlock("Site Block");
@@ -1345,7 +1383,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
-        16,
+        17,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid street address");
   }
@@ -1382,6 +1420,7 @@ public class PartyServiceTest {
     invalidAddress.setLine1("Line 1");
     invalidAddress.setLine2("Line 2");
     invalidAddress.setLine3("Line 3");
+    invalidAddress.setLine4("Line 4");
     invalidAddress.setPostalCode("Postal Code");
     invalidAddress.setRegion("Region");
     invalidAddress.setSiteBlock("Site Block");
@@ -1967,6 +2006,7 @@ public class PartyServiceTest {
     internationalAddress.setLine1("Address Line 1");
     internationalAddress.setLine2("Address Line 2");
     internationalAddress.setLine3("Address Line 3");
+    internationalAddress.setLine4("Address Line 4");
     internationalAddress.setCity("Johannesburg");
     internationalAddress.setCountry("ZA");
     internationalAddress.setPostalCode("2194");
@@ -2007,6 +2047,7 @@ public class PartyServiceTest {
     unstructuredAddress.setLine1("Address Line 1");
     unstructuredAddress.setLine2("Address Line 2");
     unstructuredAddress.setLine3("Address Line 3");
+    unstructuredAddress.setLine4("Address Line 4");
     // unstructuredAddress.setCity("Johannesburg");
     unstructuredAddress.setCountry("ZA");
     unstructuredAddress.setPostalCode("2194");
@@ -2204,6 +2245,91 @@ public class PartyServiceTest {
         12,
         organizationConstraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid organization");
+  }
+
+  /** Test the segment allocation functionality. */
+  @Test
+  public void segmentAllocationTest() throws Exception {
+    // Person segments
+    Person person = getTestBasicPersonDetails();
+
+    person.addSegmentAllocation(new SegmentAllocation("test_person_segment"));
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    assertTrue(retrievedPerson.getSegmentAllocationWithSegment("test_person_segment").isPresent());
+
+    compareSegmentAllocations(
+        person.getSegmentAllocationWithSegment("test_person_segment").get(),
+        retrievedPerson.getSegmentAllocationWithSegment("test_person_segment").get());
+
+    person.removeSegmentAllocationWithSegment("test_person_segment");
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setSegmentAllocations(
+        Set.of(
+            new SegmentAllocation(
+                "test_person_segment", LocalDate.of(2012, 5, 17), LocalDate.of(2019, 9, 23))));
+
+    partyService.updatePerson(person);
+
+    retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(person.getId());
+
+    // Organization segments
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addSegmentAllocation(new SegmentAllocation("test_organization_segment"));
+
+    partyService.createOrganization(organization);
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    assertTrue(
+        retrievedOrganization
+            .getSegmentAllocationWithSegment("test_organization_segment")
+            .isPresent());
+
+    compareSegmentAllocations(
+        organization.getSegmentAllocationWithSegment("test_organization_segment").get(),
+        retrievedOrganization.getSegmentAllocationWithSegment("test_organization_segment").get());
+
+    organization.removeSegmentAllocationWithSegment("test_organization_segment");
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setSegmentAllocations(
+        Set.of(
+            new SegmentAllocation(
+                "test_organization_segment",
+                LocalDate.of(2012, 5, 17),
+                LocalDate.of(2019, 9, 23))));
+
+    partyService.updateOrganization(organization);
+
+    retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(organization.getId());
   }
 
   /** Test the sourceOfFunds functionality. */
@@ -2901,6 +3027,34 @@ public class PartyServiceTest {
     }
 
     assertEquals(
+        organization1.getSegmentAllocations().size(),
+        organization2.getSegmentAllocations().size(),
+        "The number of segment allocations for the organizations do not match");
+
+    for (SegmentAllocation organization1SegmentAllocation : organization1.getSegmentAllocations()) {
+      boolean foundSegmentAllocation = false;
+
+      for (SegmentAllocation organization2SegmentAllocation :
+          organization2.getSegmentAllocations()) {
+        if (organization1SegmentAllocation
+            .getSegment()
+            .equals(organization2SegmentAllocation.getSegment())) {
+
+          compareSegmentAllocations(organization1SegmentAllocation, organization2SegmentAllocation);
+
+          foundSegmentAllocation = true;
+        }
+      }
+
+      if (!foundSegmentAllocation) {
+        fail(
+            "Failed to find the segment allocation ("
+                + organization1SegmentAllocation.getSegment()
+                + ")");
+      }
+    }
+
+    assertEquals(
         organization1.getStatuses().size(),
         organization2.getStatuses().size(),
         "The number of statuses for the organizations do not match");
@@ -3334,6 +3488,31 @@ public class PartyServiceTest {
     }
 
     assertEquals(
+        person1.getSegmentAllocations().size(),
+        person2.getSegmentAllocations().size(),
+        "The number of segment allocations for the persons do not match");
+
+    for (SegmentAllocation person1SegmentAllocation : person1.getSegmentAllocations()) {
+      boolean foundSegmentAllocation = false;
+
+      for (SegmentAllocation person2SegmentAllocation : person2.getSegmentAllocations()) {
+        if (person1SegmentAllocation.getSegment().equals(person2SegmentAllocation.getSegment())) {
+
+          compareSegmentAllocations(person1SegmentAllocation, person2SegmentAllocation);
+
+          foundSegmentAllocation = true;
+        }
+      }
+
+      if (!foundSegmentAllocation) {
+        fail(
+            "Failed to find the segment allocation ("
+                + person1SegmentAllocation.getSegment()
+                + ")");
+      }
+    }
+
+    assertEquals(
         person1.getStatuses().size(),
         person2.getStatuses().size(),
         "The number of statuses for the persons do not match");
@@ -3430,6 +3609,10 @@ public class PartyServiceTest {
         physicalAddress2.getLine3(),
         "The line 3 values for the physical addresses do not match");
     assertEquals(
+        physicalAddress1.getLine4(),
+        physicalAddress2.getLine4(),
+        "The line 4 values for the physical addresses do not match");
+    assertEquals(
         physicalAddress1.getParty(),
         physicalAddress2.getParty(),
         "The party values for the physical addresses do not match");
@@ -3525,6 +3708,26 @@ public class PartyServiceTest {
         "The effective to values for the roles do not match");
     assertEquals(role1.getParty(), role2.getParty(), "The party values for the roles do not match");
     assertEquals(role1.getType(), role2.getType(), "The type values for the roles do not match");
+  }
+
+  private void compareSegmentAllocations(
+      SegmentAllocation segmentAllocation1, SegmentAllocation segmentAllocation2) {
+    assertEquals(
+        segmentAllocation1.getEffectiveFrom(),
+        segmentAllocation2.getEffectiveFrom(),
+        "The effective from values for the segment allocations do not match");
+    assertEquals(
+        segmentAllocation1.getEffectiveTo(),
+        segmentAllocation2.getEffectiveTo(),
+        "The effective to values for the segment allocations do not match");
+    assertEquals(
+        segmentAllocation1.getParty(),
+        segmentAllocation2.getParty(),
+        "The party values for the segment allocations do not match");
+    assertEquals(
+        segmentAllocation1.getSegment(),
+        segmentAllocation2.getSegment(),
+        "The segment values for the segment allocations do not match");
   }
 
   private void compareSourcesOfFunds(SourceOfFunds sourceOfFunds1, SourceOfFunds sourceOfFunds2) {
