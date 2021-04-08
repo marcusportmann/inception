@@ -83,7 +83,7 @@ public abstract class ApplicationBase implements WebApplicationInitializer {
    *     processor package
    */
   @Bean
-  protected Jackson2ObjectMapperBuilder jacksonBuilder() {
+  protected Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
     jackson2ObjectMapperBuilder.indentOutput(true);
 

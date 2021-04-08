@@ -1071,6 +1071,29 @@ COMMENT ON COLUMN party.parties.type IS 'The code for the party type';
 COMMENT ON COLUMN party.parties.updated IS 'The date and time the party was last updated';
 
 
+CREATE TABLE party.party_history (
+   created   TIMESTAMP NOT NULL,
+   data      JSON      NOT NULL,
+   id        UUID      NOT NULL,
+   party_id  UUID      NOT NULL,
+
+   PRIMARY KEY (id),
+   CONSTRAINT party_history_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX party_history_created_ix ON party.party_history(created);
+
+CREATE INDEX party_history_party_id_ix ON party.party_history(party_id);
+
+COMMENT ON COLUMN party.party_history.created IS 'The date and time the party history was created';
+
+COMMENT ON COLUMN party.party_history.data IS 'The JSON data for the party representing a historical view of the party';
+
+COMMENT ON COLUMN party.party_history.id IS 'The Universally Unique Identifier (UUID) for the party history';
+
+COMMENT ON COLUMN party.party_history.party_id IS 'The Universally Unique Identifier (UUID) for the party the party history is associated with';
+
+
 CREATE TABLE party.organizations (
   countries_of_tax_residence VARCHAR(30),
   id                         UUID          NOT NULL,

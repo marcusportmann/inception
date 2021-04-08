@@ -16,6 +16,10 @@
     <!-- Inception Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-json</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-persistence</artifactId>
     </dependency>
 

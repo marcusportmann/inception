@@ -16,6 +16,8 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
@@ -31,7 +33,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -63,6 +66,9 @@ public class PartyService implements IPartyService {
   /** /** The Organization Repository. */
   private final OrganizationRepository organizationRepository;
 
+  /** The Party History Repository. */
+  private final PartyHistoryRepository partyHistoryRepository;
+
   /** The Party Repository. */
   private final PartyRepository partyRepository;
 
@@ -71,6 +77,9 @@ public class PartyService implements IPartyService {
 
   /** The JSR-303 validator. */
   private final Validator validator;
+
+  /** The Jackson2 Object Mapper Builder. */
+  private final Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
 
   /** The internal reference to the Party Service to enable caching. */
   @Resource private IPartyService self;
@@ -81,18 +90,23 @@ public class PartyService implements IPartyService {
    * @param applicationContext the Spring application context
    * @param validator the JSR-303 validator
    * @param organizationRepository the Organization Repository
+   * @param partyHistoryRepository the Party History Repository
    * @param partyRepository the Party Repository
    * @param personRepository the Person Repository
    */
   public PartyService(
       ApplicationContext applicationContext,
+      Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder,
       Validator validator,
       OrganizationRepository organizationRepository,
+      PartyHistoryRepository partyHistoryRepository,
       PartyRepository partyRepository,
       PersonRepository personRepository) {
     this.applicationContext = applicationContext;
+    this.jackson2ObjectMapperBuilder = jackson2ObjectMapperBuilder;
     this.validator = validator;
     this.organizationRepository = organizationRepository;
+    this.partyHistoryRepository = partyHistoryRepository;
     this.partyRepository = partyRepository;
     this.personRepository = personRepository;
   }
@@ -122,7 +136,16 @@ public class PartyService implements IPartyService {
         throw new DuplicateOrganizationException(organization.getId());
       }
 
+      // Serialize the person object as JSON
+      ObjectMapper objectMapper =
+          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
+
+      String organizationJson = objectMapper.writeValueAsString(organization);
+
       organizationRepository.saveAndFlush(organization);
+
+      partyHistoryRepository.saveAndFlush(new PartyHistory(organization.getId(), organizationJson));
+
     } catch (DuplicateOrganizationException e) {
       throw e;
     } catch (Throwable e) {
@@ -156,7 +179,16 @@ public class PartyService implements IPartyService {
         throw new DuplicatePersonException(person.getId());
       }
 
+      // Serialize the person object as JSON
+      ObjectMapper objectMapper =
+          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
+
+      String personJson = objectMapper.writeValueAsString(person);
+
       personRepository.saveAndFlush(person);
+
+      partyHistoryRepository.saveAndFlush(new PartyHistory(person.getId(), personJson));
+
     } catch (DuplicatePersonException e) {
       throw e;
     } catch (Throwable e) {
@@ -323,18 +355,14 @@ public class PartyService implements IPartyService {
             PageRequest.of(
                 pageIndex,
                 Math.min(pageSize, MAX_FILTERED_ORGANISATIONS),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
+                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
                 "name");
       } else {
         pageRequest =
             PageRequest.of(
                 pageIndex,
                 Math.min(pageSize, MAX_FILTERED_ORGANISATIONS),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
+                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
                 "name");
       }
 
@@ -520,18 +548,14 @@ public class PartyService implements IPartyService {
             PageRequest.of(
                 pageIndex,
                 Math.min(pageSize, MAX_FILTERED_PERSONS),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
+                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
                 "preferredName");
       } else {
         pageRequest =
             PageRequest.of(
                 pageIndex,
                 Math.min(pageSize, MAX_FILTERED_PERSONS),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
+                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
                 "name");
       }
 
@@ -583,7 +607,16 @@ public class PartyService implements IPartyService {
         throw new OrganizationNotFoundException(organization.getId());
       }
 
+      // Serialize the person object as JSON
+      ObjectMapper objectMapper =
+          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
+
+      String organizationJson = objectMapper.writeValueAsString(organization);
+
       organizationRepository.saveAndFlush(organization);
+
+      partyHistoryRepository.saveAndFlush(new PartyHistory(organization.getId(), organizationJson));
+
     } catch (OrganizationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -618,7 +651,16 @@ public class PartyService implements IPartyService {
         throw new PersonNotFoundException(person.getId());
       }
 
+      // Serialize the person object as JSON
+      ObjectMapper objectMapper =
+          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
+
+      String personJson = objectMapper.writeValueAsString(person);
+
       personRepository.saveAndFlush(person);
+
+      partyHistoryRepository.saveAndFlush(new PartyHistory(person.getId(), personJson));
+
     } catch (PersonNotFoundException e) {
       throw e;
     } catch (Throwable e) {

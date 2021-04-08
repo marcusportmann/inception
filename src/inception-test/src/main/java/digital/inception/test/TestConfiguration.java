@@ -18,6 +18,7 @@ package digital.inception.test;
 
 import digital.inception.core.util.JDBCUtil;
 import digital.inception.core.util.ResourceUtil;
+import digital.inception.json.DateTimeModule;
 import digital.inception.persistence.JtaPlatform;
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
@@ -54,6 +55,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -328,6 +330,28 @@ public class TestConfiguration {
 
       return dataSource;
     }
+  }
+
+  /**
+   * Returns the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
+   * processor package.
+   *
+   * @return the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
+   *     processor package
+   */
+  @Bean
+  protected Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
+    Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
+    jackson2ObjectMapperBuilder.indentOutput(true);
+
+    /*
+     * Install the custom Jackson module that supports serializing and de-serializing ISO 8601 date
+     * and date/time values. The jackson-datatype-jsr310 module provided by Jackson was not used as
+     * it does not handle timezones correctly for LocalDateTime objects.
+     */
+    jackson2ObjectMapperBuilder.modulesToInstall(new DateTimeModule());
+
+    return jackson2ObjectMapperBuilder;
   }
 
   /**
