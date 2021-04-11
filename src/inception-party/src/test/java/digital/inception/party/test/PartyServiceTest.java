@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.party.Attribute;
@@ -54,6 +55,7 @@ import digital.inception.party.Preference;
 import digital.inception.party.ResidencePermit;
 import digital.inception.party.Role;
 import digital.inception.party.SegmentAllocation;
+import digital.inception.party.Snapshots;
 import digital.inception.party.SourceOfFunds;
 import digital.inception.party.SourceOfWealth;
 import digital.inception.party.Status;
@@ -70,6 +72,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -102,6 +105,9 @@ public class PartyServiceTest {
   private static int partyCount;
 
   private static int personCount;
+
+  /** The Jackson2 Object Mapper Builder */
+  @Autowired private Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
 
   /** The Party Service. */
   @Autowired private IPartyService partyService;
@@ -1660,7 +1666,7 @@ public class PartyServiceTest {
 
     organization.removeRoleWithType("employer");
 
-    organization.addRole(new Role("vendor"));
+    organization.addRole(new Role("supplier"));
 
     partyService.updateOrganization(organization);
 
@@ -1745,6 +1751,16 @@ public class PartyServiceTest {
         "The correct number of filtered persons was not retrieved");
 
     comparePersons(person, filteredPersons.getPersons().get(0));
+
+    Snapshots snapshots =
+        partyService.getSnapshots(person.getId(), null, null, SortDirection.ASCENDING, 0, 100);
+
+    ObjectMapper objectMapper = jackson2ObjectMapperBuilder.build();
+
+    System.out.println(snapshots.getSnapshots().get(0).getData());
+
+    Person serializedPerson =
+        objectMapper.readValue(snapshots.getSnapshots().get(0).getData(), Person.class);
 
     person.setCountriesOfCitizenship(Set.of("ZA", "GB"));
     person.setCountryOfBirth("GB");

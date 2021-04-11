@@ -28,6 +28,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalDate;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -377,6 +378,86 @@ public class PartyApi extends SecureApi {
     }
 
     return partyService.getParties(filter, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
+   * Retrieve the snapshots.
+   *
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param from the optional date to retrieve the snapshots from
+   * @param to the optional date to retrieve the snapshots to
+   * @param sortDirection the optional sort direction to apply to the snapshots
+   * @param sortDirection the optional sort direction to apply to the parties
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the parties
+   */
+  @Operation(summary = "Retrieve the snapshots", description = "Retrieve the snapshots")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/parties/{partyId}/snapshots",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
+  public Snapshots getParties(
+      @Parameter(name = "partyId", description = "The ID for the party", required = true)
+          @PathVariable
+          UUID partyId,
+      @Parameter(
+              name = "from",
+              description = "The optional date to retrieve the snapshots from")
+          @RequestParam(value = "from", required = false)
+          LocalDate from,
+      @Parameter(name = "to", description = "The optional date to retrieve the snapshots to")
+          @RequestParam(value = "to", required = false)
+          LocalDate to,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the parties")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
+    return partyService.getSnapshots(partyId, from, to, sortDirection, pageIndex, pageSize);
   }
 
   /**

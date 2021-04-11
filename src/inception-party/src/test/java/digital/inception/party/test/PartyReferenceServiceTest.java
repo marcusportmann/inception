@@ -492,7 +492,16 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getRoleTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        5, retrievedRoleTypes.size(), "The correct number of role types was not retrieved");
+        32, retrievedRoleTypes.size(), "The correct number of role types was not retrieved");
+  }
+
+  /** Test the segment reference functionality. */
+  @Test
+  public void segmentTest() throws Exception {
+    List<Segment> retrievedSegments =
+        partyReferenceService.getSegments(PartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(2, retrievedSegments.size(), "The correct number of segments was not retrieved");
   }
 
   /** Test the source of funds types reference functionality. */
@@ -539,18 +548,6 @@ public class PartyReferenceServiceTest {
         7,
         retrievedTaxNumberTypes.size(),
         "The correct number of tax number types was not retrieved");
-  }
-
-  /** Test the segment reference functionality. */
-  @Test
-  public void segmentTest() throws Exception {
-    List<Segment> retrievedSegments =
-        partyReferenceService.getSegments(PartyReferenceService.DEFAULT_LOCALE_ID);
-
-    assertEquals(
-        2,
-        retrievedSegments.size(),
-        "The correct number of segments was not retrieved");
   }
 
   /** Test the time to contact functionality. */

@@ -16,8 +16,17 @@
   <changeSet id="inception-core-1.0.0" author="Marcus Portmann">
     <comment>Inception - Core - 1.0.0</comment>
     <sql dbms="postgresql" endDelimiter=";">
-      create schema idgenerator
+      CREATE SCHEMA idgenerator
     </sql>
+
+    <sql dbms="postgresql" endDelimiter=";">
+      CREATE CAST (varchar AS jsonb) WITH INOUT AS ASSIGNMENT
+    </sql>
+
+    <sql dbms="postgresql" endDelimiter=";">
+      CREATE CAST (text AS jsonb) WITH INOUT AS ASSIGNMENT
+    </sql>
+
     <sql dbms="mssql" endDelimiter=";">
       create schema idgenerator
     </sql>

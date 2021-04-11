@@ -20,9 +20,9 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>PartyHistoryRepository</b> interface declares the repository for the <b>PartyHistory</b>
- * domain type.
+ * The <b>SnapshotRepository</b> interface declares the repository for the <b>Snapshot</b> domain
+ * type.
  *
  * @author Marcus Portmann
  */
-public interface PartyHistoryRepository extends JpaRepository<PartyHistory, UUID> {}
+public interface SnapshotRepository extends JpaRepository<Snapshot, UUID> {}

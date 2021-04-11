@@ -19,6 +19,7 @@ package digital.inception.party;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.ConstraintViolation;
@@ -143,6 +144,26 @@ public interface IPartyService {
   Persons getPersons(
       String filter,
       PersonSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the snapshots for the party.
+   *
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param from the optional date to retrieve the snapshots from
+   * @param to the optional date to retrieve the snapshots to
+   * @param sortDirection the optional sort direction to apply to the snapshots
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the snapshots
+   */
+  Snapshots getSnapshots(
+      UUID partyId,
+      LocalDate from,
+      LocalDate to,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)

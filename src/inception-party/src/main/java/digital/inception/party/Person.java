@@ -1008,7 +1008,7 @@ public class Person extends PartyBase implements Serializable {
    */
   @Schema(description = "The educations obtained by the person")
   @JsonProperty
-  @JsonManagedReference("eductionReference")
+  @JsonManagedReference("educationReference")
   @XmlElementWrapper(name = "Educations")
   @XmlElement(name = "Education")
   public Set<Education> getEducations() {

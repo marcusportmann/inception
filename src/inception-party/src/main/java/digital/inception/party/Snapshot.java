@@ -16,7 +16,6 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -35,53 +34,42 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import org.hibernate.annotations.CreationTimestamp;
 
 /**
- * The <b>PartyHistory</b> class holds the information for a historical view of a party.
+ * The <b>Snapshot</b> class holds the information for a snapshot of a party.
  *
- * <p>Changes to parties are recorded as party history records, which include all the data for the
- * party serialized as a JSON data structure.
+ * <p>Changes to parties are recorded as snapshots, which include all the data for the party
+ * serialized as a JSON data structure.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A historical view of a party")
+@Schema(description = "A snapshot")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "partyId", "data"})
-@XmlRootElement(name = "PartyHistory", namespace = "http://inception.digital/party")
+@JsonPropertyOrder({"id", "partyId", "timestamp", "data"})
+@XmlRootElement(name = "Snapshot", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "PartyHistory",
+    name = "Snapshot",
     namespace = "http://inception.digital/party",
-    propOrder = {"id", "partyId", "data"})
+    propOrder = {"id", "partyId", "timestamp", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "party_history")
-public class PartyHistory implements Serializable {
+@Table(schema = "party", name = "snapshots")
+public class Snapshot implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the party history was created. */
-  @JsonIgnore
-  @XmlTransient
-  @CreationTimestamp
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
-
-  /** The JSON data for the party representing a historical view of the party. */
-  @Schema(
-      description = "The JSON data for the party representing a historical view of the party",
-      required = true)
+  /** The JSON data for the party. */
+  @Schema(description = "The JSON data for the party", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Data", required = true)
   @NotNull
   @Column(name = "data", nullable = false)
   private String data;
 
-  /** The Universally Unique Identifier (UUID) for the party history. */
+  /** The Universally Unique Identifier (UUID) for the snapshot. */
   @Schema(
-      description = "The Universally Unique Identifier (UUID) for the party history",
+      description = "The Universally Unique Identifier (UUID) for the snapshot",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -90,12 +78,10 @@ public class PartyHistory implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the party the party history is associated with.
-   */
+  /** The Universally Unique Identifier (UUID) for the party the snapshot is associated with. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) for the party the party history is associated with",
+          "The Universally Unique Identifier (UUID) for the party the snapshot is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "PartyId", required = true)
@@ -103,19 +89,27 @@ public class PartyHistory implements Serializable {
   @Column(name = "party_id", nullable = false)
   private UUID partyId;
 
-  /** Constructs a new <b>PartyHistory</b>. */
-  public PartyHistory() {}
+  /** The date and time the snapshot was created. */
+  @Schema(description = "The date and time the snapshot was created", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Timestamp", required = true)
+  @Column(name = "timestamp", nullable = false)
+  private LocalDateTime timestamp;
+
+  /** Constructs a new <b>Snapshot</b>. */
+  public Snapshot() {}
 
   /**
-   * Constructs a new <b>PartyHistory</b>.
+   * Constructs a new <b>Snapshot</b>.
    *
-   * @param partyId the Universally Unique Identifier (UUID) for the party the party history is
+   * @param partyId the Universally Unique Identifier (UUID) for the party the snapshot is
    *     associated with
-   * @param data the JSON data for the party representing a historical view of the party
+   * @param data the JSON data for the party
    */
-  public PartyHistory(UUID partyId, String data) {
+  public Snapshot(UUID partyId, String data) {
     this.id = UuidCreator.getShortPrefixComb();
     this.partyId = partyId;
+    this.timestamp = LocalDateTime.now();
     this.data = data;
   }
 
@@ -139,47 +133,45 @@ public class PartyHistory implements Serializable {
       return false;
     }
 
-    PartyHistory other = (PartyHistory) object;
+    Snapshot other = (Snapshot) object;
 
     return Objects.equals(id, other.id);
   }
 
   /**
-   * Returns the date and time the party history was created.
+   * Returns the JSON data for the party.
    *
-   * @return the date and time the party history was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
-   * Returns the JSON data for the party representing a historical view of the party.
-   *
-   * @return the JSON data for the party representing a historical view of the party
+   * @return the JSON data for the party
    */
   public String getData() {
     return data;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the party history.
+   * Returns the Universally Unique Identifier (UUID) for the snapshot.
    *
-   * @return the Universally Unique Identifier (UUID) for the party history
+   * @return the Universally Unique Identifier (UUID) for the snapshot
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the party the party history is associated
-   * with.
+   * Returns the Universally Unique Identifier (UUID) for the party the snapshot is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the party the party history is associated
-   *     with
+   * @return the Universally Unique Identifier (UUID) for the party the snapshot is associated with
    */
   public UUID getPartyId() {
     return partyId;
+  }
+
+  /**
+   * Returns the date and time the snapshot was created.
+   *
+   * @return the date and time the snapshot was created
+   */
+  public LocalDateTime getTimestamp() {
+    return timestamp;
   }
 
   /**
@@ -193,31 +185,39 @@ public class PartyHistory implements Serializable {
   }
 
   /**
-   * Set the JSON data for the party representing a historical view of the party.
+   * Set the JSON data for the party.
    *
-   * @param data the JSON data for the party representing a historical view of the party
+   * @param data the JSON data for the party
    */
   public void setData(String data) {
     this.data = data;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the party history.
+   * Set the Universally Unique Identifier (UUID) for the snapshot.
    *
-   * @param id the Universally Unique Identifier (UUID) for the party history
+   * @param id the Universally Unique Identifier (UUID) for the snapshot
    */
   public void setId(UUID id) {
     this.id = id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the party the party history is associated
-   * with.
+   * Set the Universally Unique Identifier (UUID) for the party the snapshot is associated with.
    *
-   * @param partyId the Universally Unique Identifier (UUID) for the party the party history is
+   * @param partyId the Universally Unique Identifier (UUID) for the party the snapshot is
    *     associated with
    */
   public void setPartyId(UUID partyId) {
     this.partyId = partyId;
+  }
+
+  /**
+   * Set the date and time the snapshot was created.
+   *
+   * @param timestamp the date and time the snapshot was created
+   */
+  public void setTimestamp(LocalDateTime timestamp) {
+    this.timestamp = timestamp;
   }
 }

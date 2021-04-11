@@ -22,10 +22,12 @@ import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.slf4j.Logger;
@@ -57,17 +59,22 @@ public class PartyService implements IPartyService {
   /** The maximum number of filtered persons. */
   private static final int MAX_FILTERED_PERSONS = 100;
 
+  /** The maximum number of snapshots. */
+  private static final int MAX_PARTY_SNAPSHOTS = 100;
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(PartyService.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
 
+  private final DataSource applicationDataSource;
+
+  /** The Jackson2 Object Mapper Builder. */
+  private final Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
+
   /** /** The Organization Repository. */
   private final OrganizationRepository organizationRepository;
-
-  /** The Party History Repository. */
-  private final PartyHistoryRepository partyHistoryRepository;
 
   /** The Party Repository. */
   private final PartyRepository partyRepository;
@@ -75,11 +82,11 @@ public class PartyService implements IPartyService {
   /** The Person Repository. */
   private final PersonRepository personRepository;
 
+  /** The Snapshot Repository. */
+  private final SnapshotRepository snapshotRepository;
+
   /** The JSR-303 validator. */
   private final Validator validator;
-
-  /** The Jackson2 Object Mapper Builder. */
-  private final Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
 
   /** The internal reference to the Party Service to enable caching. */
   @Resource private IPartyService self;
@@ -90,25 +97,27 @@ public class PartyService implements IPartyService {
    * @param applicationContext the Spring application context
    * @param validator the JSR-303 validator
    * @param organizationRepository the Organization Repository
-   * @param partyHistoryRepository the Party History Repository
    * @param partyRepository the Party Repository
    * @param personRepository the Person Repository
+   * @param snapshotRepository the Snapshot Repository
    */
   public PartyService(
+      DataSource applicationDataSource,
       ApplicationContext applicationContext,
       Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder,
       Validator validator,
       OrganizationRepository organizationRepository,
-      PartyHistoryRepository partyHistoryRepository,
       PartyRepository partyRepository,
-      PersonRepository personRepository) {
+      PersonRepository personRepository,
+      SnapshotRepository snapshotRepository) {
+    this.applicationDataSource = applicationDataSource;
     this.applicationContext = applicationContext;
     this.jackson2ObjectMapperBuilder = jackson2ObjectMapperBuilder;
     this.validator = validator;
     this.organizationRepository = organizationRepository;
-    this.partyHistoryRepository = partyHistoryRepository;
     this.partyRepository = partyRepository;
     this.personRepository = personRepository;
+    this.snapshotRepository = snapshotRepository;
   }
 
   /**
@@ -144,7 +153,7 @@ public class PartyService implements IPartyService {
 
       organizationRepository.saveAndFlush(organization);
 
-      partyHistoryRepository.saveAndFlush(new PartyHistory(organization.getId(), organizationJson));
+      snapshotRepository.saveAndFlush(new Snapshot(organization.getId(), organizationJson));
 
     } catch (DuplicateOrganizationException e) {
       throw e;
@@ -187,7 +196,7 @@ public class PartyService implements IPartyService {
 
       personRepository.saveAndFlush(person);
 
-      partyHistoryRepository.saveAndFlush(new PartyHistory(person.getId(), personJson));
+      snapshotRepository.saveAndFlush(new Snapshot(person.getId(), personJson));
 
     } catch (DuplicatePersonException e) {
       throw e;
@@ -382,9 +391,6 @@ public class PartyService implements IPartyService {
           pageIndex,
           pageSize);
     } catch (Throwable e) {
-
-      logger.error("Failed to retrieve the filtered organizations", e);
-
       throw new ServiceUnavailableException("Failed to retrieve the filtered organizations", e);
     }
   }
@@ -575,10 +581,84 @@ public class PartyService implements IPartyService {
           pageIndex,
           pageSize);
     } catch (Throwable e) {
-
-      logger.error("Failed to retrieve the filtered persons", e);
-
       throw new ServiceUnavailableException("Failed to retrieve the filtered persons", e);
+    }
+  }
+
+  /**
+   * Retrieve the snapshots for the party.
+   *
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param from the optional date to retrieve the snapshots from
+   * @param to the optional date to retrieve the snapshots to
+   * @param sortDirection the optional sort direction to apply to the snapshots
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the snapshots
+   */
+  @Override
+  @Transactional
+  public Snapshots getSnapshots(
+      UUID partyId,
+      LocalDate from,
+      LocalDate to,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.ASCENDING;
+    }
+
+    try {
+      PageRequest pageRequest;
+
+      if (pageIndex == null) {
+        pageIndex = 0;
+      }
+
+      if (pageSize == null) {
+        pageSize = MAX_FILTERED_PERSONS;
+      }
+
+      pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, MAX_FILTERED_PERSONS),
+              (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
+              "timestamp");
+
+      Page<Snapshot> partySnapshotPage;
+
+      if ((from != null) && (to != null)) {
+        partySnapshotPage = snapshotRepository.findAll(pageRequest);
+      } else if (from != null) {
+        partySnapshotPage = snapshotRepository.findAll(pageRequest);
+      } else if (to != null) {
+        partySnapshotPage = snapshotRepository.findAll(pageRequest);
+      } else {
+        partySnapshotPage = snapshotRepository.findAll(pageRequest);
+      }
+
+      return new Snapshots(
+          partySnapshotPage.toList(),
+          partySnapshotPage.getTotalElements(),
+          partyId,
+          from,
+          to,
+          sortDirection,
+          pageIndex,
+          pageSize);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the snapshots", e);
     }
   }
 
@@ -615,7 +695,7 @@ public class PartyService implements IPartyService {
 
       organizationRepository.saveAndFlush(organization);
 
-      partyHistoryRepository.saveAndFlush(new PartyHistory(organization.getId(), organizationJson));
+      snapshotRepository.saveAndFlush(new Snapshot(organization.getId(), organizationJson));
 
     } catch (OrganizationNotFoundException e) {
       throw e;
@@ -659,7 +739,7 @@ public class PartyService implements IPartyService {
 
       personRepository.saveAndFlush(person);
 
-      partyHistoryRepository.saveAndFlush(new PartyHistory(person.getId(), personJson));
+      snapshotRepository.saveAndFlush(new Snapshot(person.getId(), personJson));
 
     } catch (PersonNotFoundException e) {
       throw e;
