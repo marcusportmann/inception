@@ -23,6 +23,7 @@ import digital.inception.core.sorting.SortDirection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -39,6 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "The results of a request to retrieve a list of organizations")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+  "tenantId",
   "organizations",
   "total",
   "filter",
@@ -52,6 +54,7 @@ import javax.xml.bind.annotation.XmlType;
     name = "Organizations",
     namespace = "http://inception.digital/party",
     propOrder = {
+      "tenantId",
       "organizations",
       "total",
       "filter",
@@ -103,6 +106,17 @@ public class Organizations implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
+  /**
+   * The Universally Unique Identifier (UUID) for the tenant the organizations are associated with.
+   */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the organizations are associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  private UUID tenantId;
+
   /** The total number of organizations. */
   @Schema(description = "The total number of organizations", required = true)
   @JsonProperty(required = true)
@@ -115,6 +129,8 @@ public class Organizations implements Serializable {
   /**
    * Constructs a new <b>Organizations</b>.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organizations are
+   *     associated with
    * @param organizations the organizations
    * @param total the total number of organizations
    * @param filter the optional filter that was applied to the organizations
@@ -124,6 +140,7 @@ public class Organizations implements Serializable {
    * @param pageSize the optional page size
    */
   public Organizations(
+      UUID tenantId,
       List<Organization> organizations,
       long total,
       String filter,
@@ -131,6 +148,7 @@ public class Organizations implements Serializable {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
+    this.tenantId = tenantId;
     this.organizations = organizations;
     this.total = total;
     this.filter = filter;
@@ -192,6 +210,17 @@ public class Organizations implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the organizations are
+   * associated with.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the organizations are
+   *     associated with
+   */
+  public UUID getTenantId() {
+    return tenantId;
   }
 
   /**

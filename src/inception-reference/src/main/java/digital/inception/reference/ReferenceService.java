@@ -95,7 +95,7 @@ public class ReferenceService implements IReferenceService {
    * @return the countries
    */
   @Override
-  @Cacheable(value = "reference", key = "'countries.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'countries.' + #localeId")
   public List<Country> getCountries(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -117,7 +117,7 @@ public class ReferenceService implements IReferenceService {
    * @return the languages
    */
   @Override
-  @Cacheable(value = "reference", key = "'languages.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'languages.' + #localeId")
   public List<Language> getLanguages(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -139,7 +139,7 @@ public class ReferenceService implements IReferenceService {
    * @return the measurement systems
    */
   @Override
-  @Cacheable(value = "reference", key = "'measurementSystems.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'measurementSystems.' + #localeId")
   public List<MeasurementSystem> getMeasurementSystems(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -162,7 +162,7 @@ public class ReferenceService implements IReferenceService {
    * @return the measurement unit types
    */
   @Override
-  @Cacheable(value = "reference", key = "'measurementUnitTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'measurementUnitTypes.' + #localeId")
   public List<MeasurementUnitType> getMeasurementUnitTypes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -186,7 +186,7 @@ public class ReferenceService implements IReferenceService {
    * @return the measurement units
    */
   @Override
-  @Cacheable(value = "reference", key = "'measurementUnits.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'measurementUnits.' + #localeId")
   public List<MeasurementUnit> getMeasurementUnits(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -209,7 +209,7 @@ public class ReferenceService implements IReferenceService {
    * @return the regions
    */
   @Override
-  @Cacheable(value = "reference", key = "'regions.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'regions.' + #localeId")
   public List<Region> getRegions(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -231,7 +231,7 @@ public class ReferenceService implements IReferenceService {
    * @return the time zones
    */
   @Override
-  @Cacheable(value = "reference", key = "'timeZones.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'timeZones.' + #localeId")
   public List<TimeZone> getTimeZones(String localeId) throws ServiceUnavailableException {
     try {
       List<TimeZone> timeZones = new ArrayList<>();

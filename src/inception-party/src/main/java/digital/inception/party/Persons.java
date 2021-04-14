@@ -23,6 +23,7 @@ import digital.inception.core.sorting.SortDirection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -38,6 +39,7 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "The results of a request to retrieve a list of persons")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+  "tenantId",
   "persons",
   "total",
   "filter",
@@ -50,7 +52,16 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(
     name = "Persons",
     namespace = "http://inception.digital/party",
-    propOrder = {"persons", "total", "filter", "sortBy", "sortDirection", "pageIndex", "pageSize"})
+    propOrder = {
+      "tenantId",
+      "persons",
+      "total",
+      "filter",
+      "sortBy",
+      "sortDirection",
+      "pageIndex",
+      "pageSize"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class Persons implements Serializable {
@@ -94,6 +105,15 @@ public class Persons implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
+  /** The Universally Unique Identifier (UUID) for the tenant the persons are associated with. */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the persons are associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  private UUID tenantId;
+
   /** The total number of persons. */
   @Schema(description = "The total number of persons", required = true)
   @JsonProperty(required = true)
@@ -106,6 +126,8 @@ public class Persons implements Serializable {
   /**
    * Constructs a new <b>Persons</b>.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the persons are
+   *     associated with
    * @param persons the persons
    * @param total the total number of persons
    * @param filter the optional filter that was applied to the persons
@@ -115,6 +137,7 @@ public class Persons implements Serializable {
    * @param pageSize the optional page size
    */
   public Persons(
+      UUID tenantId,
       List<Person> persons,
       long total,
       String filter,
@@ -122,6 +145,7 @@ public class Persons implements Serializable {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
+    this.tenantId = tenantId;
     this.persons = persons;
     this.total = total;
     this.filter = filter;
@@ -183,6 +207,16 @@ public class Persons implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the persons are associated
+   * with.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the persons are associated with
+   */
+  public UUID getTenantId() {
+    return tenantId;
   }
 
   /**

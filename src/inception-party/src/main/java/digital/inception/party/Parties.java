@@ -23,6 +23,7 @@ import digital.inception.core.sorting.SortDirection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -37,12 +38,28 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "The results of a request to retrieve a list of parties")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"parties", "total", "filter", "sortDirection", "pageIndex", "pageSize"})
+@JsonPropertyOrder({
+  "tenantId",
+  "parties",
+  "total",
+  "filter",
+  "sortDirection",
+  "pageIndex",
+  "pageSize"
+})
 @XmlRootElement(name = "Parties", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Parties",
     namespace = "http://inception.digital/party",
-    propOrder = {"parties", "total", "filter", "sortDirection", "pageIndex", "pageSize"})
+    propOrder = {
+      "tenantId",
+      "parties",
+      "total",
+      "filter",
+      "sortDirection",
+      "pageIndex",
+      "pageSize"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class Parties implements Serializable {
@@ -80,6 +97,15 @@ public class Parties implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
+  /** The Universally Unique Identifier (UUID) for the tenant the parties are associated with. */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the parties are associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  private UUID tenantId;
+
   /** The total number of parties. */
   @Schema(description = "The total number of parties", required = true)
   @JsonProperty(required = true)
@@ -92,6 +118,8 @@ public class Parties implements Serializable {
   /**
    * Constructs a new <b>Parties</b>.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the parties are
+   *     associated with
    * @param parties the parties
    * @param total the total number of parties
    * @param filter the optional filter that was applied to the parties
@@ -100,12 +128,14 @@ public class Parties implements Serializable {
    * @param pageSize the optional page size
    */
   public Parties(
+      UUID tenantId,
       List<Party> parties,
       long total,
       String filter,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
+    this.tenantId = tenantId;
     this.parties = parties;
     this.total = total;
     this.filter = filter;
@@ -157,6 +187,16 @@ public class Parties implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the parties are associated
+   * with.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the parties are associated with
+   */
+  public UUID getTenantId() {
+    return tenantId;
   }
 
   /**

@@ -500,7 +500,7 @@ public class SecurityServiceTest {
         () -> {
           Tenant tenant = getTestTenantDetails();
 
-          securityService.deleteGroup(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, "INVALID");
+          securityService.deleteGroup(SecurityService.DEFAULT_USER_DIRECTORY_ID, "INVALID");
         });
   }
 
@@ -770,16 +770,16 @@ public class SecurityServiceTest {
   /** Test the functionality to retrieve the authorised function codes for the user. */
   @Test
   public void getFunctionCodesForUserTest() throws Exception {
-    User user = getTestUserDetails(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID);
+    User user = getTestUserDetails(SecurityService.DEFAULT_USER_DIRECTORY_ID);
 
     securityService.createUser(user, false, false);
 
     securityService.addUserToGroup(
-        SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, "Administrators", user.getUsername());
+        SecurityService.DEFAULT_USER_DIRECTORY_ID, "Administrators", user.getUsername());
 
     List<String> groupNamesForUser =
         securityService.getGroupNamesForUser(
-            SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, user.getUsername());
+            SecurityService.DEFAULT_USER_DIRECTORY_ID, user.getUsername());
 
     assertEquals(
         1,
@@ -790,7 +790,7 @@ public class SecurityServiceTest {
 
     List<String> functionCodesForUser =
         securityService.getFunctionCodesForUser(
-            SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, user.getUsername());
+            SecurityService.DEFAULT_USER_DIRECTORY_ID, user.getUsername());
 
     assertEquals(
         0,
@@ -1121,7 +1121,7 @@ public class SecurityServiceTest {
 
     List<String> retrievedRoleCodes =
         securityService.getRoleCodesForUser(
-            SecurityService.ADMINISTRATION_USER_DIRECTORY_ID,
+            SecurityService.DEFAULT_USER_DIRECTORY_ID,
             SecurityService.ADMINISTRATOR_USERNAME);
 
     assertEquals(
@@ -1134,7 +1134,7 @@ public class SecurityServiceTest {
 
     List<GroupRole> retrievedGroupRoles =
         securityService.getRolesForGroup(
-            SecurityService.ADMINISTRATION_USER_DIRECTORY_ID,
+            SecurityService.DEFAULT_USER_DIRECTORY_ID,
             SecurityService.ADMINISTRATORS_GROUP_NAME);
 
     assertEquals(
@@ -1147,7 +1147,7 @@ public class SecurityServiceTest {
 
     retrievedRoleCodes =
         securityService.getRoleCodesForGroup(
-            SecurityService.ADMINISTRATION_USER_DIRECTORY_ID,
+            SecurityService.DEFAULT_USER_DIRECTORY_ID,
             SecurityService.ADMINISTRATORS_GROUP_NAME);
 
     assertEquals(

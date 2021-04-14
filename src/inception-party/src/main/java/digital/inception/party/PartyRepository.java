@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,11 @@ public interface PartyRepository extends JpaRepository<Party, UUID> {
   @Query("select p from Party p")
   Page<Party> findAll(Pageable pageable);
 
+  Page<Party> findByTenantId(UUID tenantId, Pageable pageable);
+
   @Query("select p from Party p where (lower(p.name) like lower(:filter))")
   Page<Party> findFiltered(@Param("filter") String filter, Pageable pageable);
+
+  @Query("select p.tenantId from Party p where p.id = :partyId")
+  Optional<UUID> getTenantIdByPartyId(@Param("partyId") UUID partyId);
 }

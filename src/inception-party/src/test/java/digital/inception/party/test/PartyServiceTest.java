@@ -66,7 +66,6 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import javax.validation.ConstraintViolation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -116,9 +115,7 @@ public class PartyServiceTest {
     organizationCount++;
 
     Organization organization =
-        new Organization(
-            UUID.fromString("00000000-0000-0000-0000-000000000000"),
-            "Organization Name " + organizationCount);
+        new Organization(IPartyService.DEFAULT_TENANT_ID, "Organization Name " + organizationCount);
 
     organization.addIdentityDocument(
         new IdentityDocument(
@@ -133,17 +130,14 @@ public class PartyServiceTest {
     organizationCount++;
 
     return new Organization(
-        UUID.fromString("00000000-0000-0000-0000-000000000000"),
-        "Organization Name " + organizationCount);
+        IPartyService.DEFAULT_TENANT_ID, "Organization Name " + organizationCount);
   }
 
   private static synchronized Party getTestPartyDetails() {
     partyCount++;
 
     return new Party(
-        UUID.fromString("00000000-0000-0000-0000-000000000000"),
-        PartyType.ORGANIZATION,
-        "Party Name " + partyCount);
+        IPartyService.DEFAULT_TENANT_ID, PartyType.ORGANIZATION, "Party Name " + partyCount);
   }
 
   private static synchronized Person getTestCompletePersonDetails(boolean isMarried) {
@@ -151,7 +145,7 @@ public class PartyServiceTest {
 
     Person person =
         new Person(
-            UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            IPartyService.DEFAULT_TENANT_ID,
             String.format(
                 "GivenName%d MiddleName%d Surname%d", personCount, personCount, personCount));
 
@@ -305,7 +299,7 @@ public class PartyServiceTest {
 
     Person person =
         new Person(
-            UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            IPartyService.DEFAULT_TENANT_ID,
             String.format(
                 "GivenName%d MiddleName%d Surname%d", personCount, personCount, personCount));
 
@@ -365,8 +359,7 @@ public class PartyServiceTest {
   private static synchronized Person getTestBasicPersonDetails() {
     personCount++;
 
-    return new Person(
-        UUID.fromString("00000000-0000-0000-0000-000000000000"), "Full Name " + personCount);
+    return new Person(IPartyService.DEFAULT_TENANT_ID, "Full Name " + personCount);
   }
 
   /** Test the attribute functionality. */
@@ -760,7 +753,13 @@ public class PartyServiceTest {
     partyService.createPerson(foreignPerson);
 
     Persons filteredPersons =
-        partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+        partyService.getPersons(
+            IPartyService.DEFAULT_TENANT_ID,
+            "",
+            PersonSortBy.NAME,
+            SortDirection.ASCENDING,
+            0,
+            100);
 
     assertEquals(
         1,
@@ -1581,7 +1580,13 @@ public class PartyServiceTest {
     partyService.createOrganization(organization);
 
     Organizations filteredOrganizations =
-        partyService.getOrganizations("", OrganizationSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+        partyService.getOrganizations(
+            IPartyService.DEFAULT_TENANT_ID,
+            "",
+            OrganizationSortBy.NAME,
+            SortDirection.ASCENDING,
+            0,
+            100);
 
     assertEquals(
         1,
@@ -1589,6 +1594,17 @@ public class PartyServiceTest {
         "The correct number of filtered organizations was not retrieved");
 
     compareOrganizations(organization, filteredOrganizations.getOrganizations().get(0));
+
+    Snapshots snapshots =
+        partyService.getSnapshots(
+            organization.getId(), null, null, SortDirection.ASCENDING, 0, 100);
+
+    ObjectMapper objectMapper = jackson2ObjectMapperBuilder.build();
+
+    Organization serializedOrganization =
+        objectMapper.readValue(snapshots.getSnapshots().get(0).getData(), Organization.class);
+
+    compareOrganizations(organization, serializedOrganization);
 
     organization.setName(organization.getName() + " Updated");
 
@@ -1671,7 +1687,13 @@ public class PartyServiceTest {
     partyService.updateOrganization(organization);
 
     filteredOrganizations =
-        partyService.getOrganizations("", OrganizationSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+        partyService.getOrganizations(
+            IPartyService.DEFAULT_TENANT_ID,
+            "",
+            OrganizationSortBy.NAME,
+            SortDirection.ASCENDING,
+            0,
+            100);
 
     assertEquals(
         1,
@@ -1680,7 +1702,9 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, filteredOrganizations.getOrganizations().get(0));
 
-    Parties filteredParties = partyService.getParties("", SortDirection.ASCENDING, 0, 100);
+    Parties filteredParties =
+        partyService.getParties(
+            IPartyService.DEFAULT_TENANT_ID, "", SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         1,
@@ -1705,7 +1729,9 @@ public class PartyServiceTest {
 
     partyService.createPerson(person);
 
-    Parties filteredParties = partyService.getParties("", SortDirection.ASCENDING, 0, 100);
+    Parties filteredParties =
+        partyService.getParties(
+            IPartyService.DEFAULT_TENANT_ID, "", SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         2,
@@ -1727,7 +1753,13 @@ public class PartyServiceTest {
     partyService.createPerson(person);
 
     Persons filteredPersons =
-        partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+        partyService.getPersons(
+            IPartyService.DEFAULT_TENANT_ID,
+            "",
+            PersonSortBy.NAME,
+            SortDirection.ASCENDING,
+            0,
+            100);
 
     assertEquals(
         1,
@@ -1736,6 +1768,11 @@ public class PartyServiceTest {
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
+    assertEquals(
+        person.getTenantId(),
+        partyService.getTenantIdForParty(person.getId()),
+        "The tenant ID for the person is incorrect");
+
     partyService.deletePerson(person.getId());
 
     person = getTestCompletePersonDetails(true);
@@ -1743,7 +1780,13 @@ public class PartyServiceTest {
     partyService.createPerson(person);
 
     filteredPersons =
-        partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+        partyService.getPersons(
+            IPartyService.DEFAULT_TENANT_ID,
+            "",
+            PersonSortBy.NAME,
+            SortDirection.ASCENDING,
+            0,
+            100);
 
     assertEquals(
         1,
@@ -1757,10 +1800,10 @@ public class PartyServiceTest {
 
     ObjectMapper objectMapper = jackson2ObjectMapperBuilder.build();
 
-    System.out.println(snapshots.getSnapshots().get(0).getData());
-
     Person serializedPerson =
         objectMapper.readValue(snapshots.getSnapshots().get(0).getData(), Person.class);
+
+    comparePersons(person, serializedPerson);
 
     person.setCountriesOfCitizenship(Set.of("ZA", "GB"));
     person.setCountryOfBirth("GB");
@@ -1834,7 +1877,13 @@ public class PartyServiceTest {
     partyService.updatePerson(person);
 
     filteredPersons =
-        partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+        partyService.getPersons(
+            IPartyService.DEFAULT_TENANT_ID,
+            "",
+            PersonSortBy.NAME,
+            SortDirection.ASCENDING,
+            0,
+            100);
 
     assertEquals(
         1,
@@ -1844,7 +1893,13 @@ public class PartyServiceTest {
     comparePersons(person, filteredPersons.getPersons().get(0));
 
     filteredPersons =
-        partyService.getPersons("Updated", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+        partyService.getPersons(
+            IPartyService.DEFAULT_TENANT_ID,
+            "Updated",
+            PersonSortBy.NAME,
+            SortDirection.ASCENDING,
+            0,
+            100);
 
     assertEquals(
         1,
@@ -1857,7 +1912,9 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    Parties filteredParties = partyService.getParties("", SortDirection.ASCENDING, 0, 100);
+    Parties filteredParties =
+        partyService.getParties(
+            IPartyService.DEFAULT_TENANT_ID, "", SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         1,

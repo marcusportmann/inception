@@ -3513,48 +3513,52 @@ public class SecurityApi extends SecureApi {
    *     user directory or <b>false</b> otherwise
    */
   protected boolean hasAccessToUserDirectory(UUID userDirectoryId) throws InvalidArgumentException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
+    if (isSecurityEnabled()) {
+      if (userDirectoryId == null) {
+        throw new InvalidArgumentException("userDirectoryId");
+      }
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    // Could not retrieve the currently authenticated principal
-    if (authentication == null) {
-      return false;
-    }
-
-    try {
-      // If the user is not authenticated then they cannot have access
-      if (!authentication.isAuthenticated()) {
+      // Could not retrieve the currently authenticated principal
+      if (authentication == null) {
         return false;
       }
 
-      // If the user has the "Administrator" role they always have access
-      if (hasRole(SecurityService.ADMINISTRATOR_ROLE_CODE)) {
-        return true;
+      try {
+        // If the user is not authenticated then they cannot have access
+        if (!authentication.isAuthenticated()) {
+          return false;
+        }
+
+        // If the user has the "Administrator" role they always have access
+        if (hasRole(SecurityService.ADMINISTRATOR_ROLE_CODE)) {
+          return true;
+        }
+
+        List<UUID> userDirectoryIdsForUser = new ArrayList<>();
+
+        List<UUID> tenantIds = getUUIDValuesForAuthoritiesWithPrefix(authentication, "TENANT_");
+
+        for (UUID tenantId : tenantIds) {
+          var userDirectoryIdsForTenant = securityService.getUserDirectoryIdsForTenant(tenantId);
+
+          userDirectoryIdsForUser.addAll(userDirectoryIdsForTenant);
+        }
+
+        return userDirectoryIdsForUser.stream().anyMatch(userDirectoryId::equals);
+      } catch (Throwable e) {
+        logger.error(
+            "Failed to check if the user ("
+                + authentication.getName()
+                + ") has access to the user directory ("
+                + userDirectoryId
+                + ")",
+            e);
+        return false;
       }
-
-      List<UUID> userDirectoryIdsForUser = new ArrayList<>();
-
-      List<UUID> tenantIds = getUUIDValuesForAuthoritiesWithPrefix(authentication, "TENANT_");
-
-      for (UUID tenantId : tenantIds) {
-        var userDirectoryIdsForTenant = securityService.getUserDirectoryIdsForTenant(tenantId);
-
-        userDirectoryIdsForUser.addAll(userDirectoryIdsForTenant);
-      }
-
-      return userDirectoryIdsForUser.stream().anyMatch(userDirectoryId::equals);
-    } catch (Throwable e) {
-      logger.error(
-          "Failed to check if the user ("
-              + authentication.getName()
-              + ") has access to the user directory ("
-              + userDirectoryId
-              + ")",
-          e);
-      return false;
+    } else {
+      return true;
     }
   }
 }

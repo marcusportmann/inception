@@ -27,11 +27,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Resource;
-import javax.sql.DataSource;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -68,8 +70,6 @@ public class PartyService implements IPartyService {
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
 
-  private final DataSource applicationDataSource;
-
   /** The Jackson2 Object Mapper Builder. */
   private final Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
 
@@ -102,7 +102,6 @@ public class PartyService implements IPartyService {
    * @param snapshotRepository the Snapshot Repository
    */
   public PartyService(
-      DataSource applicationDataSource,
       ApplicationContext applicationContext,
       Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder,
       Validator validator,
@@ -110,7 +109,6 @@ public class PartyService implements IPartyService {
       PartyRepository partyRepository,
       PersonRepository personRepository,
       SnapshotRepository snapshotRepository) {
-    this.applicationDataSource = applicationDataSource;
     this.applicationContext = applicationContext;
     this.jackson2ObjectMapperBuilder = jackson2ObjectMapperBuilder;
     this.validator = validator;
@@ -124,10 +122,12 @@ public class PartyService implements IPartyService {
    * Create the new organization.
    *
    * @param organization the organization
+   * @return the organization
    */
   @Override
   @Transactional
-  public void createOrganization(Organization organization)
+  @CachePut(cacheNames = "organizations", key = "#organization.id")
+  public Organization createOrganization(Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, ServiceUnavailableException {
     if (organization == null) {
       throw new InvalidArgumentException("organization");
@@ -145,7 +145,7 @@ public class PartyService implements IPartyService {
         throw new DuplicateOrganizationException(organization.getId());
       }
 
-      // Serialize the person object as JSON
+      // Serialize the organization object as JSON
       ObjectMapper objectMapper =
           jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
 
@@ -155,6 +155,7 @@ public class PartyService implements IPartyService {
 
       snapshotRepository.saveAndFlush(new Snapshot(organization.getId(), organizationJson));
 
+      return organization;
     } catch (DuplicateOrganizationException e) {
       throw e;
     } catch (Throwable e) {
@@ -170,7 +171,8 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Transactional
-  public void createPerson(Person person)
+  @CachePut(cacheNames = "persons", key = "#person.id")
+  public Person createPerson(Person person)
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException {
     if (person == null) {
       throw new InvalidArgumentException("person");
@@ -198,6 +200,7 @@ public class PartyService implements IPartyService {
 
       snapshotRepository.saveAndFlush(new Snapshot(person.getId(), personJson));
 
+      return person;
     } catch (DuplicatePersonException e) {
       throw e;
     } catch (Throwable e) {
@@ -213,6 +216,7 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Transactional
+  @CacheEvict(cacheNames = "organizations", key = "#organizationId")
   public void deleteOrganization(UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
     if (organizationId == null) {
@@ -240,6 +244,9 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Transactional
+  @CacheEvict(
+      cacheNames = {"organizations", "persons"},
+      key = "#partyId")
   public void deleteParty(UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
     if (partyId == null) {
@@ -266,6 +273,7 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Transactional
+  @CacheEvict(cacheNames = "persons", key = "#personId")
   public void deletePerson(UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (personId == null) {
@@ -292,6 +300,7 @@ public class PartyService implements IPartyService {
    * @return the organization
    */
   @Override
+  @Cacheable(cacheNames = "organizations", key = "#organizationId")
   public Organization getOrganization(UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
     if (organizationId == null) {
@@ -317,6 +326,7 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the organizations.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the organizations
    * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
@@ -326,6 +336,7 @@ public class PartyService implements IPartyService {
    */
   @Override
   public Organizations getOrganizations(
+      UUID tenantId,
       String filter,
       OrganizationSortBy sortBy,
       SortDirection sortDirection,
@@ -379,10 +390,11 @@ public class PartyService implements IPartyService {
       if (StringUtils.hasText(filter)) {
         organizationPage = organizationRepository.findFiltered("%" + filter + "%", pageRequest);
       } else {
-        organizationPage = organizationRepository.findAll(pageRequest);
+        organizationPage = organizationRepository.findByTenantId(tenantId, pageRequest);
       }
 
       return new Organizations(
+          tenantId,
           organizationPage.toList(),
           organizationPage.getTotalElements(),
           filter,
@@ -398,6 +410,7 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the parties.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the parties
    * @param sortDirection the optional sort direction to apply to the parties
    * @param pageIndex the optional page index
@@ -406,7 +419,11 @@ public class PartyService implements IPartyService {
    */
   @Override
   public Parties getParties(
-      String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+      UUID tenantId,
+      String filter,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
@@ -432,10 +449,11 @@ public class PartyService implements IPartyService {
       if (StringUtils.hasText(filter)) {
         partyPage = partyRepository.findFiltered("%" + filter + "%", pageRequest);
       } else {
-        partyPage = partyRepository.findAll(pageRequest);
+        partyPage = partyRepository.findByTenantId(tenantId, pageRequest);
       }
 
       return new Parties(
+          tenantId,
           partyPage.toList(),
           partyPage.getTotalElements(),
           filter,
@@ -482,7 +500,7 @@ public class PartyService implements IPartyService {
    * @return the person
    */
   @Override
-  // @Cacheable(value = "persons", key = "#personId")
+  @Cacheable(cacheNames = "persons", key = "#personId")
   public Person getPerson(UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (personId == null) {
@@ -507,6 +525,7 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the persons.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the persons
    * @param sortBy the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
@@ -516,6 +535,7 @@ public class PartyService implements IPartyService {
    */
   @Override
   public Persons getPersons(
+      UUID tenantId,
       String filter,
       PersonSortBy sortBy,
       SortDirection sortDirection,
@@ -569,10 +589,11 @@ public class PartyService implements IPartyService {
       if (StringUtils.hasText(filter)) {
         personPage = personRepository.findFiltered("%" + filter + "%", pageRequest);
       } else {
-        personPage = personRepository.findAll(pageRequest);
+        personPage = personRepository.findByTenantId(tenantId, pageRequest);
       }
 
       return new Persons(
+          tenantId,
           personPage.toList(),
           personPage.getTotalElements(),
           filter,
@@ -639,13 +660,13 @@ public class PartyService implements IPartyService {
       Page<Snapshot> partySnapshotPage;
 
       if ((from != null) && (to != null)) {
-        partySnapshotPage = snapshotRepository.findAll(pageRequest);
+        partySnapshotPage = snapshotRepository.findByPartyId(partyId, pageRequest);
       } else if (from != null) {
-        partySnapshotPage = snapshotRepository.findAll(pageRequest);
+        partySnapshotPage = snapshotRepository.findByPartyId(partyId, pageRequest);
       } else if (to != null) {
-        partySnapshotPage = snapshotRepository.findAll(pageRequest);
+        partySnapshotPage = snapshotRepository.findByPartyId(partyId, pageRequest);
       } else {
-        partySnapshotPage = snapshotRepository.findAll(pageRequest);
+        partySnapshotPage = snapshotRepository.findByPartyId(partyId, pageRequest);
       }
 
       return new Snapshots(
@@ -663,13 +684,44 @@ public class PartyService implements IPartyService {
   }
 
   /**
+   * Retrieve the Universally Unique Identifier (UUID) for the tenant the party is associated with.
+   *
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @return the Universally Unique Identifier (UUID) for the tenant the party is associated with
+   */
+  @Override
+  public UUID getTenantIdForParty(UUID partyId)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    if (partyId == null) {
+      throw new InvalidArgumentException("partyId");
+    }
+
+    try {
+      Optional<UUID> tenantIdOptional = partyRepository.getTenantIdByPartyId(partyId);
+
+      if (tenantIdOptional.isPresent()) {
+        return tenantIdOptional.get();
+      } else {
+        throw new PartyNotFoundException(partyId);
+      }
+    } catch (PartyNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the tenant ID for the party (" + partyId + ")", e);
+    }
+  }
+
+  /**
    * Update the organization.
    *
    * @param organization the organization
+   * @return the organization
    */
   @Override
   @Transactional
-  public void updateOrganization(Organization organization)
+  @CachePut(cacheNames = "organizations", key = "#organization.id")
+  public Organization updateOrganization(Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
     if (organization == null) {
       throw new InvalidArgumentException("organization");
@@ -687,7 +739,7 @@ public class PartyService implements IPartyService {
         throw new OrganizationNotFoundException(organization.getId());
       }
 
-      // Serialize the person object as JSON
+      // Serialize the organization object as JSON
       ObjectMapper objectMapper =
           jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
 
@@ -697,6 +749,7 @@ public class PartyService implements IPartyService {
 
       snapshotRepository.saveAndFlush(new Snapshot(organization.getId(), organizationJson));
 
+      return organization;
     } catch (OrganizationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -709,11 +762,12 @@ public class PartyService implements IPartyService {
    * Update the person.
    *
    * @param person the person
+   * @return the person
    */
   @Override
   @Transactional
-  // @CacheEvict(value="persons", allEntries=true)
-  public void updatePerson(Person person)
+  @CachePut(cacheNames = "persons", key = "#person.id")
+  public Person updatePerson(Person person)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (person == null) {
       throw new InvalidArgumentException("person");
@@ -741,6 +795,7 @@ public class PartyService implements IPartyService {
 
       snapshotRepository.saveAndFlush(new Snapshot(person.getId(), personJson));
 
+      return person;
     } catch (PersonNotFoundException e) {
       throw e;
     } catch (Throwable e) {

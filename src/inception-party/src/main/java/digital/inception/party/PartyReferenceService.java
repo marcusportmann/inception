@@ -35,9 +35,6 @@ import org.springframework.util.StringUtils;
 @Service
 public class PartyReferenceService implements IPartyReferenceService {
 
-  /** The default locale ID. */
-  public static final String DEFAULT_LOCALE_ID = "en-US";
-
   /** The Party Attribute Type Category Repository. */
   private final AttributeTypeCategoryRepository attributeTypeCategoryRepository;
 
@@ -109,6 +106,9 @@ public class PartyReferenceService implements IPartyReferenceService {
 
   /** The Race Repository. */
   private final RaceRepository raceRepository;
+
+  /** The Relationship Type Repository. */
+  private final RelationshipTypeRepository relationshipTypeRepository;
 
   /** The Residence Permit Type Repository. */
   private final ResidencePermitTypeRepository residencePermitTypeRepository;
@@ -186,6 +186,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param preferenceTypeRepository the Preference Type Repository
    * @param qualificationTypeRepository the Qualification Type Repository
    * @param raceRepository the Race Repository
+   * @param relationshipTypeRepository the Relationship Type Repository
    * @param residencePermitTypeRepository the Residence Permit Type Repository
    * @param residencyStatusRepository the Residency Status Repository
    * @param residentialTypeRepository the Residential Type Repository
@@ -229,6 +230,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       PreferenceTypeRepository preferenceTypeRepository,
       QualificationTypeRepository qualificationTypeRepository,
       RaceRepository raceRepository,
+      RelationshipTypeRepository relationshipTypeRepository,
       ResidencePermitTypeRepository residencePermitTypeRepository,
       ResidencyStatusRepository residencyStatusRepository,
       ResidentialTypeRepository residentialTypeRepository,
@@ -268,6 +270,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.preferenceTypeRepository = preferenceTypeRepository;
     this.qualificationTypeRepository = qualificationTypeRepository;
     this.raceRepository = raceRepository;
+    this.relationshipTypeRepository = relationshipTypeRepository;
     this.residencePermitTypeRepository = residencePermitTypeRepository;
     this.residencyStatusRepository = residencyStatusRepository;
     this.residentialTypeRepository = residentialTypeRepository;
@@ -293,7 +296,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the attribute type categories
    */
   @Override
-  @Cacheable(value = "reference", key = "'attributeTypeCategories.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'attributeTypeCategories.' + #localeId")
   public List<AttributeTypeCategory> getAttributeTypeCategories(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -317,7 +320,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the attribute types
    */
   @Override
-  @Cacheable(value = "reference", key = "'attributeTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'attributeTypes.' + #localeId")
   public List<AttributeType> getAttributeTypes(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -339,7 +342,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the consent types
    */
   @Override
-  @Cacheable(value = "reference", key = "'consentTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'consentTypes.' + #localeId")
   public List<ConsentType> getConsentTypes(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -361,7 +364,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the contact mechanism purposes
    */
   @Override
-  @Cacheable(value = "reference", key = "'contactMechanismPurposes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'contactMechanismPurposes.' + #localeId")
   public List<ContactMechanismPurpose> getContactMechanismPurposes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -385,7 +388,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the contact mechanism roles
    */
   @Override
-  @Cacheable(value = "reference", key = "'contactMechanismRoles.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'contactMechanismRoles.' + #localeId")
   public List<ContactMechanismRole> getContactMechanismRoles(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -409,7 +412,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the contact mechanism types
    */
   @Override
-  @Cacheable(value = "reference", key = "'contactMechanismTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'contactMechanismTypes.' + #localeId")
   public List<ContactMechanismType> getContactMechanismTypes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -433,7 +436,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the employment statuses
    */
   @Override
-  @Cacheable(value = "reference", key = "'employmentStatuses.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'employmentStatuses.' + #localeId")
   public List<EmploymentStatus> getEmploymentStatuses(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -456,7 +459,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the employment types
    */
   @Override
-  @Cacheable(value = "reference", key = "'employmentTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'employmentTypes.' + #localeId")
   public List<EmploymentType> getEmploymentTypes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -479,7 +482,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the fields of study
    */
   @Override
-  @Cacheable(value = "reference", key = "'fieldsOfStudy.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'fieldsOfStudy.' + #localeId")
   public List<FieldOfStudy> getFieldsOfStudy(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -501,7 +504,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the genders
    */
   @Override
-  @Cacheable(value = "reference", key = "'genders.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'genders.' + #localeId")
   public List<Gender> getGenders(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -523,7 +526,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the identity document types
    */
   @Override
-  @Cacheable(value = "reference", key = "'identityDocumentTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'identityDocumentTypes.' + #localeId")
   public List<IdentityDocumentType> getIdentityDocumentTypes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -547,7 +550,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the lock type categories
    */
   @Override
-  @Cacheable(value = "reference", key = "'lockTypeCategories.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'lockTypeCategories.' + #localeId")
   public List<LockTypeCategory> getLockTypeCategories(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -570,7 +573,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the lock types
    */
   @Override
-  @Cacheable(value = "reference", key = "'lockTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'lockTypes.' + #localeId")
   public List<LockType> getLockTypes(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -592,7 +595,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the marital statuses
    */
   @Override
-  @Cacheable(value = "reference", key = "'maritalStatuses.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'maritalStatuses.' + #localeId")
   public List<MaritalStatus> getMaritalStatuses(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -615,7 +618,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the marriage types
    */
   @Override
-  @Cacheable(value = "reference", key = "'marriageTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'marriageTypes.' + #localeId")
   public List<MarriageType> getMarriageTypes(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -637,7 +640,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the next of kin types
    */
   @Override
-  @Cacheable(value = "reference", key = "'nextOfKinTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'nextOfKinTypes.' + #localeId")
   public List<NextOfKinType> getNextOfKinTypes(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -659,7 +662,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the occupations
    */
   @Override
-  @Cacheable(value = "reference", key = "'occupations.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'occupations.' + #localeId")
   public List<Occupation> getOccupations(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -681,7 +684,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the physical address purposes
    */
   @Override
-  @Cacheable(value = "reference", key = "'physicalAddressPurposes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'physicalAddressPurposes.' + #localeId")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -705,7 +708,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the physical address roles
    */
   @Override
-  @Cacheable(value = "reference", key = "'physicalAddressRoles.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'physicalAddressRoles.' + #localeId")
   public List<PhysicalAddressRole> getPhysicalAddressRoles(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -729,7 +732,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the physical address types
    */
   @Override
-  @Cacheable(value = "reference", key = "'physicalAddressTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'physicalAddressTypes.' + #localeId")
   public List<PhysicalAddressType> getPhysicalAddressTypes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -753,7 +756,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the preference type categories
    */
   @Override
-  @Cacheable(value = "reference", key = "'preferenceTypeCategories.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'preferenceTypeCategories.' + #localeId")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -777,7 +780,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the preference types
    */
   @Override
-  @Cacheable(value = "reference", key = "'preferenceTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'preferenceTypes.' + #localeId")
   public List<PreferenceType> getPreferenceTypes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -800,7 +803,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the qualification types
    */
   @Override
-  @Cacheable(value = "reference", key = "'qualificationTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'qualificationTypes.' + #localeId")
   public List<QualificationType> getQualificationTypes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -823,7 +826,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the races
    */
   @Override
-  @Cacheable(value = "reference", key = "'races.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'races.' + #localeId")
   public List<Race> getRaces(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -838,6 +841,29 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
+   * Retrieve the relationship types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship types
+   *     for or <b>null</b> to retrieve the relationship types for all locales
+   * @return the relationship types
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'relationshipTypes.' + #localeId")
+  public List<RelationshipType> getRelationshipTypes(String localeId)
+      throws ServiceUnavailableException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return relationshipTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return relationshipTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the relationship types", e);
+    }
+  }
+
+  /**
    * Retrieve the residence permit types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
@@ -845,7 +871,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the residence permit types
    */
   @Override
-  @Cacheable(value = "reference", key = "'residencePermitTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'residencePermitTypes.' + #localeId")
   public List<ResidencePermitType> getResidencePermitTypes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -869,7 +895,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the residency statuses
    */
   @Override
-  @Cacheable(value = "reference", key = "'residencyStatuses.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'residencyStatuses.' + #localeId")
   public List<ResidencyStatus> getResidencyStatuses(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -892,7 +918,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the residential types
    */
   @Override
-  @Cacheable(value = "reference", key = "'residentialTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'residentialTypes.' + #localeId")
   public List<ResidentialType> getResidentialTypes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -915,7 +941,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the role purposes
    */
   @Override
-  @Cacheable(value = "reference", key = "'rolePurposes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'rolePurposes.' + #localeId")
   public List<RolePurpose> getRolePurposes(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -935,7 +961,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the role type attribute type constraints
    */
   @Override
-  @Cacheable(value = "reference", key = "'roleTypeAttributeTypeConstraints.ALL'")
+  @Cacheable(cacheNames = "reference", key = "'roleTypeAttributeTypeConstraints.ALL'")
   public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints()
       throws ServiceUnavailableException {
     return getRoleTypeAttributeTypeConstraints(null);
@@ -948,7 +974,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the role type attribute type constraints
    */
   @Override
-  @Cacheable(value = "reference", key = "'roleTypeAttributeTypeConstraints.' + #roleType")
+  @Cacheable(cacheNames = "reference", key = "'roleTypeAttributeTypeConstraints.' + #roleType")
   public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(String roleType)
       throws ServiceUnavailableException {
     try {
@@ -971,7 +997,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the role type preference type constraints
    */
   @Override
-  @Cacheable(value = "reference", key = "'roleTypePreferenceTypeConstraints.ALL'")
+  @Cacheable(cacheNames = "reference", key = "'roleTypePreferenceTypeConstraints.ALL'")
   public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints()
       throws ServiceUnavailableException {
     return getRoleTypePreferenceTypeConstraints(null);
@@ -984,7 +1010,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the role type preference type constraints
    */
   @Override
-  @Cacheable(value = "reference", key = "'roleTypePreferenceTypeConstraints.' + #roleType")
+  @Cacheable(cacheNames = "reference", key = "'roleTypePreferenceTypeConstraints.' + #roleType")
   public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
       String roleType) throws ServiceUnavailableException {
     try {
@@ -1009,7 +1035,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the role types
    */
   @Override
-  @Cacheable(value = "reference", key = "'roleTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'roleTypes.' + #localeId")
   public List<RoleType> getRoleTypes(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -1031,7 +1057,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the segments
    */
   @Override
-  @Cacheable(value = "reference", key = "'segments.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'segments.' + #localeId")
   public List<Segment> getSegments(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -1053,7 +1079,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the source of funds types
    */
   @Override
-  @Cacheable(value = "reference", key = "'sourceOfFundsTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'sourceOfFundsTypes.' + #localeId")
   public List<SourceOfFundsType> getSourceOfFundsTypes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -1076,7 +1102,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the source of wealth types
    */
   @Override
-  @Cacheable(value = "reference", key = "'sourceOfWealthTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'sourceOfWealthTypes.' + #localeId")
   public List<SourceOfWealthType> getSourceOfWealthTypes(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -1100,7 +1126,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the status type categories
    */
   @Override
-  @Cacheable(value = "reference", key = "'statusTypeCategories.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'statusTypeCategories.' + #localeId")
   public List<StatusTypeCategory> getStatusTypeCategories(String localeId)
       throws ServiceUnavailableException {
     try {
@@ -1124,7 +1150,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the status types
    */
   @Override
-  @Cacheable(value = "reference", key = "'statusTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'statusTypes.' + #localeId")
   public List<StatusType> getStatusTypes(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -1146,7 +1172,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the tax number types
    */
   @Override
-  @Cacheable(value = "reference", key = "'taxNumberTypes.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'taxNumberTypes.' + #localeId")
   public List<TaxNumberType> getTaxNumberTypes(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -1168,7 +1194,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the times to contact
    */
   @Override
-  @Cacheable(value = "reference", key = "'timesToContact.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'timesToContact.' + #localeId")
   public List<TimeToContact> getTimesToContact(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -1190,7 +1216,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @return the titles
    */
   @Override
-  @Cacheable(value = "reference", key = "'titles.' + #localeId")
+  @Cacheable(cacheNames = "reference", key = "'titles.' + #localeId")
   public List<Title> getTitles(String localeId) throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -1773,6 +1799,26 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     return self.getRaces(DEFAULT_LOCALE_ID).stream()
         .anyMatch(race -> Objects.equals(race.getCode(), raceCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a relationship type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param relationshipTypeCode the code for the relationship type
+   * @return <b>true</b> if the code is a valid code for a relationship type or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidRelationshipType(String partyTypeCode, String relationshipTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(relationshipTypeCode)) {
+      return false;
+    }
+
+    return self.getRelationshipTypes(DEFAULT_LOCALE_ID).stream()
+        .anyMatch(
+            relationshipType -> Objects.equals(relationshipType.getCode(), relationshipTypeCode));
   }
 
   /**

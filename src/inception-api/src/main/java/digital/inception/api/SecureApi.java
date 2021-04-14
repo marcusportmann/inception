@@ -35,6 +35,9 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public abstract class SecureApi {
 
+  /** The code for the Administrator role. */
+  private static final String ADMINISTRATOR_ROLE_CODE = "Administrator";
+
   /** Is debugging enabled for the Inception Framework? */
   private boolean inDebugMode;
 
@@ -199,6 +202,44 @@ public abstract class SecureApi {
   }
 
   /**
+   * Confirm that the user associated with the authenticated request has access to the tenant.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @return <b>true</b> if the user associated with the authenticated request has access to the
+   *     tenant or <b>false</b> otherwise
+   */
+  protected boolean hasAccessToTenant(UUID tenantId) {
+    if (isSecurityEnabled) {
+      if (tenantId == null) {
+        return false;
+      }
+
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+      // Could not retrieve the currently authenticated principal
+      if (authentication == null) {
+        return false;
+      }
+
+      // If the user is not authenticated then they cannot have access
+      if (!authentication.isAuthenticated()) {
+        return false;
+      }
+
+      // If the user has the "Administrator" role they always have access
+      if (hasRole(ADMINISTRATOR_ROLE_CODE)) {
+        return true;
+      }
+
+      List<UUID> tenantIds = getUUIDValuesForAuthoritiesWithPrefix(authentication, "TENANT_");
+
+      return tenantIds.contains(tenantId);
+    } else {
+      return true;
+    }
+  }
+
+  /**
    * Confirm that the user associated with the authenticated request has the specified authority.
    *
    * @param authority the authority
@@ -206,28 +247,32 @@ public abstract class SecureApi {
    *     authority or <b>false</b> otherwise
    */
   protected boolean hasAuthority(String authority) {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (isSecurityEnabled) {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    // Could not retrieve the currently authenticated principal
-    if (authentication == null) {
-      return false;
-    }
-
-    if (!StringUtils.hasText(authority)) {
-      return false;
-    }
-
-    if (!authentication.isAuthenticated()) {
-      return false;
-    }
-
-    for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
-      if (grantedAuthority.getAuthority().equalsIgnoreCase(authority)) {
-        return true;
+      // Could not retrieve the currently authenticated principal
+      if (authentication == null) {
+        return false;
       }
-    }
 
-    return false;
+      if (!StringUtils.hasText(authority)) {
+        return false;
+      }
+
+      if (!authentication.isAuthenticated()) {
+        return false;
+      }
+
+      for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
+        if (grantedAuthority.getAuthority().equalsIgnoreCase(authority)) {
+          return true;
+        }
+      }
+
+      return false;
+    } else {
+      return true;
+    }
   }
 
   /**

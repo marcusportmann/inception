@@ -32,10 +32,12 @@ import java.time.LocalDate;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -125,6 +127,11 @@ public class PartyApi extends SecureApi {
           @RequestBody
           Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, ServiceUnavailableException {
+    if (!hasAccessToTenant(organization.getTenantId())) {
+      throw new AccessDeniedException(
+          "Access denied to the tenant (" + organization.getTenantId() + ")");
+    }
+
     partyService.createOrganization(organization);
   }
 
@@ -178,6 +185,10 @@ public class PartyApi extends SecureApi {
           @RequestBody
           Person person)
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException {
+    if (!hasAccessToTenant(person.getTenantId())) {
+      throw new AccessDeniedException("Access denied to the tenant (" + person.getTenantId() + ")");
+    }
+
     partyService.createPerson(person);
   }
 
@@ -236,12 +247,20 @@ public class PartyApi extends SecureApi {
           @PathVariable
           UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
-    return partyService.getOrganization(organizationId);
+    Organization organization = partyService.getOrganization(organizationId);
+
+    if (!hasAccessToTenant(organization.getTenantId())) {
+      throw new AccessDeniedException(
+          "Access denied to the tenant (" + organization.getTenantId() + ")");
+    }
+
+    return organization;
   }
 
   /**
    * Retrieve the organizations.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the organizations
    * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
@@ -284,6 +303,14 @@ public class PartyApi extends SecureApi {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public Organizations getOrganizations(
+      @Parameter(
+              name = "tenantId",
+              description = "The Universally Unique Identifier (UUID) for the tenant")
+          @RequestParam(
+              name = "tenantId",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
       @Parameter(name = "filter", description = "The optional filter to apply to the organizations")
           @RequestParam(value = "filter", required = false)
           String filter,
@@ -304,6 +331,10 @@ public class PartyApi extends SecureApi {
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      tenantId = IPartyService.DEFAULT_TENANT_ID;
+    }
+
     if (pageIndex == null) {
       pageIndex = 0;
     }
@@ -311,12 +342,18 @@ public class PartyApi extends SecureApi {
       pageSize = 10;
     }
 
-    return partyService.getOrganizations(filter, sortBy, sortDirection, pageIndex, pageSize);
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return partyService.getOrganizations(
+        tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**
    * Retrieve the parties.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the parties
    * @param sortDirection the optional sort direction to apply to the parties
    * @param pageIndex the optional page index
@@ -355,6 +392,14 @@ public class PartyApi extends SecureApi {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
   public Parties getParties(
+      @Parameter(
+              name = "tenantId",
+              description = "The Universally Unique Identifier (UUID) for the tenant")
+          @RequestHeader(
+              name = "tenantId",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
       @Parameter(name = "filter", description = "The optional filter to apply to the parties")
           @RequestParam(value = "filter", required = false)
           String filter,
@@ -370,6 +415,10 @@ public class PartyApi extends SecureApi {
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      tenantId = IPartyService.DEFAULT_TENANT_ID;
+    }
+
     if (pageIndex == null) {
       pageIndex = 0;
     }
@@ -377,87 +426,11 @@ public class PartyApi extends SecureApi {
       pageSize = 10;
     }
 
-    return partyService.getParties(filter, sortDirection, pageIndex, pageSize);
-  }
-
-  /**
-   * Retrieve the snapshots.
-   *
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @param from the optional date to retrieve the snapshots from
-   * @param to the optional date to retrieve the snapshots to
-   * @param sortDirection the optional sort direction to apply to the snapshots
-   * @param sortDirection the optional sort direction to apply to the parties
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the parties
-   */
-  @Operation(summary = "Retrieve the snapshots", description = "Retrieve the snapshots")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "403",
-            description = "Access denied",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/parties/{partyId}/snapshots",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
-  public Snapshots getParties(
-      @Parameter(name = "partyId", description = "The ID for the party", required = true)
-          @PathVariable
-          UUID partyId,
-      @Parameter(
-              name = "from",
-              description = "The optional date to retrieve the snapshots from")
-          @RequestParam(value = "from", required = false)
-          LocalDate from,
-      @Parameter(name = "to", description = "The optional date to retrieve the snapshots to")
-          @RequestParam(value = "to", required = false)
-          LocalDate to,
-      @Parameter(
-              name = "sortDirection",
-              description = "The optional sort direction to apply to the parties")
-          @RequestParam(value = "sortDirection", required = false)
-          SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
-          Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
-          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
-          Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (pageIndex == null) {
-      pageIndex = 0;
-    }
-    if (pageSize == null) {
-      pageSize = 10;
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return partyService.getSnapshots(partyId, from, to, sortDirection, pageIndex, pageSize);
+    return partyService.getParties(tenantId, filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -515,7 +488,13 @@ public class PartyApi extends SecureApi {
           @PathVariable
           UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
-    return partyService.getParty(partyId);
+    Party party = partyService.getParty(partyId);
+
+    if (!hasAccessToTenant(party.getTenantId())) {
+      throw new AccessDeniedException("Access denied to the tenant (" + party.getTenantId() + ")");
+    }
+
+    return party;
   }
 
   /**
@@ -573,12 +552,19 @@ public class PartyApi extends SecureApi {
           @PathVariable
           UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
-    return partyService.getPerson(personId);
+    Person person = partyService.getPerson(personId);
+
+    if (!hasAccessToTenant(person.getTenantId())) {
+      throw new AccessDeniedException("Access denied to the tenant (" + person.getTenantId() + ")");
+    }
+
+    return person;
   }
 
   /**
    * Retrieve the persons.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the persons
    * @param sortBy the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
@@ -618,6 +604,14 @@ public class PartyApi extends SecureApi {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration')")
   public Persons getPersons(
+      @Parameter(
+              name = "tenantId",
+              description = "The Universally Unique Identifier (UUID) for the tenant")
+          @RequestHeader(
+              name = "tenantId",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
       @Parameter(name = "filter", description = "The optional filter to apply to the persons")
           @RequestParam(value = "filter", required = false)
           String filter,
@@ -638,6 +632,10 @@ public class PartyApi extends SecureApi {
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      tenantId = IPartyService.DEFAULT_TENANT_ID;
+    }
+
     if (pageIndex == null) {
       pageIndex = 0;
     }
@@ -645,7 +643,95 @@ public class PartyApi extends SecureApi {
       pageSize = 10;
     }
 
-    return partyService.getPersons(filter, sortBy, sortDirection, pageIndex, pageSize);
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return partyService.getPersons(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
+   * Retrieve the snapshots.
+   *
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param from the optional date to retrieve the snapshots from
+   * @param to the optional date to retrieve the snapshots to
+   * @param sortDirection the optional sort direction to apply to the snapshots
+   * @param sortDirection the optional sort direction to apply to the parties
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the snapshots
+   */
+  @Operation(summary = "Retrieve the snapshots", description = "Retrieve the snapshots")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/parties/{partyId}/snapshots",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
+  public Snapshots getSnapshots(
+      @Parameter(name = "partyId", description = "The ID for the party", required = true)
+          @PathVariable
+          UUID partyId,
+      @Parameter(name = "from", description = "The optional date to retrieve the snapshots from")
+          @RequestParam(value = "from", required = false)
+          LocalDate from,
+      @Parameter(name = "to", description = "The optional date to retrieve the snapshots to")
+          @RequestParam(value = "to", required = false)
+          LocalDate to,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the parties")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
+    UUID tenantId = partyService.getTenantIdForParty(partyId);
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return partyService.getSnapshots(partyId, from, to, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -722,6 +808,11 @@ public class PartyApi extends SecureApi {
       throw new InvalidArgumentException("organization");
     }
 
+    if (!hasAccessToTenant(organization.getTenantId())) {
+      throw new AccessDeniedException(
+          "Access denied to the tenant (" + organization.getTenantId() + ")");
+    }
+
     partyService.updateOrganization(organization);
   }
 
@@ -792,6 +883,10 @@ public class PartyApi extends SecureApi {
 
     if (!personId.equals(person.getId())) {
       throw new InvalidArgumentException("person");
+    }
+
+    if (!hasAccessToTenant(person.getTenantId())) {
+      throw new AccessDeniedException("Access denied to the tenant (" + person.getTenantId() + ")");
     }
 
     partyService.updatePerson(person);

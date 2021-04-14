@@ -16,8 +16,8 @@
 
 package digital.inception.mail;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
 import freemarker.cache.TemplateLookupContext;
 import freemarker.cache.TemplateLookupResult;
@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -131,7 +132,8 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   @Transactional
-  public void createMailTemplate(MailTemplate mailTemplate)
+  @CachePut(cacheNames = "mailTemplates", key = "#mailTemplate.id")
+  public MailTemplate createMailTemplate(MailTemplate mailTemplate)
       throws InvalidArgumentException, DuplicateMailTemplateException, ServiceUnavailableException {
     validateMailTemplate(mailTemplate);
 
@@ -141,6 +143,8 @@ public class MailService implements IMailService, InitializingBean {
       }
 
       mailTemplateRepository.saveAndFlush(mailTemplate);
+
+      return mailTemplate;
     } catch (DuplicateMailTemplateException e) {
       throw e;
     } catch (Throwable e) {
@@ -156,7 +160,7 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   @Transactional
-  @CacheEvict(value = "mailTemplates", key = "#mailTemplateId")
+  @CacheEvict(cacheNames = "mailTemplates", key = "#mailTemplateId")
   public void deleteMailTemplate(String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(mailTemplateId)) {
@@ -191,7 +195,7 @@ public class MailService implements IMailService, InitializingBean {
    * @return the mail template
    */
   @Override
-  @Cacheable("mailTemplates")
+  @Cacheable(cacheNames = "mailTemplates", key = "#mailTemplateId")
   public MailTemplate getMailTemplate(String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(mailTemplateId)) {
@@ -474,8 +478,8 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   @Transactional
-  @CacheEvict(value = "mailTemplates", key = "#mailTemplate.id")
-  public void updateMailTemplate(MailTemplate mailTemplate)
+  @CachePut(cacheNames = "mailTemplates", key = "#mailTemplate.id")
+  public MailTemplate updateMailTemplate(MailTemplate mailTemplate)
       throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     validateMailTemplate(mailTemplate);
 
@@ -492,6 +496,8 @@ public class MailService implements IMailService, InitializingBean {
        * sufficient for now.
        */
       freeMarkerConfiguration.clearTemplateCache();
+
+      return mailTemplate;
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {

@@ -16,8 +16,8 @@
 
 package digital.inception.mail;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +36,9 @@ public interface IMailService {
    *
    * @param mailTemplate the <b>MailTemplate</b> instance containing the information for the new
    *     mail template
+   * @return the mail template
    */
-  void createMailTemplate(MailTemplate mailTemplate)
+  MailTemplate createMailTemplate(MailTemplate mailTemplate)
       throws InvalidArgumentException, DuplicateMailTemplateException, ServiceUnavailableException;
 
   /**
@@ -141,7 +142,8 @@ public interface IMailService {
    *
    * @param mailTemplate the <b>MailTemplate</b> instance containing the updated information for the
    *     mail template
+   * @param the mail template
    */
-  void updateMailTemplate(MailTemplate mailTemplate)
+  MailTemplate updateMailTemplate(MailTemplate mailTemplate)
       throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException;
 }

@@ -17,6 +17,8 @@
 package digital.inception.party;
 
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -25,4 +27,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface SnapshotRepository extends JpaRepository<Snapshot, UUID> {}
+public interface SnapshotRepository extends JpaRepository<Snapshot, UUID> {
+
+  Page<Snapshot> findByPartyId(UUID partyId, Pageable pageable);
+}

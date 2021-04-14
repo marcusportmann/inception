@@ -33,20 +33,25 @@ import javax.validation.ConstraintViolation;
 @SuppressWarnings("unused")
 public interface IPartyService {
 
+  /** The Universally Unique Identifier (UUID) for the default tenant. */
+  UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
   /**
    * Create the new organization.
    *
    * @param organization the organization
+   * @return the organization
    */
-  void createOrganization(Organization organization)
+  Organization createOrganization(Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, ServiceUnavailableException;
 
   /**
    * Create the new person.
    *
    * @param person the person
+   * @return the person
    */
-  void createPerson(Person person)
+  Person createPerson(Person person)
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException;
 
   /**
@@ -85,6 +90,7 @@ public interface IPartyService {
   /**
    * Retrieve the organizations.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the organizations
    * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
@@ -93,6 +99,7 @@ public interface IPartyService {
    * @return the organizations
    */
   Organizations getOrganizations(
+      UUID tenantId,
       String filter,
       OrganizationSortBy sortBy,
       SortDirection sortDirection,
@@ -103,6 +110,7 @@ public interface IPartyService {
   /**
    * Retrieve the parties.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the parties
    * @param sortDirection the optional sort direction to apply to the parties
    * @param pageIndex the optional page index
@@ -110,7 +118,11 @@ public interface IPartyService {
    * @return the parties
    */
   Parties getParties(
-      String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+      UUID tenantId,
+      String filter,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
@@ -134,6 +146,7 @@ public interface IPartyService {
   /**
    * Retrieve the persons.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the persons
    * @param sortBy the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
@@ -142,6 +155,7 @@ public interface IPartyService {
    * @return the persons
    */
   Persons getPersons(
+      UUID tenantId,
       String filter,
       PersonSortBy sortBy,
       SortDirection sortDirection,
@@ -170,19 +184,30 @@ public interface IPartyService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Retrieve the Universally Unique Identifier (UUID) for the tenant the party is associated with.
+   *
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @return the Universally Unique Identifier (UUID) for the tenant the party is associated with
+   */
+  UUID getTenantIdForParty(UUID partyId)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
+
+  /**
    * Update the organization.
    *
    * @param organization the organization
+   * @return the organization
    */
-  void updateOrganization(Organization organization)
+  Organization updateOrganization(Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the person.
    *
    * @param person the person
+   * @return the person
    */
-  void updatePerson(Person person)
+  Person updatePerson(Person person)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException;
 
   /**

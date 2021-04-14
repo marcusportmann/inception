@@ -3033,11 +3033,15 @@ INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, descripti
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('married', 'en-US', 2, 'Married', 'Married');
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('common_law', 'en-US', 3, 'Common Law', 'Common Law');
+  VALUES ('civil_partnership', 'en-US', 3, 'Civil Partnership', 'Civil Partnership');
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('divorced', 'en-US', 4, 'Divorced', 'Divorced');
+  VALUES ('civil_union', 'en-US', 4, 'Civil Union', 'Civil Union');
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('widowed', 'en-US', 5, 'Widowed', 'Widowed');
+  VALUES ('common_law', 'en-US', 5, 'Common Law', 'Common Law');
+INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('divorced', 'en-US', 6, 'Divorced', 'Divorced');
+INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('widowed', 'en-US', 7, 'Widowed', 'Widowed');
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
@@ -3046,30 +3050,42 @@ INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, descripti
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('married', 'en-ZA', 2, 'Married', 'Married');
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('common_law', 'en-ZA', 3, 'Common Law', 'Common Law');
+  VALUES ('civil_partnership', 'en-ZA', 3, 'Civil Partnership', 'Civil Partnership');
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('divorced', 'en-ZA', 4, 'Divorced', 'Divorced');
+  VALUES ('civil_union', 'en-ZA', 4, 'Civil Union', 'Civil Union');
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('widowed', 'en-ZA', 5, 'Widowed', 'Widowed');
+  VALUES ('common_law', 'en-ZA', 5, 'Common Law', 'Common Law');
+INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('divorced', 'en-ZA', 6, 'Divorced', 'Divorced');
+INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('widowed', 'en-ZA', 7, 'Widowed', 'Widowed');
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('married', 'in_community_of_property', 'en-US', 1, 'In Community Of Property', 'In Community Of Property');
+  VALUES ('civil_partnership', 'civil_partnership', 'en-US', 1, 'Civil Partnership', 'Civil Partnership');
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('married', 'anc_without_accrual', 'en-US', 1, 'ANC Without Accrual', 'ANC Without Accrual');
+  VALUES ('civil_union', 'civil_union', 'en-US', 2, 'Civil Union', 'Civil Union');
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('married', 'anc_with_accrual', 'en-US', 1, 'ANC With Accrual', 'ANC With Accrual');
+  VALUES ('married', 'in_community_of_property', 'en-US', 3, 'In Community Of Property', 'In Community Of Property');
+INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
+  VALUES ('married', 'anc_without_accrual', 'en-US', 4, 'ANC Without Accrual', 'ANC Without Accrual');
+INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
+  VALUES ('married', 'anc_with_accrual', 'en-US', 5, 'ANC With Accrual', 'ANC With Accrual');
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('married', 'in_community_of_property', 'en-ZA', 1, 'In Community Of Property', 'In Community Of Property');
+  VALUES ('civil_partnership', 'civil_partnership', 'en-ZA', 1, 'Civil Partnership', 'Civil Partnership');
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('married', 'anc_without_accrual', 'en-ZA', 1, 'ANC Without Accrual', 'ANC Without Accrual');
+  VALUES ('civil_union', 'civil_union', 'en-ZA', 2, 'Civil Union', 'Civil Union');
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('married', 'anc_with_accrual', 'en-ZA', 1, 'ANC With Accrual', 'ANC With Accrual');
+  VALUES ('married', 'in_community_of_property', 'en-ZA', 3, 'In Community Of Property', 'In Community Of Property');
+INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
+  VALUES ('married', 'anc_without_accrual', 'en-ZA', 4, 'ANC Without Accrual', 'ANC Without Accrual');
+INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
+  VALUES ('married', 'anc_with_accrual', 'en-ZA', 5, 'ANC With Accrual', 'ANC With Accrual');
 INSERT INTO party.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
@@ -3618,134 +3634,242 @@ INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
 
 
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('agency', 'en-US', 101, 'Agency', 'A business or organization providing a particular service on behalf of another business, person, or group', 'organization');
+  VALUES ('affiliate', 'en-US', 1, 'Affiliate', 'A company under common control with another company', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('agent', 'en-US', 102, 'Agent', 'A person who acts on behalf of another person or group', 'person');
+  VALUES ('agency', 'en-US', 2, 'Agency', 'An organization providing a particular service on behalf of another organization', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('association', 'en-US', 103, 'Association', 'An organization that provides services such as networking and sharing of information within particular fields of interest or industries', 'organization');
+  VALUES ('agent', 'en-US', 3, 'Agent', 'A person who acts on behalf of an organization', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('child', 'en-US', 104, 'Child', 'A boy or girl from the time of birth until he or she is an adult, or a son or daughter of any age', 'person');
+  VALUES ('association', 'en-US', 4, 'Association', 'An organization that provides services such as networking and sharing of information within particular fields of interest or industries', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('competitor', 'en-US', 105, 'Competitor', 'An organization engaged in commercial competition with others', 'organization');
+  VALUES ('association_member', 'en-US', 5, 'Association Member', 'An organization or person who is a member of an association', 'organization,person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('department', 'en-US', 106, 'Department', 'A division of a large organization such as a government, university, or business, dealing with a specific area of activity', 'organization');
+  VALUES ('business_customer', 'en-US', 6, 'Business Customer', 'A business who buys goods or services from a shop or business', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('distributor', 'en-US', 107, 'Distributor', 'An organization that buys noncompeting products or product lines and sells them direct to end users or customers', 'organization');
+  VALUES ('child', 'en-US', 7, 'Child', 'A boy or girl from the time of birth until he or she is an adult, or a son or daughter of any age', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('division', 'en-US', 108, 'Division', 'A major section of an organization, with responsibility for a particular area of activity', 'organization');
+  VALUES ('civil_partner', 'en-US', 8, 'Civil Partner', 'A significant other in a civil partnership', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employee', 'en-US', 109, 'Employee', 'A person employed for wages or salary', 'person');
+  VALUES ('company', 'en-US', 9, 'Company', 'A commercial business', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employer', 'en-US', 110, 'Employer', 'An organization or person that has employees', 'organization,person');
+  VALUES ('competitor', 'en-US', 10, 'Competitor', 'An organization engaged in commercial competition with others', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('contractor', 'en-US', 111, 'Contractor', 'A person paid to work on a project for a particular period and amount of money', 'person');
+  VALUES ('contractor', 'en-US', 11, 'Contractor', 'A person paid to work on a project for a particular period and amount of money', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('customer', 'en-US', 112, 'Customer', 'A person who buys goods or services from a shop or business', 'person');
+  VALUES ('department', 'en-US', 12, 'Department', 'A division of a large organization dealing with a specific area of activity', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('director', 'en-US', 113, 'Director', 'A person who is in charge of an activity, department, or organization', 'person');
+  VALUES ('director', 'en-US', 13, 'Director', 'A person who is in charge of an activity, department, or organization', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('family', 'en-US', 114, 'Family', 'A group of one or more parents and their children living together as a unit', 'organization');
+  VALUES ('distributor', 'en-US', 14, 'Distributor', 'An organization that buys noncompeting products or product lines and sells them direct to end users or customers', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('family_member', 'en-US', 115, 'Family Member', 'A member of a family', 'person');
+  VALUES ('division', 'en-US', 15, 'Division', 'A major section of an organization with responsibility for a particular area of activity', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('holding_company', 'en-US', 116, 'Holding Company', 'A company created to buy and own the shares of other companies, which it then controls', 'person');
+  VALUES ('employee', 'en-US', 16, 'Employee', 'A person employed for wages or salary', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('household', 'en-US', 117, 'Household', 'A group of people living together', 'organization');
+  VALUES ('employer', 'en-US', 17, 'Employer', 'An organization or person that has employees', 'organization,person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('household_member', 'en-US', 118, 'Household Member', 'A member of a household', 'person');
+  VALUES ('family', 'en-US', 18, 'Family', 'A group of one or more parents and their children living together as a unit', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('life_partner', 'en-US', 119, 'Life Partner', 'Either member of a couple in a long-term relationship', 'person');
+  VALUES ('family_member', 'en-US', 19, 'Family Member', 'A person who is a member of a family', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('parent', 'en-US', 120, 'Parent', 'A person''s father or mother', 'person');
+  VALUES ('household', 'en-US', 20, 'Household', 'A group of people living together', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('parent_company', 'en-US', 121, 'Parent Company', 'A company that has a controlling interest in another company or companies', 'organization');
+  VALUES ('household_member', 'en-US', 21, 'Household Member', 'A person who is a member of a household', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('parent_organization', 'en-US', 122, 'Parent Organization', 'A parent organization of an organization', 'organization');
+  VALUES ('individual_customer', 'en-US', 22, 'Individual Customer', 'A person who buys goods or services from a shop or business', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('partner', 'en-US', 123, 'Partner', 'A person associated with another or others as a principal or a contributor of capital in a business or a joint venture', 'person');
+  VALUES ('joint_venture', 'en-US', 23, 'Joint Venture', 'A joint venture is a business entity created by two or more organizations, generally characterized by shared ownership, shared returns and risks, and shared governance', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('prospect', 'en-US', 124, 'Prospect', 'An organization or a person who is a potential customer', 'organization,person');
+  VALUES ('life_partner', 'en-US', 24, 'Life Partner', 'Either member of a couple in a long-term relationship', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('regulatory_authority', 'en-US', 125, 'Regulatory Authority', 'A government agency that is responsible for exercising autonomous dominion over some area of human activity in a regulatory or monitoring capacity', 'organization');
+  VALUES ('organization', 'en-US', 25, 'Organization', 'A group of people bound together in a formal relationship to achieve common objectives', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('sibling', 'en-US', 126, 'Sibling', 'Each of two or more children or offspring having one or both parents in common', 'person');
+  VALUES ('parent', 'en-US', 26, 'Parent', 'A person''s father or mother', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('shareholder', 'en-US', 127, 'Shareholder', 'An individual or institution that legally owns one or more shares of the share capital of a public or private corporation', 'organization,person');
+  VALUES ('partner', 'en-US', 27, 'Partner', 'A person associated with another or others as a principal or a contributor of capital in a business or a joint venture', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('spouse', 'en-US', 128, 'Spouse', 'A significant other in a marriage, civil union, or common-law marriage', 'person');
+  VALUES ('partnership', 'en-US', 28, 'Partnership', 'A formal arrangement by two or more parties to manage and operate a business and share its profits', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('subsidiary', 'en-US', 129, 'Subsidiary', 'A company controlled by a parent company or holding company', 'organization');
+  VALUES ('prospect', 'en-US', 29, 'Prospect', 'An organization or a person who is a potential customer', 'organization,person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('supplier', 'en-US', 130, 'Supplier', 'A person or organization that provides something needed such as a product or service', 'organization,person');
+  VALUES ('regulatory_authority', 'en-US', 30, 'Regulatory Authority', 'A government agency that is responsible for exercising autonomous dominion over some area of human activity in a regulatory or monitoring capacity', 'organization');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('sibling', 'en-US', 31, 'Sibling', 'Each of two or more children or offspring having one or both parents in common', 'person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('shareholder', 'en-US', 32, 'Shareholder', 'An organization or person that legally owns one or more shares of the share capital of a public or private company', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('spouse', 'en-US', 33, 'Spouse', 'A significant other in a marriage', 'person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('subsidiary', 'en-US', 34, 'Subsidiary', 'A company controlled by a parent company or holding company', 'organization');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('supplier', 'en-US', 35, 'Supplier', 'A person or organization that provides something needed such as a product or service', 'organization,person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('test_organization_role', 'en-US', 66601, 'Test Organization Role', 'Test Organization Role', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('test_person_role', 'en-US', 66602, 'Test Person Role', 'Test Person Role', 'person');
 
+
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('agency', 'en-ZA', 101, 'Agency', 'A business or organization providing a particular service on behalf of another business, person, or group', 'organization');
+  VALUES ('affiliate', 'en-ZA', 1, 'Affiliate', 'A company under common control with another company', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('agent', 'en-ZA', 102, 'Agent', 'A person who acts on behalf of another person or group', 'person');
+  VALUES ('agency', 'en-ZA', 2, 'Agency', 'An organization providing a particular service on behalf of another organization', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('association', 'en-ZA', 103, 'Association', 'An organization that provides services such as networking and sharing of information within particular fields of interest or industries', 'organization');
+  VALUES ('agent', 'en-ZA', 3, 'Agent', 'A person who acts on behalf of an organization', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('child', 'en-ZA', 104, 'Child', 'A boy or girl from the time of birth until he or she is an adult, or a son or daughter of any age', 'person');
+  VALUES ('association', 'en-ZA', 4, 'Association', 'An organization that provides services such as networking and sharing of information within particular fields of interest or industries', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('competitor', 'en-ZA', 105, 'Competitor', 'An organization engaged in commercial competition with others', 'organization');
+  VALUES ('association_member', 'en-ZA', 5, 'Association Member', 'An organization or person who is a member of an association', 'organization,person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('department', 'en-ZA', 106, 'Department', 'A division of a large organization such as a government, university, or business, dealing with a specific area of activity', 'organization');
+  VALUES ('business_customer', 'en-ZA', 6, 'Business Customer', 'A business who buys goods or services from a shop or business', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('distributor', 'en-ZA', 107, 'Distributor', 'An organization that buys noncompeting products or product lines and sells them direct to end users or customers', 'organization');
+  VALUES ('child', 'en-ZA', 7, 'Child', 'A boy or girl from the time of birth until he or she is an adult, or a son or daughter of any age', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('division', 'en-ZA', 108, 'Division', 'A major section of an organization, with responsibility for a particular area of activity', 'organization');
+  VALUES ('civil_partner', 'en-ZA', 8, 'Civil Partner', 'A significant other in a civil partnership', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employee', 'en-ZA', 109, 'Employee', 'A person employed for wages or salary', 'person');
+  VALUES ('company', 'en-ZA', 9, 'Company', 'A commercial business', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employer', 'en-ZA', 110, 'Employer', 'An organization or person that has employees', 'organization,person');
+  VALUES ('competitor', 'en-ZA', 10, 'Competitor', 'An organization engaged in commercial competition with others', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('contractor', 'en-ZA', 111, 'Contractor', 'A person paid to work on a project for a particular period and amount of money', 'person');
+  VALUES ('contractor', 'en-ZA', 11, 'Contractor', 'A person paid to work on a project for a particular period and amount of money', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('customer', 'en-ZA', 112, 'Customer', 'A person who buys goods or services from a shop or business', 'person');
+  VALUES ('department', 'en-ZA', 12, 'Department', 'A division of a large organization dealing with a specific area of activity', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('director', 'en-ZA', 113, 'Director', 'A person who is in charge of an activity, department, or organization', 'person');
+  VALUES ('director', 'en-ZA', 13, 'Director', 'A person who is in charge of an activity, department, or organization', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('family', 'en-ZA', 114, 'Family', 'A group of one or more parents and their children living together as a unit', 'organization');
+  VALUES ('distributor', 'en-ZA', 14, 'Distributor', 'An organization that buys noncompeting products or product lines and sells them direct to end users or customers', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('family_member', 'en-ZA', 115, 'Family Member', 'A member of a family', 'person');
+  VALUES ('division', 'en-ZA', 15, 'Division', 'A major section of an organization with responsibility for a particular area of activity', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('holding_company', 'en-ZA', 116, 'Holding Company', 'A company created to buy and own the shares of other companies, which it then controls', 'person');
+  VALUES ('employee', 'en-ZA', 16, 'Employee', 'A person employed for wages or salary', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('household', 'en-ZA', 117, 'Household', 'A group of people living together', 'organization');
+  VALUES ('employer', 'en-ZA', 17, 'Employer', 'An organization or person that has employees', 'organization,person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('household_member', 'en-ZA', 118, 'Household Member', 'A member of a household', 'person');
+  VALUES ('family', 'en-ZA', 18, 'Family', 'A group of one or more parents and their children living together as a unit', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('life_partner', 'en-ZA', 119, 'Life Partner', 'Either member of a couple in a long-term relationship', 'person');
+  VALUES ('family_member', 'en-ZA', 19, 'Family Member', 'A person who is a member of a family', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('parent', 'en-ZA', 120, 'Parent', 'A person''s father or mother', 'person');
+  VALUES ('household', 'en-ZA', 20, 'Household', 'A group of people living together', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('parent_company', 'en-ZA', 121, 'Parent Company', 'A company that has a controlling interest in another company or companies', 'organization');
+  VALUES ('household_member', 'en-ZA', 21, 'Household Member', 'A person who is a member of a household', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('parent_organization', 'en-ZA', 122, 'Parent Organization', 'A parent organization of an organization', 'organization');
+  VALUES ('individual_customer', 'en-ZA', 22, 'Individual Customer', 'A person who buys goods or services from a shop or business', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('partner', 'en-ZA', 123, 'Partner', 'A person associated with another or others as a principal or a contributor of capital in a business or a joint venture', 'person');
+  VALUES ('joint_venture', 'en-ZA', 23, 'Joint Venture', 'A joint venture is a business entity created by two or more organizations, generally characterized by shared ownership, shared returns and risks, and shared governance', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('prospect', 'en-ZA', 124, 'Prospect', 'An organization or a person who is a potential customer', 'organization,person');
+  VALUES ('life_partner', 'en-ZA', 24, 'Life Partner', 'Either member of a couple in a long-term relationship', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('regulatory_authority', 'en-ZA', 125, 'Regulatory Authority', 'A government agency that is responsible for exercising autonomous dominion over some area of human activity in a regulatory or monitoring capacity', 'organization');
+  VALUES ('organization', 'en-ZA', 25, 'Organization', 'A group of people bound together in a formal relationship to achieve common objectives', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('sibling', 'en-ZA', 126, 'Sibling', 'Each of two or more children or offspring having one or both parents in common', 'person');
+  VALUES ('parent', 'en-ZA', 26, 'Parent', 'A person''s father or mother', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('shareholder', 'en-ZA', 127, 'Shareholder', 'An individual or institution that legally owns one or more shares of the share capital of a public or private corporation', 'organization,person');
+  VALUES ('partner', 'en-ZA', 27, 'Partner', 'A person associated with another or others as a principal or a contributor of capital in a business or a joint venture', 'person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('spouse', 'en-ZA', 128, 'Spouse', 'A significant other in a marriage, civil union, or common-law marriage', 'person');
+  VALUES ('partnership', 'en-ZA', 28, 'Partnership', 'A formal arrangement by two or more parties to manage and operate a business and share its profits', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('subsidiary', 'en-ZA', 129, 'Subsidiary', 'A company controlled by a parent company or holding company', 'organization');
+  VALUES ('prospect', 'en-ZA', 29, 'Prospect', 'An organization or a person who is a potential customer', 'organization,person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('supplier', 'en-ZA', 130, 'Supplier', 'A person or organization that provides something needed such as a product or service', 'organization,person');
+  VALUES ('regulatory_authority', 'en-ZA', 30, 'Regulatory Authority', 'A government agency that is responsible for exercising autonomous dominion over some area of human activity in a regulatory or monitoring capacity', 'organization');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('sibling', 'en-ZA', 31, 'Sibling', 'Each of two or more children or offspring having one or both parents in common', 'person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('shareholder', 'en-ZA', 32, 'Shareholder', 'An organization or person that legally owns one or more shares of the share capital of a public or private company', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('spouse', 'en-ZA', 33, 'Spouse', 'A significant other in a marriage', 'person');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('subsidiary', 'en-ZA', 34, 'Subsidiary', 'A company controlled by a parent company or holding company', 'organization');
+INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
+  VALUES ('supplier', 'en-ZA', 35, 'Supplier', 'A person or organization that provides something needed such as a product or service', 'organization,person');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('test_organization_role', 'en-ZA', 66601, 'Test Organization Role', 'Test Organization Role', 'organization');
 INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
   VALUES ('test_person_role', 'en-ZA', 66602, 'Test Person Role', 'Test Person Role', 'person');
+
+
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('affiliation', 'en-US', 1, 'Affiliation', 'A relationship between affiliates', 'affiliate', 'affiliate');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('association_membership', 'en-US', 2, 'Association Membership', 'A relationship identifying an organization as a member of an association', 'association', 'association_member');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('civil_partnership', 'en-US', 3, 'Civil Partnership', 'A legally recognized union with rights similar to those of marriage', 'civil_partner', 'civil_partner');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('company_shareholder', 'en-US', 4, 'Company Shareholder', 'A relationship between a company and an organization or person that legally owns one or more shares of the share capital of the company', 'company', 'shareholder');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('company_subsidiary', 'en-US', 5, 'Company Subsidiary', 'A relationship between a parent company or holding company and a subsidiary', 'company', 'subsidiary');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('competitor', 'en-US', 6, 'Competitor', 'A relationship between two organizations that are engaged in commercial competition with each other', 'competitor', 'competitor');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('division_department', 'en-US', 7, 'Division Department', 'A relationship between a division and a department that forms part of the division', 'division', 'department');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('directorship', 'en-US', 8, 'Directorship', 'A relationship identifying a person as a directory of a company', 'company', 'director');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('employment', 'en-US', 9, 'Employment', 'A relationship between two parties that is usually based on contract where work is paid for', 'employer', 'employee');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('family_membership', 'en-US', 10, 'Family Membership', 'A relationship identifying a person as a member of a family', 'family', 'family_member');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('household_membership', 'en-US', 11, 'Household Membership', 'A relationship identifying a person as a member of a household', 'household', 'household_member');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('joint_venture', 'en-US', 12, 'Joint Venture', 'A relationship identifying an organization as a participant in a joint venture arrangement', 'joint_venture', 'organization');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('life_partnership', 'en-US', 13, 'Life Partnership', 'A relationship between a parent and child', 'life_partner', 'life_partner');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('marriage', 'en-US', 14, 'Marriage', 'A legally recognized union of two people as partners in a personal relationship ', 'spouse', 'spouse');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('organization_agency', 'en-US', 15, 'Organization Agency', 'A relationship where an organization provides a particular service on behalf of another organization', 'organization', 'agency');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('organization_agent', 'en-US', 16, 'Organization Agent', 'A relationship between an organization and a person who acts on behalf of the organization', 'organization', 'agent');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('organization_department', 'en-US', 17, 'Organization Department', 'A relationship between an organization and a department that forms part of the organization', 'organization', 'department');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('organization_division', 'en-US', 18, 'Organization Division', 'A relationship between an organization and a division that forms part of the organization', 'organization', 'division');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('parent_child', 'en-US', 19, 'Parent-Child', 'A relationship between a parent and a child', 'parent', 'child');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('partnership', 'en-US', 20, 'Partnership', 'A relationship between a partnership and one of its partners', 'partnership', 'partner');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('sibling', 'en-US', 21, 'Sibling', 'A relationship between two children or offspring having one or both parents in common', 'sibling', 'sibling');
+
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('affiliation', 'en-ZA', 1, 'Affiliation', 'A relationship between affiliates', 'affiliate', 'affiliate');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('association_membership', 'en-ZA', 2, 'Association Membership', 'A relationship identifying an organization as a member of an association', 'association', 'association_member');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('civil_partnership', 'en-ZA', 3, 'Civil Partnership', 'A legally recognized union with rights similar to those of marriage', 'civil_partner', 'civil_partner');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('company_shareholder', 'en-ZA', 4, 'Company Shareholder', 'A relationship between a company and an organization or person that legally owns one or more shares of the share capital of the company', 'company', 'shareholder');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('company_subsidiary', 'en-ZA', 5, 'Company Subsidiary', 'A relationship between a parent company or holding company and a subsidiary', 'company', 'subsidiary');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('competitor', 'en-ZA', 6, 'Competitor', 'A relationship between two organizations that are engaged in commercial competition with each other', 'competitor', 'competitor');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('division_department', 'en-ZA', 7, 'Division Department', 'A relationship between a division and a department that forms part of the division', 'division', 'department');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('directorship', 'en-ZA', 8, 'Directorship', 'A relationship identifying a person as a directory of a company', 'company', 'director');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('employment', 'en-ZA', 9, 'Employment', 'A relationship between two parties that is usually based on contract where work is paid for', 'employer', 'employee');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('family_membership', 'en-ZA', 10, 'Family Membership', 'A relationship identifying a person as a member of a family', 'family', 'family_member');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('household_membership', 'en-ZA', 11, 'Household Membership', 'A relationship identifying a person as a member of a household', 'household', 'household_member');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('joint_venture', 'en-ZA', 12, 'Joint Venture', 'A relationship identifying an organization as a participant in a joint venture arrangement', 'joint_venture', 'organization');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('life_partnership', 'en-ZA', 13, 'Life Partnership', 'A relationship between a parent and child', 'life_partner', 'life_partner');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('marriage', 'en-ZA', 14, 'Marriage', 'A legally recognized union of two people as partners in a personal relationship ', 'spouse', 'spouse');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('organization_agency', 'en-ZA', 15, 'Organization Agency', 'A relationship where an organization provides a particular service on behalf of another organization', 'organization', 'agency');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('organization_agent', 'en-ZA', 16, 'Organization Agent', 'A relationship between an organization and a person who acts on behalf of the organization', 'organization', 'agent');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('organization_department', 'en-ZA', 17, 'Organization Department', 'A relationship between an organization and a department that forms part of the organization', 'organization', 'department');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('organization_division', 'en-ZA', 18, 'Organization Division', 'A relationship between an organization and a division that forms part of the organization', 'organization', 'division');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('parent_child', 'en-ZA', 19, 'Parent-Child', 'A relationship between a parent and a child', 'parent', 'child');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('partnership', 'en-ZA', 20, 'Partnership', 'A relationship between a partnership and one of its partners', 'partnership', 'partner');
+INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
+  VALUES ('sibling', 'en-ZA', 21, 'Sibling', 'A relationship between two children or offspring having one or both parents in common', 'sibling', 'sibling');
 
 
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
@@ -3910,17 +4034,6 @@ INSERT INTO party.role_type_preference_type_constraints(role_type, preference_ty
   VALUES ('test_organization_role', 'test_preference', 'max_size', '20');
 INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_organization_role', 'test_preference', 'pattern', '^[0-9]*$');
-
-
-
--- INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
---   VALUES ('')
-
-
-
-
-
-
 
 
 INSERT INTO party.segments (code, locale_id, sort_index, name, description, party_types)

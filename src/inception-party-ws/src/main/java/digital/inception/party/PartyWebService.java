@@ -19,6 +19,7 @@ package digital.inception.party;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import java.util.UUID;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -53,6 +54,7 @@ public class PartyWebService {
   /**
    * Retrieve the organizations.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the organizations
    * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
@@ -62,18 +64,21 @@ public class PartyWebService {
    */
   @WebMethod(operationName = "GetOrganizations")
   public Organizations getOrganizations(
+      @WebParam(name = "TenantId") @XmlElement UUID tenantId,
       @WebParam(name = "Filter") @XmlElement String filter,
       @WebParam(name = "SortBy") @XmlElement OrganizationSortBy sortBy,
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return partyService.getOrganizations(filter, sortBy, sortDirection, pageIndex, pageSize);
+    return partyService.getOrganizations(
+        tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**
    * Retrieve the parties.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the parties
    * @param sortDirection the optional sort direction to apply to the parties
    * @param pageIndex the optional page index
@@ -82,17 +87,19 @@ public class PartyWebService {
    */
   @WebMethod(operationName = "GetParties")
   public Parties getParties(
+      @WebParam(name = "TenantId") @XmlElement UUID tenantId,
       @WebParam(name = "Filter") @XmlElement String filter,
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return partyService.getParties(filter, sortDirection, pageIndex, pageSize);
+    return partyService.getParties(tenantId, filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
    * Retrieve the persons.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the persons
    * @param sortBy the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
@@ -102,12 +109,13 @@ public class PartyWebService {
    */
   @WebMethod(operationName = "GetPersons")
   public Persons getPersons(
+      @WebParam(name = "TenantId") @XmlElement UUID tenantId,
       @WebParam(name = "Filter") @XmlElement String filter,
       @WebParam(name = "SortBy") @XmlElement PersonSortBy sortBy,
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return partyService.getPersons(filter, sortBy, sortDirection, pageIndex, pageSize);
+    return partyService.getPersons(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 }

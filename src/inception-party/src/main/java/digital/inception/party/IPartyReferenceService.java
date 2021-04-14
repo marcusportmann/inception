@@ -27,6 +27,9 @@ import java.util.List;
  */
 public interface IPartyReferenceService {
 
+  /** The default locale ID. */
+  String DEFAULT_LOCALE_ID = "en-US";
+
   /**
    * Retrieve the attribute type categories.
    *
@@ -251,6 +254,15 @@ public interface IPartyReferenceService {
    * @return the races
    */
   List<Race> getRaces(String localeId) throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the relationship types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship types
+   *     for or <b>null</b> to retrieve the relationship types for all locales
+   * @return the relationship types
+   */
+  List<RelationshipType> getRelationshipTypes(String localeId) throws ServiceUnavailableException;
 
   /**
    * Retrieve the residence permit types.
@@ -679,6 +691,17 @@ public interface IPartyReferenceService {
    * @return <b>true</b> if the code is a valid code for a race or <b>false</b> otherwise
    */
   boolean isValidRace(String raceCode) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a relationship type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param relationshipTypeCode the code for the relationship type
+   * @return <b>true</b> if the code is a valid code for a relationship type or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidRelationshipType(String partyTypeCode, String relationshipTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a residence permit type.

@@ -47,6 +47,7 @@ import digital.inception.party.PreferenceType;
 import digital.inception.party.PreferenceTypeCategory;
 import digital.inception.party.QualificationType;
 import digital.inception.party.Race;
+import digital.inception.party.RelationshipType;
 import digital.inception.party.ResidencePermitType;
 import digital.inception.party.ResidencyStatus;
 import digital.inception.party.ResidentialType;
@@ -161,7 +162,10 @@ public class PartyReferenceServiceTest {
     List<ContactMechanismType> retrievedContactMechanismTypes =
         partyReferenceService.getContactMechanismTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
-    // TODO: Check results
+    assertEquals(
+        5,
+        retrievedContactMechanismTypes.size(),
+        "The correct number of contact mechanism types was not retrieved");
   }
 
   /** Test the employment status reference functionality. */
@@ -198,8 +202,6 @@ public class PartyReferenceServiceTest {
         191,
         retrievedFieldsOfStudy.size(),
         "The correct number of fields of study was not retrieved");
-
-    retrievedFieldsOfStudy = partyReferenceService.getFieldsOfStudy("en-US");
   }
 
   /** Test the gender reference functionality. */
@@ -233,8 +235,6 @@ public class PartyReferenceServiceTest {
         3,
         retrievedLockTypeCategories.size(),
         "The correct number of lock type categories was not retrieved");
-
-    retrievedLockTypeCategories = partyReferenceService.getLockTypeCategories("en-US");
   }
 
   /** Test the lock type reference functionality. */
@@ -254,11 +254,9 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getMaritalStatuses(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        6,
+        8,
         retrievedMaritalStatuses.size(),
         "The correct number of marital statuses was not retrieved");
-
-    retrievedMaritalStatuses = partyReferenceService.getMaritalStatuses("en-US");
   }
 
   /** Test the marriage type reference functionality. */
@@ -268,7 +266,7 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getMarriageTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        4, retrievedMarriageTypes.size(), "The correct number of marriage types was not retrieved");
+        6, retrievedMarriageTypes.size(), "The correct number of marriage types was not retrieved");
   }
 
   /** Test the next of kin type reference functionality. */
@@ -281,8 +279,6 @@ public class PartyReferenceServiceTest {
         17,
         retrievedNextOfKinTypes.size(),
         "The correct number of next of kin types was not retrieved");
-
-    retrievedNextOfKinTypes = partyReferenceService.getNextOfKinTypes("en-US");
   }
 
   /** Test the occupation reference functionality. */
@@ -374,6 +370,18 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getRaces(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(6, retrievedRaces.size(), "The correct number of races was not retrieved");
+  }
+
+  /** Test the relationship type reference functionality. */
+  @Test
+  public void relationshipTypeTest() throws Exception {
+    List<RelationshipType> retrievedRelationshipTypes =
+        partyReferenceService.getRelationshipTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        21,
+        retrievedRelationshipTypes.size(),
+        "The correct number of relationship typw was not retrieved");
   }
 
   /** Test the residence permit type reference functionality. */
@@ -492,7 +500,7 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getRoleTypes(PartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        32, retrievedRoleTypes.size(), "The correct number of role types was not retrieved");
+        37, retrievedRoleTypes.size(), "The correct number of role types was not retrieved");
   }
 
   /** Test the segment reference functionality. */

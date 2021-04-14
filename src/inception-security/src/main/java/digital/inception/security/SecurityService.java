@@ -60,46 +60,13 @@ import org.springframework.web.util.UriUtils;
 @SuppressWarnings({"unused", "WeakerAccess", "DuplicatedCode"})
 public class SecurityService implements ISecurityService, InitializingBean {
 
-  /** The Universally Unique Identifier (UUID) for the Administration tenant. */
-  public static final UUID ADMINISTRATION_TENANT_ID =
-      UUID.fromString("00000000-0000-0000-0000-000000000000");
-
-  /** The Universally Unique Identifier (UUID) for the Administration user directory. */
-  public static final UUID ADMINISTRATION_USER_DIRECTORY_ID =
-      UUID.fromString("00000000-0000-0000-0000-000000000000");
-
-  /** The Universally Unique Identifier (UUID) for the Administrators group. */
-  public static final UUID ADMINISTRATORS_GROUP_ID =
-      UUID.fromString("00000000-0000-0000-0000-000000000000");
-
-  /** The name of the Administrators group. */
-  public static final String ADMINISTRATORS_GROUP_NAME = "Administrators";
-
-  /** The code for the Administrator role. */
-  public static final String ADMINISTRATOR_ROLE_CODE = "Administrator";
-
-  /** The username for the Administrator user. */
-  public static final String ADMINISTRATOR_USERNAME = "Administrator";
-
-  /** The code for the internal user directory type. */
-  public static final String INTERNAL_USER_DIRECTORY_TYPE = "InternalUserDirectory";
-
-  /** The code for the LDAP user directory type. */
-  public static final String LDAP_USER_DIRECTORY_TYPE = "LDAPUserDirectory";
-
-  /** The code for the Password Resetter role. */
-  public static final String PASSWORD_RESETTER_ROLE_CODE = "PasswordResetter";
-
-  /** The code for the Tenant Administrator role. */
-  public static final String TENANT_ADMINISTRATOR_ROLE_CODE = "TenantAdministrator";
-
   /** The maximum number of filtered tenants. */
   private static final int MAX_FILTERED_ORGANISATIONS = 100;
 
   /** The maximum number of filtered user directories. */
   private static final int MAX_FILTERED_USER_DIRECTORIES = 100;
 
-  /** The Universally Unique Identifier (UUID) for the password reset mail template. */
+  /** The code for the password reset mail template. */
   private static final String PASSWORD_RESET_MAIL_TEMPLATE_ID =
       "Inception.Security.PasswordResetMail";
 

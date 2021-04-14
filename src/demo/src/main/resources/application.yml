@@ -77,6 +77,7 @@ inception:
     hazelcast:
       server:
         enabled: true
+        port-auto-increment: true
         cluster:
           port: 15000
           name: demo-cluster

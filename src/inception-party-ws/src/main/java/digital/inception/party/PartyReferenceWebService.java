@@ -387,6 +387,20 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the relationship types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship types
+   *     for or <b>null</b> to retrieve the relationship types for all locales
+   * @return the relationship types
+   */
+  @WebMethod(operationName = "GetRelationshipTypes")
+  public List<RelationshipType> getRelationshipTypes(
+      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
+    return partyReferenceService.getRelationshipTypes(
+        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
    * Retrieve the residence permit types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit

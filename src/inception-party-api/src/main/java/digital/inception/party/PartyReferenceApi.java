@@ -1024,6 +1024,47 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the relationship types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship types
+   *     for or <b>null</b> to retrieve the relationship types for all locales
+   * @return the relationship types
+   */
+  @Operation(
+      summary = "Retrieve the relationship types",
+      description = "Retrieve the relationship types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/relationship-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<RelationshipType> getRelationshipTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the relationship types for",
+              example = PartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ServiceUnavailableException {
+    return partyReferenceService.getRelationshipTypes(
+        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  }
+
+  /**
    * Retrieve the residence permit types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit

@@ -31,6 +31,37 @@ import java.util.UUID;
  */
 public interface ISecurityService {
 
+  /** The Universally Unique Identifier (UUID) for the Administrators group. */
+  UUID ADMINISTRATORS_GROUP_ID =
+      UUID.fromString("00000000-0000-0000-0000-000000000000");
+
+  /** The name of the Administrators group. */
+  String ADMINISTRATORS_GROUP_NAME = "Administrators";
+
+  /** The code for the Administrator role. */
+  String ADMINISTRATOR_ROLE_CODE = "Administrator";
+
+  /** The username for the Administrator user. */
+  String ADMINISTRATOR_USERNAME = "administrator";
+
+  /** The Universally Unique Identifier (UUID) for the default tenant. */
+  UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
+  /** The Universally Unique Identifier (UUID) for the default internal user directory. */
+  UUID DEFAULT_USER_DIRECTORY_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
+  /** The code for the internal user directory type. */
+  String INTERNAL_USER_DIRECTORY_TYPE = "InternalUserDirectory";
+
+  /** The code for the LDAP user directory type. */
+  String LDAP_USER_DIRECTORY_TYPE = "LDAPUserDirectory";
+
+  /** The code for the Password Resetter role. */
+  String PASSWORD_RESETTER_ROLE_CODE = "PasswordResetter";
+
+  /** The code for the Tenant Administrator role. */
+  String TENANT_ADMINISTRATOR_ROLE_CODE = "TenantAdministrator";
+
   /**
    * Add the group member to the group.
    *

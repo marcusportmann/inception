@@ -31,6 +31,8 @@ import org.springframework.data.repository.query.Param;
  */
 public interface OrganizationRepository extends JpaRepository<Organization, UUID> {
 
+  Page<Organization> findByTenantId(UUID tenantId, Pageable pageable);
+
   @Query("select o from Organization o where (lower(o.name) like lower(:filter))")
   Page<Organization> findFiltered(@Param("filter") String filter, Pageable pageable);
 }

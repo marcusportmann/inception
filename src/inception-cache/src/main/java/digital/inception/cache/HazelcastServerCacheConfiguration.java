@@ -55,6 +55,9 @@ public class HazelcastServerCacheConfiguration {
   /** Is the Hazelcast server cache enabled? */
   private boolean enabled;
 
+  /** Is port auto increment enabled? */
+  private boolean portAutoIncrement;
+
   /**
    * Returns the distributed in-memory caches.
    *
@@ -74,6 +77,15 @@ public class HazelcastServerCacheConfiguration {
   }
 
   /**
+   * Returns whether port auto increment is enabled.
+   *
+   * @return whether port auto increment is enabled
+   */
+  public boolean getPortAutoIncrement() {
+    return portAutoIncrement;
+  }
+
+  /**
    * Returns the Hazelcast configuration.
    *
    * @return the Hazelcast configuration
@@ -90,7 +102,7 @@ public class HazelcastServerCacheConfiguration {
     NetworkConfig networkConfig = config.getNetworkConfig();
 
     networkConfig.setPort(getCluster().getPort());
-    networkConfig.setPortAutoIncrement(false);
+    networkConfig.setPortAutoIncrement(portAutoIncrement);
     networkConfig.setReuseAddress(true);
 
     JoinConfig joinConfig = networkConfig.getJoin();
@@ -187,6 +199,15 @@ public class HazelcastServerCacheConfiguration {
    */
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;
+  }
+
+  /**
+   * Set whether port auto increment is enabled.
+   *
+   * @param portAutoIncrement is port auto increment enabled
+   */
+  public void setPortAutoIncrement(boolean portAutoIncrement) {
+    this.portAutoIncrement = portAutoIncrement;
   }
 
   /**

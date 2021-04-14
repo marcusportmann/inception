@@ -16,22 +16,18 @@
 
 package digital.inception.party;
 
-import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>PersonRepository</b> interface declares the repository for the <b>Person</b> domain type.
+ * The <b>RelationshipTypeRepository</b> interface declares the repository for the <b>
+ * RelationshipType</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface PersonRepository extends JpaRepository<Person, UUID> {
+public interface RelationshipTypeRepository
+    extends JpaRepository<RelationshipType, RelationshipTypeId> {
 
-  Page<Person> findByTenantId(UUID tenantId, Pageable pageable);
-
-  @Query("select p from Person p where (lower(p.name) like lower(:filter))")
-  Page<Person> findFiltered(@Param("filter") String filter, Pageable pageable);
+  List<RelationshipType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }
