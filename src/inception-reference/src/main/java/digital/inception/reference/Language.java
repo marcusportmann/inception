@@ -45,7 +45,15 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(
     description = "A systematic use of sounds, characters, symbols or signs to communicate meaning")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "iso3Code", "localeId", "sortIndex", "name", "shortName", "description"})
+@JsonPropertyOrder({
+  "code",
+  "iso3Code",
+  "localeId",
+  "sortIndex",
+  "name",
+  "shortName",
+  "description"
+})
 @XmlRootElement(name = "Language", namespace = "http://inception.digital/reference")
 @XmlType(
     name = "Language",
@@ -117,11 +125,10 @@ public class Language implements Serializable {
   private String shortName;
 
   /** The sort index for the language. */
-  @Schema(description = "The sort index for the language", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
-  @NotNull
-  @Column(name = "sort_index", nullable = false)
+  @Schema(description = "The sort index for the language")
+  @JsonProperty
+  @XmlElement(name = "SortIndex")
+  @Column(name = "sort_index")
   private Integer sortIndex;
 
   /** Constructs a new <b>Language</b>. */

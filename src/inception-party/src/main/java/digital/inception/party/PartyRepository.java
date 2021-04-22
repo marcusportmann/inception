@@ -31,10 +31,16 @@ import org.springframework.data.repository.query.Param;
  */
 public interface PartyRepository extends JpaRepository<Party, UUID> {
 
+  void deleteByTenantIdAndId(UUID tenantId, UUID id);
+
+  boolean existsByTenantIdAndId(UUID tenantId, UUID id);
+
   @Query("select p from Party p")
   Page<Party> findAll(Pageable pageable);
 
   Page<Party> findByTenantId(UUID tenantId, Pageable pageable);
+
+  Optional<Party> findByTenantIdAndId(UUID tenantId, UUID id);
 
   @Query("select p from Party p where (lower(p.name) like lower(:filter))")
   Page<Party> findFiltered(@Param("filter") String filter, Pageable pageable);

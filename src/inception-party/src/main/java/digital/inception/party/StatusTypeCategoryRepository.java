@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>StatusTypeCategoryRepository</b> interface declares the repository for the <b>
@@ -29,5 +29,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StatusTypeCategoryRepository
     extends JpaRepository<StatusTypeCategory, StatusTypeCategoryId> {
 
-  List<StatusTypeCategory> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query(
+      "select stc from StatusTypeCategory stc order by stc.localeId, -stc.sortIndex DESC, stc.name")
+  List<StatusTypeCategory> findAll();
+
+  @Query(
+      "select stc from StatusTypeCategory stc where upper(stc.localeId) = upper(:localeId) order by stc.localeId, -stc.sortIndex DESC, stc.name")
+  List<StatusTypeCategory> findByLocaleIdIgnoreCase(String localeId);
 }

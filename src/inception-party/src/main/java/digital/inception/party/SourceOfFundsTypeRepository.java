@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>SourceOfFundsTypeRepository</b> interface declares the repository for the <b>
@@ -29,5 +29,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SourceOfFundsTypeRepository
     extends JpaRepository<SourceOfFundsType, SourceOfFundsTypeId> {
 
-  List<SourceOfFundsType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select soft from SourceOfFundsType soft order by -soft.sortIndex DESC, soft.name")
+  List<SourceOfFundsType> findAll();
+
+  @Query(
+      "select soft from SourceOfFundsType soft where upper(soft.localeId) = upper(:localeId) order by -soft.sortIndex DESC, soft.name")
+  List<SourceOfFundsType> findByLocaleIdIgnoreCase(String localeId);
 }

@@ -17,8 +17,8 @@
 package digital.inception.reference;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>CountryRepository</b> interface declares the repository for the <b>Country</b> domain
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface CountryRepository extends JpaRepository<Country, CountryId> {
 
-  List<Country> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select c from Country c order by c.localeId, -c.sortIndex DESC, c.shortName")
+  List<Country> findAll();
+
+  @Query(
+      "select c from Country c where upper(c.localeId) = upper(:localeId) order by c.localeId, -c.sortIndex DESC, c.shortName")
+  List<Country> findByLocaleIdIgnoreCase(String localeId);
 }

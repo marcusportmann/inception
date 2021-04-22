@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>LockTypeCategoryRepository</b> interface declares the repository for the <b>
@@ -29,5 +29,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface LockTypeCategoryRepository
     extends JpaRepository<LockTypeCategory, LockTypeCategoryId> {
 
-  List<LockTypeCategory> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query(
+      "select ltc from LockTypeCategory ltc order by ltc.localeId, -ltc.sortIndex DESC, ltc.name")
+  List<LockTypeCategory> findAll();
+
+  @Query(
+      "select ltc from LockTypeCategory ltc where upper(ltc.localeId) = upper(:localeId) order by ltc.localeId, -ltc.sortIndex DESC, ltc.name")
+  List<LockTypeCategory> findByLocaleIdIgnoreCase(String localeId);
 }

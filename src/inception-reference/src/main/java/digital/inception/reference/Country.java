@@ -143,11 +143,10 @@ public class Country implements Serializable {
   private String shortName;
 
   /** The sort index for the country. */
-  @Schema(description = "The sort index for the country", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
-  @NotNull
-  @Column(name = "sort_index", nullable = false)
+  @Schema(description = "The sort index for the country")
+  @JsonProperty
+  @XmlElement(name = "SortIndex")
+  @Column(name = "sort_index")
   private Integer sortIndex;
 
   /** The ISO 3166-1 alpha-2 code for the sovereign state the country is associated with. */

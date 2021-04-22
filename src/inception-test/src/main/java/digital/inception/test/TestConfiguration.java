@@ -110,22 +110,33 @@ public class TestConfiguration {
     "digital/inception/test/inception-test-h2.sql",
     // Utility modules
     "digital/inception/audit/inception-audit-h2.sql",
+    "digital/inception/audit/test/inception-audit-test-h2.sql",
     "digital/inception/bmi/inception-bmi-h2.sql",
+    "digital/inception/bmi/test/inception-bmi-test-h2.sql",
     "digital/inception/bmi/inception-camunda-h2.sql",
+    "digital/inception/bmi/test/inception-camunda-test-h2.sql",
     "digital/inception/codes/inception-codes-h2.sql",
+    "digital/inception/codes/test/inception-codes-test/h2.sql",
     "digital/inception/config/inception-config-h2.sql",
+    "digital/inception/config/test/inception-config-test-h2.sql",
     "digital/inception/error/inception-error-h2.sql",
+    "digital/inception/error/test/inception-error-test-h2.sql",
     "digital/inception/mail/inception-mail-h2.sql",
+    "digital/inception/mail/test/inception-mail-test-h2.sql",
     "digital/inception/messaging/inception-messaging-h2.sql",
+    "digital/inception/messaging/test/inception-messaging-test-h2.sql",
     "digital/inception/reporting/inception-reporting-h2.sql",
+    "digital/inception/reporting/test/inception-reporting-test-h2.sql",
     "digital/inception/scheduler/inception-scheduler-h2.sql",
+    "digital/inception/scheduler/test/inception-scheduler-test-h2.sql",
     "digital/inception/security/inception-security-h2.sql",
+    "digital/inception/security/test/inception-security-test-h2.sql",
     "digital/inception/sms/inception-sms-h2.sql",
     // Business Modules
     "digital/inception/reference/inception-reference-h2.sql",
+    "digital/inception/reference/test/inception-reference-test-h2.sql",
     "digital/inception/party/inception-party-h2.sql",
-    // Banking Modules
-    "digital/inception/banking/inception-banking-customer-h2.sql",
+    "digital/inception/party/test/inception-party-test-h2.sql"
   };
 
   private static final Object dataSourceLock = new Object();

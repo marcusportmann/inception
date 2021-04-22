@@ -48,9 +48,10 @@ public class PersonNotFoundException extends ServiceException {
   /**
    * Constructs a new <b>PersonNotFoundException</b>.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param personId the Universally Unique Identifier (UUID) for the person
    */
-  public PersonNotFoundException(UUID personId) {
-    super("The person (" + personId + ") could not be found");
+  public PersonNotFoundException(UUID tenantId, UUID personId) {
+    super("The person (" + personId + ") could not be found for the tenant (" + tenantId + ")");
   }
 }

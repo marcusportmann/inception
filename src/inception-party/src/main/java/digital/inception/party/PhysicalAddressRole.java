@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -47,12 +48,20 @@ import org.springframework.util.StringUtils;
  */
 @Schema(description = "A physical address role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
+@JsonPropertyOrder({
+  "code",
+  "localeId",
+  "tenantId",
+  "sortIndex",
+  "name",
+  "description",
+  "partyTypes"
+})
 @XmlRootElement(name = "PhysicalAddressRole", namespace = "http://inception.digital/party")
 @XmlType(
     name = "PhysicalAddressRole",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "partyTypes", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "physical_address_roles")
@@ -150,6 +159,18 @@ public class PhysicalAddressRole implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
+  /**
+   * The Universally Unique Identifier (UUID) for the tenant the physical address role is specific
+   * to.
+   */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the physical address role is specific to")
+  @JsonProperty
+  @XmlElement(name = "TenantId")
+  @Column(name = "tenant_id")
+  private UUID tenantId;
+
   /** Constructs a new <b>PhysicalAddressRole</b>. */
   public PhysicalAddressRole() {}
 
@@ -238,6 +259,17 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the physical address role is
+   * specific to.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the physical address role is
+   *     specific to
+   */
+  public UUID getTenantId() {
+    return tenantId;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -321,5 +353,16 @@ public class PhysicalAddressRole implements Serializable {
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the tenant the physical address role is
+   * specific to.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     role is specific to
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 }

@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>ResidencePermitTypeRepository</b> interface declares the repository for the <b>
@@ -29,5 +29,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ResidencePermitTypeRepository
     extends JpaRepository<ResidencePermitType, ResidencePermitTypeId> {
 
-  List<ResidencePermitType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query(
+      "select rpt from ResidencePermitType rpt order by rpt.localeId, -rpt.sortIndex DESC, rpt.name")
+  List<ResidencePermitType> findAll();
+
+  @Query(
+      "select rpt from ResidencePermitType rpt where upper(rpt.localeId) = upper(:localeId) order by rpt.localeId, -rpt.sortIndex DESC, rpt.name")
+  List<ResidencePermitType> findByLocaleIdIgnoreCase(String localeId);
 }

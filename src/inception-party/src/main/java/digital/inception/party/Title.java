@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -42,12 +43,28 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "An honorific prefixing a person's name")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "abbreviation", "description"})
+@JsonPropertyOrder({
+  "code",
+  "localeId",
+  "tenantId",
+  "sortIndex",
+  "name",
+  "abbreviation",
+  "description"
+})
 @XmlRootElement(name = "Title", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Title",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "sortIndex", "name", "abbreviation", "description"})
+    propOrder = {
+      "code",
+      "localeId",
+      "tenantId",
+      "sortIndex",
+      "name",
+      "abbreviation",
+      "description"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "titles")
@@ -104,12 +121,20 @@ public class Title implements Serializable {
   private String name;
 
   /** The sort index for the title. */
-  @Schema(description = "The sort index for the title", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
-  @NotNull
-  @Column(name = "sort_index", nullable = false)
+  @Schema(description = "The sort index for the title")
+  @JsonProperty
+  @XmlElement(name = "SortIndex")
+  @Column(name = "sort_index")
   private Integer sortIndex;
+
+  /** The Universally Unique Identifier (UUID) for the tenant the title is specific to. */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the title is specific to")
+  @JsonProperty
+  @XmlElement(name = "TenantId")
+  @Column(name = "tenant_id")
+  private UUID tenantId;
 
   /** Constructs a new <b>Title</b>. */
   public Title() {}
@@ -194,6 +219,15 @@ public class Title implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the title is specific to.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the title is specific to
+   */
+  public UUID getTenantId() {
+    return tenantId;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -255,5 +289,15 @@ public class Title implements Serializable {
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the tenant the title is specific to.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the title is specific
+   *     to
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 }

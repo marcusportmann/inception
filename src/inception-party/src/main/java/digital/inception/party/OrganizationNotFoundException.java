@@ -48,9 +48,15 @@ public class OrganizationNotFoundException extends ServiceException {
   /**
    * Constructs a new <b>OrganizationNotFoundException</b>.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organizationId the Universally Unique Identifier (UUID) for the organization
    */
-  public OrganizationNotFoundException(UUID organizationId) {
-    super("The organization (" + organizationId + ") could not be found");
+  public OrganizationNotFoundException(UUID tenantId, UUID organizationId) {
+    super(
+        "The organization ("
+            + organizationId
+            + ") could not be found for the tenant ("
+            + tenantId
+            + ")");
   }
 }

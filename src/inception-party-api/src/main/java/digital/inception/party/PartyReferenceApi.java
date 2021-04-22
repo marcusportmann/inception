@@ -18,6 +18,7 @@ package digital.inception.party;
 
 import digital.inception.api.ProblemDetails;
 import digital.inception.api.SecureApi;
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,11 +28,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,18 +70,27 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
-   * Retrieve the attribute type categories.
+   * Retrieve the attribute type category reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
+   *     category reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
-   *     categories for or <b>null</b> to retrieve the attribute type categories for all locales
-   * @return the attribute type categories
+   *     category reference data for
+   * @return the attribute type category reference data
    */
   @Operation(
-      summary = "Retrieve the attribute type categories",
-      description = "Retrieve the attribute type categories")
+      summary = "Retrieve the attribute type category reference data for a specific locale",
+      description = "Retrieve the attribute type category reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -97,28 +108,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<AttributeTypeCategory> getAttributeTypeCategories(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the attribute type category reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the attribute type categories for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the attribute type category reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getAttributeTypeCategories(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getAttributeTypeCategories(tenantId, localeId);
   }
 
   /**
-   * Retrieve the attribute types.
+   * Retrieve the attribute type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute types
-   *     for or <b>null</b> to retrieve the attribute types for all locales
-   * @return the attribute types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     reference data for
+   * @return the attribute type reference data
    */
-  @Operation(summary = "Retrieve the attribute types", description = "Retrieve the attribute types")
+  @Operation(
+      summary = "Retrieve the attribute type reference data for a specific locale",
+      description = "Retrieve the attribute type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -136,28 +170,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<AttributeType> getAttributeTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the attribute type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the attribute types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the attribute type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getAttributeTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getAttributeTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the consent types.
+   * Retrieve the consent type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the consent types for
-   *     or <b>null</b> to retrieve the consent types for all locales
-   * @return the consent types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the consent type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
+   *     reference data for
+   * @return the consent type reference data
    */
-  @Operation(summary = "Retrieve the consent types", description = "Retrieve the consent types")
+  @Operation(
+      summary = "Retrieve the consent type reference data for a specific locale",
+      description = "Retrieve the consent type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -175,30 +232,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<ConsentType> getConsentTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the consent type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the consent types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the consent types reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getConsentTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getConsentTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the contact mechanism purposes.
+   * Retrieve the contact mechanism purpose reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     purpose reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <b>null</b> to retrieve the contact mechanism purposes for all locales
-   * @return the contact mechanism purposes
+   *     purpose reference data for
+   * @return the contact mechanism purpose reference data
    */
   @Operation(
-      summary = "Retrieve the contact mechanism purposes",
-      description = "Retrieve the contact mechanism purposes")
+      summary = "Retrieve the contact mechanism purpose reference data for a specific locale",
+      description = "Retrieve the contact mechanism purpose reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -216,30 +294,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<ContactMechanismPurpose> getContactMechanismPurposes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the contact mechanism purpose reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the contact mechanism purposes for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the contact mechanism purpose reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getContactMechanismPurposes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getContactMechanismPurposes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the contact mechanism roles.
+   * Retrieve the contact mechanism role reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     role reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <b>null</b> to retrieve the contact mechanism roles for all locales
-   * @return the contact mechanism roles
+   *     role reference data for
+   * @return the contact mechanism role reference data
    */
   @Operation(
-      summary = "Retrieve the contact mechanism roles",
-      description = "Retrieve the contact mechanism roles")
+      summary = "Retrieve the contact mechanism role reference data for a specific locale",
+      description = "Retrieve the contact mechanism role reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -257,30 +356,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<ContactMechanismRole> getContactMechanismRoles(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the contact mechanism role reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the contact mechanism roles for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the contact mechanism role reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getContactMechanismRoles(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getContactMechanismRoles(tenantId, localeId);
   }
 
   /**
-   * Retrieve the contact mechanism types.
+   * Retrieve the contact mechanism type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     types for or <b>null</b> to retrieve the contact mechanism types for all locales
-   * @return the contact mechanism types
+   *     type reference data for
+   * @return the contact mechanism type reference data
    */
   @Operation(
-      summary = "Retrieve the contact mechanism types",
-      description = "Retrieve the contact mechanism types")
+      summary = "Retrieve the contact mechanism type reference data for a specific locale",
+      description = "Retrieve the contact mechanism type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -298,30 +418,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<ContactMechanismType> getContactMechanismTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the contact mechanism type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the contact mechanism types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the contact mechanism type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getContactMechanismTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getContactMechanismTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the employment statuses.
+   * Retrieve the employment status reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment
-   *     statuses for or <b>null</b> to retrieve the employment statuses for all locales
-   * @return the employment statuses
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
+   *     reference data for
+   * @return the employment status reference data
    */
   @Operation(
-      summary = "Retrieve the employment statuses",
-      description = "Retrieve the employment statuses")
+      summary = "Retrieve the employment status reference data for a specific locale",
+      description = "Retrieve the employment status reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -339,30 +480,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<EmploymentStatus> getEmploymentStatuses(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the employment status reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the employment statuses for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the employment status reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getEmploymentStatuses(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getEmploymentStatuses(tenantId, localeId);
   }
 
   /**
-   * Retrieve the employment types.
+   * Retrieve the employment type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment types
-   *     for or <b>null</b> to retrieve the employment types for all locales
-   * @return the employment types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
+   *     reference data for
+   * @return the employment type reference data
    */
   @Operation(
-      summary = "Retrieve the employment types",
-      description = "Retrieve the employment types")
+      summary = "Retrieve the employment type reference data for a specific locale",
+      description = "Retrieve the employment type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -380,28 +542,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<EmploymentType> getEmploymentTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the employment type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the employment types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the employment type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getEmploymentTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getEmploymentTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the fields of study.
+   * Retrieve the fields of study reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the fields of study
+   *     reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
-   *     for or <b>null</b> to retrieve the fields of study for all locales
-   * @return the fields of study
+   *     reference data for
+   * @return the fields of study reference data
    */
-  @Operation(summary = "Retrieve the fields of study", description = "Retrieve the fields of study")
+  @Operation(
+      summary = "Retrieve the fields of study reference data for a specific locale",
+      description = "Retrieve the fields of study reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -419,28 +604,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<FieldOfStudy> getFieldsOfStudy(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the fields of study reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the fields of study for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the fields of study reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getFieldsOfStudy(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getFieldsOfStudy(tenantId, localeId);
   }
 
   /**
-   * Retrieve the genders.
+   * Retrieve the gender reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
-   *     <b>null</b> to retrieve the genders for all locales
-   * @return the genders
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the gender reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
+   *     data for
+   * @return the gender reference data
    */
-  @Operation(summary = "Retrieve the genders", description = "Retrieve the genders")
+  @Operation(
+      summary = "Retrieve the gender reference data for a specific locale",
+      description = "Retrieve the gender reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -455,30 +663,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<Gender> getGenders(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the gender reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the genders for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the gender reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getGenders(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getGenders(tenantId, localeId);
   }
 
   /**
-   * Retrieve the identity document types.
+   * Retrieve the identity document type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the identity document
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
-   *     types for or <b>null</b> to retrieve the identity document types for all locales
-   * @return the identity document types
+   *     type reference data for
+   * @return the identity document type reference data
    */
   @Operation(
-      summary = "Retrieve the identity document types",
-      description = "Retrieve the identity document types")
+      summary = "Retrieve the identity document type reference data for a specific locale",
+      description = "Retrieve the identity document type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -496,30 +725,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<IdentityDocumentType> getIdentityDocumentTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the identity document type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the identity document types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the identity document type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getIdentityDocumentTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getIdentityDocumentTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the lock type categories.
+   * Retrieve the lock type category reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
-   *     categories for or <b>null</b> to retrieve the lock type categories for all locales
-   * @return the lock type categories
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type category
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
+   *     reference data for
+   * @return the lock type category reference data
    */
   @Operation(
-      summary = "Retrieve the lock type categories",
-      description = "Retrieve the lock type categories")
+      summary = "Retrieve the lock type category reference data for a specific locale",
+      description = "Retrieve the lock type category reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -537,28 +787,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<LockTypeCategory> getLockTypeCategories(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the lock type category reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the lock type categories for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the lock type category reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getLockTypeCategories(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getLockTypeCategories(tenantId, localeId);
   }
 
   /**
-   * Retrieve the lock types.
+   * Retrieve the lock type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock types for or
-   *     <b>null</b> to retrieve the lock types for all locales
-   * @return the lock types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
+   *     reference data for
+   * @return the lock type reference data
    */
-  @Operation(summary = "Retrieve the lock types", description = "Retrieve the lock types")
+  @Operation(
+      summary = "Retrieve the lock type reference data for a specific locale",
+      description = "Retrieve the lock type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -573,30 +846,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<LockType> getLockTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the lock type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the lock types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the lock type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getLockTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getLockTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the marital statuses.
+   * Retrieve the marital status reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
-   *     for or <b>null</b> to retrieve the marital statuses for all locales
-   * @return the marital statuses
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marital status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
+   *     reference data for
+   * @return the marital status reference data
    */
   @Operation(
-      summary = "Retrieve the marital statuses",
-      description = "Retrieve the marital statuses")
+      summary = "Retrieve the marital status reference data for a specific locale",
+      description = "Retrieve the marital status reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -614,28 +908,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<MaritalStatus> getMaritalStatuses(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the marital status reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the marital statuses for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the marital status reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getMaritalStatuses(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getMaritalStatuses(tenantId, localeId);
   }
 
   /**
-   * Retrieve the marriage types.
+   * Retrieve the marriage type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage types for
-   *     or <b>null</b> to retrieve the marriage types for all locales
-   * @return the marriage types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marriage type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
+   *     reference data
+   * @return the marriage type reference data
    */
-  @Operation(summary = "Retrieve the marriage types", description = "Retrieve the marriage types")
+  @Operation(
+      summary = "Retrieve the marriage type reference data for a specific locale",
+      description = "Retrieve the marriage type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -653,30 +970,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<MarriageType> getMarriageTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the marriage type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the marriage types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the marriage type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getMarriageTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getMarriageTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the next of kin types.
+   * Retrieve the next of kin type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin types
-   *     for or <b>null</b> to retrieve the next of kin types for all locales
-   * @return the next of kin types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the next of kin type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
+   *     reference data for
+   * @return the next of kin type reference data
    */
   @Operation(
-      summary = "Retrieve the next of kin types",
-      description = "Retrieve the next of kin types")
+      summary = "Retrieve the next of kin type reference data for a specific locale",
+      description = "Retrieve the next of kin type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -694,28 +1032,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<NextOfKinType> getNextOfKinTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the next of kin type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the next of kin types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the next of kin type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getNextOfKinTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getNextOfKinTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the occupations.
+   * Retrieve the occupation reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for or
-   *     <b>null</b> to retrieve the occupations for all locales
-   * @return the occupations
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the occupation
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
+   *     reference data for
+   * @return the occupation reference data
    */
-  @Operation(summary = "Retrieve the occupations", description = "Retrieve the occupations")
+  @Operation(
+      summary = "Retrieve the occupation reference data for a specific locale",
+      description = "Retrieve the occupation reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -730,30 +1091,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<Occupation> getOccupations(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the occupation reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the occupations for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the occupation reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getOccupations(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getOccupations(tenantId, localeId);
   }
 
   /**
-   * Retrieve the physical address purposes.
+   * Retrieve the physical address purpose reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     purpose reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     purposes for or <b>null</b> to retrieve the physical address purposes for all locales
-   * @return the physical address purposes
+   *     purpose reference data for
+   * @return the physical address purpose reference data
    */
   @Operation(
-      summary = "Retrieve the physical address purposes",
-      description = "Retrieve the physical address purposes")
+      summary = "Retrieve the physical address purpose reference data for a specific locale",
+      description = "Retrieve the physical address purpose reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -771,30 +1153,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the XXX reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the physical address purposes for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the physical address purpose reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getPhysicalAddressPurposes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getPhysicalAddressPurposes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the physical address roles.
+   * Retrieve the physical address role reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     role reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     roles for or <b>null</b> to retrieve the physical address roles for all locales
-   * @return the physical address roles
+   *     role reference data for
+   * @return the physical address role reference data
    */
   @Operation(
-      summary = "Retrieve the physical address roles",
-      description = "Retrieve the physical address roles")
+      summary = "Retrieve the physical address role reference data for a specific locale",
+      description = "Retrieve the physical address role reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -812,30 +1215,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<PhysicalAddressRole> getPhysicalAddressRoles(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the physical address role reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the physical address roles for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the physical address role reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getPhysicalAddressRoles(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getPhysicalAddressRoles(tenantId, localeId);
   }
 
   /**
-   * Retrieve the physical address types.
+   * Retrieve the physical address type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     types for or <b>null</b> to retrieve the physical address types for all locales
-   * @return the physical address types
+   *     type reference data for
+   * @return the physical address type reference data
    */
   @Operation(
-      summary = "Retrieve the physical address types",
-      description = "Retrieve the physical address types")
+      summary = "Retrieve the physical address type reference data for a specific locale",
+      description = "Retrieve the physical address type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -853,30 +1277,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<PhysicalAddressType> getPhysicalAddressTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the physical address type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the physical address types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the physical address type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getPhysicalAddressTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getPhysicalAddressTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the preference type categories.
+   * Retrieve the preference type category reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the XXX reference data
+   *     is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     categories for or <b>null</b> to retrieve the preference type categories for all locales
-   * @return the preference type categories
+   *     category reference data for
+   * @return the preference type category reference data
    */
   @Operation(
-      summary = "Retrieve the preference type categories",
-      description = "Retrieve the preference type categories")
+      summary = "Retrieve the preference type category reference data for a specific locale",
+      description = "Retrieve the preference type category reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -894,30 +1339,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the preference type category reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the preference type categories for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the preference type category reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getPreferenceTypeCategories(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getPreferenceTypeCategories(tenantId, localeId);
   }
 
   /**
-   * Retrieve the preference types.
+   * Retrieve the preference type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the preference types
-   *     for or <b>null</b> to retrieve the preference types for all locales
-   * @return the preference types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     reference data for
+   * @return the preference type reference data
    */
   @Operation(
-      summary = "Retrieve the preference types",
-      description = "Retrieve the preference types")
+      summary = "Retrieve the preference type reference data for a specific locale",
+      description = "Retrieve the preference type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -935,30 +1401,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<PreferenceType> getPreferenceTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the preference type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the preference types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the preference type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getPreferenceTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getPreferenceTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the qualification types.
+   * Retrieve the qualification type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
-   *     types for or <b>null</b> to retrieve the qualification types for all locales
-   * @return the qualification types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the qualification type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
+   *     reference data for
+   * @return the qualification type reference data
    */
   @Operation(
-      summary = "Retrieve the qualification types",
-      description = "Retrieve the qualification types")
+      summary = "Retrieve the qualification type reference data for a specific locale",
+      description = "Retrieve the qualification type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -976,28 +1463,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<QualificationType> getQualificationTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the qualification type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the qualification types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the qualification type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getQualificationTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getQualificationTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the races.
+   * Retrieve the race reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the races for or
-   *     <b>null</b> to retrieve the races for all locales
-   * @return the races
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the race reference data
+   *     is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
+   *     data for
+   * @return the race reference data
    */
-  @Operation(summary = "Retrieve the races", description = "Retrieve the races")
+  @Operation(
+      summary = "Retrieve the race reference data for a specific locale",
+      description = "Retrieve the race reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1012,30 +1522,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<Race> getRaces(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the race reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the races for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the race reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getRaces(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getRaces(tenantId, localeId);
   }
 
   /**
-   * Retrieve the relationship types.
+   * Retrieve the relationship type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship types
-   *     for or <b>null</b> to retrieve the relationship types for all locales
-   * @return the relationship types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship type
+   *     reference data for
+   * @return the relationship type reference data
    */
   @Operation(
-      summary = "Retrieve the relationship types",
-      description = "Retrieve the relationship types")
+      summary = "Retrieve the relationship type reference data for a specific locale",
+      description = "Retrieve the relationship type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1053,30 +1584,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<RelationshipType> getRelationshipTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the relationship type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the relationship types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the relationship type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getRelationshipTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getRelationshipTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the residence permit types.
+   * Retrieve the residence permit type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residence permit
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
-   *     types for or <b>null</b> to retrieve the residence permit types for all locales
-   * @return the residence permit types
+   *     type reference data for
+   * @return the residence permit type reference data
    */
   @Operation(
-      summary = "Retrieve the residence permit types",
-      description = "Retrieve the residence permit types")
+      summary = "Retrieve the residence permit type reference data for a specific locale",
+      description = "Retrieve the residence permit type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1094,30 +1646,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<ResidencePermitType> getResidencePermitTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the residence permit type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the residence permit types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the residence permit type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getResidencePermitTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getResidencePermitTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the residency statuses.
+   * Retrieve the residency status reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residency statuses
-   *     for or <b>null</b> to retrieve the residency statuses for all locales
-   * @return the residency statuses
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residency status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
+   *     reference data for
+   * @return the residency status reference data
    */
   @Operation(
-      summary = "Retrieve the residency statuses",
-      description = "Retrieve the residency statuses")
+      summary = "Retrieve the residency status reference data for a specific locale",
+      description = "Retrieve the residency status reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1135,30 +1708,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<ResidencyStatus> getResidencyStatuses(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the residency status reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the residency statuses for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the residency status reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getResidencyStatuses(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getResidencyStatuses(tenantId, localeId);
   }
 
   /**
-   * Retrieve the residential types.
+   * Retrieve the residential type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residential types
-   *     for or <b>null</b> to retrieve the residential types for all locales
-   * @return the residential types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residential type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
+   *     reference data for
+   * @return the residential type reference data
    */
   @Operation(
-      summary = "Retrieve the residential types",
-      description = "Retrieve the residential types")
+      summary = "Retrieve the residential type reference data for a specific locale",
+      description = "Retrieve the residential type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1176,28 +1770,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<ResidentialType> getResidentialTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the residential type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the residential types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the residential type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getResidentialTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getResidentialTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the role purposes.
+   * Retrieve the role purpose reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role purposes for
-   *     or <b>null</b> to retrieve the role purposes for all locales
-   * @return the role purposes
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role purpose
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
+   *     reference data for
+   * @return the role purpose reference data
    */
-  @Operation(summary = "Retrieve the role purposes", description = "Retrieve the role purposes")
+  @Operation(
+      summary = "Retrieve the role purpose reference data for a specific locale",
+      description = "Retrieve the role purpose reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1215,22 +1832,33 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<RolePurpose> getRolePurposes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the role purpose reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the role purposes for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the role purpose reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getRolePurposes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getRolePurposes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the role type attribute type constraints.
+   * Retrieve the role type attribute type constraints for a specific role type.
    *
-   * @param roleType the code for the role type to retrieve the role type attribute type constraints
-   *     for or <b>null</b> to retrieve the role type attribute type constraints for all role types
+   * @param roleType the code for the role type to retrieve the attribute constraints for
    * @return the role type attribute type constraints
    */
   @Operation(
@@ -1239,6 +1867,13 @@ public class PartyReferenceApi extends SecureApi {
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1261,16 +1896,14 @@ public class PartyReferenceApi extends SecureApi {
                   "The optional code for the role type to retrieve the role type attribute type constraints for")
           @RequestParam(value = "roleType", required = false)
           String roleType)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     return partyReferenceService.getRoleTypeAttributeTypeConstraints(roleType);
   }
 
   /**
-   * Retrieve the role type preference type constraints.
+   * Retrieve the role type preference type constraints for a specific role type.
    *
-   * @param roleType the code for the role type to retrieve the role type preference type
-   *     constraints for or <b>null</b> to retrieve the role type preference type constraints for
-   *     all role types
+   * @param roleType the code for the role type to retrieve the preference constraints for
    * @return the role type preference type constraints
    */
   @Operation(
@@ -1279,6 +1912,13 @@ public class PartyReferenceApi extends SecureApi {
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1301,21 +1941,32 @@ public class PartyReferenceApi extends SecureApi {
                   "The optional code for the role type to retrieve the role type preference type constraints for")
           @RequestParam(value = "roleType", required = false)
           String roleType)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     return partyReferenceService.getRoleTypePreferenceTypeConstraints(roleType);
   }
 
   /**
-   * Retrieve the role types.
+   * Retrieve the role type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
-   *     <b>null</b> to retrieve the role types for all locales
-   * @return the role types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role type reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role type
+   *     reference data for
+   * @return the role type reference data
    */
-  @Operation(summary = "Retrieve the role types", description = "Retrieve the role types")
+  @Operation(
+      summary = "Retrieve the role type reference data for a specific locale",
+      description = "Retrieve the role type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1330,28 +1981,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<RoleType> getRoleTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the role type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the role types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the role type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getRoleTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getRoleTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the segments.
+   * Retrieve the segment reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the segments for or
-   *     <b>null</b> to retrieve the segments for all locales
-   * @return the segments
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the segment reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
+   *     data for
+   * @return the segment reference data
    */
-  @Operation(summary = "Retrieve the segments", description = "Retrieve the segments")
+  @Operation(
+      summary = "Retrieve the segment reference data for a specific locale",
+      description = "Retrieve the segment reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1366,30 +2040,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<Segment> getSegments(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the segment reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the segments for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the segment reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getSegments(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSegments(tenantId, localeId);
   }
 
   /**
-   * Retrieve the source of funds types.
+   * Retrieve the source of funds type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of funds
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
-   *     types for or <b>null</b> to retrieve the source of funds types for all locales
-   * @return the source of funds types
+   *     type reference data
+   * @return the source of funds type reference data
    */
   @Operation(
-      summary = "Retrieve the source of funds types",
-      description = "Retrieve the source of funds types")
+      summary = "Retrieve the source of funds type reference data for a specific locale",
+      description = "Retrieve the source of funds type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1407,30 +2102,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<SourceOfFundsType> getSourceOfFundsTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the source of funds type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the source of funds types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the source of funds type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getSourceOfFundsTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSourceOfFundsTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the source of wealth types.
+   * Retrieve the source of wealth type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of wealth
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
-   *     types for or <b>null</b> to retrieve the source of wealth types for all locales
-   * @return the source of wealth types
+   *     type reference data for
+   * @return the source of wealth type reference data
    */
   @Operation(
-      summary = "Retrieve the source of wealth types",
-      description = "Retrieve the source of wealth types")
+      summary = "Retrieve the source of wealth type reference data for a specific locale",
+      description = "Retrieve the source of wealth type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1448,30 +2164,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<SourceOfWealthType> getSourceOfWealthTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the source of wealth type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the source of wealth types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the source of wealth type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getSourceOfWealthTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSourceOfWealthTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the status type categories.
+   * Retrieve the status type category reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
+   *     category reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
-   *     categories for or <b>null</b> to retrieve the status type categories for all locales
-   * @return the status type categories
+   *     category reference data for
+   * @return the status type category reference data
    */
   @Operation(
-      summary = "Retrieve the status type categories",
-      description = "Retrieve the status type categories")
+      summary = "Retrieve the status type category reference data for a specific locale",
+      description = "Retrieve the status type category reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1489,28 +2226,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<StatusTypeCategory> getStatusTypeCategories(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the status type category reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the status type categories for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the status type category reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getStatusTypeCategories(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getStatusTypeCategories(tenantId, localeId);
   }
 
   /**
-   * Retrieve the status types.
+   * Retrieve the status type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the status types for
-   *     or <b>null</b> to retrieve the status types for all locales
-   * @return the status types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     reference data for
+   * @return the status type reference data
    */
-  @Operation(summary = "Retrieve the status types", description = "Retrieve the status types")
+  @Operation(
+      summary = "Retrieve the status type reference data for a specific locale",
+      description = "Retrieve the status type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1528,30 +2288,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<StatusType> getStatusTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the status type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the status types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the status type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getStatusTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getStatusTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the tax number types.
+   * Retrieve the tax number type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number types
-   *     for or <b>null</b> to retrieve the tax number types for all locales
-   * @return the tax number types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the tax number type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
+   *     reference data for
+   * @return the tax number type reference data
    */
   @Operation(
-      summary = "Retrieve the tax number types",
-      description = "Retrieve the tax number types")
+      summary = "Retrieve the tax number type reference data for a specific locale",
+      description = "Retrieve the tax number type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1569,30 +2350,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<TaxNumberType> getTaxNumberTypes(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the tax number type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the tax number types for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the tax number type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getTaxNumberTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getTaxNumberTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the times to contact.
+   * Retrieve the times to contact reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the times to contact
+   *     reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
-   *     for or <b>null</b> to retrieve the times to contact for all locales
-   * @return the times to contact
+   *     reference data for
+   * @return the times to contact reference data
    */
   @Operation(
-      summary = "Retrieve the times to contact",
-      description = "Retrieve the times to contact")
+      summary = "Retrieve the times to contact reference data for a specific locale",
+      description = "Retrieve the times to contact reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1610,28 +2412,51 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<TimeToContact> getTimesToContact(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the times to contact reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the times to contact for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the times to contact reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getTimesToContact(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getTimesToContact(tenantId, localeId);
   }
 
   /**
-   * Retrieve the titles.
+   * Retrieve the title reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the titles for or
-   *     <b>null</b> to retrieve the titles for all locales
-   * @return the titles
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the title reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
+   *     data for
+   * @return the title reference data
    */
-  @Operation(summary = "Retrieve the titles", description = "Retrieve the titles")
+  @Operation(
+      summary = "Retrieve the title reference data for a specific locale",
+      description = "Retrieve the title reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -1646,14 +2471,26 @@ public class PartyReferenceApi extends SecureApi {
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
   public List<Title> getTitles(
       @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The Universally Unique Identifier (UUID) for the tenant the title reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the titles for",
-              example = PartyReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the title reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getTitles(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getTitles(tenantId, localeId);
   }
 }

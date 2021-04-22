@@ -17,8 +17,8 @@
 package digital.inception.reference;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>MeasurementUnitTypeRepository</b> interface declares the repository for the
@@ -29,5 +29,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MeasurementUnitTypeRepository
     extends JpaRepository<MeasurementUnitType, MeasurementUnitTypeId> {
 
-  List<MeasurementUnitType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query(
+      "select mut from MeasurementUnitType mut order by mut.localeId, -mut.sortIndex DESC, mut.name")
+  List<MeasurementUnitType> findAll();
+
+  @Query(
+      "select mut from MeasurementUnitType mut where upper(mut.localeId) = upper(:localeId) order by mut.localeId, -mut.sortIndex DESC, mut.name")
+  List<MeasurementUnitType> findByLocaleIdIgnoreCase(String localeId);
 }

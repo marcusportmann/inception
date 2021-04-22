@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>AttributeTypeCategoryRepository</b> interface declares the repository for the <b>
@@ -29,5 +29,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface AttributeTypeCategoryRepository
     extends JpaRepository<AttributeTypeCategory, AttributeTypeCategoryId> {
 
-  List<AttributeTypeCategory> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select atc from AttributeTypeCategory atc order by -atc.sortIndex DESC, atc.name")
+  List<AttributeTypeCategory> findAll();
+
+  @Query(
+      "select atc from AttributeTypeCategory atc where upper(atc.localeId) = upper(:localeId) order by -atc.sortIndex DESC, atc.name")
+  List<AttributeTypeCategory> findByLocaleIdIgnoreCase(String localeId);
 }

@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>MaritalStatusRepository</b> interface declares the repository for the <b>
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MaritalStatusRepository extends JpaRepository<MaritalStatus, MaritalStatusId> {
 
-  List<MaritalStatus> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select ms from MaritalStatus ms order by ms.localeId, -ms.sortIndex DESC, ms.name")
+  List<MaritalStatus> findAll();
+
+  @Query(
+      "select ms from MaritalStatus ms where upper(ms.localeId) = upper(:localeId) order by ms.localeId, -ms.sortIndex DESC, ms.name")
+  List<MaritalStatus> findByLocaleIdIgnoreCase(String localeId);
 }

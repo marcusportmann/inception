@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>ConsentTypeRepository</b> interface declares the repository for the <b> ConsentType</b>
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ConsentTypeRepository extends JpaRepository<ConsentType, ConsentTypeId> {
 
-  List<ConsentType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select ct from ConsentType ct order by ct.localeId, -ct.sortIndex DESC, ct.name")
+  List<ConsentType> findAll();
+
+  @Query(
+      "select ct from ConsentType ct where upper(ct.localeId) = upper(:localeId) order by ct.localeId, -ct.sortIndex DESC, ct.name")
+  List<ConsentType> findByLocaleIdIgnoreCase(String localeId);
 }

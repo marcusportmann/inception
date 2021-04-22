@@ -19,10 +19,14 @@ package digital.inception.party.constraints;
 import digital.inception.party.Attribute;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.IPartyReferenceService;
+import digital.inception.party.PhysicalAddress;
+import digital.inception.party.PhysicalAddressType;
 import digital.inception.party.Preference;
 import digital.inception.reference.IReferenceService;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Pattern;
 import javax.validation.ValidationException;
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
@@ -392,14 +396,643 @@ public abstract class PartyValidator {
   }
 
   /**
+   * Validate the physical address.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
+   *     with
+   * @param partyType the code for the party type
+   * @param physicalAddress the physical address
+   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
+   * @return <b>true</b> if the physical address is valid or <b>false</b> otherwise
+   */
+  protected boolean validatePhysicalAddress(
+      UUID tenantId,
+      String partyType,
+      PhysicalAddress physicalAddress,
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext) {
+    /*
+    The following validation rules are applied for the different address types:
+
+    +----------------------+-----------+----------+----------+---------------+----------+----------+----------+--------------+
+    |                      |  Building | Complex  |   Farm   | International |  Postal  |   Site   |  Street  | Unstructured |
+    +----------------------+-----------+----------+----------+---------------+----------+----------+----------+--------------+
+    | Building Floor       | Optional  | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Building Name        | Required  | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Building Room        | Optional  | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | City                 | Required  | Required | Optional | Optional      | Required | Required | Required | Optional     |
+    | Complex Name         | Invalid   | Required | Invalid  | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Complex Unit Number  | Invalid   | Required | Invalid  | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Country              | Required  | Required | Required | Required      | Required | Required | Required | Required     |
+    | Farm Description     | Invalid   | Invalid  | Optional | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Farm Name            | Invalid   | Invalid  | Optional | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Farm Number          | Invalid   | Invalid  | Required | Required      | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Line 1               | Invalid   | Invalid  | Invalid  | Required      | Required | Invalid  | Invalid  | Required     |
+    | Line 2               | Invalid   | Invalid  | Invalid  | Optional      | Optional | Invalid  | Invalid  | Optional     |
+    | Line 3               | Invalid   | Invalid  | Invalid  | Optional      | Optional | Invalid  | Invalid  | Optional     |
+    | Line 4               | Invalid   | Invalid  | Invalid  | Optional      | Optional | Invalid  | Invalid  | Optional     |
+    | Postal Code Required | Required  | Required | Required | Required      | Required | Required | Required | Required     |
+    | Region               | Optional  | Optional | Optional | Optional      | Optional | Optional | Optional | Optional     |
+    | Site Block           | Invalid   | Invalid  | Invalid  | Invalid       | Invalid  | Required | Invalid  | Invalid      |
+    | Site Number          | Invalid   | Invalid  | Invalid  | Invalid       | Invalid  | Required | Invalid  | Invalid      |
+    | Street Name          | Required  | Required | Optional | Invalid       | Invalid  | Optional | Required | Invalid      |
+    | Street Number        | Optional  | Optional | Optional | Invalid       | Invalid  | Optional | Optional | Invalid      |
+    | Suburb               | Optional  | Optional | Optional | Invalid       | Optional | Invalid  | Optional | Invalid      |
+    +----------------------+-----------+----------+----------+---------------+----------+----------+----------+--------------+
+    */
+
+    boolean isValid = true;
+
+    try {
+      if (!partyReferenceService.isValidPhysicalAddressType(tenantId, physicalAddress.getType())) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("type", physicalAddress.getType())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.party.constraints.ValidPhysicalAddress.invalidType.message}")
+            .addPropertyNode("physicalAddresses")
+            .addPropertyNode("type")
+            .addConstraintViolation();
+
+        isValid = false;
+      } else {
+        switch (physicalAddress.getType()) {
+            // Validate a building address
+          case PhysicalAddressType.BUILDING:
+            if (!StringUtils.hasText(physicalAddress.getBuildingName())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.buildingNameRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("buildingName")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (!StringUtils.hasText(physicalAddress.getCity())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("city")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (!StringUtils.hasText(physicalAddress.getStreetName())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("streetName")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+            break;
+            // Validate a complex address
+          case PhysicalAddressType.COMPLEX:
+            if (!StringUtils.hasText(physicalAddress.getCity())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("city")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (!StringUtils.hasText(physicalAddress.getComplexName())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.complexNameRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("complexName")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (!StringUtils.hasText(physicalAddress.getComplexUnitNumber())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.complexUnitNumberRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("complexNumber")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (!StringUtils.hasText(physicalAddress.getStreetName())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("streetName")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+            break;
+            // Validate a farm address
+          case PhysicalAddressType.FARM:
+            if (!StringUtils.hasText(physicalAddress.getFarmNumber())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.farmNumberRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("farmNumber")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+            break;
+            // Validate an international address
+          case PhysicalAddressType.INTERNATIONAL:
+            if (!StringUtils.hasText(physicalAddress.getLine1())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.line1InternationalRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("line1")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (StringUtils.hasText(physicalAddress.getStreetName())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameNotSupported.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("streetName")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (StringUtils.hasText(physicalAddress.getStreetNumber())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.streetNumberNotSupported.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("streetNumber")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (StringUtils.hasText(physicalAddress.getSuburb())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.suburbNotSupported.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("suburb")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+            break;
+            // Validate a postal address
+          case PhysicalAddressType.POSTAL:
+            if (!StringUtils.hasText(physicalAddress.getLine1())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.line1PostalRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("line1")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (StringUtils.hasText(physicalAddress.getStreetName())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameNotSupported.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("streetName")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (StringUtils.hasText(physicalAddress.getStreetNumber())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.streetNumberNotSupported.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("streetNumber")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+            break;
+            // Validate a site address
+          case PhysicalAddressType.SITE:
+            if (!StringUtils.hasText(physicalAddress.getCity())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("city")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (!StringUtils.hasText(physicalAddress.getSiteBlock())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.siteBlockRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("siteBlock")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (!StringUtils.hasText(physicalAddress.getSiteNumber())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.siteNumberRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("siteNumber")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+            break;
+            // Validate a street address
+          case PhysicalAddressType.STREET:
+            if (!StringUtils.hasText(physicalAddress.getCity())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("city")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (!StringUtils.hasText(physicalAddress.getStreetName())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("streetName")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            //      if (!StringUtils.hasText(physicalAddress.getStreetNumber())) {
+            //        context.buildConstraintViolationWithTemplate(
+            //
+            // "{digital.inception.party.constraints.ValidPhysicalAddress.streetNumberRequired.message}")
+            //            .addConstraintViolation();
+            //
+            //        isValid = false;
+            //      }
+            break;
+            // Validate an unstructured address
+          case PhysicalAddressType.UNSTRUCTURED:
+            if (!StringUtils.hasText(physicalAddress.getLine1())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.line1UnstructuredRequired.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("line1")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (StringUtils.hasText(physicalAddress.getStreetName())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameNotSupported.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("streetName")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (StringUtils.hasText(physicalAddress.getStreetNumber())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.streetNumberNotSupported.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("streetNumber")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            if (StringUtils.hasText(physicalAddress.getSuburb())) {
+              hibernateConstraintValidatorContext
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPhysicalAddress.suburbNotSupported.message}")
+                  .addPropertyNode("physicalAddresses")
+                  .addPropertyNode("suburb")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+            break;
+        }
+
+        if (!StringUtils.hasText(physicalAddress.getCountry())) {
+          hibernateConstraintValidatorContext
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPhysicalAddress.countryRequired.message}")
+              .addPropertyNode("physicalAddresses")
+              .addPropertyNode("country")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+
+        if (!StringUtils.hasText(physicalAddress.getPostalCode())) {
+          hibernateConstraintValidatorContext
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPhysicalAddress.postalCodeRequired.message}")
+              .addPropertyNode("physicalAddresses")
+              .addPropertyNode("postalCode")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+
+        if (StringUtils.hasText(physicalAddress.getSuburb())
+            && (!StringUtils.hasText(physicalAddress.getCity()))) {
+          hibernateConstraintValidatorContext
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
+              .addPropertyNode("physicalAddresses")
+              .addPropertyNode("city")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+
+        /*
+         * Check that building address fields have not been specified for an address that is not a
+         * building address.
+         */
+        if (!physicalAddress.getType().equals(PhysicalAddressType.BUILDING)) {
+          if (StringUtils.hasText(physicalAddress.getBuildingFloor())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.buildingFloorNotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("buildingFloor")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+
+          if (StringUtils.hasText(physicalAddress.getBuildingName())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.buildingNameNotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("buildingName")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+
+          if (StringUtils.hasText(physicalAddress.getBuildingRoom())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.buildingRoomNotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("buildingRoom")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+        }
+
+        /*
+         * Check that complex address fields have not been specified for an address that is not a
+         * complex address.
+         */
+        if (!physicalAddress.getType().equals(PhysicalAddressType.COMPLEX)) {
+          if (StringUtils.hasText(physicalAddress.getComplexName())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.complexNameNotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("complexName")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+
+          if (StringUtils.hasText(physicalAddress.getComplexUnitNumber())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.complexUnitNumberNotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("complexUnitNumber")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+        }
+
+        /*
+         * Check that farm address fields have not been specified for an address that is not a
+         * farm address.
+         */
+        if (!physicalAddress.getType().equals(PhysicalAddressType.FARM)) {
+          if (StringUtils.hasText(physicalAddress.getFarmDescription())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.farmDescriptionNotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("farmDescription")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+
+          if (StringUtils.hasText(physicalAddress.getFarmName())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.farmNameNotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("farmName")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+
+          if (StringUtils.hasText(physicalAddress.getFarmNumber())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.farmNumberNotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("farmNumber")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+        }
+
+        /*
+         * Check that site address fields have not been specified for an address that is not a
+         * site address.
+         */
+        if (!physicalAddress.getType().equals(PhysicalAddressType.SITE)) {
+          if (StringUtils.hasText(physicalAddress.getSiteBlock())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.siteBlockNotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("siteBlock")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+
+          if (StringUtils.hasText(physicalAddress.getSiteNumber())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.siteNumberNotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("siteNumber")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+        }
+
+        /*
+         * Check that international, postal and unstructured address fields have not been specified for
+         * an address that is not an international address, postal address or unstructured address.
+         */
+        if ((!physicalAddress.getType().equals(PhysicalAddressType.INTERNATIONAL))
+            && (!physicalAddress.getType().equals(PhysicalAddressType.POSTAL))
+            && (!Objects.equals(physicalAddress.getType(), PhysicalAddressType.UNSTRUCTURED))) {
+          if (StringUtils.hasText(physicalAddress.getLine1())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.line1NotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("line1")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+
+          if (StringUtils.hasText(physicalAddress.getLine2())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.line2NotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("line2")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+
+          if (StringUtils.hasText(physicalAddress.getLine3())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.line3NotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("line3")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+
+          if (StringUtils.hasText(physicalAddress.getLine4())) {
+            hibernateConstraintValidatorContext
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPhysicalAddress.line4NotSupported.message}")
+                .addPropertyNode("physicalAddresses")
+                .addPropertyNode("line4")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+        }
+
+        if (StringUtils.hasText(physicalAddress.getCountry())
+            && (!referenceService.isValidCountry(physicalAddress.getCountry()))) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("country", physicalAddress.getCountry())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPhysicalAddress.invalidCountryCode.message}")
+              .addPropertyNode("physicalAddresses")
+              .addPropertyNode("country")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+      }
+
+      if (StringUtils.hasText(physicalAddress.getRole())) {
+        if (!getPartyReferenceService()
+            .isValidPhysicalAddressRole(tenantId, partyType, physicalAddress.getRole())) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("role", physicalAddress.getRole())
+              .addMessageParameter("partyType", partyType)
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPhysicalAddress.invalidRoleForPartyType.message}")
+              .addPropertyNode("physicalAddresses")
+              .addPropertyNode("role")
+              .inIterable()
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+      }
+
+      for (String physicalAddressPurpose : physicalAddress.getPurposes()) {
+        if (!getPartyReferenceService()
+            .isValidPhysicalAddressPurpose(tenantId, partyType, physicalAddressPurpose)) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("purpose", physicalAddressPurpose)
+              .addMessageParameter("partyType", partyType)
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPhysicalAddress.invalidPurposeForPartyType.message}")
+              .addPropertyNode("physicalAddresses")
+              .addPropertyNode("purposes")
+              .inIterable()
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+      }
+
+    } catch (Throwable e) {
+      throw new ValidationException("Failed to validate the physical address", e);
+    }
+
+    return isValid;
+  }
+
+  /**
    * Validate the reference attribute constraint.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
+   *     with
    * @param referenceType the type of reference
    * @param attribute the attribute
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
    * @return <b>true</b> if the attribute is valid or <b>false</b> otherwise
    */
   protected boolean validateReferenceAttributeConstraint(
+      UUID tenantId,
       String referenceType,
       Attribute attribute,
       HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
@@ -414,7 +1047,9 @@ public abstract class PartyValidator {
     try {
       switch (referenceType) {
         case "contact_mechanism_type":
-          isValid = partyReferenceService.isValidContactMechanismType(attribute.getStringValue());
+          isValid =
+              partyReferenceService.isValidContactMechanismType(
+                  tenantId, attribute.getStringValue());
 
           if (!isValid) {
             hibernateConstraintValidatorContext
@@ -482,12 +1117,15 @@ public abstract class PartyValidator {
   /**
    * Validate the reference preference constraint.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
+   *     with
    * @param referenceType the type of reference
    * @param preference the preference
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
    * @return <b>true</b> if the preference is valid or <b>false</b> otherwise
    */
   protected boolean validateReferencePreferenceConstraint(
+      UUID tenantId,
       String referenceType,
       Preference preference,
       HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
@@ -502,7 +1140,8 @@ public abstract class PartyValidator {
     try {
       switch (referenceType) {
         case "contact_mechanism_type":
-          isValid = partyReferenceService.isValidContactMechanismType(preference.getValue());
+          isValid =
+              partyReferenceService.isValidContactMechanismType(tenantId, preference.getValue());
 
           if (!isValid) {
             hibernateConstraintValidatorContext
@@ -733,3 +1372,30 @@ public abstract class PartyValidator {
     }
   }
 }
+
+/*
+See: https://ozh.github.io/ascii-tables/
+
+, Building,Complex,Farm,International,Postal,Site,Street,Unstructured
+Building Floor,Optional,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid
+Building Name,Required,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid
+Building Room,Optional,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid
+City,Required,Required,Optional,Optional,Required,Required,Required,Optional
+Complex Name,Invalid,Required,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid
+Complex Unit Number,Invalid,Required,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid
+Country,Required,Required,Required,Required,Required,Required,Required,Required
+Farm Description,Invalid,Invalid,Optional,Invalid,Invalid,Invalid,Invalid,Invalid
+Farm Name,Invalid,Invalid,Optional,Invalid,Invalid,Invalid,Invalid,Invalid
+Farm Number,Invalid,Invalid,Required,Required,Invalid,Invalid,Invalid,Invalid
+Line 1,Invalid,Invalid,Invalid,Required,Required,Invalid,Invalid,Required
+Line 2,Invalid,Invalid,Invalid,Optional,Optional,Invalid,Invalid,Optional
+Line 3,Invalid,Invalid,Invalid,Optional,Optional,Invalid,Invalid,Optional
+Line 4,Invalid,Invalid,Invalid,Optional,Optional,Invalid,Invalid,Optional
+Postal Code Required,Required,Required,Required,Required,Required,Required,Required,Required
+Region,Optional,Optional,Optional,Optional,Optional,Optional,Optional,Optional
+Site Block,Invalid,Invalid,Invalid,Invalid,Invalid,Required,Invalid,Invalid
+Site Number,Invalid,Invalid,Invalid,Invalid,Invalid,Required,Invalid,Invalid
+Street Name,Required,Required,Optional,Invalid,Invalid,Optional,Required,Invalid
+Street Number,Optional,Optional,Optional,Invalid,Invalid,Optional,Optional,Invalid
+Suburb,Optional,Optional,Optional,Invalid,Optional,Invalid,Optional,Invalid
+ */

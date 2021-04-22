@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>ContactMechanismRoleRepository</b> interface declares the repository for the <b>
@@ -29,5 +29,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ContactMechanismRoleRepository
     extends JpaRepository<ContactMechanismRole, ContactMechanismRoleId> {
 
-  List<ContactMechanismRole> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query(
+      "select cmr from ContactMechanismRole cmr order by cmr.localeId, -cmr.sortIndex DESC, cmr.name")
+  List<ContactMechanismRole> findAll();
+
+  @Query(
+      "select cmr from ContactMechanismRole cmr where upper(cmr.localeId) = upper(:localeId) order by cmr.localeId, -cmr.sortIndex DESC, cmr.name")
+  List<ContactMechanismRole> findByLocaleIdIgnoreCase(String localeId);
 }

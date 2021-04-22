@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>NextOfKinTypeRepository</b> interface declares the repository for the <b>
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface NextOfKinTypeRepository extends JpaRepository<NextOfKinType, NextOfKinTypeId> {
 
-  List<NextOfKinType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select nok from NextOfKinType nok order by nok.localeId, -nok.sortIndex DESC, nok.name")
+  List<NextOfKinType> findAll();
+
+  @Query(
+      "select nok from NextOfKinType nok where upper(nok.localeId) = upper(:localeId) order by nok.localeId, -nok.sortIndex DESC, nok.name")
+  List<NextOfKinType> findByLocaleIdIgnoreCase(String localeId);
 }

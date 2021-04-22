@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>ResidentialTypeRepository</b> interface declares the repository for the <b>
@@ -29,5 +29,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ResidentialTypeRepository
     extends JpaRepository<ResidentialType, ResidentialTypeId> {
 
-  List<ResidentialType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select rt from ResidentialType rt order by rt.localeId, -rt.sortIndex DESC, rt.name")
+  List<ResidentialType> findAll();
+
+  @Query(
+      "select rt from ResidentialType rt where upper(rt.localeId) = upper(:localeId) order by rt.localeId, -rt.sortIndex DESC, rt.name")
+  List<ResidentialType> findByLocaleIdIgnoreCase(String localeId);
 }

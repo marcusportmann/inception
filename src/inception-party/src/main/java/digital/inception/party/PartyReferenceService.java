@@ -16,9 +16,11 @@
 
 package digital.inception.party;
 
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.cache.annotation.Cacheable;
@@ -289,674 +291,1711 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve the attribute type categories.
+   * Retrieve the attribute type category reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
-   *     categories for or <b>null</b> to retrieve the attribute type categories for all locales
-   * @return the attribute type categories
+   *     category reference data for
+   * @return the attribute type category reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'attributeTypeCategories.' + #localeId")
   public List<AttributeTypeCategory> getAttributeTypeCategories(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return attributeTypeCategoryRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return attributeTypeCategoryRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return attributeTypeCategoryRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the attribute type categories", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the attribute type category reference data", e);
     }
   }
 
   /**
-   * Retrieve the attribute types.
+   * Retrieve the attribute type category reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute types
-   *     for or <b>null</b> to retrieve the attribute types for all locales
-   * @return the attribute types
+   * @return the attribute type category reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'attributeTypeCategories.ALL'")
+  public List<AttributeTypeCategory> getAttributeTypeCategories()
+      throws ServiceUnavailableException {
+    try {
+      return attributeTypeCategoryRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the attribute type category reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the attribute type category reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
+   *     category reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     category reference data for
+   * @return the attribute type category reference data
+   */
+  @Override
+  public List<AttributeTypeCategory> getAttributeTypeCategories(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getAttributeTypeCategories(localeId).stream()
+        .filter(
+            attributeTypeCategory ->
+                (attributeTypeCategory.getTenantId() == null
+                    || (Objects.equals(attributeTypeCategory.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the attribute type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     reference data for
+   * @return the attribute type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'attributeTypes.' + #localeId")
-  public List<AttributeType> getAttributeTypes(String localeId) throws ServiceUnavailableException {
+  public List<AttributeType> getAttributeTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return attributeTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return attributeTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return attributeTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the attribute types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the attribute type reference data", e);
     }
   }
 
   /**
-   * Retrieve the consent types.
+   * Retrieve the attribute type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the consent types for
-   *     or <b>null</b> to retrieve the consent types for all locales
-   * @return the consent types
+   * @return the attribute type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'attributeTypes.ALL'")
+  public List<AttributeType> getAttributeTypes() throws ServiceUnavailableException {
+    try {
+      return attributeTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the attribute type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the attribute type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     reference data for
+   * @return the attribute type reference data
+   */
+  @Override
+  public List<AttributeType> getAttributeTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getAttributeTypes(localeId).stream()
+        .filter(
+            attributeType ->
+                (attributeType.getTenantId() == null
+                    || (Objects.equals(attributeType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the consent type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
+   *     reference data for
+   * @return the consent type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'consentTypes.' + #localeId")
-  public List<ConsentType> getConsentTypes(String localeId) throws ServiceUnavailableException {
+  public List<ConsentType> getConsentTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return consentTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return consentTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return consentTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the consent types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the consent type reference data", e);
     }
   }
 
   /**
-   * Retrieve the contact mechanism purposes.
+   * Retrieve the consent type reference data for all locales.
+   *
+   * @return the consent type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'consentTypes.ALL'")
+  public List<ConsentType> getConsentTypes() throws ServiceUnavailableException {
+    try {
+      return consentTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the consent type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the consent type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the consent type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
+   *     reference data for
+   * @return the consent type reference data
+   */
+  @Override
+  public List<ConsentType> getConsentTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getConsentTypes(localeId).stream()
+        .filter(
+            consentType ->
+                (consentType.getTenantId() == null
+                    || (Objects.equals(consentType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the contact mechanism purpose reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <b>null</b> to retrieve the contact mechanism purposes for all locales
-   * @return the contact mechanism purposes
+   *     purpose reference data for
+   * @return the contact mechanism purpose reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'contactMechanismPurposes.' + #localeId")
   public List<ContactMechanismPurpose> getContactMechanismPurposes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return contactMechanismPurposeRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return contactMechanismPurposeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return contactMechanismPurposeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the contact mechanism purposes", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the contact mechanism purpose reference data", e);
     }
   }
 
   /**
-   * Retrieve the contact mechanism roles.
+   * Retrieve the contact mechanism purpose reference data for all locales.
+   *
+   * @return the contact mechanism purpose reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'contactMechanismPurposes.ALL'")
+  public List<ContactMechanismPurpose> getContactMechanismPurposes()
+      throws ServiceUnavailableException {
+    try {
+      return contactMechanismPurposeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the contact mechanism purpose reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the contact mechanism purpose reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     purpose reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     purpose reference data for
+   * @return the contact mechanism purpose reference data
+   */
+  @Override
+  public List<ContactMechanismPurpose> getContactMechanismPurposes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getContactMechanismPurposes(localeId).stream()
+        .filter(
+            contactMechanismPurpose ->
+                (contactMechanismPurpose.getTenantId() == null
+                    || (Objects.equals(contactMechanismPurpose.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the contact mechanism role reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <b>null</b> to retrieve the contact mechanism roles for all locales
-   * @return the contact mechanism roles
+   *     role reference data for
+   * @return the contact mechanism role reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'contactMechanismRoles.' + #localeId")
   public List<ContactMechanismRole> getContactMechanismRoles(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return contactMechanismRoleRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return contactMechanismRoleRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return contactMechanismRoleRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the contact mechanism roles", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the contact mechanism role reference data", e);
     }
   }
 
   /**
-   * Retrieve the contact mechanism types.
+   * Retrieve the contact mechanism role reference data for all locales.
+   *
+   * @return the contact mechanism role reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'contactMechanismRoles.ALL'")
+  public List<ContactMechanismRole> getContactMechanismRoles() throws ServiceUnavailableException {
+    try {
+      return contactMechanismRoleRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the contact mechanism role reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the contact mechanism role reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     role reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     role reference data for
+   * @return the contact mechanism role reference data
+   */
+  @Override
+  public List<ContactMechanismRole> getContactMechanismRoles(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getContactMechanismRoles(localeId).stream()
+        .filter(
+            contactMechanismRole ->
+                (contactMechanismRole.getTenantId() == null
+                    || (Objects.equals(contactMechanismRole.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the contact mechanism type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     types for or <b>null</b> to retrieve the contact mechanism types for all locales
-   * @return the contact mechanism types
+   *     type reference data for
+   * @return the contact mechanism type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'contactMechanismTypes.' + #localeId")
   public List<ContactMechanismType> getContactMechanismTypes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return contactMechanismTypeRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return contactMechanismTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return contactMechanismTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the contact mechanism types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the contact mechanism type reference data", e);
     }
   }
 
   /**
-   * Retrieve the employment statuses.
+   * Retrieve the contact mechanism type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment
-   *     statuses for or <b>null</b> to retrieve the employment statuses for all locales
-   * @return the employment statuses
+   * @return the contact mechanism type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'contactMechanismTypes.ALL'")
+  public List<ContactMechanismType> getContactMechanismTypes() throws ServiceUnavailableException {
+    try {
+      return contactMechanismTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the contact mechanism type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the contact mechanism type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     type reference data for
+   * @return the contact mechanism type reference data
+   */
+  @Override
+  public List<ContactMechanismType> getContactMechanismTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getContactMechanismTypes(localeId).stream()
+        .filter(
+            contactMechanismType ->
+                (contactMechanismType.getTenantId() == null
+                    || (Objects.equals(contactMechanismType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the employment status reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
+   *     reference data for
+   * @return the employment status reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'employmentStatuses.' + #localeId")
   public List<EmploymentStatus> getEmploymentStatuses(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return employmentStatusRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return employmentStatusRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return employmentStatusRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the employment statuses", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the employment status reference data", e);
     }
   }
 
   /**
-   * Retrieve the employment types.
+   * Retrieve the employment status reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment types
-   *     for or <b>null</b> to retrieve the employment types for all locales
-   * @return the employment types
+   * @return the employment status reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'employmentStatuses.ALL'")
+  public List<EmploymentStatus> getEmploymentStatuses() throws ServiceUnavailableException {
+    try {
+      return employmentStatusRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the employment status reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the employment status reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
+   *     reference data for
+   * @return the employment status reference data
+   */
+  @Override
+  public List<EmploymentStatus> getEmploymentStatuses(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getEmploymentStatuses(localeId).stream()
+        .filter(
+            employmentStatus ->
+                (employmentStatus.getTenantId() == null
+                    || (Objects.equals(employmentStatus.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the employment type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
+   *     reference data for
+   * @return the employment type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'employmentTypes.' + #localeId")
   public List<EmploymentType> getEmploymentTypes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return employmentTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return employmentTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return employmentTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the employment types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the employment type reference data", e);
     }
   }
 
   /**
-   * Retrieve the fields of study.
+   * Retrieve the employment type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
-   *     types for or <b>null</b> to retrieve the fields of study for all locales
-   * @return the fields of study
+   * @return the employment type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'employmentTypes.ALL'")
+  public List<EmploymentType> getEmploymentTypes() throws ServiceUnavailableException {
+    try {
+      return employmentTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the employment type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the employment type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
+   *     reference data for
+   * @return the employment type reference data
+   */
+  @Override
+  public List<EmploymentType> getEmploymentTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getEmploymentTypes(localeId).stream()
+        .filter(
+            employmentType ->
+                (employmentType.getTenantId() == null
+                    || (Objects.equals(employmentType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the fields of study reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
+   *     reference data for
+   * @return the fields of study reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'fieldsOfStudy.' + #localeId")
-  public List<FieldOfStudy> getFieldsOfStudy(String localeId) throws ServiceUnavailableException {
+  public List<FieldOfStudy> getFieldsOfStudy(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return fieldOfStudyRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return fieldOfStudyRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return fieldOfStudyRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the fields of study", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the fields of study reference data", e);
     }
   }
 
   /**
-   * Retrieve the genders.
+   * Retrieve the fields of study reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
-   *     <b>null</b> to retrieve the genders for all locales
-   * @return the genders
+   * @return the fields of study reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'fieldsOfStudy.ALL'")
+  public List<FieldOfStudy> getFieldsOfStudy() throws ServiceUnavailableException {
+    try {
+      return fieldOfStudyRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the fields of study reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the fields of study reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the fields of study
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
+   *     reference data for
+   * @return the fields of study reference data
+   */
+  @Override
+  public List<FieldOfStudy> getFieldsOfStudy(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getFieldsOfStudy(localeId).stream()
+        .filter(
+            fieldOfStudy ->
+                (fieldOfStudy.getTenantId() == null
+                    || (Objects.equals(fieldOfStudy.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the gender reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
+   *     data for
+   * @return the gender reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'genders.' + #localeId")
-  public List<Gender> getGenders(String localeId) throws ServiceUnavailableException {
+  public List<Gender> getGenders(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return genderRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return genderRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return genderRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the genders", e);
+      throw new ServiceUnavailableException("Failed to retrieve the gender reference data", e);
     }
   }
 
   /**
-   * Retrieve the identity document types.
+   * Retrieve the gender reference data for all locales.
+   *
+   * @return the gender reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'genders.ALL'")
+  public List<Gender> getGenders() throws ServiceUnavailableException {
+    try {
+      return genderRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the gender reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the gender reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the gender reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
+   *     data for
+   * @return the gender reference data
+   */
+  @Override
+  public List<Gender> getGenders(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getGenders(localeId).stream()
+        .filter(
+            gender ->
+                (gender.getTenantId() == null || (Objects.equals(gender.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the identity document type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
-   *     types for or <b>null</b> to retrieve the identity document types for all locales
-   * @return the identity document types
+   *     type reference data for
+   * @return the identity document type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'identityDocumentTypes.' + #localeId")
   public List<IdentityDocumentType> getIdentityDocumentTypes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return identityDocumentTypeRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return identityDocumentTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return identityDocumentTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the identity document types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the identity document type reference data", e);
     }
   }
 
   /**
-   * Retrieve the lock type categories.
+   * Retrieve the identity document type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
-   *     categories for or <b>null</b> to retrieve the lock type categories for all locales
-   * @return the lock type categories
+   * @return the identity document type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'identityDocumentTypes.ALL'")
+  public List<IdentityDocumentType> getIdentityDocumentTypes() throws ServiceUnavailableException {
+    try {
+      return identityDocumentTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the identity document type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the identity document type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the identity document
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
+   *     type reference data for
+   * @return the identity document type reference data
+   */
+  @Override
+  public List<IdentityDocumentType> getIdentityDocumentTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getIdentityDocumentTypes(localeId).stream()
+        .filter(
+            identityDocumentType ->
+                (identityDocumentType.getTenantId() == null
+                    || (Objects.equals(identityDocumentType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the lock type category reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
+   *     reference data for
+   * @return the lock type category reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'lockTypeCategories.' + #localeId")
   public List<LockTypeCategory> getLockTypeCategories(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return lockTypeCategoryRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return lockTypeCategoryRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return lockTypeCategoryRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the lock type categories", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the lock type category reference data", e);
     }
   }
 
   /**
-   * Retrieve the lock types.
+   * Retrieve the lock type category reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock types for or
-   *     <b>null</b> to retrieve the lock types for all locales
-   * @return the lock types
+   * @return the lock type category reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'lockTypeCategories.ALL'")
+  public List<LockTypeCategory> getLockTypeCategories() throws ServiceUnavailableException {
+    try {
+      return lockTypeCategoryRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the lock type category reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the lock type category reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type category
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
+   *     reference data for
+   * @return the lock type category reference data
+   */
+  @Override
+  public List<LockTypeCategory> getLockTypeCategories(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getLockTypeCategories(localeId).stream()
+        .filter(
+            lockTypeCategory ->
+                (lockTypeCategory.getTenantId() == null
+                    || (Objects.equals(lockTypeCategory.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the lock type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
+   *     reference data for
+   * @return the lock type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'lockTypes.' + #localeId")
-  public List<LockType> getLockTypes(String localeId) throws ServiceUnavailableException {
+  public List<LockType> getLockTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return lockTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return lockTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return lockTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the lock types", e);
+      throw new ServiceUnavailableException("Failed to retrieve the lock type reference data", e);
     }
   }
 
   /**
-   * Retrieve the marital statuses.
+   * Retrieve the lock type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
-   *     for or <b>null</b> to retrieve the marital statuses for all locales
-   * @return the marital statuses
+   * @return the lock type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'lockTypes.ALL'")
+  public List<LockType> getLockTypes() throws ServiceUnavailableException {
+    try {
+      return lockTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the lock type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the lock type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
+   *     reference data for
+   * @return the lock type reference data
+   */
+  @Override
+  public List<LockType> getLockTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getLockTypes(localeId).stream()
+        .filter(
+            lockType ->
+                (lockType.getTenantId() == null
+                    || (Objects.equals(lockType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the marital status reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
+   *     reference data for
+   * @return the marital status reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'maritalStatuses.' + #localeId")
   public List<MaritalStatus> getMaritalStatuses(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return maritalStatusRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return maritalStatusRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return maritalStatusRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the marital statuses", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the marital status reference data", e);
     }
   }
 
   /**
-   * Retrieve the marriage types.
+   * Retrieve the marital status reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage types for
-   *     or <b>null</b> to retrieve the marriage types for all locales
-   * @return the marriage types
+   * @return the marital status reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'maritalStatuses.ALL'")
+  public List<MaritalStatus> getMaritalStatuses() throws ServiceUnavailableException {
+    try {
+      return maritalStatusRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the marital status reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the marital status reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marital status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
+   *     reference data for
+   * @return the marital status reference data
+   */
+  @Override
+  public List<MaritalStatus> getMaritalStatuses(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getMaritalStatuses(localeId).stream()
+        .filter(
+            maritalStatus ->
+                (maritalStatus.getTenantId() == null
+                    || (Objects.equals(maritalStatus.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the marriage type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
+   *     reference data
+   * @return the marriage type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'marriageTypes.' + #localeId")
-  public List<MarriageType> getMarriageTypes(String localeId) throws ServiceUnavailableException {
+  public List<MarriageType> getMarriageTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return marriageTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return marriageTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return marriageTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the marriage types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the marriage type reference data", e);
     }
   }
 
   /**
-   * Retrieve the next of kin types.
+   * Retrieve the marriage type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin types
-   *     for or <b>null</b> to retrieve the next of kin types for all locales
-   * @return the next of kin types
+   * @return the marriage type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'marriageTypes.ALL'")
+  public List<MarriageType> getMarriageTypes() throws ServiceUnavailableException {
+    try {
+      return marriageTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the marriage type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the marriage type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marriage type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
+   *     reference data
+   * @return the marriage type reference data
+   */
+  @Override
+  public List<MarriageType> getMarriageTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getMarriageTypes(localeId).stream()
+        .filter(
+            marriageType ->
+                (marriageType.getTenantId() == null
+                    || (Objects.equals(marriageType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the next of kin type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
+   *     reference data for
+   * @return the next of kin type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'nextOfKinTypes.' + #localeId")
-  public List<NextOfKinType> getNextOfKinTypes(String localeId) throws ServiceUnavailableException {
+  public List<NextOfKinType> getNextOfKinTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return nextOfKinTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return nextOfKinTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return nextOfKinTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the next of kin types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the next of kin type reference data", e);
     }
   }
 
   /**
-   * Retrieve the occupations.
+   * Retrieve the next of kin type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for or
-   *     <b>null</b> to retrieve the occupations for all locales
-   * @return the occupations
+   * @return the next of kin type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'nextOfKinTypes.ALL'")
+  public List<NextOfKinType> getNextOfKinTypes() throws ServiceUnavailableException {
+    try {
+      return nextOfKinTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the next of kin type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the next of kin type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the next of kin type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
+   *     reference data for
+   * @return the next of kin type reference data
+   */
+  @Override
+  public List<NextOfKinType> getNextOfKinTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getNextOfKinTypes(localeId).stream()
+        .filter(
+            nextOfKinType ->
+                (nextOfKinType.getTenantId() == null
+                    || (Objects.equals(nextOfKinType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the occupation reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
+   *     reference data for
+   * @return the occupation reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'occupations.' + #localeId")
-  public List<Occupation> getOccupations(String localeId) throws ServiceUnavailableException {
+  public List<Occupation> getOccupations(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return occupationRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return occupationRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return occupationRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the occupations", e);
+      throw new ServiceUnavailableException("Failed to retrieve the occupation reference data", e);
     }
   }
 
   /**
-   * Retrieve the physical address purposes.
+   * Retrieve the occupation reference data for all locales.
+   *
+   * @return the occupation reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'occupations.ALL'")
+  public List<Occupation> getOccupations() throws ServiceUnavailableException {
+    try {
+      return occupationRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the occupation reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the occupation reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the occupation
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
+   *     reference data for
+   * @return the occupation reference data
+   */
+  @Override
+  public List<Occupation> getOccupations(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getOccupations(localeId).stream()
+        .filter(
+            occupation ->
+                (occupation.getTenantId() == null
+                    || (Objects.equals(occupation.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the physical address purpose reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     purposes for or <b>null</b> to retrieve the physical address purposes for all locales
-   * @return the physical address purposes
+   *     purpose reference data for
+   * @return the physical address purpose reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'physicalAddressPurposes.' + #localeId")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return physicalAddressPurposeRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return physicalAddressPurposeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return physicalAddressPurposeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the physical address purposes", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the physical address purpose reference data", e);
     }
   }
 
   /**
-   * Retrieve the physical address roles.
+   * Retrieve the physical address purpose reference data for all locales.
+   *
+   * @return the physical address purpose reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'physicalAddressPurposes.ALL'")
+  public List<PhysicalAddressPurpose> getPhysicalAddressPurposes()
+      throws ServiceUnavailableException {
+    try {
+      return physicalAddressPurposeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the physical address purpose reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the physical address purpose reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     purpose reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
+   *     purpose reference data for
+   * @return the physical address purpose reference data
+   */
+  @Override
+  public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getPhysicalAddressPurposes(localeId).stream()
+        .filter(
+            physicalAddressPurpose ->
+                (physicalAddressPurpose.getTenantId() == null
+                    || (Objects.equals(physicalAddressPurpose.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the physical address role reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     roles for or <b>null</b> to retrieve the physical address roles for all locales
-   * @return the physical address roles
+   *     role reference data for
+   * @return the physical address role reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'physicalAddressRoles.' + #localeId")
   public List<PhysicalAddressRole> getPhysicalAddressRoles(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return physicalAddressRoleRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return physicalAddressRoleRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return physicalAddressRoleRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the physical address roles", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the physical address role reference data", e);
     }
   }
 
   /**
-   * Retrieve the physical address types.
+   * Retrieve the physical address role reference data for all locales.
+   *
+   * @return the physical address role reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'physicalAddressRoles.ALL'")
+  public List<PhysicalAddressRole> getPhysicalAddressRoles() throws ServiceUnavailableException {
+    try {
+      return physicalAddressRoleRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the physical address role reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the physical address role reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     role reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
+   *     role reference data for
+   * @return the physical address role reference data
+   */
+  @Override
+  public List<PhysicalAddressRole> getPhysicalAddressRoles(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getPhysicalAddressRoles(localeId).stream()
+        .filter(
+            physicalAddressRole ->
+                (physicalAddressRole.getTenantId() == null
+                    || (Objects.equals(physicalAddressRole.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the physical address type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     types for or <b>null</b> to retrieve the physical address types for all locales
-   * @return the physical address types
+   *     type reference data for
+   * @return the physical address type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'physicalAddressTypes.' + #localeId")
   public List<PhysicalAddressType> getPhysicalAddressTypes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return physicalAddressTypeRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return physicalAddressTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return physicalAddressTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the physical address types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the physical address type reference data", e);
     }
   }
 
   /**
-   * Retrieve the preference type categories.
+   * Retrieve the physical address type reference data for all locales.
+   *
+   * @return the physical address type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'physicalAddressTypes.ALL'")
+  public List<PhysicalAddressType> getPhysicalAddressTypes() throws ServiceUnavailableException {
+    try {
+      return physicalAddressTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the physical address type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the physical address type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
+   *     type reference data for
+   * @return the physical address type reference data
+   */
+  @Override
+  public List<PhysicalAddressType> getPhysicalAddressTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getPhysicalAddressTypes(localeId).stream()
+        .filter(
+            physicalAddressType ->
+                (physicalAddressType.getTenantId() == null
+                    || (Objects.equals(physicalAddressType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the preference type category reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     categories for or <b>null</b> to retrieve the preference type categories for all locales
-   * @return the preference type categories
+   *     category reference data for
+   * @return the preference type category reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'preferenceTypeCategories.' + #localeId")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return preferenceTypeCategoryRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return preferenceTypeCategoryRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return preferenceTypeCategoryRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the preference type categories", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the preference type category reference data", e);
     }
   }
 
   /**
-   * Retrieve the preference types.
+   * Retrieve the preference type category reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the preference types
-   *     for or <b>null</b> to retrieve the preference types for all locales
-   * @return the preference types
+   * @return the preference type category reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'preferenceTypeCategories.ALL'")
+  public List<PreferenceTypeCategory> getPreferenceTypeCategories()
+      throws ServiceUnavailableException {
+    try {
+      return preferenceTypeCategoryRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the preference type category reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the preference type category reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
+   *     category reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     category reference data for
+   * @return the preference type category reference data
+   */
+  @Override
+  public List<PreferenceTypeCategory> getPreferenceTypeCategories(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getPreferenceTypeCategories(localeId).stream()
+        .filter(
+            preferenceTypeCategory ->
+                (preferenceTypeCategory.getTenantId() == null
+                    || (Objects.equals(preferenceTypeCategory.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the preference type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     reference data for
+   * @return the preference type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'preferenceTypes.' + #localeId")
   public List<PreferenceType> getPreferenceTypes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return preferenceTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return preferenceTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return preferenceTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the preference types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the preference type reference data", e);
     }
   }
 
   /**
-   * Retrieve the qualification types.
+   * Retrieve the preference type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
-   *     types for or <b>null</b> to retrieve the qualification types for all locales
-   * @return the qualification types
+   * @return the preference type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'preferenceTypes.ALL'")
+  public List<PreferenceType> getPreferenceTypes() throws ServiceUnavailableException {
+    try {
+      return preferenceTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the preference type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the preference type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     reference data for
+   * @return the preference type reference data
+   */
+  @Override
+  public List<PreferenceType> getPreferenceTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getPreferenceTypes(localeId).stream()
+        .filter(
+            preferenceType ->
+                (preferenceType.getTenantId() == null
+                    || (Objects.equals(preferenceType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the qualification type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
+   *     reference data for
+   * @return the qualification type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'qualificationTypes.' + #localeId")
   public List<QualificationType> getQualificationTypes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return qualificationTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return qualificationTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return qualificationTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the qualification types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the qualification type reference data", e);
     }
   }
 
   /**
-   * Retrieve the races.
+   * Retrieve the qualification type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the races for or
-   *     <b>null</b> to retrieve the races for all locales
-   * @return the races
+   * @return the qualification type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'qualificationTypes.ALL'")
+  public List<QualificationType> getQualificationTypes() throws ServiceUnavailableException {
+    try {
+      return qualificationTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the qualification type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the qualification type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the qualification type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
+   *     reference data for
+   * @return the qualification type reference data
+   */
+  @Override
+  public List<QualificationType> getQualificationTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getQualificationTypes(localeId).stream()
+        .filter(
+            qualificationType ->
+                (qualificationType.getTenantId() == null
+                    || (Objects.equals(qualificationType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the race reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
+   *     data for
+   * @return the race reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'races.' + #localeId")
-  public List<Race> getRaces(String localeId) throws ServiceUnavailableException {
+  public List<Race> getRaces(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return raceRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return raceRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return raceRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the races", e);
+      throw new ServiceUnavailableException("Failed to retrieve the race reference data", e);
     }
   }
 
   /**
-   * Retrieve the relationship types.
+   * Retrieve the race reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship types
-   *     for or <b>null</b> to retrieve the relationship types for all locales
-   * @return the relationship types
+   * @return the race reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'races.ALL'")
+  public List<Race> getRaces() throws ServiceUnavailableException {
+    try {
+      return raceRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the race reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the race reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the race reference data
+   *     is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
+   *     data for
+   * @return the race reference data
+   */
+  @Override
+  public List<Race> getRaces(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getRaces(localeId).stream()
+        .filter(
+            race -> (race.getTenantId() == null || (Objects.equals(race.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the relationship type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship type
+   *     reference data for
+   * @return the relationship type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'relationshipTypes.' + #localeId")
   public List<RelationshipType> getRelationshipTypes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return relationshipTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return relationshipTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return relationshipTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the relationship types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the relationship type reference data", e);
     }
   }
 
   /**
-   * Retrieve the residence permit types.
+   * Retrieve the relationship type reference data for all locales.
+   *
+   * @return the relationship type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'relationshipTypes.ALL'")
+  public List<RelationshipType> getRelationshipTypes() throws ServiceUnavailableException {
+    try {
+      return relationshipTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the relationship type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the relationship type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship type
+   *     reference data for
+   * @return the relationship type reference data
+   */
+  @Override
+  public List<RelationshipType> getRelationshipTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getRelationshipTypes(localeId).stream()
+        .filter(
+            relationshipType ->
+                (relationshipType.getTenantId() == null
+                    || (Objects.equals(relationshipType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the residence permit type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
-   *     types for or <b>null</b> to retrieve the residence permit types for all locales
-   * @return the residence permit types
+   *     type reference data for
+   * @return the residence permit type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'residencePermitTypes.' + #localeId")
   public List<ResidencePermitType> getResidencePermitTypes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return residencePermitTypeRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return residencePermitTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return residencePermitTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the residence permit types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the residence permit type reference data", e);
     }
   }
 
   /**
-   * Retrieve the residency statuses.
+   * Retrieve the residence permit type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residency statuses
-   *     for or <b>null</b> to retrieve the residency statuses for all locales
-   * @return the residency statuses
+   * @return the residence permit type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'residencePermitTypes.ALL'")
+  public List<ResidencePermitType> getResidencePermitTypes() throws ServiceUnavailableException {
+    try {
+      return residencePermitTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the residence permit type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the residence permit type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residence permit
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
+   *     type reference data for
+   * @return the residence permit type reference data
+   */
+  @Override
+  public List<ResidencePermitType> getResidencePermitTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getResidencePermitTypes(localeId).stream()
+        .filter(
+            residencePermitType ->
+                (residencePermitType.getTenantId() == null
+                    || (Objects.equals(residencePermitType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the residency status reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
+   *     reference data for
+   * @return the residency status reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'residencyStatuses.' + #localeId")
   public List<ResidencyStatus> getResidencyStatuses(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return residencyStatusRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return residencyStatusRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return residencyStatusRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the residency statuses", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the residency status reference data", e);
     }
   }
 
   /**
-   * Retrieve the residential types.
+   * Retrieve the residency status reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residential types
-   *     for or <b>null</b> to retrieve the residential types for all locales
-   * @return the residential types
+   * @return the residency status reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'residencyStatuses.ALL'")
+  public List<ResidencyStatus> getResidencyStatuses() throws ServiceUnavailableException {
+    try {
+      return residencyStatusRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the residency status reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the residency status reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residency status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
+   *     reference data for
+   * @return the residency status reference data
+   */
+  @Override
+  public List<ResidencyStatus> getResidencyStatuses(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getResidencyStatuses(localeId).stream()
+        .filter(
+            residencyStatus ->
+                (residencyStatus.getTenantId() == null
+                    || (Objects.equals(residencyStatus.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the residential type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
+   *     reference data for
+   * @return the residential type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'residentialTypes.' + #localeId")
   public List<ResidentialType> getResidentialTypes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return residentialTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return residentialTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return residentialTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the residential types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the residential type reference data", e);
     }
   }
 
   /**
-   * Retrieve the role purposes.
+   * Retrieve the residential type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role purposes for
-   *     or <b>null</b> to retrieve the role purposes for all locales
-   * @return the role purposes
+   * @return the residential type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'residentialTypes.ALL'")
+  public List<ResidentialType> getResidentialTypes() throws ServiceUnavailableException {
+    try {
+      return residentialTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the residential type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the residential type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residential type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
+   *     reference data for
+   * @return the residential type reference data
+   */
+  @Override
+  public List<ResidentialType> getResidentialTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getResidentialTypes(localeId).stream()
+        .filter(
+            residentialType ->
+                (residentialType.getTenantId() == null
+                    || (Objects.equals(residentialType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the role purpose reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
+   *     reference data for
+   * @return the role purpose reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'rolePurposes.' + #localeId")
-  public List<RolePurpose> getRolePurposes(String localeId) throws ServiceUnavailableException {
+  public List<RolePurpose> getRolePurposes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return rolePurposeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return rolePurposeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return rolePurposeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the role purposes", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the role purpose reference data", e);
     }
   }
 
   /**
-   * Retrieve the role type attribute type constraints.
+   * Retrieve the role purpose reference data for all locales.
+   *
+   * @return the role purpose reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'rolePurposes.ALL'")
+  public List<RolePurpose> getRolePurposes() throws ServiceUnavailableException {
+    try {
+      return rolePurposeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the role purpose reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the role purpose reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role purpose
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
+   *     reference data for
+   * @return the role purpose reference data
+   */
+  @Override
+  public List<RolePurpose> getRolePurposes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getRolePurposes(localeId).stream()
+        .filter(
+            rolePurpose ->
+                (rolePurpose.getTenantId() == null
+                    || (Objects.equals(rolePurpose.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the role type attribute type constraints for all role types.
    *
    * @return the role type attribute type constraints
    */
@@ -964,27 +2003,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Cacheable(cacheNames = "reference", key = "'roleTypeAttributeTypeConstraints.ALL'")
   public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints()
       throws ServiceUnavailableException {
-    return getRoleTypeAttributeTypeConstraints(null);
-  }
-
-  /**
-   * Retrieve the role type attribute type constraints.
-   *
-   * @param roleType the code for the role type to retrieve the attribute constraints for
-   * @return the role type attribute type constraints
-   */
-  @Override
-  @Cacheable(cacheNames = "reference", key = "'roleTypeAttributeTypeConstraints.' + #roleType")
-  public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(String roleType)
-      throws ServiceUnavailableException {
     try {
-      if (!StringUtils.hasText(roleType)) {
-        return roleTypeAttributeTypeConstraintRepository.findAll(
-            Sort.by(Direction.ASC, "roleType", "attributeType"));
-      } else {
-        return roleTypeAttributeTypeConstraintRepository.findByRoleTypeIgnoreCase(
-            roleType, Sort.by(Direction.ASC, "roleType", "attributeType"));
-      }
+      return roleTypeAttributeTypeConstraintRepository.findAll(
+          Sort.by(Direction.ASC, "roleType", "attributeType"));
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the role type attribute type constraints", e);
@@ -992,7 +2013,30 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve the role type preference type constraints.
+   * Retrieve the role type attribute type constraints for a specific role type.
+   *
+   * @param roleType the code for the role type to retrieve the attribute constraints for
+   * @return the role type attribute type constraints
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'roleTypeAttributeTypeConstraints.' + #roleType")
+  public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(String roleType)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(roleType)) {
+      throw new InvalidArgumentException("roleType");
+    }
+
+    try {
+      return roleTypeAttributeTypeConstraintRepository.findByRoleTypeIgnoreCase(
+          roleType, Sort.by(Direction.ASC, "roleType", "attributeType"));
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the role type attribute type constraints", e);
+    }
+  }
+
+  /**
+   * Retrieve the role type preference type constraints for all role types.
    *
    * @return the role type preference type constraints
    */
@@ -1000,27 +2044,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Cacheable(cacheNames = "reference", key = "'roleTypePreferenceTypeConstraints.ALL'")
   public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints()
       throws ServiceUnavailableException {
-    return getRoleTypePreferenceTypeConstraints(null);
-  }
-
-  /**
-   * Retrieve the role type preference type constraints.
-   *
-   * @param roleType the code for the role type to retrieve the preference constraints for
-   * @return the role type preference type constraints
-   */
-  @Override
-  @Cacheable(cacheNames = "reference", key = "'roleTypePreferenceTypeConstraints.' + #roleType")
-  public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
-      String roleType) throws ServiceUnavailableException {
     try {
-      if (!StringUtils.hasText(roleType)) {
-        return roleTypePreferenceTypeConstraintRepository.findAll(
-            Sort.by(Direction.ASC, "roleType", "preferenceType"));
-      } else {
-        return roleTypePreferenceTypeConstraintRepository.findByRoleTypeIgnoreCase(
-            roleType, Sort.by(Direction.ASC, "roleType", "preferenceType"));
-      }
+      return roleTypePreferenceTypeConstraintRepository.findAll(
+          Sort.by(Direction.ASC, "roleType", "preferenceType"));
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the role type preference type constraints", e);
@@ -1028,268 +2054,623 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve the role types.
+   * Retrieve the role type preference type constraints for a specific role type.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
-   *     <b>null</b> to retrieve the role types for all locales
-   * @return the role types
+   * @param roleType the code for the role type to retrieve the preference constraints for
+   * @return the role type preference type constraints
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'roleTypePreferenceTypeConstraints.' + #roleType")
+  public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
+      String roleType) throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(roleType)) {
+      throw new InvalidArgumentException("roleType");
+    }
+
+    try {
+      return roleTypePreferenceTypeConstraintRepository.findByRoleTypeIgnoreCase(
+          roleType, Sort.by(Direction.ASC, "roleType", "preferenceType"));
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the role type preference type constraints", e);
+    }
+  }
+
+  /**
+   * Retrieve the role type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role type
+   *     reference data for
+   * @return the role type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'roleTypes.' + #localeId")
-  public List<RoleType> getRoleTypes(String localeId) throws ServiceUnavailableException {
+  public List<RoleType> getRoleTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return roleTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return roleTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return roleTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the role types", e);
+      throw new ServiceUnavailableException("Failed to retrieve the role type reference data", e);
     }
   }
 
   /**
-   * Retrieve the segments.
+   * Retrieve the role type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the segments for or
-   *     <b>null</b> to retrieve the segments for all locales
-   * @return the segments
+   * @return the role type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'roleTypes.ALL'")
+  public List<RoleType> getRoleTypes() throws ServiceUnavailableException {
+    try {
+      return roleTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the role type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the role type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role type reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role type
+   *     reference data for
+   * @return the role type reference data
+   */
+  @Override
+  public List<RoleType> getRoleTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getRoleTypes(localeId).stream()
+        .filter(
+            roleType ->
+                (roleType.getTenantId() == null
+                    || (Objects.equals(roleType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the segment reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
+   *     data for
+   * @return the segment reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'segments.' + #localeId")
-  public List<Segment> getSegments(String localeId) throws ServiceUnavailableException {
+  public List<Segment> getSegments(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return segmentRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return segmentRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return segmentRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the segments", e);
+      throw new ServiceUnavailableException("Failed to retrieve the segment reference data", e);
     }
   }
 
   /**
-   * Retrieve the source of funds types.
+   * Retrieve the segment reference data for all locales.
+   *
+   * @return the segment reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'segments.ALL'")
+  public List<Segment> getSegments() throws ServiceUnavailableException {
+    try {
+      return segmentRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the segment reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the segment reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the segment reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
+   *     data for
+   * @return the segment reference data
+   */
+  @Override
+  public List<Segment> getSegments(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getSegments(localeId).stream()
+        .filter(
+            segment ->
+                (segment.getTenantId() == null
+                    || (Objects.equals(segment.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the source of funds type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
-   *     types for or <b>null</b> to retrieve the source of funds types for all locales
-   * @return the source of funds types
+   *     type reference data
+   * @return the source of funds type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'sourceOfFundsTypes.' + #localeId")
   public List<SourceOfFundsType> getSourceOfFundsTypes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return sourceOfFundsTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return sourceOfFundsTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return sourceOfFundsTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the source of funds types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the source of funds type reference data", e);
     }
   }
 
   /**
-   * Retrieve the source of wealth types.
+   * Retrieve the source of funds type reference data for all locales.
+   *
+   * @return the source of funds type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'sourceOfFundsTypes.ALL'")
+  public List<SourceOfFundsType> getSourceOfFundsTypes() throws ServiceUnavailableException {
+    try {
+      return sourceOfFundsTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the source of funds type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the source of funds type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of funds
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
+   *     type reference data
+   * @return the source of funds type reference data
+   */
+  @Override
+  public List<SourceOfFundsType> getSourceOfFundsTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getSourceOfFundsTypes(localeId).stream()
+        .filter(
+            sourceOfFundsType ->
+                (sourceOfFundsType.getTenantId() == null
+                    || (Objects.equals(sourceOfFundsType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the source of wealth type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
-   *     types for or <b>null</b> to retrieve the source of wealth types for all locales
-   * @return the source of wealth types
+   *     type reference data for
+   * @return the source of wealth type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'sourceOfWealthTypes.' + #localeId")
   public List<SourceOfWealthType> getSourceOfWealthTypes(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return sourceOfWealthTypeRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return sourceOfWealthTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return sourceOfWealthTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the source of wealth types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the source of wealth type reference data", e);
     }
   }
 
   /**
-   * Retrieve the status type categories.
+   * Retrieve the source of wealth type reference data for all locales.
+   *
+   * @return the source of wealth type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'sourceOfWealthTypes.ALL'")
+  public List<SourceOfWealthType> getSourceOfWealthTypes() throws ServiceUnavailableException {
+    try {
+      return sourceOfWealthTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the source of wealth type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the source of wealth type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of wealth
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
+   *     type reference data for
+   * @return the source of wealth type reference data
+   */
+  @Override
+  public List<SourceOfWealthType> getSourceOfWealthTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getSourceOfWealthTypes(localeId).stream()
+        .filter(
+            sourceOfWealthType ->
+                (sourceOfWealthType.getTenantId() == null
+                    || (Objects.equals(sourceOfWealthType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the status type category reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
-   *     categories for or <b>null</b> to retrieve the status type categories for all locales
-   * @return the status type categories
+   *     category reference data for
+   * @return the status type category reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'statusTypeCategories.' + #localeId")
   public List<StatusTypeCategory> getStatusTypeCategories(String localeId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return statusTypeCategoryRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return statusTypeCategoryRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return statusTypeCategoryRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the status type categories", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the status type category reference data", e);
     }
   }
 
   /**
-   * Retrieve the status types.
+   * Retrieve the status type category reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the status types for
-   *     or <b>null</b> to retrieve the status types for all locales
-   * @return the status types
+   * @return the status type category reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'statusTypeCategories.ALL'")
+  public List<StatusTypeCategory> getStatusTypeCategories() throws ServiceUnavailableException {
+    try {
+      return statusTypeCategoryRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the status type category reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the status type category reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
+   *     category reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     category reference data for
+   * @return the status type category reference data
+   */
+  @Override
+  public List<StatusTypeCategory> getStatusTypeCategories(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getStatusTypeCategories(localeId).stream()
+        .filter(
+            statusTypeCategory ->
+                (statusTypeCategory.getTenantId() == null
+                    || (Objects.equals(statusTypeCategory.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the status type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     reference data for
+   * @return the status type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'statusTypes.' + #localeId")
-  public List<StatusType> getStatusTypes(String localeId) throws ServiceUnavailableException {
+  public List<StatusType> getStatusTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return statusTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return statusTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return statusTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the status types", e);
+      throw new ServiceUnavailableException("Failed to retrieve the status type reference data", e);
     }
   }
 
   /**
-   * Retrieve the tax number types.
+   * Retrieve the status type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number types
-   *     for or <b>null</b> to retrieve the tax number types for all locales
-   * @return the tax number types
+   * @return the status type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'statusTypes.ALL'")
+  public List<StatusType> getStatusTypes() throws ServiceUnavailableException {
+    try {
+      return statusTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the status type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the status type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     reference data for
+   * @return the status type reference data
+   */
+  @Override
+  public List<StatusType> getStatusTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getStatusTypes(localeId).stream()
+        .filter(
+            statusType ->
+                (statusType.getTenantId() == null
+                    || (Objects.equals(statusType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the tax number type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
+   *     reference data for
+   * @return the tax number type reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'taxNumberTypes.' + #localeId")
-  public List<TaxNumberType> getTaxNumberTypes(String localeId) throws ServiceUnavailableException {
+  public List<TaxNumberType> getTaxNumberTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return taxNumberTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return taxNumberTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return taxNumberTypeRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the tax number types", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the tax number type reference data", e);
     }
   }
 
   /**
-   * Retrieve the times to contact.
+   * Retrieve the tax number type reference data for all locales.
+   *
+   * @return the tax number type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'taxNumberTypes.ALL'")
+  public List<TaxNumberType> getTaxNumberTypes() throws ServiceUnavailableException {
+    try {
+      return taxNumberTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the tax number type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the tax number type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the tax number type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
+   *     reference data for
+   * @return the tax number type reference data
+   */
+  @Override
+  public List<TaxNumberType> getTaxNumberTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getTaxNumberTypes(localeId).stream()
+        .filter(
+            taxNumberType ->
+                (taxNumberType.getTenantId() == null
+                    || (Objects.equals(taxNumberType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the times to contact reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
-   *     for or <b>null</b> to retrieve the times to contact for all locales
-   * @return the times to contact
+   *     reference data for
+   * @return the times to contact reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'timesToContact.' + #localeId")
-  public List<TimeToContact> getTimesToContact(String localeId) throws ServiceUnavailableException {
+  public List<TimeToContact> getTimesToContact(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return timeToContactRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return timeToContactRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return timeToContactRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the times to contact", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the times to contact reference data", e);
     }
   }
 
   /**
-   * Retrieve the titles.
+   * Retrieve the times to contact reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the titles for or
-   *     <b>null</b> to retrieve the titles for all locales
-   * @return the titles
+   * @return the times to contact reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'timesToContact.ALL'")
+  public List<TimeToContact> getTimesToContact() throws ServiceUnavailableException {
+    try {
+      return timeToContactRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the times to contact reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the times to contact reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the times to contact
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
+   *     reference data for
+   * @return the times to contact reference data
+   */
+  @Override
+  public List<TimeToContact> getTimesToContact(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getTimesToContact(localeId).stream()
+        .filter(
+            timeToContact ->
+                (timeToContact.getTenantId() == null
+                    || (Objects.equals(timeToContact.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the title reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
+   *     data for
+   * @return the title reference data
    */
   @Override
   @Cacheable(cacheNames = "reference", key = "'titles.' + #localeId")
-  public List<Title> getTitles(String localeId) throws ServiceUnavailableException {
+  public List<Title> getTitles(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
     try {
-      if (!StringUtils.hasText(localeId)) {
-        return titleRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return titleRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
+      return titleRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the titles", e);
+      throw new ServiceUnavailableException("Failed to retrieve the title reference data", e);
     }
   }
 
   /**
-   * Check whether the code is a valid code for a attribute type for the party type.
+   * Retrieve the title reference data for all locales.
    *
-   * @param partyTypeCode the party type code
-   * @param attributeTypeCode the code for the attribute type
-   * @return <b>true</b> if the code is a valid code for a attribute type or <b>false</b> otherwise
+   * @return the title reference data
    */
   @Override
-  public boolean isValidAttributeType(String partyTypeCode, String attributeTypeCode)
+  @Cacheable(cacheNames = "reference", key = "'titles.ALL'")
+  public List<Title> getTitles() throws ServiceUnavailableException {
+    try {
+      return titleRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the title reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the title reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the title reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
+   *     data for
+   * @return the title reference data
+   */
+  @Override
+  public List<Title> getTitles(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getTitles(localeId).stream()
+        .filter(
+            title ->
+                (title.getTenantId() == null || (Objects.equals(title.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Check whether the code is a valid code for an attribute type for the party type.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyTypeCode the party type code
+   * @param attributeTypeCode the code for the attribute type
+   * @return <b>true</b> if the code is a valid code for an attribute type or <b>false</b> otherwise
+   */
+  @Override
+  public boolean isValidAttributeType(UUID tenantId, String partyTypeCode, String attributeTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(attributeTypeCode)) {
       return false;
     }
 
-    return self.getAttributeTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getAttributeTypes().stream()
         .anyMatch(
             attributeType ->
-                (Objects.equals(attributeType.getCode(), attributeTypeCode)
-                    && attributeType.isValidForPartyType(partyTypeCode)));
+                (attributeType.getTenantId() == null
+                        || attributeType.getTenantId().equals(tenantId))
+                    && Objects.equals(attributeType.getCode(), attributeTypeCode)
+                    && attributeType.isValidForPartyType(partyTypeCode));
   }
 
   /**
-   * Check whether the code is a valid code for a attribute type category.
+   * Check whether the code is a valid code for an attribute type category.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param attributeTypeCategoryCode the code for the attribute type category
-   * @return <b>true</b> if the code is a valid code for a attribute type category or <b>false</b>
+   * @return <b>true</b> if the code is a valid code for an attribute type category or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidAttributeTypeCategory(String attributeTypeCategoryCode)
+  public boolean isValidAttributeTypeCategory(UUID tenantId, String attributeTypeCategoryCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(attributeTypeCategoryCode)) {
       return false;
     }
 
-    return self.getAttributeTypeCategories(DEFAULT_LOCALE_ID).stream()
+    return self.getAttributeTypeCategories().stream()
         .anyMatch(
             attributeTypeCategory ->
-                Objects.equals(attributeTypeCategory.getCode(), attributeTypeCategoryCode));
+                (attributeTypeCategory.getTenantId() == null
+                        || Objects.equals(attributeTypeCategory.getTenantId(), tenantId))
+                    && Objects.equals(attributeTypeCategory.getCode(), attributeTypeCategoryCode));
   }
 
   /**
    * Check whether the code is a valid code for a consent type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param consentTypeCode the code for the consent type
    * @return <b>true</b> if the code is a valid code for a consent type or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidConsentType(String consentTypeCode) throws ServiceUnavailableException {
+  public boolean isValidConsentType(UUID tenantId, String consentTypeCode)
+      throws ServiceUnavailableException {
     if (!StringUtils.hasText(consentTypeCode)) {
       return false;
     }
 
-    return self.getConsentTypes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(consentType -> Objects.equals(consentType.getCode(), consentTypeCode));
+    return self.getConsentTypes().stream()
+        .anyMatch(
+            consentType ->
+                (consentType.getTenantId() == null
+                        || Objects.equals(consentType.getTenantId(), tenantId))
+                    && Objects.equals(consentType.getCode(), consentTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a contact mechanism purpose for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @param contactMechanismPurposeCode the code for the contact mechanism purpose
@@ -1298,25 +2679,31 @@ public class PartyReferenceService implements IPartyReferenceService {
    */
   @Override
   public boolean isValidContactMechanismPurpose(
-      String partyTypeCode, String contactMechanismTypeCode, String contactMechanismPurposeCode)
+      UUID tenantId,
+      String partyTypeCode,
+      String contactMechanismTypeCode,
+      String contactMechanismPurposeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(contactMechanismPurposeCode)) {
       return false;
     }
 
-    return self.getContactMechanismPurposes(DEFAULT_LOCALE_ID).stream()
+    return self.getContactMechanismPurposes().stream()
         .anyMatch(
             contactMechanismPurpose ->
-                (contactMechanismPurpose.isValidForPartyType(partyTypeCode)
+                (contactMechanismPurpose.getTenantId() == null
+                        || Objects.equals(contactMechanismPurpose.getTenantId(), tenantId))
+                    && contactMechanismPurpose.isValidForPartyType(partyTypeCode)
                     && contactMechanismPurpose.isValidForContactMechanismType(
                         contactMechanismTypeCode)
                     && Objects.equals(
-                        contactMechanismPurpose.getCode(), contactMechanismPurposeCode)));
+                        contactMechanismPurpose.getCode(), contactMechanismPurposeCode));
   }
 
   /**
    * Check whether the code is a valid code for a contact mechanism role for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @param contactMechanismRoleCode the code for the contact mechanism role
@@ -1325,220 +2712,270 @@ public class PartyReferenceService implements IPartyReferenceService {
    */
   @Override
   public boolean isValidContactMechanismRole(
-      String partyTypeCode, String contactMechanismTypeCode, String contactMechanismRoleCode)
+      UUID tenantId,
+      String partyTypeCode,
+      String contactMechanismTypeCode,
+      String contactMechanismRoleCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(contactMechanismRoleCode)) {
       return false;
     }
 
-    return self.getContactMechanismRoles(DEFAULT_LOCALE_ID).stream()
+    return self.getContactMechanismRoles().stream()
         .anyMatch(
             contactMechanismRole ->
-                (contactMechanismRole.isValidForPartyType(partyTypeCode)
+                (contactMechanismRole.getTenantId() == null
+                        || Objects.equals(contactMechanismRole.getTenantId(), tenantId))
+                    && contactMechanismRole.isValidForPartyType(partyTypeCode)
                     && contactMechanismRole
                         .getContactMechanismType()
                         .equals(contactMechanismTypeCode)
-                    && Objects.equals(contactMechanismRole.getCode(), contactMechanismRoleCode)));
+                    && Objects.equals(contactMechanismRole.getCode(), contactMechanismRoleCode));
   }
 
   /**
    * Check whether the code is a valid code for a contact mechanism type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @return <b>true</b> if the code is a valid code for a contact mechanism type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidContactMechanismType(String contactMechanismTypeCode)
+  public boolean isValidContactMechanismType(UUID tenantId, String contactMechanismTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(contactMechanismTypeCode)) {
       return false;
     }
 
-    return self.getContactMechanismTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getContactMechanismTypes().stream()
         .anyMatch(
             contactMechanismType ->
-                Objects.equals(contactMechanismType.getCode(), contactMechanismTypeCode));
+                (contactMechanismType.getTenantId() == null
+                        || Objects.equals(contactMechanismType.getTenantId(), tenantId))
+                    && Objects.equals(contactMechanismType.getCode(), contactMechanismTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for an employment status.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param employmentStatusCode the code for the employment status
    * @return <b>true</b> if the code is a valid code for an employment status or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidEmploymentStatus(String employmentStatusCode)
+  public boolean isValidEmploymentStatus(UUID tenantId, String employmentStatusCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(employmentStatusCode)) {
       return false;
     }
 
-    return self.getEmploymentStatuses(DEFAULT_LOCALE_ID).stream()
+    return self.getEmploymentStatuses().stream()
         .anyMatch(
-            employmentStatus -> Objects.equals(employmentStatus.getCode(), employmentStatusCode));
+            employmentStatus ->
+                (employmentStatus.getTenantId() == null
+                        || Objects.equals(employmentStatus.getTenantId(), tenantId))
+                    && Objects.equals(employmentStatus.getCode(), employmentStatusCode));
   }
 
   /**
    * Check whether the code is a valid code for an employment type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param employmentStatusCode the code for the employment status
    * @param employmentTypeCode the code for the employment type
    * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidEmploymentType(String employmentStatusCode, String employmentTypeCode)
+  public boolean isValidEmploymentType(
+      UUID tenantId, String employmentStatusCode, String employmentTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(employmentTypeCode)) {
       return false;
     }
 
-    return self.getEmploymentTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getEmploymentTypes().stream()
         .anyMatch(
             employmentType ->
-                (Objects.equals(employmentType.getCode(), employmentTypeCode)
-                    && Objects.equals(employmentType.getEmploymentStatus(), employmentStatusCode)));
+                (employmentType.getTenantId() == null
+                        || Objects.equals(employmentType.getTenantId(), tenantId))
+                    && Objects.equals(employmentType.getCode(), employmentTypeCode)
+                    && Objects.equals(employmentType.getEmploymentStatus(), employmentStatusCode));
   }
 
   /**
    * Check whether the code is a valid code for an employment type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param employmentTypeCode the code for the employment type
    * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidEmploymentType(String employmentTypeCode)
+  public boolean isValidEmploymentType(UUID tenantId, String employmentTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(employmentTypeCode)) {
       return false;
     }
 
-    return self.getEmploymentTypes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(employmentType -> Objects.equals(employmentType.getCode(), employmentTypeCode));
+    return self.getEmploymentTypes().stream()
+        .anyMatch(
+            employmentType ->
+                (employmentType.getTenantId() == null
+                        || Objects.equals(employmentType.getTenantId(), tenantId))
+                    && Objects.equals(employmentType.getCode(), employmentTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a field of study.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param fieldOfStudyCode the code for the field of study
    * @return <b>true</b> if the code is a valid code for a field of study or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidFieldOfStudy(String fieldOfStudyCode) throws ServiceUnavailableException {
+  public boolean isValidFieldOfStudy(UUID tenantId, String fieldOfStudyCode)
+      throws ServiceUnavailableException {
     if (!StringUtils.hasText(fieldOfStudyCode)) {
       return false;
     }
 
-    return self.getFieldsOfStudy(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(fieldOfStudy -> Objects.equals(fieldOfStudy.getCode(), fieldOfStudyCode));
+    return self.getFieldsOfStudy().stream()
+        .anyMatch(
+            fieldOfStudy ->
+                (fieldOfStudy.getTenantId() == null
+                        || Objects.equals(fieldOfStudy.getTenantId(), tenantId))
+                    && Objects.equals(fieldOfStudy.getCode(), fieldOfStudyCode));
   }
 
   /**
    * Check whether the code is a valid code for a gender.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param genderCode the code for the gender
    * @return <b>true</b> if the code is a valid code for a gender or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidGender(String genderCode) throws ServiceUnavailableException {
+  public boolean isValidGender(UUID tenantId, String genderCode)
+      throws ServiceUnavailableException {
     if (!StringUtils.hasText(genderCode)) {
       return false;
     }
 
-    return self.getGenders(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(gender -> Objects.equals(gender.getCode(), genderCode));
+    return self.getGenders().stream()
+        .anyMatch(
+            gender ->
+                (gender.getTenantId() == null || Objects.equals(gender.getTenantId(), tenantId))
+                    && Objects.equals(gender.getCode(), genderCode));
   }
 
   /**
    * Check whether the code is a valid code for an identity document type for the party type
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param identityDocumentTypeCode the code for the identity document type
    * @return <b>true</b> if the code is a valid code for an identity document type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidIdentityDocumentType(String partyTypeCode, String identityDocumentTypeCode)
+  public boolean isValidIdentityDocumentType(
+      UUID tenantId, String partyTypeCode, String identityDocumentTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(identityDocumentTypeCode)) {
       return false;
     }
 
-    return self.getIdentityDocumentTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getIdentityDocumentTypes().stream()
         .anyMatch(
             identityDocumentType ->
-                (Objects.equals(identityDocumentType.getCode(), identityDocumentTypeCode)
-                    && identityDocumentType.isValidForPartyType(partyTypeCode)));
+                (identityDocumentType.getTenantId() == null
+                        || Objects.equals(identityDocumentType.getTenantId(), tenantId))
+                    && Objects.equals(identityDocumentType.getCode(), identityDocumentTypeCode)
+                    && identityDocumentType.isValidForPartyType(partyTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a lock type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param lockTypeCode the code for the lock type
    * @return <b>true</b> if the code is a valid code for a lock type or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidLockType(String partyTypeCode, String lockTypeCode)
+  public boolean isValidLockType(UUID tenantId, String partyTypeCode, String lockTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(lockTypeCode)) {
       return false;
     }
 
-    return self.getLockTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getLockTypes().stream()
         .anyMatch(
             lockType ->
-                (Objects.equals(lockType.getCode(), lockTypeCode)
-                    && lockType.isValidForPartyType(partyTypeCode)));
+                (lockType.getTenantId() == null || Objects.equals(lockType.getTenantId(), tenantId))
+                    && Objects.equals(lockType.getCode(), lockTypeCode)
+                    && lockType.isValidForPartyType(partyTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a lock type category.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param lockTypeCategoryCode the code for the lock type category
    * @return <b>true</b> if the code is a valid code for a lock type category or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidLockTypeCategory(String lockTypeCategoryCode)
+  public boolean isValidLockTypeCategory(UUID tenantId, String lockTypeCategoryCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(lockTypeCategoryCode)) {
       return false;
     }
 
-    return self.getLockTypeCategories(DEFAULT_LOCALE_ID).stream()
+    return self.getLockTypeCategories().stream()
         .anyMatch(
-            lockTypeCategory -> Objects.equals(lockTypeCategory.getCode(), lockTypeCategoryCode));
+            lockTypeCategory ->
+                (lockTypeCategory.getTenantId() == null
+                        || Objects.equals(lockTypeCategory.getTenantId(), tenantId))
+                    && Objects.equals(lockTypeCategory.getCode(), lockTypeCategoryCode));
   }
 
   /**
    * Check whether the code is a valid code for a marital status.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param maritalStatusCode the code for the marital status
    * @return <b>true</b> if the code is a valid code for a marital status or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidMaritalStatus(String maritalStatusCode) throws ServiceUnavailableException {
+  public boolean isValidMaritalStatus(UUID tenantId, String maritalStatusCode)
+      throws ServiceUnavailableException {
     if (!StringUtils.hasText(maritalStatusCode)) {
       return false;
     }
 
-    return self.getMaritalStatuses(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(maritalStatus -> Objects.equals(maritalStatus.getCode(), maritalStatusCode));
+    return self.getMaritalStatuses().stream()
+        .anyMatch(
+            maritalStatus ->
+                (maritalStatus.getTenantId() == null
+                        || Objects.equals(maritalStatus.getTenantId(), tenantId))
+                    && Objects.equals(maritalStatus.getCode(), maritalStatusCode));
   }
 
   /**
    * Check whether the code is a valid code for a marriage type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param maritalStatusCode the code for the marital status
    * @param marriageTypeCode the code for the marriage type
    * @return <b>true</b> if the code is a valid code for a marriage type or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidMarriageType(String maritalStatusCode, String marriageTypeCode)
+  public boolean isValidMarriageType(
+      UUID tenantId, String maritalStatusCode, String marriageTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(maritalStatusCode)) {
       return true;
@@ -1546,9 +2983,13 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     // Find marriage types for the specified marital status
     List<MarriageType> marriageTypes =
-        self.getMarriageTypes(DEFAULT_LOCALE_ID).stream()
+        self.getMarriageTypes().stream()
             .filter(
-                marriageType -> Objects.equals(marriageType.getMaritalStatus(), maritalStatusCode))
+                marriageType ->
+                    ((marriageType.getTenantId() == null)
+                            && Objects.equals(marriageType.getMaritalStatus(), maritalStatusCode)
+                        || (Objects.equals(marriageType.getTenantId(), tenantId))
+                            && Objects.equals(marriageType.getMaritalStatus(), maritalStatusCode)))
             .collect(Collectors.toList());
 
     // If we have marriage types for the specified marital status then check if one matches
@@ -1556,8 +2997,10 @@ public class PartyReferenceService implements IPartyReferenceService {
       return marriageTypes.stream()
           .anyMatch(
               marriageType ->
-                  (Objects.equals(marriageType.getCode(), marriageTypeCode)
-                      && Objects.equals(marriageType.getMaritalStatus(), maritalStatusCode)));
+                  (marriageType.getTenantId() == null
+                          || Objects.equals(marriageType.getTenantId(), tenantId))
+                      && Objects.equals(marriageType.getCode(), marriageTypeCode)
+                      && Objects.equals(marriageType.getMaritalStatus(), maritalStatusCode));
     } else {
       return true;
     }
@@ -1566,63 +3009,79 @@ public class PartyReferenceService implements IPartyReferenceService {
   /**
    * Check whether the measurement unit is valid for the attribute type with the specified code.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param attributeTypeCode the code for the attribute type
    * @param measurementUnit the measurement unit
    * @return <b>true</b> if the measurement unit is valid for the attribute type with the specified
    *     code or <b>false</b> otherwise
    */
   public boolean isValidMeasurementUnitForAttributeType(
-      String attributeTypeCode, MeasurementUnit measurementUnit)
+      UUID tenantId, String attributeTypeCode, MeasurementUnit measurementUnit)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(attributeTypeCode)) {
       return false;
     }
 
-    return self.getAttributeTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getAttributeTypes().stream()
         .anyMatch(
             attributeType ->
-                (Objects.equals(attributeType.getCode(), attributeTypeCode)
+                (attributeType.getTenantId() == null
+                        || Objects.equals(attributeType.getTenantId(), tenantId))
+                    && Objects.equals(attributeType.getCode(), attributeTypeCode)
                     && Objects.equals(
                         attributeType.getUnitType(),
-                        (measurementUnit == null) ? null : measurementUnit.getType())));
+                        measurementUnit == null ? null : measurementUnit.getType()));
   }
 
   /**
    * Check whether the code is a valid code for a next of kin type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param nextOfKinTypeCode the code for the next of kin type
    * @return <b>true</b> if the code is a valid code for a next of kin type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidNextOfKinType(String nextOfKinTypeCode) throws ServiceUnavailableException {
+  public boolean isValidNextOfKinType(UUID tenantId, String nextOfKinTypeCode)
+      throws ServiceUnavailableException {
     if (!StringUtils.hasText(nextOfKinTypeCode)) {
       return false;
     }
 
-    return self.getNextOfKinTypes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(nextOfKinType -> Objects.equals(nextOfKinType.getCode(), nextOfKinTypeCode));
+    return self.getNextOfKinTypes().stream()
+        .anyMatch(
+            nextOfKinType ->
+                (nextOfKinType.getTenantId() == null
+                        || Objects.equals(nextOfKinType.getTenantId(), tenantId))
+                    && Objects.equals(nextOfKinType.getCode(), nextOfKinTypeCode));
   }
 
   /**
-   * Check whether the code is a valid code for a occupation.
+   * Check whether the code is a valid code for an occupation.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param occupationCode the code for the occupation
-   * @return <b>true</b> if the code is a valid code for a occupation or <b>false</b> otherwise
+   * @return <b>true</b> if the code is a valid code for an occupation or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidOccupation(String occupationCode) throws ServiceUnavailableException {
+  public boolean isValidOccupation(UUID tenantId, String occupationCode)
+      throws ServiceUnavailableException {
     if (!StringUtils.hasText(occupationCode)) {
       return false;
     }
 
-    return self.getOccupations(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(occupation -> Objects.equals(occupation.getCode(), occupationCode));
+    return self.getOccupations().stream()
+        .anyMatch(
+            occupation ->
+                (occupation.getTenantId() == null
+                        || Objects.equals(occupation.getTenantId(), tenantId))
+                    && Objects.equals(occupation.getCode(), occupationCode));
   }
 
   /**
    * Check whether the code is a valid code for a physical address purpose for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param physicalAddressPurposeCode the code for the physical address purpose
    * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
@@ -1630,436 +3089,525 @@ public class PartyReferenceService implements IPartyReferenceService {
    */
   @Override
   public boolean isValidPhysicalAddressPurpose(
-      String partyTypeCode, String physicalAddressPurposeCode) throws ServiceUnavailableException {
+      UUID tenantId, String partyTypeCode, String physicalAddressPurposeCode)
+      throws ServiceUnavailableException {
     if (!StringUtils.hasText(physicalAddressPurposeCode)) {
       return false;
     }
 
-    return self.getPhysicalAddressPurposes(DEFAULT_LOCALE_ID).stream()
+    return self.getPhysicalAddressPurposes().stream()
         .anyMatch(
             physicalAddressPurpose ->
-                (Objects.equals(physicalAddressPurpose.getCode(), physicalAddressPurposeCode)
-                    && physicalAddressPurpose.isValidForPartyType(partyTypeCode)));
+                (physicalAddressPurpose.getTenantId() == null
+                        || Objects.equals(physicalAddressPurpose.getTenantId(), tenantId))
+                    && Objects.equals(physicalAddressPurpose.getCode(), physicalAddressPurposeCode)
+                    && physicalAddressPurpose.isValidForPartyType(partyTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a physical address purpose.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param physicalAddressPurposeCode the code for the physical address purpose
    * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidPhysicalAddressPurpose(String physicalAddressPurposeCode)
+  public boolean isValidPhysicalAddressPurpose(UUID tenantId, String physicalAddressPurposeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(physicalAddressPurposeCode)) {
       return false;
     }
 
-    return self.getPhysicalAddressPurposes(DEFAULT_LOCALE_ID).stream()
+    return self.getPhysicalAddressPurposes().stream()
         .anyMatch(
             physicalAddressPurpose ->
-                Objects.equals(physicalAddressPurpose.getCode(), physicalAddressPurposeCode));
+                (physicalAddressPurpose.getTenantId() == null
+                        || Objects.equals(physicalAddressPurpose.getTenantId(), tenantId))
+                    && Objects.equals(
+                        physicalAddressPurpose.getCode(), physicalAddressPurposeCode));
   }
 
   /**
    * Check whether the code is a valid code for a physical address role for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param physicalAddressRoleCode the code for the physical address role
    * @return <b>true</b> if the code is a valid code for a physical address role or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidPhysicalAddressRole(String partyTypeCode, String physicalAddressRoleCode)
+  public boolean isValidPhysicalAddressRole(
+      UUID tenantId, String partyTypeCode, String physicalAddressRoleCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(physicalAddressRoleCode)) {
       return false;
     }
 
-    return self.getPhysicalAddressRoles(DEFAULT_LOCALE_ID).stream()
+    return self.getPhysicalAddressRoles().stream()
         .anyMatch(
             physicalAddressRole ->
-                (Objects.equals(physicalAddressRole.getCode(), physicalAddressRoleCode)
-                    && physicalAddressRole.isValidForPartyType(partyTypeCode)));
+                (physicalAddressRole.getTenantId() == null
+                        || Objects.equals(physicalAddressRole.getTenantId(), tenantId))
+                    && Objects.equals(physicalAddressRole.getCode(), physicalAddressRoleCode)
+                    && physicalAddressRole.isValidForPartyType(partyTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a physical address role.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param physicalAddressRoleCode the code for the physical address role
    * @return <b>true</b> if the code is a valid code for a physical address role or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidPhysicalAddressRole(String physicalAddressRoleCode)
+  public boolean isValidPhysicalAddressRole(UUID tenantId, String physicalAddressRoleCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(physicalAddressRoleCode)) {
       return false;
     }
 
-    return self.getPhysicalAddressRoles(DEFAULT_LOCALE_ID).stream()
+    return self.getPhysicalAddressRoles().stream()
         .anyMatch(
             physicalAddressRole ->
-                Objects.equals(physicalAddressRole.getCode(), physicalAddressRoleCode));
+                (physicalAddressRole.getTenantId() == null
+                        || Objects.equals(physicalAddressRole.getTenantId(), tenantId))
+                    && Objects.equals(physicalAddressRole.getCode(), physicalAddressRoleCode));
   }
 
   /**
    * Check whether the code is a valid code for a physical address type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param physicalAddressTypeCode the code for the physical address type
    * @return <b>true</b> if the code is a valid code for a physical address type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidPhysicalAddressType(String physicalAddressTypeCode)
+  public boolean isValidPhysicalAddressType(UUID tenantId, String physicalAddressTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(physicalAddressTypeCode)) {
       return false;
     }
 
-    return self.getPhysicalAddressTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getPhysicalAddressTypes().stream()
         .anyMatch(
             physicalAddressType ->
-                Objects.equals(physicalAddressType.getCode(), physicalAddressTypeCode));
+                (physicalAddressType.getTenantId() == null
+                        || Objects.equals(physicalAddressType.getTenantId(), tenantId))
+                    && Objects.equals(physicalAddressType.getCode(), physicalAddressTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a preference type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param preferenceTypeCode the code for the preference type
    * @return <b>true</b> if the code is a valid code for a preference type or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidPreferenceType(String partyTypeCode, String preferenceTypeCode)
+  public boolean isValidPreferenceType(
+      UUID tenantId, String partyTypeCode, String preferenceTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(preferenceTypeCode)) {
       return false;
     }
 
-    return self.getPreferenceTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getPreferenceTypes().stream()
         .anyMatch(
             preferenceType ->
-                (Objects.equals(preferenceType.getCode(), preferenceTypeCode)
-                    && preferenceType.isValidForPartyType(partyTypeCode)));
+                (preferenceType.getTenantId() == null
+                        || Objects.equals(preferenceType.getTenantId(), tenantId))
+                    && Objects.equals(preferenceType.getCode(), preferenceTypeCode)
+                    && preferenceType.isValidForPartyType(partyTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a preference type category.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param preferenceTypeCategoryCode the code for the preference type category
    * @return <b>true</b> if the code is a valid code for a preference type category or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidPreferenceTypeCategory(String preferenceTypeCategoryCode)
+  public boolean isValidPreferenceTypeCategory(UUID tenantId, String preferenceTypeCategoryCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(preferenceTypeCategoryCode)) {
       return false;
     }
 
-    return self.getPreferenceTypeCategories(DEFAULT_LOCALE_ID).stream()
+    return self.getPreferenceTypeCategories().stream()
         .anyMatch(
             preferenceTypeCategory ->
-                Objects.equals(preferenceTypeCategory.getCode(), preferenceTypeCategoryCode));
+                (preferenceTypeCategory.getTenantId() == null
+                        || Objects.equals(preferenceTypeCategory.getTenantId(), tenantId))
+                    && Objects.equals(
+                        preferenceTypeCategory.getCode(), preferenceTypeCategoryCode));
   }
 
   /**
    * Check whether the code is a valid code for a qualification type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param qualificationTypeCode the code for the qualification type
    * @return <b>true</b> if the code is a valid code for a qualification type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidQualificationType(String qualificationTypeCode)
+  public boolean isValidQualificationType(UUID tenantId, String qualificationTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(qualificationTypeCode)) {
       return false;
     }
 
-    return self.getQualificationTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getQualificationTypes().stream()
         .anyMatch(
             qualificationType ->
-                Objects.equals(qualificationType.getCode(), qualificationTypeCode));
+                (qualificationType.getTenantId() == null
+                        || Objects.equals(qualificationType.getTenantId(), tenantId))
+                    && Objects.equals(qualificationType.getCode(), qualificationTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a race.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param raceCode the code for the race
    * @return <b>true</b> if the code is a valid code for a race or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidRace(String raceCode) throws ServiceUnavailableException {
+  public boolean isValidRace(UUID tenantId, String raceCode) throws ServiceUnavailableException {
     if (!StringUtils.hasText(raceCode)) {
       return false;
     }
 
-    return self.getRaces(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(race -> Objects.equals(race.getCode(), raceCode));
+    return self.getRaces().stream()
+        .anyMatch(
+            race ->
+                (race.getTenantId() == null || Objects.equals(race.getTenantId(), tenantId))
+                    && Objects.equals(race.getCode(), raceCode));
   }
 
   /**
    * Check whether the code is a valid code for a relationship type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param relationshipTypeCode the code for the relationship type
    * @return <b>true</b> if the code is a valid code for a relationship type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidRelationshipType(String partyTypeCode, String relationshipTypeCode)
+  public boolean isValidRelationshipType(
+      UUID tenantId, String partyTypeCode, String relationshipTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(relationshipTypeCode)) {
       return false;
     }
 
-    return self.getRelationshipTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getRelationshipTypes().stream()
         .anyMatch(
-            relationshipType -> Objects.equals(relationshipType.getCode(), relationshipTypeCode));
+            relationshipType ->
+                (relationshipType.getTenantId() == null
+                        || Objects.equals(relationshipType.getTenantId(), tenantId))
+                    && Objects.equals(relationshipType.getCode(), relationshipTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a residence permit type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param residencePermitTypeCode the code for the residence permit type
    * @return <b>true</b> if the code is a valid code for a residence permit type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidResidencePermitType(String residencePermitTypeCode)
+  public boolean isValidResidencePermitType(UUID tenantId, String residencePermitTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(residencePermitTypeCode)) {
       return false;
     }
 
-    return self.getResidencePermitTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getResidencePermitTypes().stream()
         .anyMatch(
             residencePermitType ->
-                Objects.equals(residencePermitType.getCode(), residencePermitTypeCode));
+                (residencePermitType.getTenantId() == null
+                        || Objects.equals(residencePermitType.getTenantId(), tenantId))
+                    && Objects.equals(residencePermitType.getCode(), residencePermitTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a residency status.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param residencyStatusCode the code for the residency status
    * @return <b>true</b> if the code is a valid code for a residency status or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidResidencyStatus(String residencyStatusCode)
+  public boolean isValidResidencyStatus(UUID tenantId, String residencyStatusCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(residencyStatusCode)) {
       return false;
     }
 
-    return self.getResidencyStatuses(DEFAULT_LOCALE_ID).stream()
+    return self.getResidencyStatuses().stream()
         .anyMatch(
-            residencyStatus -> Objects.equals(residencyStatus.getCode(), residencyStatusCode));
+            residencyStatus ->
+                (residencyStatus.getTenantId() == null
+                        || Objects.equals(residencyStatus.getTenantId(), tenantId))
+                    && Objects.equals(residencyStatus.getCode(), residencyStatusCode));
   }
 
   /**
    * Check whether the code is a valid code for a residential type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param residentialTypeCode the code for the residential type
    * @return <b>true</b> if the code is a valid code for a residential type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidResidentialType(String residentialTypeCode)
+  public boolean isValidResidentialType(UUID tenantId, String residentialTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(residentialTypeCode)) {
       return false;
     }
 
-    return self.getResidentialTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getResidentialTypes().stream()
         .anyMatch(
-            residentialType -> Objects.equals(residentialType.getCode(), residentialTypeCode));
+            residentialType ->
+                (residentialType.getTenantId() == null
+                        || Objects.equals(residentialType.getTenantId(), tenantId))
+                    && Objects.equals(residentialType.getCode(), residentialTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a role purpose.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param rolePurposeCode the code for the role purpose
    * @return <b>true</b> if the code is a valid code for a role purpose or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidRolePurpose(String rolePurposeCode) throws ServiceUnavailableException {
+  public boolean isValidRolePurpose(UUID tenantId, String rolePurposeCode)
+      throws ServiceUnavailableException {
     if (!StringUtils.hasText(rolePurposeCode)) {
       return false;
     }
 
-    return self.getRolePurposes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(rolePurpose -> Objects.equals(rolePurpose.getCode(), rolePurposeCode));
+    return self.getRolePurposes().stream()
+        .anyMatch(
+            rolePurpose ->
+                (rolePurpose.getTenantId() == null
+                        || (Objects.equals(rolePurpose.getTenantId(), tenantId)))
+                    && Objects.equals(rolePurpose.getCode(), rolePurposeCode));
   }
 
   /**
    * Check whether the code is a valid code for a role type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param roleTypeCode the code for the role type
    * @return <b>true</b> if the code is a valid code for a role type or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidRoleType(String partyTypeCode, String roleTypeCode)
+  public boolean isValidRoleType(UUID tenantId, String partyTypeCode, String roleTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(roleTypeCode)) {
       return false;
     }
 
-    return self.getRoleTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getRoleTypes().stream()
         .anyMatch(
             roleType ->
-                (Objects.equals(roleType.getCode(), roleTypeCode)
-                    && roleType.isValidForPartyType(partyTypeCode)));
+                (roleType.getTenantId() == null || Objects.equals(roleType.getTenantId(), tenantId))
+                    && Objects.equals(roleType.getCode(), roleTypeCode)
+                    && roleType.isValidForPartyType(partyTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a segment.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param segmentCode the code for the segment
    * @return <b>true</b> if the code is a valid code for a segment or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidSegment(String segmentCode) throws ServiceUnavailableException {
+  public boolean isValidSegment(UUID tenantId, String segmentCode)
+      throws ServiceUnavailableException {
     if (!StringUtils.hasText(segmentCode)) {
       return false;
     }
 
-    return self.getSegments(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(segment -> Objects.equals(segment.getCode(), segmentCode));
+    return self.getSegments().stream()
+        .anyMatch(
+            segment ->
+                (segment.getTenantId() == null || Objects.equals(segment.getTenantId(), tenantId))
+                    && Objects.equals(segment.getCode(), segmentCode));
   }
 
   /**
    * Check whether the code is a valid code for a source of funds type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param sourceOfFundsTypeCode the code for the source of funds type
    * @return <b>true</b> if the code is a valid code for a source of funds type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidSourceOfFundsType(String sourceOfFundsTypeCode)
+  public boolean isValidSourceOfFundsType(UUID tenantId, String sourceOfFundsTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(sourceOfFundsTypeCode)) {
       return false;
     }
 
-    return self.getSourceOfFundsTypes(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(sourceOfFunds -> Objects.equals(sourceOfFunds.getCode(), sourceOfFundsTypeCode));
+    return self.getSourceOfFundsTypes().stream()
+        .anyMatch(
+            sourceOfFunds ->
+                (sourceOfFunds.getTenantId() == null
+                        || Objects.equals(sourceOfFunds.getTenantId(), tenantId))
+                    && Objects.equals(sourceOfFunds.getCode(), sourceOfFundsTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a source of wealth type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param sourceOfWealthTypeCode the code for the source of wealth type
    * @return <b>true</b> if the code is a valid code for a source of wealth type or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidSourceOfWealthType(String sourceOfWealthTypeCode)
+  public boolean isValidSourceOfWealthType(UUID tenantId, String sourceOfWealthTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(sourceOfWealthTypeCode)) {
       return false;
     }
 
-    return self.getSourceOfWealthTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getSourceOfWealthTypes().stream()
         .anyMatch(
-            sourceOfWealth -> Objects.equals(sourceOfWealth.getCode(), sourceOfWealthTypeCode));
+            sourceOfWealth ->
+                (sourceOfWealth.getTenantId() == null
+                        || Objects.equals(sourceOfWealth.getTenantId(), tenantId))
+                    && Objects.equals(sourceOfWealth.getCode(), sourceOfWealthTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a status type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param statusTypeCode the code for the status type
    * @return <b>true</b> if the code is a valid code for a status type or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidStatusType(String partyTypeCode, String statusTypeCode)
+  public boolean isValidStatusType(UUID tenantId, String partyTypeCode, String statusTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(statusTypeCode)) {
       return false;
     }
 
-    return self.getStatusTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getStatusTypes().stream()
         .anyMatch(
             statusType ->
-                (Objects.equals(statusType.getCode(), statusTypeCode)
-                    && statusType.isValidForPartyType(partyTypeCode)));
+                (statusType.getTenantId() == null
+                        || Objects.equals(statusType.getTenantId(), tenantId))
+                    && Objects.equals(statusType.getCode(), statusTypeCode)
+                    && statusType.isValidForPartyType(partyTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a status type category.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param statusTypeCategoryCode the code for the status type category
    * @return <b>true</b> if the code is a valid code for a status type category or <b>false</b>
    *     otherwise
    */
   @Override
-  public boolean isValidStatusTypeCategory(String statusTypeCategoryCode)
+  public boolean isValidStatusTypeCategory(UUID tenantId, String statusTypeCategoryCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(statusTypeCategoryCode)) {
       return false;
     }
 
-    return self.getStatusTypeCategories(DEFAULT_LOCALE_ID).stream()
+    return self.getStatusTypeCategories().stream()
         .anyMatch(
             statusTypeCategory ->
-                Objects.equals(statusTypeCategory.getCode(), statusTypeCategoryCode));
+                (statusTypeCategory.getTenantId() == null
+                        || Objects.equals(statusTypeCategory.getTenantId(), tenantId))
+                    && Objects.equals(statusTypeCategory.getCode(), statusTypeCategoryCode));
   }
 
   /**
    * Check whether the code is a valid code for a tax number type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param taxNumberTypeCode the code for the tax number type
    * @return <b>true</b> if the code is a valid code for a tax number type or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidTaxNumberType(String partyTypeCode, String taxNumberTypeCode)
+  public boolean isValidTaxNumberType(UUID tenantId, String partyTypeCode, String taxNumberTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(taxNumberTypeCode)) {
       return false;
     }
 
-    return self.getTaxNumberTypes(DEFAULT_LOCALE_ID).stream()
+    return self.getTaxNumberTypes().stream()
         .anyMatch(
             taxNumberType ->
-                Objects.equals(taxNumberType.getCode(), taxNumberTypeCode)
+                (taxNumberType.getTenantId() == null
+                        || Objects.equals(taxNumberType.getTenantId(), tenantId))
+                    && Objects.equals(taxNumberType.getCode(), taxNumberTypeCode)
                     && taxNumberType.isValidForPartyType(partyTypeCode));
   }
 
   /**
    * Check whether the code is a valid code for a time to contact.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param timeToContactCode the code for the time to contact
    * @return <b>true</b> if the code is a valid code for a time to contact or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidTimeToContact(String timeToContactCode) throws ServiceUnavailableException {
+  public boolean isValidTimeToContact(UUID tenantId, String timeToContactCode)
+      throws ServiceUnavailableException {
     if (!StringUtils.hasText(timeToContactCode)) {
       return false;
     }
 
-    return self.getTimesToContact(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(timeToContact -> Objects.equals(timeToContact.getCode(), timeToContactCode));
+    return self.getTimesToContact().stream()
+        .anyMatch(
+            timeToContact ->
+                (timeToContact.getTenantId() == null
+                        || Objects.equals(timeToContact.getTenantId(), tenantId))
+                    && Objects.equals(timeToContact.getCode(), timeToContactCode));
   }
 
   /**
    * Check whether the code is a valid code for a title.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param titleCode the code for the title
    * @return <b>true</b> if the code is a valid code for a title or <b>false</b> otherwise
    */
   @Override
-  public boolean isValidTitle(String titleCode) throws ServiceUnavailableException {
+  public boolean isValidTitle(UUID tenantId, String titleCode) throws ServiceUnavailableException {
     if (!StringUtils.hasText(titleCode)) {
       return false;
     }
 
-    return self.getTitles(DEFAULT_LOCALE_ID).stream()
-        .anyMatch(title -> Objects.equals(title.getCode(), titleCode));
+    return self.getTitles().stream()
+        .anyMatch(
+            title ->
+                (title.getTenantId() == null || Objects.equals(title.getTenantId(), tenantId))
+                    && Objects.equals(title.getCode(), titleCode));
   }
 }

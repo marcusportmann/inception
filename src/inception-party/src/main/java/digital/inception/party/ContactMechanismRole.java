@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -51,6 +52,7 @@ import org.springframework.util.StringUtils;
   "contactMechanismType",
   "code",
   "localeId",
+  "tenantId",
   "sortIndex",
   "name",
   "description",
@@ -64,6 +66,7 @@ import org.springframework.util.StringUtils;
       "contactMechanismType",
       "code",
       "localeId",
+      "tenantId",
       "sortIndex",
       "name",
       "description",
@@ -96,7 +99,7 @@ public class ContactMechanismRole implements Serializable {
   /** The contact mechanism role code for an other e-mail address. */
   public static final String OTHER_EMAIL_ADDRESS = "other_email_address";
 
-  /** The contact mechanism role code for a other fax number. */
+  /** The contact mechanism role code for an other fax number. */
   public static final String OTHER_FAX_NUMBER = "other_fax_number";
 
   /** The contact mechanism role code for an other mobile number. */
@@ -211,6 +214,18 @@ public class ContactMechanismRole implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
+  /**
+   * The Universally Unique Identifier (UUID) for the tenant the contact mechanism role is specific
+   * to.
+   */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the contact mechanism role is specific to")
+  @JsonProperty
+  @XmlElement(name = "TenantId")
+  @Column(name = "tenant_id")
+  private UUID tenantId;
+
   /** Constructs a new <b>ContactMechanismRole</b>. */
   public ContactMechanismRole() {}
 
@@ -310,6 +325,17 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the contact mechanism role is
+   * specific to.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the contact mechanism role is
+   *     specific to
+   */
+  public UUID getTenantId() {
+    return tenantId;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -405,5 +431,16 @@ public class ContactMechanismRole implements Serializable {
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the tenant the contact mechanism role is
+   * specific to.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     role is specific to
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 }

@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>RolePurposeRepository</b> interface declares the repository for the <b>RolePurpose</b>
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface RolePurposeRepository extends JpaRepository<RolePurpose, RolePurposeId> {
 
-  List<RolePurpose> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select rp from RolePurpose rp order by rp.localeId, -rp.sortIndex DESC, rp.name")
+  List<RolePurpose> findAll();
+
+  @Query(
+      "select rp from RolePurpose rp where upper(rp.localeId) = upper(:localeId) order by rp.localeId, -rp.sortIndex DESC, rp.name")
+  List<RolePurpose> findByLocaleIdIgnoreCase(String localeId);
 }

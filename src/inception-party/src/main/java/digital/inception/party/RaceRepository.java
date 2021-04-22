@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>RaceRepository</b> interface declares the repository for the <b>Race</b> domain type.
@@ -27,5 +27,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface RaceRepository extends JpaRepository<Race, RaceId> {
 
-  List<Race> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select r from Race r order by r.localeId, -r.sortIndex DESC, r.name")
+  List<Race> findAll();
+
+  @Query(
+      "select r from Race r where upper(r.localeId) = upper(:localeId) order by r.localeId, -r.sortIndex DESC, r.name")
+  List<Race> findByLocaleIdIgnoreCase(String localeId);
 }

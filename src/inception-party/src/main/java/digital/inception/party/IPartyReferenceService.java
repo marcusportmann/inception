@@ -16,8 +16,10 @@
 
 package digital.inception.party;
 
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <b>IPartyReferenceService</b> interface defines the functionality provided by a Party
@@ -27,282 +29,854 @@ import java.util.List;
  */
 public interface IPartyReferenceService {
 
+  /** The Universally Unique Identifier (UUID) for the default tenant. */
+  UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
   /** The default locale ID. */
   String DEFAULT_LOCALE_ID = "en-US";
 
   /**
-   * Retrieve the attribute type categories.
+   * Retrieve the attribute type category reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
-   *     categories for or <b>null</b> to retrieve the attribute type categories for all locales
-   * @return the attribute type categories
+   *     category reference data for
+   * @return the attribute type category reference data
    */
   List<AttributeTypeCategory> getAttributeTypeCategories(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the attribute types.
+   * Retrieve the attribute type category reference data for a specific tenant and locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute types
-   *     for or <b>null</b> to retrieve the attribute types for all locales
-   * @return the attribute types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
+   *     category reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     category reference data for
+   * @return the attribute type category reference data
    */
-  List<AttributeType> getAttributeTypes(String localeId) throws ServiceUnavailableException;
+  List<AttributeTypeCategory> getAttributeTypeCategories(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the consent types.
+   * Retrieve the attribute type category reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the consent types for
-   *     or <b>null</b> to retrieve the consent types for all locales
-   * @return the consent types
+   * @return the attribute type category reference data
    */
-  List<ConsentType> getConsentTypes(String localeId) throws ServiceUnavailableException;
+  List<AttributeTypeCategory> getAttributeTypeCategories() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the contact mechanism purposes.
+   * Retrieve the attribute type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     reference data for
+   * @return the attribute type reference data
+   */
+  List<AttributeType> getAttributeTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the attribute type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     reference data for
+   * @return the attribute type reference data
+   */
+  List<AttributeType> getAttributeTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the attribute type reference data for all locales.
+   *
+   * @return the attribute type reference data
+   */
+  List<AttributeType> getAttributeTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the consent type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
+   *     reference data for
+   * @return the consent type reference data
+   */
+  List<ConsentType> getConsentTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the consent type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the consent type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
+   *     reference data for
+   * @return the consent type reference data
+   */
+  List<ConsentType> getConsentTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the consent type reference data for all locales.
+   *
+   * @return the consent type reference data
+   */
+  List<ConsentType> getConsentTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the contact mechanism purpose reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <b>null</b> to retrieve the contact mechanism purposes for all locales
-   * @return the contact mechanism purposes
+   *     purpose reference data for
+   * @return the contact mechanism purpose reference data
    */
   List<ContactMechanismPurpose> getContactMechanismPurposes(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the contact mechanism roles.
+   * Retrieve the contact mechanism purpose reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     purpose reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     purpose reference data for
+   * @return the contact mechanism purpose reference data
+   */
+  List<ContactMechanismPurpose> getContactMechanismPurposes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the contact mechanism purpose reference data for all locales.
+   *
+   * @return the contact mechanism purpose reference data
+   */
+  List<ContactMechanismPurpose> getContactMechanismPurposes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the contact mechanism role reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <b>null</b> to retrieve the contact mechanism roles for all locales
-   * @return the contact mechanism roles
+   *     role reference data for
+   * @return the contact mechanism role reference data
    */
   List<ContactMechanismRole> getContactMechanismRoles(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the contact mechanism types.
+   * Retrieve the contact mechanism role reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     role reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     role reference data for
+   * @return the contact mechanism role reference data
+   */
+  List<ContactMechanismRole> getContactMechanismRoles(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the contact mechanism role reference data for all locales.
+   *
+   * @return the contact mechanism role reference data
+   */
+  List<ContactMechanismRole> getContactMechanismRoles() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the contact mechanism type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     types for or <b>null</b> to retrieve the contact mechanism types for all locales
-   * @return the contact mechanism types
+   *     type reference data for
+   * @return the contact mechanism type reference data
    */
   List<ContactMechanismType> getContactMechanismTypes(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the employment statuses.
+   * Retrieve the contact mechanism type reference data for a specific tenant and locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment
-   *     statuses for or <b>null</b> to retrieve the employment statuses for all locales
-   * @return the employment statuses
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     type reference data for
+   * @return the contact mechanism type reference data
    */
-  List<EmploymentStatus> getEmploymentStatuses(String localeId) throws ServiceUnavailableException;
+  List<ContactMechanismType> getContactMechanismTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the employment types.
+   * Retrieve the contact mechanism type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment types
-   *     for or <b>null</b> to retrieve the employment types for all locales
-   * @return the employment types
+   * @return the contact mechanism type reference data
    */
-  List<EmploymentType> getEmploymentTypes(String localeId) throws ServiceUnavailableException;
+  List<ContactMechanismType> getContactMechanismTypes() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the fields of study.
+   * Retrieve the employment status reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
-   *     types for or <b>null</b> to retrieve the fields of study for all locales
-   * @return the fields of study
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
+   *     reference data for
+   * @return the employment status reference data
    */
-  List<FieldOfStudy> getFieldsOfStudy(String localeId) throws ServiceUnavailableException;
+  List<EmploymentStatus> getEmploymentStatuses(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the genders.
+   * Retrieve the employment status reference data for a specific tenant and locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
-   *     <b>null</b> to retrieve the genders for all locales
-   * @return the genders
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
+   *     reference data for
+   * @return the employment status reference data
    */
-  List<Gender> getGenders(String localeId) throws ServiceUnavailableException;
+  List<EmploymentStatus> getEmploymentStatuses(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the identity document types.
+   * Retrieve the employment status reference data for all locales.
+   *
+   * @return the employment status reference data
+   */
+  List<EmploymentStatus> getEmploymentStatuses() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the employment type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
+   *     reference data for
+   * @return the employment type reference data
+   */
+  List<EmploymentType> getEmploymentTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the employment type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
+   *     reference data for
+   * @return the employment type reference data
+   */
+  List<EmploymentType> getEmploymentTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the employment type reference data for all locales.
+   *
+   * @return the employment type reference data
+   */
+  List<EmploymentType> getEmploymentTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the fields of study reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
+   *     reference data for
+   * @return the fields of study reference data
+   */
+  List<FieldOfStudy> getFieldsOfStudy(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the fields of study reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the fields of study
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
+   *     reference data for
+   * @return the fields of study reference data
+   */
+  List<FieldOfStudy> getFieldsOfStudy(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the fields of study reference data for all locales.
+   *
+   * @return the fields of study reference data
+   */
+  List<FieldOfStudy> getFieldsOfStudy() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the gender reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
+   *     data for
+   * @return the gender reference data
+   */
+  List<Gender> getGenders(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the gender reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the gender reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
+   *     data for
+   * @return the gender reference data
+   */
+  List<Gender> getGenders(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the gender reference data for all locales.
+   *
+   * @return the gender reference data
+   */
+  List<Gender> getGenders() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the identity document type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
-   *     types for or <b>null</b> to retrieve the identity document types for all locales
-   * @return the identity document types
+   *     type reference data for
+   * @return the identity document type reference data
    */
   List<IdentityDocumentType> getIdentityDocumentTypes(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the lock type categories.
+   * Retrieve the identity document type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the identity document
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
+   *     type reference data for
+   * @return the identity document type reference data
+   */
+  List<IdentityDocumentType> getIdentityDocumentTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the identity document type reference data for all locales.
+   *
+   * @return the identity document type reference data
+   */
+  List<IdentityDocumentType> getIdentityDocumentTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the lock type category reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
+   *     reference data for
+   * @return the lock type category reference data
+   */
+  List<LockTypeCategory> getLockTypeCategories(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the lock type category reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type category
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
+   *     reference data for
+   * @return the lock type category reference data
+   */
+  List<LockTypeCategory> getLockTypeCategories(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the lock type category reference data for all locales.
+   *
+   * @return the lock type category reference data
+   */
+  List<LockTypeCategory> getLockTypeCategories() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the lock type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
-   *     categories for or <b>null</b> to retrieve the lock type categories for all locales
-   * @return the lock type categories
+   *     reference data for
+   * @return the lock type reference data
    */
-  List<LockTypeCategory> getLockTypeCategories(String localeId) throws ServiceUnavailableException;
+  List<LockType> getLockTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the lock types.
+   * Retrieve the lock type reference data for a specific tenant and locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock types for or
-   *     <b>null</b> to retrieve the lock types for all locales
-   * @return the lock types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
+   *     reference data for
+   * @return the lock type reference data
    */
-  List<LockType> getLockTypes(String localeId) throws ServiceUnavailableException;
+  List<LockType> getLockTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the marital statuses.
+   * Retrieve the lock type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
-   *     for or <b>null</b> to retrieve the marital statuses for all locales
-   * @return the marital statuses
+   * @return the lock type reference data
    */
-  List<MaritalStatus> getMaritalStatuses(String localeId) throws ServiceUnavailableException;
+  List<LockType> getLockTypes() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the marriage types.
+   * Retrieve the marital status reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage types for
-   *     or <b>null</b> to retrieve the marriage types for all locales
-   * @return the marriage types
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
+   *     reference data for
+   * @return the marital status reference data
    */
-  List<MarriageType> getMarriageTypes(String localeId) throws ServiceUnavailableException;
+  List<MaritalStatus> getMaritalStatuses(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the next of kin types.
+   * Retrieve the marital status reference data for a specific tenant and locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin types
-   *     for or <b>null</b> to retrieve the next of kin types for all locales
-   * @return the next of kin types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marital status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
+   *     reference data for
+   * @return the marital status reference data
    */
-  List<NextOfKinType> getNextOfKinTypes(String localeId) throws ServiceUnavailableException;
+  List<MaritalStatus> getMaritalStatuses(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the occupations.
+   * Retrieve the marital status reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for or
-   *     <b>null</b> to retrieve the occupations for all locales
-   * @return the occupations
+   * @return the marital status reference data
    */
-  List<Occupation> getOccupations(String localeId) throws ServiceUnavailableException;
+  List<MaritalStatus> getMaritalStatuses() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the physical address purposes.
+   * Retrieve the marriage type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
+   *     reference data
+   * @return the marriage type reference data
+   */
+  List<MarriageType> getMarriageTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the marriage type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marriage type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
+   *     reference data
+   * @return the marriage type reference data
+   */
+  List<MarriageType> getMarriageTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the marriage type reference data for all locales.
+   *
+   * @return the marriage type reference data
+   */
+  List<MarriageType> getMarriageTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the next of kin type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
+   *     reference data for
+   * @return the next of kin type reference data
+   */
+  List<NextOfKinType> getNextOfKinTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the next of kin type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the next of kin type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
+   *     reference data for
+   * @return the next of kin type reference data
+   */
+  List<NextOfKinType> getNextOfKinTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the next of kin type reference data for all locales.
+   *
+   * @return the next of kin type reference data
+   */
+  List<NextOfKinType> getNextOfKinTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the occupation reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
+   *     reference data for
+   * @return the occupation reference data
+   */
+  List<Occupation> getOccupations(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the occupation reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the occupation
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
+   *     reference data for
+   * @return the occupation reference data
+   */
+  List<Occupation> getOccupations(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the occupation reference data for all locales.
+   *
+   * @return the occupation reference data
+   */
+  List<Occupation> getOccupations() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the physical address purpose reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     purposes for or <b>null</b> to retrieve the physical address purposes for all locales
-   * @return the physical address purposes
+   *     purpose reference data for
+   * @return the physical address purpose reference data
    */
   List<PhysicalAddressPurpose> getPhysicalAddressPurposes(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the physical address roles.
+   * Retrieve the physical address purpose reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     purpose reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
+   *     purpose reference data for
+   * @return the physical address purpose reference data
+   */
+  List<PhysicalAddressPurpose> getPhysicalAddressPurposes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the physical address purpose reference data for all locales.
+   *
+   * @return the physical address purpose reference data
+   */
+  List<PhysicalAddressPurpose> getPhysicalAddressPurposes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the physical address role reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     roles for or <b>null</b> to retrieve the physical address roles for all locales
-   * @return the physical address roles
+   *     role reference data for
+   * @return the physical address role reference data
    */
   List<PhysicalAddressRole> getPhysicalAddressRoles(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the physical address types.
+   * Retrieve the physical address role reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     role reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
+   *     role reference data for
+   * @return the physical address role reference data
+   */
+  List<PhysicalAddressRole> getPhysicalAddressRoles(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the physical address role reference data for all locales.
+   *
+   * @return the physical address role reference data
+   */
+  List<PhysicalAddressRole> getPhysicalAddressRoles() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the physical address type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     types for or <b>null</b> to retrieve the physical address types for all locales
-   * @return the physical address types
+   *     type reference data for
+   * @return the physical address type reference data
    */
   List<PhysicalAddressType> getPhysicalAddressTypes(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the preference type categories.
+   * Retrieve the physical address type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
+   *     type reference data for
+   * @return the physical address type reference data
+   */
+  List<PhysicalAddressType> getPhysicalAddressTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the physical address type reference data for all locales.
+   *
+   * @return the physical address type reference data
+   */
+  List<PhysicalAddressType> getPhysicalAddressTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the preference type category reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     categories for or <b>null</b> to retrieve the preference type categories for all locales
-   * @return the preference type categories
+   *     category reference data for
+   * @return the preference type category reference data
    */
   List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the preference types.
+   * Retrieve the preference type category reference data for a specific tenant and locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the preference types
-   *     for or <b>null</b> to retrieve the preference types for all locales
-   * @return the preference types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
+   *     category reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     category reference data for
+   * @return the preference type category reference data
    */
-  List<PreferenceType> getPreferenceTypes(String localeId) throws ServiceUnavailableException;
+  List<PreferenceTypeCategory> getPreferenceTypeCategories(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the qualification types.
+   * Retrieve the preference type category reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
-   *     types for or <b>null</b> to retrieve the qualification types for all locales
-   * @return the qualification types
+   * @return the preference type category reference data
    */
-  List<QualificationType> getQualificationTypes(String localeId) throws ServiceUnavailableException;
+  List<PreferenceTypeCategory> getPreferenceTypeCategories() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the races.
+   * Retrieve the preference type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the races for or
-   *     <b>null</b> to retrieve the races for all locales
-   * @return the races
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     reference data for
+   * @return the preference type reference data
    */
-  List<Race> getRaces(String localeId) throws ServiceUnavailableException;
+  List<PreferenceType> getPreferenceTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the relationship types.
+   * Retrieve the preference type reference data for a specific tenant and locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship types
-   *     for or <b>null</b> to retrieve the relationship types for all locales
-   * @return the relationship types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     reference data for
+   * @return the preference type reference data
    */
-  List<RelationshipType> getRelationshipTypes(String localeId) throws ServiceUnavailableException;
+  List<PreferenceType> getPreferenceTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the residence permit types.
+   * Retrieve the preference type reference data for all locales.
+   *
+   * @return the preference type reference data
+   */
+  List<PreferenceType> getPreferenceTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the qualification type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
+   *     reference data for
+   * @return the qualification type reference data
+   */
+  List<QualificationType> getQualificationTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the qualification type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the qualification type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
+   *     reference data for
+   * @return the qualification type reference data
+   */
+  List<QualificationType> getQualificationTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the qualification type reference data for all locales.
+   *
+   * @return the qualification type reference data
+   */
+  List<QualificationType> getQualificationTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the race reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
+   *     data for
+   * @return the race reference data
+   */
+  List<Race> getRaces(String localeId) throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the race reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the race reference data
+   *     is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
+   *     data for
+   * @return the race reference data
+   */
+  List<Race> getRaces(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the race reference data for all locales.
+   *
+   * @return the race reference data
+   */
+  List<Race> getRaces() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the relationship type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship type
+   *     reference data for
+   * @return the relationship type reference data
+   */
+  List<RelationshipType> getRelationshipTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the relationship type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship type
+   *     reference data for
+   * @return the relationship type reference data
+   */
+  List<RelationshipType> getRelationshipTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the relationship type reference data for all locales.
+   *
+   * @return the relationship type reference data
+   */
+  List<RelationshipType> getRelationshipTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the residence permit type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
-   *     types for or <b>null</b> to retrieve the residence permit types for all locales
-   * @return the residence permit types
+   *     type reference data for
+   * @return the residence permit type reference data
    */
   List<ResidencePermitType> getResidencePermitTypes(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the residency statuses.
+   * Retrieve the residence permit type reference data for a specific tenant and locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residency statuses
-   *     for or <b>null</b> to retrieve the residency statuses for all locales
-   * @return the residency statuses
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residence permit
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
+   *     type reference data for
+   * @return the residence permit type reference data
    */
-  List<ResidencyStatus> getResidencyStatuses(String localeId) throws ServiceUnavailableException;
+  List<ResidencePermitType> getResidencePermitTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the residential types.
+   * Retrieve the residence permit type reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residential types
-   *     for or <b>null</b> to retrieve the residential types for all locales
-   * @return the residential types
+   * @return the residence permit type reference data
    */
-  List<ResidentialType> getResidentialTypes(String localeId) throws ServiceUnavailableException;
+  List<ResidencePermitType> getResidencePermitTypes() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the role purposes.
+   * Retrieve the residency status reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role purposes for
-   *     or <b>null</b> to retrieve the role purposes for all locales
-   * @return the role purposes
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
+   *     reference data for
+   * @return the residency status reference data
    */
-  List<RolePurpose> getRolePurposes(String localeId) throws ServiceUnavailableException;
+  List<ResidencyStatus> getResidencyStatuses(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the role type attribute type constraints.
+   * Retrieve the residency status reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residency status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
+   *     reference data for
+   * @return the residency status reference data
+   */
+  List<ResidencyStatus> getResidencyStatuses(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the residency status reference data for all locales.
+   *
+   * @return the residency status reference data
+   */
+  List<ResidencyStatus> getResidencyStatuses() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the residential type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
+   *     reference data for
+   * @return the residential type reference data
+   */
+  List<ResidentialType> getResidentialTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the residential type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residential type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
+   *     reference data for
+   * @return the residential type reference data
+   */
+  List<ResidentialType> getResidentialTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the residential type reference data for all locales.
+   *
+   * @return the residential type reference data
+   */
+  List<ResidentialType> getResidentialTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the role purpose reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
+   *     reference data for
+   * @return the role purpose reference data
+   */
+  List<RolePurpose> getRolePurposes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the role purpose reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role purpose
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
+   *     reference data for
+   * @return the role purpose reference data
+   */
+  List<RolePurpose> getRolePurposes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the role purpose reference data for all locales.
+   *
+   * @return the role purpose reference data
+   */
+  List<RolePurpose> getRolePurposes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the role type attribute type constraints for all role types.
    *
    * @return the role type attribute type constraints
    */
@@ -310,16 +884,16 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve the role type attribute type constraints.
+   * Retrieve the role type attribute type constraints for a specific role type.
    *
    * @param roleType the code for the role type to retrieve the attribute constraints for
    * @return the role type attribute type constraints
    */
   List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(String roleType)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the role type preference type constraints.
+   * Retrieve the role type preference type constraints for all role types.
    *
    * @return the role type preference type constraints
    */
@@ -327,128 +901,311 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve the role type preference type constraints.
+   * Retrieve the role type preference type constraints for a specific role type.
    *
    * @param roleType the code for the role type to retrieve the preference constraints for
    * @return the role type preference type constraints
    */
   List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(String roleType)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the role types.
+   * Retrieve the role type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
-   *     <b>null</b> to retrieve the role types for all locales
-   * @return the role types
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role type
+   *     reference data for
+   * @return the role type reference data
    */
-  List<RoleType> getRoleTypes(String localeId) throws ServiceUnavailableException;
+  List<RoleType> getRoleTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the segments.
+   * Retrieve the role type reference data for a specific tenant and locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the segments for or
-   *     <b>null</b> to retrieve the segments for all locales
-   * @return the segments
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role type reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role type
+   *     reference data for
+   * @return the role type reference data
    */
-  List<Segment> getSegments(String localeId) throws ServiceUnavailableException;
+  List<RoleType> getRoleTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the source of funds types.
+   * Retrieve the role type reference data for all locales.
+   *
+   * @return the role type reference data
+   */
+  List<RoleType> getRoleTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the segment reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
+   *     data for
+   * @return the segment reference data
+   */
+  List<Segment> getSegments(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the segment reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the segment reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
+   *     data for
+   * @return the segment reference data
+   */
+  List<Segment> getSegments(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the segment reference data for all locales.
+   *
+   * @return the segment reference data
+   */
+  List<Segment> getSegments() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the source of funds type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
-   *     types for or <b>null</b> to retrieve the source of funds types for all locales
-   * @return the source of funds types
+   *     type reference data
+   * @return the source of funds type reference data
    */
-  List<SourceOfFundsType> getSourceOfFundsTypes(String localeId) throws ServiceUnavailableException;
+  List<SourceOfFundsType> getSourceOfFundsTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the source of wealth types.
+   * Retrieve the source of funds type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of funds
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
+   *     type reference data
+   * @return the source of funds type reference data
+   */
+  List<SourceOfFundsType> getSourceOfFundsTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the source of funds type reference data for all locales.
+   *
+   * @return the source of funds type reference data
+   */
+  List<SourceOfFundsType> getSourceOfFundsTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the source of wealth type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
-   *     types for or <b>null</b> to retrieve the source of wealth types for all locales
-   * @return the source of wealth types
+   *     type reference data for
+   * @return the source of wealth type reference data
    */
   List<SourceOfWealthType> getSourceOfWealthTypes(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the status type categories.
+   * Retrieve the source of wealth type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of wealth
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
+   *     type reference data for
+   * @return the source of wealth type reference data
+   */
+  List<SourceOfWealthType> getSourceOfWealthTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the source of wealth type reference data for all locales.
+   *
+   * @return the source of wealth type reference data
+   */
+  List<SourceOfWealthType> getSourceOfWealthTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the status type category reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
-   *     categories for or <b>null</b> to retrieve the status type categories for all locales
-   * @return the status type categories
+   *     category reference data for
+   * @return the status type category reference data
    */
   List<StatusTypeCategory> getStatusTypeCategories(String localeId)
-      throws ServiceUnavailableException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the status types.
+   * Retrieve the status type category reference data for a specific tenant and locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the status types for
-   *     or <b>null</b> to retrieve the status types for all locales
-   * @return the status types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
+   *     category reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     category reference data for
+   * @return the status type category reference data
    */
-  List<StatusType> getStatusTypes(String localeId) throws ServiceUnavailableException;
+  List<StatusTypeCategory> getStatusTypeCategories(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the tax number types.
+   * Retrieve the status type category reference data for all locales.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number types
-   *     for or <b>null</b> to retrieve the tax number types for all locales
-   * @return the tax number types
+   * @return the status type category reference data
    */
-  List<TaxNumberType> getTaxNumberTypes(String localeId) throws ServiceUnavailableException;
+  List<StatusTypeCategory> getStatusTypeCategories() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the times to contact.
+   * Retrieve the status type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     reference data for
+   * @return the status type reference data
+   */
+  List<StatusType> getStatusTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the status type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     reference data for
+   * @return the status type reference data
+   */
+  List<StatusType> getStatusTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the status type reference data for all locales.
+   *
+   * @return the status type reference data
+   */
+  List<StatusType> getStatusTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the tax number type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
+   *     reference data for
+   * @return the tax number type reference data
+   */
+  List<TaxNumberType> getTaxNumberTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the tax number type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the tax number type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
+   *     reference data for
+   * @return the tax number type reference data
+   */
+  List<TaxNumberType> getTaxNumberTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the tax number type reference data for all locales.
+   *
+   * @return the tax number type reference data
+   */
+  List<TaxNumberType> getTaxNumberTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the times to contact reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
-   *     for or <b>null</b> to retrieve the times to contact for all locales
-   * @return the times to contact
+   *     reference data for
+   * @return the times to contact reference data
    */
-  List<TimeToContact> getTimesToContact(String localeId) throws ServiceUnavailableException;
+  List<TimeToContact> getTimesToContact(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the titles.
+   * Retrieve the times to contact reference data for a specific tenant and locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the titles for or
-   *     <b>null</b> to retrieve the titles for all locales
-   * @return the titles
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the times to contact
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
+   *     reference data for
+   * @return the times to contact reference data
    */
-  List<Title> getTitles(String localeId) throws ServiceUnavailableException;
+  List<TimeToContact> getTimesToContact(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Check whether the code is a valid code for a attribute type for the party type.
+   * Retrieve the times to contact reference data for all locales.
    *
+   * @return the times to contact reference data
+   */
+  List<TimeToContact> getTimesToContact() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the title reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
+   *     data for
+   * @return the title reference data
+   */
+  List<Title> getTitles(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the title reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the title reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
+   *     data for
+   * @return the title reference data
+   */
+  List<Title> getTitles(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the title reference data for all locales.
+   *
+   * @return the title reference data
+   */
+  List<Title> getTitles() throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for an attribute type for the party type.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param attributeTypeCode the code for the attribute type
-   * @return <b>true</b> if the code is a valid code for a attribute type or <b>false</b> otherwise
+   * @return <b>true</b> if the code is a valid code for an attribute type or <b>false</b> otherwise
    */
-  boolean isValidAttributeType(String partyTypeCode, String attributeTypeCode)
+  boolean isValidAttributeType(UUID tenantId, String partyTypeCode, String attributeTypeCode)
       throws ServiceUnavailableException;
 
   /**
-   * Check whether the code is a valid code for a attribute type category.
+   * Check whether the code is a valid code for an attribute type category.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param attributeTypeCategoryCode the code for the attribute type category
-   * @return <b>true</b> if the code is a valid code for a attribute type category or <b>false</b>
+   * @return <b>true</b> if the code is a valid code for an attribute type category or <b>false</b>
    *     otherwise
    */
-  boolean isValidAttributeTypeCategory(String attributeTypeCategoryCode)
+  boolean isValidAttributeTypeCategory(UUID tenantId, String attributeTypeCategoryCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a consent type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param consentTypeCode the code for the consent type
    * @return <b>true</b> if the code is a valid code for a consent type or <b>false</b> otherwise
    */
-  boolean isValidConsentType(String consentTypeCode) throws ServiceUnavailableException;
+  boolean isValidConsentType(UUID tenantId, String consentTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a contact mechanism purpose for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @param contactMechanismPurposeCode the code for the contact mechanism purpose
@@ -456,12 +1213,16 @@ public interface IPartyReferenceService {
    *     otherwise
    */
   boolean isValidContactMechanismPurpose(
-      String partyTypeCode, String contactMechanismTypeCode, String contactMechanismPurposeCode)
+      UUID tenantId,
+      String partyTypeCode,
+      String contactMechanismTypeCode,
+      String contactMechanismPurposeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a contact mechanism role for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @param contactMechanismRoleCode the code for the contact mechanism role
@@ -469,356 +1230,414 @@ public interface IPartyReferenceService {
    *     otherwise
    */
   boolean isValidContactMechanismRole(
-      String partyTypeCode, String contactMechanismTypeCode, String contactMechanismRoleCode)
+      UUID tenantId,
+      String partyTypeCode,
+      String contactMechanismTypeCode,
+      String contactMechanismRoleCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a contact mechanism type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @return <b>true</b> if the code is a valid code for a contact mechanism type or <b>false</b>
    *     otherwise
    */
-  boolean isValidContactMechanismType(String contactMechanismTypeCode)
+  boolean isValidContactMechanismType(UUID tenantId, String contactMechanismTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for an employment status.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param employmentStatusCode the code for the employment status
    * @return <b>true</b> if the code is a valid code for an employment status or <b>false</b>
    *     otherwise
    */
-  boolean isValidEmploymentStatus(String employmentStatusCode) throws ServiceUnavailableException;
-
-  /**
-   * Check whether the code is a valid code for an employment type.
-   *
-   * @param employmentStatusCode the code for the employment status
-   * @param employmentTypeCode the code for the employment type
-   * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
-   *     otherwise
-   */
-  boolean isValidEmploymentType(String employmentStatusCode, String employmentTypeCode)
+  boolean isValidEmploymentStatus(UUID tenantId, String employmentStatusCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for an employment type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param employmentStatusCode the code for the employment status
    * @param employmentTypeCode the code for the employment type
    * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
    *     otherwise
    */
-  boolean isValidEmploymentType(String employmentTypeCode) throws ServiceUnavailableException;
+  boolean isValidEmploymentType(
+      UUID tenantId, String employmentStatusCode, String employmentTypeCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for an employment type.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param employmentTypeCode the code for the employment type
+   * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidEmploymentType(UUID tenantId, String employmentTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a field of study.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param fieldOfStudyCode the code for the field of study
    * @return <b>true</b> if the code is a valid code for a field of study or <b>false</b> otherwise
    */
-  boolean isValidFieldOfStudy(String fieldOfStudyCode) throws ServiceUnavailableException;
+  boolean isValidFieldOfStudy(UUID tenantId, String fieldOfStudyCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a gender.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param genderCode the code for the gender
    * @return <b>true</b> if the code is a valid code for a gender or <b>false</b> otherwise
    */
-  boolean isValidGender(String genderCode) throws ServiceUnavailableException;
+  boolean isValidGender(UUID tenantId, String genderCode) throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for an identity document type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param identityDocumentTypeCode the code for the identity document type
    * @return <b>true</b> if the code is a valid code for an identity document type or <b>false</b>
    *     otherwise
    */
-  boolean isValidIdentityDocumentType(String partyTypeCode, String identityDocumentTypeCode)
+  boolean isValidIdentityDocumentType(
+      UUID tenantId, String partyTypeCode, String identityDocumentTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a lock type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param lockTypeCode the code for the lock type
    * @return <b>true</b> if the code is a valid code for a lock type or <b>false</b> otherwise
    */
-  boolean isValidLockType(String partyTypeCode, String lockTypeCode)
+  boolean isValidLockType(UUID tenantId, String partyTypeCode, String lockTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a lock type category.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param lockTypeCategoryCode the code for the lock type category
    * @return <b>true</b> if the code is a valid code for a lock type category or <b>false</b>
    *     otherwise
    */
-  boolean isValidLockTypeCategory(String lockTypeCategoryCode) throws ServiceUnavailableException;
+  boolean isValidLockTypeCategory(UUID tenantId, String lockTypeCategoryCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a marital status.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param maritalStatusCode the code for the marital status
    * @return <b>true</b> if the code is a valid code for a marital status or <b>false</b> otherwise
    */
-  boolean isValidMaritalStatus(String maritalStatusCode) throws ServiceUnavailableException;
+  boolean isValidMaritalStatus(UUID tenantId, String maritalStatusCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a marriage type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param maritalStatusCode the code for the marital status
    * @param marriageTypeCode the code for the marriage type
    * @return <b>true</b> if the code is a valid code for a marriage type or <b>false</b> otherwise
    */
-  boolean isValidMarriageType(String maritalStatusCode, String marriageTypeCode)
+  boolean isValidMarriageType(UUID tenantId, String maritalStatusCode, String marriageTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the measurement unit is valid for the attribute type with the specified code.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param attributeTypeCode the code for the attribute type
    * @param measurementUnit the measurement unit
    * @return <b>true</b> if the measurement unit is valid for the attribute type with the specified
    *     code or <b>false</b> otherwise
    */
   boolean isValidMeasurementUnitForAttributeType(
-      String attributeTypeCode, MeasurementUnit measurementUnit) throws ServiceUnavailableException;
+      UUID tenantId, String attributeTypeCode, MeasurementUnit measurementUnit)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a next of kin type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param nextOfKinTypeCode the code for the next of kin type
    * @return <b>true</b> if the code is a valid code for a next of kin type or <b>false</b>
    *     otherwise
    */
-  boolean isValidNextOfKinType(String nextOfKinTypeCode) throws ServiceUnavailableException;
+  boolean isValidNextOfKinType(UUID tenantId, String nextOfKinTypeCode)
+      throws ServiceUnavailableException;
 
   /**
-   * Check whether the code is a valid code for a occupation.
+   * Check whether the code is a valid code for an occupation.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param occupationCode the code for the occupation
-   * @return <b>true</b> if the code is a valid code for a occupation or <b>false</b> otherwise
+   * @return <b>true</b> if the code is a valid code for an occupation or <b>false</b> otherwise
    */
-  boolean isValidOccupation(String occupationCode) throws ServiceUnavailableException;
+  boolean isValidOccupation(UUID tenantId, String occupationCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a physical address purpose for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param physicalAddressPurposeCode the code for the physical address purpose
    * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
    *     otherwise
    */
-  boolean isValidPhysicalAddressPurpose(String partyTypeCode, String physicalAddressPurposeCode)
+  boolean isValidPhysicalAddressPurpose(
+      UUID tenantId, String partyTypeCode, String physicalAddressPurposeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a physical address purpose.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param physicalAddressPurposeCode the code for the physical address purpose
    * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
    *     otherwise
    */
-  boolean isValidPhysicalAddressPurpose(String physicalAddressPurposeCode)
+  boolean isValidPhysicalAddressPurpose(UUID tenantId, String physicalAddressPurposeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a physical address role for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param physicalAddressRoleCode the code for the physical address role
    * @return <b>true</b> if the code is a valid code for a physical address role or <b>false</b>
    *     otherwise
    */
-  boolean isValidPhysicalAddressRole(String partyTypeCode, String physicalAddressRoleCode)
+  boolean isValidPhysicalAddressRole(
+      UUID tenantId, String partyTypeCode, String physicalAddressRoleCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a physical address role for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param physicalAddressRoleCode the code for the physical address role
    * @return <b>true</b> if the code is a valid code for a physical address role or <b>false</b>
    *     otherwise
    */
-  boolean isValidPhysicalAddressRole(String physicalAddressRoleCode)
+  boolean isValidPhysicalAddressRole(UUID tenantId, String physicalAddressRoleCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a physical address type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param physicalAddressTypeCode the code for the physical address type
    * @return <b>true</b> if the code is a valid code for a physical address type or <b>false</b>
    *     otherwise
    */
-  boolean isValidPhysicalAddressType(String physicalAddressTypeCode)
+  boolean isValidPhysicalAddressType(UUID tenantId, String physicalAddressTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a preference type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param preferenceTypeCode the code for the preference type
    * @return <b>true</b> if the code is a valid code for a preference type or <b>false</b> otherwise
    */
-  boolean isValidPreferenceType(String partyTypeCode, String preferenceTypeCode)
+  boolean isValidPreferenceType(UUID tenantId, String partyTypeCode, String preferenceTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a preference type category.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param preferenceTypeCategoryCode the code for the preference type category
    * @return <b>true</b> if the code is a valid code for a preference type category or <b>false</b>
    *     otherwise
    */
-  boolean isValidPreferenceTypeCategory(String preferenceTypeCategoryCode)
+  boolean isValidPreferenceTypeCategory(UUID tenantId, String preferenceTypeCategoryCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a qualification type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param qualificationTypeCode the code for the qualification type
    * @return <b>true</b> if the code is a valid code for a qualification type or <b>false</b>
    *     otherwise
    */
-  boolean isValidQualificationType(String qualificationTypeCode) throws ServiceUnavailableException;
+  boolean isValidQualificationType(UUID tenantId, String qualificationTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a race.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param raceCode the code for the race
    * @return <b>true</b> if the code is a valid code for a race or <b>false</b> otherwise
    */
-  boolean isValidRace(String raceCode) throws ServiceUnavailableException;
+  boolean isValidRace(UUID tenantId, String raceCode) throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a relationship type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param relationshipTypeCode the code for the relationship type
    * @return <b>true</b> if the code is a valid code for a relationship type or <b>false</b>
    *     otherwise
    */
-  boolean isValidRelationshipType(String partyTypeCode, String relationshipTypeCode)
+  boolean isValidRelationshipType(UUID tenantId, String partyTypeCode, String relationshipTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a residence permit type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param residencePermitTypeCode the code for the residence permit type
    * @return <b>true</b> if the code is a valid code for a residence permit type or <b>false</b>
    *     otherwise
    */
-  boolean isValidResidencePermitType(String residencePermitTypeCode)
+  boolean isValidResidencePermitType(UUID tenantId, String residencePermitTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a residency status.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param residencyStatusCode the code for the residency status
    * @return <b>true</b> if the code is a valid code for a residency status or <b>false</b>
    *     otherwise
    */
-  boolean isValidResidencyStatus(String residencyStatusCode) throws ServiceUnavailableException;
+  boolean isValidResidencyStatus(UUID tenantId, String residencyStatusCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a residential type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param residentialTypeCode the code for the residential type
    * @return <b>true</b> if the code is a valid code for a residential type or <b>false</b>
    *     otherwise
    */
-  boolean isValidResidentialType(String residentialTypeCode) throws ServiceUnavailableException;
+  boolean isValidResidentialType(UUID tenantId, String residentialTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a role purpose.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param rolePurposeCode the code for the role purpose
    * @return <b>true</b> if the code is a valid code for a role purpose or <b>false</b> otherwise
    */
-  boolean isValidRolePurpose(String rolePurposeCode) throws ServiceUnavailableException;
+  boolean isValidRolePurpose(UUID tenantId, String rolePurposeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a role type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param roleTypeCode the code for the role type
    * @return <b>true</b> if the code is a valid code for a role type or <b>false</b> otherwise
    */
-  boolean isValidRoleType(String partyTypeCode, String roleTypeCode)
+  boolean isValidRoleType(UUID tenantId, String partyTypeCode, String roleTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a segment.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param segmentCode the code for the segment
    * @return <b>true</b> if the code is a valid code for a segment or <b>false</b> otherwise
    */
-  boolean isValidSegment(String segmentCode) throws ServiceUnavailableException;
+  boolean isValidSegment(UUID tenantId, String segmentCode) throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a source of funds type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param sourceOfFundsTypeCode the code for the source of funds type
    * @return <b>true</b> if the code is a valid code for a source of funds type or <b>false</b>
    *     otherwise
    */
-  boolean isValidSourceOfFundsType(String sourceOfFundsTypeCode) throws ServiceUnavailableException;
+  boolean isValidSourceOfFundsType(UUID tenantId, String sourceOfFundsTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a source of wealth type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param sourceOfWealthTypeCode the code for the source of wealth type
    * @return <b>true</b> if the code is a valid code for a source of wealth type or <b>false</b>
    *     otherwise
    */
-  boolean isValidSourceOfWealthType(String sourceOfWealthTypeCode)
+  boolean isValidSourceOfWealthType(UUID tenantId, String sourceOfWealthTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a status type for the party type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param statusTypeCode the code for the status type
    * @return <b>true</b> if the code is a valid code for a status type or <b>false</b> otherwise
    */
-  boolean isValidStatusType(String partyTypeCode, String statusTypeCode)
+  boolean isValidStatusType(UUID tenantId, String partyTypeCode, String statusTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a status type category.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param statusTypeCategoryCode the code for the status type category
    * @return <b>true</b> if the code is a valid code for a status type category or <b>false</b>
    *     otherwise
    */
-  boolean isValidStatusTypeCategory(String statusTypeCategoryCode)
+  boolean isValidStatusTypeCategory(UUID tenantId, String statusTypeCategoryCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a tax number type.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyTypeCode the party type code
    * @param taxNumberTypeCode the code for the tax number type
    * @return <b>true</b> if the code is a valid code for a tax number type or <b>false</b> otherwise
    */
-  boolean isValidTaxNumberType(String partyTypeCode, String taxNumberTypeCode)
+  boolean isValidTaxNumberType(UUID tenantId, String partyTypeCode, String taxNumberTypeCode)
       throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a time to contact.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param timeToContactCode the code for the time to contact
    * @return <b>true</b> if the code is a valid code for a time to contact or <b>false</b> otherwise
    */
-  boolean isValidTimeToContact(String timeToContactCode) throws ServiceUnavailableException;
+  boolean isValidTimeToContact(UUID tenantId, String timeToContactCode)
+      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a title.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param titleCode the code for the title
    * @return <b>true</b> if the code is a valid code for a title or <b>false</b> otherwise
    */
-  boolean isValidTitle(String titleCode) throws ServiceUnavailableException;
+  boolean isValidTitle(UUID tenantId, String titleCode) throws ServiceUnavailableException;
 }

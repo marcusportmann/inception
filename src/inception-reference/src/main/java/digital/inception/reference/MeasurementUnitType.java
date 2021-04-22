@@ -97,11 +97,10 @@ public class MeasurementUnitType implements Serializable {
   private String name;
 
   /** The sort index for the measurement unit type. */
-  @Schema(description = "The sort index for the measurement unit type", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
-  @NotNull
-  @Column(name = "sort_index", nullable = false)
+  @Schema(description = "The sort index for the measurement unit type")
+  @JsonProperty
+  @XmlElement(name = "SortIndex")
+  @Column(name = "sort_index")
   private Integer sortIndex;
 
   /** Constructs a new <b>MeasurementUnitType</b>. */

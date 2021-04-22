@@ -16,6 +16,7 @@
 
 package digital.inception.reference;
 
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 import javax.jws.WebMethod;
@@ -23,7 +24,6 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
-import org.springframework.util.StringUtils;
 
 /**
  * The <b>ReferenceWebService</b> class.
@@ -51,100 +51,100 @@ public class ReferenceWebService {
   }
 
   /**
-   * Retrieve the countries.
+   * Retrieve the country reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the countries for or
-   *     <b>null</b> to retrieve the countries for all locales
-   * @return the countries
+   * @param localeId the Unicode locale identifier for the locale to retrieve the country reference
+   *     data for
+   * @return the country reference data
    */
   @WebMethod(operationName = "GetCountries")
-  public List<Country> getCountries(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return referenceService.getCountries(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+  public List<Country> getCountries(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getCountries(localeId);
   }
 
   /**
-   * Retrieve the languages.
+   * Retrieve the language reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the languages for or
-   *     <b>null</b> to retrieve the languages for all locales
-   * @return the languages
+   * @param localeId the Unicode locale identifier for the locale to retrieve the language reference
+   *     data for
+   * @return the language reference data
    */
   @WebMethod(operationName = "GetLanguages")
-  public List<Language> getLanguages(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return referenceService.getLanguages(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+  public List<Language> getLanguages(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getLanguages(localeId);
   }
 
   /**
-   * Retrieve the measurement systems.
+   * Retrieve the measurement system reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
-   *     systems for or <b>null</b> to retrieve the measurement systems for all locales
-   * @return the measurement systems
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement system
+   *     reference data for
+   * @return the measurement system reference data
    */
   @WebMethod(operationName = "GetMeasurementSystems")
   public List<MeasurementSystem> getMeasurementSystems(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return referenceService.getMeasurementSystems(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getMeasurementSystems(localeId);
   }
 
   /**
-   * Retrieve the measurement unit types.
+   * Retrieve the measurement unit type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
-   *     systems for or <b>null</b> to retrieve the measurement unit types for all locales
-   * @return the measurement unit types
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
+   *     type reference data for
+   * @return the measurement unit type reference data
    */
   @WebMethod(operationName = "GetMeasurementUnitTypes")
   public List<MeasurementUnitType> getMeasurementUnitTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return referenceService.getMeasurementUnitTypes(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getMeasurementUnitTypes(localeId);
   }
 
   /**
-   * Retrieve the measurement units.
+   * Retrieve the measurement unit reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
-   *     systems for or <b>null</b> to retrieve the measurement units for all locales
-   * @return the measurement units
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
+   *     reference data for
+   * @return the measurement unit reference data
    */
   @WebMethod(operationName = "GetMeasurementUnits")
   public List<MeasurementUnit> getMeasurementUnits(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return referenceService.getMeasurementUnits(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getMeasurementUnits(localeId);
   }
 
   /**
-   * Retrieve the regions.
+   * Retrieve the region reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the regions for or
-   *     <b>null</b> to retrieve the regions for all locales
-   * @return the regions
+   * @param localeId the Unicode locale identifier for the locale to retrieve the region reference
+   *     data for
+   * @return the region reference data
    */
   @WebMethod(operationName = "GetRegions")
-  public List<Region> getRegions(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return referenceService.getRegions(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+  public List<Region> getRegions(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getRegions(localeId);
   }
 
   /**
-   * Retrieve the time zones.
+   * Retrieve the time zone reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the time zones for or
-   *     <b>null</b> to retrieve the time zones for all locales
-   * @return the time zones
+   * @param localeId the Unicode locale identifier for the locale to retrieve the time zone
+   *     reference data for
+   * @return the time zone reference data
    */
   @WebMethod(operationName = "GetTimeZones")
-  public List<TimeZone> getTimeZones(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return referenceService.getTimeZones(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+  public List<TimeZone> getTimeZones(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getTimeZones(localeId);
   }
 }

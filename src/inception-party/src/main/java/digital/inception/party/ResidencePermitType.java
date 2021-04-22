@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -45,12 +46,28 @@ import javax.xml.bind.annotation.XmlType;
     description =
         "A type of official document giving a foreign national authorization to reside in a country")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "countryOfIssue"})
+@JsonPropertyOrder({
+  "code",
+  "localeId",
+  "tenantId",
+  "sortIndex",
+  "name",
+  "description",
+  "countryOfIssue"
+})
 @XmlRootElement(name = "ResidencePermitType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "ResidencePermitType",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "sortIndex", "name", "description", "countryOfIssue"})
+    propOrder = {
+      "code",
+      "localeId",
+      "tenantId",
+      "sortIndex",
+      "name",
+      "description",
+      "countryOfIssue"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "residence_permit_types")
@@ -118,6 +135,18 @@ public class ResidencePermitType implements Serializable {
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
+
+  /**
+   * The Universally Unique Identifier (UUID) for the tenant the residence permit type is specific
+   * to.
+   */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the residence permit type is specific to")
+  @JsonProperty
+  @XmlElement(name = "TenantId")
+  @Column(name = "tenant_id")
+  private UUID tenantId;
 
   /** Constructs a new <b>ResidencePermitType</b>. */
   public ResidencePermitType() {}
@@ -202,6 +231,17 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the residence permit type is
+   * specific to.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the residence permit type is
+   *     specific to
+   */
+  public UUID getTenantId() {
+    return tenantId;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -264,5 +304,16 @@ public class ResidencePermitType implements Serializable {
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the tenant the residence permit type is
+   * specific to.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residence permit
+   *     type is specific to
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 }

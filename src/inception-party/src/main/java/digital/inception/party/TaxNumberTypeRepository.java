@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>TaxNumberTypeRepository</b> interface declares the repository for the <b>
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface TaxNumberTypeRepository extends JpaRepository<TaxNumberType, TaxNumberTypeId> {
 
-  List<TaxNumberType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select tnt from TaxNumberType tnt order by tnt.localeId, -tnt.sortIndex DESC, tnt.name")
+  List<TaxNumberType> findAll();
+
+  @Query(
+      "select tnt from TaxNumberType tnt where upper(tnt.localeId) = upper(:localeId) order by tnt.localeId, -tnt.sortIndex DESC, tnt.name")
+  List<TaxNumberType> findByLocaleIdIgnoreCase(String localeId);
 }

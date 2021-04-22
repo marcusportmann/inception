@@ -23,6 +23,7 @@ import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
 import digital.inception.core.sorting.SortDirection;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -121,19 +122,25 @@ public class PartyService implements IPartyService {
   /**
    * Create the new organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organization the organization
    * @return the organization
    */
   @Override
   @Transactional
   @CachePut(cacheNames = "organizations", key = "#organization.id")
-  public Organization createOrganization(Organization organization)
+  public Organization createOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, ServiceUnavailableException {
     if (organization == null) {
       throw new InvalidArgumentException("organization");
     }
 
-    Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
+    if (!Objects.equals(tenantId, organization.getTenantId())) {
+      throw new InvalidArgumentException("organization.tenantId");
+    }
+
+    Set<ConstraintViolation<Organization>> constraintViolations =
+        validateOrganization(tenantId, organization);
 
     if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException(
@@ -160,25 +167,35 @@ public class PartyService implements IPartyService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to create the organization (" + organization.getId() + ")", e);
+          "Failed to create the organization ("
+              + organization.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
   /**
    * Create the new person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param person the person
    */
   @Override
   @Transactional
   @CachePut(cacheNames = "persons", key = "#person.id")
-  public Person createPerson(Person person)
+  public Person createPerson(UUID tenantId, Person person)
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException {
     if (person == null) {
       throw new InvalidArgumentException("person");
     }
 
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    if (!Objects.equals(tenantId, person.getTenantId())) {
+      throw new InvalidArgumentException("person.tenantId");
+    }
+
+    Set<ConstraintViolation<Person>> constraintViolations = validatePerson(tenantId, person);
 
     if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException(
@@ -205,41 +222,49 @@ public class PartyService implements IPartyService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to create the person (" + person.getId() + ")", e);
+          "Failed to create the person (" + person.getId() + ") for the tenant (" + tenantId + ")",
+          e);
     }
   }
 
   /**
    * Delete the organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organizationId the Universally Unique Identifier (UUID) for the organization
    */
   @Override
   @Transactional
   @CacheEvict(cacheNames = "organizations", key = "#organizationId")
-  public void deleteOrganization(UUID organizationId)
+  public void deleteOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
     if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
 
     try {
-      if (!organizationRepository.existsById(organizationId)) {
-        throw new OrganizationNotFoundException(organizationId);
+      if (!organizationRepository.existsByTenantIdAndId(tenantId, organizationId)) {
+        throw new OrganizationNotFoundException(tenantId, organizationId);
       }
 
-      organizationRepository.deleteById(organizationId);
+      organizationRepository.deleteByTenantIdAndId(tenantId, organizationId);
     } catch (OrganizationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to delete the organization (" + organizationId + ")", e);
+          "Failed to delete the organization ("
+              + organizationId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
   /**
    * Delete the party.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyId the Universally Unique Identifier (UUID) for the party
    */
   @Override
@@ -247,79 +272,89 @@ public class PartyService implements IPartyService {
   @CacheEvict(
       cacheNames = {"organizations", "persons"},
       key = "#partyId")
-  public void deleteParty(UUID partyId)
+  public void deleteParty(UUID tenantId, UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
     if (partyId == null) {
       throw new InvalidArgumentException("partyId");
     }
 
     try {
-      if (!partyRepository.existsById(partyId)) {
-        throw new PartyNotFoundException(partyId);
+      if (!partyRepository.existsByTenantIdAndId(tenantId, partyId)) {
+        throw new PartyNotFoundException(tenantId, partyId);
       }
 
-      partyRepository.deleteById(partyId);
+      partyRepository.deleteByTenantIdAndId(tenantId, partyId);
     } catch (PartyNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to delete the party (" + partyId + ")", e);
+      throw new ServiceUnavailableException(
+          "Failed to delete the party (" + partyId + ") for the tenant (" + tenantId + ")", e);
     }
   }
 
   /**
    * Delete the person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param personId the Universally Unique Identifier (UUID) for the person
    */
   @Override
   @Transactional
   @CacheEvict(cacheNames = "persons", key = "#personId")
-  public void deletePerson(UUID personId)
+  public void deletePerson(UUID tenantId, UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (personId == null) {
       throw new InvalidArgumentException("personId");
     }
 
     try {
-      if (!personRepository.existsById(personId)) {
-        throw new PersonNotFoundException(personId);
+      if (!personRepository.existsByTenantIdAndId(tenantId, personId)) {
+        throw new PersonNotFoundException(tenantId, personId);
       }
 
-      personRepository.deleteById(personId);
+      personRepository.deleteByTenantIdAndId(tenantId, personId);
     } catch (PersonNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to delete the person (" + personId + ")", e);
+      throw new ServiceUnavailableException(
+          "Failed to delete the person (" + personId + ") for the tenant (" + tenantId + ")", e);
     }
   }
 
   /**
    * Retrieve the organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organizationId the Universally Unique Identifier (UUID) for the organization
    * @return the organization
    */
   @Override
   @Cacheable(cacheNames = "organizations", key = "#organizationId")
-  public Organization getOrganization(UUID organizationId)
+  public Organization getOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
     if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
 
     try {
-      Optional<Organization> organizationOptional = organizationRepository.findById(organizationId);
+      Optional<Organization> organizationOptional =
+          organizationRepository.findByTenantIdAndId(tenantId, organizationId);
 
       if (organizationOptional.isPresent()) {
         return organizationOptional.get();
       } else {
-        throw new OrganizationNotFoundException(organizationId);
+        throw new OrganizationNotFoundException(tenantId, organizationId);
       }
     } catch (OrganizationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the organization (" + organizationId + ")", e);
+          "Failed to retrieve the organization ("
+              + organizationId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -403,7 +438,8 @@ public class PartyService implements IPartyService {
           pageIndex,
           pageSize);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the filtered organizations", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered organizations for the tenant (" + tenantId + ")", e);
     }
   }
 
@@ -461,64 +497,69 @@ public class PartyService implements IPartyService {
           pageIndex,
           pageSize);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the filtered parties", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered parties for the tenant (" + tenantId + ")", e);
     }
   }
 
   /**
    * Retrieve the party.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyId the Universally Unique Identifier (UUID) for the party
    * @return the party
    */
   @Override
-  public Party getParty(UUID partyId)
+  public Party getParty(UUID tenantId, UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
     if (partyId == null) {
       throw new InvalidArgumentException("partyId");
     }
 
     try {
-      Optional<Party> partyOptional = partyRepository.findById(partyId);
+      Optional<Party> partyOptional = partyRepository.findByTenantIdAndId(tenantId, partyId);
 
       if (partyOptional.isPresent()) {
         return partyOptional.get();
       } else {
-        throw new PartyNotFoundException(partyId);
+        throw new PartyNotFoundException(tenantId, partyId);
       }
     } catch (PartyNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the party (" + partyId + ")", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the party (" + partyId + ") for the tenant (" + tenantId + ")", e);
     }
   }
 
   /**
    * Retrieve the person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param personId the Universally Unique Identifier (UUID) for the person
    * @return the person
    */
   @Override
   @Cacheable(cacheNames = "persons", key = "#personId")
-  public Person getPerson(UUID personId)
+  public Person getPerson(UUID tenantId, UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (personId == null) {
       throw new InvalidArgumentException("personId");
     }
 
     try {
-      Optional<Person> personOptional = personRepository.findById(personId);
+      Optional<Person> personOptional = personRepository.findByTenantIdAndId(tenantId, personId);
 
       if (personOptional.isPresent()) {
         return personOptional.get();
       } else {
-        throw new PersonNotFoundException(personId);
+        throw new PersonNotFoundException(tenantId, personId);
       }
     } catch (PersonNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the person (" + personId + ")", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the person (" + personId + ") for the tenant (" + tenantId + ")", e);
     }
   }
 
@@ -602,13 +643,15 @@ public class PartyService implements IPartyService {
           pageIndex,
           pageSize);
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the filtered persons", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the filtered persons for the tenant (" + tenantId + ")", e);
     }
   }
 
   /**
    * Retrieve the snapshots for the party.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyId the Universally Unique Identifier (UUID) for the party
    * @param from the optional date to retrieve the snapshots from
    * @param to the optional date to retrieve the snapshots to
@@ -620,13 +663,14 @@ public class PartyService implements IPartyService {
   @Override
   @Transactional
   public Snapshots getSnapshots(
+      UUID tenantId,
       UUID partyId,
       LocalDate from,
       LocalDate to,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
     }
@@ -640,6 +684,12 @@ public class PartyService implements IPartyService {
     }
 
     try {
+      Optional<UUID> partyTenantId = self.getTenantIdForParty(partyId);
+
+      if (partyTenantId.isEmpty() || (!Objects.equals(tenantId, partyTenantId.get()))) {
+        throw new PartyNotFoundException(tenantId, partyId);
+      }
+
       PageRequest pageRequest;
 
       if (pageIndex == null) {
@@ -678,8 +728,16 @@ public class PartyService implements IPartyService {
           sortDirection,
           pageIndex,
           pageSize);
+    } catch (PartyNotFoundException e) {
+      throw e;
     } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the snapshots", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the snapshots for the party ("
+              + partyId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -687,25 +745,19 @@ public class PartyService implements IPartyService {
    * Retrieve the Universally Unique Identifier (UUID) for the tenant the party is associated with.
    *
    * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @return the Universally Unique Identifier (UUID) for the tenant the party is associated with
+   * @return an Optional containing the Universally Unique Identifier (UUID) for the tenant the
+   *     party is associated with or an empty Optional if the party could not be found
    */
   @Override
-  public UUID getTenantIdForParty(UUID partyId)
-      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+  @Cacheable(cacheNames = "partyTenantIds", key = "#partyId")
+  public Optional<UUID> getTenantIdForParty(UUID partyId)
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (partyId == null) {
       throw new InvalidArgumentException("partyId");
     }
 
     try {
-      Optional<UUID> tenantIdOptional = partyRepository.getTenantIdByPartyId(partyId);
-
-      if (tenantIdOptional.isPresent()) {
-        return tenantIdOptional.get();
-      } else {
-        throw new PartyNotFoundException(partyId);
-      }
-    } catch (PartyNotFoundException e) {
-      throw e;
+      return partyRepository.getTenantIdByPartyId(partyId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the tenant ID for the party (" + partyId + ")", e);
@@ -715,19 +767,21 @@ public class PartyService implements IPartyService {
   /**
    * Update the organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organization the organization
    * @return the organization
    */
   @Override
   @Transactional
   @CachePut(cacheNames = "organizations", key = "#organization.id")
-  public Organization updateOrganization(Organization organization)
+  public Organization updateOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
     if (organization == null) {
       throw new InvalidArgumentException("organization");
     }
 
-    Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
+    Set<ConstraintViolation<Organization>> constraintViolations =
+        validateOrganization(tenantId, organization);
 
     if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException(
@@ -735,8 +789,8 @@ public class PartyService implements IPartyService {
     }
 
     try {
-      if (!organizationRepository.existsById(organization.getId())) {
-        throw new OrganizationNotFoundException(organization.getId());
+      if (!organizationRepository.existsByTenantIdAndId(tenantId, organization.getId())) {
+        throw new OrganizationNotFoundException(tenantId, organization.getId());
       }
 
       // Serialize the organization object as JSON
@@ -754,26 +808,32 @@ public class PartyService implements IPartyService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to update the organization (" + organization.getId() + ")", e);
+          "Failed to update the organization ("
+              + organization.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
   /**
    * Update the person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param person the person
    * @return the person
    */
   @Override
   @Transactional
   @CachePut(cacheNames = "persons", key = "#person.id")
-  public Person updatePerson(Person person)
+  public Person updatePerson(UUID tenantId, Person person)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (person == null) {
       throw new InvalidArgumentException("person");
     }
 
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    Set<ConstraintViolation<Person>> constraintViolations = validatePerson(tenantId, person);
 
     if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException(
@@ -781,8 +841,8 @@ public class PartyService implements IPartyService {
     }
 
     try {
-      if (!personRepository.existsById(person.getId())) {
-        throw new PersonNotFoundException(person.getId());
+      if (!personRepository.existsByTenantIdAndId(tenantId, person.getId())) {
+        throw new PersonNotFoundException(tenantId, person.getId());
       }
 
       // Serialize the person object as JSON
@@ -800,52 +860,45 @@ public class PartyService implements IPartyService {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to update the person (" + person.getId() + ")", e);
+          "Failed to update the person (" + person.getId() + ") for the tenant (" + tenantId + ")",
+          e);
     }
   }
 
   /**
    * Validate the organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organization the organization
    * @return the constraint violations for the organization
    */
   @Override
-  public Set<ConstraintViolation<Organization>> validateOrganization(Organization organization) {
+  public Set<ConstraintViolation<Organization>> validateOrganization(
+      UUID tenantId, Organization organization) {
     return validator.validate(organization);
   }
 
   /**
    * Validate the party.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param party the party
    * @return the constraint violations for the party
    */
   @Override
-  public Set<ConstraintViolation<Party>> validateParty(Party party) {
+  public Set<ConstraintViolation<Party>> validateParty(UUID tenantId, Party party) {
     return validator.validate(party);
   }
 
   /**
    * Validate the person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param person the person
    * @return the constraint violations for the person
    */
   @Override
-  public Set<ConstraintViolation<Person>> validatePerson(Person person) {
+  public Set<ConstraintViolation<Person>> validatePerson(UUID tenantId, Person person) {
     return validator.validate(person);
-  }
-
-  /**
-   * Validate the physical address.
-   *
-   * @param physicalAddress the physical address
-   * @return the constraint violations for the physical address
-   */
-  @Override
-  public Set<ConstraintViolation<PhysicalAddress>> validatePhysicalAddress(
-      PhysicalAddress physicalAddress) {
-    return validator.validate(physicalAddress);
   }
 }

@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>TitleRepository</b> interface declares the repository for the <b>Title</b> domain type.
@@ -27,5 +27,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface TitleRepository extends JpaRepository<Title, TitleId> {
 
-  List<Title> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query(
+      "select t from Title t where upper(t.localeId) = upper(:localeId) order by -t.sortIndex DESC, t.name")
+  List<Title> findByLocaleIdIgnoreCase(String localeId);
+
+  @Query("select t from Title t order by -t.sortIndex DESC, t.name")
+  List<Title> findall();
 }

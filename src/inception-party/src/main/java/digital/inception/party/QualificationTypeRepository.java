@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>QualificationTypeRepository</b> interface declares the repository for the <b>
@@ -29,5 +29,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface QualificationTypeRepository
     extends JpaRepository<QualificationType, QualificationTypeId> {
 
-  List<QualificationType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select qt from QualificationType qt order by qt.localeId, -qt.sortIndex DESC, qt.name")
+  List<QualificationType> findAll();
+
+  @Query(
+      "select qt from QualificationType qt where upper(qt.localeId) = upper(:localeId) order by qt.localeId, -qt.sortIndex DESC, qt.name")
+  List<QualificationType> findByLocaleIdIgnoreCase(String localeId);
 }

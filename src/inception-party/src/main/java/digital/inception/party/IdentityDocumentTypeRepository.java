@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>IdentityDocumentTypeRepository</b> interface declares the repository for the <b>
@@ -29,5 +29,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface IdentityDocumentTypeRepository
     extends JpaRepository<IdentityDocumentType, IdentityDocumentTypeId> {
 
-  List<IdentityDocumentType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query(
+      "select idt from IdentityDocumentType idt order by idt.localeId, -idt.sortIndex DESC, idt.name")
+  List<IdentityDocumentType> findAll();
+
+  @Query(
+      "select idt from IdentityDocumentType idt where upper(idt.localeId) = upper(:localeId) order by idt.localeId, -idt.sortIndex DESC, idt.name")
+  List<IdentityDocumentType> findByLocaleIdIgnoreCase(String localeId);
 }

@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>MarriageTypeRepository</b> interface declares the repository for the <b>MarriageType</b>
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MarriageTypeRepository extends JpaRepository<MarriageType, MarriageTypeId> {
 
-  List<MarriageType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select mt from MarriageType mt order by mt.localeId, -mt.sortIndex DESC, mt.name")
+  List<MarriageType> findAll();
+
+  @Query(
+      "select mt from MarriageType mt where upper(mt.localeId) = upper(:localeId) order by mt.localeId, -mt.sortIndex DESC, mt.name")
+  List<MarriageType> findByLocaleIdIgnoreCase(String localeId);
 }

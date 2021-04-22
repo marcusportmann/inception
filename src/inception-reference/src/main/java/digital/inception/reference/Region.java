@@ -109,11 +109,10 @@ public class Region implements Serializable {
   private String name;
 
   /** The sort index for the region. */
-  @Schema(description = "The sort index for the region", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
-  @NotNull
-  @Column(name = "sort_index", nullable = false)
+  @Schema(description = "The sort index for the region")
+  @JsonProperty
+  @XmlElement(name = "SortIndex")
+  @Column(name = "sort_index")
   private Integer sortIndex;
 
   /** Constructs a new <b>Region</b>. */

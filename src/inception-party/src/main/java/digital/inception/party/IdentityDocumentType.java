@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -50,6 +51,7 @@ import org.springframework.util.StringUtils;
 @JsonPropertyOrder({
   "code",
   "localeId",
+  "tenantId",
   "sortIndex",
   "name",
   "description",
@@ -63,6 +65,7 @@ import org.springframework.util.StringUtils;
     propOrder = {
       "code",
       "localeId",
+      "tenantId",
       "sortIndex",
       "name",
       "description",
@@ -145,6 +148,18 @@ public class IdentityDocumentType implements Serializable {
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
+
+  /**
+   * The Universally Unique Identifier (UUID) for the tenant the identity document type is specific
+   * to.
+   */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the identity document type is specific to")
+  @JsonProperty
+  @XmlElement(name = "TenantId")
+  @Column(name = "tenant_id")
+  private UUID tenantId;
 
   /** Constructs a new <b>IdentityDocumentType</b>. */
   public IdentityDocumentType() {}
@@ -243,6 +258,17 @@ public class IdentityDocumentType implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the identity document type is
+   * specific to.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the identity document type is
+   *     specific to
+   */
+  public UUID getTenantId() {
+    return tenantId;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -335,5 +361,16 @@ public class IdentityDocumentType implements Serializable {
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the tenant the identity document type is
+   * specific to.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the identity document
+   *     type is specific to
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 }

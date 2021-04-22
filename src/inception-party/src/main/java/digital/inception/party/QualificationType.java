@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -55,12 +56,28 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A qualification type")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "fieldOfStudy"})
+@JsonPropertyOrder({
+  "code",
+  "localeId",
+  "tenantId",
+  "sortIndex",
+  "name",
+  "description",
+  "fieldOfStudy"
+})
 @XmlRootElement(name = "QualificationType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "QualificationType",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "sortIndex", "name", "description", "fieldOfStudy"})
+    propOrder = {
+      "code",
+      "localeId",
+      "tenantId",
+      "sortIndex",
+      "name",
+      "description",
+      "fieldOfStudy"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "qualification_types")
@@ -122,6 +139,17 @@ public class QualificationType implements Serializable {
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
+
+  /**
+   * The Universally Unique Identifier (UUID) for the tenant the qualification type is specific to.
+   */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the qualification type is specific to")
+  @JsonProperty
+  @XmlElement(name = "TenantId")
+  @Column(name = "tenant_id")
+  private UUID tenantId;
 
   /** Constructs a new <b>QualificationType</b>. */
   public QualificationType() {}
@@ -206,6 +234,17 @@ public class QualificationType implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the qualification type is
+   * specific to.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the qualification type is
+   *     specific to
+   */
+  public UUID getTenantId() {
+    return tenantId;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -267,5 +306,16 @@ public class QualificationType implements Serializable {
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the tenant the qualification type is specific
+   * to.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the qualification type
+   *     is specific to
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 }

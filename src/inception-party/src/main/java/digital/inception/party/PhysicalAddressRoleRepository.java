@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>PhysicalAddressRoleRepository</b> interface declares the repository for the
@@ -29,5 +29,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PhysicalAddressRoleRepository
     extends JpaRepository<PhysicalAddressRole, PhysicalAddressRoleId> {
 
-  List<PhysicalAddressRole> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query(
+      "select par from PhysicalAddressRole par order by par.localeId, -par.sortIndex DESC, par.name")
+  List<PhysicalAddressRole> findAll();
+
+  @Query(
+      "select par from PhysicalAddressRole par where upper(par.localeId) = upper(:localeId) order by par.localeId, -par.sortIndex DESC, par.name")
+  List<PhysicalAddressRole> findByLocaleIdIgnoreCase(String localeId);
 }

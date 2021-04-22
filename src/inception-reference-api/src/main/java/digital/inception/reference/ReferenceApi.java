@@ -18,6 +18,7 @@ package digital.inception.reference;
 
 import digital.inception.api.ProblemDetails;
 import digital.inception.api.SecureApi;
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,7 +31,6 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,16 +67,25 @@ public class ReferenceApi extends SecureApi {
   }
 
   /**
-   * Retrieve the countries.
+   * Retrieve the country reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the countries for or
-   *     <b>null</b> to retrieve the countries for all locales
-   * @return the countries
+   * @param localeId the Unicode locale identifier for the locale to retrieve the country reference
+   *     data for
+   * @return the country reference data
    */
-  @Operation(summary = "Retrieve the countries", description = "Retrieve the countries")
+  @Operation(
+      summary = "Retrieve the country reference data for a specific locale",
+      description = "Retrieve the country reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -93,26 +102,37 @@ public class ReferenceApi extends SecureApi {
       @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the countries for",
-              example = ReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the country reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return referenceService.getCountries(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getCountries(localeId);
   }
 
   /**
-   * Retrieve the languages.
+   * Retrieve the language reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the languages for or
-   *     <b>null</b> to retrieve the languages for all locales
-   * @return the languages
+   * @param localeId the Unicode locale identifier for the locale to retrieve the language reference
+   *     data for
+   * @return the language reference data
    */
-  @Operation(summary = "Retrieve the languages", description = "Retrieve the languages")
+  @Operation(
+      summary = "Retrieve the language reference data for a specific locale",
+      description = "Retrieve the language reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -129,28 +149,37 @@ public class ReferenceApi extends SecureApi {
       @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the languages for",
-              example = ReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the language reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return referenceService.getLanguages(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getLanguages(localeId);
   }
 
   /**
-   * Retrieve the measurement systems.
+   * Retrieve the measurement system reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
-   *     systems for or <b>null</b> to retrieve the measurement systems for all locales
-   * @return the measurement systems
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement system
+   *     reference data for
+   * @return the measurement system reference data
    */
   @Operation(
-      summary = "Retrieve the measurement systems",
-      description = "Retrieve the measurement systems")
+      summary = "Retrieve the measurement system reference data for a specific locale",
+      description = "Retrieve the measurement system reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -170,28 +199,37 @@ public class ReferenceApi extends SecureApi {
       @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the measurement systems for",
-              example = ReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the measurement system reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return referenceService.getMeasurementSystems(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getMeasurementSystems(localeId);
   }
 
   /**
-   * Retrieve the measurement unit types.
+   * Retrieve the measurement unit type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
-   *     systems for or <b>null</b> to retrieve the measurement unit types for all locales
-   * @return the measurement unit types
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
+   *     type reference data for
+   * @return the measurement unit type reference data
    */
   @Operation(
-      summary = "Retrieve the measurement unit types",
-      description = "Retrieve the measurement unit types")
+      summary = "Retrieve the measurement unit type reference data for a specific locale",
+      description = "Retrieve the measurement unit type reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -211,28 +249,37 @@ public class ReferenceApi extends SecureApi {
       @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the measurement unit types for",
-              example = ReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the measurement unit type reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return referenceService.getMeasurementUnitTypes(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getMeasurementUnitTypes(localeId);
   }
 
   /**
-   * Retrieve the measurement units.
+   * Retrieve the measurement unit reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement
-   *     systems for or <b>null</b> to retrieve the measurement units for all locales
-   * @return the measurement units
+   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
+   *     reference data
+   * @return the measurement unit reference data
    */
   @Operation(
-      summary = "Retrieve the measurement units",
-      description = "Retrieve the measurement units")
+      summary = "Retrieve the measurement unit reference data for a specific locale",
+      description = "Retrieve the measurement unit reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -252,26 +299,37 @@ public class ReferenceApi extends SecureApi {
       @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the measurement units for",
-              example = ReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the measurement unit reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return referenceService.getMeasurementUnits(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getMeasurementUnits(localeId);
   }
 
   /**
-   * Retrieve the regions.
+   * Retrieve the region reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the regions for or
-   *     <b>null</b> to retrieve the regions for all locales
-   * @return the regions
+   * @param localeId the Unicode locale identifier for the locale to retrieve the region reference
+   *     data for
+   * @return the region reference data
    */
-  @Operation(summary = "Retrieve the regions", description = "Retrieve the regions")
+  @Operation(
+      summary = "Retrieve the region reference data for a specific locale",
+      description = "Retrieve the region reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -288,29 +346,37 @@ public class ReferenceApi extends SecureApi {
       @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the regions for",
-              example = ReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the region reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return referenceService.getRegions(
-        StringUtils.hasText(
-                StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID)
-            ? localeId
-            : ReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getRegions(localeId);
   }
 
   /**
-   * Retrieve the time zones.
+   * Retrieve the time zone reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the time zone for or
-   *     <b>null</b> to retrieve the time zones for all locales
-   * @return the time zones
+   * @param localeId the Unicode locale identifier for the locale to retrieve the time zone
+   *     reference data for
+   * @return the time zone reference data
    */
-  @Operation(summary = "Retrieve the time zones", description = "Retrieve the time zones")
+  @Operation(
+      summary = "Retrieve the time zone reference data for a specific locale",
+      description = "Retrieve the time zone reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -327,12 +393,14 @@ public class ReferenceApi extends SecureApi {
       @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier for the locale to retrieve the time zones for",
-              example = ReferenceService.DEFAULT_LOCALE_ID)
-          @RequestParam(value = "localeId", required = false)
+                  "The Unicode locale identifier for the locale to retrieve the time zone reference data for",
+              example = "en-US")
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
-      throws ServiceUnavailableException {
-    return referenceService.getTimeZones(
-        StringUtils.hasText(localeId) ? localeId : ReferenceService.DEFAULT_LOCALE_ID);
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return referenceService.getTimeZones(localeId);
   }
 }

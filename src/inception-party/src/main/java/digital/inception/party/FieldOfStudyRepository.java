@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>FieldOfStudyRepository</b> interface declares the repository for the <b>FieldOfStudy</b>
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface FieldOfStudyRepository extends JpaRepository<FieldOfStudy, FieldOfStudyId> {
 
-  List<FieldOfStudy> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select fos from FieldOfStudy fos order by fos.localeId, -fos.sortIndex DESC, fos.name")
+  List<FieldOfStudy> findAll();
+
+  @Query(
+      "select fos from FieldOfStudy fos where upper(fos.localeId) = upper(:localeId) order by fos.localeId, -fos.sortIndex DESC, fos.name")
+  List<FieldOfStudy> findByLocaleIdIgnoreCase(String localeId);
 }

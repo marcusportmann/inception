@@ -45,9 +45,8 @@ export class SessionInterceptor implements HttpInterceptor {
       return this.sessionService.session$.pipe(first(), flatMap(session => {
         if (session) {
           httpRequest = httpRequest.clone({
-            setHeaders: {
-              Authorization: `Bearer ${session.accessToken}`
-            }
+            headers: httpRequest.headers.set('Authorization', `Bearer ${session.accessToken}`)
+            .set('X-TENANT-ID', (!!session.tenantId) ? session.tenantId : '00000000-0000-0000-0000-000000000000')
           });
         }
 

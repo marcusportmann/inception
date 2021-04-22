@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,13 @@ import org.springframework.data.repository.query.Param;
  */
 public interface PersonRepository extends JpaRepository<Person, UUID> {
 
+  void deleteByTenantIdAndId(UUID tenantId, UUID id);
+
+  boolean existsByTenantIdAndId(UUID tenantId, UUID id);
+
   Page<Person> findByTenantId(UUID tenantId, Pageable pageable);
+
+  Optional<Person> findByTenantIdAndId(UUID tenantId, UUID id);
 
   @Query("select p from Person p where (lower(p.name) like lower(:filter))")
   Page<Person> findFiltered(@Param("filter") String filter, Pageable pageable);

@@ -20,7 +20,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MeasurementUnitTypeId</b> class implements the ID class for the <b>MeasurementUnitType</b> class.
+ * The <b>MeasurementUnitTypeId</b> class implements the ID class for the <b>MeasurementUnitType</b>
+ * class.
  *
  * @author Marcus Portmann
  */

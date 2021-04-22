@@ -10,7 +10,8 @@ CREATE SCHEMA party;
 CREATE TABLE party.attribute_type_categories (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -25,6 +26,8 @@ COMMENT ON COLUMN party.attribute_type_categories.locale_id IS 'The Unicode loca
 
 COMMENT ON COLUMN party.attribute_type_categories.sort_index IS 'The sort index for the attribute type category';
 
+COMMENT ON COLUMN party.attribute_type_categories.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the attribute type category is specific to';
+
 COMMENT ON COLUMN party.attribute_type_categories.name IS 'The name of the attribute type category';
 
 COMMENT ON COLUMN party.attribute_type_categories.description IS 'The description for the attribute type category';
@@ -34,7 +37,8 @@ CREATE TABLE party.attribute_types (
   category    VARCHAR(30)  NOT NULL,
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
   party_types VARCHAR(310) NOT NULL,
@@ -68,7 +72,8 @@ COMMENT ON COLUMN party.attribute_types.unit_type IS 'The code for the measureme
 CREATE TABLE party.consent_types (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -90,11 +95,12 @@ COMMENT ON COLUMN party.consent_types.description IS 'The description for the co
 
 CREATE TABLE party.contact_mechanism_purposes (
   code                    VARCHAR(30)  NOT NULL,
-  contact_mechanism_types VARCHAR(310) NOT NULL,
   locale_id               VARCHAR(10)  NOT NULL,
-  sort_index              INTEGER      NOT NULL,
+  tenant_id               UUID,
+  sort_index              INTEGER,
   name                    VARCHAR(50)  NOT NULL,
   description             VARCHAR(200) NOT NULL DEFAULT '',
+  contact_mechanism_types VARCHAR(310) NOT NULL,
   party_types             VARCHAR(310) NOT NULL,
 
  PRIMARY KEY (code, locale_id)
@@ -104,8 +110,6 @@ CREATE INDEX contact_mechanism_purposes_locale_id_ix ON party.contact_mechanism_
 
 COMMENT ON COLUMN party.contact_mechanism_purposes.code IS 'The code for the contact mechanism purpose';
 
-COMMENT ON COLUMN party.contact_mechanism_purposes.contact_mechanism_types IS 'The comma-delimited list of codes for the contact mechanism types the contact mechanism purpose is associated with';
-
 COMMENT ON COLUMN party.contact_mechanism_purposes.locale_id IS 'The Unicode locale identifier for the contact mechanism purpose';
 
 COMMENT ON COLUMN party.contact_mechanism_purposes.sort_index IS 'The sort index for the contact mechanism purpose';
@@ -114,13 +118,16 @@ COMMENT ON COLUMN party.contact_mechanism_purposes.name IS 'The name of the cont
 
 COMMENT ON COLUMN party.contact_mechanism_purposes.description IS 'The description for the contact mechanism purpose';
 
+COMMENT ON COLUMN party.contact_mechanism_purposes.contact_mechanism_types IS 'The comma-delimited list of codes for the contact mechanism types the contact mechanism purpose is associated with';
+
 COMMENT ON COLUMN party.contact_mechanism_purposes.party_types IS 'The comma-delimited list of codes for the party types the contact mechanism purpose is associated with';
 
 
 CREATE TABLE party.contact_mechanism_types (
   code         VARCHAR(30)  NOT NULL,
   locale_id    VARCHAR(10)  NOT NULL,
-  sort_index   INTEGER      NOT NULL,
+  tenant_id    UUID,
+  sort_index   INTEGER,
   name         VARCHAR(50)  NOT NULL,
   plural       VARCHAR(50)  NOT NULL,
   description  VARCHAR(200) NOT NULL DEFAULT '',
@@ -147,7 +154,8 @@ CREATE TABLE party.contact_mechanism_roles (
   contact_mechanism_type VARCHAR(30)  NOT NULL,
   code                   VARCHAR(30)  NOT NULL,
   locale_id              VARCHAR(10)  NOT NULL,
-  sort_index             INTEGER      NOT NULL,
+  tenant_id              UUID,
+  sort_index             INTEGER,
   name                   VARCHAR(50)  NOT NULL,
   description            VARCHAR(200) NOT NULL DEFAULT '',
   party_types            VARCHAR(310) NOT NULL,
@@ -180,7 +188,8 @@ COMMENT ON COLUMN party.contact_mechanism_roles.party_types IS 'The comma-delimi
 CREATE TABLE party.employment_statuses (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -204,7 +213,8 @@ CREATE TABLE party.employment_types (
   employment_status VARCHAR(30)  NOT NULL,
   code              VARCHAR(30)  NOT NULL,
   locale_id         VARCHAR(10)  NOT NULL,
-  sort_index        INTEGER      NOT NULL,
+  tenant_id         UUID,
+  sort_index        INTEGER,
   name              VARCHAR(50)  NOT NULL,
   description       VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -232,7 +242,8 @@ COMMENT ON COLUMN party.employment_types.description IS 'The description for the
 CREATE TABLE party.fields_of_study (
   code           VARCHAR(50)  NOT NULL,
   locale_id      VARCHAR(10)  NOT NULL,
-  sort_index     INTEGER      NOT NULL,
+  tenant_id      UUID,
+  sort_index     INTEGER,
   name           VARCHAR(50)  NOT NULL,
   description    VARCHAR(200) NOT NULL DEFAULT '',
     
@@ -255,7 +266,8 @@ COMMENT ON COLUMN party.fields_of_study.description IS 'The description for the 
 CREATE TABLE party.genders (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10) NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -278,7 +290,8 @@ COMMENT ON COLUMN party.genders.description IS 'The description for the gender';
 CREATE TABLE party.identity_document_types (
   code             VARCHAR(30)  NOT NULL,
   locale_id        VARCHAR(10)  NOT NULL,
-  sort_index       INTEGER      NOT NULL,
+  tenant_id        UUID,
+  sort_index       INTEGER,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
   country_of_issue CHAR(2),
@@ -309,7 +322,8 @@ COMMENT ON COLUMN party.identity_document_types.party_types IS 'The comma-delimi
 CREATE TABLE party.lock_type_categories (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -333,7 +347,8 @@ CREATE TABLE party.lock_types (
   category    VARCHAR(30)  NOT NULL,
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
   party_types VARCHAR(310) NOT NULL,
@@ -364,7 +379,8 @@ COMMENT ON COLUMN party.lock_types.party_types IS 'The comma-delimited list of c
 CREATE TABLE party.marital_statuses (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -388,7 +404,8 @@ CREATE TABLE party.marriage_types (
   marital_status VARCHAR(30)  NOT NULL,
   code           VARCHAR(30)  NOT NULL,
   locale_id      VARCHAR(10)  NOT NULL,
-  sort_index     INTEGER      NOT NULL,
+  tenant_id      UUID,
+  sort_index     INTEGER,
   name           VARCHAR(50)  NOT NULL,
   description    VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -416,7 +433,8 @@ COMMENT ON COLUMN party.marriage_types.description IS 'The description for the m
 CREATE TABLE party.minor_types (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -439,7 +457,8 @@ COMMENT ON COLUMN party.minor_types.description IS 'The description for the mino
 CREATE TABLE party.next_of_kin_types (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -462,7 +481,8 @@ COMMENT ON COLUMN party.next_of_kin_types.description IS 'The description for th
 CREATE TABLE party.occupations (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -482,10 +502,89 @@ COMMENT ON COLUMN party.occupations.name IS 'The name of the occupation';
 COMMENT ON COLUMN party.occupations.description IS 'The description for the occupation';
 
 
+CREATE TABLE party.physical_address_types (
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  tenant_id    UUID,
+  sort_index   INTEGER,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX physical_address_types_locale_id_ix ON party.physical_address_types(locale_id);
+
+COMMENT ON COLUMN party.physical_address_types.code IS 'The code for the physical address type';
+
+COMMENT ON COLUMN party.physical_address_types.locale_id IS 'The Unicode locale identifier for the physical address type';
+
+COMMENT ON COLUMN party.physical_address_types.sort_index IS 'The sort index for the physical address type';
+
+COMMENT ON COLUMN party.physical_address_types.name IS 'The name of the physical address type';
+
+COMMENT ON COLUMN party.physical_address_types.description IS 'The description for the physical address type';
+
+
+CREATE TABLE party.physical_address_purposes (
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  tenant_id    UUID,
+  sort_index   INTEGER,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+  party_types  VARCHAR(310) NOT NULL,
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX physical_address_purposes_locale_id_ix ON party.physical_address_purposes(locale_id);
+
+COMMENT ON COLUMN party.physical_address_purposes.code IS 'The code for the physical address purpose';
+
+COMMENT ON COLUMN party.physical_address_purposes.locale_id IS 'The Unicode locale identifier for the physical address purpose';
+
+COMMENT ON COLUMN party.physical_address_purposes.sort_index IS 'The sort index for the physical address purpose';
+
+COMMENT ON COLUMN party.physical_address_purposes.name IS 'The name of the physical address purpose';
+
+COMMENT ON COLUMN party.physical_address_purposes.description IS 'The description for the physical address purpose';
+
+COMMENT ON COLUMN party.physical_address_purposes.party_types IS 'The comma-delimited list of codes for the party types the physical address purpose is associated with';
+
+
+CREATE TABLE party.physical_address_roles (
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  tenant_id    UUID,
+  sort_index   INTEGER,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+  party_types  VARCHAR(310) NOT NULL,
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX physical_address_roles_locale_id_ix ON party.physical_address_roles(locale_id);
+
+COMMENT ON COLUMN party.physical_address_roles.code IS 'The code for the physical address role';
+
+COMMENT ON COLUMN party.physical_address_roles.locale_id IS 'The Unicode locale identifier for the physical address role';
+
+COMMENT ON COLUMN party.physical_address_roles.sort_index IS 'The sort index for the physical address role';
+
+COMMENT ON COLUMN party.physical_address_roles.name IS 'The name of the physical address role';
+
+COMMENT ON COLUMN party.physical_address_roles.description IS 'The description for the physical address role';
+
+COMMENT ON COLUMN party.physical_address_roles.party_types IS 'The comma-delimited list of codes for the party types the physical address role is associated with';
+
+
 CREATE TABLE party.preference_type_categories (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -509,7 +608,8 @@ CREATE TABLE party.preference_types (
   category    VARCHAR(30)  NOT NULL,
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
   party_types VARCHAR(310) NOT NULL,
@@ -537,86 +637,12 @@ COMMENT ON COLUMN party.preference_types.description IS 'The description for the
 COMMENT ON COLUMN party.preference_types.party_types IS 'The comma-delimited list of codes for the party types the preference type is associated with';
 
 
-CREATE TABLE party.physical_address_types (
-  code         VARCHAR(30)  NOT NULL,
-  locale_id    VARCHAR(10)  NOT NULL,
-  sort_index   INTEGER      NOT NULL,
-  name         VARCHAR(50)  NOT NULL,
-  description  VARCHAR(200) NOT NULL DEFAULT '',
-
-  PRIMARY KEY (code, locale_id)
-);
-
-CREATE INDEX physical_address_types_locale_id_ix ON party.physical_address_types(locale_id);
-
-COMMENT ON COLUMN party.physical_address_types.code IS 'The code for the physical address type';
-
-COMMENT ON COLUMN party.physical_address_types.locale_id IS 'The Unicode locale identifier for the physical address type';
-
-COMMENT ON COLUMN party.physical_address_types.sort_index IS 'The sort index for the physical address type';
-
-COMMENT ON COLUMN party.physical_address_types.name IS 'The name of the physical address type';
-
-COMMENT ON COLUMN party.physical_address_types.description IS 'The description for the physical address type';
-
-
-CREATE TABLE party.physical_address_purposes (
-  code         VARCHAR(30)  NOT NULL,
-  locale_id    VARCHAR(10)  NOT NULL,
-  sort_index   INTEGER      NOT NULL,
-  name         VARCHAR(50)  NOT NULL,
-  description  VARCHAR(200) NOT NULL DEFAULT '',
-  party_types  VARCHAR(310) NOT NULL,
-
-  PRIMARY KEY (code, locale_id)
-);
-
-CREATE INDEX physical_address_purposes_locale_id_ix ON party.physical_address_purposes(locale_id);
-
-COMMENT ON COLUMN party.physical_address_purposes.code IS 'The code for the physical address purpose';
-
-COMMENT ON COLUMN party.physical_address_purposes.locale_id IS 'The Unicode locale identifier for the physical address purpose';
-
-COMMENT ON COLUMN party.physical_address_purposes.sort_index IS 'The sort index for the physical address purpose';
-
-COMMENT ON COLUMN party.physical_address_purposes.name IS 'The name of the physical address purpose';
-
-COMMENT ON COLUMN party.physical_address_purposes.description IS 'The description for the physical address purpose';
-
-COMMENT ON COLUMN party.physical_address_purposes.party_types IS 'The comma-delimited list of codes for the party types the physical address purpose is associated with';
-
-
-CREATE TABLE party.physical_address_roles (
-  code         VARCHAR(30)  NOT NULL,
-  locale_id    VARCHAR(10)  NOT NULL,
-  sort_index   INTEGER      NOT NULL,
-  name         VARCHAR(50)  NOT NULL,
-  description  VARCHAR(200) NOT NULL DEFAULT '',
-  party_types  VARCHAR(310) NOT NULL,
-
-  PRIMARY KEY (code, locale_id)
-);
-
-CREATE INDEX physical_address_roles_locale_id_ix ON party.physical_address_roles(locale_id);
-
-COMMENT ON COLUMN party.physical_address_roles.code IS 'The code for the physical address role';
-
-COMMENT ON COLUMN party.physical_address_roles.locale_id IS 'The Unicode locale identifier for the physical address role';
-
-COMMENT ON COLUMN party.physical_address_roles.sort_index IS 'The sort index for the physical address role';
-
-COMMENT ON COLUMN party.physical_address_roles.name IS 'The name of the physical address role';
-
-COMMENT ON COLUMN party.physical_address_roles.description IS 'The description for the physical address role';
-
-COMMENT ON COLUMN party.physical_address_roles.party_types IS 'The comma-delimited list of codes for the party types the physical address role is associated with';
-
-
 CREATE TABLE party.qualification_types (
   code           VARCHAR(30)  NOT NULL,
   field_of_study VARCHAR(50),
   locale_id      VARCHAR(10)  NOT NULL,
-  sort_index     INTEGER      NOT NULL,
+  tenant_id      UUID,
+  sort_index     INTEGER,
   name           VARCHAR(50)  NOT NULL,
   description    VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -642,7 +668,8 @@ COMMENT ON COLUMN party.qualification_types.description IS 'The description for 
 CREATE TABLE party.races (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -665,7 +692,8 @@ COMMENT ON COLUMN party.races.description IS 'The description for the race';
 CREATE TABLE party.residence_permit_types (
   code             VARCHAR(30)  NOT NULL,
   locale_id        VARCHAR(10)  NOT NULL,
-  sort_index       INTEGER      NOT NULL,
+  tenant_id        UUID,
+  sort_index       INTEGER,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
   country_of_issue CHAR(2)      NOT NULL,
@@ -693,7 +721,8 @@ COMMENT ON COLUMN party.residence_permit_types.country_of_issue IS 'The ISO 3166
 CREATE TABLE party.residency_statuses (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -716,7 +745,8 @@ COMMENT ON COLUMN party.residency_statuses.description IS 'The description for t
 CREATE TABLE party.residential_types (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -739,7 +769,8 @@ COMMENT ON COLUMN party.residential_types.description IS 'The description for th
 CREATE TABLE party.role_purposes (
   code         VARCHAR(30)  NOT NULL,
   locale_id    VARCHAR(10)  NOT NULL,
-  sort_index   INTEGER      NOT NULL,
+  tenant_id    UUID,
+  sort_index   INTEGER,
   name         VARCHAR(50)  NOT NULL,
   description  VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -762,7 +793,8 @@ COMMENT ON COLUMN party.role_purposes.description IS 'The description for the ro
 CREATE TABLE party.role_types (
   code         VARCHAR(30)  NOT NULL,
   locale_id    VARCHAR(10)  NOT NULL,
-  sort_index   INTEGER      NOT NULL,
+  tenant_id    UUID,
+  sort_index   INTEGER,
   name         VARCHAR(50)  NOT NULL,
   description  VARCHAR(200) NOT NULL DEFAULT '',
   party_types  VARCHAR(310) NOT NULL,
@@ -827,7 +859,8 @@ COMMENT ON COLUMN party.role_type_preference_type_constraints.value IS 'The valu
 CREATE TABLE party.relationship_types (
   code              VARCHAR(30)  NOT NULL,
   locale_id         VARCHAR(10)  NOT NULL,
-  sort_index        INTEGER      NOT NULL,
+  tenant_id         UUID,
+  sort_index        INTEGER,
   name              VARCHAR(50)  NOT NULL,
   description       VARCHAR(200) NOT NULL DEFAULT '',
   first_party_role  VARCHAR(30)  NOT NULL,
@@ -858,7 +891,8 @@ COMMENT ON COLUMN party.relationship_types.second_party_role IS 'The code for th
 CREATE TABLE party.segments (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
   party_types VARCHAR(310) NOT NULL,
@@ -884,7 +918,8 @@ COMMENT ON COLUMN party.segments.party_types IS 'The comma-delimited list of cod
 CREATE TABLE party.source_of_funds_types (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -907,7 +942,8 @@ COMMENT ON COLUMN party.source_of_funds_types.description IS 'The description fo
 CREATE TABLE party.source_of_wealth_types (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -930,7 +966,8 @@ COMMENT ON COLUMN party.source_of_wealth_types.description IS 'The description f
 CREATE TABLE party.status_type_categories (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -954,7 +991,8 @@ CREATE TABLE party.status_types (
   category    VARCHAR(30)  NOT NULL,
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
   party_types VARCHAR(310) NOT NULL,
@@ -985,7 +1023,8 @@ COMMENT ON COLUMN party.status_types.party_types IS 'The comma-delimited list of
 CREATE TABLE party.tax_number_types (
   code             VARCHAR(30)  NOT NULL,
   locale_id        VARCHAR(10)  NOT NULL,
-  sort_index       INTEGER      NOT NULL,
+  tenant_id        UUID,
+  sort_index       INTEGER,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
   country_of_issue CHAR(2)      NOT NULL,
@@ -1016,7 +1055,8 @@ COMMENT ON COLUMN party.tax_number_types.party_types IS 'The comma-delimited lis
 CREATE TABLE party.times_to_contact (
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -1039,7 +1079,8 @@ COMMENT ON COLUMN party.times_to_contact.description IS 'The description for the
 CREATE TABLE party.titles (
   code         VARCHAR(30)  NOT NULL,
   locale_id    VARCHAR(10)  NOT NULL,
-  sort_index   INTEGER      NOT NULL,
+  tenant_id    UUID,
+  sort_index   INTEGER,
   name         VARCHAR(50)  NOT NULL,
   abbreviation VARCHAR(20)  NOT NULL,
   description  VARCHAR(200) NOT NULL DEFAULT '',
@@ -1052,6 +1093,8 @@ CREATE INDEX titles_locale_id_ix ON party.titles(locale_id);
 COMMENT ON COLUMN party.titles.code IS 'The code for the title';
 
 COMMENT ON COLUMN party.titles.locale_id IS 'The Unicode locale identifier for the title';
+
+COMMENT ON COLUMN party.titles.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the title is specific to';
 
 COMMENT ON COLUMN party.titles.sort_index IS 'The sort index for the title';
 
@@ -1945,56 +1988,48 @@ COMMENT ON COLUMN party.tax_numbers.updated IS 'The date and time the tax number
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('anthropometric_measurements', 'en-US', 1, 'Anthropometric Measurements', 'Anthropometric Measurements');
-INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-US', 666, 'Test', 'Test');
+INSERT INTO party.attribute_type_categories (code, locale_id, name, description)
+  VALUES ('anthropometric_measurements', 'en-US', 'Anthropometric Measurements', 'Anthropometric Measurements');
 
-INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('anthropometric_measurements', 'en-ZA', 1, 'Anthropometric Measurements', 'Anthropometric Measurements');
-INSERT INTO party.attribute_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-ZA', 666, 'Test', 'Test');
+INSERT INTO party.attribute_type_categories (code, locale_id, name, description)
+  VALUES ('anthropometric_measurements', 'en-ZA', 'Anthropometric Measurements', 'Anthropometric Measurements');
 
 
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','bmi', 'en-US', 101, 'Body Mass Index', 'Body Mass Index', 'person');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types, unit_type)
-  VALUES ('anthropometric_measurements','height', 'en-US', 102, 'Height', 'Height', 'person', 'length');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types, unit_type)
-  VALUES ('anthropometric_measurements','weight', 'en-US', 103, 'Weight', 'Weight', 'person', 'mass');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_attribute_name', 'en-US', 66601, 'Test Attribute Name', 'Test Attribute Name', 'organization,person');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types)
+  VALUES ('anthropometric_measurements','bmi', 'en-US', 'Body Mass Index', 'Body Mass Index', 'person');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type)
+  VALUES ('anthropometric_measurements','height', 'en-US', 'Height', 'Height', 'person', 'length');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type)
+  VALUES ('anthropometric_measurements','weight', 'en-US', 'Weight', 'Weight', 'person', 'mass');
 
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('anthropometric_measurements','bmi', 'en-ZA', 101, 'Body Mass Index', 'Body Mass Index', 'person');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types, unit_type)
-  VALUES ('anthropometric_measurements','height', 'en-ZA', 102, 'Height', 'Height', 'person', 'length');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types, unit_type)
-  VALUES ('anthropometric_measurements','weight', 'en-ZA', 103, 'Weight', 'Weight', 'person', 'mass');
-INSERT INTO party.attribute_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_attribute_name', 'en-ZA', 66601, 'Test Attribute Name', 'Test Attribute Name', 'organization,person');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types)
+  VALUES ('anthropometric_measurements','bmi', 'en-ZA', 'Body Mass Index', 'Body Mass Index', 'person');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type)
+  VALUES ('anthropometric_measurements','height', 'en-ZA', 'Height', 'Height', 'person', 'length');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type)
+  VALUES ('anthropometric_measurements','weight', 'en-ZA', 'Weight', 'Weight', 'person', 'mass');
 
 
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description)
-  VALUES ('marketing', 'en-US', 1, 'Marketing Consent', 'Marketing Consent');
+INSERT INTO party.consent_types(code, locale_id, name, description)
+  VALUES ('marketing', 'en-US', 'Marketing Consent', 'Marketing Consent');
 
-INSERT INTO party.consent_types(code, locale_id, sort_index, name, description)
-  VALUES ('marketing', 'en-ZA', 1, 'Marketing Consent', 'Marketing Consent');
+INSERT INTO party.consent_types(code, locale_id, name, description)
+  VALUES ('marketing', 'en-ZA', 'Marketing Consent', 'Marketing Consent');
 
 
-INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, sort_index, name, description, party_types)
-  VALUES ('general', 'email_address', 'en-US', 1, 'General Correspondence', 'General Correspondence', 'organization,person');
-INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, sort_index, name, description, party_types)
-  VALUES ('marketing', 'email_address', 'en-US', 2, 'Marketing Correspondence', 'Marketing Correspondence', 'organization,person');
-INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, sort_index, name, description, party_types)
-  VALUES ('security', 'email_address,mobile_number', 'en-US', 3, 'Security Alerts', 'Security Alerts', 'organization,person');
+INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, name, description, party_types)
+  VALUES ('general', 'email_address', 'en-US', 'General Correspondence', 'General Correspondence', 'organization,person');
+INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, name, description, party_types)
+  VALUES ('marketing', 'email_address', 'en-US', 'Marketing Correspondence', 'Marketing Correspondence', 'organization,person');
+INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, name, description, party_types)
+  VALUES ('security', 'email_address,mobile_number', 'en-US', 'Security Alerts', 'Security Alerts', 'organization,person');
 
-INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, sort_index, name, description, party_types)
-  VALUES ('general', 'email_address', 'en-ZA', 1, 'General Correspondence', 'General Correspondence', 'organization,person');
-INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, sort_index, name, description, party_types)
-  VALUES ('marketing', 'email_address', 'en-ZA', 2, 'Marketing Correspondence', 'Marketing Correspondence', 'organization,person');
-INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, sort_index, name, description, party_types)
-  VALUES ('security', 'email_address,mobile_number', 'en-ZA', 3, 'Security Alerts', 'Security Alerts', 'organization,person');
+INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, name, description, party_types)
+  VALUES ('general', 'email_address', 'en-ZA', 'General Correspondence', 'General Correspondence', 'organization,person');
+INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, name, description, party_types)
+  VALUES ('marketing', 'email_address', 'en-ZA', 'Marketing Correspondence', 'Marketing Correspondence', 'organization,person');
+INSERT INTO party.contact_mechanism_purposes (code, contact_mechanism_types, locale_id, name, description, party_types)
+  VALUES ('security', 'email_address,mobile_number', 'en-ZA', 'Security Alerts', 'Security Alerts', 'organization,person');
 
 
 INSERT INTO party.contact_mechanism_types (code, locale_id, sort_index, name, plural, description)
@@ -2123,19 +2158,19 @@ INSERT INTO party.contact_mechanism_roles (contact_mechanism_type, code, locale_
   VALUES ('social_media', 'twitter_id', 'en-ZA', 502, 'Twitter ID', 'Twitter ID', 'person');
 
 
-INSERT INTO party.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('employed', 'en-US', 1, 'Employed', 'Employed');
-INSERT INTO party.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('other', 'en-US', 2, 'Other', 'Other');
-INSERT INTO party.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
+INSERT INTO party.employment_statuses (code, locale_id, name, description)
+  VALUES ('employed', 'en-US', 'Employed', 'Employed');
+INSERT INTO party.employment_statuses (code, locale_id, name, description)
+  VALUES ('other', 'en-US', 'Other', 'Other');
+INSERT INTO party.employment_statuses (code, locale_id, name, description)
+  VALUES ('unknown', 'en-US', 'Unknown', 'Unknown');
 
-INSERT INTO party.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('employed', 'en-ZA', 1, 'Employed', 'Employed');
-INSERT INTO party.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('other', 'en-ZA', 2, 'Other', 'Other');
-INSERT INTO party.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+INSERT INTO party.employment_statuses (code, locale_id, name, description)
+  VALUES ('employed', 'en-ZA', 'Employed', 'Employed');
+INSERT INTO party.employment_statuses (code, locale_id, name, description)
+  VALUES ('other', 'en-ZA', 'Other', 'Other');
+INSERT INTO party.employment_statuses (code, locale_id, name, description)
+  VALUES ('unknown', 'en-ZA', 'Unknown', 'Unknown');
 
 
 INSERT INTO party.employment_types (employment_status, code, locale_id, sort_index, name, description)
@@ -2185,771 +2220,771 @@ INSERT INTO party.employment_types (employment_status, code, locale_id, sort_ind
   VALUES ('other', 'unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('accounting', 'en-US', 1, 'Accounting', 'Accounting');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('actuarial_science', 'en-US', 2, 'Actuarial Science', 'Actuarial Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('advertising', 'en-US', 3, 'Advertising', 'Advertising');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('aeronautics_aviation_science', 'en-US', 4, 'Aeronautics and Aviation Science', 'Aeronautics and Aviation Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('african_literature', 'en-US', 5, 'African Literature', 'African Literature');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('agribusiness_management', 'en-US', 6, 'Agribusiness Management', 'Agribusiness Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('agricultural_economics', 'en-US', 7, 'Agricultural Economics', 'Agricultural Economics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('anatomy', 'en-US', 8, 'Anatomy', 'Anatomy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('anthropology', 'en-US', 9, 'Anthropology', 'Anthropology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('applied_development_economics', 'en-US', 10, 'Applied Development Economics', 'Applied Development Economics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('applied_mathematics', 'en-US', 11, 'Applied Mathematics', 'Applied Mathematics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('archaeology', 'en-US', 12, 'Archaeology', 'Archaeology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('architecture', 'en-US', 13, 'Architecture', 'Architecture');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('artificial_intelligence_robotics', 'en-US', 14, 'Artificial Intelligence and Robotics', 'Artificial Intelligence and Robotics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('arts_culture_heritage_studies', 'en-US', 15, 'Arts, Culture and Heritage Studies', 'Arts, Culture and Heritage Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('arts_humanities', 'en-US', 16, 'Arts and Humanities', 'Arts and Humanities');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('astronomy', 'en-US', 17, 'Astronomy', 'Astronomy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('audiology', 'en-US', 18, 'Audiology', 'Audiology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('auditing', 'en-US', 19, 'Auditing', 'Auditing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('automotive_trades', 'en-US', 20, 'Automotive Trades', 'Automotive Trades');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('banking', 'en-US', 21, 'Banking', 'Banking');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('banking_international_finance', 'en-US', 22, 'Banking and International Finance', 'Banking and International Finance');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('biochemistry', 'en-US', 23, 'Biochemistry', 'Biochemistry');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('biodiversity', 'en-US', 24, 'Biodiversity', 'Biodiversity');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('biology', 'en-US', 25, 'Biology', 'Biology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('business_management_informatics', 'en-US', 26, 'Business Management and Informatics', 'Business Management and Informatics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('brand', 'en-US', 27, 'Brand', 'Brand');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('business_commerce_management_studies', 'en-US', 28, 'Business, Commerce and Management Studies', 'Business, Commerce and Management Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('business_administration', 'en-US', 29, 'Business Administration', 'Business Administration');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('business_management', 'en-US', 30, 'Business Management', 'Business Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('cfa', 'en-US', 31, 'CFA', 'CFA');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('cfp', 'en-US', 32, 'CFP', 'CFP');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('chemical_engineering', 'en-US', 33, 'Chemical Engineering', 'Chemical Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('chemistry', 'en-US', 34, 'Chemistry', 'Chemistry');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('child_youth_care', 'en-US', 35, 'Child and Youth Care', 'Child and Youth Care');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('cima', 'en-US', 36, 'CIMA', 'CIMA');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('civil_engineering', 'en-US', 37, 'Civil Engineering', 'Civil Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('clinical_psychology', 'en-US', 38, 'Clinical Psychology', 'Clinical Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('commerce', 'en-US', 39, 'Commerce', 'Commerce');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('communication_studies_language', 'en-US', 40, 'Communication Studies and Language', 'Communication Studies and Language');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('compliance_management', 'en-US', 41, 'Compliance Management', 'Compliance Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('computational_applied_mathematics', 'en-US', 42, 'Computational and Applied Mathematics', 'Computational and Applied Mathematics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('computer_information_science', 'en-US', 43, 'Computer and Information Science', 'Computer and Information Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('construction_management', 'en-US', 44, 'Construction Management', 'Construction Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('consumer_behaviour', 'en-US', 45, 'Consumer Behaviour', 'Consumer Behaviour');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('cosmetology', 'en-US', 46, 'Cosmetology', 'Cosmetology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('counselling_psychology', 'en-US', 47, 'Counselling Psychology', 'Counselling Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('creative_writing', 'en-US', 48, 'Creative Writing', 'Creative Writing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('criminology', 'en-US', 49, 'Criminology', 'Criminology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('culinary_arts', 'en-US', 50, 'Culinary Arts', 'Culinary Arts');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('data_science', 'en-US', 51, 'Data Science', 'Data Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('demography', 'en-US', 52, 'Demography', 'Demography');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('dentistry', 'en-US', 53, 'Dentistry', 'Dentistry');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('development_studies', 'en-US', 54, 'Development Studies', 'Development Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('dietetics_nutrition', 'en-US', 55, 'Dietetics and Nutrition', 'Dietetics and Nutrition');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('digital_arts', 'en-US', 56, 'Digital Arts', 'Digital Arts');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('diplomacy', 'en-US', 57, 'Diplomacy', 'Diplomacy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('diplomacy_international_studies', 'en-US', 58, 'Diplomacy and International Studies', 'Diplomacy and International Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('diversity_studies', 'en-US', 59, 'Diversity Studies', 'Diversity Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('drama_film', 'en-US', 60, 'Drama and Film', 'Drama and Film');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('ecology', 'en-US', 61, 'Ecology', 'Ecology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('econometrics', 'en-US', 62, 'Econometrics', 'Econometrics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('economic_management_science', 'en-US', 63, 'Economic and Management Science', 'Economic and Management Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('economics', 'en-US', 64, 'Economics', 'Economics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('education', 'en-US', 65, 'Education', 'Education');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('education_training_development', 'en-US', 66, 'Education, Training and Development', 'Education, Training and Development');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('educational_psychology', 'en-US', 67, 'Educational Psychology', 'Educational Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('electrical_engineering', 'en-US', 68, 'Electrical Engineering', 'Electrical Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('entrepreneurship', 'en-US', 69, 'Entrepreneurship', 'Entrepreneurship');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('environmental_science', 'en-US', 70, 'Environmental Science', 'Environmental Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('epidemiology', 'en-US', 71, 'Epidemiology', 'Epidemiology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('escience', 'en-US', 72, 'e-Science', 'e-Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('estate_trust_management', 'en-US', 73, 'Estate and Trust Management', 'Estate and Trust Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('exercise_science', 'en-US', 74, 'Exercise Science', 'Exercise Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('fashion_design', 'en-US', 75, 'Fashion Design', 'Fashion Design');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('finance_investment_management', 'en-US', 76, 'Finance and Investment Management', 'Finance and Investment Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('financial_economics', 'en-US', 77, 'Financial Economics', 'Financial Economics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('financial_planning', 'en-US', 78, 'Financial Planning', 'Financial Planning');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('financial_sciences', 'en-US', 79, 'Financial Sciences', 'Financial Sciences');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('fine_arts', 'en-US', 80, 'Fine Arts', 'Fine Arts');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('gender_sexuality_studies', 'en-US', 81, 'Gender and Sexuality Studies', 'Gender and Sexuality Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('general', 'en-US', 82, 'General', 'General');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('genetics', 'en-US', 83, 'Genetics', 'Genetics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('geochemistry', 'en-US', 84, 'Geochemistry', 'Geochemistry');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('geography', 'en-US', 85, 'Geography', 'Geography');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('geology', 'en-US', 86, 'Geology', 'Geology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('geophysics', 'en-US', 87, 'Geophysics', 'Geophysics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('geosciences', 'en-US', 88, 'Geosciences', 'Geosciences');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('global_change_studies', 'en-US', 89, 'Global Change Studies', 'Global Change Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('graphic_design', 'en-US', 90, 'Graphic Design', 'Graphic Design');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('haematology', 'en-US', 91, 'Haematology', 'Haematology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('health_sciences_social_services', 'en-US', 92, 'Health Sciences and Social Services', 'Health Sciences and Social Services');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('history', 'en-US', 93, 'History', 'History');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('human_social_studies', 'en-US', 94, 'Human and Social Studies', 'Human and Social Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('humanities', 'en-US', 95, 'Humanities', 'Humanities');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('human_resource_development', 'en-US', 96, 'Human Resource Development', 'Human Resource Development');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('human_resources_management', 'en-US', 97, 'Human Resources Management', 'Human Resources Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('human_rights_advocacy', 'en-US', 98, 'Human Rights Advocacy', 'Human Rights Advocacy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('hydrogeology', 'en-US', 99, 'Hydrogeology', 'Hydrogeology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('imas', 'en-US', 100, 'IMAS', 'IMAS');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('industrial_organisational_psychology', 'en-US', 101, 'Industrial and Organisational Psychology', 'Industrial and Organisational Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('information_systems', 'en-US', 102, 'Information Systems', 'Information Systems');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('information_technology', 'en-US', 103, 'Information Technology', 'Information Technology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('insurance_risk_management', 'en-US', 104, 'Insurance and Risk Management', 'Insurance and Risk Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('interior_design', 'en-US', 105, 'Interior Design', 'Interior Design');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('internal_auditing', 'en-US', 106, 'Internal Auditing', 'Internal Auditing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('international_finance', 'en-US', 107, 'International Finance', 'International Finance');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('international_law', 'en-US', 108, 'International Law', 'International Law');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('international_relations', 'en-US', 109, 'International Relations', 'International Relations');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('international_studies', 'en-US', 110, 'International Studies', 'International Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('investment_management', 'en-US', 111, 'Investment Management', 'Investment Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('journalism', 'en-US', 112, 'Journalism', 'Journalism');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('labour_law', 'en-US', 113, 'Labour Law', 'Labour Law');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('law', 'en-US', 114, 'Law', 'Law');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('law_military_science_security', 'en-US', 115, 'Law, Military Science and Security', 'Law, Military Science and Security');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('library_information_science', 'en-US', 116, 'Library and Information Science', 'Library and Information Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('linguistics', 'en-US', 117, 'Linguistics', 'Linguistics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('Linguistics_languages', 'en-US', 118, 'Linguistics and Languages', 'Linguistics and Languages');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('logistics', 'en-US', 119, 'Logistics', 'Logistics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('management', 'en-US', 120, 'Management', 'Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('management_accounting', 'en-US', 121, 'Management Accounting', 'Management Accounting');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('manufacturing_engineering_technology', 'en-US', 122, 'Manufacturing, Engineering and Technology', 'Manufacturing, Engineering and Technology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('marketing', 'en-US', 123, 'Marketing', 'Marketing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('mathematics', 'en-US', 124, 'Mathematics', 'Mathematics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('mechanical_engineering', 'en-US', 125, 'Mechanical Engineering', 'Mechanical Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('media_studies', 'en-US', 126, 'Media Studies', 'Media Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('medical_sciences', 'en-US', 127, 'Medical Sciences', 'Medical Sciences');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('metallurgical_engineering', 'en-US', 128, 'Metallurgical Engineering', 'Metallurgical Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('meteorology', 'en-US', 129, 'Meteorology', 'Meteorology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('microelectronic_engineering', 'en-US', 130, 'Microelectronic Engineering', 'Microelectronic Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('migration_displacement', 'en-US', 131, 'Migration and Displacement', 'Migration and Displacement');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('mining', 'en-US', 132, 'Mining', 'Mining');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('money_laundering_control', 'en-US', 133, 'Money Laundering Control', 'Money Laundering Control');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('multimedia', 'en-US', 134, 'Multimedia', 'Multimedia');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('music', 'en-US', 135, 'Music', 'Music');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('neuropsychology', 'en-US', 136, 'Neuropsychology', 'Neuropsychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('nursing', 'en-US', 137, 'Nursing', 'Nursing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('occupational_therapy', 'en-US', 138, 'Occupational Therapy', 'Occupational Therapy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('oceanography', 'en-US', 139, 'Oceanography', 'Oceanography');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('office_administration', 'en-US', 140, 'Office Administration', 'Office Administration');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('operations_management', 'en-US', 141, 'Operations Management', 'Operations Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('optometry', 'en-US', 142, 'Optometry', 'Optometry');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('pharmacology', 'en-US', 143, 'Pharmacology', 'Pharmacology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('philosophy', 'en-US', 144, 'Philosophy', 'Philosophy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('photography', 'en-US', 145, 'Photography', 'Photography');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('physical_mathematical_computer_life_sciences', 'en-US', 146, 'Physical, Mathematical, Computer and Life Sciences', 'Physical, Mathematical, Computer and Life Sciences');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('physical_planning_construction', 'en-US', 147, 'Physical Planning and Construction', 'Physical Planning and Construction');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('physics', 'en-US', 148, 'Physics', 'Physics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('physiotherapy', 'en-US', 149, 'Physiotherapy', 'Physiotherapy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('political_studies', 'en-US', 150, 'Political Studies', 'Political Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('politics_journalism', 'en-US', 151, 'Politics and Journalism', 'Politics and Journalism');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('programme_management', 'en-US', 152, 'Programme Management', 'Programme Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('project_management', 'en-US', 153, 'Project Management', 'Project Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('psychology', 'en-US', 154, 'Psychology', 'Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('public_administration', 'en-US', 155, 'Public Administration', 'Public Administration');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('public_health', 'en-US', 156, 'Public Health', 'Public Health');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('public_management_governance', 'en-US', 157, 'Public Management and Governance', 'Public Management and Governance');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('public_relations', 'en-US', 158, 'Public Relations', 'Public Relations');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('publishing', 'en-US', 159, 'Publishing', 'Publishing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('quantity_surveying', 'en-US', 160, 'Quantity Surveying', 'Quantity Surveying');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('radiation_protection', 'en-US', 161, 'Radiation Protection', 'Radiation Protection');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('religion_theology', 'en-US', 162, 'Religion and Theology', 'Religion and Theology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('research_psychology', 'en-US', 163, 'Research Psychology', 'Research Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('resource_conservation_biology', 'en-US', 164, 'Resource Conservation Biology', 'Resource Conservation Biology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('retailing', 'en-US', 165, 'Retailing', 'Retailing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('retail_management', 'en-US', 166, 'Retail Management', 'Retail Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('risk', 'en-US', 167, 'Risk', 'Risk');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('risk_management', 'en-US', 168, 'Risk Management', 'Risk Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('risk_management_financial_risk_management', 'en-US', 169, 'Risk Management and Financial Risk Management', 'Risk Management and Financial Risk Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('robotics', 'en-US', 170, 'Robotics', 'Robotics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('rural_development', 'en-US', 171, 'Rural Development', 'Rural Development');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('security_management', 'en-US', 172, 'Security Management', 'Security Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('services', 'en-US', 173, 'Services', 'Services');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('social_psychology', 'en-US', 174, 'Social Psychology', 'Social Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('social_work', 'en-US', 175, 'Social Work', 'Social Work');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('sociology', 'en-US', 176, 'Sociology', 'Sociology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('speech_language_studies', 'en-US', 177, 'Speech-Language Studies', 'Speech-Language Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('sports_management', 'en-US', 178, 'Sports Management', 'Sports Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('statistics', 'en-US', 179, 'Statistics', 'Statistics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('strategic_management', 'en-US', 180, 'Strategic Management', 'Strategic Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('supply_chain_management', 'en-US', 181, 'Supply Chain Management', 'Supply Chain Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('systems_development', 'en-US', 182, 'Systems Development', 'Systems Development');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('taxation', 'en-US', 183, 'Taxation', 'Taxation');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('tourism_hospitality', 'en-US', 184, 'Tourism and Hospitality', 'Tourism and Hospitality');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('translation_interpreting', 'en-US', 185, 'Translation and Interpreting', 'Translation and Interpreting');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('transportation_supply_chain_management', 'en-US', 186, 'Transportation and Supply Chain Management', 'Transportation and Supply Chain Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('urban_planning', 'en-US', 187, 'Urban Planning', 'Urban Planning');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('visual_studies', 'en-US', 188, 'Visual Studies', 'Visual Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('wealth_management', 'en-US', 189, 'Wealth Management', 'Wealth Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('women_gender_studies', 'en-US', 190, 'Women and Gender Studies', 'Women and Gender Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('zoology', 'en-US', 191, 'Zoology', 'Zoology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('accounting', 'en-US', 'Accounting', 'Accounting');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('actuarial_science', 'en-US', 'Actuarial Science', 'Actuarial Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('advertising', 'en-US', 'Advertising', 'Advertising');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('aeronautics_aviation_science', 'en-US', 'Aeronautics and Aviation Science', 'Aeronautics and Aviation Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('african_literature', 'en-US', 'African Literature', 'African Literature');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('agribusiness_management', 'en-US', 'Agribusiness Management', 'Agribusiness Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('agricultural_economics', 'en-US', 'Agricultural Economics', 'Agricultural Economics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('anatomy', 'en-US', 'Anatomy', 'Anatomy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('anthropology', 'en-US', 'Anthropology', 'Anthropology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('applied_development_economics', 'en-US', 'Applied Development Economics', 'Applied Development Economics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('applied_mathematics', 'en-US', 'Applied Mathematics', 'Applied Mathematics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('archaeology', 'en-US', 'Archaeology', 'Archaeology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('architecture', 'en-US', 'Architecture', 'Architecture');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('artificial_intelligence_robotics', 'en-US', 'Artificial Intelligence and Robotics', 'Artificial Intelligence and Robotics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('arts_culture_heritage_studies', 'en-US', 'Arts, Culture and Heritage Studies', 'Arts, Culture and Heritage Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('arts_humanities', 'en-US', 'Arts and Humanities', 'Arts and Humanities');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('astronomy', 'en-US', 'Astronomy', 'Astronomy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('audiology', 'en-US', 'Audiology', 'Audiology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('auditing', 'en-US', 'Auditing', 'Auditing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('automotive_trades', 'en-US', 'Automotive Trades', 'Automotive Trades');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('banking', 'en-US', 'Banking', 'Banking');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('banking_international_finance', 'en-US', 'Banking and International Finance', 'Banking and International Finance');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('biochemistry', 'en-US', 'Biochemistry', 'Biochemistry');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('biodiversity', 'en-US', 'Biodiversity', 'Biodiversity');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('biology', 'en-US', 'Biology', 'Biology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('business_management_informatics', 'en-US', 'Business Management and Informatics', 'Business Management and Informatics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('brand', 'en-US', 'Brand', 'Brand');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('business_commerce_management_studies', 'en-US', 'Business, Commerce and Management Studies', 'Business, Commerce and Management Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('business_administration', 'en-US', 'Business Administration', 'Business Administration');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('business_management', 'en-US', 'Business Management', 'Business Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('cfa', 'en-US', 'CFA', 'CFA');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('cfp', 'en-US', 'CFP', 'CFP');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('chemical_engineering', 'en-US', 'Chemical Engineering', 'Chemical Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('chemistry', 'en-US', 'Chemistry', 'Chemistry');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('child_youth_care', 'en-US', 'Child and Youth Care', 'Child and Youth Care');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('cima', 'en-US', 'CIMA', 'CIMA');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('civil_engineering', 'en-US', 'Civil Engineering', 'Civil Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('clinical_psychology', 'en-US', 'Clinical Psychology', 'Clinical Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('commerce', 'en-US', 'Commerce', 'Commerce');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('communication_studies_language', 'en-US', 'Communication Studies and Language', 'Communication Studies and Language');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('compliance_management', 'en-US', 'Compliance Management', 'Compliance Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('computational_applied_mathematics', 'en-US', 'Computational and Applied Mathematics', 'Computational and Applied Mathematics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('computer_information_science', 'en-US', 'Computer and Information Science', 'Computer and Information Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('construction_management', 'en-US', 'Construction Management', 'Construction Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('consumer_behaviour', 'en-US', 'Consumer Behaviour', 'Consumer Behaviour');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('cosmetology', 'en-US', 'Cosmetology', 'Cosmetology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('counselling_psychology', 'en-US', 'Counselling Psychology', 'Counselling Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('creative_writing', 'en-US', 'Creative Writing', 'Creative Writing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('criminology', 'en-US', 'Criminology', 'Criminology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('culinary_arts', 'en-US', 'Culinary Arts', 'Culinary Arts');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('data_science', 'en-US', 'Data Science', 'Data Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('demography', 'en-US', 'Demography', 'Demography');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('dentistry', 'en-US', 'Dentistry', 'Dentistry');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('development_studies', 'en-US', 'Development Studies', 'Development Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('dietetics_nutrition', 'en-US', 'Dietetics and Nutrition', 'Dietetics and Nutrition');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('digital_arts', 'en-US', 'Digital Arts', 'Digital Arts');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('diplomacy', 'en-US', 'Diplomacy', 'Diplomacy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('diplomacy_international_studies', 'en-US', 'Diplomacy and International Studies', 'Diplomacy and International Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('diversity_studies', 'en-US', 'Diversity Studies', 'Diversity Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('drama_film', 'en-US', 'Drama and Film', 'Drama and Film');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('ecology', 'en-US', 'Ecology', 'Ecology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('econometrics', 'en-US', 'Econometrics', 'Econometrics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('economic_management_science', 'en-US', 'Economic and Management Science', 'Economic and Management Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('economics', 'en-US', 'Economics', 'Economics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('education', 'en-US', 'Education', 'Education');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('education_training_development', 'en-US', 'Education, Training and Development', 'Education, Training and Development');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('educational_psychology', 'en-US', 'Educational Psychology', 'Educational Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('electrical_engineering', 'en-US', 'Electrical Engineering', 'Electrical Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('entrepreneurship', 'en-US', 'Entrepreneurship', 'Entrepreneurship');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('environmental_science', 'en-US', 'Environmental Science', 'Environmental Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('epidemiology', 'en-US', 'Epidemiology', 'Epidemiology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('escience', 'en-US', 'e-Science', 'e-Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('estate_trust_management', 'en-US', 'Estate and Trust Management', 'Estate and Trust Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('exercise_science', 'en-US', 'Exercise Science', 'Exercise Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('fashion_design', 'en-US', 'Fashion Design', 'Fashion Design');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('finance_investment_management', 'en-US', 'Finance and Investment Management', 'Finance and Investment Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('financial_economics', 'en-US', 'Financial Economics', 'Financial Economics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('financial_planning', 'en-US', 'Financial Planning', 'Financial Planning');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('financial_sciences', 'en-US', 'Financial Sciences', 'Financial Sciences');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('fine_arts', 'en-US', 'Fine Arts', 'Fine Arts');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('gender_sexuality_studies', 'en-US', 'Gender and Sexuality Studies', 'Gender and Sexuality Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('general', 'en-US', 'General', 'General');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('genetics', 'en-US', 'Genetics', 'Genetics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('geochemistry', 'en-US', 'Geochemistry', 'Geochemistry');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('geography', 'en-US', 'Geography', 'Geography');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('geology', 'en-US', 'Geology', 'Geology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('geophysics', 'en-US', 'Geophysics', 'Geophysics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('geosciences', 'en-US', 'Geosciences', 'Geosciences');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('global_change_studies', 'en-US', 'Global Change Studies', 'Global Change Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('graphic_design', 'en-US', 'Graphic Design', 'Graphic Design');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('haematology', 'en-US', 'Haematology', 'Haematology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('health_sciences_social_services', 'en-US', 'Health Sciences and Social Services', 'Health Sciences and Social Services');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('history', 'en-US', 'History', 'History');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('human_social_studies', 'en-US', 'Human and Social Studies', 'Human and Social Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('humanities', 'en-US', 'Humanities', 'Humanities');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('human_resource_development', 'en-US', 'Human Resource Development', 'Human Resource Development');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('human_resources_management', 'en-US', 'Human Resources Management', 'Human Resources Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('human_rights_advocacy', 'en-US', 'Human Rights Advocacy', 'Human Rights Advocacy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('hydrogeology', 'en-US', 'Hydrogeology', 'Hydrogeology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('imas', 'en-US', 'IMAS', 'IMAS');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('industrial_organisational_psychology', 'en-US', 'Industrial and Organisational Psychology', 'Industrial and Organisational Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('information_systems', 'en-US', 'Information Systems', 'Information Systems');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('information_technology', 'en-US', 'Information Technology', 'Information Technology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('insurance_risk_management', 'en-US', 'Insurance and Risk Management', 'Insurance and Risk Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('interior_design', 'en-US', 'Interior Design', 'Interior Design');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('internal_auditing', 'en-US', 'Internal Auditing', 'Internal Auditing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('international_finance', 'en-US', 'International Finance', 'International Finance');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('international_law', 'en-US', 'International Law', 'International Law');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('international_relations', 'en-US', 'International Relations', 'International Relations');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('international_studies', 'en-US', 'International Studies', 'International Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('investment_management', 'en-US', 'Investment Management', 'Investment Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('journalism', 'en-US', 'Journalism', 'Journalism');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('labour_law', 'en-US',  'Labour Law', 'Labour Law');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('law', 'en-US', 'Law', 'Law');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('law_military_science_security', 'en-US', 'Law, Military Science and Security', 'Law, Military Science and Security');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('library_information_science', 'en-US', 'Library and Information Science', 'Library and Information Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('linguistics', 'en-US', 'Linguistics', 'Linguistics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('Linguistics_languages', 'en-US', 'Linguistics and Languages', 'Linguistics and Languages');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('logistics', 'en-US', 'Logistics', 'Logistics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('management', 'en-US', 'Management', 'Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('management_accounting', 'en-US', 'Management Accounting', 'Management Accounting');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('manufacturing_engineering_technology', 'en-US',  'Manufacturing, Engineering and Technology', 'Manufacturing, Engineering and Technology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('marketing', 'en-US', 'Marketing', 'Marketing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('mathematics', 'en-US', 'Mathematics', 'Mathematics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('mechanical_engineering', 'en-US', 'Mechanical Engineering', 'Mechanical Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('media_studies', 'en-US', 'Media Studies', 'Media Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('medical_sciences', 'en-US', 'Medical Sciences', 'Medical Sciences');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('metallurgical_engineering', 'en-US', 'Metallurgical Engineering', 'Metallurgical Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('meteorology', 'en-US', 'Meteorology', 'Meteorology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('microelectronic_engineering', 'en-US', 'Microelectronic Engineering', 'Microelectronic Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('migration_displacement', 'en-US', 'Migration and Displacement', 'Migration and Displacement');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('mining', 'en-US', 'Mining', 'Mining');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('money_laundering_control', 'en-US', 'Money Laundering Control', 'Money Laundering Control');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('multimedia', 'en-US', 'Multimedia', 'Multimedia');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('music', 'en-US', 'Music', 'Music');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('neuropsychology', 'en-US', 'Neuropsychology', 'Neuropsychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('nursing', 'en-US', 'Nursing', 'Nursing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('occupational_therapy', 'en-US', 'Occupational Therapy', 'Occupational Therapy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('oceanography', 'en-US', 'Oceanography', 'Oceanography');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('office_administration', 'en-US', 'Office Administration', 'Office Administration');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('operations_management', 'en-US', 'Operations Management', 'Operations Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('optometry', 'en-US', 'Optometry', 'Optometry');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('pharmacology', 'en-US', 'Pharmacology', 'Pharmacology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('philosophy', 'en-US', 'Philosophy', 'Philosophy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('photography', 'en-US', 'Photography', 'Photography');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('physical_mathematical_computer_life_sciences', 'en-US', 'Physical, Mathematical, Computer and Life Sciences', 'Physical, Mathematical, Computer and Life Sciences');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('physical_planning_construction', 'en-US', 'Physical Planning and Construction', 'Physical Planning and Construction');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('physics', 'en-US', 'Physics', 'Physics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('physiotherapy', 'en-US', 'Physiotherapy', 'Physiotherapy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('political_studies', 'en-US', 'Political Studies', 'Political Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('politics_journalism', 'en-US', 'Politics and Journalism', 'Politics and Journalism');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('programme_management', 'en-US', 'Programme Management', 'Programme Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('project_management', 'en-US', 'Project Management', 'Project Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('psychology', 'en-US', 'Psychology', 'Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('public_administration', 'en-US', 'Public Administration', 'Public Administration');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('public_health', 'en-US', 'Public Health', 'Public Health');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('public_management_governance', 'en-US', 'Public Management and Governance', 'Public Management and Governance');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('public_relations', 'en-US', 'Public Relations', 'Public Relations');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('publishing', 'en-US', 'Publishing', 'Publishing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('quantity_surveying', 'en-US', 'Quantity Surveying', 'Quantity Surveying');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('radiation_protection', 'en-US', 'Radiation Protection', 'Radiation Protection');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('religion_theology', 'en-US', 'Religion and Theology', 'Religion and Theology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('research_psychology', 'en-US', 'Research Psychology', 'Research Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('resource_conservation_biology', 'en-US', 'Resource Conservation Biology', 'Resource Conservation Biology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('retailing', 'en-US', 'Retailing', 'Retailing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('retail_management', 'en-US', 'Retail Management', 'Retail Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('risk', 'en-US', 'Risk', 'Risk');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('risk_management', 'en-US', 'Risk Management', 'Risk Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('risk_management_financial_risk_management', 'en-US', 'Risk Management and Financial Risk Management', 'Risk Management and Financial Risk Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('robotics', 'en-US', 'Robotics', 'Robotics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('rural_development', 'en-US', 'Rural Development', 'Rural Development');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('security_management', 'en-US', 'Security Management', 'Security Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('services', 'en-US', 'Services', 'Services');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('social_psychology', 'en-US', 'Social Psychology', 'Social Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('social_work', 'en-US', 'Social Work', 'Social Work');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('sociology', 'en-US', 'Sociology', 'Sociology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('speech_language_studies', 'en-US', 'Speech-Language Studies', 'Speech-Language Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('sports_management', 'en-US', 'Sports Management', 'Sports Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('statistics', 'en-US', 'Statistics', 'Statistics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('strategic_management', 'en-US', 'Strategic Management', 'Strategic Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('supply_chain_management', 'en-US', 'Supply Chain Management', 'Supply Chain Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('systems_development', 'en-US', 'Systems Development', 'Systems Development');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('taxation', 'en-US', 'Taxation', 'Taxation');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('tourism_hospitality', 'en-US', 'Tourism and Hospitality', 'Tourism and Hospitality');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('translation_interpreting', 'en-US', 'Translation and Interpreting', 'Translation and Interpreting');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('transportation_supply_chain_management', 'en-US', 'Transportation and Supply Chain Management', 'Transportation and Supply Chain Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('urban_planning', 'en-US', 'Urban Planning', 'Urban Planning');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('visual_studies', 'en-US', 'Visual Studies', 'Visual Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('wealth_management', 'en-US', 'Wealth Management', 'Wealth Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('women_gender_studies', 'en-US', 'Women and Gender Studies', 'Women and Gender Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('zoology', 'en-US', 'Zoology', 'Zoology');
 
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('accounting', 'en-ZA', 1, 'Accounting', 'Accounting');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('actuarial_science', 'en-ZA', 2, 'Actuarial Science', 'Actuarial Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('advertising', 'en-ZA', 3, 'Advertising', 'Advertising');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('aeronautics_aviation_science', 'en-ZA', 4, 'Aeronautics and Aviation Science', 'Aeronautics and Aviation Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('african_literature', 'en-ZA', 5, 'African Literature', 'African Literature');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('agribusiness_management', 'en-ZA', 6, 'Agribusiness Management', 'Agribusiness Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('agricultural_economics', 'en-ZA', 7, 'Agricultural Economics', 'Agricultural Economics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('anatomy', 'en-ZA', 8, 'Anatomy', 'Anatomy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('anthropology', 'en-ZA', 9, 'Anthropology', 'Anthropology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('applied_development_economics', 'en-ZA', 10, 'Applied Development Economics', 'Applied Development Economics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('applied_mathematics', 'en-ZA', 11, 'Applied Mathematics', 'Applied Mathematics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('archaeology', 'en-ZA', 12, 'Archaeology', 'Archaeology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('architecture', 'en-ZA', 13, 'Architecture', 'Architecture');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('artificial_intelligence_robotics', 'en-ZA', 14, 'Artificial Intelligence and Robotics', 'Artificial Intelligence and Robotics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('arts_culture_heritage_studies', 'en-ZA', 15, 'Arts, Culture and Heritage Studies', 'Arts, Culture and Heritage Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('arts_humanities', 'en-ZA', 16, 'Arts and Humanities', 'Arts and Humanities');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('astronomy', 'en-ZA', 17, 'Astronomy', 'Astronomy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('audiology', 'en-ZA', 18, 'Audiology', 'Audiology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('auditing', 'en-ZA', 19, 'Auditing', 'Auditing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('automotive_trades', 'en-ZA', 20, 'Automotive Trades', 'Automotive Trades');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('banking', 'en-ZA', 21, 'Banking', 'Banking');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('banking_international_finance', 'en-ZA', 22, 'Banking and International Finance', 'Banking and International Finance');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('biochemistry', 'en-ZA', 23, 'Biochemistry', 'Biochemistry');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('biodiversity', 'en-ZA', 24, 'Biodiversity', 'Biodiversity');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('biology', 'en-ZA', 25, 'Biology', 'Biology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('business_management_informatics', 'en-ZA', 26, 'Business Management and Informatics', 'Business Management and Informatics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('brand', 'en-ZA', 27, 'Brand', 'Brand');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('business_commerce_management_studies', 'en-ZA', 28, 'Business, Commerce and Management Studies', 'Business, Commerce and Management Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('business_administration', 'en-ZA', 29, 'Business Administration', 'Business Administration');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('business_management', 'en-ZA', 30, 'Business Management', 'Business Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('cfa', 'en-ZA', 31, 'CFA', 'CFA');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('cfp', 'en-ZA', 32, 'CFP', 'CFP');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('chemical_engineering', 'en-ZA', 33, 'Chemical Engineering', 'Chemical Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('chemistry', 'en-ZA', 34, 'Chemistry', 'Chemistry');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('child_youth_care', 'en-ZA', 35, 'Child and Youth Care', 'Child and Youth Care');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('cima', 'en-ZA', 36, 'CIMA', 'CIMA');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('civil_engineering', 'en-ZA', 37, 'Civil Engineering', 'Civil Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('clinical_psychology', 'en-ZA', 38, 'Clinical Psychology', 'Clinical Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('commerce', 'en-ZA', 39, 'Commerce', 'Commerce');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('communication_studies_language', 'en-ZA', 40, 'Communication Studies and Language', 'Communication Studies and Language');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('compliance_management', 'en-ZA', 41, 'Compliance Management', 'Compliance Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('computational_applied_mathematics', 'en-ZA', 42, 'Computational and Applied Mathematics', 'Computational and Applied Mathematics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('computer_information_science', 'en-ZA', 43, 'Computer and Information Science', 'Computer and Information Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('construction_management', 'en-ZA', 44, 'Construction Management', 'Construction Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('consumer_behaviour', 'en-ZA', 45, 'Consumer Behaviour', 'Consumer Behaviour');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('cosmetology', 'en-ZA', 46, 'Cosmetology', 'Cosmetology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('counselling_psychology', 'en-ZA', 47, 'Counselling Psychology', 'Counselling Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('creative_writing', 'en-ZA', 48, 'Creative Writing', 'Creative Writing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('criminology', 'en-ZA', 49, 'Criminology', 'Criminology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('culinary_arts', 'en-ZA', 50, 'Culinary Arts', 'Culinary Arts');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('data_science', 'en-ZA', 51, 'Data Science', 'Data Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('demography', 'en-ZA', 52, 'Demography', 'Demography');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('dentistry', 'en-ZA', 53, 'Dentistry', 'Dentistry');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('development_studies', 'en-ZA', 54, 'Development Studies', 'Development Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('dietetics_nutrition', 'en-ZA', 55, 'Dietetics and Nutrition', 'Dietetics and Nutrition');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('digital_arts', 'en-ZA', 56, 'Digital Arts', 'Digital Arts');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('diplomacy', 'en-ZA', 57, 'Diplomacy', 'Diplomacy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('diplomacy_international_studies', 'en-ZA', 58, 'Diplomacy and International Studies', 'Diplomacy and International Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('diversity_studies', 'en-ZA', 59, 'Diversity Studies', 'Diversity Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('drama_film', 'en-ZA', 60, 'Drama and Film', 'Drama and Film');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('ecology', 'en-ZA', 61, 'Ecology', 'Ecology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('econometrics', 'en-ZA', 62, 'Econometrics', 'Econometrics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('economic_management_science', 'en-ZA', 63, 'Economic and Management Science', 'Economic and Management Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('economics', 'en-ZA', 64, 'Economics', 'Economics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('education', 'en-ZA', 65, 'Education', 'Education');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('education_training_development', 'en-ZA', 66, 'Education, Training and Development', 'Education, Training and Development');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('educational_psychology', 'en-ZA', 67, 'Educational Psychology', 'Educational Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('electrical_engineering', 'en-ZA', 68, 'Electrical Engineering', 'Electrical Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('entrepreneurship', 'en-ZA', 69, 'Entrepreneurship', 'Entrepreneurship');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('environmental_science', 'en-ZA', 70, 'Environmental Science', 'Environmental Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('epidemiology', 'en-ZA', 71, 'Epidemiology', 'Epidemiology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('escience', 'en-ZA', 72, 'e-Science', 'e-Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('estate_trust_management', 'en-ZA', 73, 'Estate and Trust Management', 'Estate and Trust Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('exercise_science', 'en-ZA', 74, 'Exercise Science', 'Exercise Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('fashion_design', 'en-ZA', 75, 'Fashion Design', 'Fashion Design');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('finance_investment_management', 'en-ZA', 76, 'Finance and Investment Management', 'Finance and Investment Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('financial_economics', 'en-ZA', 77, 'Financial Economics', 'Financial Economics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('financial_planning', 'en-ZA', 78, 'Financial Planning', 'Financial Planning');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('financial_sciences', 'en-ZA', 79, 'Financial Sciences', 'Financial Sciences');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('fine_arts', 'en-ZA', 80, 'Fine Arts', 'Fine Arts');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('gender_sexuality_studies', 'en-ZA', 81, 'Gender and Sexuality Studies', 'Gender and Sexuality Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('general', 'en-ZA', 82, 'General', 'General');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('genetics', 'en-ZA', 83, 'Genetics', 'Genetics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('geochemistry', 'en-ZA', 84, 'Geochemistry', 'Geochemistry');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('geography', 'en-ZA', 85, 'Geography', 'Geography');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('geology', 'en-ZA', 86, 'Geology', 'Geology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('geophysics', 'en-ZA', 87, 'Geophysics', 'Geophysics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('geosciences', 'en-ZA', 88, 'Geosciences', 'Geosciences');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('global_change_studies', 'en-ZA', 89, 'Global Change Studies', 'Global Change Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('graphic_design', 'en-ZA', 90, 'Graphic Design', 'Graphic Design');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('haematology', 'en-ZA', 91, 'Haematology', 'Haematology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('health_sciences_social_services', 'en-ZA', 92, 'Health Sciences and Social Services', 'Health Sciences and Social Services');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('history', 'en-ZA', 93, 'History', 'History');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('human_social_studies', 'en-ZA', 94, 'Human and Social Studies', 'Human and Social Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('humanities', 'en-ZA', 95, 'Humanities', 'Humanities');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('human_resource_development', 'en-ZA', 96, 'Human Resource Development', 'Human Resource Development');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('human_resources_management', 'en-ZA', 97, 'Human Resources Management', 'Human Resources Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('human_rights_advocacy', 'en-ZA', 98, 'Human Rights Advocacy', 'Human Rights Advocacy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('hydrogeology', 'en-ZA', 99, 'Hydrogeology', 'Hydrogeology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('imas', 'en-ZA', 100, 'IMAS', 'IMAS');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('industrial_organisational_psychology', 'en-ZA', 101, 'Industrial and Organisational Psychology', 'Industrial and Organisational Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('information_systems', 'en-ZA', 102, 'Information Systems', 'Information Systems');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('information_technology', 'en-ZA', 103, 'Information Technology', 'Information Technology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('insurance_risk_management', 'en-ZA', 104, 'Insurance and Risk Management', 'Insurance and Risk Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('interior_design', 'en-ZA', 105, 'Interior Design', 'Interior Design');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('internal_auditing', 'en-ZA', 106, 'Internal Auditing', 'Internal Auditing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('international_finance', 'en-ZA', 107, 'International Finance', 'International Finance');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('international_law', 'en-ZA', 108, 'International Law', 'International Law');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('international_relations', 'en-ZA', 109, 'International Relations', 'International Relations');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('international_studies', 'en-ZA', 110, 'International Studies', 'International Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('investment_management', 'en-ZA', 111, 'Investment Management', 'Investment Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('journalism', 'en-ZA', 112, 'Journalism', 'Journalism');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('labour_law', 'en-ZA', 113, 'Labour Law', 'Labour Law');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('law', 'en-ZA', 114, 'Law', 'Law');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('law_military_science_security', 'en-ZA', 115, 'Law, Military Science and Security', 'Law, Military Science and Security');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('library_information_science', 'en-ZA', 116, 'Library and Information Science', 'Library and Information Science');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('linguistics', 'en-ZA', 117, 'Linguistics', 'Linguistics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('Linguistics_languages', 'en-ZA', 118, 'Linguistics and Languages', 'Linguistics and Languages');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('logistics', 'en-ZA', 119, 'Logistics', 'Logistics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('management', 'en-ZA', 120, 'Management', 'Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('management_accounting', 'en-ZA', 121, 'Management Accounting', 'Management Accounting');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('manufacturing_engineering_technology', 'en-ZA', 122, 'Manufacturing, Engineering and Technology', 'Manufacturing, Engineering and Technology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('marketing', 'en-ZA', 123, 'Marketing', 'Marketing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('mathematics', 'en-ZA', 124, 'Mathematics', 'Mathematics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('mechanical_engineering', 'en-ZA', 125, 'Mechanical Engineering', 'Mechanical Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('media_studies', 'en-ZA', 126, 'Media Studies', 'Media Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('medical_sciences', 'en-ZA', 127, 'Medical Sciences', 'Medical Sciences');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('metallurgical_engineering', 'en-ZA', 128, 'Metallurgical Engineering', 'Metallurgical Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('meteorology', 'en-ZA', 129, 'Meteorology', 'Meteorology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('microelectronic_engineering', 'en-ZA', 130, 'Microelectronic Engineering', 'Microelectronic Engineering');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('migration_displacement', 'en-ZA', 131, 'Migration and Displacement', 'Migration and Displacement');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('mining', 'en-ZA', 132, 'Mining', 'Mining');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('money_laundering_control', 'en-ZA', 133, 'Money Laundering Control', 'Money Laundering Control');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('multimedia', 'en-ZA', 134, 'Multimedia', 'Multimedia');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('music', 'en-ZA', 135, 'Music', 'Music');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('neuropsychology', 'en-ZA', 136, 'Neuropsychology', 'Neuropsychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('nursing', 'en-ZA', 137, 'Nursing', 'Nursing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('occupational_therapy', 'en-ZA', 138, 'Occupational Therapy', 'Occupational Therapy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('oceanography', 'en-ZA', 139, 'Oceanography', 'Oceanography');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('office_administration', 'en-ZA', 140, 'Office Administration', 'Office Administration');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('operations_management', 'en-ZA', 141, 'Operations Management', 'Operations Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('optometry', 'en-ZA', 142, 'Optometry', 'Optometry');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('pharmacology', 'en-ZA', 143, 'Pharmacology', 'Pharmacology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('philosophy', 'en-ZA', 144, 'Philosophy', 'Philosophy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('photography', 'en-ZA', 145, 'Photography', 'Photography');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('physical_mathematical_computer_life_sciences', 'en-ZA', 146, 'Physical, Mathematical, Computer and Life Sciences', 'Physical, Mathematical, Computer and Life Sciences');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('physical_planning_construction', 'en-ZA', 147, 'Physical Planning and Construction', 'Physical Planning and Construction');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('physics', 'en-ZA', 148, 'Physics', 'Physics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('physiotherapy', 'en-ZA', 149, 'Physiotherapy', 'Physiotherapy');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('political_studies', 'en-ZA', 150, 'Political Studies', 'Political Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('politics_journalism', 'en-ZA', 151, 'Politics and Journalism', 'Politics and Journalism');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('programme_management', 'en-ZA', 152, 'Programme Management', 'Programme Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('project_management', 'en-ZA', 153, 'Project Management', 'Project Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('psychology', 'en-ZA', 154, 'Psychology', 'Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('public_administration', 'en-ZA', 155, 'Public Administration', 'Public Administration');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('public_health', 'en-ZA', 156, 'Public Health', 'Public Health');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('public_management_governance', 'en-ZA', 157, 'Public Management and Governance', 'Public Management and Governance');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('public_relations', 'en-ZA', 158, 'Public Relations', 'Public Relations');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('publishing', 'en-ZA', 159, 'Publishing', 'Publishing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('quantity_surveying', 'en-ZA', 160, 'Quantity Surveying', 'Quantity Surveying');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('radiation_protection', 'en-ZA', 161, 'Radiation Protection', 'Radiation Protection');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('religion_theology', 'en-ZA', 162, 'Religion and Theology', 'Religion and Theology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('research_psychology', 'en-ZA', 163, 'Research Psychology', 'Research Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('resource_conservation_biology', 'en-ZA', 164, 'Resource Conservation Biology', 'Resource Conservation Biology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('retailing', 'en-ZA', 165, 'Retailing', 'Retailing');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('retail_management', 'en-ZA', 166, 'Retail Management', 'Retail Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('risk', 'en-ZA', 167, 'Risk', 'Risk');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('risk_management', 'en-ZA', 168, 'Risk Management', 'Risk Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('risk_management_financial_risk_management', 'en-ZA', 169, 'Risk Management and Financial Risk Management', 'Risk Management and Financial Risk Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('robotics', 'en-ZA', 170, 'Robotics', 'Robotics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('rural_development', 'en-ZA', 171, 'Rural Development', 'Rural Development');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('security_management', 'en-ZA', 172, 'Security Management', 'Security Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('services', 'en-ZA', 173, 'Services', 'Services');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('social_psychology', 'en-ZA', 174, 'Social Psychology', 'Social Psychology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('social_work', 'en-ZA', 175, 'Social Work', 'Social Work');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('sociology', 'en-ZA', 176, 'Sociology', 'Sociology');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('speech_language_studies', 'en-ZA', 177, 'Speech-Language Studies', 'Speech-Language Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('sports_management', 'en-ZA', 178, 'Sports Management', 'Sports Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('statistics', 'en-ZA', 179, 'Statistics', 'Statistics');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('strategic_management', 'en-ZA', 180, 'Strategic Management', 'Strategic Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('supply_chain_management', 'en-ZA', 181, 'Supply Chain Management', 'Supply Chain Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('systems_development', 'en-ZA', 182, 'Systems Development', 'Systems Development');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('taxation', 'en-ZA', 183, 'Taxation', 'Taxation');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('tourism_hospitality', 'en-ZA', 184, 'Tourism and Hospitality', 'Tourism and Hospitality');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('translation_interpreting', 'en-ZA', 185, 'Translation and Interpreting', 'Translation and Interpreting');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('transportation_supply_chain_management', 'en-ZA', 186, 'Transportation and Supply Chain Management', 'Transportation and Supply Chain Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('urban_planning', 'en-ZA', 187, 'Urban Planning', 'Urban Planning');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('visual_studies', 'en-ZA', 188, 'Visual Studies', 'Visual Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('wealth_management', 'en-ZA', 189, 'Wealth Management', 'Wealth Management');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('women_gender_studies', 'en-ZA', 190, 'Women and Gender Studies', 'Women and Gender Studies');
-INSERT INTO party.fields_of_study (code, locale_id, sort_index, name, description)
-  VALUES ('zoology', 'en-ZA', 191, 'Zoology', 'Zoology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('accounting', 'en-ZA', 'Accounting', 'Accounting');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('actuarial_science', 'en-ZA', 'Actuarial Science', 'Actuarial Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('advertising', 'en-ZA', 'Advertising', 'Advertising');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('aeronautics_aviation_science', 'en-ZA', 'Aeronautics and Aviation Science', 'Aeronautics and Aviation Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('african_literature', 'en-ZA', 'African Literature', 'African Literature');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('agribusiness_management', 'en-ZA', 'Agribusiness Management', 'Agribusiness Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('agricultural_economics', 'en-ZA', 'Agricultural Economics', 'Agricultural Economics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('anatomy', 'en-ZA', 'Anatomy', 'Anatomy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('anthropology', 'en-ZA', 'Anthropology', 'Anthropology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('applied_development_economics', 'en-ZA', 'Applied Development Economics', 'Applied Development Economics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('applied_mathematics', 'en-ZA', 'Applied Mathematics', 'Applied Mathematics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('archaeology', 'en-ZA', 'Archaeology', 'Archaeology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('architecture', 'en-ZA', 'Architecture', 'Architecture');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('artificial_intelligence_robotics', 'en-ZA', 'Artificial Intelligence and Robotics', 'Artificial Intelligence and Robotics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('arts_culture_heritage_studies', 'en-ZA', 'Arts, Culture and Heritage Studies', 'Arts, Culture and Heritage Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('arts_humanities', 'en-ZA', 'Arts and Humanities', 'Arts and Humanities');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('astronomy', 'en-ZA', 'Astronomy', 'Astronomy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('audiology', 'en-ZA', 'Audiology', 'Audiology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('auditing', 'en-ZA', 'Auditing', 'Auditing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('automotive_trades', 'en-ZA', 'Automotive Trades', 'Automotive Trades');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('banking', 'en-ZA', 'Banking', 'Banking');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('banking_international_finance', 'en-ZA', 'Banking and International Finance', 'Banking and International Finance');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('biochemistry', 'en-ZA', 'Biochemistry', 'Biochemistry');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('biodiversity', 'en-ZA', 'Biodiversity', 'Biodiversity');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('biology', 'en-ZA', 'Biology', 'Biology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('business_management_informatics', 'en-ZA', 'Business Management and Informatics', 'Business Management and Informatics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('brand', 'en-ZA', 'Brand', 'Brand');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('business_commerce_management_studies', 'en-ZA', 'Business, Commerce and Management Studies', 'Business, Commerce and Management Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('business_administration', 'en-ZA', 'Business Administration', 'Business Administration');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('business_management', 'en-ZA', 'Business Management', 'Business Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('cfa', 'en-ZA', 'CFA', 'CFA');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('cfp', 'en-ZA', 'CFP', 'CFP');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('chemical_engineering', 'en-ZA', 'Chemical Engineering', 'Chemical Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('chemistry', 'en-ZA', 'Chemistry', 'Chemistry');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('child_youth_care', 'en-ZA', 'Child and Youth Care', 'Child and Youth Care');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('cima', 'en-ZA', 'CIMA', 'CIMA');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('civil_engineering', 'en-ZA', 'Civil Engineering', 'Civil Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('clinical_psychology', 'en-ZA', 'Clinical Psychology', 'Clinical Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('commerce', 'en-ZA', 'Commerce', 'Commerce');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('communication_studies_language', 'en-ZA', 'Communication Studies and Language', 'Communication Studies and Language');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('compliance_management', 'en-ZA', 'Compliance Management', 'Compliance Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('computational_applied_mathematics', 'en-ZA', 'Computational and Applied Mathematics', 'Computational and Applied Mathematics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('computer_information_science', 'en-ZA', 'Computer and Information Science', 'Computer and Information Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('construction_management', 'en-ZA', 'Construction Management', 'Construction Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('consumer_behaviour', 'en-ZA', 'Consumer Behaviour', 'Consumer Behaviour');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('cosmetology', 'en-ZA', 'Cosmetology', 'Cosmetology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('counselling_psychology', 'en-ZA', 'Counselling Psychology', 'Counselling Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('creative_writing', 'en-ZA', 'Creative Writing', 'Creative Writing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('criminology', 'en-ZA', 'Criminology', 'Criminology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('culinary_arts', 'en-ZA', 'Culinary Arts', 'Culinary Arts');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('data_science', 'en-ZA', 'Data Science', 'Data Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('demography', 'en-ZA', 'Demography', 'Demography');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('dentistry', 'en-ZA', 'Dentistry', 'Dentistry');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('development_studies', 'en-ZA', 'Development Studies', 'Development Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('dietetics_nutrition', 'en-ZA', 'Dietetics and Nutrition', 'Dietetics and Nutrition');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('digital_arts', 'en-ZA', 'Digital Arts', 'Digital Arts');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('diplomacy', 'en-ZA', 'Diplomacy', 'Diplomacy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('diplomacy_international_studies', 'en-ZA', 'Diplomacy and International Studies', 'Diplomacy and International Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('diversity_studies', 'en-ZA', 'Diversity Studies', 'Diversity Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('drama_film', 'en-ZA', 'Drama and Film', 'Drama and Film');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('ecology', 'en-ZA', 'Ecology', 'Ecology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('econometrics', 'en-ZA', 'Econometrics', 'Econometrics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('economic_management_science', 'en-ZA', 'Economic and Management Science', 'Economic and Management Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('economics', 'en-ZA', 'Economics', 'Economics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('education', 'en-ZA', 'Education', 'Education');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('education_training_development', 'en-ZA', 'Education, Training and Development', 'Education, Training and Development');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('educational_psychology', 'en-ZA', 'Educational Psychology', 'Educational Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('electrical_engineering', 'en-ZA', 'Electrical Engineering', 'Electrical Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('entrepreneurship', 'en-ZA', 'Entrepreneurship', 'Entrepreneurship');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('environmental_science', 'en-ZA', 'Environmental Science', 'Environmental Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('epidemiology', 'en-ZA', 'Epidemiology', 'Epidemiology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('escience', 'en-ZA', 'e-Science', 'e-Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('estate_trust_management', 'en-ZA', 'Estate and Trust Management', 'Estate and Trust Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('exercise_science', 'en-ZA', 'Exercise Science', 'Exercise Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('fashion_design', 'en-ZA', 'Fashion Design', 'Fashion Design');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('finance_investment_management', 'en-ZA', 'Finance and Investment Management', 'Finance and Investment Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('financial_economics', 'en-ZA', 'Financial Economics', 'Financial Economics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('financial_planning', 'en-ZA', 'Financial Planning', 'Financial Planning');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('financial_sciences', 'en-ZA', 'Financial Sciences', 'Financial Sciences');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('fine_arts', 'en-ZA', 'Fine Arts', 'Fine Arts');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('gender_sexuality_studies', 'en-ZA', 'Gender and Sexuality Studies', 'Gender and Sexuality Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('general', 'en-ZA', 'General', 'General');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('genetics', 'en-ZA', 'Genetics', 'Genetics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('geochemistry', 'en-ZA', 'Geochemistry', 'Geochemistry');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('geography', 'en-ZA', 'Geography', 'Geography');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('geology', 'en-ZA', 'Geology', 'Geology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('geophysics', 'en-ZA', 'Geophysics', 'Geophysics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('geosciences', 'en-ZA', 'Geosciences', 'Geosciences');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('global_change_studies', 'en-ZA', 'Global Change Studies', 'Global Change Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('graphic_design', 'en-ZA', 'Graphic Design', 'Graphic Design');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('haematology', 'en-ZA', 'Haematology', 'Haematology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('health_sciences_social_services', 'en-ZA', 'Health Sciences and Social Services', 'Health Sciences and Social Services');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('history', 'en-ZA', 'History', 'History');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('human_social_studies', 'en-ZA', 'Human and Social Studies', 'Human and Social Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('humanities', 'en-ZA', 'Humanities', 'Humanities');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('human_resource_development', 'en-ZA', 'Human Resource Development', 'Human Resource Development');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('human_resources_management', 'en-ZA', 'Human Resources Management', 'Human Resources Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('human_rights_advocacy', 'en-ZA', 'Human Rights Advocacy', 'Human Rights Advocacy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('hydrogeology', 'en-ZA', 'Hydrogeology', 'Hydrogeology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('imas', 'en-ZA', 'IMAS', 'IMAS');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('industrial_organisational_psychology', 'en-ZA', 'Industrial and Organisational Psychology', 'Industrial and Organisational Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('information_systems', 'en-ZA', 'Information Systems', 'Information Systems');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('information_technology', 'en-ZA', 'Information Technology', 'Information Technology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('insurance_risk_management', 'en-ZA', 'Insurance and Risk Management', 'Insurance and Risk Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('interior_design', 'en-ZA', 'Interior Design', 'Interior Design');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('internal_auditing', 'en-ZA', 'Internal Auditing', 'Internal Auditing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('international_finance', 'en-ZA', 'International Finance', 'International Finance');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('international_law', 'en-ZA', 'International Law', 'International Law');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('international_relations', 'en-ZA', 'International Relations', 'International Relations');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('international_studies', 'en-ZA', 'International Studies', 'International Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('investment_management', 'en-ZA', 'Investment Management', 'Investment Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('journalism', 'en-ZA', 'Journalism', 'Journalism');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('labour_law', 'en-ZA',  'Labour Law', 'Labour Law');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('law', 'en-ZA', 'Law', 'Law');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('law_military_science_security', 'en-ZA', 'Law, Military Science and Security', 'Law, Military Science and Security');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('library_information_science', 'en-ZA', 'Library and Information Science', 'Library and Information Science');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('linguistics', 'en-ZA', 'Linguistics', 'Linguistics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('Linguistics_languages', 'en-ZA', 'Linguistics and Languages', 'Linguistics and Languages');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('logistics', 'en-ZA', 'Logistics', 'Logistics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('management', 'en-ZA', 'Management', 'Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('management_accounting', 'en-ZA', 'Management Accounting', 'Management Accounting');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('manufacturing_engineering_technology', 'en-ZA',  'Manufacturing, Engineering and Technology', 'Manufacturing, Engineering and Technology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('marketing', 'en-ZA', 'Marketing', 'Marketing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('mathematics', 'en-ZA', 'Mathematics', 'Mathematics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('mechanical_engineering', 'en-ZA', 'Mechanical Engineering', 'Mechanical Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('media_studies', 'en-ZA', 'Media Studies', 'Media Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('medical_sciences', 'en-ZA', 'Medical Sciences', 'Medical Sciences');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('metallurgical_engineering', 'en-ZA', 'Metallurgical Engineering', 'Metallurgical Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('meteorology', 'en-ZA', 'Meteorology', 'Meteorology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('microelectronic_engineering', 'en-ZA', 'Microelectronic Engineering', 'Microelectronic Engineering');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('migration_displacement', 'en-ZA', 'Migration and Displacement', 'Migration and Displacement');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('mining', 'en-ZA', 'Mining', 'Mining');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('money_laundering_control', 'en-ZA', 'Money Laundering Control', 'Money Laundering Control');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('multimedia', 'en-ZA', 'Multimedia', 'Multimedia');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('music', 'en-ZA', 'Music', 'Music');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('neuropsychology', 'en-ZA', 'Neuropsychology', 'Neuropsychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('nursing', 'en-ZA', 'Nursing', 'Nursing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('occupational_therapy', 'en-ZA', 'Occupational Therapy', 'Occupational Therapy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('oceanography', 'en-ZA', 'Oceanography', 'Oceanography');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('office_administration', 'en-ZA', 'Office Administration', 'Office Administration');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('operations_management', 'en-ZA', 'Operations Management', 'Operations Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('optometry', 'en-ZA', 'Optometry', 'Optometry');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('pharmacology', 'en-ZA', 'Pharmacology', 'Pharmacology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('philosophy', 'en-ZA', 'Philosophy', 'Philosophy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('photography', 'en-ZA', 'Photography', 'Photography');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('physical_mathematical_computer_life_sciences', 'en-ZA', 'Physical, Mathematical, Computer and Life Sciences', 'Physical, Mathematical, Computer and Life Sciences');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('physical_planning_construction', 'en-ZA', 'Physical Planning and Construction', 'Physical Planning and Construction');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('physics', 'en-ZA', 'Physics', 'Physics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('physiotherapy', 'en-ZA', 'Physiotherapy', 'Physiotherapy');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('political_studies', 'en-ZA', 'Political Studies', 'Political Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('politics_journalism', 'en-ZA', 'Politics and Journalism', 'Politics and Journalism');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('programme_management', 'en-ZA', 'Programme Management', 'Programme Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('project_management', 'en-ZA', 'Project Management', 'Project Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('psychology', 'en-ZA', 'Psychology', 'Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('public_administration', 'en-ZA', 'Public Administration', 'Public Administration');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('public_health', 'en-ZA', 'Public Health', 'Public Health');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('public_management_governance', 'en-ZA', 'Public Management and Governance', 'Public Management and Governance');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('public_relations', 'en-ZA', 'Public Relations', 'Public Relations');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('publishing', 'en-ZA', 'Publishing', 'Publishing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('quantity_surveying', 'en-ZA', 'Quantity Surveying', 'Quantity Surveying');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('radiation_protection', 'en-ZA', 'Radiation Protection', 'Radiation Protection');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('religion_theology', 'en-ZA', 'Religion and Theology', 'Religion and Theology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('research_psychology', 'en-ZA', 'Research Psychology', 'Research Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('resource_conservation_biology', 'en-ZA', 'Resource Conservation Biology', 'Resource Conservation Biology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('retailing', 'en-ZA', 'Retailing', 'Retailing');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('retail_management', 'en-ZA', 'Retail Management', 'Retail Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('risk', 'en-ZA', 'Risk', 'Risk');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('risk_management', 'en-ZA', 'Risk Management', 'Risk Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('risk_management_financial_risk_management', 'en-ZA', 'Risk Management and Financial Risk Management', 'Risk Management and Financial Risk Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('robotics', 'en-ZA', 'Robotics', 'Robotics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('rural_development', 'en-ZA', 'Rural Development', 'Rural Development');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('security_management', 'en-ZA', 'Security Management', 'Security Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('services', 'en-ZA', 'Services', 'Services');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('social_psychology', 'en-ZA', 'Social Psychology', 'Social Psychology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('social_work', 'en-ZA', 'Social Work', 'Social Work');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('sociology', 'en-ZA', 'Sociology', 'Sociology');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('speech_language_studies', 'en-ZA', 'Speech-Language Studies', 'Speech-Language Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('sports_management', 'en-ZA', 'Sports Management', 'Sports Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('statistics', 'en-ZA', 'Statistics', 'Statistics');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('strategic_management', 'en-ZA', 'Strategic Management', 'Strategic Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('supply_chain_management', 'en-ZA', 'Supply Chain Management', 'Supply Chain Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('systems_development', 'en-ZA', 'Systems Development', 'Systems Development');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('taxation', 'en-ZA', 'Taxation', 'Taxation');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('tourism_hospitality', 'en-ZA', 'Tourism and Hospitality', 'Tourism and Hospitality');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('translation_interpreting', 'en-ZA', 'Translation and Interpreting', 'Translation and Interpreting');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('transportation_supply_chain_management', 'en-ZA', 'Transportation and Supply Chain Management', 'Transportation and Supply Chain Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('urban_planning', 'en-ZA', 'Urban Planning', 'Urban Planning');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('visual_studies', 'en-ZA', 'Visual Studies', 'Visual Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('wealth_management', 'en-ZA', 'Wealth Management', 'Wealth Management');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('women_gender_studies', 'en-ZA', 'Women and Gender Studies', 'Women and Gender Studies');
+INSERT INTO party.fields_of_study (code, locale_id, name, description)
+  VALUES ('zoology', 'en-ZA', 'Zoology', 'Zoology');
 
 
 INSERT INTO party.genders (code, locale_id, sort_index, name, description)
@@ -2998,34 +3033,26 @@ INSERT INTO party.identity_document_types (code, locale_id, sort_index, name, de
   VALUES ('za_company_registration', 'en-ZA', 20001, 'South African Company Registration', 'South African Company Registration', 'ZA', 'organization');
 
 
-INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('fraud', 'en-US', 1, 'Fraud', 'Fraud');
-INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('kyc', 'en-US', 2, 'KYC', 'Know Your Customer');
-INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-US', 666, 'Test Lock Category', 'Test Lock Category');
+INSERT INTO party.lock_type_categories(code, locale_id, name, description)
+  VALUES ('fraud', 'en-US', 'Fraud', 'Fraud');
+INSERT INTO party.lock_type_categories(code, locale_id, name, description)
+  VALUES ('kyc', 'en-US', 'KYC', 'Know Your Customer');
 
-INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('fraud', 'en-ZA', 1, 'Fraud', 'Fraud');
-INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('kyc', 'en-ZA', 2, 'KYC', 'Know Your Customer');
-INSERT INTO party.lock_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-ZA', 666, 'Test Lock Category', 'Test Lock Category');
+INSERT INTO party.lock_type_categories(code, locale_id, name, description)
+  VALUES ('fraud', 'en-ZA', 'Fraud', 'Fraud');
+INSERT INTO party.lock_type_categories(code, locale_id, name, description)
+  VALUES ('kyc', 'en-ZA', 'KYC', 'Know Your Customer');
 
 
-INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fraud', 'suspected_fraud', 'en-US', 101, 'Suspected Fraud', 'Suspected Fraud', 'organization,person');
-INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('kyc', 'kyc_unverified', 'en-US', 201, 'KYC Unverified', 'KYC Unverified', 'organization,person');
-INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test', 'test', 'en-US', 66601, 'Test Lock', 'Test Lock', 'organization,person');
+INSERT INTO party.lock_types(category, code, locale_id, name, description, party_types)
+  VALUES ('fraud', 'suspected_fraud', 'en-US', 'Suspected Fraud', 'Suspected Fraud', 'organization,person');
+INSERT INTO party.lock_types(category, code, locale_id, name, description, party_types)
+  VALUES ('kyc', 'kyc_unverified', 'en-US', 'KYC Unverified', 'KYC Unverified', 'organization,person');
 
-INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fraud', 'suspected_fraud', 'en-ZA', 101, 'Suspected Fraud', 'Suspected Fraud', 'organization,person');
-INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('kyc', 'kyc_unverified', 'en-ZA', 201, 'KYC Unverified', 'KYC Unverified', 'organization,person');
-INSERT INTO party.lock_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test', 'test', 'en-ZA', 66601, 'Test Lock', 'Test Lock', 'organization,person');
+INSERT INTO party.lock_types(category, code, locale_id, name, description, party_types)
+  VALUES ('fraud', 'suspected_fraud', 'en-ZA', 'Suspected Fraud', 'Suspected Fraud', 'organization,person');
+INSERT INTO party.lock_types(category, code, locale_id, name, description, party_types)
+  VALUES ('kyc', 'kyc_unverified', 'en-ZA', 'KYC Unverified', 'KYC Unverified', 'organization,person');
 
 
 INSERT INTO party.marital_statuses (code, locale_id, sort_index, name, description)
@@ -3109,341 +3136,317 @@ INSERT INTO party.minor_types (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('aunt', 'en-US', 1, 'Aunt', 'Aunt');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('brother', 'en-US', 1, 'Brother', 'Brother');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('cousin', 'en-US', 1, 'Cousin', 'Cousin');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('father', 'en-US', 1, 'Father', 'Father');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('friend', 'en-US', 1, 'Friend', 'Friend');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('grandfather', 'en-US', 1, 'Grandfather', 'Grandfather');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('grandmother', 'en-US', 1, 'Grandmother', 'Grandmother');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('husband', 'en-US', 1, 'Husband', 'Husband');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('life_partner', 'en-US', 1, 'Life Partner', 'Life Partner');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('mother', 'en-US', 1, 'Mother', 'Mother');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('nephew', 'en-US', 1, 'Nephew', 'Nephew');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('niece', 'en-US', 1, 'Niece', 'Niece');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('sister', 'en-US', 1, 'Sister', 'Sister');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('uncle', 'en-US', 1, 'Uncle', 'Uncle');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('wife', 'en-US', 1, 'Wife', 'Wife');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('other', 'en-US', 1, 'Other', 'Other');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('aunt', 'en-US', 'Aunt', 'Aunt');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('brother', 'en-US', 'Brother', 'Brother');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('cousin', 'en-US', 'Cousin', 'Cousin');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('father', 'en-US', 'Father', 'Father');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('friend', 'en-US', 'Friend', 'Friend');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('grandfather', 'en-US', 'Grandfather', 'Grandfather');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('grandmother', 'en-US', 'Grandmother', 'Grandmother');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('husband', 'en-US', 'Husband', 'Husband');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('life_partner', 'en-US', 'Life Partner', 'Life Partner');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('mother', 'en-US', 'Mother', 'Mother');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('nephew', 'en-US', 'Nephew', 'Nephew');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('niece', 'en-US', 'Niece', 'Niece');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('sister', 'en-US', 'Sister', 'Sister');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('uncle', 'en-US', 'Uncle', 'Uncle');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('wife', 'en-US', 'Wife', 'Wife');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('other', 'en-US', 'Other', 'Other');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('unknown', 'en-US', 'Unknown', 'Unknown');
 
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('aunt', 'en-ZA', 1, 'Aunt', 'Aunt');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('brother', 'en-ZA', 1, 'Brother', 'Brother');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('cousin', 'en-ZA', 1, 'Cousin', 'Cousin');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('father', 'en-ZA', 1, 'Father', 'Father');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('friend', 'en-ZA', 1, 'Friend', 'Friend');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('grandfather', 'en-ZA', 1, 'Grandfather', 'Grandfather');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('grandmother', 'en-ZA', 1, 'Grandmother', 'Grandmother');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('husband', 'en-ZA', 1, 'Husband', 'Husband');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('life_partner', 'en-ZA', 1, 'Life Partner', 'Life Partner');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('mother', 'en-ZA', 1, 'Mother', 'Mother');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('nephew', 'en-ZA', 1, 'Nephew', 'Nephew');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('niece', 'en-ZA', 1, 'Niece', 'Niece');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('sister', 'en-ZA', 1, 'Sister', 'Sister');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('uncle', 'en-ZA', 1, 'Uncle', 'Uncle');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('wife', 'en-ZA', 1, 'Wife', 'Wife');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('other', 'en-ZA', 1, 'Other', 'Other');
-INSERT INTO party.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
-
-
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('creative', 'en-US', 1, 'Creative', 'Creative');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('driver', 'en-US', 2, 'Driver', 'Driver');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('executive', 'en-US', 3, 'Executive', 'Executive');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('farmer', 'en-US', 4, 'Farmer', 'Farmer');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('government', 'en-US', 5, 'Government Official', 'Government Official');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('guard', 'en-US', 6, 'Guard', 'Guard');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('labourer', 'en-US', 7, 'Labourer', 'Labourer');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('military_or_police', 'en-US', 8, 'Military / Police', 'Military / Police');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('manager', 'en-US', 9, 'Manager', 'Manager');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('office_staff', 'en-US', 10, 'Office Staff', 'Office Staff');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('pensioner_retired', 'en-US', 11, 'Pensioner / Retired', 'Pensioner / Retired');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('plant_or_machine_operator', 'en-US', 12, 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_business', 'en-US', 13, 'Professional: Business', 'Professional: Business');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_education', 'en-US', 14, 'Professional: Education', 'Professional: Education');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_engineering', 'en-US', 15, 'Professional: Engineering', 'Professional: Engineering');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_government', 'en-US', 16, 'Professional: Government', 'Professional: Government');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_legal', 'en-US', 17, 'Professional: Legal', 'Professional: Legal');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_medical', 'en-US', 18, 'Professional: Medical', 'Professional: Medical');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_scientific', 'en-US', 19, 'Professional: Scientific', 'Professional: Scientific');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_transport', 'en-US', 20, 'Professional: Transport', 'Professional: Transport');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('religious_charity', 'en-US', 21, 'Religious / Charitable', 'Religious / Charitable');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('sales', 'en-US', 22, 'Sales', 'Sales');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('semi_skilled_worker', 'en-US', 23, 'Semi-skilled Worker', 'Semi-skilled Worker');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('service', 'en-US', 24, 'Service', 'Service');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('skilled_worker', 'en-US', 25, 'Skilled Worker', 'Skilled Worker');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('technician', 'en-US', 26, 'Technician', 'Technician');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('trade_worker', 'en-US', 27, 'Trade Worker', 'Trade Worker');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('unemployed', 'en-US', 50, 'Unemployed', 'Unemployed');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
-
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('creative', 'en-ZA', 1, 'Creative', 'Creative');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('driver', 'en-ZA', 2, 'Driver', 'Driver');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('executive', 'en-ZA', 3, 'Executive', 'Executive');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('farmer', 'en-ZA', 4, 'Farmer', 'Farmer');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('government', 'en-ZA', 5, 'Government Official', 'Government Official');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('guard', 'en-ZA', 6, 'Guard', 'Guard');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('labourer', 'en-ZA', 7, 'Labourer', 'Labourer');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('military_or_police', 'en-ZA', 8, 'Military / Police', 'Military / Police');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('manager', 'en-ZA', 9, 'Manager', 'Manager');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('office_staff', 'en-ZA', 10, 'Office Staff', 'Office Staff');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('pensioner_retired', 'en-ZA', 11, 'Pensioner / Retired', 'Pensioner / Retired');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('plant_or_machine_operator', 'en-ZA', 12, 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_business', 'en-ZA', 13, 'Professional: Business', 'Professional: Business');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_education', 'en-ZA', 14, 'Professional: Education', 'Professional: Education');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_engineering', 'en-ZA', 15, 'Professional: Engineering', 'Professional: Engineering');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_government', 'en-ZA', 16, 'Professional: Government', 'Professional: Government');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_legal', 'en-ZA', 17, 'Professional: Legal', 'Professional: Legal');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_medical', 'en-ZA', 18, 'Professional: Medical', 'Professional: Medical');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_scientific', 'en-ZA', 19, 'Professional: Scientific', 'Professional: Scientific');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('professional_transport', 'en-ZA', 20, 'Professional: Transport', 'Professional: Transport');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('religious_charity', 'en-ZA', 21, 'Religious / Charitable', 'Religious / Charitable');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('sales', 'en-ZA', 22, 'Sales', 'Sales');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('semi_skilled_worker', 'en-ZA', 23, 'Semi-skilled Worker', 'Semi-skilled Worker');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('service', 'en-ZA', 24, 'Service', 'Service');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('skilled_worker', 'en-ZA', 25, 'Skilled Worker', 'Skilled Worker');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('technician', 'en-ZA', 26, 'Technician', 'Technician');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('trade_worker', 'en-ZA', 27, 'Trade Worker', 'Trade Worker');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('unemployed', 'en-ZA', 50, 'Unemployed', 'Unemployed');
-INSERT INTO party.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('aunt', 'en-ZA', 'Aunt', 'Aunt');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('brother', 'en-ZA', 'Brother', 'Brother');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('cousin', 'en-ZA', 'Cousin', 'Cousin');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('father', 'en-ZA', 'Father', 'Father');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('friend', 'en-ZA', 'Friend', 'Friend');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('grandfather', 'en-ZA', 'Grandfather', 'Grandfather');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('grandmother', 'en-ZA', 'Grandmother', 'Grandmother');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('husband', 'en-ZA', 'Husband', 'Husband');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('life_partner', 'en-ZA', 'Life Partner', 'Life Partner');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('mother', 'en-ZA', 'Mother', 'Mother');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('nephew', 'en-ZA', 'Nephew', 'Nephew');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('niece', 'en-ZA', 'Niece', 'Niece');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('sister', 'en-ZA', 'Sister', 'Sister');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('uncle', 'en-ZA', 'Uncle', 'Uncle');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('wife', 'en-ZA', 'Wife', 'Wife');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('other', 'en-ZA', 'Other', 'Other');
+INSERT INTO party.next_of_kin_types (code, locale_id, name, description)
+  VALUES ('unknown', 'en-ZA', 'Unknown', 'Unknown');
 
 
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('billing', 'en-US', 1, 'Billing', 'Billing Address', 'organization,person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'en-US', 2, 'Correspondence', 'Correspondence Address', 'organization,person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('delivery', 'en-US', 3, 'Delivery', 'Delivery Address', 'organization,person');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('creative', 'en-US', 'Creative', 'Creative');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('driver', 'en-US', 'Driver', 'Driver');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('executive', 'en-US', 'Executive', 'Executive');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('farmer', 'en-US', 'Farmer', 'Farmer');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('government', 'en-US', 'Government Official', 'Government Official');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('guard', 'en-US', 'Guard', 'Guard');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('labourer', 'en-US', 'Labourer', 'Labourer');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('military_or_police', 'en-US', 'Military / Police', 'Military / Police');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('manager', 'en-US', 'Manager', 'Manager');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('office_staff', 'en-US', 'Office Staff', 'Office Staff');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('pensioner_retired', 'en-US', 'Pensioner / Retired', 'Pensioner / Retired');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('plant_or_machine_operator', 'en-US', 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_business', 'en-US', 'Professional: Business', 'Professional: Business');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_education', 'en-US', 'Professional: Education', 'Professional: Education');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_engineering', 'en-US', 'Professional: Engineering', 'Professional: Engineering');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_government', 'en-US', 'Professional: Government', 'Professional: Government');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_legal', 'en-US', 'Professional: Legal', 'Professional: Legal');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_medical', 'en-US', 'Professional: Medical', 'Professional: Medical');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_scientific', 'en-US', 'Professional: Scientific', 'Professional: Scientific');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_transport', 'en-US', 'Professional: Transport', 'Professional: Transport');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('religious_charity', 'en-US', 'Religious / Charitable', 'Religious / Charitable');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('sales', 'en-US', 'Sales', 'Sales');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('semi_skilled_worker', 'en-US', 'Semi-skilled Worker', 'Semi-skilled Worker');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('service', 'en-US', 'Service', 'Service');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('skilled_worker', 'en-US', 'Skilled Worker', 'Skilled Worker');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('technician', 'en-US', 'Technician', 'Technician');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('trade_worker', 'en-US', 'Trade Worker', 'Trade Worker');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('unemployed', 'en-US', 'Unemployed', 'Unemployed');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('unknown', 'en-US', 'Unknown', 'Unknown');
 
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('billing', 'en-ZA', 1, 'Billing', 'Billing Address', 'organization,person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'en-ZA', 2, 'Correspondence', 'Correspondence Address', 'organization,person');
-INSERT INTO party.physical_address_purposes (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('delivery', 'en-ZA', 3, 'Delivery', 'Delivery Address', 'organization,person');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('creative', 'en-ZA', 'Creative', 'Creative');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('driver', 'en-ZA', 'Driver', 'Driver');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('executive', 'en-ZA', 'Executive', 'Executive');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('farmer', 'en-ZA', 'Farmer', 'Farmer');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('government', 'en-ZA', 'Government Official', 'Government Official');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('guard', 'en-ZA', 'Guard', 'Guard');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('labourer', 'en-ZA', 'Labourer', 'Labourer');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('military_or_police', 'en-ZA', 'Military / Police', 'Military / Police');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('manager', 'en-ZA', 'Manager', 'Manager');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('office_staff', 'en-ZA', 'Office Staff', 'Office Staff');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('pensioner_retired', 'en-ZA', 'Pensioner / Retired', 'Pensioner / Retired');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('plant_or_machine_operator', 'en-ZA', 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_business', 'en-ZA', 'Professional: Business', 'Professional: Business');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_education', 'en-ZA', 'Professional: Education', 'Professional: Education');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_engineering', 'en-ZA', 'Professional: Engineering', 'Professional: Engineering');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_government', 'en-ZA', 'Professional: Government', 'Professional: Government');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_legal', 'en-ZA', 'Professional: Legal', 'Professional: Legal');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_medical', 'en-ZA', 'Professional: Medical', 'Professional: Medical');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_scientific', 'en-ZA', 'Professional: Scientific', 'Professional: Scientific');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('professional_transport', 'en-ZA', 'Professional: Transport', 'Professional: Transport');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('religious_charity', 'en-ZA', 'Religious / Charitable', 'Religious / Charitable');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('sales', 'en-ZA', 'Sales', 'Sales');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('semi_skilled_worker', 'en-ZA', 'Semi-skilled Worker', 'Semi-skilled Worker');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('service', 'en-ZA', 'Service', 'Service');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('skilled_worker', 'en-ZA', 'Skilled Worker', 'Skilled Worker');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('technician', 'en-ZA', 'Technician', 'Technician');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('trade_worker', 'en-ZA', 'Trade Worker', 'Trade Worker');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('unemployed', 'en-ZA', 'Unemployed', 'Unemployed');
+INSERT INTO party.occupations (code, locale_id, name, description)
+  VALUES ('unknown', 'en-ZA', 'Unknown', 'Unknown');
 
 
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('business', 'en-US', 1, 'Business', 'Business Address', 'organization');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('home', 'en-US', 2, 'Home', 'Home Address', 'person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('main', 'en-US', 3, 'Main', 'Main Address', 'organization');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('permanent', 'en-US', 4, 'Permanent', 'Permanent Address', 'person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('postal', 'en-US', 5, 'Postal', 'Postal Address', 'organization,person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('registered_office', 'en-US', 6, 'Registered Office', 'Registered Office Address', 'organization');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('residential', 'en-US', 7, 'Residential', 'Residential Address', 'person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('service', 'en-US', 8, 'Service', 'Service Address', 'organization,person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('sole_trader', 'en-US', 9, 'Sole Trader', 'Sole Trader Address', 'person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('temporary', 'en-US', 10, 'Temporary', 'Temporary Address', 'person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('work', 'en-US', 11, 'Work', 'Work Address', 'person');
+INSERT INTO party.physical_address_purposes (code, locale_id, name, description, party_types)
+  VALUES ('billing', 'en-US', 'Billing', 'Billing Address', 'organization,person');
+INSERT INTO party.physical_address_purposes (code, locale_id, name, description, party_types)
+  VALUES ('correspondence', 'en-US', 'Correspondence', 'Correspondence Address', 'organization,person');
+INSERT INTO party.physical_address_purposes (code, locale_id, name, description, party_types)
+  VALUES ('delivery', 'en-US', 'Delivery', 'Delivery Address', 'organization,person');
 
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('business', 'en-ZA', 1, 'Business', 'Business Address', 'organization');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('home', 'en-ZA', 2, 'Home', 'Home Address', 'person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('main', 'en-ZA', 3, 'Main', 'Main Address', 'organization');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('permanent', 'en-ZA', 4, 'Permanent', 'Permanent Address', 'person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('postal', 'en-ZA', 5, 'Postal', 'Postal Address', 'organization,person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('registered_office', 'en-ZA', 6, 'Registered Office', 'Registered Office Address', 'organization');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('residential', 'en-ZA', 7, 'Residential', 'Residential Address', 'person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('service', 'en-ZA', 8, 'Service', 'Service Address', 'organization,person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('sole_trader', 'en-ZA', 9, 'Sole Trader', 'Sole Trader Address', 'person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('temporary', 'en-ZA', 10, 'Temporary', 'Temporary Address', 'person');
-INSERT INTO party.physical_address_roles (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('work', 'en-ZA', 11, 'Work', 'Work Address', 'person');
+INSERT INTO party.physical_address_purposes (code, locale_id, name, description, party_types)
+  VALUES ('billing', 'en-ZA', 'Billing', 'Billing Address', 'organization,person');
+INSERT INTO party.physical_address_purposes (code, locale_id, name, description, party_types)
+  VALUES ('correspondence', 'en-ZA', 'Correspondence', 'Correspondence Address', 'organization,person');
+INSERT INTO party.physical_address_purposes (code, locale_id, name, description, party_types)
+  VALUES ('delivery', 'en-ZA', 'Delivery', 'Delivery Address', 'organization,person');
 
 
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('building', 'en-US', 1, 'Building', 'Building');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('complex', 'en-US', 2, 'Complex', 'Complex');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('farm', 'en-US', 3, 'Farm', 'Farm');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('international', 'en-US', 4, 'International', 'International');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('postal', 'en-US', 5, 'Postal', 'Postal');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('site', 'en-US', 6, 'Site', 'Site');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('street', 'en-US', 7, 'Street', 'Street');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('unstructured', 'en-US', 99, 'Unstructured', 'Unstructured');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('business', 'en-US', 'Business', 'Business Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('home', 'en-US', 'Home', 'Home Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('main', 'en-US', 'Main', 'Main Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('permanent', 'en-US', 'Permanent', 'Permanent Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('postal', 'en-US', 'Postal', 'Postal Address', 'organization,person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('registered_office', 'en-US', 'Registered Office', 'Registered Office Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('residential', 'en-US', 'Residential', 'Residential Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('service', 'en-US', 'Service', 'Service Address', 'organization,person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('sole_trader', 'en-US', 'Sole Trader', 'Sole Trader Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('temporary', 'en-US', 'Temporary', 'Temporary Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('work', 'en-US', 'Work', 'Work Address', 'person');
 
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('building', 'en-ZA', 1, 'Building', 'Building');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('complex', 'en-ZA', 2, 'Complex', 'Complex');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('farm', 'en-ZA', 3, 'Farm', 'Farm');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('international', 'en-ZA', 4, 'International', 'International');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('postal', 'en-ZA', 5, 'Postal', 'Postal');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('site', 'en-ZA', 6, 'Site', 'Site');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('street', 'en-ZA', 7, 'Street', 'Street');
-INSERT INTO party.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('unstructured', 'en-ZA', 99, 'Unstructured', 'Unstructured');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('business', 'en-ZA', 'Business', 'Business Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('home', 'en-ZA', 'Home', 'Home Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('main', 'en-ZA', 'Main', 'Main Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('permanent', 'en-ZA', 'Permanent', 'Permanent Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('postal', 'en-ZA', 'Postal', 'Postal Address', 'organization,person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('registered_office', 'en-ZA', 'Registered Office', 'Registered Office Address', 'organization');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('residential', 'en-ZA', 'Residential', 'Residential Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('service', 'en-ZA', 'Service', 'Service Address', 'organization,person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('sole_trader', 'en-ZA', 'Sole Trader', 'Sole Trader Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('temporary', 'en-ZA', 'Temporary', 'Temporary Address', 'person');
+INSERT INTO party.physical_address_roles (code, locale_id, name, description, party_types)
+  VALUES ('work', 'en-ZA', 'Work', 'Work Address', 'person');
 
 
-INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('correspondence', 'en-US', 1, 'Correspondence', 'Correspondence');
-INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-US', 666, 'Test', 'Test');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('building', 'en-US', 'Building', 'Building');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('complex', 'en-US', 'Complex', 'Complex');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('farm', 'en-US', 'Farm', 'Farm');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('international', 'en-US', 'International', 'International');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('postal', 'en-US', 'Postal', 'Postal');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('site', 'en-US', 'Site', 'Site');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('street', 'en-US', 'Street', 'Street');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('unstructured', 'en-US', 'Unstructured', 'Unstructured');
 
-INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('correspondence', 'en-ZA', 1, 'Correspondence', 'Correspondence');
-INSERT INTO party.preference_type_categories (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-ZA', 666, 'Test', 'Test');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('building', 'en-ZA', 'Building', 'Building');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('complex', 'en-ZA', 'Complex', 'Complex');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('farm', 'en-ZA', 'Farm', 'Farm');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('international', 'en-ZA', 'International', 'International');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('postal', 'en-ZA', 'Postal', 'Postal');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('site', 'en-ZA', 'Site', 'Site');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('street', 'en-ZA', 'Street', 'Street');
+INSERT INTO party.physical_address_types (code, locale_id, name, description)
+  VALUES ('unstructured', 'en-ZA', 'Unstructured', 'Unstructured');
 
 
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence','contact_person', 'en-US', 101, 'Contact Person', 'Contact Person', 'organization');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence','correspondence_language', 'en-US', 102, 'Correspondence Language', 'Correspondence Language', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'preferred_contact_mechanism', 'en-US', 103, 'Preferred Contact Mechanism', 'Preferred Contact Mechanism', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence','time_to_contact', 'en-US', 104, 'Time To Contact', 'Suitable Time To Contact', 'person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_contact_mechanism_type', 'en-US', 66601, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_country', 'en-US', 66602, 'Test Country', 'Test Country', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_language', 'en-US', 66603, 'Test Language', 'Test Language', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_preference', 'en-US', 66604, 'Test Preference', 'Test Preference', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_size', 'en-US', 66605, 'Test Size', 'Test Size', 'organization,person');
+INSERT INTO party.preference_type_categories (code, locale_id, name, description)
+  VALUES ('correspondence', 'en-US', 'Correspondence', 'Correspondence');
 
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence','contact_person', 'en-ZA', 101, 'Contact Person', 'Contact Person', 'organization');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'correspondence_language', 'en-ZA', 102, 'Correspondence Language', 'Correspondence Language', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'preferred_contact_mechanism', 'en-ZA', 103, 'Preferred Contact Mechanism', 'Preferred Contact Mechanism', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence', 'time_to_contact', 'en-ZA', 104, 'Time To Contact', 'Suitable Time To Contact', 'person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_contact_mechanism_type', 'en-ZA', 66601, 'Test Contact Mechanism Type', 'Test Contact Mechanism Type', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_country', 'en-ZA', 66602, 'Test Country', 'Test Country', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_language', 'en-ZA', 66603, 'Test Language', 'Test Language', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_preference', 'en-ZA', 66604, 'Test Preference', 'Test Preference', 'organization,person');
-INSERT INTO party.preference_types (category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test','test_size', 'en-ZA', 66605, 'Test Size', 'Test Size', 'organization,person');
+INSERT INTO party.preference_type_categories (code, locale_id, name, description)
+  VALUES ('correspondence', 'en-ZA', 'Correspondence', 'Correspondence');
+
+
+INSERT INTO party.preference_types (category, code, locale_id, name, description, party_types)
+  VALUES ('correspondence','contact_person', 'en-US', 'Contact Person', 'Contact Person', 'organization');
+INSERT INTO party.preference_types (category, code, locale_id, name, description, party_types)
+  VALUES ('correspondence','correspondence_language', 'en-US', 'Correspondence Language', 'Correspondence Language', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, name, description, party_types)
+  VALUES ('correspondence', 'preferred_contact_mechanism', 'en-US', 'Preferred Contact Mechanism', 'Preferred Contact Mechanism', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, name, description, party_types)
+  VALUES ('correspondence','time_to_contact', 'en-US', 'Time To Contact', 'Suitable Time To Contact', 'person');
+
+INSERT INTO party.preference_types (category, code, locale_id, name, description, party_types)
+  VALUES ('correspondence','contact_person', 'en-ZA', 'Contact Person', 'Contact Person', 'organization');
+INSERT INTO party.preference_types (category, code, locale_id, name, description, party_types)
+  VALUES ('correspondence', 'correspondence_language', 'en-ZA', 'Correspondence Language', 'Correspondence Language', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, name, description, party_types)
+  VALUES ('correspondence', 'preferred_contact_mechanism', 'en-ZA', 'Preferred Contact Mechanism', 'Preferred Contact Mechanism', 'organization,person');
+INSERT INTO party.preference_types (category, code, locale_id, name, description, party_types)
+  VALUES ('correspondence', 'time_to_contact', 'en-ZA', 'Time To Contact', 'Suitable Time To Contact', 'person');
 
 
 INSERT INTO party.qualification_types (code, locale_id, sort_index, name, description)
@@ -3626,425 +3629,234 @@ INSERT INTO party.residential_types (code, locale_id, sort_index, name, descript
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
-INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-US', 666, 'Test', 'Test');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('affiliate', 'en-US', 'Affiliate', 'A company under common control with another company', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('agency', 'en-US', 'Agency', 'An organization providing a particular service on behalf of another organization', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('agent', 'en-US', 'Agent', 'A person who acts on behalf of an organization', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('association', 'en-US', 'Association', 'An organization that provides services such as networking and sharing of information within particular fields of interest or industries', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('association_member', 'en-US', 'Association Member', 'An organization or person who is a member of an association', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('business_customer', 'en-US', 'Business Customer', 'A business who buys goods or services from a shop or business', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('child', 'en-US', 'Child', 'A boy or girl from the time of birth until he or she is an adult, or a son or daughter of any age', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('civil_partner', 'en-US', 'Civil Partner', 'A significant other in a civil partnership', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('company', 'en-US', 'Company', 'A commercial business', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('competitor', 'en-US', 'Competitor', 'An organization engaged in commercial competition with others', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('contractor', 'en-US', 'Contractor', 'A person paid to work on a project for a particular period and amount of money', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('department', 'en-US', 'Department', 'A division of a large organization dealing with a specific area of activity', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('director', 'en-US', 'Director', 'A person who is in charge of an activity, department, or organization', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('distributor', 'en-US', 'Distributor', 'An organization that buys noncompeting products or product lines and sells them direct to end users or customers', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('division', 'en-US', 'Division', 'A major section of an organization with responsibility for a particular area of activity', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('employee', 'en-US', 'Employee', 'A person employed for wages or salary', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('employer', 'en-US', 'Employer', 'An organization or person that has employees', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('family', 'en-US', 'Family', 'A group of one or more parents and their children living together as a unit', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('family_member', 'en-US', 'Family Member', 'A person who is a member of a family', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('household', 'en-US', 'Household', 'A group of people living together', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('household_member', 'en-US', 'Household Member', 'A person who is a member of a household', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('individual_customer', 'en-US', 'Individual Customer', 'A person who buys goods or services from a shop or business', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('joint_venture', 'en-US', 'Joint Venture', 'A joint venture is a business entity created by two or more organizations, generally characterized by shared ownership, shared returns and risks, and shared governance', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('life_partner', 'en-US', 'Life Partner', 'Either member of a couple in a long-term relationship', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('organization', 'en-US', 'Organization', 'A group of people bound together in a formal relationship to achieve common objectives', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('parent', 'en-US', 'Parent', 'A person''s father or mother', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('partner', 'en-US', 'Partner', 'A person associated with another or others as a principal or a contributor of capital in a business or a joint venture', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('partnership', 'en-US', 'Partnership', 'A formal arrangement by two or more parties to manage and operate a business and share its profits', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('prospect', 'en-US', 'Prospect', 'An organization or a person who is a potential customer', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('regulatory_authority', 'en-US', 'Regulatory Authority', 'A government agency that is responsible for exercising autonomous dominion over some area of human activity in a regulatory or monitoring capacity', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('sibling', 'en-US', 'Sibling', 'Each of two or more children or offspring having one or both parents in common', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('shareholder', 'en-US', 'Shareholder', 'An organization or person that legally owns one or more shares of the share capital of a public or private company', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('spouse', 'en-US', 'Spouse', 'A significant other in a marriage', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('subsidiary', 'en-US', 'Subsidiary', 'A company controlled by a parent company or holding company', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('supplier', 'en-US', 'Supplier', 'A person or organization that provides something needed such as a product or service', 'organization,person');
 
-INSERT INTO party.role_purposes (code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-ZA', 666, 'Test', 'Test');
-
-
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('affiliate', 'en-US', 1, 'Affiliate', 'A company under common control with another company', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('agency', 'en-US', 2, 'Agency', 'An organization providing a particular service on behalf of another organization', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('agent', 'en-US', 3, 'Agent', 'A person who acts on behalf of an organization', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('association', 'en-US', 4, 'Association', 'An organization that provides services such as networking and sharing of information within particular fields of interest or industries', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('association_member', 'en-US', 5, 'Association Member', 'An organization or person who is a member of an association', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('business_customer', 'en-US', 6, 'Business Customer', 'A business who buys goods or services from a shop or business', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('child', 'en-US', 7, 'Child', 'A boy or girl from the time of birth until he or she is an adult, or a son or daughter of any age', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('civil_partner', 'en-US', 8, 'Civil Partner', 'A significant other in a civil partnership', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('company', 'en-US', 9, 'Company', 'A commercial business', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('competitor', 'en-US', 10, 'Competitor', 'An organization engaged in commercial competition with others', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('contractor', 'en-US', 11, 'Contractor', 'A person paid to work on a project for a particular period and amount of money', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('department', 'en-US', 12, 'Department', 'A division of a large organization dealing with a specific area of activity', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('director', 'en-US', 13, 'Director', 'A person who is in charge of an activity, department, or organization', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('distributor', 'en-US', 14, 'Distributor', 'An organization that buys noncompeting products or product lines and sells them direct to end users or customers', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('division', 'en-US', 15, 'Division', 'A major section of an organization with responsibility for a particular area of activity', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employee', 'en-US', 16, 'Employee', 'A person employed for wages or salary', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employer', 'en-US', 17, 'Employer', 'An organization or person that has employees', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('family', 'en-US', 18, 'Family', 'A group of one or more parents and their children living together as a unit', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('family_member', 'en-US', 19, 'Family Member', 'A person who is a member of a family', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('household', 'en-US', 20, 'Household', 'A group of people living together', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('household_member', 'en-US', 21, 'Household Member', 'A person who is a member of a household', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('individual_customer', 'en-US', 22, 'Individual Customer', 'A person who buys goods or services from a shop or business', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('joint_venture', 'en-US', 23, 'Joint Venture', 'A joint venture is a business entity created by two or more organizations, generally characterized by shared ownership, shared returns and risks, and shared governance', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('life_partner', 'en-US', 24, 'Life Partner', 'Either member of a couple in a long-term relationship', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('organization', 'en-US', 25, 'Organization', 'A group of people bound together in a formal relationship to achieve common objectives', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('parent', 'en-US', 26, 'Parent', 'A person''s father or mother', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('partner', 'en-US', 27, 'Partner', 'A person associated with another or others as a principal or a contributor of capital in a business or a joint venture', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('partnership', 'en-US', 28, 'Partnership', 'A formal arrangement by two or more parties to manage and operate a business and share its profits', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('prospect', 'en-US', 29, 'Prospect', 'An organization or a person who is a potential customer', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('regulatory_authority', 'en-US', 30, 'Regulatory Authority', 'A government agency that is responsible for exercising autonomous dominion over some area of human activity in a regulatory or monitoring capacity', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('sibling', 'en-US', 31, 'Sibling', 'Each of two or more children or offspring having one or both parents in common', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('shareholder', 'en-US', 32, 'Shareholder', 'An organization or person that legally owns one or more shares of the share capital of a public or private company', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('spouse', 'en-US', 33, 'Spouse', 'A significant other in a marriage', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('subsidiary', 'en-US', 34, 'Subsidiary', 'A company controlled by a parent company or holding company', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('supplier', 'en-US', 35, 'Supplier', 'A person or organization that provides something needed such as a product or service', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_organization_role', 'en-US', 66601, 'Test Organization Role', 'Test Organization Role', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_person_role', 'en-US', 66602, 'Test Person Role', 'Test Person Role', 'person');
-
-
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('affiliate', 'en-ZA', 1, 'Affiliate', 'A company under common control with another company', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('agency', 'en-ZA', 2, 'Agency', 'An organization providing a particular service on behalf of another organization', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('agent', 'en-ZA', 3, 'Agent', 'A person who acts on behalf of an organization', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('association', 'en-ZA', 4, 'Association', 'An organization that provides services such as networking and sharing of information within particular fields of interest or industries', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('association_member', 'en-ZA', 5, 'Association Member', 'An organization or person who is a member of an association', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('business_customer', 'en-ZA', 6, 'Business Customer', 'A business who buys goods or services from a shop or business', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('child', 'en-ZA', 7, 'Child', 'A boy or girl from the time of birth until he or she is an adult, or a son or daughter of any age', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('civil_partner', 'en-ZA', 8, 'Civil Partner', 'A significant other in a civil partnership', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('company', 'en-ZA', 9, 'Company', 'A commercial business', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('competitor', 'en-ZA', 10, 'Competitor', 'An organization engaged in commercial competition with others', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('contractor', 'en-ZA', 11, 'Contractor', 'A person paid to work on a project for a particular period and amount of money', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('department', 'en-ZA', 12, 'Department', 'A division of a large organization dealing with a specific area of activity', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('director', 'en-ZA', 13, 'Director', 'A person who is in charge of an activity, department, or organization', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('distributor', 'en-ZA', 14, 'Distributor', 'An organization that buys noncompeting products or product lines and sells them direct to end users or customers', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('division', 'en-ZA', 15, 'Division', 'A major section of an organization with responsibility for a particular area of activity', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employee', 'en-ZA', 16, 'Employee', 'A person employed for wages or salary', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('employer', 'en-ZA', 17, 'Employer', 'An organization or person that has employees', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('family', 'en-ZA', 18, 'Family', 'A group of one or more parents and their children living together as a unit', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('family_member', 'en-ZA', 19, 'Family Member', 'A person who is a member of a family', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('household', 'en-ZA', 20, 'Household', 'A group of people living together', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('household_member', 'en-ZA', 21, 'Household Member', 'A person who is a member of a household', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('individual_customer', 'en-ZA', 22, 'Individual Customer', 'A person who buys goods or services from a shop or business', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('joint_venture', 'en-ZA', 23, 'Joint Venture', 'A joint venture is a business entity created by two or more organizations, generally characterized by shared ownership, shared returns and risks, and shared governance', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('life_partner', 'en-ZA', 24, 'Life Partner', 'Either member of a couple in a long-term relationship', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('organization', 'en-ZA', 25, 'Organization', 'A group of people bound together in a formal relationship to achieve common objectives', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('parent', 'en-ZA', 26, 'Parent', 'A person''s father or mother', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('partner', 'en-ZA', 27, 'Partner', 'A person associated with another or others as a principal or a contributor of capital in a business or a joint venture', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('partnership', 'en-ZA', 28, 'Partnership', 'A formal arrangement by two or more parties to manage and operate a business and share its profits', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('prospect', 'en-ZA', 29, 'Prospect', 'An organization or a person who is a potential customer', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('regulatory_authority', 'en-ZA', 30, 'Regulatory Authority', 'A government agency that is responsible for exercising autonomous dominion over some area of human activity in a regulatory or monitoring capacity', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('sibling', 'en-ZA', 31, 'Sibling', 'Each of two or more children or offspring having one or both parents in common', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('shareholder', 'en-ZA', 32, 'Shareholder', 'An organization or person that legally owns one or more shares of the share capital of a public or private company', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('spouse', 'en-ZA', 33, 'Spouse', 'A significant other in a marriage', 'person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('subsidiary', 'en-ZA', 34, 'Subsidiary', 'A company controlled by a parent company or holding company', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('supplier', 'en-ZA', 35, 'Supplier', 'A person or organization that provides something needed such as a product or service', 'organization,person');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_organization_role', 'en-ZA', 66601, 'Test Organization Role', 'Test Organization Role', 'organization');
-INSERT INTO party.role_types (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_person_role', 'en-ZA', 66602, 'Test Person Role', 'Test Person Role', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('affiliate', 'en-ZA', 'Affiliate', 'A company under common control with another company', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('agency', 'en-ZA', 'Agency', 'An organization providing a particular service on behalf of another organization', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('agent', 'en-ZA', 'Agent', 'A person who acts on behalf of an organization', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('association', 'en-ZA', 'Association', 'An organization that provides services such as networking and sharing of information within particular fields of interest or industries', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('association_member', 'en-ZA', 'Association Member', 'An organization or person who is a member of an association', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('business_customer', 'en-ZA', 'Business Customer', 'A business who buys goods or services from a shop or business', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('child', 'en-ZA', 'Child', 'A boy or girl from the time of birth until he or she is an adult, or a son or daughter of any age', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('civil_partner', 'en-ZA', 'Civil Partner', 'A significant other in a civil partnership', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('company', 'en-ZA', 'Company', 'A commercial business', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('competitor', 'en-ZA', 'Competitor', 'An organization engaged in commercial competition with others', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('contractor', 'en-ZA', 'Contractor', 'A person paid to work on a project for a particular period and amount of money', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('department', 'en-ZA', 'Department', 'A division of a large organization dealing with a specific area of activity', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('director', 'en-ZA', 'Director', 'A person who is in charge of an activity, department, or organization', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('distributor', 'en-ZA', 'Distributor', 'An organization that buys noncompeting products or product lines and sells them direct to end users or customers', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('division', 'en-ZA', 'Division', 'A major section of an organization with responsibility for a particular area of activity', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('employee', 'en-ZA', 'Employee', 'A person employed for wages or salary', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('employer', 'en-ZA', 'Employer', 'An organization or person that has employees', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('family', 'en-ZA', 'Family', 'A group of one or more parents and their children living together as a unit', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('family_member', 'en-ZA', 'Family Member', 'A person who is a member of a family', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('household', 'en-ZA', 'Household', 'A group of people living together', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('household_member', 'en-ZA', 'Household Member', 'A person who is a member of a household', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('individual_customer', 'en-ZA', 'Individual Customer', 'A person who buys goods or services from a shop or business', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('joint_venture', 'en-ZA', 'Joint Venture', 'A joint venture is a business entity created by two or more organizations, generally characterized by shared ownership, shared returns and risks, and shared governance', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('life_partner', 'en-ZA', 'Life Partner', 'Either member of a couple in a long-term relationship', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('organization', 'en-ZA', 'Organization', 'A group of people bound together in a formal relationship to achieve common objectives', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('parent', 'en-ZA', 'Parent', 'A person''s father or mother', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('partner', 'en-ZA', 'Partner', 'A person associated with another or others as a principal or a contributor of capital in a business or a joint venture', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('partnership', 'en-ZA', 'Partnership', 'A formal arrangement by two or more parties to manage and operate a business and share its profits', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('prospect', 'en-ZA', 'Prospect', 'An organization or a person who is a potential customer', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('regulatory_authority', 'en-ZA', 'Regulatory Authority', 'A government agency that is responsible for exercising autonomous dominion over some area of human activity in a regulatory or monitoring capacity', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('sibling', 'en-ZA', 'Sibling', 'Each of two or more children or offspring having one or both parents in common', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('shareholder', 'en-ZA', 'Shareholder', 'An organization or person that legally owns one or more shares of the share capital of a public or private company', 'organization,person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('spouse', 'en-ZA', 'Spouse', 'A significant other in a marriage', 'person');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('subsidiary', 'en-ZA', 'Subsidiary', 'A company controlled by a parent company or holding company', 'organization');
+INSERT INTO party.role_types (code, locale_id, name, description, party_types)
+  VALUES ('supplier', 'en-ZA', 'Supplier', 'A person or organization that provides something needed such as a product or service', 'organization,person');
 
 
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('affiliation', 'en-US', 1, 'Affiliation', 'A relationship between affiliates', 'affiliate', 'affiliate');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('association_membership', 'en-US', 2, 'Association Membership', 'A relationship identifying an organization as a member of an association', 'association', 'association_member');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('civil_partnership', 'en-US', 3, 'Civil Partnership', 'A legally recognized union with rights similar to those of marriage', 'civil_partner', 'civil_partner');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('company_shareholder', 'en-US', 4, 'Company Shareholder', 'A relationship between a company and an organization or person that legally owns one or more shares of the share capital of the company', 'company', 'shareholder');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('company_subsidiary', 'en-US', 5, 'Company Subsidiary', 'A relationship between a parent company or holding company and a subsidiary', 'company', 'subsidiary');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('competitor', 'en-US', 6, 'Competitor', 'A relationship between two organizations that are engaged in commercial competition with each other', 'competitor', 'competitor');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('division_department', 'en-US', 7, 'Division Department', 'A relationship between a division and a department that forms part of the division', 'division', 'department');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('directorship', 'en-US', 8, 'Directorship', 'A relationship identifying a person as a directory of a company', 'company', 'director');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('employment', 'en-US', 9, 'Employment', 'A relationship between two parties that is usually based on contract where work is paid for', 'employer', 'employee');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('family_membership', 'en-US', 10, 'Family Membership', 'A relationship identifying a person as a member of a family', 'family', 'family_member');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('household_membership', 'en-US', 11, 'Household Membership', 'A relationship identifying a person as a member of a household', 'household', 'household_member');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('joint_venture', 'en-US', 12, 'Joint Venture', 'A relationship identifying an organization as a participant in a joint venture arrangement', 'joint_venture', 'organization');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('life_partnership', 'en-US', 13, 'Life Partnership', 'A relationship between a parent and child', 'life_partner', 'life_partner');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('marriage', 'en-US', 14, 'Marriage', 'A legally recognized union of two people as partners in a personal relationship ', 'spouse', 'spouse');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('organization_agency', 'en-US', 15, 'Organization Agency', 'A relationship where an organization provides a particular service on behalf of another organization', 'organization', 'agency');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('organization_agent', 'en-US', 16, 'Organization Agent', 'A relationship between an organization and a person who acts on behalf of the organization', 'organization', 'agent');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('organization_department', 'en-US', 17, 'Organization Department', 'A relationship between an organization and a department that forms part of the organization', 'organization', 'department');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('organization_division', 'en-US', 18, 'Organization Division', 'A relationship between an organization and a division that forms part of the organization', 'organization', 'division');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('parent_child', 'en-US', 19, 'Parent-Child', 'A relationship between a parent and a child', 'parent', 'child');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('partnership', 'en-US', 20, 'Partnership', 'A relationship between a partnership and one of its partners', 'partnership', 'partner');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('sibling', 'en-US', 21, 'Sibling', 'A relationship between two children or offspring having one or both parents in common', 'sibling', 'sibling');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('affiliation', 'en-US', 'Affiliation', 'A relationship between affiliates', 'affiliate', 'affiliate');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('association_membership', 'en-US', 'Association Membership', 'A relationship identifying an organization as a member of an association', 'association', 'association_member');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('civil_partnership', 'en-US', 'Civil Partnership', 'A legally recognized union with rights similar to those of marriage', 'civil_partner', 'civil_partner');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('company_shareholder', 'en-US', 'Company Shareholder', 'A relationship between a company and an organization or person that legally owns one or more shares of the share capital of the company', 'company', 'shareholder');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('company_subsidiary', 'en-US', 'Company Subsidiary', 'A relationship between a parent company or holding company and a subsidiary', 'company', 'subsidiary');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('competitor', 'en-US', 'Competitor', 'A relationship between two organizations that are engaged in commercial competition with each other', 'competitor', 'competitor');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('division_department', 'en-US', 'Division Department', 'A relationship between a division and a department that forms part of the division', 'division', 'department');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('directorship', 'en-US', 'Directorship', 'A relationship identifying a person as a directory of a company', 'company', 'director');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('employment', 'en-US', 'Employment', 'A relationship between two parties that is usually based on contract where work is paid for', 'employer', 'employee');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('family_membership', 'en-US', 'Family Membership', 'A relationship identifying a person as a member of a family', 'family', 'family_member');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('household_membership', 'en-US', 'Household Membership', 'A relationship identifying a person as a member of a household', 'household', 'household_member');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('joint_venture', 'en-US', 'Joint Venture', 'A relationship identifying an organization as a participant in a joint venture arrangement', 'joint_venture', 'organization');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('life_partnership', 'en-US', 'Life Partnership', 'A relationship between a parent and child', 'life_partner', 'life_partner');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('marriage', 'en-US', 'Marriage', 'A legally recognized union of two people as partners in a personal relationship ', 'spouse', 'spouse');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('organization_agency', 'en-US', 'Organization Agency', 'A relationship where an organization provides a particular service on behalf of another organization', 'organization', 'agency');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('organization_agent', 'en-US', 'Organization Agent', 'A relationship between an organization and a person who acts on behalf of the organization', 'organization', 'agent');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('organization_department', 'en-US', 'Organization Department', 'A relationship between an organization and a department that forms part of the organization', 'organization', 'department');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('organization_division', 'en-US', 'Organization Division', 'A relationship between an organization and a division that forms part of the organization', 'organization', 'division');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('parent_child', 'en-US', 'Parent-Child', 'A relationship between a parent and a child', 'parent', 'child');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('partnership', 'en-US', 'Partnership', 'A relationship between a partnership and one of its partners', 'partnership', 'partner');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('sibling', 'en-US', 'Sibling', 'A relationship between two children or offspring having one or both parents in common', 'sibling', 'sibling');
 
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('affiliation', 'en-ZA', 1, 'Affiliation', 'A relationship between affiliates', 'affiliate', 'affiliate');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('association_membership', 'en-ZA', 2, 'Association Membership', 'A relationship identifying an organization as a member of an association', 'association', 'association_member');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('civil_partnership', 'en-ZA', 3, 'Civil Partnership', 'A legally recognized union with rights similar to those of marriage', 'civil_partner', 'civil_partner');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('company_shareholder', 'en-ZA', 4, 'Company Shareholder', 'A relationship between a company and an organization or person that legally owns one or more shares of the share capital of the company', 'company', 'shareholder');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('company_subsidiary', 'en-ZA', 5, 'Company Subsidiary', 'A relationship between a parent company or holding company and a subsidiary', 'company', 'subsidiary');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('competitor', 'en-ZA', 6, 'Competitor', 'A relationship between two organizations that are engaged in commercial competition with each other', 'competitor', 'competitor');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('division_department', 'en-ZA', 7, 'Division Department', 'A relationship between a division and a department that forms part of the division', 'division', 'department');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('directorship', 'en-ZA', 8, 'Directorship', 'A relationship identifying a person as a directory of a company', 'company', 'director');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('employment', 'en-ZA', 9, 'Employment', 'A relationship between two parties that is usually based on contract where work is paid for', 'employer', 'employee');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('family_membership', 'en-ZA', 10, 'Family Membership', 'A relationship identifying a person as a member of a family', 'family', 'family_member');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('household_membership', 'en-ZA', 11, 'Household Membership', 'A relationship identifying a person as a member of a household', 'household', 'household_member');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('joint_venture', 'en-ZA', 12, 'Joint Venture', 'A relationship identifying an organization as a participant in a joint venture arrangement', 'joint_venture', 'organization');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('life_partnership', 'en-ZA', 13, 'Life Partnership', 'A relationship between a parent and child', 'life_partner', 'life_partner');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('marriage', 'en-ZA', 14, 'Marriage', 'A legally recognized union of two people as partners in a personal relationship ', 'spouse', 'spouse');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('organization_agency', 'en-ZA', 15, 'Organization Agency', 'A relationship where an organization provides a particular service on behalf of another organization', 'organization', 'agency');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('organization_agent', 'en-ZA', 16, 'Organization Agent', 'A relationship between an organization and a person who acts on behalf of the organization', 'organization', 'agent');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('organization_department', 'en-ZA', 17, 'Organization Department', 'A relationship between an organization and a department that forms part of the organization', 'organization', 'department');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('organization_division', 'en-ZA', 18, 'Organization Division', 'A relationship between an organization and a division that forms part of the organization', 'organization', 'division');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('parent_child', 'en-ZA', 19, 'Parent-Child', 'A relationship between a parent and a child', 'parent', 'child');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('partnership', 'en-ZA', 20, 'Partnership', 'A relationship between a partnership and one of its partners', 'partnership', 'partner');
-INSERT INTO party.relationship_types(code, locale_id, sort_index, name, description, first_party_role, second_party_role)
-  VALUES ('sibling', 'en-ZA', 21, 'Sibling', 'A relationship between two children or offspring having one or both parents in common', 'sibling', 'sibling');
-
-
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'contact_mechanisms', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
-  VALUES ('test_person_role', 'contact_mechanism', 'email_address', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
-  VALUES ('test_person_role', 'contact_mechanism', 'fax_number', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
-  VALUES ('test_person_role', 'contact_mechanism', 'mobile_number', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
-  VALUES ('test_person_role', 'contact_mechanism', 'phone_number', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'countries_of_citizenship', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'countries_of_tax_residence', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'country_of_birth', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'country_of_residence', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'date_of_birth', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'educations', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'employment_status', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'employment_type', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'employments', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'gender', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'given_name', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'highest_qualification_type', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'identity_documents', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'initials', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'language', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'language_proficiencies', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'marital_status', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'marital_status_date', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'marriage_type', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'measurement_system', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'occupation', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'physical_addresses', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
-  VALUES ('test_person_role', 'physical_address', 'residential', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'preferred_name', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'race', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'residency_status', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'residential_type', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'sources_of_funds', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'sources_of_wealth', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'surname', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'tax_numbers', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'time_zone', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'title', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'test_attribute', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
-  VALUES ('test_person_role', 'test_attribute', 'min_size', '5');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
-  VALUES ('test_person_role', 'test_attribute', 'max_size', '20');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
-  VALUES ('test_person_role', 'test_attribute', 'pattern', '^[a-zA-Z0-9]*$');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'test_contact_mechanism_type', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
-  VALUES ('test_person_role', 'test_contact_mechanism_type', 'reference', 'contact_mechanism_type');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'test_country', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
-  VALUES ('test_person_role', 'test_country', 'reference', 'country');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'test_language', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
-  VALUES ('test_person_role', 'test_language', 'reference', 'language');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_person_role', 'test_size', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
-  VALUES ('test_person_role', 'test_size', 'size', '10');
-
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_organization_role', 'contact_mechanisms', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
-  VALUES ('test_organization_role', 'contact_mechanism', 'email_address', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
-  VALUES ('test_organization_role', 'contact_mechanism', 'fax_number', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
-  VALUES ('test_organization_role', 'contact_mechanism', 'mobile_number', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
-  VALUES ('test_organization_role', 'contact_mechanism', 'phone_number', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_organization_role', 'countries_of_tax_residence', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_organization_role', 'identity_documents', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_organization_role', 'physical_addresses', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
-  VALUES ('test_organization_role', 'physical_address', 'main', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_organization_role', 'tax_numbers', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
-  VALUES ('test_organization_role', 'test_attribute', 'required');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
-  VALUES ('test_organization_role', 'test_attribute', 'size', '10');
-INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type, value)
-  VALUES ('test_organization_role', 'test_attribute', 'pattern', '^[0-9]*$');
-
-
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
-  VALUES ('test_person_role', 'test_preference', 'required');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
-  VALUES ('test_person_role', 'test_preference', 'min_size', '5');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
-  VALUES ('test_person_role', 'test_preference', 'max_size', '20');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
-  VALUES ('test_person_role', 'test_preference', 'pattern', '^[a-zA-Z0-9]*$');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
-  VALUES ('test_person_role', 'test_contact_mechanism_type', 'required');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
-  VALUES ('test_person_role', 'test_contact_mechanism_type', 'reference', 'contact_mechanism_type');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
-  VALUES ('test_person_role', 'test_country', 'required');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
-  VALUES ('test_person_role', 'test_country', 'reference', 'country');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
-  VALUES ('test_person_role', 'test_language', 'required');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
-  VALUES ('test_person_role', 'test_language', 'reference', 'language');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
-  VALUES ('test_person_role', 'test_size', 'required');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
-  VALUES ('test_person_role', 'test_size', 'size', '10');
-
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type)
-  VALUES ('test_organization_role', 'test_preference', 'required');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
-  VALUES ('test_organization_role', 'test_preference', 'min_size', '5');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
-  VALUES ('test_organization_role', 'test_preference', 'max_size', '20');
-INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
-  VALUES ('test_organization_role', 'test_preference', 'pattern', '^[0-9]*$');
-
-
-INSERT INTO party.segments (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_organization_segment', 'en-US', 66601, 'Test Organization Segment', 'Test Organization Segment', 'organization');
-INSERT INTO party.segments (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_person_segment', 'en-US', 66602, 'Test Person Segment', 'Test Person Segment', 'person');
-
-INSERT INTO party.segments (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_organization_segment', 'en-ZA', 66601, 'Test Organization Segment', 'Test Organization Segment', 'organization');
-INSERT INTO party.segments (code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test_person_segment', 'en-ZA', 66602, 'Test Person Segment', 'Test Person Segment', 'person');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('affiliation', 'en-ZA', 'Affiliation', 'A relationship between affiliates', 'affiliate', 'affiliate');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('association_membership', 'en-ZA', 'Association Membership', 'A relationship identifying an organization as a member of an association', 'association', 'association_member');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('civil_partnership', 'en-ZA', 'Civil Partnership', 'A legally recognized union with rights similar to those of marriage', 'civil_partner', 'civil_partner');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('company_shareholder', 'en-ZA', 'Company Shareholder', 'A relationship between a company and an organization or person that legally owns one or more shares of the share capital of the company', 'company', 'shareholder');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('company_subsidiary', 'en-ZA', 'Company Subsidiary', 'A relationship between a parent company or holding company and a subsidiary', 'company', 'subsidiary');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('competitor', 'en-ZA', 'Competitor', 'A relationship between two organizations that are engaged in commercial competition with each other', 'competitor', 'competitor');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('division_department', 'en-ZA', 'Division Department', 'A relationship between a division and a department that forms part of the division', 'division', 'department');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('directorship', 'en-ZA', 'Directorship', 'A relationship identifying a person as a directory of a company', 'company', 'director');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('employment', 'en-ZA', 'Employment', 'A relationship between two parties that is usually based on contract where work is paid for', 'employer', 'employee');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('family_membership', 'en-ZA', 'Family Membership', 'A relationship identifying a person as a member of a family', 'family', 'family_member');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('household_membership', 'en-ZA', 'Household Membership', 'A relationship identifying a person as a member of a household', 'household', 'household_member');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('joint_venture', 'en-ZA', 'Joint Venture', 'A relationship identifying an organization as a participant in a joint venture arrangement', 'joint_venture', 'organization');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('life_partnership', 'en-ZA', 'Life Partnership', 'A relationship between a parent and child', 'life_partner', 'life_partner');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('marriage', 'en-ZA', 'Marriage', 'A legally recognized union of two people as partners in a personal relationship ', 'spouse', 'spouse');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('organization_agency', 'en-ZA', 'Organization Agency', 'A relationship where an organization provides a particular service on behalf of another organization', 'organization', 'agency');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('organization_agent', 'en-ZA', 'Organization Agent', 'A relationship between an organization and a person who acts on behalf of the organization', 'organization', 'agent');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('organization_department', 'en-ZA', 'Organization Department', 'A relationship between an organization and a department that forms part of the organization', 'organization', 'department');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('organization_division', 'en-ZA', 'Organization Division', 'A relationship between an organization and a division that forms part of the organization', 'organization', 'division');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('parent_child', 'en-ZA', 'Parent-Child', 'A relationship between a parent and a child', 'parent', 'child');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('partnership', 'en-ZA', 'Partnership', 'A relationship between a partnership and one of its partners', 'partnership', 'partner');
+INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+  VALUES ('sibling', 'en-ZA', 'Sibling', 'A relationship between two children or offspring having one or both parents in common', 'sibling', 'sibling');
 
 
 INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
@@ -4141,34 +3953,26 @@ INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, des
   VALUES ('investments', 'en-ZA', 3, 'Investments', 'Investments');
 
 
-INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('fraud', 'en-US', 1, 'Fraud', 'Fraud');
-INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('kyc', 'en-US', 2, 'KYC', 'Know Your Customer');
-INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-US', 666, 'Test', 'Test');
+INSERT INTO party.status_type_categories(code, locale_id, name, description)
+  VALUES ('fraud', 'en-US', 'Fraud', 'Fraud');
+INSERT INTO party.status_type_categories(code, locale_id, name, description)
+  VALUES ('kyc', 'en-US', 'KYC', 'Know Your Customer');
 
-INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('fraud', 'en-ZA', 1, 'Fraud', 'Fraud');
-INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('kyc', 'en-ZA', 2, 'KYC', 'Know Your Customer');
-INSERT INTO party.status_type_categories(code, locale_id, sort_index, name, description)
-  VALUES ('test', 'en-ZA', 666, 'Test', 'Test');
+INSERT INTO party.status_type_categories(code, locale_id, name, description)
+  VALUES ('fraud', 'en-ZA', 'Fraud', 'Fraud');
+INSERT INTO party.status_type_categories(code, locale_id, name, description)
+  VALUES ('kyc', 'en-ZA', 'KYC', 'Know Your Customer');
 
 
-INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fraud', 'fraud_investigation', 'en-US', 101, 'Fraud Investigation', 'Fraud Investigation', 'organization,person');
-INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('kyc', 'kyc_verified', 'en-US', 201, 'KYC Verified', 'KYC Verified', 'organization,person');
-INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test', 'test', 'en-US', 66601, 'Test Status', 'Test Status', 'organization,person');
+INSERT INTO party.status_types(category, code, locale_id, name, description, party_types)
+  VALUES ('fraud', 'fraud_investigation', 'en-US', 'Fraud Investigation', 'Fraud Investigation', 'organization,person');
+INSERT INTO party.status_types(category, code, locale_id, name, description, party_types)
+  VALUES ('kyc', 'kyc_verified', 'en-US', 'KYC Verified', 'KYC Verified', 'organization,person');
 
-INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('fraud', 'fraud_investigation', 'en-ZA', 101, 'Fraud Investigation', 'Fraud Investigation', 'organization,person');
-INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('kyc', 'kyc_verified', 'en-ZA', 201, 'KYC Verified', 'KYC Verified', 'organization,person');
-INSERT INTO party.status_types(category, code, locale_id, sort_index, name, description, party_types)
-  VALUES ('test', 'test', 'en-ZA', 66601, 'Test Status', 'Test Status', 'organization,person');
+INSERT INTO party.status_types(category, code, locale_id, name, description, party_types)
+  VALUES ('fraud', 'fraud_investigation', 'en-ZA', 'Fraud Investigation', 'Fraud Investigation', 'organization,person');
+INSERT INTO party.status_types(category, code, locale_id, name, description, party_types)
+  VALUES ('kyc', 'kyc_verified', 'en-ZA', 'KYC Verified', 'KYC Verified', 'organization,person');
 
 
 INSERT INTO party.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue, party_types)
@@ -4233,22 +4037,22 @@ INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, descr
   VALUES ('miss', 'en-US', 3, 'Miss', 'Miss', 'Miss');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('mrs', 'en-US', 4, 'Mrs', 'Mrs.', 'Mrs');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('doctor', 'en-US', 5, 'Doctor', 'Dr.', 'Doctor');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('the_honorable', 'en-US', 6, 'The Honorable', 'The Hon.', 'The Honorable');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('reverend', 'en-US', 7, 'Reverend', 'Rev.', 'Reverend');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('father', 'en-US', 8, 'Father', 'Fr.', 'Father');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('rabbi', 'en-US', 9, 'Rabbi', 'Rabbi', 'Rabbi');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('professor', 'en-US', 10, 'Professor', 'Prof.', 'Professor');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('advocate', 'en-US', 11, 'Advocate', 'Adv.', 'Advocate');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown', 'Unknown');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('advocate', 'en-US', 'Advocate', 'Adv.', 'Advocate');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('doctor', 'en-US', 'Doctor', 'Dr.', 'Doctor');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('father', 'en-US', 'Father', 'Fr.', 'Father');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('professor', 'en-US', 'Professor', 'Prof.', 'Professor');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('rabbi', 'en-US', 'Rabbi', 'Rabbi', 'Rabbi');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('reverend', 'en-US', 'Reverend', 'Rev.', 'Reverend');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('the_honorable', 'en-US', 'The Honorable', 'The Hon.', 'The Honorable');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('unknown', 'en-US', 'Unknown', 'Unknown', 'Unknown');
 
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('mr', 'en-ZA', 1, 'Mr', 'Mr.', 'Mr');
@@ -4258,23 +4062,22 @@ INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, descr
   VALUES ('miss', 'en-ZA', 3, 'Miss', 'Miss', 'Miss');
 INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('mrs', 'en-ZA', 4, 'Mrs', 'Mrs.', 'Mrs');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('doctor', 'en-ZA', 5, 'Doctor', 'Dr.', 'Doctor');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('the_honorable', 'en-ZA', 6, 'The Honorable', 'The Hon.', 'The Honorable');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('reverend', 'en-ZA', 7, 'Reverend', 'Rev.', 'Reverend');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('father', 'en-ZA', 8, 'Father', 'Fr.', 'Father');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('rabbi', 'en-ZA', 9, 'Rabbi', 'Rabbi', 'Rabbi');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('professor', 'en-ZA', 10, 'Professor', 'Prof.', 'Professor');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('advocate', 'en-ZA', 11, 'Advocate', 'Adv.', 'Advocate');
-INSERT INTO party.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown', 'Unknown');
-
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('advocate', 'en-ZA', 'Advocate', 'Adv.', 'Advocate');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('doctor', 'en-ZA', 'Doctor', 'Dr.', 'Doctor');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('father', 'en-ZA', 'Father', 'Fr.', 'Father');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('professor', 'en-ZA', 'Professor', 'Prof.', 'Professor');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('rabbi', 'en-ZA', 'Rabbi', 'Rabbi', 'Rabbi');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('reverend', 'en-ZA', 'Reverend', 'Rev.', 'Reverend');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('the_honorable', 'en-ZA', 'The Honorable', 'The Hon.', 'The Honorable');
+INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
+  VALUES ('unknown', 'en-ZA', 'Unknown', 'Unknown', 'Unknown');
 
 
 

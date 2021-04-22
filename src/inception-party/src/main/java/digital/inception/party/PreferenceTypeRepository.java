@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>PreferenceTypeRepository</b> interface declares the repository for the <b>
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface PreferenceTypeRepository extends JpaRepository<PreferenceType, PreferenceTypeId> {
 
-  List<PreferenceType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select pt from PreferenceType pt order by pt.localeId, -pt.sortIndex DESC, pt.name")
+  List<PreferenceType> findAll();
+
+  @Query(
+      "select pt from PreferenceType pt where upper(pt.localeId) = upper(:localeId) order by pt.localeId, -pt.sortIndex DESC, pt.name")
+  List<PreferenceType> findByLocaleIdIgnoreCase(String localeId);
 }

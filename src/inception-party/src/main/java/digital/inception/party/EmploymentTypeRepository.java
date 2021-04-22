@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>EmploymentTypeRepository</b> interface declares the repository for the <b>
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface EmploymentTypeRepository extends JpaRepository<EmploymentType, EmploymentTypeId> {
 
-  List<EmploymentType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select et from EmploymentType et order by et.localeId, -et.sortIndex DESC, et.name")
+  List<EmploymentType> findAll();
+
+  @Query(
+      "select et from EmploymentType et where upper(et.localeId) = upper(:localeId) order by et.localeId, -et.sortIndex DESC, et.name")
+  List<EmploymentType> findByLocaleIdIgnoreCase(String localeId);
 }

@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>TimeToContactRepository</b> interface declares the repository for the <b>
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface TimeToContactRepository extends JpaRepository<TimeToContact, TimeToContactId> {
 
-  List<TimeToContact> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select ttc from TimeToContact ttc order by ttc.localeId, -ttc.sortIndex DESC, ttc.name")
+  List<TimeToContact> findAll();
+
+  @Query(
+      "select ttc from TimeToContact ttc where upper(ttc.localeId) = upper(:localeId) order by ttc.localeId, -ttc.sortIndex DESC, ttc.name")
+  List<TimeToContact> findByLocaleIdIgnoreCase(String localeId);
 }

@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>SegmentRepository</b> interface declares the repository for the <b>Segment</b> domain
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface SegmentRepository extends JpaRepository<Segment, SegmentId> {
 
-  List<Segment> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select s from Segment s order by s.localeId, -s.sortIndex DESC, s.name")
+  List<Segment> findAll();
+
+  @Query(
+      "select s from Segment s where upper(s.localeId) = upper(:localeId) order by s.localeId, -s.sortIndex DESC, s.name")
+  List<Segment> findByLocaleIdIgnoreCase(String localeId);
 }

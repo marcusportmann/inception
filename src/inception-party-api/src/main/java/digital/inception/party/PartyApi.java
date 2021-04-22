@@ -75,6 +75,7 @@ public class PartyApi extends SecureApi {
   /**
    * Create the new organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organization the organization
    */
   @Operation(summary = "Create the organization", description = "Create the organization")
@@ -121,23 +122,35 @@ public class PartyApi extends SecureApi {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public void createOrganization(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The organization to create",
               required = true)
           @RequestBody
           Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
     if (!hasAccessToTenant(organization.getTenantId())) {
       throw new AccessDeniedException(
           "Access denied to the tenant (" + organization.getTenantId() + ")");
     }
 
-    partyService.createOrganization(organization);
+    partyService.createOrganization(tenantId, organization);
   }
 
   /**
    * Create the new person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param person the person
    */
   @Operation(summary = "Create the person", description = "Create the person")
@@ -179,22 +192,34 @@ public class PartyApi extends SecureApi {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration')")
   public void createPerson(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The person to create",
               required = true)
           @RequestBody
           Person person)
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
     if (!hasAccessToTenant(person.getTenantId())) {
       throw new AccessDeniedException("Access denied to the tenant (" + person.getTenantId() + ")");
     }
 
-    partyService.createPerson(person);
+    partyService.createPerson(tenantId, person);
   }
 
   /**
    * Retrieve the organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organizationId the Universally Unique Identifier (UUID) for the organization
    * @return the organization
    */
@@ -241,20 +266,28 @@ public class PartyApi extends SecureApi {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public Organization getOrganization(
       @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "organizationId",
               description = "The Universally Unique Identifier (UUID) for the organization",
               required = true)
           @PathVariable
           UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
-    Organization organization = partyService.getOrganization(organizationId);
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(organization.getTenantId())) {
-      throw new AccessDeniedException(
-          "Access denied to the tenant (" + organization.getTenantId() + ")");
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return organization;
+    return partyService.getOrganization(tenantId, organizationId);
   }
 
   /**
@@ -304,10 +337,11 @@ public class PartyApi extends SecureApi {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public Organizations getOrganizations(
       @Parameter(
-              name = "tenantId",
-              description = "The Universally Unique Identifier (UUID) for the tenant")
-          @RequestParam(
-              name = "tenantId",
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
@@ -331,8 +365,10 @@ public class PartyApi extends SecureApi {
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      tenantId = IPartyService.DEFAULT_TENANT_ID;
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
     if (pageIndex == null) {
@@ -340,10 +376,6 @@ public class PartyApi extends SecureApi {
     }
     if (pageSize == null) {
       pageSize = 10;
-    }
-
-    if (!hasAccessToTenant(tenantId)) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
     return partyService.getOrganizations(
@@ -393,10 +425,11 @@ public class PartyApi extends SecureApi {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
   public Parties getParties(
       @Parameter(
-              name = "tenantId",
-              description = "The Universally Unique Identifier (UUID) for the tenant")
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
-              name = "tenantId",
+              name = "Tenant-ID",
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
@@ -415,8 +448,10 @@ public class PartyApi extends SecureApi {
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      tenantId = IPartyService.DEFAULT_TENANT_ID;
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
     if (pageIndex == null) {
@@ -426,16 +461,13 @@ public class PartyApi extends SecureApi {
       pageSize = 10;
     }
 
-    if (!hasAccessToTenant(tenantId)) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
     return partyService.getParties(tenantId, filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
    * Retrieve the party.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyId the Universally Unique Identifier (UUID) for the party
    * @return the party
    */
@@ -482,24 +514,34 @@ public class PartyApi extends SecureApi {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
   public Party getParty(
       @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "partyId",
               description = "The Universally Unique Identifier (UUID) for the party",
               required = true)
           @PathVariable
           UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
-    Party party = partyService.getParty(partyId);
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(party.getTenantId())) {
-      throw new AccessDeniedException("Access denied to the tenant (" + party.getTenantId() + ")");
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return party;
+    return partyService.getParty(tenantId, partyId);
   }
 
   /**
    * Retrieve the person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param personId the Universally Unique Identifier (UUID) for the person
    * @return the person
    */
@@ -546,19 +588,28 @@ public class PartyApi extends SecureApi {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration')")
   public Person getPerson(
       @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "personId",
               description = "The Universally Unique Identifier (UUID) for the person",
               required = true)
           @PathVariable
           UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
-    Person person = partyService.getPerson(personId);
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
 
-    if (!hasAccessToTenant(person.getTenantId())) {
-      throw new AccessDeniedException("Access denied to the tenant (" + person.getTenantId() + ")");
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return person;
+    return partyService.getPerson(tenantId, personId);
   }
 
   /**
@@ -605,10 +656,11 @@ public class PartyApi extends SecureApi {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration')")
   public Persons getPersons(
       @Parameter(
-              name = "tenantId",
-              description = "The Universally Unique Identifier (UUID) for the tenant")
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
-              name = "tenantId",
+              name = "Tenant-ID",
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
@@ -632,8 +684,10 @@ public class PartyApi extends SecureApi {
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      tenantId = IPartyService.DEFAULT_TENANT_ID;
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
     if (pageIndex == null) {
@@ -643,21 +697,17 @@ public class PartyApi extends SecureApi {
       pageSize = 10;
     }
 
-    if (!hasAccessToTenant(tenantId)) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
     return partyService.getPersons(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**
    * Retrieve the snapshots.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyId the Universally Unique Identifier (UUID) for the party
    * @param from the optional date to retrieve the snapshots from
    * @param to the optional date to retrieve the snapshots to
    * @param sortDirection the optional sort direction to apply to the snapshots
-   * @param sortDirection the optional sort direction to apply to the parties
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the snapshots
@@ -697,6 +747,15 @@ public class PartyApi extends SecureApi {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
   public Snapshots getSnapshots(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
       @Parameter(name = "partyId", description = "The ID for the party", required = true)
           @PathVariable
           UUID partyId,
@@ -718,6 +777,12 @@ public class PartyApi extends SecureApi {
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     if (pageIndex == null) {
       pageIndex = 0;
     }
@@ -725,18 +790,14 @@ public class PartyApi extends SecureApi {
       pageSize = 10;
     }
 
-    UUID tenantId = partyService.getTenantIdForParty(partyId);
-
-    if (!hasAccessToTenant(tenantId)) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    return partyService.getSnapshots(partyId, from, to, sortDirection, pageIndex, pageSize);
+    return partyService.getSnapshots(
+        tenantId, partyId, from, to, sortDirection, pageIndex, pageSize);
   }
 
   /**
    * Update the organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organizationId the ID for the organization
    * @param organization the organization
    */
@@ -785,6 +846,15 @@ public class PartyApi extends SecureApi {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public void updateOrganization(
       @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
               name = "organizationId",
               description = "The ID for the organization",
               required = true)
@@ -796,6 +866,12 @@ public class PartyApi extends SecureApi {
           @RequestBody
           Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
@@ -808,17 +884,13 @@ public class PartyApi extends SecureApi {
       throw new InvalidArgumentException("organization");
     }
 
-    if (!hasAccessToTenant(organization.getTenantId())) {
-      throw new AccessDeniedException(
-          "Access denied to the tenant (" + organization.getTenantId() + ")");
-    }
-
-    partyService.updateOrganization(organization);
+    partyService.updateOrganization(tenantId, organization);
   }
 
   /**
    * Update the person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param personId the ID for the person
    * @param person the person
    */
@@ -864,6 +936,15 @@ public class PartyApi extends SecureApi {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration')")
   public void updatePerson(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
       @Parameter(name = "personId", description = "The ID for the person", required = true)
           @PathVariable
           UUID personId,
@@ -873,6 +954,12 @@ public class PartyApi extends SecureApi {
           @RequestBody
           Person person)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
     if (personId == null) {
       throw new InvalidArgumentException("personId");
     }
@@ -885,10 +972,6 @@ public class PartyApi extends SecureApi {
       throw new InvalidArgumentException("person");
     }
 
-    if (!hasAccessToTenant(person.getTenantId())) {
-      throw new AccessDeniedException("Access denied to the tenant (" + person.getTenantId() + ")");
-    }
-
-    partyService.updatePerson(person);
+    partyService.updatePerson(tenantId, person);
   }
 }

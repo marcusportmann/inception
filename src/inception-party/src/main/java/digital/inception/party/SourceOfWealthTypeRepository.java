@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>SourceOfWealthTypeRepository</b> interface declares the repository for the <b>
@@ -29,5 +29,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SourceOfWealthTypeRepository
     extends JpaRepository<SourceOfWealthType, SourceOfWealthTypeId> {
 
-  List<SourceOfWealthType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query(
+      "select sowt from SourceOfWealthType sowt order by sowt.localeId, -sowt.sortIndex DESC, sowt.name")
+  List<SourceOfWealthType> findAll();
+
+  @Query(
+      "select sowt from SourceOfWealthType sowt where upper(sowt.localeId) = upper(:localeId) order by sowt.localeId, -sowt.sortIndex DESC, sowt.name")
+  List<SourceOfWealthType> findByLocaleIdIgnoreCase(String localeId);
 }

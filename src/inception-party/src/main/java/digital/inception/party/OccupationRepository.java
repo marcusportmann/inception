@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>OccupationRepository</b> interface declares the repository for the <b>Occupation</b>
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface OccupationRepository extends JpaRepository<Occupation, OccupationId> {
 
-  List<Occupation> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select o from Occupation o order by o.localeId, -o.sortIndex DESC, o.name")
+  List<Occupation> findAll();
+
+  @Query(
+      "select o from Occupation o where upper(o.localeId) = upper(:localeId) order by o.localeId, -o.sortIndex DESC, o.name")
+  List<Occupation> findByLocaleIdIgnoreCase(String localeId);
 }

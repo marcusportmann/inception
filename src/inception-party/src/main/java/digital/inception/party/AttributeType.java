@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -41,7 +42,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>AttributeType</b> class holds the information for a attribute type.
+ * The <b>AttributeType</b> class holds the information for an attribute type.
  *
  * @author Marcus Portmann
  */
@@ -51,6 +52,7 @@ import org.springframework.util.StringUtils;
   "code",
   "category",
   "localeId",
+  "tenantId",
   "sortIndex",
   "name",
   "description",
@@ -65,6 +67,7 @@ import org.springframework.util.StringUtils;
       "code",
       "category",
       "localeId",
+      "tenantId",
       "sortIndex",
       "name",
       "description",
@@ -144,6 +147,15 @@ public class AttributeType implements Serializable {
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
+
+  /** The Universally Unique Identifier (UUID) for the tenant the attribute type is specific to. */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the attribute type is specific to")
+  @JsonProperty
+  @XmlElement(name = "TenantId")
+  @Column(name = "tenant_id")
+  private UUID tenantId;
 
   /** The measurement unit type for the attribute type. */
   @Schema(description = "The measurement unit type for the attribute type")
@@ -249,6 +261,17 @@ public class AttributeType implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the attribute type is specific
+   * to.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the attribute type is specific
+   *     to
+   */
+  public UUID getTenantId() {
+    return tenantId;
+  }
+
+  /**
    * Returns the measurement unit type for the attribute type.
    *
    * @return the measurement unit type for the attribute type
@@ -349,6 +372,16 @@ public class AttributeType implements Serializable {
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the tenant the attribute type is specific to.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type is
+   *     specific to
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 
   /**

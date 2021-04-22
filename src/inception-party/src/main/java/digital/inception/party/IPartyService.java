@@ -20,6 +20,7 @@ import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.ConstraintViolation;
@@ -39,52 +40,58 @@ public interface IPartyService {
   /**
    * Create the new organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organization the organization
    * @return the organization
    */
-  Organization createOrganization(Organization organization)
+  Organization createOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, ServiceUnavailableException;
 
   /**
    * Create the new person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param person the person
    * @return the person
    */
-  Person createPerson(Person person)
+  Person createPerson(UUID tenantId, Person person)
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException;
 
   /**
    * Delete the organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organizationId the Universally Unique Identifier (UUID) for the organization
    */
-  void deleteOrganization(UUID organizationId)
+  void deleteOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException;
 
   /**
    * Delete the party.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyId the Universally Unique Identifier (UUID) for the party
    */
-  void deleteParty(UUID partyId)
+  void deleteParty(UUID tenantId, UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
 
   /**
    * Delete the person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param personId the Universally Unique Identifier (UUID) for the person
    */
-  void deletePerson(UUID personId)
+  void deletePerson(UUID tenantId, UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organizationId the Universally Unique Identifier (UUID) for the organization
    * @return the organization
    */
-  Organization getOrganization(UUID organizationId)
+  Organization getOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException;
 
   /**
@@ -128,19 +135,21 @@ public interface IPartyService {
   /**
    * Retrieve the party.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyId the Universally Unique Identifier (UUID) for the party
    * @return the party
    */
-  Party getParty(UUID partyId)
+  Party getParty(UUID tenantId, UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param personId the Universally Unique Identifier (UUID) for the person
    * @return the person
    */
-  Person getPerson(UUID personId)
+  Person getPerson(UUID tenantId, UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException;
 
   /**
@@ -166,6 +175,7 @@ public interface IPartyService {
   /**
    * Retrieve the snapshots for the party.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyId the Universally Unique Identifier (UUID) for the party
    * @param from the optional date to retrieve the snapshots from
    * @param to the optional date to retrieve the snapshots to
@@ -175,71 +185,71 @@ public interface IPartyService {
    * @return the snapshots
    */
   Snapshots getSnapshots(
+      UUID tenantId,
       UUID partyId,
       LocalDate from,
       LocalDate to,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException;
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the Universally Unique Identifier (UUID) for the tenant the party is associated with.
    *
    * @param partyId the Universally Unique Identifier (UUID) for the party
    * @return the Universally Unique Identifier (UUID) for the tenant the party is associated with
+   * @return an Optional containing the Universally Unique Identifier (UUID) for the tenant the
+   *     party is associated with or an empty Optional if the party could not be found
    */
-  UUID getTenantIdForParty(UUID partyId)
-      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
+  Optional<UUID> getTenantIdForParty(UUID partyId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Update the organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organization the organization
    * @return the organization
    */
-  Organization updateOrganization(Organization organization)
+  Organization updateOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param person the person
    * @return the person
    */
-  Person updatePerson(Person person)
+  Person updatePerson(UUID tenantId, Person person)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException;
 
   /**
    * Validate the organization.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organization the organization
    * @return the constraint violations for the organization
    */
-  Set<ConstraintViolation<Organization>> validateOrganization(Organization organization);
+  Set<ConstraintViolation<Organization>> validateOrganization(
+      UUID tenantId, Organization organization);
 
   /**
    * Validate the party.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param party the party
    * @return the constraint violations for the party
    */
-  Set<ConstraintViolation<Party>> validateParty(Party party);
+  Set<ConstraintViolation<Party>> validateParty(UUID tenantId, Party party);
 
   /**
    * Validate the person.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param person the person
    * @return the constraint violations for the person
    */
-  Set<ConstraintViolation<Person>> validatePerson(Person person);
-
-  /**
-   * Validate the physical address.
-   *
-   * @param physicalAddress the physical address
-   * @return the constraint violations for the physical address
-   */
-  Set<ConstraintViolation<PhysicalAddress>> validatePhysicalAddress(
-      PhysicalAddress physicalAddress);
+  Set<ConstraintViolation<Person>> validatePerson(UUID tenantId, Person person);
 }

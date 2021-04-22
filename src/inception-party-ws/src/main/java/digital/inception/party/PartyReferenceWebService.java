@@ -16,14 +16,15 @@
 
 package digital.inception.party;
 
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
+import java.util.UUID;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
-import org.springframework.util.StringUtils;
 
 /**
  * The <b>PartyReferenceWebService</b> class.
@@ -51,561 +52,674 @@ public class PartyReferenceWebService {
   }
 
   /**
-   * Retrieve the attribute type categories.
+   * Retrieve the attribute type category reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
+   *     category reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
-   *     categories for or <b>null</b> to retrieve the attribute type categories for all locales
-   * @return the attribute type categories
+   *     category reference data for
+   * @return the attribute type category reference data
    */
   @WebMethod(operationName = "GetAttributeTypeCategories")
   public List<AttributeTypeCategory> getAttributeTypeCategories(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getAttributeTypeCategories(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getAttributeTypeCategories(tenantId, localeId);
   }
 
   /**
-   * Retrieve the attribute types.
+   * Retrieve the attribute type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute types
-   *     for or <b>null</b> to retrieve the attribute types for all locales
-   * @return the attribute types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
+   *     reference data for
+   * @return the attribute type reference data
    */
   @WebMethod(operationName = "GetAttributeTypes")
   public List<AttributeType> getAttributeTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getAttributeTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getAttributeTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the consent types.
+   * Retrieve the consent type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the consent types for
-   *     or <b>null</b> to retrieve the consent types for all locales
-   * @return the consent types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the consent type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
+   *     reference data for
+   * @return the consent type reference data
    */
   @WebMethod(operationName = "GetConsentTypes")
-  public List<ConsentType> getConsentTypes(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getConsentTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  public List<ConsentType> getConsentTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getConsentTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the contact mechanism purposes.
+   * Retrieve the contact mechanism purpose reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     purpose reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <b>null</b> to retrieve the contact mechanism purposes for all locales
-   * @return the contact mechanism purposes
+   *     purpose reference data for
+   * @return the contact mechanism purpose reference data
    */
   @WebMethod(operationName = "GetContactMechanismPurposes")
   public List<ContactMechanismPurpose> getContactMechanismPurposes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getContactMechanismPurposes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getContactMechanismPurposes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the contact mechanism roles.
+   * Retrieve the contact mechanism role reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     role reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <b>null</b> to retrieve the contact mechanism roles for all locales
-   * @return the contact mechanism roles
+   *     role reference data for
+   * @return the contact mechanism role reference data
    */
   @WebMethod(operationName = "GetContactMechanismRoles")
   public List<ContactMechanismRole> getContactMechanismRoles(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getContactMechanismRoles(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getContactMechanismRoles(tenantId, localeId);
   }
 
   /**
-   * Retrieve the contact mechanism types.
+   * Retrieve the contact mechanism type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     types for or <b>null</b> to retrieve the contact mechanism types for all locales
-   * @return the contact mechanism types
+   *     type reference data for
+   * @return the contact mechanism type reference data
    */
   @WebMethod(operationName = "GetContactMechanismTypes")
   public List<ContactMechanismType> getContactMechanismTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getContactMechanismTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getContactMechanismTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the employment statuses.
+   * Retrieve the employment status reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment
-   *     statuses for or <b>null</b> to retrieve the employment statuses for all locales
-   * @return the employment statuses
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
+   *     reference data for
+   * @return the employment status reference data
    */
   @WebMethod(operationName = "GetEmploymentStatuses")
   public List<EmploymentStatus> getEmploymentStatuses(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getEmploymentStatuses(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getEmploymentStatuses(tenantId, localeId);
   }
 
   /**
-   * Retrieve the employment types.
+   * Retrieve the employment type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment types
-   *     for or <b>null</b> to retrieve the employment types for all locales
-   * @return the employment types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
+   *     reference data for
+   * @return the employment type reference data
    */
   @WebMethod(operationName = "GetEmploymentTypes")
   public List<EmploymentType> getEmploymentTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getEmploymentTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getEmploymentTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the fields of study.
+   * Retrieve the fields of study reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the fields of study
+   *     reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
-   *     for or <b>null</b> to retrieve the fields of study for all locales
-   * @return the fields of study
+   *     reference data for
+   * @return the fields of study reference data
    */
   @WebMethod(operationName = "GetFieldsOfStudy")
   public List<FieldOfStudy> getFieldsOfStudy(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getFieldsOfStudy(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getFieldsOfStudy(tenantId, localeId);
   }
 
   /**
-   * Retrieve the genders.
+   * Retrieve the gender reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
-   *     <b>null</b> to retrieve the genders for all locales
-   * @return the genders
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the gender reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
+   *     data for
+   * @return the gender reference data
    */
   @WebMethod(operationName = "GetGenders")
-  public List<Gender> getGenders(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getGenders(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  public List<Gender> getGenders(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getGenders(tenantId, localeId);
   }
 
   /**
-   * Retrieve the identity document types.
+   * Retrieve the identity document type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the identity document
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
-   *     types for or <b>null</b> to retrieve the identity document types for all locales
-   * @return the identity document types
+   *     type reference data for
+   * @return the identity document type reference data
    */
   @WebMethod(operationName = "GetIdentityDocumentTypes")
   public List<IdentityDocumentType> getIdentityDocumentTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getIdentityDocumentTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getIdentityDocumentTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the lock type categories.
+   * Retrieve the lock type category reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
-   *     categories for or <b>null</b> to retrieve the lock type categories for all locales
-   * @return the lock type categories
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type category
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
+   *     reference data for
+   * @return the lock type category reference data
    */
   @WebMethod(operationName = "GetLockTypeCategories")
   public List<LockTypeCategory> getLockTypeCategories(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getLockTypeCategories(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getLockTypeCategories(tenantId, localeId);
   }
 
   /**
-   * Retrieve the lock types.
+   * Retrieve the lock type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock types for or
-   *     <b>null</b> to retrieve the lock types for all locales
-   * @return the lock types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
+   *     reference data for
+   * @return the lock type reference data
    */
   @WebMethod(operationName = "GetLockTypes")
-  public List<LockType> getLockTypes(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getLockTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  public List<LockType> getLockTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getLockTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the marital statuses.
+   * Retrieve the marital status reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
-   *     for or <b>null</b> to retrieve the marital statuses for all locales
-   * @return the marital statuses
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marital status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
+   *     reference data for
+   * @return the marital status reference data
    */
   @WebMethod(operationName = "GetMaritalStatuses")
   public List<MaritalStatus> getMaritalStatuses(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getMaritalStatuses(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getMaritalStatuses(tenantId, localeId);
   }
 
   /**
-   * Retrieve the marriage types.
+   * Retrieve the marriage type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage types for
-   *     or <b>null</b> to retrieve the marriage types for all locales
-   * @return the marriage types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marriage type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
+   *     reference data
+   * @return the marriage type reference data
    */
   @WebMethod(operationName = "GetMarriageTypes")
   public List<MarriageType> getMarriageTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getMarriageTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getMarriageTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the next of kin types.
+   * Retrieve the next of kin type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin types
-   *     for or <b>null</b> to retrieve the next of kin types for all locales
-   * @return the next of kin types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the next of kin type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
+   *     reference data for
+   * @return the next of kin type reference data
    */
   @WebMethod(operationName = "GetNextOfKinTypes")
   public List<NextOfKinType> getNextOfKinTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getNextOfKinTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getNextOfKinTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the occupations.
+   * Retrieve the occupation reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for or
-   *     <b>null</b> to retrieve the occupations for all locales
-   * @return the occupations
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the occupation
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
+   *     reference data for
+   * @return the occupation reference data
    */
   @WebMethod(operationName = "GetOccupations")
-  public List<Occupation> getOccupations(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getOccupations(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  public List<Occupation> getOccupations(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getOccupations(tenantId, localeId);
   }
 
   /**
-   * Retrieve the physical address purposes.
+   * Retrieve the physical address purpose reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     purpose reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     purposes for or <b>null</b> to retrieve the physical address purposes for all locales
-   * @return the physical address purposes
+   *     purpose reference data for
+   * @return the physical address purpose reference data
    */
   @WebMethod(operationName = "GetPhysicalAddressPurposes")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getPhysicalAddressPurposes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getPhysicalAddressPurposes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the physical address roles.
+   * Retrieve the physical address role reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     role reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     roles for or <b>null</b> to retrieve the physical address roles for all locales
-   * @return the physical address roles
+   *     role reference data for
+   * @return the physical address role reference data
    */
   @WebMethod(operationName = "GetPhysicalAddressRoles")
   public List<PhysicalAddressRole> getPhysicalAddressRoles(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getPhysicalAddressRoles(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getPhysicalAddressRoles(tenantId, localeId);
   }
 
   /**
-   * Retrieve the physical address types.
+   * Retrieve the physical address type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     types for or <b>null</b> to retrieve the physical address types for all locales
-   * @return the physical address types
+   *     type reference data for
+   * @return the physical address type reference data
    */
   @WebMethod(operationName = "GetPhysicalAddressTypes")
   public List<PhysicalAddressType> getPhysicalAddressTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getPhysicalAddressTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getPhysicalAddressTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the preference type categories.
+   * Retrieve the preference type category reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
+   *     category reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     categories for or <b>null</b> to retrieve the preference type categories for all locales
-   * @return the preference type categories
+   *     category reference data for
+   * @return the preference type category reference data
    */
   @WebMethod(operationName = "GetPreferenceTypeCategories")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getPreferenceTypeCategories(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getPreferenceTypeCategories(tenantId, localeId);
   }
 
   /**
-   * Retrieve the preference types.
+   * Retrieve the preference type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the preference types
-   *     for or <b>null</b> to retrieve the preference types for all locales
-   * @return the preference types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     reference data for
+   * @return the preference type reference data
    */
   @WebMethod(operationName = "GetPreferenceTypes")
   public List<PreferenceType> getPreferenceTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getPreferenceTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getPreferenceTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the qualification types.
+   * Retrieve the qualification type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
-   *     types for or <b>null</b> to retrieve the qualification types for all locales
-   * @return the qualification types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the qualification type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
+   *     reference data for
+   * @return the qualification type reference data
    */
   @WebMethod(operationName = "GetQualificationTypes")
   public List<QualificationType> getQualificationTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getQualificationTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getQualificationTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the races.
+   * Retrieve the race reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the races for or
-   *     <b>null</b> to retrieve the races for all locales
-   * @return the races
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the race reference data
+   *     is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
+   *     data for
+   * @return the race reference data
    */
   @WebMethod(operationName = "GetRaces")
-  public List<Race> getRaces(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getRaces(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  public List<Race> getRaces(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getRaces(tenantId, localeId);
   }
 
   /**
-   * Retrieve the relationship types.
+   * Retrieve the relationship type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship types
-   *     for or <b>null</b> to retrieve the relationship types for all locales
-   * @return the relationship types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship type
+   *     reference data for
+   * @return the relationship type reference data
    */
   @WebMethod(operationName = "GetRelationshipTypes")
   public List<RelationshipType> getRelationshipTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getRelationshipTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getRelationshipTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the residence permit types.
+   * Retrieve the residence permit type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residence permit
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
-   *     types for or <b>null</b> to retrieve the residence permit types for all locales
-   * @return the residence permit types
+   *     type reference data for
+   * @return the residence permit type reference data
    */
   @WebMethod(operationName = "GetResidencePermitTypes")
   public List<ResidencePermitType> getResidencePermitTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getResidencePermitTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getResidencePermitTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the residency statuses.
+   * Retrieve the residency status reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residency statuses
-   *     for or <b>null</b> to retrieve the residency statuses for all locales
-   * @return the residency statuses
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residency status
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
+   *     reference data for
+   * @return the residency status reference data
    */
   @WebMethod(operationName = "GetResidencyStatuses")
   public List<ResidencyStatus> getResidencyStatuses(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getResidencyStatuses(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getResidencyStatuses(tenantId, localeId);
   }
 
   /**
-   * Retrieve the residential types.
+   * Retrieve the residential type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residential types
-   *     for or <b>null</b> to retrieve the residential types for all locales
-   * @return the residential types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residential type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
+   *     reference data for
+   * @return the residential type reference data
    */
   @WebMethod(operationName = "GetResidentialTypes")
   public List<ResidentialType> getResidentialTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getResidentialTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getResidentialTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the role purposes.
+   * Retrieve the role purpose reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role purposes for
-   *     or <b>null</b> to retrieve the role purposes for all locales
-   * @return the role purposes
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role purpose
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
+   *     reference data for
+   * @return the role purpose reference data
    */
   @WebMethod(operationName = "GetRolePurposes")
-  public List<RolePurpose> getRolePurposes(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getRolePurposes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  public List<RolePurpose> getRolePurposes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getRolePurposes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the role type attribute type constraints.
+   * Retrieve the role type attribute type constraints for a specific role type.
    *
-   * @param roleType the code for the role type to retrieve the role type attribute type constraints
-   *     for or <b>null</b> to retrieve the role type attribute type constraints for all role types
+   * @param roleType the code for the role type to retrieve the attribute constraints for
    * @return the role type attribute type constraints
    */
   @WebMethod(operationName = "GetRoleTypeAttributeTypeConstraints")
   public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(
-      @WebParam(name = "RoleType") @XmlElement String roleType) throws ServiceUnavailableException {
+      @WebParam(name = "RoleType") @XmlElement String roleType)
+      throws InvalidArgumentException, ServiceUnavailableException {
     return partyReferenceService.getRoleTypeAttributeTypeConstraints(roleType);
   }
 
   /**
-   * Retrieve the role type preference type constraints.
+   * Retrieve the role type preference type constraints for a specific role type.
    *
-   * @param roleType the code for the role type to retrieve the role type preference type
-   *     constraints for or <b>null</b> to retrieve the role type preference type constraints for
-   *     all role types
+   * @param roleType the code for the role type to retrieve the preference constraints for
    * @return the role type preference type constraints
    */
   @WebMethod(operationName = "GetRoleTypePreferenceTypeConstraints")
   public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
-      @WebParam(name = "RoleType") @XmlElement String roleType) throws ServiceUnavailableException {
+      @WebParam(name = "RoleType") @XmlElement String roleType)
+      throws InvalidArgumentException, ServiceUnavailableException {
     return partyReferenceService.getRoleTypePreferenceTypeConstraints(roleType);
   }
 
   /**
-   * Retrieve the role types.
+   * Retrieve the role type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role types for or
-   *     <b>null</b> to retrieve the role types for all locales
-   * @return the role types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role type reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role type
+   *     reference data for
+   * @return the role type reference data
    */
   @WebMethod(operationName = "GetRoleTypes")
-  public List<RoleType> getRoleTypes(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getRoleTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  public List<RoleType> getRoleTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getRoleTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the segments.
+   * Retrieve the segment reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the segments for or
-   *     <b>null</b> to retrieve the segments for all locales
-   * @return the segments
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the segment reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
+   *     data for
+   * @return the segment reference data
    */
   @WebMethod(operationName = "GetSegments")
-  public List<Segment> getSegments(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getSegments(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  public List<Segment> getSegments(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSegments(tenantId, localeId);
   }
 
   /**
-   * Retrieve the source of funds types.
+   * Retrieve the source of funds type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of funds
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
-   *     types for or <b>null</b> to retrieve the source of funds types for all locales
-   * @return the source of funds types
+   *     type reference data
+   * @return the source of funds type reference data
    */
   @WebMethod(operationName = "GetSourceOfFundsTypes")
   public List<SourceOfFundsType> getSourceOfFundsTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getSourceOfFundsTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSourceOfFundsTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the source of wealth types.
+   * Retrieve the source of wealth type reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of wealth
+   *     type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
-   *     types for or <b>null</b> to retrieve the source of wealth types for all locales
-   * @return the source of wealth types
+   *     type reference data for
+   * @return the source of wealth type reference data
    */
   @WebMethod(operationName = "GetSourceOfWealthTypes")
   public List<SourceOfWealthType> getSourceOfWealthTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getSourceOfWealthTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSourceOfWealthTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the status type categories.
+   * Retrieve the status type category reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
+   *     category reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
-   *     categories for or <b>null</b> to retrieve the status type categories for all locales
-   * @return the status type categories
+   *     category reference data for
+   * @return the status type category reference data
    */
   @WebMethod(operationName = "GetStatusTypeCategories")
   public List<StatusTypeCategory> getStatusTypeCategories(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getStatusTypeCategories(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getStatusTypeCategories(tenantId, localeId);
   }
 
   /**
-   * Retrieve the status types.
+   * Retrieve the status type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the status types for
-   *     or <b>null</b> to retrieve the status types for all locales
-   * @return the status types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     reference data for
+   * @return the status type reference data
    */
   @WebMethod(operationName = "GetStatusTypes")
-  public List<StatusType> getStatusTypes(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getStatusTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  public List<StatusType> getStatusTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getStatusTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the tax number types.
+   * Retrieve the tax number type reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number types
-   *     for or <b>null</b> to retrieve the tax number types for all locales
-   * @return the tax number types
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the tax number type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
+   *     reference data for
+   * @return the tax number type reference data
    */
   @WebMethod(operationName = "GetTaxNumberTypes")
   public List<TaxNumberType> getTaxNumberTypes(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getTaxNumberTypes(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getTaxNumberTypes(tenantId, localeId);
   }
 
   /**
-   * Retrieve the times to contact.
+   * Retrieve the times to contact reference data for a specific locale.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the times to contact
+   *     reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
-   *     for or <b>null</b> to retrieve the times to contact for all locales
-   * @return the times to contact
+   *     reference data for
+   * @return the times to contact reference data
    */
   @WebMethod(operationName = "GetTimesToContact")
   public List<TimeToContact> getTimesToContact(
-      @WebParam(name = "LocaleId") @XmlElement String localeId) throws ServiceUnavailableException {
-    return partyReferenceService.getTimesToContact(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getTimesToContact(tenantId, localeId);
   }
 
   /**
-   * Retrieve the titles.
+   * Retrieve the title reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the titles for or
-   *     <b>null</b> to retrieve the titles for all locales
-   * @return the titles
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the title reference
+   *     data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
+   *     data for
+   * @return the title reference data
    */
   @WebMethod(operationName = "GetTitles")
-  public List<Title> getTitles(@WebParam(name = "LocaleId") @XmlElement String localeId)
-      throws ServiceUnavailableException {
-    return partyReferenceService.getTitles(
-        StringUtils.hasText(localeId) ? localeId : PartyReferenceService.DEFAULT_LOCALE_ID);
+  public List<Title> getTitles(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getTitles(tenantId, localeId);
   }
 }

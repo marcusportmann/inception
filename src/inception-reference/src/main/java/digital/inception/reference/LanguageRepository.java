@@ -17,8 +17,8 @@
 package digital.inception.reference;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>LanguageRepository</b> interface declares the repository for the <b>Language</b> domain
@@ -28,5 +28,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface LanguageRepository extends JpaRepository<Language, LanguageId> {
 
-  List<Language> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select l from Language l order by l.localeId, -l.sortIndex DESC, l.shortName")
+  List<Language> findAll();
+
+  @Query(
+      "select l from Language l where upper(l.localeId) = upper(:localeId) order by l.localeId, -l.sortIndex DESC, l.shortName")
+  List<Language> findByLocaleIdIgnoreCase(String localeId);
 }

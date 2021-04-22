@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import java.util.List;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * The <b>GenderRepository</b> interface declares the repository for the <b>Gender</b> domain type.
@@ -27,5 +27,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface GenderRepository extends JpaRepository<Gender, GenderId> {
 
-  List<Gender> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  @Query("select g from Gender g order by g.localeId, -g.sortIndex DESC, g.name")
+  List<Gender> findAll();
+
+  @Query(
+      "select g from Gender g where upper(g.localeId) = upper(:localeId) order by g.localeId, -g.sortIndex DESC, g.name")
+  List<Gender> findByLocaleIdIgnoreCase(String localeId);
 }

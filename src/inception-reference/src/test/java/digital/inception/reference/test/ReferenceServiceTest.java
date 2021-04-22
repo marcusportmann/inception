@@ -18,6 +18,7 @@ package digital.inception.reference.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import digital.inception.reference.Country;
 import digital.inception.reference.IReferenceService;
@@ -25,12 +26,12 @@ import digital.inception.reference.Language;
 import digital.inception.reference.MeasurementSystem;
 import digital.inception.reference.MeasurementUnit;
 import digital.inception.reference.MeasurementUnitType;
-import digital.inception.reference.ReferenceService;
 import digital.inception.reference.Region;
 import digital.inception.reference.TimeZone;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,53 +68,75 @@ public class ReferenceServiceTest {
   /** Test the country reference functionality. */
   @Test
   public void countryTest() throws Exception {
-    List<Country> retrievedCountries =
-        referenceService.getCountries(ReferenceService.DEFAULT_LOCALE_ID);
-
-    Country retrievedCountry = retrievedCountries.get(0);
+    List<Country> retrievedCountries = referenceService.getCountries(IReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         246, retrievedCountries.size(), "The correct number of countries was not retrieved");
 
+    Optional<Country> retrievedCountryOptional =
+        retrievedCountries.stream().filter(country -> country.getCode().equals("AF")).findFirst();
+
+    if (retrievedCountryOptional.isEmpty()) {
+      fail("Failed to retrieve the country with code (AF)");
+    } else {
+      Country retrievedCountry = retrievedCountryOptional.get();
+
+      assertEquals(
+          "AF", retrievedCountry.getCode(), "The correct code was not retrieved for the country");
+      assertEquals(
+          IReferenceService.DEFAULT_LOCALE_ID,
+          retrievedCountry.getLocaleId(),
+          "The correct locale was not retrieved for the country");
+      assertEquals(
+          "Afghanistan",
+          retrievedCountry.getName(),
+          "The correct name was not retrieved for the country");
+      assertEquals(
+          "Afghanistan",
+          retrievedCountry.getName(),
+          "The correct short name was not retrieved for the country");
+      assertEquals(
+          "Afghanistan",
+          retrievedCountry.getName(),
+          "The correct description was not retrieved for the country");
+    }
+
+    retrievedCountries = referenceService.getCountries();
+
     assertEquals(
-        "AF", retrievedCountry.getCode(), "The correct code was not retrieved for the country");
-    assertEquals(
-        "en-US",
-        retrievedCountry.getLocaleId(),
-        "The correct locale was not retrieved for the country");
-    assertEquals(
-        "Afghanistan",
-        retrievedCountry.getName(),
-        "The correct name was not retrieved for the country");
-    assertEquals(
-        "Afghanistan",
-        retrievedCountry.getName(),
-        "The correct short name was not retrieved for the country");
-    assertEquals(
-        "Afghanistan",
-        retrievedCountry.getName(),
-        "The correct description was not retrieved for the country");
+        492, retrievedCountries.size(), "The correct number of countries was not retrieved");
   }
 
   /** Test the language reference functionality. */
   @Test
   public void languageTest() throws Exception {
 
-    List<Language> retrievedLanguages =
-        referenceService.getLanguages(ReferenceService.DEFAULT_LOCALE_ID);
+    List<Language> retrievedLanguages = referenceService.getLanguages(IReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         93, retrievedLanguages.size(), "The correct number of languages was not retrieved");
+
+    retrievedLanguages = referenceService.getLanguages();
+
+    assertEquals(
+        186, retrievedLanguages.size(), "The correct number of languages was not retrieved");
   }
 
   /** Test the measurement systems reference functionality. */
   @Test
   public void measurementSystemsTest() throws Exception {
     List<MeasurementSystem> retrievedMeasurementSystems =
-        referenceService.getMeasurementSystems(ReferenceService.DEFAULT_LOCALE_ID);
+        referenceService.getMeasurementSystems(IReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
+        retrievedMeasurementSystems.size(),
+        "The correct number of measurement systems was not retrieved");
+
+    retrievedMeasurementSystems = referenceService.getMeasurementSystems();
+
+    assertEquals(
+        6,
         retrievedMeasurementSystems.size(),
         "The correct number of measurement systems was not retrieved");
   }
@@ -122,10 +145,17 @@ public class ReferenceServiceTest {
   @Test
   public void measurementUnitTypesTest() throws Exception {
     List<MeasurementUnitType> retrievedMeasurementUnitTypes =
-        referenceService.getMeasurementUnitTypes(ReferenceService.DEFAULT_LOCALE_ID);
+        referenceService.getMeasurementUnitTypes(IReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         3,
+        retrievedMeasurementUnitTypes.size(),
+        "The correct number of measurement unit types was not retrieved");
+
+    retrievedMeasurementUnitTypes = referenceService.getMeasurementUnitTypes();
+
+    assertEquals(
+        6,
         retrievedMeasurementUnitTypes.size(),
         "The correct number of measurement unit types was not retrieved");
   }
@@ -133,11 +163,17 @@ public class ReferenceServiceTest {
   /** Test the measurement units reference functionality. */
   @Test
   public void measurementUnitsTest() throws Exception {
-    List<MeasurementUnit> retrievedMeasurementUnits =
-        referenceService.getMeasurementUnits(ReferenceService.DEFAULT_LOCALE_ID);
+    List<MeasurementUnit> retrievedMeasurementUnits = referenceService.getMeasurementUnits(IReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
         9,
+        retrievedMeasurementUnits.size(),
+        "The correct number of measurement units was not retrieved");
+
+    retrievedMeasurementUnits = referenceService.getMeasurementUnits();
+
+    assertEquals(
+        18,
         retrievedMeasurementUnits.size(),
         "The correct number of measurement units was not retrieved");
   }
@@ -145,16 +181,23 @@ public class ReferenceServiceTest {
   /** Test the region reference functionality. */
   @Test
   public void regionTest() throws Exception {
-    List<Region> retrievedRegions = referenceService.getRegions(ReferenceService.DEFAULT_LOCALE_ID);
+    List<Region> retrievedRegions = referenceService.getRegions(IReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(9, retrievedRegions.size(), "The correct number of regions was not retrieved");
+
+    retrievedRegions = referenceService.getRegions();
+
+    assertEquals(18, retrievedRegions.size(), "The correct number of regions was not retrieved");
   }
 
   /** Test the time zone reference functionality. */
   @Test
   public void timeZoneTest() throws Exception {
-    List<TimeZone> retrievedTimeZones =
-        referenceService.getTimeZones(ReferenceService.DEFAULT_LOCALE_ID);
+    List<TimeZone> retrievedTimeZones = referenceService.getTimeZones(IReferenceService.DEFAULT_LOCALE_ID);
+
+    if (retrievedTimeZones.size() <= 0) {
+      fail("Failed to retrieve the time zones");
+    }
   }
 
   /** Test the reference validity check functionality. */

@@ -101,11 +101,10 @@ public class MeasurementSystem implements Serializable {
   private String name;
 
   /** The sort index for the measurement system. */
-  @Schema(description = "The sort index for the measurement system", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
-  @NotNull
-  @Column(name = "sort_index", nullable = false)
+  @Schema(description = "The sort index for the measurement system")
+  @JsonProperty
+  @XmlElement(name = "SortIndex")
+  @Column(name = "sort_index")
   private Integer sortIndex;
 
   /** Constructs a new <b>MeasurementSystem</b>. */

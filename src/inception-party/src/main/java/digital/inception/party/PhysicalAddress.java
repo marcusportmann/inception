@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.party.constraints.ValidCountryCode;
-import digital.inception.party.constraints.ValidPhysicalAddress;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -131,7 +130,6 @@ import org.springframework.util.StringUtils;
       "purposes"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidPhysicalAddress
 @Entity
 @Table(schema = "party", name = "physical_addresses")
 public class PhysicalAddress implements Serializable {
