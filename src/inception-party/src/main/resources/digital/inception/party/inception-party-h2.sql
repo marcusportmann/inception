@@ -24,9 +24,9 @@ COMMENT ON COLUMN party.attribute_type_categories.code IS 'The code for the attr
 
 COMMENT ON COLUMN party.attribute_type_categories.locale_id IS 'The Unicode locale identifier for the attribute type category';
 
-COMMENT ON COLUMN party.attribute_type_categories.sort_index IS 'The sort index for the attribute type category';
-
 COMMENT ON COLUMN party.attribute_type_categories.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the attribute type category is specific to';
+
+COMMENT ON COLUMN party.attribute_type_categories.sort_index IS 'The sort index for the attribute type category';
 
 COMMENT ON COLUMN party.attribute_type_categories.name IS 'The name of the attribute type category';
 
@@ -58,6 +58,8 @@ COMMENT ON COLUMN party.attribute_types.code IS 'The code for the attribute type
 
 COMMENT ON COLUMN party.attribute_types.locale_id IS 'The Unicode locale identifier for the attribute type';
 
+COMMENT ON COLUMN party.attribute_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the attribute type is specific to';
+
 COMMENT ON COLUMN party.attribute_types.sort_index IS 'The sort index for the attribute type';
 
 COMMENT ON COLUMN party.attribute_types.name IS 'The name of the attribute type';
@@ -86,6 +88,8 @@ COMMENT ON COLUMN party.consent_types.code IS 'The code for the consent type';
 
 COMMENT ON COLUMN party.consent_types.locale_id IS 'The Unicode locale identifier for the consent type';
 
+COMMENT ON COLUMN party.consent_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the consent type is specific to';
+
 COMMENT ON COLUMN party.consent_types.sort_index IS 'The sort index for the consent type';
 
 COMMENT ON COLUMN party.consent_types.name IS 'The name of the consent type';
@@ -111,6 +115,8 @@ CREATE INDEX contact_mechanism_purposes_locale_id_ix ON party.contact_mechanism_
 COMMENT ON COLUMN party.contact_mechanism_purposes.code IS 'The code for the contact mechanism purpose';
 
 COMMENT ON COLUMN party.contact_mechanism_purposes.locale_id IS 'The Unicode locale identifier for the contact mechanism purpose';
+
+COMMENT ON COLUMN party.contact_mechanism_purposes.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the contact mechanism purpose is specific to';
 
 COMMENT ON COLUMN party.contact_mechanism_purposes.sort_index IS 'The sort index for the contact mechanism purpose';
 
@@ -140,6 +146,8 @@ CREATE INDEX contact_mechanism_types_locale_id_ix ON party.contact_mechanism_typ
 COMMENT ON COLUMN party.contact_mechanism_types.code IS 'The code for the contact mechanism type';
 
 COMMENT ON COLUMN party.contact_mechanism_types.locale_id IS 'The Unicode locale identifier for the contact mechanism type';
+
+COMMENT ON COLUMN party.contact_mechanism_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the contact mechanism type is specific to';
 
 COMMENT ON COLUMN party.contact_mechanism_types.sort_index IS 'The sort index for the contact mechanism type';
 
@@ -176,6 +184,8 @@ COMMENT ON COLUMN party.contact_mechanism_roles.code IS 'The code for the contac
 
 COMMENT ON COLUMN party.contact_mechanism_roles.locale_id IS 'The Unicode locale identifier for the contact mechanism role';
 
+COMMENT ON COLUMN party.contact_mechanism_roles.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the contact mechanism role is specific to';
+
 COMMENT ON COLUMN party.contact_mechanism_roles.sort_index IS 'The sort index for the contact mechanism role';
 
 COMMENT ON COLUMN party.contact_mechanism_roles.name IS 'The name of the contact mechanism role';
@@ -201,6 +211,8 @@ CREATE INDEX employment_statuses_locale_id_ix ON party.employment_statuses(local
 COMMENT ON COLUMN party.employment_statuses.code IS 'The code for the employment status';
 
 COMMENT ON COLUMN party.employment_statuses.locale_id IS 'The Unicode locale identifier for the employment status';
+
+COMMENT ON COLUMN party.employment_statuses.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the employment status is specific to';
 
 COMMENT ON COLUMN party.employment_statuses.sort_index IS 'The sort index for the employment status';
 
@@ -232,6 +244,8 @@ COMMENT ON COLUMN party.employment_types.code IS 'The code for the employment ty
 
 COMMENT ON COLUMN party.employment_types.locale_id IS 'The Unicode locale identifier for the employment type';
 
+COMMENT ON COLUMN party.employment_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the employment type is specific to';
+
 COMMENT ON COLUMN party.employment_types.sort_index IS 'The sort index for the employment type';
 
 COMMENT ON COLUMN party.employment_types.name IS 'The name of the employment type';
@@ -256,6 +270,8 @@ COMMENT ON COLUMN party.fields_of_study.code IS 'The code for the field of study
 
 COMMENT ON COLUMN party.fields_of_study.locale_id IS 'The Unicode locale identifier for the field of study';
 
+COMMENT ON COLUMN party.fields_of_study.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the field of study is specific to';
+
 COMMENT ON COLUMN party.fields_of_study.sort_index IS 'The sort index for the field of study';
 
 COMMENT ON COLUMN party.fields_of_study.name IS 'The name of the field of study';
@@ -279,6 +295,8 @@ CREATE INDEX genders_locale_id_ix ON party.genders(locale_id);
 COMMENT ON COLUMN party.genders.code IS 'The code for the gender';
 
 COMMENT ON COLUMN party.genders.locale_id IS 'The Unicode locale identifier for the gender';
+
+COMMENT ON COLUMN party.genders.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the gender is specific to';
 
 COMMENT ON COLUMN party.genders.sort_index IS 'The sort index for the gender';
 
@@ -308,6 +326,8 @@ COMMENT ON COLUMN party.identity_document_types.code IS 'The code for the identi
 
 COMMENT ON COLUMN party.identity_document_types.locale_id IS 'The Unicode locale identifier for the identity document type';
 
+COMMENT ON COLUMN party.identity_document_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the identity document type is specific to';
+
 COMMENT ON COLUMN party.identity_document_types.sort_index IS 'The sort index for the identity document type';
 
 COMMENT ON COLUMN party.identity_document_types.name IS 'The name of the identity document type';
@@ -335,6 +355,8 @@ CREATE INDEX lock_type_categories_locale_id_ix ON party.lock_type_categories(loc
 COMMENT ON COLUMN party.lock_type_categories.code IS 'The code for the lock type category';
 
 COMMENT ON COLUMN party.lock_type_categories.locale_id IS 'The Unicode locale identifier for the lock type category';
+
+COMMENT ON COLUMN party.lock_type_categories.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the lock type category is specific to';
 
 COMMENT ON COLUMN party.lock_type_categories.sort_index IS 'The sort index for the lock type category';
 
@@ -367,6 +389,8 @@ COMMENT ON COLUMN party.lock_types.code IS 'The code for the lock type';
 
 COMMENT ON COLUMN party.lock_types.locale_id IS 'The Unicode locale identifier for the lock type';
 
+COMMENT ON COLUMN party.lock_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the lock type is specific to';
+
 COMMENT ON COLUMN party.lock_types.sort_index IS 'The sort index for the lock type';
 
 COMMENT ON COLUMN party.lock_types.name IS 'The name of the lock type';
@@ -392,6 +416,8 @@ CREATE INDEX marital_statuses_locale_id_ix ON party.marital_statuses(locale_id);
 COMMENT ON COLUMN party.marital_statuses.code IS 'The code for the marital status';
 
 COMMENT ON COLUMN party.marital_statuses.locale_id IS 'The Unicode locale identifier for the marital status';
+
+COMMENT ON COLUMN party.marital_statuses.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the marital status is specific to';
 
 COMMENT ON COLUMN party.marital_statuses.sort_index IS 'The sort index for the marital status';
 
@@ -423,6 +449,8 @@ COMMENT ON COLUMN party.marriage_types.code IS 'The code for the marriage type';
 
 COMMENT ON COLUMN party.marriage_types.locale_id IS 'The Unicode locale identifier for the marriage type';
 
+COMMENT ON COLUMN party.marriage_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the marriage type is specific to';
+
 COMMENT ON COLUMN party.marriage_types.sort_index IS 'The sort index for the marriage type';
 
 COMMENT ON COLUMN party.marriage_types.name IS 'The name of the marriage type';
@@ -446,6 +474,8 @@ CREATE INDEX minor_types_locale_id_ix ON party.minor_types(locale_id);
 COMMENT ON COLUMN party.minor_types.code IS 'The code for the minor type';
 
 COMMENT ON COLUMN party.minor_types.locale_id IS 'The Unicode locale identifier for the minor type';
+
+COMMENT ON COLUMN party.minor_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the minor type is specific to';
 
 COMMENT ON COLUMN party.minor_types.sort_index IS 'The sort index for the minor type';
 
@@ -471,6 +501,8 @@ COMMENT ON COLUMN party.next_of_kin_types.code IS 'The code for the next of kin 
 
 COMMENT ON COLUMN party.next_of_kin_types.locale_id IS 'The Unicode locale identifier for the next of kin type';
 
+COMMENT ON COLUMN party.next_of_kin_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the next of kin type is specific to';
+
 COMMENT ON COLUMN party.next_of_kin_types.sort_index IS 'The sort index for the next of kin type';
 
 COMMENT ON COLUMN party.next_of_kin_types.name IS 'The name of the next of kin type';
@@ -494,6 +526,8 @@ CREATE INDEX occupations_locale_id_ix ON party.occupations(locale_id);
 COMMENT ON COLUMN party.occupations.code IS 'The code for the occupation';
 
 COMMENT ON COLUMN party.occupations.locale_id IS 'The Unicode locale identifier for the occupation';
+
+COMMENT ON COLUMN party.occupations.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the occupation is specific to';
 
 COMMENT ON COLUMN party.occupations.sort_index IS 'The sort index for the occupation';
 
@@ -519,6 +553,8 @@ COMMENT ON COLUMN party.physical_address_types.code IS 'The code for the physica
 
 COMMENT ON COLUMN party.physical_address_types.locale_id IS 'The Unicode locale identifier for the physical address type';
 
+COMMENT ON COLUMN party.physical_address_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the physical address type is specific to';
+
 COMMENT ON COLUMN party.physical_address_types.sort_index IS 'The sort index for the physical address type';
 
 COMMENT ON COLUMN party.physical_address_types.name IS 'The name of the physical address type';
@@ -543,6 +579,8 @@ CREATE INDEX physical_address_purposes_locale_id_ix ON party.physical_address_pu
 COMMENT ON COLUMN party.physical_address_purposes.code IS 'The code for the physical address purpose';
 
 COMMENT ON COLUMN party.physical_address_purposes.locale_id IS 'The Unicode locale identifier for the physical address purpose';
+
+COMMENT ON COLUMN party.physical_address_purposes.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the physical address purpose is specific to';
 
 COMMENT ON COLUMN party.physical_address_purposes.sort_index IS 'The sort index for the physical address purpose';
 
@@ -571,6 +609,8 @@ COMMENT ON COLUMN party.physical_address_roles.code IS 'The code for the physica
 
 COMMENT ON COLUMN party.physical_address_roles.locale_id IS 'The Unicode locale identifier for the physical address role';
 
+COMMENT ON COLUMN party.physical_address_roles.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the physical address role is specific to';
+
 COMMENT ON COLUMN party.physical_address_roles.sort_index IS 'The sort index for the physical address role';
 
 COMMENT ON COLUMN party.physical_address_roles.name IS 'The name of the physical address role';
@@ -596,6 +636,8 @@ CREATE INDEX preference_type_categories_locale_id_ix ON party.preference_type_ca
 COMMENT ON COLUMN party.preference_type_categories.code IS 'The code for the preference type category';
 
 COMMENT ON COLUMN party.preference_type_categories.locale_id IS 'The Unicode locale identifier for the preference type category';
+
+COMMENT ON COLUMN party.preference_type_categories.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the preference type category is specific to';
 
 COMMENT ON COLUMN party.preference_type_categories.sort_index IS 'The sort index for the preference type category';
 
@@ -628,6 +670,8 @@ COMMENT ON COLUMN party.preference_types.code IS 'The code for the preference ty
 
 COMMENT ON COLUMN party.preference_types.locale_id IS 'The Unicode locale identifier for the preference type';
 
+COMMENT ON COLUMN party.preference_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the preference type is specific to';
+
 COMMENT ON COLUMN party.preference_types.sort_index IS 'The sort index for the preference type';
 
 COMMENT ON COLUMN party.preference_types.name IS 'The name of the preference type';
@@ -658,6 +702,8 @@ COMMENT ON COLUMN party.qualification_types.field_of_study IS 'The code for the 
 
 COMMENT ON COLUMN party.qualification_types.locale_id IS 'The Unicode locale identifier for the qualification type';
 
+COMMENT ON COLUMN party.qualification_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the qualification type is specific to';
+
 COMMENT ON COLUMN party.qualification_types.sort_index IS 'The sort index for the qualification type';
 
 COMMENT ON COLUMN party.qualification_types.name IS 'The name of the qualification type';
@@ -681,6 +727,8 @@ CREATE INDEX races_locale_id_ix ON party.races(locale_id);
 COMMENT ON COLUMN party.races.code IS 'The code for the race';
 
 COMMENT ON COLUMN party.races.locale_id IS 'The Unicode locale identifier for the race';
+
+COMMENT ON COLUMN party.races.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the race is specific to';
 
 COMMENT ON COLUMN party.races.sort_index IS 'The sort index for the race';
 
@@ -709,6 +757,8 @@ COMMENT ON COLUMN party.residence_permit_types.code IS 'The code for the residen
 
 COMMENT ON COLUMN party.residence_permit_types.locale_id IS 'The Unicode locale identifier for the residence permit type';
 
+COMMENT ON COLUMN party.residence_permit_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the residence permit type is specific to';
+
 COMMENT ON COLUMN party.residence_permit_types.sort_index IS 'The sort index for the residence permit type';
 
 COMMENT ON COLUMN party.residence_permit_types.name IS 'The name of the residence permit type';
@@ -735,6 +785,8 @@ COMMENT ON COLUMN party.residency_statuses.code IS 'The code for the residency s
 
 COMMENT ON COLUMN party.residency_statuses.locale_id IS 'The Unicode locale identifier for the residency status';
 
+COMMENT ON COLUMN party.residency_statuses.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the residency status is specific to';
+
 COMMENT ON COLUMN party.residency_statuses.sort_index IS 'The sort index for the residency status';
 
 COMMENT ON COLUMN party.residency_statuses.name IS 'The name of the residency status';
@@ -758,6 +810,8 @@ CREATE INDEX residential_types_locale_id_ix ON party.residential_types(locale_id
 COMMENT ON COLUMN party.residential_types.code IS 'The code for the residential type';
 
 COMMENT ON COLUMN party.residential_types.locale_id IS 'The Unicode locale identifier for the residential type';
+
+COMMENT ON COLUMN party.residential_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the residential type is specific to';
 
 COMMENT ON COLUMN party.residential_types.sort_index IS 'The sort index for the residential type';
 
@@ -783,6 +837,8 @@ COMMENT ON COLUMN party.role_purposes.code IS 'The code for the role purpose';
 
 COMMENT ON COLUMN party.role_purposes.locale_id IS 'The Unicode locale identifier for the role purpose';
 
+COMMENT ON COLUMN party.role_purposes.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the role purpose is specific to';
+
 COMMENT ON COLUMN party.role_purposes.sort_index IS 'The sort index for the role purpose';
 
 COMMENT ON COLUMN party.role_purposes.name IS 'The name of the role purpose';
@@ -807,6 +863,8 @@ CREATE INDEX role_types_locale_id_ix ON party.role_types(locale_id);
 COMMENT ON COLUMN party.role_types.code IS 'The code for the role type';
 
 COMMENT ON COLUMN party.role_types.locale_id IS 'The Unicode locale identifier for the role type';
+
+COMMENT ON COLUMN party.role_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the role type is specific to';
 
 COMMENT ON COLUMN party.role_types.sort_index IS 'The sort index for the role type';
 
@@ -877,6 +935,8 @@ COMMENT ON COLUMN party.relationship_types.code IS 'The code for the relationshi
 
 COMMENT ON COLUMN party.relationship_types.locale_id IS 'The Unicode locale identifier for the relationship type';
 
+COMMENT ON COLUMN party.relationship_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the relationship type is specific to';
+
 COMMENT ON COLUMN party.relationship_types.sort_index IS 'The sort index for the relationship type';
 
 COMMENT ON COLUMN party.relationship_types.name IS 'The name of the relationship type';
@@ -886,6 +946,38 @@ COMMENT ON COLUMN party.relationship_types.description IS 'The description for t
 COMMENT ON COLUMN party.relationship_types.first_party_role IS 'The code for the role type for the first party in the relationship';
 
 COMMENT ON COLUMN party.relationship_types.second_party_role IS 'The code for the role type for the second party in the relationship';
+
+
+CREATE TABLE party.relationship_property_types (
+  relationship_type VARCHAR(30)  NOT NULL,
+  code              VARCHAR(30)  NOT NULL,
+  locale_id         VARCHAR(10)  NOT NULL,
+  tenant_id         UUID,
+  sort_index        INTEGER,
+  name              VARCHAR(50)  NOT NULL,
+  description       VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (relationship_type, code, locale_id),
+  CONSTRAINT relationship_property_types_relationship_type_fk FOREIGN KEY (relationship_type, locale_id) REFERENCES party.relationship_types(code, locale_id) ON DELETE CASCADE
+);
+
+CREATE INDEX relationship_property_types_relationship_type_ix ON party.relationship_property_types(relationship_type);
+
+CREATE INDEX relationship_property_types_locale_id_ix ON party.relationship_property_types(locale_id);
+
+COMMENT ON COLUMN party.relationship_property_types.relationship_type IS 'The code for the relationship type the relationship property type is associated with';
+
+COMMENT ON COLUMN party.relationship_property_types.code IS 'The code for the relationship property type';
+
+COMMENT ON COLUMN party.relationship_property_types.locale_id IS 'The Unicode locale identifier for the relationship property type';
+
+COMMENT ON COLUMN party.relationship_property_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the relationship property type is specific to';
+
+COMMENT ON COLUMN party.relationship_property_types.sort_index IS 'The sort index for the relationship property type';
+
+COMMENT ON COLUMN party.relationship_property_types.name IS 'The name of the relationship property type';
+
+COMMENT ON COLUMN party.relationship_property_types.description IS 'The description for the relationship property type';
 
 
 CREATE TABLE party.segments (
@@ -905,6 +997,8 @@ CREATE INDEX segments_locale_id_ix ON party.segments(locale_id);
 COMMENT ON COLUMN party.segments.code IS 'The code for the segment';
 
 COMMENT ON COLUMN party.segments.locale_id IS 'The Unicode locale identifier for the segment';
+
+COMMENT ON COLUMN party.segments.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the segment is specific to';
 
 COMMENT ON COLUMN party.segments.sort_index IS 'The sort index for the segment';
 
@@ -932,6 +1026,8 @@ COMMENT ON COLUMN party.source_of_funds_types.code IS 'The code for the source o
 
 COMMENT ON COLUMN party.source_of_funds_types.locale_id IS 'The Unicode locale identifier for the source of funds type';
 
+COMMENT ON COLUMN party.source_of_funds_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the source of funds type is specific to';
+
 COMMENT ON COLUMN party.source_of_funds_types.sort_index IS 'The sort index for the source of funds type';
 
 COMMENT ON COLUMN party.source_of_funds_types.name IS 'The name of the source of funds type';
@@ -956,6 +1052,8 @@ COMMENT ON COLUMN party.source_of_wealth_types.code IS 'The code for the source 
 
 COMMENT ON COLUMN party.source_of_wealth_types.locale_id IS 'The Unicode locale identifier for the source of wealth type';
 
+COMMENT ON COLUMN party.source_of_wealth_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the source of wealth type is specific to';
+
 COMMENT ON COLUMN party.source_of_wealth_types.sort_index IS 'The sort index for the source of wealth type';
 
 COMMENT ON COLUMN party.source_of_wealth_types.name IS 'The name of the source of wealth type';
@@ -979,6 +1077,8 @@ CREATE INDEX status_type_categories_locale_id_ix ON party.status_type_categories
 COMMENT ON COLUMN party.status_type_categories.code IS 'The code for the status type category';
 
 COMMENT ON COLUMN party.status_type_categories.locale_id IS 'The Unicode locale identifier for the status type category';
+
+COMMENT ON COLUMN party.status_type_categories.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the status type category is specific to';
 
 COMMENT ON COLUMN party.status_type_categories.sort_index IS 'The sort index for the status type category';
 
@@ -1011,6 +1111,8 @@ COMMENT ON COLUMN party.status_types.code IS 'The code for the status type';
 
 COMMENT ON COLUMN party.status_types.locale_id IS 'The Unicode locale identifier for the status type';
 
+COMMENT ON COLUMN party.status_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the status type is specific to';
+
 COMMENT ON COLUMN party.status_types.sort_index IS 'The sort index for the status type';
 
 COMMENT ON COLUMN party.status_types.name IS 'The name of the status type';
@@ -1041,6 +1143,8 @@ COMMENT ON COLUMN party.tax_number_types.code IS 'The code for the tax number ty
 
 COMMENT ON COLUMN party.tax_number_types.locale_id IS 'The Unicode locale identifier for the tax number type';
 
+COMMENT ON COLUMN party.tax_number_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the tax number type is specific to';
+
 COMMENT ON COLUMN party.tax_number_types.sort_index IS 'The sort index for the tax number type';
 
 COMMENT ON COLUMN party.tax_number_types.name IS 'The name of the tax number type';
@@ -1068,6 +1172,8 @@ CREATE INDEX times_to_contact_locale_id_ix ON party.times_to_contact(locale_id);
 COMMENT ON COLUMN party.times_to_contact.code IS 'The code for the time to contact';
 
 COMMENT ON COLUMN party.times_to_contact.locale_id IS 'The Unicode locale identifier for the time to contact';
+
+COMMENT ON COLUMN party.times_to_contact.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the time to contact is specific to';
 
 COMMENT ON COLUMN party.times_to_contact.sort_index IS 'The sort index for the time to contact';
 
@@ -1842,12 +1948,13 @@ COMMENT ON COLUMN party.snapshots.party_id IS 'The Universally Unique Identifier
 
 
 CREATE TABLE party.sources_of_funds (
-  created        TIMESTAMP   NOT NULL,
+  created        TIMESTAMP    NOT NULL,
+  description    VARCHAR(100),
   effective_from DATE,
   effective_to   DATE,
-  person_id      UUID        NOT NULL,
-  percentage     INTEGER     NOT NULL,
-  type           VARCHAR(30) NOT NULL,
+  person_id      UUID         NOT NULL,
+  percentage     INTEGER,
+  type           VARCHAR(30)  NOT NULL,
   updated        TIMESTAMP,
 
   PRIMARY KEY (person_id, type),
@@ -1858,13 +1965,15 @@ CREATE INDEX sources_of_funds_person_id_ix ON party.sources_of_funds(person_id);
 
 COMMENT ON COLUMN party.sources_of_funds.created IS 'The date and time the source of funds was created';
 
+COMMENT ON COLUMN party.sources_of_funds.description IS 'The description for the source of funds';
+
 COMMENT ON COLUMN party.sources_of_funds.effective_from IS 'The date that the source of funds is effective from';
 
 COMMENT ON COLUMN party.sources_of_funds.effective_to IS 'The date that the source of funds is effective to';
 
 COMMENT ON COLUMN party.sources_of_funds.person_id IS 'The Universally Unique Identifier (UUID) for the person the source of funds is associated with';
 
-COMMENT ON COLUMN party.sources_of_funds.percentage IS 'The percentage of the total of all sources of funds attributed to this source of funds';
+COMMENT ON COLUMN party.sources_of_funds.percentage IS 'The percentage of the total of all sources of funds attributed to the source of funds';
 
 COMMENT ON COLUMN party.sources_of_funds.type IS 'The code for the source of funds type';
 
@@ -1877,6 +1986,7 @@ CREATE TABLE party.sources_of_wealth (
   effective_to   DATE,
   person_id      UUID        NOT NULL,
   type           VARCHAR(30) NOT NULL,
+  description    VARCHAR(100),
   updated        TIMESTAMP,
 
   PRIMARY KEY (person_id, type),
@@ -1894,6 +2004,8 @@ COMMENT ON COLUMN party.sources_of_wealth.effective_to IS 'The date that the sou
 COMMENT ON COLUMN party.sources_of_wealth.person_id IS 'The Universally Unique Identifier (UUID) for the person the source of wealth is associated with';
 
 COMMENT ON COLUMN party.sources_of_wealth.type IS 'The code for the source of wealth type';
+
+COMMENT ON COLUMN party.sources_of_wealth.description IS 'The description for the source of wealth';
 
 COMMENT ON COLUMN party.sources_of_wealth.updated IS 'The date and time the source of wealth was last updated';
 
@@ -3660,7 +3772,7 @@ INSERT INTO party.role_types (code, locale_id, name, description, party_types)
 INSERT INTO party.role_types (code, locale_id, name, description, party_types)
   VALUES ('division', 'en-US', 'Division', 'A major section of an organization with responsibility for a particular area of activity', 'organization');
 INSERT INTO party.role_types (code, locale_id, name, description, party_types)
-  VALUES ('employee', 'en-US', 'Employee', 'A person employed for wages or salary', 'person');
+  VALUES ('employee', 'en-US', 'Employee', 'A person employed for a salary or wages', 'person');
 INSERT INTO party.role_types (code, locale_id, name, description, party_types)
   VALUES ('employer', 'en-US', 'Employer', 'An organization or person that has employees', 'organization,person');
 INSERT INTO party.role_types (code, locale_id, name, description, party_types)
@@ -3731,7 +3843,7 @@ INSERT INTO party.role_types (code, locale_id, name, description, party_types)
 INSERT INTO party.role_types (code, locale_id, name, description, party_types)
   VALUES ('division', 'en-ZA', 'Division', 'A major section of an organization with responsibility for a particular area of activity', 'organization');
 INSERT INTO party.role_types (code, locale_id, name, description, party_types)
-  VALUES ('employee', 'en-ZA', 'Employee', 'A person employed for wages or salary', 'person');
+  VALUES ('employee', 'en-ZA', 'Employee', 'A person employed for a salary or wages', 'person');
 INSERT INTO party.role_types (code, locale_id, name, description, party_types)
   VALUES ('employer', 'en-ZA', 'Employer', 'An organization or person that has employees', 'organization,person');
 INSERT INTO party.role_types (code, locale_id, name, description, party_types)
@@ -3860,97 +3972,217 @@ INSERT INTO party.relationship_types(code, locale_id, name, description, first_p
 
 
 INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('salary', 'en-US', 1, 'Salary', 'Salary');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('commission', 'en-US', 2, 'Commission', 'Commission');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('rental_income', 'en-US', 3, 'Rental Income', 'Rental Income');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('investments', 'en-US', 4, 'Investments', 'Investments');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('retirement_annuity', 'en-US', 5, 'Retirement Annuity', 'Retirement Annuity');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('social_grant', 'en-US', 6, 'Social Grant', 'Social Grant');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('inheritance', 'en-US', 7, 'Inheritance', 'Inheritance');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('maintenance', 'en-US', 8, 'Maintenance', 'Maintenance');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('pension', 'en-US', 9, 'Pension', 'Pension');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('donations', 'en-US', 10, 'Donations', 'Donations');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('allowance', 'en-US', 11, 'Allowance', 'Allowance');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('winnings', 'en-US', 12, 'Winnings', 'Winnings');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('owner_draws', 'en-US', 13, 'Owner Draws', 'Owner Draws');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('bonus_incentive', 'en-US', 14, 'Bonus/Incentive', 'Bonus/Incentive');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('bursary', 'en-US', 15, 'Bursary', 'Bursary');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('settlement', 'en-US', 16, 'Settlement', 'Settlement');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('trust', 'en-US', 17, 'Trust', 'Trust');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('other', 'en-US', 18, 'Other', 'Other');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
+  VALUES ('salary_wages', 'en-US', 1, 'Salary/Wages', 'Salary/Wages');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('allowance', 'en-US', 'Allowance', 'Allowance');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('bonus_incentive', 'en-US', 'Bonus/Incentive', 'Bonus/Incentive');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('bursary', 'en-US', 'Bursary', 'Bursary');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('commission', 'en-US', 'Commission', 'Commission');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('court_award', 'en-US', 'Court Award', 'Court Award');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('development_funding', 'en-US', 'Development Funding', 'Development Funding');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('donation', 'en-US', 'Donation', 'Donation');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('entertainment_sports', 'en-US', 'Entertainment/Sports', 'Entertainment/Sports');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('family_fortune', 'en-US', 'Family Fortune', 'Family Fortune');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('gift', 'en-US', 'Gift', 'Gift');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('grant_other', 'en-US', 'Grant - Other', 'Grant - Other');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('grant_social', 'en-US', 'Grant - Social', 'Grant - Social');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('inheritance', 'en-US', 'Inheritance', 'Inheritance');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('insurance_claim', 'en-US', 'Insurance Claim', 'Insurance Claim');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('investments_other', 'en-US', 'Investments - Other', 'Investments - Other');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('investments_property', 'en-US', 'Investments - Property', 'Investments - Property (Commercial and Residential)');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('investments_securities', 'en-US', 'Investments - Securities', 'Investments - Securities');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('life_policy', 'en-US', 'Maturity/Surrender of Life Policy', 'Maturity/Surrender of Life Policy');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('loan', 'en-US', 'Loan', 'Loan');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('maintenance_alimony', 'en-US', 'Maintenance/Alimony', 'Maintenance/Alimony');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('other', 'en-US', 'Other', 'Other');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('owner_draws', 'en-US', 'Owner Draws', 'Owner Draws');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('parent_company', 'en-US', 'Parent Company', 'Parent Company');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('parent', 'en-US', 'Parent', 'Parent');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('pension', 'en-US', 'Pension', 'Pension');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('relative', 'en-US', 'Relative', 'Relative');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('retirement_annuity', 'en-US', 'Retirement Annuity', 'Retirement Annuity');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('sale_assets', 'en-US', 'Sale of Assets', 'Sale of Assets');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('sale_business', 'en-US', 'Sale of Business', 'Sale of Business');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('sale_investments', 'en-US', 'Sale of Investments', 'Sale of Investments');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('sale_property', 'en-US', 'Sale of Property', 'Sale of Property');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('sale_vehicle', 'en-US', 'Sale of Vehicle', 'Sale of Vehicle');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('savings', 'en-US', 'Savings', 'Savings');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('settlement', 'en-US', 'Settlement', 'Settlement');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('shareholder_contributions', 'en-US', 'Shareholder Contributions', 'Shareholder Contributions');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('tax_rebate', 'en-US', 'Tax Rebate', 'Tax Rebate');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('trading_income_sales', 'en-US', 'Trading Income - Sales', 'Trading Income - Sales');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('trading_income_services', 'en-US', 'Trading Income - Services', 'Trading Income - Services');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('trust_foundation', 'en-US', 'Trust/Foundation', 'Beneficiary of Trust or Foundation');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('winnings', 'en-US', 'Winnings', 'Winnings');
 
 INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('salary', 'en-ZA', 1, 'Salary', 'Salary');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('commission', 'en-ZA', 2, 'Commission', 'Commission');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('rental_income', 'en-ZA', 3, 'Rental Income', 'Rental Income');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('investments', 'en-ZA', 4, 'Investments', 'Investments');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('retirement_annuity', 'en-ZA', 5, 'Retirement Annuity', 'Retirement Annuity');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('social_grant', 'en-ZA', 6, 'Social Grant', 'Social Grant');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('inheritance', 'en-ZA', 7, 'Inheritance', 'Inheritance');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('maintenance', 'en-ZA', 8, 'Maintenance', 'Maintenance');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('pension', 'en-ZA', 9, 'Pension', 'Pension');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('donations', 'en-ZA', 10, 'Donations', 'Donations');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('allowance', 'en-ZA', 11, 'Allowance', 'Allowance');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('winnings', 'en-ZA', 12, 'Winnings', 'Winnings');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('owner_draws', 'en-ZA', 13, 'Owner Draws', 'Owner Draws');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('bonus_incentive', 'en-ZA', 14, 'Bonus/Incentive', 'Bonus/Incentive');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('bursary', 'en-ZA', 15, 'Bursary', 'Bursary');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('settlement', 'en-ZA', 16, 'Settlement', 'Settlement');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('trust', 'en-ZA', 17, 'Trust', 'Trust');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('other', 'en-ZA', 18, 'Other', 'Other');
-INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)
-  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+  VALUES ('salary_wages', 'en-ZA', 1, 'Salary/Wages', 'Salary/Wages');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('allowance', 'en-ZA', 'Allowance', 'Allowance');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('bonus_incentive', 'en-ZA', 'Bonus/Incentive', 'Bonus/Incentive');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('bursary', 'en-ZA', 'Bursary', 'Bursary');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('commission', 'en-ZA', 'Commission', 'Commission');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('court_award', 'en-ZA', 'Court Award', 'Court Award');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('development_funding', 'en-ZA', 'Development Funding', 'Development Funding');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('donation', 'en-ZA', 'Donation', 'Donation');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('entertainment_sports', 'en-ZA', 'Entertainment/Sports', 'Entertainment/Sports');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('family_fortune', 'en-ZA', 'Family Fortune', 'Family Fortune');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('gift', 'en-ZA', 'Gift', 'Gift');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('grant_other', 'en-ZA', 'Grant - Other', 'Grant - Other');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('grant_social', 'en-ZA', 'Grant - Social', 'Grant - Social');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('inheritance', 'en-ZA', 'Inheritance', 'Inheritance');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('insurance_claim', 'en-ZA', 'Insurance Claim', 'Insurance Claim');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('investments_other', 'en-ZA', 'Investments - Other', 'Investments - Other');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('investments_property', 'en-ZA', 'Investments - Property', 'Investments - Property (Commercial and Residential)');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('investments_securities', 'en-ZA', 'Investments - Securities', 'Investments - Securities');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('life_policy', 'en-ZA', 'Maturity/Surrender of Life Policy', 'Maturity/Surrender of Life Policy');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('loan', 'en-ZA', 'Loan', 'Loan');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('maintenance_alimony', 'en-ZA', 'Maintenance/Alimony', 'Maintenance/Alimony');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('other', 'en-ZA', 'Other', 'Other');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('owner_draws', 'en-ZA', 'Owner Draws', 'Owner Draws');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('parent_company', 'en-ZA', 'Parent Company', 'Parent Company');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('parent', 'en-ZA', 'Parent', 'Parent');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('pension', 'en-ZA', 'Pension', 'Pension');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('relative', 'en-ZA', 'Relative', 'Relative');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('retirement_annuity', 'en-ZA', 'Retirement Annuity', 'Retirement Annuity');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('sale_assets', 'en-ZA', 'Sale of Assets', 'Sale of Assets');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('sale_business', 'en-ZA', 'Sale of Business', 'Sale of Business');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('sale_investments', 'en-ZA', 'Sale of Investments', 'Sale of Investments');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('sale_property', 'en-ZA', 'Sale of Property', 'Sale of Property');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('sale_vehicle', 'en-ZA', 'Sale of Vehicle', 'Sale of Vehicle');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('savings', 'en-ZA', 'Savings', 'Savings');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('settlement', 'en-ZA', 'Settlement', 'Settlement');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('shareholder_contributions', 'en-ZA', 'Shareholder Contributions', 'Shareholder Contributions');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('tax_rebate', 'en-ZA', 'Tax Rebate', 'Tax Rebate');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('trading_income_sales', 'en-ZA', 'Trading Income - Sales', 'Trading Income - Sales');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('trading_income_services', 'en-ZA', 'Trading Income - Services', 'Trading Income - Services');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('trust_foundation', 'en-ZA', 'Trust/Foundation', 'Beneficiary of Trust or Foundation');
+INSERT INTO party.source_of_funds_types (code, locale_id, name, description)
+  VALUES ('winnings', 'en-ZA', 'Winnings', 'Winnings');
 
 
 INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
-  VALUES ('employment', 'en-US', 1, 'Employment', 'Employment');
-INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
-  VALUES ('inheritance', 'en-US', 2, 'Inheritance', 'Inheritance');
-INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
-  VALUES ('investments', 'en-US', 3, 'Investments', 'Investments');
+  VALUES ('savings', 'en-US', 1, 'Savings', 'Savings from Employment Income, Director Fees, Dividends');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('commercial_activities', 'en-US', 'Commercial Activities', 'Commercial Activities');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('grant_government', 'en-US', 'Grant - Government', 'Grant - Government');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('grant_other', 'en-US', 'Grant - Other', 'Grant - Other');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('inheritance', 'en-US', 'Inheritance', 'Inheritance');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('investments', 'en-US', 'Investments', 'Investments');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('other', 'en-US', 'Other', 'Other');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('property_of_business_sale', 'en-US', 'Property of Business Sale', 'Property of Business Sale');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('royalties', 'en-US', 'Royalties', 'Royalties');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('sale_of_business', 'en-US', 'Sale of Business', 'Sale of Business');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('sale_of_property', 'en-US', 'Sale of Property', 'Sale of Property');
 
 INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
-  VALUES ('employment', 'en-ZA', 1, 'Employment', 'Employment');
-INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
-  VALUES ('inheritance', 'en-ZA', 2, 'Inheritance', 'Inheritance');
-INSERT INTO party.source_of_wealth_types (code, locale_id, sort_index, name, description)
-  VALUES ('investments', 'en-ZA', 3, 'Investments', 'Investments');
+  VALUES ('savings', 'en-ZA', 1, 'Savings', 'Savings from Employment Income, Director Fees, Dividends');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('commercial_activities', 'en-ZA', 'Commercial Activities', 'Commercial Activities');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('grant_government', 'en-ZA', 'Grant - Government', 'Grant - Government');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('grant_other', 'en-ZA', 'Grant - Other', 'Grant - Other');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('inheritance', 'en-ZA', 'Inheritance', 'Inheritance');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('investments', 'en-ZA', 'Investments', 'Investments');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('other', 'en-ZA', 'Other', 'Other');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('property_of_business_sale', 'en-ZA', 'Property of Business Sale', 'Property of Business Sale');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('royalties', 'en-ZA', 'Royalties', 'Royalties');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('sale_of_business', 'en-ZA', 'Sale of Business', 'Sale of Business');
+INSERT INTO party.source_of_wealth_types (code, locale_id, name, description)
+  VALUES ('sale_of_property', 'en-ZA', 'Sale of Property', 'Sale of Property');
 
 
 INSERT INTO party.status_type_categories(code, locale_id, name, description)

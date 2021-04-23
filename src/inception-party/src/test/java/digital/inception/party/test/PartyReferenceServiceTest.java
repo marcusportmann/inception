@@ -56,6 +56,7 @@ import digital.inception.party.RoleTypeAttributeTypeConstraint;
 import digital.inception.party.RoleTypePreferenceTypeConstraint;
 import digital.inception.party.Segment;
 import digital.inception.party.SourceOfFundsType;
+import digital.inception.party.SourceOfWealthType;
 import digital.inception.party.StatusType;
 import digital.inception.party.StatusTypeCategory;
 import digital.inception.party.TaxNumberType;
@@ -1063,32 +1064,63 @@ public class PartyReferenceServiceTest {
   /** Test the source of funds types reference functionality. */
   @Test
   public void sourceOfFundsTypeTest() throws Exception {
-    List<SourceOfFundsType> retrievedSourceOfFundTypes =
+    List<SourceOfFundsType> retrievedSourceOfFundsTypes =
         partyReferenceService.getSourceOfFundsTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        20,
-        retrievedSourceOfFundTypes.size(),
+        42,
+        retrievedSourceOfFundsTypes.size(),
         "The correct number of source of funds types was not retrieved");
 
-    retrievedSourceOfFundTypes =
+    retrievedSourceOfFundsTypes =
         partyReferenceService.getSourceOfFundsTypes(
             IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        20,
-        retrievedSourceOfFundTypes.size(),
+        42,
+        retrievedSourceOfFundsTypes.size(),
         "The correct number of source of funds types was not retrieved");
 
-    retrievedSourceOfFundTypes =
+    retrievedSourceOfFundsTypes =
         partyReferenceService.getSourceOfFundsTypes(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
             IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        19,
-        retrievedSourceOfFundTypes.size(),
+        41,
+        retrievedSourceOfFundsTypes.size(),
         "The correct number of source of funds types was not retrieved");
+  }
+
+  /** Test the source of wealth types reference functionality. */
+  @Test
+  public void sourceOfWealthTypeTest() throws Exception {
+    List<SourceOfWealthType> retrievedSourceOfWealthTypes =
+        partyReferenceService.getSourceOfWealthTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        12,
+        retrievedSourceOfWealthTypes.size(),
+        "The correct number of source of wealth types was not retrieved");
+
+    retrievedSourceOfWealthTypes =
+        partyReferenceService.getSourceOfWealthTypes(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        12,
+        retrievedSourceOfWealthTypes.size(),
+        "The correct number of source of wealth types was not retrieved");
+
+    retrievedSourceOfWealthTypes =
+        partyReferenceService.getSourceOfWealthTypes(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        11,
+        retrievedSourceOfWealthTypes.size(),
+        "The correct number of source of wealth types was not retrieved");
   }
 
   /** Test the status type category functionality. */
@@ -1329,7 +1361,7 @@ public class PartyReferenceServiceTest {
             IPartyReferenceService.DEFAULT_TENANT_ID, "test_person_segment"));
     assertTrue(
         partyReferenceService.isValidSourceOfFundsType(
-            IPartyReferenceService.DEFAULT_TENANT_ID, "salary"));
+            IPartyReferenceService.DEFAULT_TENANT_ID, "salary_wages"));
     assertTrue(
         partyReferenceService.isValidStatusType(
             IPartyReferenceService.DEFAULT_TENANT_ID, "person", "fraud_investigation"));

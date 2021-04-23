@@ -55,12 +55,12 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A source of funds for a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "effectiveFrom", "effectiveTo", "percentage"})
+@JsonPropertyOrder({"type", "effectiveFrom", "effectiveTo", "percentage", "description"})
 @XmlRootElement(name = "SourceOfFunds", namespace = "http://inception.digital/party")
 @XmlType(
     name = "SourceOfFunds",
     namespace = "http://inception.digital/party",
-    propOrder = {"type", "effectiveFrom", "effectiveTo", "percentage"})
+    propOrder = {"type", "effectiveFrom", "effectiveTo", "percentage", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "sources_of_funds")
@@ -75,6 +75,13 @@ public class SourceOfFunds implements Serializable {
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
+
+  /** The description for the source of funds. */
+  @Schema(description = "The description for the source of funds")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Column(name = "description", length = 100)
+  private String description;
 
   /** The date the source of funds is effective from. */
   @Schema(description = "The date the source of funds is effective from")
@@ -94,15 +101,13 @@ public class SourceOfFunds implements Serializable {
   @Column(name = "effective_to")
   private LocalDate effectiveTo;
 
-  /** The percentage of the total of all sources of funds attributed to this source of funds. */
+  /** The percentage of the total of all sources of funds attributed to the source of funds. */
   @Schema(
       description =
-          "The percentage of the total of all sources of funds attributed to this source of funds",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Percentage", required = true)
-  @NotNull
-  @Column(name = "percentage", nullable = false)
+          "The percentage of the total of all sources of funds attributed to the source of funds")
+  @JsonProperty
+  @XmlElement(name = "Percentage")
+  @Column(name = "percentage")
   private Integer percentage;
 
   /** The person the source of funds is associated with. */
@@ -141,7 +146,6 @@ public class SourceOfFunds implements Serializable {
    */
   public SourceOfFunds(String type) {
     this.type = type;
-    this.percentage = 100;
   }
 
   /**
@@ -165,7 +169,6 @@ public class SourceOfFunds implements Serializable {
   public SourceOfFunds(String type, LocalDate effectiveFrom) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
-    this.percentage = 100;
   }
 
   /**
@@ -193,7 +196,6 @@ public class SourceOfFunds implements Serializable {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
     this.effectiveTo = effectiveTo;
-    this.percentage = 100;
   }
 
   /**
@@ -208,6 +210,99 @@ public class SourceOfFunds implements Serializable {
   public SourceOfFunds(
       String type, LocalDate effectiveFrom, LocalDate effectiveTo, int percentage) {
     this.type = type;
+    this.effectiveFrom = effectiveFrom;
+    this.effectiveTo = effectiveTo;
+    this.percentage = percentage;
+  }
+
+  /**
+   * Constructs a new <b>SourceOfFunds</b>.
+   *
+   * @param type the source of funds type
+   * @param description the description for the source of funds
+   */
+  public SourceOfFunds(String type, String description) {
+    this.type = type;
+    this.description = description;
+  }
+
+  /**
+   * Constructs a new <b>SourceOfFunds</b>.
+   *
+   * @param type the source of funds type
+   * @param description the description for the source of funds
+   * @param percentage the percentage of the total of all sources of funds attributed to this source
+   *     of funds
+   */
+  public SourceOfFunds(String type, String description, int percentage) {
+    this.type = type;
+    this.description = description;
+    this.percentage = percentage;
+  }
+
+  /**
+   * Constructs a new <b>SourceOfFunds</b>.
+   *
+   * @param type the source of funds type
+   * @param description the description for the source of funds
+   * @param effectiveFrom the date the source of funds is effective from
+   */
+  public SourceOfFunds(String type, String description, LocalDate effectiveFrom) {
+    this.type = type;
+    this.description = description;
+    this.effectiveFrom = effectiveFrom;
+  }
+
+  /**
+   * Constructs a new <b>SourceOfFunds</b>.
+   *
+   * @param type the source of funds type
+   * @param description the description for the source of funds
+   * @param effectiveFrom the date the source of funds is effective from
+   * @param percentage the percentage of the total of all sources of funds attributed to this source
+   *     of funds
+   */
+  public SourceOfFunds(String type, String description, LocalDate effectiveFrom, int percentage) {
+    this.type = type;
+    this.description = description;
+    this.effectiveFrom = effectiveFrom;
+    this.percentage = percentage;
+  }
+
+  /**
+   * Constructs a new <b>SourceOfFunds</b>.
+   *
+   * @param type the source of funds type
+   * @param description the description for the source of funds
+   * @param effectiveFrom the date the source of funds is effective from
+   * @param effectiveTo the date the source of funds is effective to
+   */
+  public SourceOfFunds(
+      String type, String description, LocalDate effectiveFrom, LocalDate effectiveTo) {
+    this.type = type;
+    this.description = description;
+    this.effectiveFrom = effectiveFrom;
+    this.effectiveTo = effectiveTo;
+  }
+
+  /**
+   * Constructs a new <b>SourceOfFunds</b>.
+   *
+   * @param type the source of funds type
+   * @param description the description for the source of funds
+   * @param effectiveFrom the date the source of funds is effective from
+   * @param effectiveTo the date the source of funds is effective to
+   * @param percentage the percentage of the total of all sources of funds attributed to this source
+   *     of funds
+   */
+  public SourceOfFunds(
+      String type,
+      String description,
+      LocalDate effectiveFrom,
+      LocalDate effectiveTo,
+      int percentage) {
+    this.type = type;
+    this.description = description;
     this.effectiveFrom = effectiveFrom;
     this.effectiveTo = effectiveTo;
     this.percentage = percentage;
@@ -248,6 +343,15 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
+   * Returns the description for the source of funds.
+   *
+   * @return the description for the source of funds
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
    * Returns the date the source of funds is effective from.
    *
    * @return the date the source of funds is effective from
@@ -266,9 +370,9 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Returns the percentage of the total of all sources of funds attributed to this source of funds.
+   * Returns the percentage of the total of all sources of funds attributed to the source of funds.
    *
-   * @return the percentage of the total of all sources of funds attributed to this source of funds
+   * @return the percentage of the total of all sources of funds attributed to the source of funds
    */
   public Integer getPercentage() {
     return percentage;
@@ -314,6 +418,15 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
+   * Set the description for the source of funds.
+   *
+   * @param description the description for the source of funds
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
    * Set the date the source of funds is effective from.
    *
    * @param effectiveFrom the date the source of funds is effective from
@@ -332,9 +445,9 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Set the percentage of the total of all sources of funds attributed to this source of funds.
+   * Set the percentage of the total of all sources of funds attributed to the source of funds.
    *
-   * @param percentage the percentage of the total of all sources of funds attributed to this source
+   * @param percentage the percentage of the total of all sources of funds attributed to the source
    *     of funds
    */
   public void setPercentage(Integer percentage) {

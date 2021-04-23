@@ -2541,7 +2541,8 @@ public class PartyServiceTest {
   public void sourceOfFundsTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
-    person.addSourceOfFunds(new SourceOfFunds("salary"));
+    person.addSourceOfFunds(new SourceOfFunds("salary_wages"));
+    person.addSourceOfFunds(new SourceOfFunds("other", "Ill-gotten gains"));
 
     partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2551,12 +2552,12 @@ public class PartyServiceTest {
     comparePersons(person, retrievedPerson);
 
     compareSourcesOfFunds(
-        person.getSourceOfFundsWithType("salary").get(),
-        retrievedPerson.getSourceOfFundsWithType("salary").get());
+        person.getSourceOfFundsWithType("salary_wages").get(),
+        retrievedPerson.getSourceOfFundsWithType("salary_wages").get());
 
-    assertTrue(retrievedPerson.hasSourceOfFundsWithType("salary"));
+    assertTrue(retrievedPerson.hasSourceOfFundsWithType("salary_wages"));
 
-    person.removeSourceOfFundsWithType("salary");
+    person.removeSourceOfFundsWithType("salary_wages");
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2564,7 +2565,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setSourcesOfFunds(Set.of(new SourceOfFunds("salary", LocalDate.of(2015, 10, 1))));
+    person.setSourcesOfFunds(Set.of(new SourceOfFunds("salary_wages", LocalDate.of(2015, 10, 1))));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2580,7 +2581,8 @@ public class PartyServiceTest {
   public void sourceOfWealthTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
-    person.addSourceOfWealth(new SourceOfWealth("employment"));
+    person.addSourceOfWealth(new SourceOfWealth("savings"));
+    person.addSourceOfWealth(new SourceOfWealth("other", "Ill-gotten gains"));
 
     partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2590,12 +2592,12 @@ public class PartyServiceTest {
     comparePersons(person, retrievedPerson);
 
     compareSourcesOfWealth(
-        person.getSourceOfWealthWithType("employment").get(),
-        retrievedPerson.getSourceOfWealthWithType("employment").get());
+        person.getSourceOfWealthWithType("savings").get(),
+        retrievedPerson.getSourceOfWealthWithType("savings").get());
 
-    assertTrue(retrievedPerson.hasSourceOfWealthWithType("employment"));
+    assertTrue(retrievedPerson.hasSourceOfWealthWithType("savings"));
 
-    person.removeSourceOfWealthWithType("employment");
+    person.removeSourceOfWealthWithType("savings");
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2603,7 +2605,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setSourcesOfWealth(Set.of(new SourceOfWealth("employment", LocalDate.of(2015, 10, 1))));
+    person.setSourcesOfWealth(Set.of(new SourceOfWealth("savings", LocalDate.of(2015, 10, 1))));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3948,6 +3950,10 @@ public class PartyServiceTest {
 
   private void compareSourcesOfFunds(SourceOfFunds sourceOfFunds1, SourceOfFunds sourceOfFunds2) {
     assertEquals(
+        sourceOfFunds1.getDescription(),
+        sourceOfFunds2.getDescription(),
+        "The description values for the sources of funds do not match");
+    assertEquals(
         sourceOfFunds1.getEffectiveFrom(),
         sourceOfFunds2.getEffectiveFrom(),
         "The effective from values for the sources of funds do not match");
@@ -3972,20 +3978,21 @@ public class PartyServiceTest {
   private void compareSourcesOfWealth(
       SourceOfWealth sourceOfWealth1, SourceOfWealth sourceOfWealth2) {
     assertEquals(
+        sourceOfWealth1.getDescription(),
+        sourceOfWealth2.getDescription(),
+        "The description values for the sources of wealth do not match");
+    assertEquals(
         sourceOfWealth1.getEffectiveFrom(),
         sourceOfWealth2.getEffectiveFrom(),
         "The effective from values for the sources of wealth do not match");
-
     assertEquals(
         sourceOfWealth1.getEffectiveTo(),
         sourceOfWealth2.getEffectiveTo(),
         "The effective to values for the sources of wealth do not match");
-
     assertEquals(
         sourceOfWealth1.getPerson(),
         sourceOfWealth2.getPerson(),
         "The person values for the sources of wealth do not match");
-
     assertEquals(
         sourceOfWealth1.getType(),
         sourceOfWealth2.getType(),

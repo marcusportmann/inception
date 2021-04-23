@@ -55,12 +55,12 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A source of wealth for a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "effectiveFrom", "effectiveTo"})
+@JsonPropertyOrder({"type", "effectiveFrom", "effectiveTo", "description"})
 @XmlRootElement(name = "SourceOfWealth", namespace = "http://inception.digital/party")
 @XmlType(
     name = "SourceOfWealth",
     namespace = "http://inception.digital/party",
-    propOrder = {"type", "effectiveFrom", "effectiveTo"})
+    propOrder = {"type", "effectiveFrom", "effectiveTo", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "sources_of_wealth")
@@ -75,6 +75,13 @@ public class SourceOfWealth implements Serializable {
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
+
+  /** The description for the source of wealth. */
+  @Schema(description = "The description for the source of wealth")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Column(name = "description", length = 100)
+  private String description;
 
   /** The date the source of wealth is effective from. */
   @Schema(description = "The date the source of wealth is effective from")
@@ -157,6 +164,46 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
+   * Constructs a new <b>SourceOfWealth</b>.
+   *
+   * @param type the source of wealth type
+   * @param description the description for the source of wealth
+   */
+  public SourceOfWealth(String type, String description) {
+    this.type = type;
+    this.description = description;
+  }
+
+  /**
+   * Constructs a new <b>SourceOfWealth</b>.
+   *
+   * @param type the source of wealth type
+   * @param description the description for the source of wealth
+   * @param effectiveFrom the date the source of wealth is effective from
+   */
+  public SourceOfWealth(String type, String description, LocalDate effectiveFrom) {
+    this.type = type;
+    this.description = description;
+    this.effectiveFrom = effectiveFrom;
+  }
+
+  /**
+   * Constructs a new <b>SourceOfWealth</b>.
+   *
+   * @param type the source of wealth type
+   * @param description the description for the source of wealth
+   * @param effectiveFrom the date the source of wealth is effective from
+   * @param effectiveTo the date the source of wealth is effective to
+   */
+  public SourceOfWealth(
+      String type, String description, LocalDate effectiveFrom, LocalDate effectiveTo) {
+    this.type = type;
+    this.description = description;
+    this.effectiveFrom = effectiveFrom;
+    this.effectiveTo = effectiveTo;
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -188,6 +235,15 @@ public class SourceOfWealth implements Serializable {
    */
   public LocalDateTime getCreated() {
     return created;
+  }
+
+  /**
+   * Returns the description for the source of wealth.
+   *
+   * @return the description for the source of wealth
+   */
+  public String getDescription() {
+    return description;
   }
 
   /**
@@ -245,6 +301,15 @@ public class SourceOfWealth implements Serializable {
   public int hashCode() {
     return (((person == null) || (person.getId() == null)) ? 0 : person.getId().hashCode())
         + ((type == null) ? 0 : type.hashCode());
+  }
+
+  /**
+   * Set the description for the source of wealth.
+   *
+   * @param description the description for the source of wealth
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**
