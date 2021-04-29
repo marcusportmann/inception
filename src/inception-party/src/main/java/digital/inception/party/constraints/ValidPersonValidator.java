@@ -22,6 +22,7 @@ import digital.inception.party.ConstraintType;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.Education;
 import digital.inception.party.Employment;
+import digital.inception.party.ExternalReference;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.LanguageProficiency;
@@ -413,6 +414,20 @@ public class ValidPersonValidator extends PartyValidator
 
               isValid = false;
             }
+          }
+        }
+
+        // Validate external references
+        for (ExternalReference externalReference : person.getExternalReferences()) {
+          if (!getPartyReferenceService().isValidExternalReferenceType(person.getTenantId(), person.getType().code(), externalReference.getType())) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("externalReferenceType", externalReference.getType())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidPerson.invalidExternalReferenceType.message}")
+                .addPropertyNode("externalReferences")
+                .addConstraintViolation();
+
+            isValid = false;
           }
         }
 
@@ -925,6 +940,24 @@ public class ValidPersonValidator extends PartyValidator
           }
         } else if (roleTypeAttributeTypeConstraint.getType() == ConstraintType.REQUIRED) {
           switch (roleTypeAttributeTypeConstraint.getAttributeType()) {
+            case "consent":
+              if (!person.hasConsentWithType(
+                  roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())) {
+                hibernateConstraintValidatorContext
+                    .addMessageParameter(
+                        "consentType",
+                        roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())
+                    .addMessageParameter("roleType", roleType)
+                    .buildConstraintViolationWithTemplate(
+                        "{digital.inception.party.constraints.ValidPerson.consentTypeRequiredForRoleType.message}")
+                    .addPropertyNode("consents")
+                    .addConstraintViolation();
+
+                isValid = false;
+              }
+
+              break;
+
             case "contact_mechanism":
               if (!person.hasContactMechanismWithType(
                   roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())) {
@@ -1015,24 +1048,24 @@ public class ValidPersonValidator extends PartyValidator
 
               break;
 
-            case "educations":
+            case "date_of_death":
               if (!validateRequiredAttributeConstraint(
                   roleType,
-                  person.getEducations(),
-                  "educations",
-                  "{digital.inception.party.constraints.ValidPerson.educationRequiredForRoleType.message}",
+                  person.getDateOfDeath(),
+                  "dateOfDeath",
+                  "{digital.inception.party.constraints.ValidPerson.dateOfDeathRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {
                 isValid = false;
               }
 
               break;
 
-            case "employments":
+            case "educations":
               if (!validateRequiredAttributeConstraint(
                   roleType,
-                  person.getEmployments(),
-                  "employments",
-                  "{digital.inception.party.constraints.ValidPerson.employmentRequiredForRoleType.message}",
+                  person.getEducations(),
+                  "educations",
+                  "{digital.inception.party.constraints.ValidPerson.educationRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {
                 isValid = false;
               }
@@ -1058,6 +1091,36 @@ public class ValidPersonValidator extends PartyValidator
                   "employmentType",
                   "{digital.inception.party.constraints.ValidPerson.employmentTypeRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+            case "employments":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getEmployments(),
+                  "employments",
+                  "{digital.inception.party.constraints.ValidPerson.employmentRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+            case "external_reference":
+              if (!person.hasExternalReferenceWithType(
+                  roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())) {
+                hibernateConstraintValidatorContext
+                    .addMessageParameter(
+                        "externalReferenceType",
+                        roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())
+                    .addMessageParameter("roleType", roleType)
+                    .buildConstraintViolationWithTemplate(
+                        "{digital.inception.party.constraints.ValidPerson.externalReferenceTypeRequiredForRoleType.message}")
+                    .addPropertyNode("externalReferences")
+                    .addConstraintViolation();
+
                 isValid = false;
               }
 
@@ -1094,6 +1157,24 @@ public class ValidPersonValidator extends PartyValidator
                   "highestQualificationType",
                   "{digital.inception.party.constraints.ValidPerson.highestQualificationTypeRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+            case "identity_document":
+              if (!person.hasIdentityDocumentWithType(
+                  roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())) {
+                hibernateConstraintValidatorContext
+                    .addMessageParameter(
+                        "identityDocumentType",
+                        roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())
+                    .addMessageParameter("roleType", roleType)
+                    .buildConstraintViolationWithTemplate(
+                        "{digital.inception.party.constraints.ValidPerson.identityDocumentTypeRequiredForRoleType.message}")
+                    .addPropertyNode("identityDocuments")
+                    .addConstraintViolation();
+
                 isValid = false;
               }
 
@@ -1263,6 +1344,18 @@ public class ValidPersonValidator extends PartyValidator
 
               break;
 
+            case "residence_permits":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getResidencePermits(),
+                  "residencePermits",
+                  "{digital.inception.party.constraints.ValidPerson.residencePermitRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
             case "residency_status":
               if (!validateRequiredAttributeConstraint(
                   roleType,
@@ -1281,6 +1374,18 @@ public class ValidPersonValidator extends PartyValidator
                   person.getResidentialType(),
                   "residentialType",
                   "{digital.inception.party.constraints.ValidPerson.residentialTypeRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+            case "segment_allocations":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getSegmentAllocations(),
+                  "segmentAllocations",
+                  "{digital.inception.party.constraints.ValidPerson.segmentAllocationRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {
                 isValid = false;
               }

@@ -31,6 +31,7 @@ import digital.inception.party.ContactMechanismRole;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.Education;
 import digital.inception.party.Employment;
+import digital.inception.party.ExternalReference;
 import digital.inception.party.IPartyService;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.LanguageProficiency;
@@ -756,6 +757,102 @@ public class PartyServiceTest {
     partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
+  /** Test the external reference functionality. */
+  @Test
+  public void externalReferenceTest() throws Exception {
+    // Person identity documents
+    Person person = getTestBasicPersonDetails();
+
+    person.addExternalReference(
+        new ExternalReference("legacy_customer_code", "Test Legacy Customer Code"));
+    person.addExternalReference(
+        new ExternalReference("test_external_reference_type", "Test External Reference"));
+
+    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    Person retrievedPerson =
+        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    compareExternalReferences(
+        person.getExternalReferenceWithType("test_external_reference_type").get(),
+        retrievedPerson.getExternalReferenceWithType("test_external_reference_type").get());
+
+    assertTrue(retrievedPerson.hasExternalReferenceWithType("legacy_customer_code"));
+    assertTrue(retrievedPerson.hasExternalReferenceWithType("test_external_reference_type"));
+
+    person.removeExternalReferenceWithType("legacy_customer_code");
+
+    assertFalse(person.hasExternalReferenceWithType("legacy_customer_code"));
+
+    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setExternalReferences(
+        Set.of(
+            new ExternalReference(
+                "test_external_reference_type", "Another Test External Reference")));
+
+    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+
+    // Organization identity documents
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addExternalReference(
+        new ExternalReference("legacy_customer_code", "Test Legacy Customer Code"));
+    organization.addExternalReference(
+        new ExternalReference("test_external_reference_type", "Test External Reference"));
+
+    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    Organization retrievedOrganization =
+        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    compareExternalReferences(
+        organization.getExternalReferenceWithType("test_external_reference_type").get(),
+        retrievedOrganization.getExternalReferenceWithType("test_external_reference_type").get());
+
+    assertTrue(retrievedOrganization.hasExternalReferenceWithType("legacy_customer_code"));
+    assertTrue(retrievedOrganization.hasExternalReferenceWithType("test_external_reference_type"));
+
+    organization.removeExternalReferenceWithType("legacy_customer_code");
+
+    assertFalse(organization.hasExternalReferenceWithType("legacy_customer_code"));
+
+    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    retrievedOrganization =
+        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    organization.setExternalReferences(
+        Set.of(
+            new ExternalReference(
+                "test_external_reference_type", "Another Test External Reference")));
+
+    partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    retrievedOrganization =
+        partyService.getOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
+
+    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+  }
+
   /** Test the foreign person functionality. */
   @Test
   public void foreignPersonTest() throws Exception {
@@ -795,7 +892,7 @@ public class PartyServiceTest {
     partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, foreignPerson.getId());
   }
 
-  /** Test the identityDocument functionality. */
+  /** Test the identity document functionality. */
   @Test
   public void identityDocumentTest() throws Exception {
     // Person identity documents
@@ -928,8 +1025,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         14,
@@ -987,8 +1083,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         15,
@@ -1097,8 +1192,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         14,
@@ -1155,8 +1249,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         16,
@@ -1190,6 +1283,24 @@ public class PartyServiceTest {
 
     organization.addAttribute(new Attribute("given_name", "Given Name"));
     organization.addAttribute(new Attribute("invalid_attribute", "Invalid Attribute"));
+
+    Set<ConstraintViolation<Organization>> constraintViolations =
+        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    assertEquals(
+        2,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid organization");
+  }
+
+  /** Test the invalid organization external reference test. */
+  @Test
+  public void invalidOrganizationExternalReferenceTest() {
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addExternalReference(
+        new ExternalReference(
+            "invalid_external_reference_type", "invalid_external_reference_value"));
 
     Set<ConstraintViolation<Organization>> constraintViolations =
         partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
@@ -1246,6 +1357,24 @@ public class PartyServiceTest {
 
     assertEquals(
         1,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid person");
+  }
+
+  /** Test the invalid person external reference test. */
+  @Test
+  public void invalidPersonExternalReferenceTest() {
+    Person person = getTestBasicPersonDetails();
+
+    person.addExternalReference(
+        new ExternalReference(
+            "invalid_external_reference_type", "invalid_external_reference_value"));
+
+    Set<ConstraintViolation<Person>> constraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        2,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid person");
   }
@@ -1410,8 +1539,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         15,
@@ -1468,8 +1596,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         17,
@@ -1526,8 +1653,7 @@ public class PartyServiceTest {
 
     person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+    constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
         16,
@@ -1562,6 +1688,8 @@ public class PartyServiceTest {
         retrievedPerson.getLanguageProficiencyWithLanguage("EN").get());
 
     person.removeLanguageProficiencyWithLanguage("EN");
+
+    assertFalse(person.hasLanguageProficiencyWithLanguage("EN"));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -1609,6 +1737,8 @@ public class PartyServiceTest {
     assertTrue(retrievedPerson.hasLockWithType("suspected_fraud"));
 
     person.removeLockWithType("suspected_fraud");
+
+    assertFalse(person.hasLockWithType("suspected_fraud"));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -1946,6 +2076,8 @@ public class PartyServiceTest {
 
     person.removeAttributeWithType("weight");
 
+    assertFalse(person.hasAttributeWithType("weight"));
+
     person.addAttribute(new Attribute("height", 180, MeasurementUnit.METRIC_CENTIMETER));
 
     Attribute attribute = new Attribute("complex_attribute");
@@ -1958,6 +2090,8 @@ public class PartyServiceTest {
     person.addAttribute(new Attribute("height", 180, MeasurementUnit.METRIC_CENTIMETER));
 
     person.removeContactMechanismWithRole(ContactMechanismRole.MAIN_FAX_NUMBER);
+
+    assertFalse(person.hasContactMechanismWithRole(ContactMechanismRole.MAIN_FAX_NUMBER));
 
     person
         .getContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS)
@@ -1978,13 +2112,19 @@ public class PartyServiceTest {
 
     person.removeIdentityDocumentWithType("za_id_card");
 
+    assertFalse(person.hasIdentityDocumentWithType("za_id_card"));
+
     person.removePreferenceWithType("correspondence_language");
+
+    assertFalse(person.hasPreferenceWithType("correspondence_language"));
 
     person.addPreference(new Preference("time_to_contact", "anytime"));
 
     person.addTaxNumber(new TaxNumber("uk_tax_number", "GB", "987654321"));
 
     person.removeTaxNumberWithType("za_income_tax_number");
+
+    assertFalse(person.hasTaxNumberWithType("za_income_tax_number"));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2079,6 +2219,8 @@ public class PartyServiceTest {
     assertTrue(retrievedPerson.hasPhysicalAddressWithRole(PhysicalAddressRole.RESIDENTIAL));
 
     person.removePhysicalAddressWithRole(PhysicalAddressRole.RESIDENTIAL);
+
+    assertFalse(person.hasPhysicalAddressWithRole(PhysicalAddressRole.RESIDENTIAL));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2284,6 +2426,8 @@ public class PartyServiceTest {
 
     person.removePreferenceWithType("test_preference");
 
+    assertFalse(person.hasPreferenceWithType("test_preference"));
+
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
@@ -2362,6 +2506,8 @@ public class PartyServiceTest {
 
     person.removeRoleWithType("employee");
 
+    assertFalse(person.hasRoleWithType("employee"));
+
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
@@ -2428,7 +2574,7 @@ public class PartyServiceTest {
         partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        48,
+        54,
         personConstraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid person");
 
@@ -2442,7 +2588,7 @@ public class PartyServiceTest {
         partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
     assertEquals(
-        12,
+        14,
         organizationConstraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid organization");
   }
@@ -2469,6 +2615,8 @@ public class PartyServiceTest {
         retrievedPerson.getSegmentAllocationWithSegment("test_person_segment").get());
 
     person.removeSegmentAllocationWithSegment("test_person_segment");
+
+    assertFalse(person.hasSegmentAllocationWithSegment("test_person_segment"));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2559,6 +2707,8 @@ public class PartyServiceTest {
 
     person.removeSourceOfFundsWithType("salary_wages");
 
+    assertFalse(person.hasSourceOfFundsWithType("salary_wages"));
+
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
@@ -2599,6 +2749,8 @@ public class PartyServiceTest {
 
     person.removeSourceOfWealthWithType("savings");
 
+    assertFalse(person.hasSourceOfWealthWithType("savings"));
+
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
@@ -2638,6 +2790,8 @@ public class PartyServiceTest {
     assertTrue(retrievedPerson.hasStatusWithType("fraud_investigation"));
 
     person.removeStatusWithType("fraud_investigation");
+
+    assertFalse(person.hasStatusWithType("fraud_investigation"));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2716,6 +2870,8 @@ public class PartyServiceTest {
     assertTrue(retrievedPerson.hasTaxNumberWithType("za_income_tax_number"));
 
     person.removeTaxNumberWithType("za_income_tax_number");
+
+    assertFalse(person.hasTaxNumberWithType("za_income_tax_number"));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2994,6 +3150,26 @@ public class PartyServiceTest {
         "The type values for the employments do not match");
   }
 
+  private void compareExternalReferences(
+      ExternalReference externalReference1, ExternalReference externalReference2) {
+    assertEquals(
+        externalReference1.getId(),
+        externalReference2.getId(),
+        "The ID values for the external references do not match");
+    assertEquals(
+        externalReference1.getParty(),
+        externalReference2.getParty(),
+        "The party values for the external references do not match");
+    assertEquals(
+        externalReference1.getType(),
+        externalReference2.getType(),
+        "The type values for the external references do not match");
+    assertEquals(
+        externalReference1.getValue(),
+        externalReference2.getValue(),
+        "The value values for the external references do not match");
+  }
+
   private void compareIdentityDocuments(
       IdentityDocument identityDocument1, IdentityDocument identityDocument2) {
     assertEquals(
@@ -3139,6 +3315,34 @@ public class PartyServiceTest {
                 + organization1ContactMechanism.getType()
                 + ")("
                 + organization1ContactMechanism.getRole()
+                + ")");
+      }
+    }
+
+    assertEquals(
+        organization1.getExternalReferences().size(),
+        organization2.getExternalReferences().size(),
+        "The number of external references for the organizations do not match");
+
+    for (ExternalReference organization1ExternalReference : organization1.getExternalReferences()) {
+      boolean foundExternalReference = false;
+
+      for (ExternalReference organization2ExternalReference :
+          organization2.getExternalReferences()) {
+        if (organization1ExternalReference.getId().equals(organization2ExternalReference.getId())) {
+
+          compareExternalReferences(organization1ExternalReference, organization2ExternalReference);
+
+          foundExternalReference = true;
+        }
+      }
+
+      if (!foundExternalReference) {
+        fail(
+            "Failed to find the external reference ("
+                + organization1ExternalReference.getId()
+                + ") with type ("
+                + organization1ExternalReference.getType()
                 + ")");
       }
     }
@@ -3564,6 +3768,33 @@ public class PartyServiceTest {
 
       if (!foundEmployment) {
         fail("Failed to find the employment (" + person1Employment.getId() + ")");
+      }
+    }
+
+    assertEquals(
+        person1.getExternalReferences().size(),
+        person2.getExternalReferences().size(),
+        "The number of external references for the persons do not match");
+
+    for (ExternalReference person1ExternalReference : person1.getExternalReferences()) {
+      boolean foundExternalReference = false;
+
+      for (ExternalReference person2ExternalReference : person2.getExternalReferences()) {
+        if (person1ExternalReference.getId().equals(person2ExternalReference.getId())) {
+
+          compareExternalReferences(person1ExternalReference, person2ExternalReference);
+
+          foundExternalReference = true;
+        }
+      }
+
+      if (!foundExternalReference) {
+        fail(
+            "Failed to find the external reference ("
+                + person1ExternalReference.getId()
+                + ") with type ("
+                + person1ExternalReference.getType()
+                + ")");
       }
     }
 

@@ -32,6 +32,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -85,6 +86,7 @@ import org.springframework.util.StringUtils;
   "name",
   "attributes",
   "contactMechanisms",
+  "externalReferences",
   "identityDocuments",
   "locks",
   "physicalAddresses",
@@ -105,6 +107,7 @@ import org.springframework.util.StringUtils;
       "name",
       "attributes",
       "contactMechanisms",
+      "externalReferences",
       "identityDocuments",
       "locks",
       "physicalAddresses",
@@ -140,6 +143,15 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
+
+  /** The external references for the organization. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<ExternalReference> externalReferences = new HashSet<>();
 
   /** The identity documents for the organization. */
   @Valid
@@ -267,6 +279,21 @@ public class Organization extends PartyBase implements Serializable {
     contactMechanism.setParty(this);
 
     contactMechanisms.add(contactMechanism);
+  }
+
+  /**
+   * Add the external reference for the organization.
+   *
+   * @param externalReference the external reference
+   */
+  public void addExternalReference(ExternalReference externalReference) {
+    externalReferences.removeIf(
+        existingExternalReference ->
+            Objects.equals(existingExternalReference.getId(), externalReference.getId()));
+
+    externalReference.setParty(this);
+
+    externalReferences.add(externalReference);
   }
 
   /**
@@ -512,6 +539,45 @@ public class Organization extends PartyBase implements Serializable {
   @XmlTransient
   public LocalDateTime getCreated() {
     return super.getCreated();
+  }
+
+  /**
+   * Retrieve the first external reference with the specified type for the organization.
+   *
+   * @param type the code for the external reference type
+   * @return an Optional containing the first external reference with the specified type for the
+   *     organization or an empty if an external reference could not be found
+   */
+  public Optional<ExternalReference> getExternalReferenceWithType(String type) {
+    return externalReferences.stream()
+        .filter(externalReference -> Objects.equals(externalReference.getType(), type))
+        .findFirst();
+  }
+
+  /**
+   * Returns the external references for the organization.
+   *
+   * @return the external references for the organization
+   */
+  @Schema(description = "The external references for the organization")
+  @JsonProperty
+  @JsonManagedReference("externalReferenceReference")
+  @XmlElementWrapper(name = "ExternalReferences")
+  @XmlElement(name = "ExternalReference")
+  public Set<ExternalReference> getExternalReferences() {
+    return externalReferences;
+  }
+
+  /**
+   * Retrieve the external references with the specified type for the organization.
+   *
+   * @param type the code for the external reference type
+   * @return the external references with the specified type for the organization
+   */
+  public Set<ExternalReference> getExternalReferencesWithType(String type) {
+    return externalReferences.stream()
+        .filter(externalReference -> Objects.equals(externalReference.getType(), type))
+        .collect(Collectors.toSet());
   }
 
   /**
@@ -847,6 +913,18 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns whether the organization has an external reference with the specified type.
+   *
+   * @param type the code for the external reference type
+   * @return <b>true</b> if the organization has an external reference with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasExternalReferenceWithType(String type) {
+    return externalReferences.stream()
+        .anyMatch(externalReference -> Objects.equals(externalReference.getType(), type));
+  }
+
+  /**
    * Returns whether the organization has an identity document with the specified type.
    *
    * @param type the code for the identity document type
@@ -967,6 +1045,16 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
+   * Remove the external reference with the specified type for the organization.
+   *
+   * @param type the code for the external reference type
+   */
+  public void removeExternalReferenceWithType(String type) {
+    externalReferences.removeIf(
+        existingExternalReference -> Objects.equals(existingExternalReference.getType(), type));
+  }
+
+  /**
    * Remove the identity document with the specified type for the organization.
    *
    * @param type the code for the identity document type
@@ -1083,6 +1171,17 @@ public class Organization extends PartyBase implements Serializable {
   @JsonIgnore
   public void setCountryOfTaxResidence(String countryOfTaxResidence) {
     this.countriesOfTaxResidence = countryOfTaxResidence;
+  }
+
+  /**
+   * Set the external references for the organization.
+   *
+   * @param externalReferences the external references for the organization
+   */
+  public void setExternalReferences(Set<ExternalReference> externalReferences) {
+    externalReferences.forEach(externalReference -> externalReference.setParty(this));
+    this.externalReferences.clear();
+    this.externalReferences.addAll(externalReferences);
   }
 
   /**

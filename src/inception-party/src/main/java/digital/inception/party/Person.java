@@ -34,6 +34,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -119,6 +120,7 @@ import org.springframework.util.StringUtils;
   "contactMechanisms",
   "educations",
   "employments",
+  "externalReferences",
   "identityDocuments",
   "languageProficiencies",
   "locks",
@@ -172,6 +174,7 @@ import org.springframework.util.StringUtils;
       "contactMechanisms",
       "educations",
       "employments",
+      "externalReferences",
       "identityDocuments",
       "languageProficiencies",
       "locks",
@@ -238,6 +241,15 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<Employment> employments = new HashSet<>();
+
+  /** The external references for the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<ExternalReference> externalReferences = new HashSet<>();
 
   /** The identity documents for the person. */
   @Valid
@@ -576,6 +588,21 @@ public class Person extends PartyBase implements Serializable {
     employment.setPerson(this);
 
     employments.add(employment);
+  }
+
+  /**
+   * Add the external reference for the person.
+   *
+   * @param externalReference the external reference
+   */
+  public void addExternalReference(ExternalReference externalReference) {
+    externalReferences.removeIf(
+        existingExternalReference ->
+            Objects.equals(existingExternalReference.getId(), externalReference.getId()));
+
+    externalReference.setParty(this);
+
+    externalReferences.add(externalReference);
   }
 
   /**
@@ -1064,6 +1091,45 @@ public class Person extends PartyBase implements Serializable {
   @XmlElement(name = "Employment")
   public Set<Employment> getEmployments() {
     return employments;
+  }
+
+  /**
+   * Retrieve the first external reference with the specified type for the person.
+   *
+   * @param type the code for the external reference type
+   * @return an Optional containing the first external reference with the specified type for the
+   *     person or an empty if an external reference could not be found
+   */
+  public Optional<ExternalReference> getExternalReferenceWithType(String type) {
+    return externalReferences.stream()
+        .filter(externalReference -> Objects.equals(externalReference.getType(), type))
+        .findFirst();
+  }
+
+  /**
+   * Returns the external references for the person.
+   *
+   * @return the external references for the person
+   */
+  @Schema(description = "The external references for the person")
+  @JsonProperty
+  @JsonManagedReference("externalReferenceReference")
+  @XmlElementWrapper(name = "ExternalReferences")
+  @XmlElement(name = "ExternalReference")
+  public Set<ExternalReference> getExternalReferences() {
+    return externalReferences;
+  }
+
+  /**
+   * Retrieve the external references with the specified type for the person.
+   *
+   * @param type the code for the external reference type
+   * @return the external references with the specified type for the person
+   */
+  public Set<ExternalReference> getExternalReferencesWithType(String type) {
+    return externalReferences.stream()
+        .filter(externalReference -> Objects.equals(externalReference.getType(), type))
+        .collect(Collectors.toSet());
   }
 
   /**
@@ -1740,6 +1806,18 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns whether the person has an external reference with the specified type.
+   *
+   * @param type the code for the external reference type
+   * @return <b>true</b> if the person has an external reference with the specified type or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasExternalReferenceWithType(String type) {
+    return externalReferences.stream()
+        .anyMatch(externalReference -> Objects.equals(externalReference.getType(), type));
+  }
+
+  /**
    * Returns whether the person has an identity document with the specified type.
    *
    * @param type the code for the identity document type
@@ -1829,6 +1907,18 @@ public class Person extends PartyBase implements Serializable {
    */
   public boolean hasRoleWithType(String type) {
     return roles.stream().anyMatch(role -> Objects.equals(role.getType(), type));
+  }
+
+  /**
+   * Returns whether the person has a segment allocation with the specified segment.
+   *
+   * @param segment the code for the segment
+   * @return <b>true</b> if the person has a segment allocation with the specified segment or
+   *     <b>false</b> otherwise
+   */
+  public boolean hasSegmentAllocationWithSegment(String segment) {
+    return segmentAllocations.stream()
+        .anyMatch(segmentAllocation -> Objects.equals(segmentAllocation.getSegment(), segment));
   }
 
   /**
@@ -1931,6 +2021,16 @@ public class Person extends PartyBase implements Serializable {
    */
   public void removeEmploymentWithId(UUID id) {
     employments.removeIf(existingEmployment -> Objects.equals(existingEmployment.getId(), id));
+  }
+
+  /**
+   * Remove the external reference with the specified type for the person.
+   *
+   * @param type the code for the external reference type
+   */
+  public void removeExternalReferenceWithType(String type) {
+    externalReferences.removeIf(
+        existingExternalReference -> Objects.equals(existingExternalReference.getType(), type));
   }
 
   /**
@@ -2237,6 +2337,17 @@ public class Person extends PartyBase implements Serializable {
     employments.forEach(employment -> employment.setPerson(this));
     this.employments.clear();
     this.employments.addAll(employments);
+  }
+
+  /**
+   * Set the external references for the person.
+   *
+   * @param externalReferences the external references for the person
+   */
+  public void setExternalReferences(Set<ExternalReference> externalReferences) {
+    externalReferences.forEach(externalReference -> externalReference.setParty(this));
+    this.externalReferences.clear();
+    this.externalReferences.addAll(externalReferences);
   }
 
   /**

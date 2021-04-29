@@ -55,6 +55,17 @@ INSERT INTO party.employment_types (employment_status, code, locale_id, tenant_i
   VALUES ('test_employment_status', 'test_employment_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 666, 'Test Employment Type', 'Test Employment Type');
 
 
+INSERT INTO party.external_reference_types (code, locale_id, name, description, party_types)
+  VALUES ('legacy_customer_code', 'en-US', 'Legacy Customer Code', 'Legacy Customer Code', 'organization,person');
+INSERT INTO party.external_reference_types (code, locale_id, tenant_id, sort_index, name, description, party_types)
+  VALUES ('test_external_reference_type', 'en-US', '00000000-0000-0000-0000-000000000000', 666, 'Test External Reference Type', 'Test External Reference Type', 'organization,person');
+
+INSERT INTO party.external_reference_types (code, locale_id, name, description, party_types)
+  VALUES ('legacy_customer_code', 'en-ZA', 'Legacy Customer Code', 'Legacy Customer Code', 'organization,person');
+INSERT INTO party.external_reference_types (code, locale_id, tenant_id, sort_index, name, description, party_types)
+  VALUES ('test_external_reference_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 666, 'Test External Reference Type', 'Test External Reference Type', 'organization,person');
+
+
 INSERT INTO party.fields_of_study (code, locale_id, tenant_id, name, description)
   VALUES ('test_field_of_study', 'en-US', '00000000-0000-0000-0000-000000000000', 'Test Field Of Study', 'Test Field Of Study');
 
@@ -229,6 +240,8 @@ INSERT INTO party.relationship_types(code, locale_id, tenant_id, name, descripti
   VALUES ('test_relationship_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Relationship Type', 'Test Relationship Type', 'test_person_role', 'test_person_role');
 
 
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_person_role', 'consent', 'test_consent_type', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'contact_mechanisms', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
@@ -250,6 +263,8 @@ INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'date_of_birth', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'date_of_death', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'educations', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'employment_status', 'required');
@@ -257,12 +272,16 @@ INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type
   VALUES ('test_person_role', 'employment_type', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'employments', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_person_role', 'external_reference', 'test_external_reference_type', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'gender', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'given_name', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'highest_qualification_type', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_person_role', 'identity_document', 'test_identity_document_type', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'identity_documents', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
@@ -290,9 +309,13 @@ INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'race', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'residence_permits', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'residency_status', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'residential_type', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
+  VALUES ('test_person_role', 'segment_allocations', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_person_role', 'sources_of_funds', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
@@ -342,12 +365,16 @@ INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type
   VALUES ('test_organization_role', 'contact_mechanism', 'phone_number', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'countries_of_tax_residence', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
+  VALUES ('test_organization_role', 'external_reference', 'test_external_reference_type', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'identity_documents', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'physical_addresses', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_organization_role', 'physical_address', 'main', 'required');
+INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
+  VALUES ('test_organization_role', 'segment_allocations', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
   VALUES ('test_organization_role', 'tax_numbers', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)

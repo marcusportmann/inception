@@ -61,6 +61,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Employment Type Repository. */
   private final EmploymentTypeRepository employmentTypeRepository;
 
+  /** The External Reference Type Repository. */
+  private final ExternalReferenceTypeRepository externalReferenceTypeRepository;
+
   /** The Field Of Study Repository */
   private final FieldOfStudyRepository fieldOfStudyRepository;
 
@@ -172,6 +175,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param contactMechanismTypeRepository the Contact Mechanism Type Repository
    * @param employmentStatusRepository the Employment Status Repository
    * @param employmentTypeRepository the Employment Type Repository
+   * @param externalReferenceTypeRepository the External Reference Type Repository
    * @param fieldOfStudyRepository the Field Of Study Repository
    * @param genderRepository the Gender Repository
    * @param identityDocumentTypeRepository the Identity Document Type Repository
@@ -216,6 +220,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       ContactMechanismTypeRepository contactMechanismTypeRepository,
       EmploymentStatusRepository employmentStatusRepository,
       EmploymentTypeRepository employmentTypeRepository,
+      ExternalReferenceTypeRepository externalReferenceTypeRepository,
       FieldOfStudyRepository fieldOfStudyRepository,
       GenderRepository genderRepository,
       IdentityDocumentTypeRepository identityDocumentTypeRepository,
@@ -256,6 +261,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.contactMechanismTypeRepository = contactMechanismTypeRepository;
     this.employmentStatusRepository = employmentStatusRepository;
     this.employmentTypeRepository = employmentTypeRepository;
+    this.externalReferenceTypeRepository = externalReferenceTypeRepository;
     this.fieldOfStudyRepository = fieldOfStudyRepository;
     this.genderRepository = genderRepository;
     this.identityDocumentTypeRepository = identityDocumentTypeRepository;
@@ -761,6 +767,66 @@ public class PartyReferenceService implements IPartyReferenceService {
             employmentType ->
                 (employmentType.getTenantId() == null
                     || (Objects.equals(employmentType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the external reference type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the external reference
+   *     type reference data for
+   * @return the external reference type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'externalReferenceTypes.' + #localeId")
+  public List<ExternalReferenceType> getExternalReferenceTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    try {
+      return externalReferenceTypeRepository.findByLocaleIdIgnoreCase(localeId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the external reference type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the external reference type reference data for all locales.
+   *
+   * @return the external reference type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'externalReferenceTypes.ALL'")
+  public List<ExternalReferenceType> getExternalReferenceTypes()
+      throws ServiceUnavailableException {
+    try {
+      return externalReferenceTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the external reference type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the external reference type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the external reference
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the external reference
+   *     type reference data for
+   * @return the external reference type reference data
+   */
+  @Override
+  public List<ExternalReferenceType> getExternalReferenceTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getExternalReferenceTypes(localeId).stream()
+        .filter(
+            externalReferenceType ->
+                (externalReferenceType.getTenantId() == null
+                    || (Objects.equals(externalReferenceType.getTenantId(), tenantId))))
         .collect(Collectors.toList());
   }
 
@@ -2826,6 +2892,32 @@ public class PartyReferenceService implements IPartyReferenceService {
                 (employmentType.getTenantId() == null
                         || Objects.equals(employmentType.getTenantId(), tenantId))
                     && Objects.equals(employmentType.getCode(), employmentTypeCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for an external reference type for the party type
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyTypeCode the party type code
+   * @param externalReferenceTypeCode the code for the external reference type
+   * @return <b>true</b> if the code is a valid code for an external reference type or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidExternalReferenceType(
+      UUID tenantId, String partyTypeCode, String externalReferenceTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(externalReferenceTypeCode)) {
+      return false;
+    }
+
+    return self.getExternalReferenceTypes().stream()
+        .anyMatch(
+            externalReferenceType ->
+                (externalReferenceType.getTenantId() == null
+                        || Objects.equals(externalReferenceType.getTenantId(), tenantId))
+                    && Objects.equals(externalReferenceType.getCode(), externalReferenceTypeCode)
+                    && externalReferenceType.isValidForPartyType(partyTypeCode));
   }
 
   /**

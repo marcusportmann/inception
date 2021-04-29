@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2021 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,31 +14,31 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.party.constraints;
+// package digital.inception.party.constraints;
 //
-//import java.lang.annotation.Documented;
-//import java.lang.annotation.ElementType;
-//import java.lang.annotation.Retention;
-//import java.lang.annotation.RetentionPolicy;
-//import java.lang.annotation.Target;
-//import javax.validation.Constraint;
-//import javax.validation.Payload;
+// import java.lang.annotation.Documented;
+// import java.lang.annotation.ElementType;
+// import java.lang.annotation.Retention;
+// import java.lang.annotation.RetentionPolicy;
+// import java.lang.annotation.Target;
+// import javax.validation.Constraint;
+// import javax.validation.Payload;
 //
-///**
+/// **
 // * The <b>ValidPhysicalAddress</b> annotation implements the custom constraint annotation used to
 // * apply the physical address validation.
 // *
 // * @author Marcus Portmann
 // */
-//@Target({ElementType.TYPE})
-//@Retention(RetentionPolicy.RUNTIME)
-//@Constraint(validatedBy = ValidPhysicalAddressValidator.class)
-//@Documented
-//public @interface ValidPhysicalAddress {
+// @Target({ElementType.TYPE})
+// @Retention(RetentionPolicy.RUNTIME)
+// @Constraint(validatedBy = ValidPhysicalAddressValidator.class)
+// @Documented
+// public @interface ValidPhysicalAddress {
 //
 //  Class<?>[] groups() default {};
 //
 //  String message() default "{digital.inception.party.constraints.ValidPhysicalAddress.message}";
 //
 //  Class<? extends Payload>[] payload() default {};
-//}
+// }

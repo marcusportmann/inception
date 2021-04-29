@@ -253,6 +253,35 @@ COMMENT ON COLUMN party.employment_types.name IS 'The name of the employment typ
 COMMENT ON COLUMN party.employment_types.description IS 'The description for the employment type';
 
 
+CREATE TABLE party.external_reference_types (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  tenant_id   UUID,
+  sort_index  INTEGER,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+  party_types VARCHAR(310) NOT NULL,
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX external_reference_types_locale_id_ix ON party.external_reference_types(locale_id);
+
+COMMENT ON COLUMN party.external_reference_types.code IS 'The code for the external reference type';
+
+COMMENT ON COLUMN party.external_reference_types.locale_id IS 'The Unicode locale identifier for the external reference type';
+
+COMMENT ON COLUMN party.external_reference_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the external reference type is specific to';
+
+COMMENT ON COLUMN party.external_reference_types.sort_index IS 'The sort index for the external reference type';
+
+COMMENT ON COLUMN party.external_reference_types.name IS 'The name of the external reference type';
+
+COMMENT ON COLUMN party.external_reference_types.description IS 'The description for the external reference type';
+
+COMMENT ON COLUMN party.external_reference_types.party_types IS 'The comma-delimited list of codes for the party types the external reference type is associated with';
+
+
 CREATE TABLE party.fields_of_study (
   code           VARCHAR(50)  NOT NULL,
   locale_id      VARCHAR(10)  NOT NULL,
@@ -1569,6 +1598,33 @@ COMMENT ON COLUMN party.employments.start_date IS 'The start date for the employ
 COMMENT ON COLUMN party.employments.type IS 'The code for the employment type for the employment';
 
 COMMENT ON COLUMN party.employments.updated IS 'The date and time the employment was last updated';
+
+
+CREATE TABLE party.external_references (
+  created          TIMESTAMP    NOT NULL,
+  id               UUID         NOT NULL,
+  party_id         UUID         NOT NULL,
+  type             VARCHAR(30)  NOT NULL,
+  updated          TIMESTAMP,
+  value            VARCHAR(100) NOT NULL,
+
+  PRIMARY KEY (id),
+  CONSTRAINT external_references_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX external_references_party_id_ix ON party.external_references(party_id);
+
+COMMENT ON COLUMN party.external_references.created IS 'The date and time the external reference was created';
+
+COMMENT ON COLUMN party.external_references.id IS 'The Universally Unique Identifier (UUID) for the external reference';
+
+COMMENT ON COLUMN party.external_references.party_id IS 'The Universally Unique Identifier (UUID) for the party the external reference is associated with';
+
+COMMENT ON COLUMN party.external_references.type IS 'The code for the external reference type';
+
+COMMENT ON COLUMN party.external_references.updated IS 'The date and time the external reference was last updated';
+
+COMMENT ON COLUMN party.external_references.value IS 'The value for the external reference';
 
 
 CREATE TABLE party.identity_documents (
@@ -4310,7 +4366,4 @@ INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
   VALUES ('the_honorable', 'en-ZA', 'The Honorable', 'The Hon.', 'The Honorable');
 INSERT INTO party.titles (code, locale_id, name, abbreviation, description)
   VALUES ('unknown', 'en-ZA', 'Unknown', 'Unknown', 'Unknown');
-
-
-
 

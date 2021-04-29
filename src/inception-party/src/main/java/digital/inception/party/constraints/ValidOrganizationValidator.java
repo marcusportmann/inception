@@ -19,6 +19,7 @@ package digital.inception.party.constraints;
 import digital.inception.party.Attribute;
 import digital.inception.party.ConstraintType;
 import digital.inception.party.ContactMechanism;
+import digital.inception.party.ExternalReference;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.Lock;
@@ -209,6 +210,20 @@ public class ValidOrganizationValidator extends PartyValidator
                 .buildConstraintViolationWithTemplate(
                     "{digital.inception.party.constraints.ValidOrganization.invalidCountryOfTaxResidence.message}")
                 .addPropertyNode("countriesOfTaxResidence")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+        }
+
+        // Validate external references
+        for (ExternalReference externalReference : organization.getExternalReferences()) {
+          if (!getPartyReferenceService().isValidExternalReferenceType(organization.getTenantId(), organization.getType().code(), externalReference.getType())) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("externalReferenceType", externalReference.getType())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidOrganization.invalidExternalReferenceType.message}")
+                .addPropertyNode("externalReferences")
                 .addConstraintViolation();
 
             isValid = false;
@@ -530,6 +545,42 @@ public class ValidOrganizationValidator extends PartyValidator
 
             break;
 
+          case "external_reference":
+            if (!organization.hasExternalReferenceWithType(
+                roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter(
+                      "externalReferenceType",
+                      roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())
+                  .addMessageParameter("roleType", roleType)
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.externalReferenceTypeRequiredForRoleType.message}")
+                  .addPropertyNode("externalReferences")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            break;
+
+          case "identity_document":
+            if (!organization.hasIdentityDocumentWithType(
+                roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter(
+                      "identityDocumentType",
+                      roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())
+                  .addMessageParameter("roleType", roleType)
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.identityDocumentTypeRequiredForRoleType.message}")
+                  .addPropertyNode("identityDocuments")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+
+            break;
+
           case "identity_documents":
             if (!validateRequiredAttributeConstraint(
                 roleType,
@@ -569,6 +620,18 @@ public class ValidOrganizationValidator extends PartyValidator
                   .inIterable()
                   .addConstraintViolation();
 
+              isValid = false;
+            }
+
+            break;
+
+          case "segment_allocations":
+            if (!validateRequiredAttributeConstraint(
+                roleType,
+                organization.getSegmentAllocations(),
+                "segmentAllocations",
+                "{digital.inception.party.constraints.ValidOrganization.segmentAllocationRequiredForRoleType.message}",
+                hibernateConstraintValidatorContext)) {
               isValid = false;
             }
 

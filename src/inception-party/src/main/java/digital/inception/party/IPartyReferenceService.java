@@ -29,11 +29,10 @@ import java.util.UUID;
  */
 public interface IPartyReferenceService {
 
-  /** The Universally Unique Identifier (UUID) for the default tenant. */
-  UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
-
   /** The default locale ID. */
   String DEFAULT_LOCALE_ID = "en-US";
+  /** The Universally Unique Identifier (UUID) for the default tenant. */
+  UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
   /**
    * Retrieve the attribute type category reference data for a specific locale.
@@ -266,6 +265,35 @@ public interface IPartyReferenceService {
    * @return the employment type reference data
    */
   List<EmploymentType> getEmploymentTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the external reference type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the external reference
+   *     type reference data for
+   * @return the external reference type reference data
+   */
+  List<ExternalReferenceType> getExternalReferenceTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the external reference type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the external reference
+   *     type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the external reference
+   *     type reference data for
+   * @return the external reference type reference data
+   */
+  List<ExternalReferenceType> getExternalReferenceTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the external reference type reference data for all locales.
+   *
+   * @return the external reference type reference data
+   */
+  List<ExternalReferenceType> getExternalReferenceTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the fields of study reference data for a specific locale.
@@ -1280,6 +1308,19 @@ public interface IPartyReferenceService {
    *     otherwise
    */
   boolean isValidEmploymentType(UUID tenantId, String employmentTypeCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for an external reference type for the party type.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyTypeCode the party type code
+   * @param externalReferenceTypeCode the code for the external reference type
+   * @return <b>true</b> if the code is a valid code for an external reference type or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidExternalReferenceType(
+      UUID tenantId, String partyTypeCode, String externalReferenceTypeCode)
       throws ServiceUnavailableException;
 
   /**

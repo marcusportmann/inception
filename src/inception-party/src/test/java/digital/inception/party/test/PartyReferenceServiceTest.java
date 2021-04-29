@@ -28,6 +28,7 @@ import digital.inception.party.ContactMechanismRole;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.EmploymentStatus;
 import digital.inception.party.EmploymentType;
+import digital.inception.party.ExternalReferenceType;
 import digital.inception.party.FieldOfStudy;
 import digital.inception.party.Gender;
 import digital.inception.party.IPartyReferenceService;
@@ -424,6 +425,43 @@ public class PartyReferenceServiceTest {
         retrievedIdentityDocumentTypes.size(),
         "The correct number of identity document types was not retrieved");
   }
+
+
+
+
+
+  /** Test the external reference type reference functionality. */
+  @Test
+  public void externalReferenceTypeTest() throws Exception {
+    List<ExternalReferenceType> retrievedExternalReferenceTypes =
+        partyReferenceService.getExternalReferenceTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        2,
+        retrievedExternalReferenceTypes.size(),
+        "The correct number of external reference types was not retrieved");
+
+    retrievedExternalReferenceTypes =
+        partyReferenceService.getExternalReferenceTypes(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        2,
+        retrievedExternalReferenceTypes.size(),
+        "The correct number of external reference types was not retrieved");
+
+    retrievedExternalReferenceTypes =
+        partyReferenceService.getExternalReferenceTypes(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        1,
+        retrievedExternalReferenceTypes.size(),
+        "The correct number of external reference types was not retrieved");
+  }  
+  
+  
 
   /** Test the lock type category reference functionality. */
   @Test
@@ -957,7 +995,7 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getRoleTypeAttributeTypeConstraints();
 
     assertEquals(
-        63,
+        71,
         retrievedRoleTypeAttributeTypeConstraints.size(),
         "The correct number of role type attribute type constraints was not retrieved");
 
@@ -965,7 +1003,7 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getRoleTypeAttributeTypeConstraints("test_person_role");
 
     assertEquals(
-        50,
+        56  ,
         retrievedRoleTypeAttributeTypeConstraints.size(),
         "The correct number of role type attribute type constraints was not retrieved");
 
@@ -1293,6 +1331,9 @@ public class PartyReferenceServiceTest {
     assertTrue(
         partyReferenceService.isValidEmploymentType(
             IPartyReferenceService.DEFAULT_TENANT_ID, "employed", "full_time"));
+    assertTrue(
+        partyReferenceService.isValidExternalReferenceType(
+            IPartyReferenceService.DEFAULT_TENANT_ID, PartyType.PERSON.code(), "test_external_reference_type"));
     assertTrue(
         partyReferenceService.isValidGender(IPartyReferenceService.DEFAULT_TENANT_ID, "female"));
     assertTrue(
