@@ -251,7 +251,7 @@ public class ExternalReferenceType implements Serializable {
   /**
    * Returns whether the external reference type is valid for the party type.
    *
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @return <b>true</b> if the external reference type is valid for the party type or <b>false</b>
    *     otherwise
    */

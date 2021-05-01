@@ -460,6 +460,23 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the relationship property type reference data for a specific locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship
+   *     property type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship
+   *     property type reference data for
+   * @return the relationship property type reference data
+   */
+  @WebMethod(operationName = "GetRelationshipPropertyTypes")
+  public List<RelationshipPropertyType> getRelationshipPropertyTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getRelationshipPropertyTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the relationship type reference data for a specific locale.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship type

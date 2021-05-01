@@ -242,7 +242,7 @@ public class RoleType implements Serializable {
   /**
    * Returns whether the role type is valid for the party type.
    *
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @return <b>true</b> if the role type is valid for the party type or <b>false</b> otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {

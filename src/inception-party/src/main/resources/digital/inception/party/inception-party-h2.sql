@@ -1399,6 +1399,7 @@ CREATE TABLE party.attributes (
   updated       TIMESTAMP,
   boolean_value DOUBLE,
   date_value    DATE,
+  decimal_value DECIMAL(18,8),
   double_value  DOUBLE,
   integer_value INTEGER,
   string_value  VARCHAR(200),
@@ -1421,6 +1422,8 @@ COMMENT ON COLUMN party.attributes.updated IS 'The date and time the attribute w
 COMMENT ON COLUMN party.attributes.boolean_value IS 'The boolean value for the attribute';
 
 COMMENT ON COLUMN party.attributes.date_value IS 'The date value for the attribute';
+
+COMMENT ON COLUMN party.attributes.decimal_value IS 'The decimal value for the attribute';
 
 COMMENT ON COLUMN party.attributes.double_value IS 'The double value for the attribute';
 
@@ -1885,6 +1888,45 @@ COMMENT ON COLUMN party.relationships.second_party_id IS 'The Universally Unique
 COMMENT ON COLUMN party.relationships.type IS 'The code for the relationship type';
 
 COMMENT ON COLUMN party.relationships.updated IS 'The date and time the relationship was last updated';
+
+
+CREATE TABLE party.relationship_properties (
+  created         TIMESTAMP    NOT NULL,
+  relationship_id UUID         NOT NULL,
+  type            VARCHAR(30)  NOT NULL,
+  updated         TIMESTAMP,
+  boolean_value   DOUBLE,
+  date_value      DATE,
+  decimal_value   DECIMAL(18,8),
+  double_value    DOUBLE,
+  integer_value   INTEGER,
+  string_value    VARCHAR(200),
+
+  PRIMARY KEY (relationship_id, type),
+  CONSTRAINT relationship_properties_relationship_fk FOREIGN KEY (relationship_id) REFERENCES party.relationships(id) ON DELETE CASCADE
+);
+
+CREATE INDEX relationship_properties_relationship_id_ix ON party.relationship_properties(relationship_id);
+
+COMMENT ON COLUMN party.relationship_properties.created IS 'The date and time the relationship property was created';
+
+COMMENT ON COLUMN party.relationship_properties.relationship_id IS 'The Universally Unique Identifier (UUID) for the relationship the relationship property is associated with';
+
+COMMENT ON COLUMN party.relationship_properties.type IS 'The code for the relationship property type';
+
+COMMENT ON COLUMN party.relationship_properties.updated IS 'The date and time the relationship property was last updated';
+
+COMMENT ON COLUMN party.relationship_properties.boolean_value IS 'The boolean value for the relationship property';
+
+COMMENT ON COLUMN party.relationship_properties.date_value IS 'The date value for the relationship property';
+
+COMMENT ON COLUMN party.relationship_properties.decimal_value IS 'The decimal value for the relationship property';
+
+COMMENT ON COLUMN party.relationship_properties.double_value IS 'The double value for the relationship property';
+
+COMMENT ON COLUMN party.relationship_properties.integer_value IS 'The integer value for the relationship property';
+
+COMMENT ON COLUMN party.relationship_properties.string_value IS 'The string value for the relationship property';
 
 
 CREATE TABLE party.residence_permits (
@@ -4025,6 +4067,13 @@ INSERT INTO party.relationship_types(code, locale_id, name, description, first_p
   VALUES ('partnership', 'en-ZA', 'Partnership', 'A relationship between a partnership and one of its partners', 'partnership', 'partner');
 INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('sibling', 'en-ZA', 'Sibling', 'A relationship between two children or offspring having one or both parents in common', 'sibling', 'sibling');
+
+
+INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, name, description)
+  VALUES ('company_shareholder', 'shareholding', 'en-US', 'Shareholding', 'Shareholding');
+
+INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, name, description)
+  VALUES ('company_shareholder', 'shareholding', 'en-ZA', 'Shareholding', 'Shareholding');
 
 
 INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)

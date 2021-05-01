@@ -274,7 +274,7 @@ public class TaxNumberType implements Serializable {
   /**
    * Returns whether the tax number type is valid for the party type.
    *
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @return <b>true</b> if the tax number type is valid for the party type or <b>false</b>
    *     otherwise
    */

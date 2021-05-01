@@ -299,8 +299,8 @@ public class ContactMechanismPurpose implements Serializable {
   /**
    * Returns whether the contact mechanism purpose is valid for the contact mechanism type.
    *
-   * @param contactMechanismTypeCode the contact mechanism type code
-   * @return <b>true</b> if the contact mechanism purpose is valid for the contact mechanos, type or
+   * @param contactMechanismTypeCode the code for the contact mechanism type
+   * @return <b>true</b> if the contact mechanism purpose is valid for the contact mechanism, type or
    *     <b>false</b> otherwise
    */
   public boolean isValidForContactMechanismType(String contactMechanismTypeCode) {
@@ -313,7 +313,7 @@ public class ContactMechanismPurpose implements Serializable {
   /**
    * Returns whether the contact mechanism purpose is valid for the party type.
    *
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @return <b>true</b> if the contact mechanism purpose is valid for the party type or
    *     <b>false</b> otherwise
    */

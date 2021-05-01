@@ -295,7 +295,7 @@ public class Employment implements Serializable {
    * @param employerAddressPostalCode the employer address postal code
    * @param startDate the start date for the employment
    * @param endDate the end date for the employment
-   * @param type code for the employment type for the employment
+   * @param type the code for the employment type for the employment
    * @param occupation the code for the occupation for the employment
    */
   public Employment(
@@ -350,7 +350,7 @@ public class Employment implements Serializable {
    * @param employerAddressCountry the employer address country
    * @param employerAddressPostalCode the employer address postal code
    * @param startDate the start date for the employment
-   * @param type code for the employment type for the employment
+   * @param type the code for the employment type for the employment
    * @param occupation the code for the occupation for the employment
    */
   public Employment(
@@ -419,7 +419,7 @@ public class Employment implements Serializable {
    * @param employerName the employer name
    * @param startDate the start date for the employment
    * @param endDate the end date for the employment
-   * @param type code for the employment type for the employment
+   * @param type the code for the employment type for the employment
    * @param occupation the code for the occupation for the employment
    */
   public Employment(
@@ -437,7 +437,7 @@ public class Employment implements Serializable {
    *
    * @param employerName the employer name
    * @param startDate the start date for the employment
-   * @param type code for the employment type for the employment
+   * @param type the code for the employment type for the employment
    * @param occupation the code for the occupation for the employment
    */
   public Employment(String employerName, LocalDate startDate, String type, String occupation) {

@@ -226,18 +226,33 @@ INSERT INTO party.role_types (code, locale_id, tenant_id, name, description, par
   VALUES ('test_organization_role', 'en-US', '00000000-0000-0000-0000-000000000000', 'Test Organization Role', 'Test Organization Role', 'organization');
 INSERT INTO party.role_types (code, locale_id, tenant_id,  name, description, party_types)
   VALUES ('test_person_role', 'en-US', '00000000-0000-0000-0000-000000000000', 'Test Person Role', 'Test Person Role', 'person');
+INSERT INTO party.role_types (code, locale_id, tenant_id,  name, description, party_types)
+  VALUES ('test_first_person_role', 'en-US', '00000000-0000-0000-0000-000000000000', 'Test First Person Role', 'Test First Person Role', 'person');
+INSERT INTO party.role_types (code, locale_id, tenant_id,  name, description, party_types)
+  VALUES ('test_second_person_role', 'en-US', '00000000-0000-0000-0000-000000000000', 'Test Second Person Role', 'Test Second Person Role', 'person');
 
 INSERT INTO party.role_types (code, locale_id, tenant_id, name, description, party_types)
   VALUES ('test_organization_role', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Organization Role', 'Test Organization Role', 'organization');
 INSERT INTO party.role_types (code, locale_id, tenant_id, name, description, party_types)
   VALUES ('test_person_role', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Person Role', 'Test Person Role', 'person');
+INSERT INTO party.role_types (code, locale_id, tenant_id,  name, description, party_types)
+  VALUES ('test_first_person_role', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test First Person Role', 'Test First Person Role', 'person');
+INSERT INTO party.role_types (code, locale_id, tenant_id,  name, description, party_types)
+  VALUES ('test_second_person_role', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Second Person Role', 'Test Second Person Role', 'person');
 
 
 INSERT INTO party.relationship_types(code, locale_id, tenant_id, name, description, first_party_role, second_party_role)
-  VALUES ('test_relationship_type', 'en-US', '00000000-0000-0000-0000-000000000000', 'Test Relationship Type', 'Test Relationship Type', 'test_person_role', 'test_person_role');
+  VALUES ('test_relationship_type', 'en-US', '00000000-0000-0000-0000-000000000000', 'Test Relationship Type', 'Test Relationship Type', 'test_first_person_role', 'test_second_person_role');
 
 INSERT INTO party.relationship_types(code, locale_id, tenant_id, name, description, first_party_role, second_party_role)
-  VALUES ('test_relationship_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Relationship Type', 'Test Relationship Type', 'test_person_role', 'test_person_role');
+  VALUES ('test_relationship_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Relationship Type', 'Test Relationship Type', 'test_first_person_role', 'test_second_person_role');
+
+
+INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, tenant_id, sort_index, name, description)
+  VALUES ('test_relationship_type', 'test_relationship_property', 'en-US', '00000000-0000-0000-0000-000000000000', 666, 'Test Relationship Property', 'Test Relationship Property');
+
+INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, tenant_id, sort_index, name, description)
+  VALUES ('test_relationship_type', 'test_relationship_property', 'en-ZA', '00000000-0000-0000-0000-000000000000', 666, 'Test Relationship Property', 'Test Relationship Property');
 
 
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)

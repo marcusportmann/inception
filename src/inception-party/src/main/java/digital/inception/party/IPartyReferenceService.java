@@ -1202,12 +1202,70 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for an attribute type for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param attributeTypeCode the code for the attribute type
    * @return <b>true</b> if the code is a valid code for an attribute type or <b>false</b> otherwise
    */
   boolean isValidAttributeType(UUID tenantId, String partyTypeCode, String attributeTypeCode)
       throws ServiceUnavailableException;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /**
+   * Retrieve the relationship property type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship property type
+   *     reference data for
+   * @return the relationship property type reference data
+   */
+  List<RelationshipPropertyType> getRelationshipPropertyTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the relationship property type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship property type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship property type
+   *     reference data for
+   * @return the relationship property type reference data
+   */
+  List<RelationshipPropertyType> getRelationshipPropertyTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the relationship property type reference data for all locales.
+   *
+   * @return the relationship property type reference data
+   */
+  List<RelationshipPropertyType> getRelationshipPropertyTypes() throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a relationship property type for the relationship type.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param relationshipTypeCode the code for the relationship type
+   * @param relationshipPropertyTypeCode the code for the relationship property type
+   * @return <b>true</b> if the code is a valid code for a relationship property type or <b>false</b> otherwise
+   */
+  boolean isValidRelationshipPropertyType(UUID tenantId, String relationshipTypeCode, String relationshipPropertyTypeCode)
+      throws ServiceUnavailableException;
+
+
+
+
+
 
   /**
    * Check whether the code is a valid code for an attribute type category.
@@ -1234,7 +1292,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for a contact mechanism purpose for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @param contactMechanismPurposeCode the code for the contact mechanism purpose
    * @return <b>true</b> if the code is a valid code for a contact mechanism purpose or <b>false</b>
@@ -1251,7 +1309,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for a contact mechanism role for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @param contactMechanismRoleCode the code for the contact mechanism role
    * @return <b>true</b> if the code is a valid code for a contact mechanism role or <b>false</b>
@@ -1314,7 +1372,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for an external reference type for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param externalReferenceTypeCode the code for the external reference type
    * @return <b>true</b> if the code is a valid code for an external reference type or <b>false</b>
    *     otherwise
@@ -1346,7 +1404,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for an identity document type for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param identityDocumentTypeCode the code for the identity document type
    * @return <b>true</b> if the code is a valid code for an identity document type or <b>false</b>
    *     otherwise
@@ -1359,7 +1417,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for a lock type for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param lockTypeCode the code for the lock type
    * @return <b>true</b> if the code is a valid code for a lock type or <b>false</b> otherwise
    */
@@ -1436,7 +1494,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for a physical address purpose for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param physicalAddressPurposeCode the code for the physical address purpose
    * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
    *     otherwise
@@ -1460,7 +1518,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for a physical address role for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param physicalAddressRoleCode the code for the physical address role
    * @return <b>true</b> if the code is a valid code for a physical address role or <b>false</b>
    *     otherwise
@@ -1495,7 +1553,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for a preference type for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param preferenceTypeCode the code for the preference type
    * @return <b>true</b> if the code is a valid code for a preference type or <b>false</b> otherwise
    */
@@ -1537,7 +1595,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for a relationship type for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param relationshipTypeCode the code for the relationship type
    * @return <b>true</b> if the code is a valid code for a relationship type or <b>false</b>
    *     otherwise
@@ -1592,7 +1650,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for a role type for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param roleTypeCode the code for the role type
    * @return <b>true</b> if the code is a valid code for a role type or <b>false</b> otherwise
    */
@@ -1634,7 +1692,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for a status type for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param statusTypeCode the code for the status type
    * @return <b>true</b> if the code is a valid code for a status type or <b>false</b> otherwise
    */
@@ -1656,7 +1714,7 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for a tax number type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the party type code
+   * @param partyTypeCode the code for the party type
    * @param taxNumberTypeCode the code for the tax number type
    * @return <b>true</b> if the code is a valid code for a tax number type or <b>false</b> otherwise
    */
@@ -1681,4 +1739,8 @@ public interface IPartyReferenceService {
    * @return <b>true</b> if the code is a valid code for a title or <b>false</b> otherwise
    */
   boolean isValidTitle(UUID tenantId, String titleCode) throws ServiceUnavailableException;
+
+
+
+
 }

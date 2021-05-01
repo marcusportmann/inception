@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -60,6 +61,7 @@ import org.springframework.util.StringUtils;
   "type",
   "booleanValue",
   "dateValue",
+  "decimalValue",
   "doubleValue",
   "integerValue",
   "stringValue",
@@ -73,6 +75,7 @@ import org.springframework.util.StringUtils;
       "type",
       "booleanValue",
       "dateValue",
+      "decimalValue",
       "doubleValue",
       "integerValue",
       "stringValue",
@@ -179,6 +182,13 @@ public class Attribute implements Serializable {
   @XmlSchemaType(name = "date")
   @Column(name = "date_value")
   private LocalDate dateValue;
+
+  /** The decimal value for the attribute. */
+  @Schema(description = "The decimal value for the attribute")
+  @JsonProperty
+  @XmlElement(name = "DecimalValue")
+  @Column(name = "decimal_value")
+  private BigDecimal decimalValue;
 
   /** The double value for the attribute. */
   @Schema(description = "The double value for the attribute")
@@ -295,6 +305,30 @@ public class Attribute implements Serializable {
    * Constructs a new <b>Attribute</b>.
    *
    * @param type the attribute type
+   * @param decimalValue the decimal value for the attribute
+   */
+  public Attribute(String type, BigDecimal decimalValue) {
+    this.type = type;
+    this.decimalValue = decimalValue;
+  }
+
+  /**
+   * Constructs a new <b>Attribute</b>.
+   *
+   * @param type the attribute type
+   * @param decimalValue the decimal value for the attribute
+   * @param unit the measurement unit for the attribute
+   */
+  public Attribute(String type, BigDecimal decimalValue, MeasurementUnit unit) {
+    this.type = type;
+    this.decimalValue = decimalValue;
+    this.unit = unit;
+  }
+
+  /**
+   * Constructs a new <b>Attribute</b>.
+   *
+   * @param type the attribute type
    * @param integerValue the integer value for the attribute
    */
   public Attribute(String type, Integer integerValue) {
@@ -381,6 +415,15 @@ public class Attribute implements Serializable {
   }
 
   /**
+   * Returns the decimal value for the attribute.
+   *
+   * @return the decimal value for the attribute
+   */
+  public BigDecimal getDecimalValue() {
+    return decimalValue;
+  }
+
+  /**
    * Returns the double value for the attribute.
    *
    * @return the double value for the attribute
@@ -453,6 +496,7 @@ public class Attribute implements Serializable {
     return StringUtils.hasText(stringValue)
         || (booleanValue != null)
         || (dateValue != null)
+        || (decimalValue != null)
         || (doubleValue != null)
         || (integerValue != null);
   }
@@ -484,6 +528,48 @@ public class Attribute implements Serializable {
    */
   public void setDateValue(LocalDate dateValue) {
     this.dateValue = dateValue;
+  }
+
+  /**
+   * Set the decimal value for the attribute.
+   *
+   * @param decimalValue the decimal value for the attribute
+   */
+  public void setDecimalValue(BigDecimal decimalValue) {
+    this.decimalValue = decimalValue;
+  }
+
+  /**
+   * Set the decimal value for the attribute.
+   *
+   * @param decimalValue the decimal value for the attribute
+   */
+  @JsonIgnore
+  @XmlTransient
+  public void setDecimalValue(String decimalValue) {
+    this.decimalValue = new BigDecimal(decimalValue);
+  }
+
+  /**
+   * Set the decimal value for the attribute.
+   *
+   * @param decimalValue the decimal value for the attribute
+   */
+  @JsonIgnore
+  @XmlTransient
+  public void setDecimalValue(long decimalValue) {
+    this.decimalValue = BigDecimal.valueOf(decimalValue);
+  }
+
+  /**
+   * Set the decimal value for the attribute.
+   *
+   * @param decimalValue the decimal value for the attribute
+   */
+  @JsonIgnore
+  @XmlTransient
+  public void setDecimalValue(double decimalValue) {
+    this.decimalValue = BigDecimal.valueOf(decimalValue);
   }
 
   /**

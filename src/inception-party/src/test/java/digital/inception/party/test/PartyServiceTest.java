@@ -2083,6 +2083,7 @@ public class PartyServiceTest {
     Attribute attribute = new Attribute("complex_attribute");
     attribute.setBooleanValue(true);
     attribute.setDateValue(LocalDate.now());
+    attribute.setDecimalValue("123.456");
     attribute.setDoubleValue(123.456);
     attribute.setIntegerValue(777);
     attribute.setStringValue("String Value");
@@ -2980,6 +2981,10 @@ public class PartyServiceTest {
         attribute1.getDateValue(),
         attribute2.getDateValue(),
         "The date value values for the attributes do not match");
+    assertEquals(
+        attribute1.getDecimalValue(),
+        attribute2.getDecimalValue(),
+        "The decimal value values for the attributes do not match");
     assertEquals(
         attribute1.getDoubleValue(),
         attribute2.getDoubleValue(),
