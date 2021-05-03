@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
+import digital.inception.party.constraints.ValidRelationship;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -52,13 +53,30 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A relationship between two parties")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "type", "firstPartyId", "secondPartyId", "effectiveFrom", "effectiveTo"})
+@JsonPropertyOrder({
+  "id",
+  "tenantId",
+  "type",
+  "firstPartyId",
+  "secondPartyId",
+  "effectiveFrom",
+  "effectiveTo"
+})
 @XmlRootElement(name = "Relationship", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Relationship",
     namespace = "http://inception.digital/party",
-    propOrder = {"id", "type", "firstPartyId", "secondPartyId", "effectiveFrom", "effectiveTo"})
+    propOrder = {
+      "id",
+      "tenantId",
+      "type",
+      "firstPartyId",
+      "secondPartyId",
+      "effectiveFrom",
+      "effectiveTo"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
+@ValidRelationship
 @Entity
 @Table(schema = "party", name = "relationships")
 public class Relationship implements Serializable {
@@ -123,6 +141,19 @@ public class Relationship implements Serializable {
   @Column(name = "second_party_id", nullable = false)
   private UUID secondPartyId;
 
+  /**
+   * The Universally Unique Identifier (UUID) for the tenant the relationship is associated with.
+   */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the relationship is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  @NotNull
+  @Column(name = "tenant_id", nullable = false)
+  private UUID tenantId;
+
   /** The code for the relationship type. */
   @Schema(description = "The code for the relationship type", required = true)
   @JsonProperty(required = true)
@@ -145,14 +176,17 @@ public class Relationship implements Serializable {
   /**
    * Constructs a new <b>Relationship</b>.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship is
+   *     associated with
    * @param type the code for the relationship type
    * @param firstPartyId the Universally Unique Identifier (UUID) for the first party in the
    *     relationship
    * @param secondPartyId the Universally Unique Identifier (UUID) for the second party in the
    *     relationship
    */
-  public Relationship(String type, UUID firstPartyId, UUID secondPartyId) {
+  public Relationship(UUID tenantId, String type, UUID firstPartyId, UUID secondPartyId) {
     this.id = UuidCreator.getShortPrefixComb();
+    this.tenantId = tenantId;
     this.type = type;
     this.firstPartyId = firstPartyId;
     this.secondPartyId = secondPartyId;
@@ -161,6 +195,8 @@ public class Relationship implements Serializable {
   /**
    * Constructs a new <b>Relationship</b>.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship is
+   *     associated with
    * @param type the code for the relationship type
    * @param firstPartyId the Universally Unique Identifier (UUID) for the first party in the
    *     relationship
@@ -168,8 +204,10 @@ public class Relationship implements Serializable {
    *     relationship
    * @param effectiveFrom the date that the relationship is effective from
    */
-  public Relationship(String type, UUID firstPartyId, UUID secondPartyId, LocalDate effectiveFrom) {
+  public Relationship(
+      UUID tenantId, String type, UUID firstPartyId, UUID secondPartyId, LocalDate effectiveFrom) {
     this.id = UuidCreator.getShortPrefixComb();
+    this.tenantId = tenantId;
     this.type = type;
     this.firstPartyId = firstPartyId;
     this.secondPartyId = secondPartyId;
@@ -179,6 +217,8 @@ public class Relationship implements Serializable {
   /**
    * Constructs a new <b>Relationship</b>.
    *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship is
+   *     associated with
    * @param type the code for the relationship type
    * @param firstPartyId the Universally Unique Identifier (UUID) for the first party in the
    *     relationship
@@ -188,12 +228,14 @@ public class Relationship implements Serializable {
    * @param effectiveTo the date that the relationship is effective to
    */
   public Relationship(
+      UUID tenantId,
       String type,
       UUID firstPartyId,
       UUID secondPartyId,
       LocalDate effectiveFrom,
       LocalDate effectiveTo) {
     this.id = UuidCreator.getShortPrefixComb();
+    this.tenantId = tenantId;
     this.type = type;
     this.firstPartyId = firstPartyId;
     this.secondPartyId = secondPartyId;
@@ -281,6 +323,17 @@ public class Relationship implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the relationship is associated
+   * with.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the relationship is associated
+   *     with
+   */
+  public UUID getTenantId() {
+    return tenantId;
+  }
+
+  /**
    * Returns the code for the relationship type.
    *
    * @return the code for the relationship type
@@ -353,6 +406,17 @@ public class Relationship implements Serializable {
    */
   public void setSecondPartyId(UUID secondPartyId) {
     this.secondPartyId = secondPartyId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the tenant the relationship is associated
+   * with.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship is
+   *     associated with
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 
   /**

@@ -80,11 +80,14 @@ public class PartyService implements IPartyService {
   /** The Party Repository. */
   private final PartyRepository partyRepository;
 
+  /** The Party Snapshot Repository. */
+  private final PartySnapshotRepository partySnapshotRepository;
+
   /** The Person Repository. */
   private final PersonRepository personRepository;
 
-  /** The Snapshot Repository. */
-  private final SnapshotRepository snapshotRepository;
+  /** The Relationship Repository. */
+  private final RelationshipRepository relationshipRepository;
 
   /** The JSR-303 validator. */
   private final Validator validator;
@@ -99,8 +102,9 @@ public class PartyService implements IPartyService {
    * @param validator the JSR-303 validator
    * @param organizationRepository the Organization Repository
    * @param partyRepository the Party Repository
+   * @param partySnapshotRepository the Party Snapshot Repository
    * @param personRepository the Person Repository
-   * @param snapshotRepository the Snapshot Repository
+   * @param relationshipRepository the Relationship Repository
    */
   public PartyService(
       ApplicationContext applicationContext,
@@ -108,15 +112,17 @@ public class PartyService implements IPartyService {
       Validator validator,
       OrganizationRepository organizationRepository,
       PartyRepository partyRepository,
+      PartySnapshotRepository partySnapshotRepository,
       PersonRepository personRepository,
-      SnapshotRepository snapshotRepository) {
+      RelationshipRepository relationshipRepository) {
     this.applicationContext = applicationContext;
     this.jackson2ObjectMapperBuilder = jackson2ObjectMapperBuilder;
     this.validator = validator;
     this.organizationRepository = organizationRepository;
     this.partyRepository = partyRepository;
     this.personRepository = personRepository;
-    this.snapshotRepository = snapshotRepository;
+    this.partySnapshotRepository = partySnapshotRepository;
+    this.relationshipRepository = relationshipRepository;
   }
 
   /**
@@ -160,7 +166,8 @@ public class PartyService implements IPartyService {
 
       organizationRepository.saveAndFlush(organization);
 
-      snapshotRepository.saveAndFlush(new Snapshot(organization.getId(), organizationJson));
+      partySnapshotRepository.saveAndFlush(
+          new PartySnapshot(organization.getId(), organizationJson));
 
       return organization;
     } catch (DuplicateOrganizationException e) {
@@ -215,7 +222,7 @@ public class PartyService implements IPartyService {
 
       personRepository.saveAndFlush(person);
 
-      snapshotRepository.saveAndFlush(new Snapshot(person.getId(), personJson));
+      partySnapshotRepository.saveAndFlush(new PartySnapshot(person.getId(), personJson));
 
       return person;
     } catch (DuplicatePersonException e) {
@@ -223,6 +230,64 @@ public class PartyService implements IPartyService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to create the person (" + person.getId() + ") for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  /**
+   * Create the new relationship.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param relationship the relationship
+   * @return the relationship
+   */
+  @Override
+  @Transactional
+  @CachePut(cacheNames = "relationships", key = "#relationship.id")
+  public Relationship createRelationship(UUID tenantId, Relationship relationship)
+      throws InvalidArgumentException, DuplicateRelationshipException, ServiceUnavailableException {
+    if (relationship == null) {
+      throw new InvalidArgumentException("relationship");
+    }
+
+    if (!Objects.equals(tenantId, relationship.getTenantId())) {
+      throw new InvalidArgumentException("relationship.tenantId");
+    }
+
+    Set<ConstraintViolation<Relationship>> constraintViolations =
+        validateRelationship(tenantId, relationship);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "relationship", ValidationError.toValidationErrors(constraintViolations));
+    }
+
+    try {
+      if (relationshipRepository.existsById(relationship.getId())) {
+        throw new DuplicateRelationshipException(relationship.getId());
+      }
+
+      // Serialize the relationship object as JSON
+      //      ObjectMapper objectMapper =
+      //          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
+      //
+      //      String relationshipJson = objectMapper.writeValueAsString(relationship);
+
+      relationshipRepository.saveAndFlush(relationship);
+
+      // partySnapshotRepository.saveAndFlush(new PartySnapshot(relationship.getId(),
+      // relationshipJson));
+
+      return relationship;
+    } catch (DuplicateRelationshipException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the relationship ("
+              + relationship.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }
@@ -533,6 +598,99 @@ public class PartyService implements IPartyService {
   }
 
   /**
+   * Retrieve the party snapshots for the party.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param from the optional date to retrieve the party snapshots from
+   * @param to the optional date to retrieve the party snapshots to
+   * @param sortDirection the optional sort direction to apply to the party snapshots
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the party snapshots
+   */
+  @Override
+  @Transactional
+  public PartySnapshots getPartySnapshots(
+      UUID tenantId,
+      UUID partyId,
+      LocalDate from,
+      LocalDate to,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.ASCENDING;
+    }
+
+    try {
+      Optional<UUID> partyTenantId = self.getTenantIdForParty(partyId);
+
+      if (partyTenantId.isEmpty() || (!Objects.equals(tenantId, partyTenantId.get()))) {
+        throw new PartyNotFoundException(tenantId, partyId);
+      }
+
+      PageRequest pageRequest;
+
+      if (pageIndex == null) {
+        pageIndex = 0;
+      }
+
+      if (pageSize == null) {
+        pageSize = MAX_FILTERED_PERSONS;
+      }
+
+      pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, MAX_FILTERED_PERSONS),
+              (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
+              "timestamp");
+
+      Page<PartySnapshot> partySnapshotPage;
+
+      if ((from != null) && (to != null)) {
+        partySnapshotPage = partySnapshotRepository.findByPartyId(partyId, pageRequest);
+      } else if (from != null) {
+        partySnapshotPage = partySnapshotRepository.findByPartyId(partyId, pageRequest);
+      } else if (to != null) {
+        partySnapshotPage = partySnapshotRepository.findByPartyId(partyId, pageRequest);
+      } else {
+        partySnapshotPage = partySnapshotRepository.findByPartyId(partyId, pageRequest);
+      }
+
+      return new PartySnapshots(
+          partySnapshotPage.toList(),
+          partySnapshotPage.getTotalElements(),
+          partyId,
+          from,
+          to,
+          sortDirection,
+          pageIndex,
+          pageSize);
+    } catch (PartyNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the party snapshots for the party ("
+              + partyId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  /**
    * Retrieve the person.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
@@ -649,99 +807,6 @@ public class PartyService implements IPartyService {
   }
 
   /**
-   * Retrieve the snapshots for the party.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @param from the optional date to retrieve the snapshots from
-   * @param to the optional date to retrieve the snapshots to
-   * @param sortDirection the optional sort direction to apply to the snapshots
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the snapshots
-   */
-  @Override
-  @Transactional
-  public Snapshots getSnapshots(
-      UUID tenantId,
-      UUID partyId,
-      LocalDate from,
-      LocalDate to,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize)
-      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
-
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
-
-    if (sortDirection == null) {
-      sortDirection = SortDirection.ASCENDING;
-    }
-
-    try {
-      Optional<UUID> partyTenantId = self.getTenantIdForParty(partyId);
-
-      if (partyTenantId.isEmpty() || (!Objects.equals(tenantId, partyTenantId.get()))) {
-        throw new PartyNotFoundException(tenantId, partyId);
-      }
-
-      PageRequest pageRequest;
-
-      if (pageIndex == null) {
-        pageIndex = 0;
-      }
-
-      if (pageSize == null) {
-        pageSize = MAX_FILTERED_PERSONS;
-      }
-
-      pageRequest =
-          PageRequest.of(
-              pageIndex,
-              Math.min(pageSize, MAX_FILTERED_PERSONS),
-              (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
-              "timestamp");
-
-      Page<Snapshot> partySnapshotPage;
-
-      if ((from != null) && (to != null)) {
-        partySnapshotPage = snapshotRepository.findByPartyId(partyId, pageRequest);
-      } else if (from != null) {
-        partySnapshotPage = snapshotRepository.findByPartyId(partyId, pageRequest);
-      } else if (to != null) {
-        partySnapshotPage = snapshotRepository.findByPartyId(partyId, pageRequest);
-      } else {
-        partySnapshotPage = snapshotRepository.findByPartyId(partyId, pageRequest);
-      }
-
-      return new Snapshots(
-          partySnapshotPage.toList(),
-          partySnapshotPage.getTotalElements(),
-          partyId,
-          from,
-          to,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (PartyNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the snapshots for the party ("
-              + partyId
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  /**
    * Retrieve the Universally Unique Identifier (UUID) for the tenant the party is associated with.
    *
    * @param partyId the Universally Unique Identifier (UUID) for the party
@@ -801,7 +866,8 @@ public class PartyService implements IPartyService {
 
       organizationRepository.saveAndFlush(organization);
 
-      snapshotRepository.saveAndFlush(new Snapshot(organization.getId(), organizationJson));
+      partySnapshotRepository.saveAndFlush(
+          new PartySnapshot(organization.getId(), organizationJson));
 
       return organization;
     } catch (OrganizationNotFoundException e) {
@@ -853,7 +919,7 @@ public class PartyService implements IPartyService {
 
       personRepository.saveAndFlush(person);
 
-      snapshotRepository.saveAndFlush(new Snapshot(person.getId(), personJson));
+      partySnapshotRepository.saveAndFlush(new PartySnapshot(person.getId(), personJson));
 
       return person;
     } catch (PersonNotFoundException e) {
@@ -900,5 +966,18 @@ public class PartyService implements IPartyService {
   @Override
   public Set<ConstraintViolation<Person>> validatePerson(UUID tenantId, Person person) {
     return validator.validate(person);
+  }
+
+  /**
+   * Validate the relationship.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param relationship the relationship
+   * @return the constraint violations for the relationship
+   */
+  @Override
+  public Set<ConstraintViolation<Relationship>> validateRelationship(
+      UUID tenantId, Relationship relationship) {
+    return validator.validate(relationship);
   }
 }

@@ -37,25 +37,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Snapshot</b> class holds the information for a snapshot of a party.
+ * The <b>PartySnapshot</b> class holds the information for a snapshot of a party, which is a view
+ * of the data for the party at a specific point in time.
  *
  * <p>Changes to parties are recorded as snapshots, which include all the data for the party
  * serialized as a JSON data structure.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A snapshot")
+@Schema(description = "A party snapshot")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "partyId", "timestamp", "data"})
-@XmlRootElement(name = "Snapshot", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "PartySnapshot", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "Snapshot",
+    name = "PartySnapshot",
     namespace = "http://inception.digital/party",
     propOrder = {"id", "partyId", "timestamp", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "snapshots")
-public class Snapshot implements Serializable {
+@Table(schema = "party", name = "party_snapshots")
+public class PartySnapshot implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
@@ -67,9 +68,9 @@ public class Snapshot implements Serializable {
   @Column(name = "data", nullable = false)
   private String data;
 
-  /** The Universally Unique Identifier (UUID) for the snapshot. */
+  /** The Universally Unique Identifier (UUID) for the party snapshot. */
   @Schema(
-      description = "The Universally Unique Identifier (UUID) for the snapshot",
+      description = "The Universally Unique Identifier (UUID) for the party snapshot",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -78,10 +79,12 @@ public class Snapshot implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The Universally Unique Identifier (UUID) for the party the snapshot is associated with. */
+  /**
+   * The Universally Unique Identifier (UUID) for the party the party snapshot is associated with.
+   */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) for the party the snapshot is associated with",
+          "The Universally Unique Identifier (UUID) for the party the party snapshot is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "PartyId", required = true)
@@ -89,24 +92,24 @@ public class Snapshot implements Serializable {
   @Column(name = "party_id", nullable = false)
   private UUID partyId;
 
-  /** The date and time the snapshot was created. */
-  @Schema(description = "The date and time the snapshot was created", required = true)
+  /** The date and time the party snapshot was created. */
+  @Schema(description = "The date and time the party snapshot was created", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Timestamp", required = true)
   @Column(name = "timestamp", nullable = false)
   private LocalDateTime timestamp;
 
-  /** Constructs a new <b>Snapshot</b>. */
-  public Snapshot() {}
+  /** Constructs a new <b>PartySnapshot</b>. */
+  public PartySnapshot() {}
 
   /**
-   * Constructs a new <b>Snapshot</b>.
+   * Constructs a new <b>PartySnapshot</b>.
    *
-   * @param partyId the Universally Unique Identifier (UUID) for the party the snapshot is
+   * @param partyId the Universally Unique Identifier (UUID) for the party the party snapshot is
    *     associated with
    * @param data the JSON data for the party
    */
-  public Snapshot(UUID partyId, String data) {
+  public PartySnapshot(UUID partyId, String data) {
     this.id = UuidCreator.getShortPrefixComb();
     this.partyId = partyId;
     this.timestamp = LocalDateTime.now();
@@ -133,7 +136,7 @@ public class Snapshot implements Serializable {
       return false;
     }
 
-    Snapshot other = (Snapshot) object;
+    PartySnapshot other = (PartySnapshot) object;
 
     return Objects.equals(id, other.id);
   }
@@ -148,27 +151,29 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the snapshot.
+   * Returns the Universally Unique Identifier (UUID) for the party snapshot.
    *
-   * @return the Universally Unique Identifier (UUID) for the snapshot
+   * @return the Universally Unique Identifier (UUID) for the party snapshot
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the party the snapshot is associated with.
+   * Returns the Universally Unique Identifier (UUID) for the party the party snapshot is associated
+   * with.
    *
-   * @return the Universally Unique Identifier (UUID) for the party the snapshot is associated with
+   * @return the Universally Unique Identifier (UUID) for the party the party snapshot is associated
+   *     with
    */
   public UUID getPartyId() {
     return partyId;
   }
 
   /**
-   * Returns the date and time the snapshot was created.
+   * Returns the date and time the party snapshot was created.
    *
-   * @return the date and time the snapshot was created
+   * @return the date and time the party snapshot was created
    */
   public LocalDateTime getTimestamp() {
     return timestamp;
@@ -194,18 +199,19 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the snapshot.
+   * Set the Universally Unique Identifier (UUID) for the party snapshot.
    *
-   * @param id the Universally Unique Identifier (UUID) for the snapshot
+   * @param id the Universally Unique Identifier (UUID) for the party snapshot
    */
   public void setId(UUID id) {
     this.id = id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the party the snapshot is associated with.
+   * Set the Universally Unique Identifier (UUID) for the party the party snapshot is associated
+   * with.
    *
-   * @param partyId the Universally Unique Identifier (UUID) for the party the snapshot is
+   * @param partyId the Universally Unique Identifier (UUID) for the party the party snapshot is
    *     associated with
    */
   public void setPartyId(UUID partyId) {
@@ -213,9 +219,9 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Set the date and time the snapshot was created.
+   * Set the date and time the party snapshot was created.
    *
-   * @param timestamp the date and time the snapshot was created
+   * @param timestamp the date and time the party snapshot was created
    */
   public void setTimestamp(LocalDateTime timestamp) {
     this.timestamp = timestamp;

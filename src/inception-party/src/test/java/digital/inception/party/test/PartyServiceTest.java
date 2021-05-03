@@ -56,7 +56,7 @@ import digital.inception.party.Preference;
 import digital.inception.party.ResidencePermit;
 import digital.inception.party.Role;
 import digital.inception.party.SegmentAllocation;
-import digital.inception.party.Snapshots;
+import digital.inception.party.PartySnapshots;
 import digital.inception.party.SourceOfFunds;
 import digital.inception.party.SourceOfWealth;
 import digital.inception.party.Status;
@@ -1823,8 +1823,8 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, filteredOrganizations.getOrganizations().get(0));
 
-    Snapshots snapshots =
-        partyService.getSnapshots(
+    PartySnapshots partySnapshots =
+        partyService.getPartySnapshots(
             IPartyService.DEFAULT_TENANT_ID,
             organization.getId(),
             null,
@@ -1836,7 +1836,7 @@ public class PartyServiceTest {
     ObjectMapper objectMapper = jackson2ObjectMapperBuilder.build();
 
     Organization serializedOrganization =
-        objectMapper.readValue(snapshots.getSnapshots().get(0).getData(), Organization.class);
+        objectMapper.readValue(partySnapshots.getPartySnapshots().get(0).getData(), Organization.class);
 
     compareOrganizations(organization, serializedOrganization);
 
@@ -2030,8 +2030,8 @@ public class PartyServiceTest {
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
-    Snapshots snapshots =
-        partyService.getSnapshots(
+    PartySnapshots partySnapshots =
+        partyService.getPartySnapshots(
             IPartyService.DEFAULT_TENANT_ID,
             person.getId(),
             null,
@@ -2043,7 +2043,7 @@ public class PartyServiceTest {
     ObjectMapper objectMapper = jackson2ObjectMapperBuilder.build();
 
     Person serializedPerson =
-        objectMapper.readValue(snapshots.getSnapshots().get(0).getData(), Person.class);
+        objectMapper.readValue(partySnapshots.getPartySnapshots().get(0).getData(), Person.class);
 
     comparePersons(person, serializedPerson);
 

@@ -218,7 +218,11 @@ public class ValidOrganizationValidator extends PartyValidator
 
         // Validate external references
         for (ExternalReference externalReference : organization.getExternalReferences()) {
-          if (!getPartyReferenceService().isValidExternalReferenceType(organization.getTenantId(), organization.getType().code(), externalReference.getType())) {
+          if (!getPartyReferenceService()
+              .isValidExternalReferenceType(
+                  organization.getTenantId(),
+                  organization.getType().code(),
+                  externalReference.getType())) {
             hibernateConstraintValidatorContext
                 .addMessageParameter("externalReferenceType", externalReference.getType())
                 .buildConstraintViolationWithTemplate(

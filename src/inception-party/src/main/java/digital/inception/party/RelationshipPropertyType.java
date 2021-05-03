@@ -37,8 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>RelationshipPropertyType</b> class holds the information for a relationship property
- * type.
+ * The <b>RelationshipPropertyType</b> class holds the information for a relationship property type.
  *
  * @author Marcus Portmann
  */
@@ -51,7 +50,8 @@ import javax.xml.bind.annotation.XmlType;
   "tenantId",
   "sortIndex",
   "name",
-  "description"
+  "description",
+  "valueType"
 })
 @XmlRootElement(name = "RelationshipPropertyType", namespace = "http://inception.digital/party")
 @XmlType(
@@ -64,7 +64,8 @@ import javax.xml.bind.annotation.XmlType;
       "tenantId",
       "sortIndex",
       "name",
-      "description"
+      "description",
+      "valueType"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -146,6 +147,13 @@ public class RelationshipPropertyType implements Serializable {
   @XmlElement(name = "TenantId")
   @Column(name = "tenant_id")
   private UUID tenantId;
+
+  /** The value type for the relationship property type. */
+  @Schema(description = "The value type for the relationship property type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ValueType", required = true)
+  @Column(name = "value_type", length = 10, nullable = false)
+  private ValueType valueType;
 
   /** Constructs a new <b>RelationshipPropertyType</b>. */
   public RelationshipPropertyType() {}
@@ -243,6 +251,15 @@ public class RelationshipPropertyType implements Serializable {
   }
 
   /**
+   * Returns the value type for the relationship property type.
+   *
+   * @return the value type for the relationship property type
+   */
+  public ValueType getValueType() {
+    return valueType;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -318,5 +335,14 @@ public class RelationshipPropertyType implements Serializable {
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
+  }
+
+  /**
+   * Set the value type for the relationship property type.
+   *
+   * @param valueType the value type for the relationship property type
+   */
+  public void setValueType(ValueType valueType) {
+    this.valueType = valueType;
   }
 }

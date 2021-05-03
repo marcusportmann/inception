@@ -300,8 +300,8 @@ public class ContactMechanismPurpose implements Serializable {
    * Returns whether the contact mechanism purpose is valid for the contact mechanism type.
    *
    * @param contactMechanismTypeCode the code for the contact mechanism type
-   * @return <b>true</b> if the contact mechanism purpose is valid for the contact mechanism, type or
-   *     <b>false</b> otherwise
+   * @return <b>true</b> if the contact mechanism purpose is valid for the contact mechanism, type
+   *     or <b>false</b> otherwise
    */
   public boolean isValidForContactMechanismType(String contactMechanismTypeCode) {
     return Arrays.stream(getContactMechanismTypes())

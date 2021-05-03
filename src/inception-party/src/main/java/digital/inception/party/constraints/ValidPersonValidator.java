@@ -419,7 +419,9 @@ public class ValidPersonValidator extends PartyValidator
 
         // Validate external references
         for (ExternalReference externalReference : person.getExternalReferences()) {
-          if (!getPartyReferenceService().isValidExternalReferenceType(person.getTenantId(), person.getType().code(), externalReference.getType())) {
+          if (!getPartyReferenceService()
+              .isValidExternalReferenceType(
+                  person.getTenantId(), person.getType().code(), externalReference.getType())) {
             hibernateConstraintValidatorContext
                 .addMessageParameter("externalReferenceType", externalReference.getType())
                 .buildConstraintViolationWithTemplate(
@@ -945,8 +947,7 @@ public class ValidPersonValidator extends PartyValidator
                   roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())) {
                 hibernateConstraintValidatorContext
                     .addMessageParameter(
-                        "consentType",
-                        roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())
+                        "consentType", roleTypeAttributeTypeConstraint.getAttributeTypeQualifier())
                     .addMessageParameter("roleType", roleType)
                     .buildConstraintViolationWithTemplate(
                         "{digital.inception.party.constraints.ValidPerson.consentTypeRequiredForRoleType.message}")

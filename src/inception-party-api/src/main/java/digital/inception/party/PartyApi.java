@@ -539,6 +539,102 @@ public class PartyApi extends SecureApi {
   }
 
   /**
+   * Retrieve the party snapshots.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param from the optional date to retrieve the party snapshots from
+   * @param to the optional date to retrieve the party snapshots to
+   * @param sortDirection the optional sort direction to apply to the party snapshots
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the party snapshots
+   */
+  @Operation(summary = "Retrieve the party snapshots", description = "Retrieve the party snapshots")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/parties/{partyId}/snapshots",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
+  public PartySnapshots getPartySnapshots(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "partyId", description = "The ID for the party", required = true)
+          @PathVariable
+          UUID partyId,
+      @Parameter(
+              name = "from",
+              description = "The optional date to retrieve the party snapshots from")
+          @RequestParam(value = "from", required = false)
+          LocalDate from,
+      @Parameter(name = "to", description = "The optional date to retrieve the party snapshots to")
+          @RequestParam(value = "to", required = false)
+          LocalDate to,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the party snapshots")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
+    return partyService.getPartySnapshots(
+        tenantId, partyId, from, to, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
    * Retrieve the person.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
@@ -698,100 +794,6 @@ public class PartyApi extends SecureApi {
     }
 
     return partyService.getPersons(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
-  }
-
-  /**
-   * Retrieve the snapshots.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @param from the optional date to retrieve the snapshots from
-   * @param to the optional date to retrieve the snapshots to
-   * @param sortDirection the optional sort direction to apply to the snapshots
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the snapshots
-   */
-  @Operation(summary = "Retrieve the snapshots", description = "Retrieve the snapshots")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "403",
-            description = "Access denied",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/parties/{partyId}/snapshots",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
-  public Snapshots getSnapshots(
-      @Parameter(
-              name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(name = "partyId", description = "The ID for the party", required = true)
-          @PathVariable
-          UUID partyId,
-      @Parameter(name = "from", description = "The optional date to retrieve the snapshots from")
-          @RequestParam(value = "from", required = false)
-          LocalDate from,
-      @Parameter(name = "to", description = "The optional date to retrieve the snapshots to")
-          @RequestParam(value = "to", required = false)
-          LocalDate to,
-      @Parameter(
-              name = "sortDirection",
-              description = "The optional sort direction to apply to the parties")
-          @RequestParam(value = "sortDirection", required = false)
-          SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
-          Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
-          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
-          Integer pageSize)
-      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
-
-    if (!hasAccessToTenant(tenantId)) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    if (pageIndex == null) {
-      pageIndex = 0;
-    }
-    if (pageSize == null) {
-      pageSize = 10;
-    }
-
-    return partyService.getSnapshots(
-        tenantId, partyId, from, to, sortDirection, pageIndex, pageSize);
   }
 
   /**

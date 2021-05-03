@@ -6,11 +6,11 @@ INSERT INTO party.attribute_type_categories (code, locale_id, tenant_id, name, d
   VALUES ('test_attribute_type_category', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Attribute Type Category', 'Test Attribute Type Category');
 
 
-INSERT INTO party.attribute_types (category, code, locale_id, tenant_id, name, description, party_types)
-  VALUES ('test_attribute_type_category','test_attribute_type', 'en-US', '00000000-0000-0000-0000-000000000000', 'Test Attribute Type', 'Test Attribute Type', 'organization,person');
+INSERT INTO party.attribute_types (category, code, locale_id, tenant_id, name, description, party_types, value_type)
+  VALUES ('test_attribute_type_category','test_attribute_type', 'en-US', '00000000-0000-0000-0000-000000000000', 'Test Attribute Type', 'Test Attribute Type', 'organization,person', 'string');
 
-INSERT INTO party.attribute_types (category, code, locale_id, tenant_id, name, description, party_types)
-  VALUES ('test_attribute_type_category','test_attribute_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Attribute Type', 'Test Attribute Type', 'organization,person');
+INSERT INTO party.attribute_types (category, code, locale_id, tenant_id, name, description, party_types, value_type)
+  VALUES ('test_attribute_type_category','test_attribute_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Attribute Type', 'Test Attribute Type', 'organization,person', 'string');
 
 
 INSERT INTO party.consent_types(code, locale_id, tenant_id, name, description)
@@ -248,11 +248,11 @@ INSERT INTO party.relationship_types(code, locale_id, tenant_id, name, descripti
   VALUES ('test_relationship_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Relationship Type', 'Test Relationship Type', 'test_first_person_role', 'test_second_person_role');
 
 
-INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, tenant_id, sort_index, name, description)
-  VALUES ('test_relationship_type', 'test_relationship_property', 'en-US', '00000000-0000-0000-0000-000000000000', 666, 'Test Relationship Property', 'Test Relationship Property');
+INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, tenant_id, sort_index, name, description, value_type)
+  VALUES ('test_relationship_type', 'test_relationship_property', 'en-US', '00000000-0000-0000-0000-000000000000', 666, 'Test Relationship Property', 'Test Relationship Property', 'string');
 
-INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, tenant_id, sort_index, name, description)
-  VALUES ('test_relationship_type', 'test_relationship_property', 'en-ZA', '00000000-0000-0000-0000-000000000000', 666, 'Test Relationship Property', 'Test Relationship Property');
+INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, tenant_id, sort_index, name, description, value_type)
+  VALUES ('test_relationship_type', 'test_relationship_property', 'en-ZA', '00000000-0000-0000-0000-000000000000', 666, 'Test Relationship Property', 'Test Relationship Property', 'string');
 
 
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)

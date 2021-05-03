@@ -43,6 +43,7 @@ CREATE TABLE party.attribute_types (
   description VARCHAR(200) NOT NULL DEFAULT '',
   party_types VARCHAR(310) NOT NULL,
   unit_type   VARCHAR(30),
+  value_type  VARCHAR(10)  NOT NULL,
 
   PRIMARY KEY (code, locale_id),
   CONSTRAINT attribute_types_attribute_type_category_fk FOREIGN KEY (category, locale_id) REFERENCES party.attribute_type_categories(code, locale_id) ON DELETE CASCADE
@@ -69,6 +70,8 @@ COMMENT ON COLUMN party.attribute_types.description IS 'The description for the 
 COMMENT ON COLUMN party.attribute_types.party_types IS 'The comma-delimited list of codes for the party types the attribute type is associated with';
 
 COMMENT ON COLUMN party.attribute_types.unit_type IS 'The code for the measurement unit type for the attribute type';
+
+COMMENT ON COLUMN party.attribute_types.value_type IS 'The code for the value type for the attribute type';
 
 
 CREATE TABLE party.consent_types (
@@ -985,6 +988,7 @@ CREATE TABLE party.relationship_property_types (
   sort_index        INTEGER,
   name              VARCHAR(50)  NOT NULL,
   description       VARCHAR(200) NOT NULL DEFAULT '',
+  value_type        VARCHAR(10) NOT NULL,
 
   PRIMARY KEY (relationship_type, code, locale_id),
   CONSTRAINT relationship_property_types_relationship_type_fk FOREIGN KEY (relationship_type, locale_id) REFERENCES party.relationship_types(code, locale_id) ON DELETE CASCADE
@@ -1007,6 +1011,8 @@ COMMENT ON COLUMN party.relationship_property_types.sort_index IS 'The sort inde
 COMMENT ON COLUMN party.relationship_property_types.name IS 'The name of the relationship property type';
 
 COMMENT ON COLUMN party.relationship_property_types.description IS 'The description for the relationship property type';
+
+COMMENT ON COLUMN party.relationship_property_types.value_type IS 'The code for the value type for the relationship property type';
 
 
 CREATE TABLE party.segments (
@@ -1278,6 +1284,29 @@ COMMENT ON COLUMN party.parties.tenant_id IS 'The Universally Unique Identifier 
 COMMENT ON COLUMN party.parties.type IS 'The code for the party type';
 
 COMMENT ON COLUMN party.parties.updated IS 'The date and time the party was last updated';
+
+
+CREATE TABLE party.party_snapshots (
+  timestamp TIMESTAMP NOT NULL,
+  data      CLOB      NOT NULL,
+  id        UUID      NOT NULL,
+  party_id  UUID      NOT NULL,
+
+  PRIMARY KEY (id),
+  CONSTRAINT party_snapshots_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX party_snapshots_timestamp_ix ON party.party_snapshots(timestamp);
+
+CREATE INDEX party_snapshots_party_id_ix ON party.party_snapshots(party_id);
+
+COMMENT ON COLUMN party.party_snapshots.timestamp IS 'The date and time the party snapshot was created';
+
+COMMENT ON COLUMN party.party_snapshots.data IS 'The JSON data for the party';
+
+COMMENT ON COLUMN party.party_snapshots.id IS 'The Universally Unique Identifier (UUID) for the party snapshot';
+
+COMMENT ON COLUMN party.party_snapshots.party_id IS 'The Universally Unique Identifier (UUID) for the party the party snapshot is associated with';
 
 
 CREATE TABLE party.organizations (
@@ -1859,6 +1888,7 @@ CREATE TABLE party.relationships (
   id              UUID        NOT NULL,
   first_party_id  UUID        NOT NULL,
   second_party_id UUID        NOT NULL,
+  tenant_id       UUID        NOT NULL,
   type            VARCHAR(30) NOT NULL,
   updated         TIMESTAMP,
 
@@ -1870,6 +1900,8 @@ CREATE TABLE party.relationships (
 CREATE INDEX relationships_first_party_id_ix ON party.relationships(first_party_id);
 
 CREATE INDEX relationships_second_party_id_ix ON party.relationships(second_party_id);
+
+CREATE INDEX relationships_tenant_id_ix ON party.relationships(tenant_id);
 
 CREATE INDEX relationships_type_ix ON party.relationships(type);
 
@@ -1884,6 +1916,8 @@ COMMENT ON COLUMN party.relationships.id IS 'The Universally Unique Identifier (
 COMMENT ON COLUMN party.relationships.first_party_id IS 'The Universally Unique Identifier (UUID) for the first party in the relationship';
 
 COMMENT ON COLUMN party.relationships.second_party_id IS 'The Universally Unique Identifier (UUID) for the second party in the relationship';
+
+COMMENT ON COLUMN party.relationships.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the relationship is associated with';
 
 COMMENT ON COLUMN party.relationships.type IS 'The code for the relationship type';
 
@@ -2020,29 +2054,6 @@ COMMENT ON COLUMN party.segment_allocations.party_id IS 'The Universally Unique 
 COMMENT ON COLUMN party.segment_allocations.segment IS 'The code for the segment';
 
 COMMENT ON COLUMN party.segment_allocations.updated IS 'The date and time the segment allocation was last updated';
-
-
-CREATE TABLE party.snapshots (
-  timestamp TIMESTAMP NOT NULL,
-  data      CLOB      NOT NULL,
-  id        UUID      NOT NULL,
-  party_id  UUID      NOT NULL,
-
-  PRIMARY KEY (id),
-  CONSTRAINT snapshots_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
-);
-
-CREATE INDEX snapshots_timestamp_ix ON party.snapshots(timestamp);
-
-CREATE INDEX snapshots_party_id_ix ON party.snapshots(party_id);
-
-COMMENT ON COLUMN party.snapshots.timestamp IS 'The date and time the snapshot was created';
-
-COMMENT ON COLUMN party.snapshots.data IS 'The JSON data for the party';
-
-COMMENT ON COLUMN party.snapshots.id IS 'The Universally Unique Identifier (UUID) for the snapshot';
-
-COMMENT ON COLUMN party.snapshots.party_id IS 'The Universally Unique Identifier (UUID) for the party the snapshot is associated with';
 
 
 CREATE TABLE party.sources_of_funds (
@@ -2205,19 +2216,19 @@ INSERT INTO party.attribute_type_categories (code, locale_id, name, description)
   VALUES ('anthropometric_measurements', 'en-ZA', 'Anthropometric Measurements', 'Anthropometric Measurements');
 
 
-INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types)
-  VALUES ('anthropometric_measurements','bmi', 'en-US', 'Body Mass Index', 'Body Mass Index', 'person');
-INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type)
-  VALUES ('anthropometric_measurements','height', 'en-US', 'Height', 'Height', 'person', 'length');
-INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type)
-  VALUES ('anthropometric_measurements','weight', 'en-US', 'Weight', 'Weight', 'person', 'mass');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, value_type)
+  VALUES ('anthropometric_measurements','bmi', 'en-US', 'Body Mass Index', 'Body Mass Index', 'person', 'decimal');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type, value_type)
+  VALUES ('anthropometric_measurements','height', 'en-US', 'Height', 'Height', 'person', 'length', 'decimal');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type, value_type)
+  VALUES ('anthropometric_measurements','weight', 'en-US', 'Weight', 'Weight', 'person', 'mass', 'decimal');
 
-INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types)
-  VALUES ('anthropometric_measurements','bmi', 'en-ZA', 'Body Mass Index', 'Body Mass Index', 'person');
-INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type)
-  VALUES ('anthropometric_measurements','height', 'en-ZA', 'Height', 'Height', 'person', 'length');
-INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type)
-  VALUES ('anthropometric_measurements','weight', 'en-ZA', 'Weight', 'Weight', 'person', 'mass');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, value_type)
+  VALUES ('anthropometric_measurements','bmi', 'en-ZA', 'Body Mass Index', 'Body Mass Index', 'person', 'decimal');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type, value_type)
+  VALUES ('anthropometric_measurements','height', 'en-ZA', 'Height', 'Height', 'person', 'length', 'decimal');
+INSERT INTO party.attribute_types (category, code, locale_id, name, description, party_types, unit_type, value_type)
+  VALUES ('anthropometric_measurements','weight', 'en-ZA', 'Weight', 'Weight', 'person', 'mass', 'decimal');
 
 
 INSERT INTO party.consent_types(code, locale_id, name, description)
@@ -4069,11 +4080,11 @@ INSERT INTO party.relationship_types(code, locale_id, name, description, first_p
   VALUES ('sibling', 'en-ZA', 'Sibling', 'A relationship between two children or offspring having one or both parents in common', 'sibling', 'sibling');
 
 
-INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, name, description)
-  VALUES ('company_shareholder', 'shareholding', 'en-US', 'Shareholding', 'Shareholding');
+INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, name, description, value_type)
+  VALUES ('company_shareholder', 'shareholding', 'en-US', 'Shareholding', 'Shareholding', 'decimal');
 
-INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, name, description)
-  VALUES ('company_shareholder', 'shareholding', 'en-ZA', 'Shareholding', 'Shareholding');
+INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, name, description, value_type)
+  VALUES ('company_shareholder', 'shareholding', 'en-ZA', 'Shareholding', 'Shareholding', 'decimal');
 
 
 INSERT INTO party.source_of_funds_types (code, locale_id, sort_index, name, description)

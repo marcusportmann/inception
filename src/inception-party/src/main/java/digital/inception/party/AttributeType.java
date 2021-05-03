@@ -57,7 +57,8 @@ import org.springframework.util.StringUtils;
   "name",
   "description",
   "partyTypes",
-  "unitType"
+  "unitType",
+  "valueType"
 })
 @XmlRootElement(name = "AttributeType", namespace = "http://inception.digital/party")
 @XmlType(
@@ -72,7 +73,8 @@ import org.springframework.util.StringUtils;
       "name",
       "description",
       "partyTypes",
-      "unitType"
+      "unitType",
+      "valueType"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -163,6 +165,13 @@ public class AttributeType implements Serializable {
   @XmlElement(name = "UnitType")
   @Column(name = "unit_type", length = 30)
   private MeasurementUnitType unitType;
+
+  /** The value type for the attribute type. */
+  @Schema(description = "The value type for the attribute type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ValueType", required = true)
+  @Column(name = "value_type", length = 10, nullable = false)
+  private ValueType valueType;
 
   /** Constructs a new <b>AttributeType</b>. */
   public AttributeType() {}
@@ -281,6 +290,15 @@ public class AttributeType implements Serializable {
   }
 
   /**
+   * Returns the value type for the attribute type.
+   *
+   * @return the value type for the attribute type
+   */
+  public ValueType getValueType() {
+    return valueType;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -391,5 +409,14 @@ public class AttributeType implements Serializable {
    */
   public void setUnitType(MeasurementUnitType unitType) {
     this.unitType = unitType;
+  }
+
+  /**
+   * Set the value type for the attribute type.
+   *
+   * @param valueType the value type for the attribute type
+   */
+  public void setValueType(ValueType valueType) {
+    this.valueType = valueType;
   }
 }

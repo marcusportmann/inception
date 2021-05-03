@@ -22,12 +22,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>SnapshotRepository</b> interface declares the repository for the <b>Snapshot</b> domain
- * type.
+ * The <b>PartySnapshotRepository</b> interface declares the repository for the <b>PartySnapshot</b>
+ * domain type.
  *
  * @author Marcus Portmann
  */
-public interface SnapshotRepository extends JpaRepository<Snapshot, UUID> {
+public interface PartySnapshotRepository extends JpaRepository<PartySnapshot, UUID> {
 
-  Page<Snapshot> findByPartyId(UUID partyId, Pageable pageable);
+  Page<PartySnapshot> findByPartyId(UUID partyId, Pageable pageable);
 }

@@ -33,11 +33,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Snapshots</b> class holds the results of a request to retrieve a list of party snapshots.
+ * The <b>PartySnapshots</b> class holds the results of a request to retrieve a list of party
+ * snapshots.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The results of a request to retrieve a list of snapshots")
+@Schema(description = "The results of a request to retrieve a list of party snapshots")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "partySnapshots",
@@ -49,12 +50,12 @@ import javax.xml.bind.annotation.XmlType;
   "pageIndex",
   "pageSize"
 })
-@XmlRootElement(name = "Snapshots", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "PartySnapshots", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "Snapshots",
+    name = "PartySnapshots",
     namespace = "http://inception.digital/party",
     propOrder = {
-      "snapshots",
+      "partySnapshots",
       "total",
       "partyId",
       "from",
@@ -65,12 +66,12 @@ import javax.xml.bind.annotation.XmlType;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
-public class Snapshots implements Serializable {
+public class PartySnapshots implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The optional date to retrieve the snapshots from. */
-  @Schema(description = "The optional date to retrieve the snapshots from")
+  /** The optional date to retrieve the party snapshots from. */
+  @Schema(description = "The optional date to retrieve the party snapshots from")
   @JsonProperty
   @XmlElement(name = "From")
   private LocalDate from;
@@ -93,48 +94,48 @@ public class Snapshots implements Serializable {
   @XmlElement(name = "PartyId", required = true)
   private UUID partyId;
 
-  /** The snapshots. */
-  @Schema(description = "The snapshots", required = true)
+  /** The party snapshots. */
+  @Schema(description = "The party snapshots", required = true)
   @JsonProperty(required = true)
-  @XmlElementWrapper(name = "Snapshots", required = true)
-  @XmlElement(name = "Snapshot", required = true)
-  private List<Snapshot> snapshots;
+  @XmlElementWrapper(name = "PartySnapshots", required = true)
+  @XmlElement(name = "PartySnapshot", required = true)
+  private List<PartySnapshot> partySnapshots;
 
-  /** The optional sort direction that was applied to the snapshots. */
-  @Schema(description = "The optional sort direction that was applied to the snapshots")
+  /** The optional sort direction that was applied to the party snapshots. */
+  @Schema(description = "The optional sort direction that was applied to the party snapshots")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The optional date to retrieve the snapshots to. */
-  @Schema(description = "The optional date to retrieve the snapshots to")
+  /** The optional date to retrieve the party snapshots to. */
+  @Schema(description = "The optional date to retrieve the party snapshots to")
   @JsonProperty
   @XmlElement(name = "To")
   private LocalDate to;
 
-  /** The total number of snapshots. */
-  @Schema(description = "The total number of snapshots", required = true)
+  /** The total number of party snapshots. */
+  @Schema(description = "The total number of party snapshots", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>Snapshots</b>. */
-  public Snapshots() {}
+  /** Constructs a new <b>PartySnapshots</b>. */
+  public PartySnapshots() {}
 
   /**
-   * Constructs a new <b>Snapshots</b>.
+   * Constructs a new <b>PartySnapshots</b>.
    *
-   * @param snapshots the snapshots
-   * @param total the total number of snapshots
+   * @param partySnapshots the party snapshots
+   * @param total the total number of party snapshots
    * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @param from the optional date to retrieve the snapshots from
-   * @param to the optional date to retrieve the snapshots to
-   * @param sortDirection the optional sort direction that was applied to the snapshots
+   * @param from the optional date to retrieve the party snapshots from
+   * @param to the optional date to retrieve the party snapshots to
+   * @param sortDirection the optional sort direction that was applied to the party snapshots
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    */
-  public Snapshots(
-      List<Snapshot> snapshots,
+  public PartySnapshots(
+      List<PartySnapshot> partySnapshots,
       long total,
       UUID partyId,
       LocalDate from,
@@ -142,7 +143,7 @@ public class Snapshots implements Serializable {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
-    this.snapshots = snapshots;
+    this.partySnapshots = partySnapshots;
     this.total = total;
     this.partyId = partyId;
     this.from = from;
@@ -153,9 +154,9 @@ public class Snapshots implements Serializable {
   }
 
   /**
-   * Returns the optional date to retrieve the snapshots from.
+   * Returns the optional date to retrieve the party snapshots from.
    *
-   * @return the optional date to retrieve the snapshots from
+   * @return the optional date to retrieve the party snapshots from
    */
   public LocalDate getFrom() {
     return from;
@@ -189,36 +190,36 @@ public class Snapshots implements Serializable {
   }
 
   /**
-   * Returns the snapshots.
+   * Returns the party snapshots.
    *
-   * @return the snapshots
+   * @return the party snapshots
    */
-  public List<Snapshot> getSnapshots() {
-    return snapshots;
+  public List<PartySnapshot> getPartySnapshots() {
+    return partySnapshots;
   }
 
   /**
-   * Returns the optional sort direction that was applied to the snapshots.
+   * Returns the optional sort direction that was applied to the party snapshots.
    *
-   * @return the optional sort direction that was applied to the snapshots
+   * @return the optional sort direction that was applied to the party snapshots
    */
   public SortDirection getSortDirection() {
     return sortDirection;
   }
 
   /**
-   * Returns the optional date to retrieve the snapshots to.
+   * Returns the optional date to retrieve the party snapshots to.
    *
-   * @return the optional date to retrieve the snapshots to
+   * @return the optional date to retrieve the party snapshots to
    */
   public LocalDate getTo() {
     return to;
   }
 
   /**
-   * Returns the total number of snapshots.
+   * Returns the total number of party snapshots.
    *
-   * @return the total number of snapshots
+   * @return the total number of party snapshots
    */
   public Long getTotal() {
     return total;
