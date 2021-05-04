@@ -1286,29 +1286,6 @@ COMMENT ON COLUMN party.parties.type IS 'The code for the party type';
 COMMENT ON COLUMN party.parties.updated IS 'The date and time the party was last updated';
 
 
-CREATE TABLE party.party_snapshots (
-  timestamp TIMESTAMP NOT NULL,
-  data      CLOB      NOT NULL,
-  id        UUID      NOT NULL,
-  party_id  UUID      NOT NULL,
-
-  PRIMARY KEY (id),
-  CONSTRAINT party_snapshots_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
-);
-
-CREATE INDEX party_snapshots_timestamp_ix ON party.party_snapshots(timestamp);
-
-CREATE INDEX party_snapshots_party_id_ix ON party.party_snapshots(party_id);
-
-COMMENT ON COLUMN party.party_snapshots.timestamp IS 'The date and time the party snapshot was created';
-
-COMMENT ON COLUMN party.party_snapshots.data IS 'The JSON data for the party';
-
-COMMENT ON COLUMN party.party_snapshots.id IS 'The Universally Unique Identifier (UUID) for the party snapshot';
-
-COMMENT ON COLUMN party.party_snapshots.party_id IS 'The Universally Unique Identifier (UUID) for the party the party snapshot is associated with';
-
-
 CREATE TABLE party.organizations (
   countries_of_tax_residence VARCHAR(30),
   id                         UUID          NOT NULL,
@@ -1336,7 +1313,7 @@ CREATE TABLE party.persons (
   highest_qualification_type VARCHAR(30),
   id                         UUID          NOT NULL,
   initials                   VARCHAR(20),
-  language                   VARCHAR(30),  
+  language                   CHAR(2),
   maiden_name                VARCHAR(100),
   marital_status             VARCHAR(30),
   marital_status_date        DATE,
@@ -1349,8 +1326,6 @@ CREATE TABLE party.persons (
   residency_status           VARCHAR(30),
   residential_type           VARCHAR(30),
   surname                    VARCHAR(100),
-  tax_number                 VARCHAR(30),
-  tax_number_type            VARCHAR(30),
   time_zone                  VARCHAR(50),
   title                      VARCHAR(30),
 
@@ -1360,13 +1335,17 @@ CREATE TABLE party.persons (
 
 CREATE INDEX persons_date_of_birth_ix ON party.persons(date_of_birth);
 
+CREATE INDEX persons_maiden_name_ix ON party.persons(maiden_name);
+
+CREATE INDEX persons_surname_ix ON party.persons(surname);
+
 COMMENT ON COLUMN party.persons.countries_of_citizenship IS 'The comma-delimited ISO 3166-1 alpha-2 codes for the countries of citizenship for the person';
 
 COMMENT ON COLUMN party.persons.countries_of_tax_residence IS 'The comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the person';
 
-COMMENT ON COLUMN party.persons.country_of_birth IS 'The code for the country of birth for the person';
+COMMENT ON COLUMN party.persons.country_of_birth IS 'The ISO 3166-1 alpha-2 code for the country of birth for the person';
 
-COMMENT ON COLUMN party.persons.country_of_residence IS 'The code for the country of residence for the person';
+COMMENT ON COLUMN party.persons.country_of_residence IS 'The ISO 3166-1 alpha-2 code for the country of residence for the person';
 
 COMMENT ON COLUMN party.persons.date_of_birth IS 'The date of birth for the person';
 
@@ -1386,7 +1365,7 @@ COMMENT ON COLUMN party.persons.id IS 'The Universally Unique Identifier (UUID) 
 
 COMMENT ON COLUMN party.persons.initials IS 'The initials for the person';
 
-COMMENT ON COLUMN party.persons.language IS 'The code for the language for the person';
+COMMENT ON COLUMN party.persons.language IS 'The ISO 639-1 alpha-2 code for the language for the person';
 
 COMMENT ON COLUMN party.persons.maiden_name IS 'The maiden name for the person';
 
@@ -1412,10 +1391,6 @@ COMMENT ON COLUMN party.persons.residential_type IS 'The code for the residentia
 
 COMMENT ON COLUMN party.persons.surname IS 'The surname for the person';
 
-COMMENT ON COLUMN party.persons.tax_number IS 'The tax number for the person';
-
-COMMENT ON COLUMN party.persons.tax_number_type IS 'The code for the tax number type for the person';
-
 COMMENT ON COLUMN party.persons.time_zone IS 'The time zone ID for the person';
 
 COMMENT ON COLUMN party.persons.title IS 'The code for the title for the person';
@@ -1425,14 +1400,14 @@ CREATE TABLE party.attributes (
   created       TIMESTAMP    NOT NULL,
   party_id      UUID         NOT NULL,
   type          VARCHAR(30)  NOT NULL,
-  updated       TIMESTAMP,
-  boolean_value DOUBLE,
+  boolean_value BOOLEAN,
   date_value    DATE,
   decimal_value DECIMAL(18,8),
   double_value  DOUBLE,
   integer_value INTEGER,
   string_value  VARCHAR(200),
   unit          VARCHAR(30),
+  updated       TIMESTAMP,
 
   PRIMARY KEY (party_id, type),
   CONSTRAINT attributes_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
@@ -1445,8 +1420,6 @@ COMMENT ON COLUMN party.attributes.created IS 'The date and time the attribute w
 COMMENT ON COLUMN party.attributes.party_id IS 'The Universally Unique Identifier (UUID) for the party the attribute is associated with';
 
 COMMENT ON COLUMN party.attributes.type IS 'The code for the attribute type';
-
-COMMENT ON COLUMN party.attributes.updated IS 'The date and time the attribute was last updated';
 
 COMMENT ON COLUMN party.attributes.boolean_value IS 'The boolean value for the attribute';
 
@@ -1461,6 +1434,8 @@ COMMENT ON COLUMN party.attributes.integer_value IS 'The integer value for the a
 COMMENT ON COLUMN party.attributes.string_value IS 'The string value for the attribute';
 
 COMMENT ON COLUMN party.attributes.unit IS 'The code for the measurement unit for the attribute';
+
+COMMENT ON COLUMN party.attributes.updated IS 'The date and time the attribute was last updated';
 
 
 CREATE TABLE party.consents (
@@ -1493,7 +1468,7 @@ COMMENT ON COLUMN party.consents.updated IS 'The date and time the consent was l
 CREATE TABLE party.contact_mechanisms (
   created  TIMESTAMP    NOT NULL,
   party_id UUID         NOT NULL,
-  purposes              VARCHAR(310),
+  purposes VARCHAR(310),
   role     VARCHAR(30)  NOT NULL,
   type     VARCHAR(30)  NOT NULL,
   updated  TIMESTAMP,
@@ -1595,19 +1570,21 @@ CREATE INDEX employments_person_id_ix ON party.employments(person_id);
 
 COMMENT ON COLUMN party.employments.created IS 'The date and time the employment was created';
 
+COMMENT ON COLUMN party.employments.employer_address_city IS 'The employer address city';
+
+COMMENT ON COLUMN party.employments.employer_address_country IS 'The ISO 3166-1 alpha-2 code for the employer address country';
+
 COMMENT ON COLUMN party.employments.employer_address_line1 IS 'The employer address line 1';
 
 COMMENT ON COLUMN party.employments.employer_address_line2 IS 'The employer address line 2';
 
 COMMENT ON COLUMN party.employments.employer_address_line3 IS 'The employer address line 3';
 
-COMMENT ON COLUMN party.employments.employer_address_suburb IS 'The employer address suburb';
-
-COMMENT ON COLUMN party.employments.employer_address_city IS 'The employer address city';
+COMMENT ON COLUMN party.employments.employer_address_postal_code IS 'The employer address postal code';
 
 COMMENT ON COLUMN party.employments.employer_address_region IS 'The ISO 3166-2 subdivision code for the employer address region';
 
-COMMENT ON COLUMN party.employments.employer_address_country IS 'The ISO 3166-1 alpha-2 code for the employer address country';
+COMMENT ON COLUMN party.employments.employer_address_suburb IS 'The employer address suburb';
 
 COMMENT ON COLUMN party.employments.employer_contact_person IS 'The employer contact person';
 
@@ -1634,21 +1611,18 @@ COMMENT ON COLUMN party.employments.updated IS 'The date and time the employment
 
 CREATE TABLE party.external_references (
   created          TIMESTAMP    NOT NULL,
-  id               UUID         NOT NULL,
   party_id         UUID         NOT NULL,
   type             VARCHAR(30)  NOT NULL,
   updated          TIMESTAMP,
   value            VARCHAR(100) NOT NULL,
 
-  PRIMARY KEY (id),
+  PRIMARY KEY (party_id, type),
   CONSTRAINT external_references_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
 CREATE INDEX external_references_party_id_ix ON party.external_references(party_id);
 
 COMMENT ON COLUMN party.external_references.created IS 'The date and time the external reference was created';
-
-COMMENT ON COLUMN party.external_references.id IS 'The Universally Unique Identifier (UUID) for the external reference';
 
 COMMENT ON COLUMN party.external_references.party_id IS 'The Universally Unique Identifier (UUID) for the party the external reference is associated with';
 
@@ -1660,7 +1634,7 @@ COMMENT ON COLUMN party.external_references.value IS 'The value for the external
 
 
 CREATE TABLE party.identity_documents (
-  country_of_issue VARCHAR(2) NOT NULL,
+  country_of_issue CHAR(2)     NOT NULL,
   created          TIMESTAMP   NOT NULL,
   date_of_expiry   DATE,
   date_of_issue    DATE        NOT NULL,
@@ -1765,7 +1739,7 @@ CREATE TABLE party.physical_addresses (
   city                VARCHAR(50),
   complex_name        VARCHAR(50),
   complex_unit_number VARCHAR(20),
-  country             VARCHAR(2)    NOT NULL,
+  country             CHAR(2)       NOT NULL,
   created             TIMESTAMP     NOT NULL,
   farm_description    VARCHAR(50),
   farm_name           VARCHAR(50),
@@ -1929,7 +1903,7 @@ CREATE TABLE party.relationship_properties (
   relationship_id UUID         NOT NULL,
   type            VARCHAR(30)  NOT NULL,
   updated         TIMESTAMP,
-  boolean_value   DOUBLE,
+  boolean_value   BOOLEAN,
   date_value      DATE,
   decimal_value   DECIMAL(18,8),
   double_value    DOUBLE,
@@ -1964,7 +1938,7 @@ COMMENT ON COLUMN party.relationship_properties.string_value IS 'The string valu
 
 
 CREATE TABLE party.residence_permits (
-  country_of_issue VARCHAR(2)  NOT NULL,
+  country_of_issue CHAR(2)     NOT NULL,
   created          TIMESTAMP   NOT NULL,
   date_of_expiry   DATE,
   date_of_issue    DATE        NOT NULL,
@@ -2054,6 +2028,31 @@ COMMENT ON COLUMN party.segment_allocations.party_id IS 'The Universally Unique 
 COMMENT ON COLUMN party.segment_allocations.segment IS 'The code for the segment';
 
 COMMENT ON COLUMN party.segment_allocations.updated IS 'The date and time the segment allocation was last updated';
+
+
+CREATE TABLE party.snapshots (
+  id          UUID        NOT NULL,
+  entity_type VARCHAR(30) NOT NULL,
+  entity_id   UUID        NOT NULL,
+  data        CLOB        NOT NULL,
+  timestamp   TIMESTAMP   NOT NULL,
+
+  PRIMARY KEY (id)
+);
+
+CREATE INDEX snapshots_timestamp_ix ON party.snapshots(timestamp);
+
+CREATE INDEX snapshots_entity_type_id_ix ON party.snapshots(entity_type, entity_id);
+
+COMMENT ON COLUMN party.snapshots.id IS 'The Universally Unique Identifier (UUID) for the snapshot';
+
+COMMENT ON COLUMN party.snapshots.entity_type IS 'The code for the type of entity';
+
+COMMENT ON COLUMN party.snapshots.entity_id IS 'The Universally Unique Identifier (UUID) for the entity';
+
+COMMENT ON COLUMN party.snapshots.timestamp IS 'The date and time the snapshot was created';
+
+COMMENT ON COLUMN party.snapshots.data IS 'The JSON data for the entity';
 
 
 CREATE TABLE party.sources_of_funds (
@@ -2149,13 +2148,12 @@ COMMENT ON COLUMN party.statuses.updated IS 'The date and time the status was la
 CREATE TABLE party.tax_numbers (
   country_of_issue VARCHAR(30) NOT NULL,
   created          TIMESTAMP   NOT NULL,
-  id               UUID        NOT NULL,
   number           VARCHAR(30) NOT NULL,
   party_id         UUID        NOT NULL,
   type             VARCHAR(30) NOT NULL,
   updated          TIMESTAMP,
 
-  PRIMARY KEY (id),
+  PRIMARY KEY (party_id, type),
   CONSTRAINT tax_numbers_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
@@ -2164,8 +2162,6 @@ CREATE INDEX tax_numbers_party_id_ix ON party.tax_numbers(party_id);
 COMMENT ON COLUMN party.tax_numbers.country_of_issue IS 'The code for the country of issue for the tax number';
 
 COMMENT ON COLUMN party.tax_numbers.created IS 'The date and time the tax number was created';
-
-COMMENT ON COLUMN party.tax_numbers.id IS 'The Universally Unique Identifier (UUID) for the tax number';
 
 COMMENT ON COLUMN party.tax_numbers.number IS 'The tax number';
 
@@ -2177,31 +2173,6 @@ COMMENT ON COLUMN party.tax_numbers.updated IS 'The date and time the tax number
 
 
 
-
-
-
-
--- CREATE TABLE party.relationships (
---   created          TIMESTAMP   NOT NULL,
---   party_id         UUID        NOT NULL,
---   related_party_id UUID        NOT NULL,
---   type             VARCHAR(30) NOT NULL,
---   updated          TIMESTAMP,
---
---   PRIMARY KEY (party_id, related_party_id, purpose),
---   CONSTRAINT relationships_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE,
---   CONSTRAINT relationships_related_party_fk FOREIGN KEY (related_party_id) REFERENCES party.parties(id) ON DELETE CASCADE
--- );
---
--- CREATE INDEX relationships_party_id_ix ON party.relationships(party_id);
---
--- CREATE INDEX relationships_related_party_id_ix ON party.relationships(related_party_id);
---
--- COMMENT ON COLUMN party.relationships.created IS 'The date and time the relationship was created';
---
--- COMMENT ON COLUMN party.relationships.party_id IS 'The Universally Unique Identifier (UUID) for the party the relationship is associated with';
---
--- COMMENT ON COLUMN party.relationships.related_party_id IS 'The Universally Unique Identifier (UUID) for the party the relationship is associated with';
 
 
 
@@ -2439,6 +2410,13 @@ INSERT INTO party.employment_types (employment_status, code, locale_id, sort_ind
   VALUES ('other', 'not_specified', 'en-ZA', 10, 'Not Specified', 'Not Specified');
 INSERT INTO party.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('other', 'unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+
+
+INSERT INTO party.external_reference_types (code, locale_id, name, description, party_types)
+  VALUES ('legacy_customer_code', 'en-US', 'Legacy Customer Code', 'Legacy Customer Code', 'organization,person');
+
+INSERT INTO party.external_reference_types (code, locale_id, name, description, party_types)
+  VALUES ('legacy_customer_code', 'en-ZA', 'Legacy Customer Code', 'Legacy Customer Code', 'organization,person');
 
 
 INSERT INTO party.fields_of_study (code, locale_id, name, description)

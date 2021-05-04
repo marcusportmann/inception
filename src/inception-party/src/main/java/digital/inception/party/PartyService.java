@@ -63,7 +63,7 @@ public class PartyService implements IPartyService {
   private static final int MAX_FILTERED_PERSONS = 100;
 
   /** The maximum number of snapshots. */
-  private static final int MAX_PARTY_SNAPSHOTS = 100;
+  private static final int MAX_SNAPSHOTS = 100;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(PartyService.class);
@@ -80,14 +80,14 @@ public class PartyService implements IPartyService {
   /** The Party Repository. */
   private final PartyRepository partyRepository;
 
-  /** The Party Snapshot Repository. */
-  private final PartySnapshotRepository partySnapshotRepository;
-
   /** The Person Repository. */
   private final PersonRepository personRepository;
 
   /** The Relationship Repository. */
   private final RelationshipRepository relationshipRepository;
+
+  /** The Snapshot Repository. */
+  private final SnapshotRepository snapshotRepository;
 
   /** The JSR-303 validator. */
   private final Validator validator;
@@ -102,9 +102,9 @@ public class PartyService implements IPartyService {
    * @param validator the JSR-303 validator
    * @param organizationRepository the Organization Repository
    * @param partyRepository the Party Repository
-   * @param partySnapshotRepository the Party Snapshot Repository
    * @param personRepository the Person Repository
    * @param relationshipRepository the Relationship Repository
+   * @param snapshotRepository the Snapshot Repository
    */
   public PartyService(
       ApplicationContext applicationContext,
@@ -112,17 +112,17 @@ public class PartyService implements IPartyService {
       Validator validator,
       OrganizationRepository organizationRepository,
       PartyRepository partyRepository,
-      PartySnapshotRepository partySnapshotRepository,
       PersonRepository personRepository,
-      RelationshipRepository relationshipRepository) {
+      RelationshipRepository relationshipRepository,
+      SnapshotRepository snapshotRepository) {
     this.applicationContext = applicationContext;
     this.jackson2ObjectMapperBuilder = jackson2ObjectMapperBuilder;
     this.validator = validator;
     this.organizationRepository = organizationRepository;
     this.partyRepository = partyRepository;
     this.personRepository = personRepository;
-    this.partySnapshotRepository = partySnapshotRepository;
     this.relationshipRepository = relationshipRepository;
+    this.snapshotRepository = snapshotRepository;
   }
 
   /**
@@ -166,8 +166,8 @@ public class PartyService implements IPartyService {
 
       organizationRepository.saveAndFlush(organization);
 
-      partySnapshotRepository.saveAndFlush(
-          new PartySnapshot(organization.getId(), organizationJson));
+      snapshotRepository.saveAndFlush(
+          new Snapshot(EntityType.ORGANIZATION, organization.getId(), organizationJson));
 
       return organization;
     } catch (DuplicateOrganizationException e) {
@@ -222,7 +222,7 @@ public class PartyService implements IPartyService {
 
       personRepository.saveAndFlush(person);
 
-      partySnapshotRepository.saveAndFlush(new PartySnapshot(person.getId(), personJson));
+      snapshotRepository.saveAndFlush(new Snapshot(EntityType.PERSON, person.getId(), personJson));
 
       return person;
     } catch (DuplicatePersonException e) {
@@ -268,15 +268,15 @@ public class PartyService implements IPartyService {
       }
 
       // Serialize the relationship object as JSON
-      //      ObjectMapper objectMapper =
-      //          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
-      //
-      //      String relationshipJson = objectMapper.writeValueAsString(relationship);
+      ObjectMapper objectMapper =
+          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
+
+      String relationshipJson = objectMapper.writeValueAsString(relationship);
 
       relationshipRepository.saveAndFlush(relationship);
 
-      // partySnapshotRepository.saveAndFlush(new PartySnapshot(relationship.getId(),
-      // relationshipJson));
+      snapshotRepository.saveAndFlush(
+          new Snapshot(EntityType.RELATIONSHIP, relationship.getId(), relationshipJson));
 
       return relationship;
     } catch (DuplicateRelationshipException e) {
@@ -598,99 +598,6 @@ public class PartyService implements IPartyService {
   }
 
   /**
-   * Retrieve the party snapshots for the party.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @param from the optional date to retrieve the party snapshots from
-   * @param to the optional date to retrieve the party snapshots to
-   * @param sortDirection the optional sort direction to apply to the party snapshots
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the party snapshots
-   */
-  @Override
-  @Transactional
-  public PartySnapshots getPartySnapshots(
-      UUID tenantId,
-      UUID partyId,
-      LocalDate from,
-      LocalDate to,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize)
-      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
-
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
-
-    if (sortDirection == null) {
-      sortDirection = SortDirection.ASCENDING;
-    }
-
-    try {
-      Optional<UUID> partyTenantId = self.getTenantIdForParty(partyId);
-
-      if (partyTenantId.isEmpty() || (!Objects.equals(tenantId, partyTenantId.get()))) {
-        throw new PartyNotFoundException(tenantId, partyId);
-      }
-
-      PageRequest pageRequest;
-
-      if (pageIndex == null) {
-        pageIndex = 0;
-      }
-
-      if (pageSize == null) {
-        pageSize = MAX_FILTERED_PERSONS;
-      }
-
-      pageRequest =
-          PageRequest.of(
-              pageIndex,
-              Math.min(pageSize, MAX_FILTERED_PERSONS),
-              (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
-              "timestamp");
-
-      Page<PartySnapshot> partySnapshotPage;
-
-      if ((from != null) && (to != null)) {
-        partySnapshotPage = partySnapshotRepository.findByPartyId(partyId, pageRequest);
-      } else if (from != null) {
-        partySnapshotPage = partySnapshotRepository.findByPartyId(partyId, pageRequest);
-      } else if (to != null) {
-        partySnapshotPage = partySnapshotRepository.findByPartyId(partyId, pageRequest);
-      } else {
-        partySnapshotPage = partySnapshotRepository.findByPartyId(partyId, pageRequest);
-      }
-
-      return new PartySnapshots(
-          partySnapshotPage.toList(),
-          partySnapshotPage.getTotalElements(),
-          partyId,
-          from,
-          to,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (PartyNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the party snapshots for the party ("
-              + partyId
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  /**
    * Retrieve the person.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
@@ -807,6 +714,100 @@ public class PartyService implements IPartyService {
   }
 
   /**
+   * Retrieve the snapshots for an entity.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param entityType the type of entity
+   * @param entityId the Universally Unique Identifier (UUID) for the entity
+   * @param from the optional date to retrieve the snapshots from
+   * @param to the optional date to retrieve the snapshots to
+   * @param sortDirection the optional sort direction to apply to the snapshots
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the snapshots
+   */
+  @Override
+  @Transactional
+  public Snapshots getSnapshots(
+      UUID tenantId,
+      EntityType entityType,
+      UUID entityId,
+      LocalDate from,
+      LocalDate to,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.ASCENDING;
+    }
+
+    try {
+      PageRequest pageRequest;
+
+      if (pageIndex == null) {
+        pageIndex = 0;
+      }
+
+      if (pageSize == null) {
+        pageSize = MAX_FILTERED_PERSONS;
+      }
+
+      pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, MAX_FILTERED_PERSONS),
+              (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
+              "timestamp");
+
+      Page<Snapshot> snapshotPage;
+
+      if ((from != null) && (to != null)) {
+        snapshotPage =
+            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
+      } else if (from != null) {
+        snapshotPage =
+            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
+      } else if (to != null) {
+        snapshotPage =
+            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
+      } else {
+        snapshotPage =
+            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
+      }
+
+      return new Snapshots(
+          snapshotPage.toList(),
+          snapshotPage.getTotalElements(),
+          entityType,
+          entityId,
+          from,
+          to,
+          sortDirection,
+          pageIndex,
+          pageSize);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the snapshots for the entity ("
+              + entityId
+              + ") of type ("
+              + entityType.code()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  /**
    * Retrieve the Universally Unique Identifier (UUID) for the tenant the party is associated with.
    *
    * @param partyId the Universally Unique Identifier (UUID) for the party
@@ -866,8 +867,8 @@ public class PartyService implements IPartyService {
 
       organizationRepository.saveAndFlush(organization);
 
-      partySnapshotRepository.saveAndFlush(
-          new PartySnapshot(organization.getId(), organizationJson));
+      snapshotRepository.saveAndFlush(
+          new Snapshot(EntityType.ORGANIZATION, organization.getId(), organizationJson));
 
       return organization;
     } catch (OrganizationNotFoundException e) {
@@ -919,7 +920,7 @@ public class PartyService implements IPartyService {
 
       personRepository.saveAndFlush(person);
 
-      partySnapshotRepository.saveAndFlush(new PartySnapshot(person.getId(), personJson));
+      snapshotRepository.saveAndFlush(new Snapshot(EntityType.PERSON, person.getId(), personJson));
 
       return person;
     } catch (PersonNotFoundException e) {

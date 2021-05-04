@@ -55,13 +55,9 @@ INSERT INTO party.employment_types (employment_status, code, locale_id, tenant_i
   VALUES ('test_employment_status', 'test_employment_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 666, 'Test Employment Type', 'Test Employment Type');
 
 
-INSERT INTO party.external_reference_types (code, locale_id, name, description, party_types)
-  VALUES ('legacy_customer_code', 'en-US', 'Legacy Customer Code', 'Legacy Customer Code', 'organization,person');
 INSERT INTO party.external_reference_types (code, locale_id, tenant_id, sort_index, name, description, party_types)
   VALUES ('test_external_reference_type', 'en-US', '00000000-0000-0000-0000-000000000000', 666, 'Test External Reference Type', 'Test External Reference Type', 'organization,person');
 
-INSERT INTO party.external_reference_types (code, locale_id, name, description, party_types)
-  VALUES ('legacy_customer_code', 'en-ZA', 'Legacy Customer Code', 'Legacy Customer Code', 'organization,person');
 INSERT INTO party.external_reference_types (code, locale_id, tenant_id, sort_index, name, description, party_types)
   VALUES ('test_external_reference_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 666, 'Test External Reference Type', 'Test External Reference Type', 'organization,person');
 

@@ -598,7 +598,7 @@ public class Person extends PartyBase implements Serializable {
   public void addExternalReference(ExternalReference externalReference) {
     externalReferences.removeIf(
         existingExternalReference ->
-            Objects.equals(existingExternalReference.getId(), externalReference.getId()));
+            Objects.equals(existingExternalReference.getType(), externalReference.getType()));
 
     externalReference.setParty(this);
 
@@ -788,9 +788,6 @@ public class Person extends PartyBase implements Serializable {
    * @param taxNumber the tax number
    */
   public void addTaxNumber(TaxNumber taxNumber) {
-    taxNumbers.removeIf(
-        existingTaxNumber -> Objects.equals(existingTaxNumber.getId(), taxNumber.getId()));
-
     taxNumbers.removeIf(
         existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), taxNumber.getType()));
 
@@ -2167,15 +2164,6 @@ public class Person extends PartyBase implements Serializable {
    */
   public void removeStatusWithType(String type) {
     statuses.removeIf(existingStatus -> Objects.equals(existingStatus.getType(), type));
-  }
-
-  /**
-   * Remove the tax number with the specified ID for the person.
-   *
-   * @param id the Universally Unique Identifier (UUID) for the tax number
-   */
-  public void removeTaxNumberWithId(UUID id) {
-    taxNumbers.removeIf(existingTaxNumber -> Objects.equals(existingTaxNumber.getId(), id));
   }
 
   /**

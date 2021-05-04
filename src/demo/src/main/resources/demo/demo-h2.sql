@@ -425,8 +425,8 @@ INSERT INTO party.preferences(party_id, type, value, created)
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'correspondence_language', 'EN', NOW());
 INSERT INTO party.preferences(party_id, type, value, created)
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'time_to_contact', 'anytime', NOW());
-INSERT INTO party.tax_numbers (id, party_id, type, number, country_of_issue, created)
-  VALUES ('60166574-6564-468a-b845-8a5c127a4345', '00166574-6564-468a-b845-8a5c127a4345', 'za_income_tax_number', '1234567890', 'ZA', NOW());
+INSERT INTO party.tax_numbers (party_id, type, number, country_of_issue, created)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'za_income_tax_number', '1234567890', 'ZA', NOW());
 
 
 

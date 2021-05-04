@@ -21,16 +21,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.github.f4b6a3.uuid.UuidCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -49,26 +48,20 @@ import org.hibernate.annotations.UpdateTimestamp;
  * The <b>ExternalReference</b> class holds the information for an external reference for an
  * organization or person.
  *
- * <p>The primary key for the external reference entity (ID) is a surrogate key to support the
- * management of related data in one or more external stores, e.g. an image of a supporting document
- * for the external reference stored in an enterprise content management repository. This approach
- * allows an entity to be modified without impacting the related data's referential integrity, for
- * example, when correcting an error that occurred during the initial capture of the information for
- * an external reference.
- *
  * @author Marcus Portmann
  */
 @Schema(description = "An external reference for an organization or person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "type", "value"})
+@JsonPropertyOrder({"type", "value"})
 @XmlRootElement(name = "ExternalReference", namespace = "http://inception.digital/party")
 @XmlType(
     name = "ExternalReference",
     namespace = "http://inception.digital/party",
-    propOrder = {"id", "type", "value"})
+    propOrder = {"type", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "external_references")
+@IdClass(ExternalReferenceId.class)
 public class ExternalReference implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -80,21 +73,11 @@ public class ExternalReference implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The Universally Unique Identifier (UUID) for the external reference. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the external reference",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Id
-  @Column(name = "id", nullable = false)
-  private UUID id;
-
   /** The party the external reference is associated with. */
   @Schema(hidden = true)
   @JsonBackReference("externalReferenceReference")
   @XmlTransient
+  @Id
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "party_id")
   private PartyBase party;
@@ -105,6 +88,7 @@ public class ExternalReference implements Serializable {
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Size(min = 1, max = 30)
+  @Id
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
@@ -134,7 +118,6 @@ public class ExternalReference implements Serializable {
    * @param value the value for the external reference
    */
   public ExternalReference(String type, String value) {
-    this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
     this.value = value;
   }
@@ -161,7 +144,7 @@ public class ExternalReference implements Serializable {
 
     ExternalReference other = (ExternalReference) object;
 
-    return Objects.equals(id, other.id);
+    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
@@ -171,15 +154,6 @@ public class ExternalReference implements Serializable {
    */
   public LocalDateTime getCreated() {
     return created;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) for the external reference.
-   *
-   * @return the Universally Unique Identifier (UUID) for the external reference
-   */
-  public UUID getId() {
-    return id;
   }
 
   /**
@@ -226,16 +200,7 @@ public class ExternalReference implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (id == null) ? 0 : id.hashCode();
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) for the external reference.
-   *
-   * @param id the Universally Unique Identifier (UUID) for the external reference
-   */
-  public void setId(UUID id) {
-    this.id = id;
+    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 
   /**

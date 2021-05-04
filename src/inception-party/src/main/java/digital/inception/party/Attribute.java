@@ -363,6 +363,31 @@ public class Attribute implements Serializable {
   }
 
   /**
+   * Returns the name of the attribute for the specified value type.
+   *
+   * @param valueType the value type
+   * @return the name of the attribute
+   */
+  public static String getAttributeNameForValueType(ValueType valueType) {
+    switch (valueType) {
+      case BOOLEAN:
+        return "booleanValue";
+      case DATE:
+        return "dateValue";
+      case DECIMAL:
+        return "decimalValue";
+      case DOUBLE:
+        return "doubleValue";
+      case INTEGER:
+        return "integerValue";
+      case STRING:
+        return "stringValue";
+      default:
+        return "unknown";
+    }
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -490,15 +515,16 @@ public class Attribute implements Serializable {
   /**
    * Returns whether the attribute has a valid value.
    *
+   * @param valueType the value type
    * @return <b>true</b> if the attribute has a valid value or <b>false</b> otherwise
    */
-  public boolean hasValue() {
-    return StringUtils.hasText(stringValue)
-        || (booleanValue != null)
-        || (dateValue != null)
-        || (decimalValue != null)
-        || (doubleValue != null)
-        || (integerValue != null);
+  public boolean hasValue(ValueType valueType) {
+    return (((valueType == ValueType.STRING) && StringUtils.hasText(stringValue))
+        || ((valueType == ValueType.BOOLEAN) && (booleanValue != null))
+        || ((valueType == ValueType.DATE) && (dateValue != null))
+        || ((valueType == ValueType.DECIMAL) && (decimalValue != null))
+        || ((valueType == ValueType.DOUBLE) && (doubleValue != null))
+        || ((valueType == ValueType.INTEGER) && (integerValue != null)));
   }
 
   /**

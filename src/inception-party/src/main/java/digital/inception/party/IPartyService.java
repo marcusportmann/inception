@@ -153,28 +153,6 @@ public interface IPartyService {
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the party snapshots for the party.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @param from the optional date to retrieve the party snapshots from
-   * @param to the optional date to retrieve the party snapshots to
-   * @param sortDirection the optional sort direction to apply to the party snapshots
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the party snapshots
-   */
-  PartySnapshots getPartySnapshots(
-      UUID tenantId,
-      UUID partyId,
-      LocalDate from,
-      LocalDate to,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize)
-      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
-
-  /**
    * Retrieve the person.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
@@ -199,6 +177,30 @@ public interface IPartyService {
       UUID tenantId,
       String filter,
       PersonSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the snapshots for an entity.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param entityType the type of entity
+   * @param entityId the Universally Unique Identifier (UUID) for the entity
+   * @param from the optional date to retrieve the snapshots from
+   * @param to the optional date to retrieve the snapshots to
+   * @param sortDirection the optional sort direction to apply to the snapshots
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the snapshots
+   */
+  Snapshots getSnapshots(
+      UUID tenantId,
+      EntityType entityType,
+      UUID entityId,
+      LocalDate from,
+      LocalDate to,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)

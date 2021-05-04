@@ -19,6 +19,7 @@ package digital.inception.party;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -62,6 +63,16 @@ public interface IPartyReferenceService {
    * @return the attribute type category reference data
    */
   List<AttributeTypeCategory> getAttributeTypeCategories() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the value type for the first attribute type with the specified code for any tenant or
+   * locale.
+   *
+   * @param attributeTypeCode the code for the attribute type
+   * @return the value type for the attribute type
+   */
+  Optional<ValueType> getAttributeTypeValueType(String attributeTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Retrieve the attribute type reference data for a specific locale.
@@ -757,6 +768,16 @@ public interface IPartyReferenceService {
    * @return the race reference data
    */
   List<Race> getRaces() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the value type for the first relationship property type with the specified code for
+   * any tenant or locale.
+   *
+   * @param relationshipPropertyTypeCode the code for the relationship property type
+   * @return the value type for the relationship property type
+   */
+  Optional<ValueType> getRelationshipPropertyTypeValueType(String relationshipPropertyTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Retrieve the relationship property type reference data for a specific locale.

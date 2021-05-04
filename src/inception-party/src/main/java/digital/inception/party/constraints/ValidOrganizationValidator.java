@@ -32,6 +32,7 @@ import digital.inception.party.RoleTypePreferenceTypeConstraint;
 import digital.inception.party.SegmentAllocation;
 import digital.inception.party.Status;
 import digital.inception.party.TaxNumber;
+import digital.inception.party.ValueType;
 import digital.inception.reference.IReferenceService;
 import java.util.Optional;
 import javax.validation.ConstraintValidator;
@@ -132,6 +133,24 @@ public class ValidOrganizationValidator extends PartyValidator
                         "{digital.inception.party.constraints.ValidOrganization.invalidUnitForAttributeType.message}")
                     .addPropertyNode("attributes")
                     .addPropertyNode("unit")
+                    .inIterable()
+                    .addConstraintViolation();
+
+                isValid = false;
+              }
+
+              Optional<ValueType> valueTypeOptional =
+                  getPartyReferenceService().getAttributeTypeValueType(attribute.getType());
+
+              if (valueTypeOptional.isPresent() && (!attribute.hasValue(valueTypeOptional.get()))) {
+                hibernateConstraintValidatorContext
+                    .addMessageParameter("valueType", valueTypeOptional.get().code())
+                    .addMessageParameter("attributeType", attribute.getType())
+                    .buildConstraintViolationWithTemplate(
+                        "{digital.inception.party.constraints.ValidOrganization.invalidValueForAttributeType.message}")
+                    .addPropertyNode("attributes")
+                    .addPropertyNode(
+                        Attribute.getAttributeNameForValueType(valueTypeOptional.get()))
                     .inIterable()
                     .addConstraintViolation();
 
@@ -658,10 +677,19 @@ public class ValidOrganizationValidator extends PartyValidator
                 organization.getAttributeWithType(
                     roleTypeAttributeTypeConstraint.getAttributeType());
 
-            if (attributeOptional.isEmpty() || (!attributeOptional.get().hasValue())) {
+            Optional<ValueType> valueTypeOptional =
+                getPartyReferenceService()
+                    .getAttributeTypeValueType(roleTypeAttributeTypeConstraint.getAttributeType());
+
+            if (attributeOptional.isEmpty()
+                || (valueTypeOptional.isPresent()
+                    && (!attributeOptional.get().hasValue(valueTypeOptional.get())))) {
               hibernateConstraintValidatorContext
                   .addMessageParameter(
                       "attributeType", roleTypeAttributeTypeConstraint.getAttributeType())
+                  .addMessageParameter(
+                      "valueType",
+                      valueTypeOptional.isPresent() ? valueTypeOptional.get().code() : "unknown")
                   .addMessageParameter("roleType", roleType)
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidParty.attributeTypeRequiredForRoleType.message}")

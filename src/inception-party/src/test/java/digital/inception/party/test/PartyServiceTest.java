@@ -31,6 +31,7 @@ import digital.inception.party.ContactMechanismRole;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.Education;
 import digital.inception.party.Employment;
+import digital.inception.party.EntityType;
 import digital.inception.party.ExternalReference;
 import digital.inception.party.IPartyService;
 import digital.inception.party.IdentityDocument;
@@ -56,13 +57,14 @@ import digital.inception.party.Preference;
 import digital.inception.party.ResidencePermit;
 import digital.inception.party.Role;
 import digital.inception.party.SegmentAllocation;
-import digital.inception.party.PartySnapshots;
+import digital.inception.party.Snapshots;
 import digital.inception.party.SourceOfFunds;
 import digital.inception.party.SourceOfWealth;
 import digital.inception.party.Status;
 import digital.inception.party.TaxNumber;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
@@ -181,7 +183,8 @@ public class PartyServiceTest {
     person.setTimeZone("Africa/Johannesburg");
     person.setTitle("mrs");
 
-    person.addAttribute(new Attribute("weight", 80, MeasurementUnit.METRIC_KILOGRAM));
+    person.addAttribute(
+        new Attribute("weight", new BigDecimal("82.6"), MeasurementUnit.METRIC_KILOGRAM));
 
     assertTrue(person.hasAttributeWithType("weight"));
 
@@ -190,7 +193,7 @@ public class PartyServiceTest {
         "Failed to confirm that the person has an attribute with type (weight)");
 
     person.setCountryOfTaxResidence("ZA");
-    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "123456789", "ZA"));
 
     person.addContactMechanism(
         new ContactMechanism(
@@ -456,7 +459,7 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("correspondence_language", "EN"));
 
-    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "123456789", "ZA"));
 
     partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
   }
@@ -1340,7 +1343,7 @@ public class PartyServiceTest {
         partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        3,
+        4,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid person");
   }
@@ -1803,7 +1806,7 @@ public class PartyServiceTest {
     assertTrue(organization.hasIdentityDocumentWithType("za_company_registration"));
 
     organization.setCountryOfTaxResidence("ZA");
-    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "123456789", "ZA"));
 
     partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -1823,9 +1826,10 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, filteredOrganizations.getOrganizations().get(0));
 
-    PartySnapshots partySnapshots =
-        partyService.getPartySnapshots(
+    Snapshots snapshots =
+        partyService.getSnapshots(
             IPartyService.DEFAULT_TENANT_ID,
+            EntityType.ORGANIZATION,
             organization.getId(),
             null,
             null,
@@ -1836,7 +1840,7 @@ public class PartyServiceTest {
     ObjectMapper objectMapper = jackson2ObjectMapperBuilder.build();
 
     Organization serializedOrganization =
-        objectMapper.readValue(partySnapshots.getPartySnapshots().get(0).getData(), Organization.class);
+        objectMapper.readValue(snapshots.getSnapshots().get(0).getData(), Organization.class);
 
     compareOrganizations(organization, serializedOrganization);
 
@@ -2030,9 +2034,10 @@ public class PartyServiceTest {
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
-    PartySnapshots partySnapshots =
-        partyService.getPartySnapshots(
+    Snapshots snapshots =
+        partyService.getSnapshots(
             IPartyService.DEFAULT_TENANT_ID,
+            EntityType.PERSON,
             person.getId(),
             null,
             null,
@@ -2043,7 +2048,7 @@ public class PartyServiceTest {
     ObjectMapper objectMapper = jackson2ObjectMapperBuilder.build();
 
     Person serializedPerson =
-        objectMapper.readValue(partySnapshots.getPartySnapshots().get(0).getData(), Person.class);
+        objectMapper.readValue(snapshots.getSnapshots().get(0).getData(), Person.class);
 
     comparePersons(person, serializedPerson);
 
@@ -2088,7 +2093,8 @@ public class PartyServiceTest {
     attribute.setIntegerValue(777);
     attribute.setStringValue("String Value");
 
-    person.addAttribute(new Attribute("height", 180, MeasurementUnit.METRIC_CENTIMETER));
+    person.addAttribute(
+        new Attribute("height", new BigDecimal("180"), MeasurementUnit.METRIC_CENTIMETER));
 
     person.removeContactMechanismWithRole(ContactMechanismRole.MAIN_FAX_NUMBER);
 
@@ -2121,7 +2127,7 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("time_to_contact", "anytime"));
 
-    person.addTaxNumber(new TaxNumber("uk_tax_number", "GB", "987654321"));
+    person.addTaxNumber(new TaxNumber("uk_tax_number", "987654321", "GB"));
 
     person.removeTaxNumberWithType("za_income_tax_number");
 
@@ -2855,7 +2861,7 @@ public class PartyServiceTest {
     // Person tax numbers
     Person person = getTestBasicPersonDetails();
 
-    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "123456789", "ZA"));
 
     partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2880,7 +2886,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "987654321")));
+    person.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "987654321", "ZA")));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -2893,7 +2899,7 @@ public class PartyServiceTest {
     // Organization tax numbers
     Organization organization = getTestBasicOrganizationDetails();
 
-    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "123456789", "ZA"));
 
     partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -2917,7 +2923,7 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, retrievedOrganization);
 
-    organization.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "987654321")));
+    organization.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "987654321", "ZA")));
 
     partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -2981,10 +2987,16 @@ public class PartyServiceTest {
         attribute1.getDateValue(),
         attribute2.getDateValue(),
         "The date value values for the attributes do not match");
-    assertEquals(
-        attribute1.getDecimalValue(),
-        attribute2.getDecimalValue(),
-        "The decimal value values for the attributes do not match");
+    if (attribute1.getDecimalValue() != null) {
+      assertTrue(
+          attribute1.getDecimalValue().compareTo(attribute2.getDecimalValue()) == 0,
+          "The decimal value values for the attributes do not match");
+    } else {
+      assertEquals(
+          attribute1.getDecimalValue(),
+          attribute2.getDecimalValue(),
+          "The decimal value values for the attributes do not match");
+    }
     assertEquals(
         attribute1.getDoubleValue(),
         attribute2.getDoubleValue(),
@@ -3158,10 +3170,6 @@ public class PartyServiceTest {
   private void compareExternalReferences(
       ExternalReference externalReference1, ExternalReference externalReference2) {
     assertEquals(
-        externalReference1.getId(),
-        externalReference2.getId(),
-        "The ID values for the external references do not match");
-    assertEquals(
         externalReference1.getParty(),
         externalReference2.getParty(),
         "The party values for the external references do not match");
@@ -3334,7 +3342,9 @@ public class PartyServiceTest {
 
       for (ExternalReference organization2ExternalReference :
           organization2.getExternalReferences()) {
-        if (organization1ExternalReference.getId().equals(organization2ExternalReference.getId())) {
+        if (organization1ExternalReference
+            .getType()
+            .equals(organization2ExternalReference.getType())) {
 
           compareExternalReferences(organization1ExternalReference, organization2ExternalReference);
 
@@ -3344,9 +3354,7 @@ public class PartyServiceTest {
 
       if (!foundExternalReference) {
         fail(
-            "Failed to find the external reference ("
-                + organization1ExternalReference.getId()
-                + ") with type ("
+            "Failed to find the external reference with type ("
                 + organization1ExternalReference.getType()
                 + ")");
       }
@@ -3513,20 +3521,8 @@ public class PartyServiceTest {
       boolean foundTaxNumber = false;
 
       for (TaxNumber organization2TaxNumber : organization2.getTaxNumbers()) {
-        if (organization1TaxNumber.getId().equals(organization2TaxNumber.getId())) {
-
-          assertEquals(
-              organization1TaxNumber.getCountryOfIssue(),
-              organization2TaxNumber.getCountryOfIssue(),
-              "The country of issue values for the tax numbers do not match");
-          assertEquals(
-              organization1TaxNumber.getNumber(),
-              organization2TaxNumber.getNumber(),
-              "The number values for the tax numbers do not match");
-          assertEquals(
-              organization1TaxNumber.getType(),
-              organization2TaxNumber.getType(),
-              "The type values for the tax numbers do not match");
+        if (organization1TaxNumber.getType().equals(organization2TaxNumber.getType())) {
+          compareTaxNumbers(organization1TaxNumber, organization2TaxNumber);
 
           foundTaxNumber = true;
         }
@@ -3785,7 +3781,7 @@ public class PartyServiceTest {
       boolean foundExternalReference = false;
 
       for (ExternalReference person2ExternalReference : person2.getExternalReferences()) {
-        if (person1ExternalReference.getId().equals(person2ExternalReference.getId())) {
+        if (person1ExternalReference.getType().equals(person2ExternalReference.getType())) {
 
           compareExternalReferences(person1ExternalReference, person2ExternalReference);
 
@@ -3795,9 +3791,7 @@ public class PartyServiceTest {
 
       if (!foundExternalReference) {
         fail(
-            "Failed to find the external reference ("
-                + person1ExternalReference.getId()
-                + ") with type ("
+            "Failed to find the external reference with type ("
                 + person1ExternalReference.getType()
                 + ")");
       }
@@ -3998,8 +3992,7 @@ public class PartyServiceTest {
       boolean foundTaxNumber = false;
 
       for (TaxNumber person2TaxNumber : person2.getTaxNumbers()) {
-        if (person1TaxNumber.getId().equals(person2TaxNumber.getId())) {
-
+        if (person1TaxNumber.getType().equals(person2TaxNumber.getType())) {
           compareTaxNumbers(person1TaxNumber, person2TaxNumber);
 
           foundTaxNumber = true;

@@ -20,6 +20,7 @@ import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
@@ -360,6 +361,29 @@ public class PartyReferenceService implements IPartyReferenceService {
                 (attributeTypeCategory.getTenantId() == null
                     || (Objects.equals(attributeTypeCategory.getTenantId(), tenantId))))
         .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the value type for the first attribute type with the specified code for any tenant or
+   * locale.
+   *
+   * @param attributeTypeCode the code for the attribute type
+   * @return the value type for the attribute type
+   */
+  @Override
+  @Cacheable(cacheNames = "attributeTypesValueTypes", key = "#attributeTypeCode")
+  public Optional<ValueType> getAttributeTypeValueType(String attributeTypeCode)
+      throws ServiceUnavailableException {
+    try {
+      return self.getAttributeTypes().stream()
+          .filter(attributeType -> Objects.equals(attributeType.getCode(), attributeTypeCode))
+          .findFirst()
+          .map(attributeType -> attributeType.getValueType());
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the value type for the attribute type (" + attributeTypeCode + ")",
+          e);
+    }
   }
 
   /**
@@ -1769,6 +1793,35 @@ public class PartyReferenceService implements IPartyReferenceService {
         .filter(
             race -> (race.getTenantId() == null || (Objects.equals(race.getTenantId(), tenantId))))
         .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the value type for the first relationship property type with the specified code for
+   * any tenant or locale.
+   *
+   * @param relationshipPropertyTypeCode the code for the relationship property type
+   * @return the value type for the relationship property type
+   */
+  @Override
+  @Cacheable(
+      cacheNames = "relationshipPropertyTypesValueTypes",
+      key = "#relationshipPropertyTypeCode")
+  public Optional<ValueType> getRelationshipPropertyTypeValueType(
+      String relationshipPropertyTypeCode) throws ServiceUnavailableException {
+    try {
+      return self.getRelationshipPropertyTypes().stream()
+          .filter(
+              relationshipPropertyType ->
+                  Objects.equals(relationshipPropertyType.getCode(), relationshipPropertyTypeCode))
+          .findFirst()
+          .map(relationshipPropertyType -> relationshipPropertyType.getValueType());
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the value type for the relationship property type ("
+              + relationshipPropertyTypeCode
+              + ")",
+          e);
+    }
   }
 
   /**

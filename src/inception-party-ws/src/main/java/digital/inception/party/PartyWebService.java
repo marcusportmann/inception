@@ -200,33 +200,6 @@ public class PartyWebService {
   }
 
   /**
-   * Retrieve the party snapshots for the party.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @param from the optional date to retrieve the party snapshots from
-   * @param to the optional date to retrieve the party snapshots to
-   * @param sortDirection the optional sort direction to apply to the party snapshots
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the party snapshots
-   */
-  @WebMethod(operationName = "GetPartySnapshots")
-  public PartySnapshots getPartySnapshots(
-      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
-      @WebParam(name = "PartyId") @XmlElement(required = true) UUID partyId,
-      @WebParam(name = "From") @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
-          LocalDate from,
-      @WebParam(name = "To") @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class) LocalDate to,
-      @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
-      @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
-      @WebParam(name = "PageSize") @XmlElement Integer pageSize)
-      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
-    return partyService.getPartySnapshots(
-        tenantId, partyId, from, to, sortDirection, pageIndex, pageSize);
-  }
-
-  /**
    * Retrieve the person.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
@@ -262,6 +235,35 @@ public class PartyWebService {
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
     return partyService.getPersons(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
+   * Retrieve the snapshots for the party.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param entityType the type of entity
+   * @param entityId the Universally Unique Identifier (UUID) for the entity
+   * @param from the optional date to retrieve the snapshots from
+   * @param to the optional date to retrieve the snapshots to
+   * @param sortDirection the optional sort direction to apply to the snapshots
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the snapshots
+   */
+  @WebMethod(operationName = "GetSnapshots")
+  public Snapshots getSnapshots(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "EntityType") @XmlElement(required = true) EntityType entityType,
+      @WebParam(name = "EntityId") @XmlElement(required = true) UUID entityId,
+      @WebParam(name = "From") @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
+          LocalDate from,
+      @WebParam(name = "To") @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class) LocalDate to,
+      @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    return partyService.getSnapshots(
+        tenantId, entityType, entityId, from, to, sortDirection, pageIndex, pageSize);
   }
 
   /**

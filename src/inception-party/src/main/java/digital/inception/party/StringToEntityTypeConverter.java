@@ -16,18 +16,25 @@
 
 package digital.inception.party;
 
-import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.stereotype.Component;
 
 /**
- * The <b>PartySnapshotRepository</b> interface declares the repository for the <b>PartySnapshot</b>
- * domain type.
+ * The <b>StringToEntityTypeConverter</b> class implements the Spring converter that converts a
+ * <b>String</b> type into a <b>EntityType</b> type.
  *
  * @author Marcus Portmann
  */
-public interface PartySnapshotRepository extends JpaRepository<PartySnapshot, UUID> {
+@Component
+@ReadingConverter
+public class StringToEntityTypeConverter implements Converter<String, EntityType> {
 
-  Page<PartySnapshot> findByPartyId(UUID partyId, Pageable pageable);
+  /** Constructs a new <b>StringToEntityTypeConverter</b>. */
+  public StringToEntityTypeConverter() {}
+
+  @Override
+  public EntityType convert(String source) {
+    return EntityType.fromCode(source);
+  }
 }

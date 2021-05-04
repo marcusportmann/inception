@@ -289,7 +289,7 @@ public class Organization extends PartyBase implements Serializable {
   public void addExternalReference(ExternalReference externalReference) {
     externalReferences.removeIf(
         existingExternalReference ->
-            Objects.equals(existingExternalReference.getId(), externalReference.getId()));
+            Objects.equals(existingExternalReference.getType(), externalReference.getType()));
 
     externalReference.setParty(this);
 

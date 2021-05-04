@@ -363,15 +363,16 @@ public class RelationshipProperty implements Serializable {
   /**
    * Returns whether the relationship property has a valid value.
    *
+   * @param valueType the value type
    * @return <b>true</b> if the relationship property has a valid value or <b>false</b> otherwise
    */
-  public boolean hasValue() {
-    return StringUtils.hasText(stringValue)
-        || (booleanValue != null)
-        || (dateValue != null)
-        || (decimalValue != null)
-        || (doubleValue != null)
-        || (integerValue != null);
+  public boolean hasValue(ValueType valueType) {
+    return (((valueType == ValueType.STRING) && StringUtils.hasText(stringValue))
+        || ((valueType == ValueType.BOOLEAN) && (booleanValue != null))
+        || ((valueType == ValueType.DATE) && (dateValue != null))
+        || ((valueType == ValueType.DECIMAL) && (decimalValue != null))
+        || ((valueType == ValueType.DOUBLE) && (doubleValue != null))
+        || ((valueType == ValueType.INTEGER) && (integerValue != null)));
   }
 
   /**
