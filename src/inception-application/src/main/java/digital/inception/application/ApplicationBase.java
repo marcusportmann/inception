@@ -17,6 +17,8 @@
 package digital.inception.application;
 
 import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.json.DateTimeModule;
 import javax.servlet.ServletContext;
 import org.slf4j.Logger;
@@ -67,6 +69,16 @@ public abstract class ApplicationBase implements WebApplicationInitializer {
     return applicationContext;
   }
 
+  /**
+   * Returns the Jackson2 object mapper.
+   *
+   * @return the Jackson2 object mapper
+   */
+  @Bean
+  public ObjectMapper objectMapper() {
+    return jackson2ObjectMapperBuilder().build().disable(SerializationFeature.INDENT_OUTPUT);
+  }
+
   @Override
   public void onStartup(ServletContext container) {
     // Create the 'root' Spring application context
@@ -82,7 +94,6 @@ public abstract class ApplicationBase implements WebApplicationInitializer {
    * @return the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
    *     processor package
    */
-  @Bean
   protected Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
     jackson2ObjectMapperBuilder.indentOutput(true);

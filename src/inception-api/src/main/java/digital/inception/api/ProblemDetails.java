@@ -37,7 +37,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A problem details object, as defined by RFC 7807, which holds the information for an error returned by an API")
+@Schema(
+    description =
+        "A problem details object, as defined by RFC 7807, which holds the information for an error returned by an API")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "timestamp",

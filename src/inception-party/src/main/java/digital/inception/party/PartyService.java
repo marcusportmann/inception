@@ -17,7 +17,6 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
@@ -39,7 +38,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -71,9 +69,6 @@ public class PartyService implements IPartyService {
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
 
-  /** The Jackson2 Object Mapper Builder. */
-  private final Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
-
   /** /** The Organization Repository. */
   private final OrganizationRepository organizationRepository;
 
@@ -92,6 +87,9 @@ public class PartyService implements IPartyService {
   /** The JSR-303 validator. */
   private final Validator validator;
 
+  /** The Jackson 2 object mapper */
+  private final ObjectMapper objectMapper;
+
   /** The internal reference to the Party Service to enable caching. */
   @Resource private IPartyService self;
 
@@ -99,6 +97,7 @@ public class PartyService implements IPartyService {
    * Constructs a new <b>PartyService</b>.
    *
    * @param applicationContext the Spring application context
+   * @param objectMapper the Jackson2 object mapper
    * @param validator the JSR-303 validator
    * @param organizationRepository the Organization Repository
    * @param partyRepository the Party Repository
@@ -108,7 +107,7 @@ public class PartyService implements IPartyService {
    */
   public PartyService(
       ApplicationContext applicationContext,
-      Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder,
+      ObjectMapper objectMapper,
       Validator validator,
       OrganizationRepository organizationRepository,
       PartyRepository partyRepository,
@@ -116,7 +115,7 @@ public class PartyService implements IPartyService {
       RelationshipRepository relationshipRepository,
       SnapshotRepository snapshotRepository) {
     this.applicationContext = applicationContext;
-    this.jackson2ObjectMapperBuilder = jackson2ObjectMapperBuilder;
+    this.objectMapper = objectMapper;
     this.validator = validator;
     this.organizationRepository = organizationRepository;
     this.partyRepository = partyRepository;
@@ -159,9 +158,6 @@ public class PartyService implements IPartyService {
       }
 
       // Serialize the organization object as JSON
-      ObjectMapper objectMapper =
-          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
-
       String organizationJson = objectMapper.writeValueAsString(organization);
 
       organizationRepository.saveAndFlush(organization);
@@ -215,9 +211,6 @@ public class PartyService implements IPartyService {
       }
 
       // Serialize the person object as JSON
-      ObjectMapper objectMapper =
-          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
-
       String personJson = objectMapper.writeValueAsString(person);
 
       personRepository.saveAndFlush(person);
@@ -268,9 +261,6 @@ public class PartyService implements IPartyService {
       }
 
       // Serialize the relationship object as JSON
-      ObjectMapper objectMapper =
-          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
-
       String relationshipJson = objectMapper.writeValueAsString(relationship);
 
       relationshipRepository.saveAndFlush(relationship);
@@ -860,9 +850,6 @@ public class PartyService implements IPartyService {
       }
 
       // Serialize the organization object as JSON
-      ObjectMapper objectMapper =
-          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
-
       String organizationJson = objectMapper.writeValueAsString(organization);
 
       organizationRepository.saveAndFlush(organization);
@@ -913,9 +900,6 @@ public class PartyService implements IPartyService {
       }
 
       // Serialize the person object as JSON
-      ObjectMapper objectMapper =
-          jackson2ObjectMapperBuilder.build().disable(SerializationFeature.INDENT_OUTPUT);
-
       String personJson = objectMapper.writeValueAsString(person);
 
       personRepository.saveAndFlush(person);

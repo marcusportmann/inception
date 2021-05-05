@@ -18,97 +18,119 @@ package digital.inception.party.test;
 
 import digital.inception.party.AttributeTypeCategory;
 import digital.inception.party.IPartyReferenceService;
-import digital.inception.test.InceptionExtension;
-import digital.inception.test.TestConfiguration;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Set;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.Banner.Mode;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 
 /**
- * The <b>LiquibaseChangelogInsertsTest</b>.
+ * The <code>GenerateLiquibaseChangelog</code> class.
  *
  * @author Marcus Portmann
  */
-@ExtendWith(SpringExtension.class)
-@ExtendWith(InceptionExtension.class)
-@ContextConfiguration(
-    classes = {TestConfiguration.class},
-    initializers = {ConfigDataApplicationContextInitializer.class})
-@TestExecutionListeners(
-    listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+@SpringBootApplication
+@ComponentScan(
+    basePackages = {"digital.inception"},
+    lazyInit = true,
+    excludeFilters = {
+      @ComponentScan.Filter(value = SpringBootApplication.class, type = FilterType.ANNOTATION),
+      @ComponentScan.Filter(
+          pattern = "digital\\.inception\\.application\\.ApplicationDataSourceConfiguration",
+          type = FilterType.REGEX),
+      @ComponentScan.Filter(
+          pattern = "digital\\.inception\\.application\\.ApplicationTransactionManager",
+          type = FilterType.REGEX),
+      @ComponentScan.Filter(
+          pattern = "digital\\.inception\\.persistence\\.PersistenceConfiguration",
+          type = FilterType.REGEX)
     })
-public class LiquibaseChangelogInsertsTest {
+public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
 
   private static final Set<String> LOCALE_IDS = Set.of("en-US", "en-ZA");
 
+  /* Logger */
+  private static final Logger logger =
+      LoggerFactory.getLogger(GenerateLiquibaseDataChangelog.class);
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
+
   /** The Party Reference Service. */
-  @Autowired private IPartyReferenceService partyReferenceService;
+  private final IPartyReferenceService partyReferenceService;
 
-  /** Create the Liquibase changelog inserts. */
-  @Test
-  public void createLiquibaseChangelogInserts() throws Exception {
-    boolean createLiquibaseInserts = true;
-    boolean createAttributeTypeCategoryInserts = createLiquibaseInserts && true;
+  /**
+   * Constructs a new <b>GenerateLiquibaseDataChangelog</b>.
+   *
+   * @param applicationContext the Spring application context
+   * @param partyReferenceService the Party Reference Service
+   */
+  public GenerateLiquibaseDataChangelog(
+      ApplicationContext applicationContext, IPartyReferenceService partyReferenceService) {
+    this.applicationContext = applicationContext;
+    this.partyReferenceService = partyReferenceService;
+  }
 
-    //    boolean createContactMechanismTypeInserts = createLiquibaseInserts && false;
-    //    boolean createContactMechanismRoleInserts = createLiquibaseInserts && false;
-    //    boolean createEmploymentStatusInserts = createLiquibaseInserts && false;
-    //    boolean createEmploymentTypeInserts = createLiquibaseInserts && false;
-    //    boolean createGenderInserts = createLiquibaseInserts && false;
-    //    boolean createIdentityDocumentTypeInserts = createLiquibaseInserts && false;
-    //    boolean createMaritalStatusInserts = createLiquibaseInserts && false;
-    //    boolean createMarriageTypeInserts = createLiquibaseInserts && false;
-    //    boolean createMinorTypeInserts = createLiquibaseInserts && false;
-    //    boolean createNextOfKinInserts = createLiquibaseInserts && false;
-    //    boolean createOccupationInserts = createLiquibaseInserts && false;
-    //    boolean createAttributeTypeCategoryInserts = createLiquibaseInserts && true;
-    //    boolean createAttributeTypeInserts = createLiquibaseInserts && true;
-    //    boolean createRolePurposeInserts = createLiquibaseInserts && false;
-    //    boolean createRoleTypeInserts = createLiquibaseInserts && false;
-    //    boolean createPhysicalAddressPurposeInserts = createLiquibaseInserts && false;
-    //    boolean createPhysicalAddressTypeInserts = createLiquibaseInserts && false;
-    //    boolean createPreferenceTypeCategoryInserts = createLiquibaseInserts && false;
-    //    boolean createPreferenceTypeInserts = createLiquibaseInserts && false;
-    //    boolean createRaceInserts = createLiquibaseInserts && false;
-    //    boolean createResidencePermitTypeInserts = createLiquibaseInserts && false;
-    //    boolean createResidencyStatusInserts = createLiquibaseInserts && false;
-    //    boolean createResidentialTypeInserts = createLiquibaseInserts && false;
-    //    boolean createSourceOfFundsInserts = createLiquibaseInserts && false;
-    //    boolean createTaxNumberTypeInserts = createLiquibaseInserts && false;
-    //    boolean createTimeToContactInserts = createLiquibaseInserts && false;
-    //    boolean createTitleInserts = createLiquibaseInserts && false;
+  /**
+   * The main method.
+   *
+   * @param args the command-line arguments
+   */
+  public static void main(String[] args) {
+    SpringApplication app = new SpringApplication(GenerateLiquibaseDataChangelog.class);
+    app.setBannerMode(Mode.OFF);
+    app.setWebApplicationType(WebApplicationType.NONE);
+    app.run(args);
+  }
 
+  @Override
+  public void run(String... args) throws Exception {
     String fileName =
         System.getProperty("user.dir")
             + File.separator
-            + "target"
+            + "inception-database"
             + File.separator
-            + "party-reference-liquibase-inserts.txt";
+            + "inception-party-data.changelog.xml";
 
-    System.out.println("File Name: " + fileName);
+    logger.info("Writing party data to file " + fileName);
 
-    PrintWriter writer = new PrintWriter(new FileWriter(fileName));
+    try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+      writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+      writer.println("");
+      writer.println("<databaseChangeLog");
+      writer.println("  xmlns=\"http://www.liquibase.org/xml/ns/dbchangelog\"");
+      writer.println("  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"");
+      writer.println("  xsi:schemaLocation=\"http://www.liquibase.org/xml/ns/dbchangelog");
+      writer.println("         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd\">");
+      writer.println("");
+      writer.println("  <changeSet id=\"inception-party-data-1.0.0\" author=\"Marcus Portmann\">");
+      writer.println("    <comment>Inception - Party - Data - 1.0.0</comment>");
+      writer.println("");
 
+      writeReferenceData(writer);
+
+      writer.println("  </changeSet>");
+      writer.println("</databaseChangeLog>");
+    }
+
+    System.exit(SpringApplication.exit(applicationContext));
+  }
+
+  private void writeReferenceData(PrintWriter writer) throws Exception {
     for (String localeId : LOCALE_IDS) {
+      for (AttributeTypeCategory attributeTypeCategory :
+          partyReferenceService.getAttributeTypeCategories(localeId)) {
 
-      if (createAttributeTypeCategoryInserts) {
-        for (AttributeTypeCategory attributeTypeCategory :
-            partyReferenceService.getAttributeTypeCategories(localeId)) {
-
+        if (attributeTypeCategory.getTenantId() == null) {
           writer.println(
               "    <insert schemaName=\"party\" tableName=\"attribute_type_categories\">");
           writer.println(
@@ -117,12 +139,6 @@ public class LiquibaseChangelogInsertsTest {
               "      <column name=\"locale_id\" value=\""
                   + attributeTypeCategory.getLocaleId()
                   + "\"/>");
-          if (attributeTypeCategory.getTenantId() != null) {
-            writer.println(
-                "      <column name=\"tenant_id\" value=\""
-                    + attributeTypeCategory.getTenantId()
-                    + "\"/>");
-          }
 
           if (attributeTypeCategory.getSortIndex() != null) {
             writer.println(
@@ -139,9 +155,9 @@ public class LiquibaseChangelogInsertsTest {
                   + "\"/>");
           writer.println("    </insert>");
         }
-
-        writer.println();
       }
+
+      writer.println();
 
       //    if (createContactMechanismTypeInserts) {
       //      for (ContactMechanismType contactMechanismType :
@@ -917,8 +933,5 @@ public class LiquibaseChangelogInsertsTest {
       writer.println();
       writer.println();
     }
-
-    writer.flush();
-    writer.close();
   }
 }

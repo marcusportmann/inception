@@ -16,12 +16,11 @@
 
 package digital.inception.security;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
 
 /**
  * An <b>UserDirectoryParameterException</b> is thrown to indicate an invalid operation was
@@ -33,8 +32,7 @@ import org.springframework.http.HttpStatus;
  */
 @Problem(
     type = "http://inception.digital/problems/security/user-directory-parameter",
-    title = "An error has occurred and the request could not be processed at this time.",
-    status = HttpStatus.INTERNAL_SERVER_ERROR)
+    title = "An error has occurred and the request could not be processed at this time.")
 @WebFault(
     name = "UserDirectoryParameterException",
     targetNamespace = "http://inception.digital/security",

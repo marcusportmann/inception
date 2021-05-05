@@ -16,13 +16,12 @@
 
 package digital.inception.security;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
 
 /**
  * A <b>DuplicateUserDirectoryException</b> is thrown to indicate that a security operation failed
@@ -35,7 +34,7 @@ import org.springframework.http.HttpStatus;
 @Problem(
     type = "http://inception.digital/problems/security/duplicate-user-directory",
     title = "A user directory with the specified ID or name already exists.",
-    status = HttpStatus.CONFLICT)
+    status = 409)
 @WebFault(
     name = "DuplicateUserDirectoryException",
     targetNamespace = "http://inception.digital/security",

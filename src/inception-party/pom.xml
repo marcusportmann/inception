@@ -23,12 +23,10 @@
       <artifactId>inception-reference</artifactId>
     </dependency>
 
-    <!-- Provided Inception Dependencies -->
+    <!-- Dependencies -->
     <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-api</artifactId>
-      <scope>provided</scope>
-      <optional>true</optional>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
     </dependency>
 
     <!-- Test Dependencies -->

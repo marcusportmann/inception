@@ -16,12 +16,11 @@
 
 package digital.inception.security;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
 
 /**
  * A <b>UserDirectoryTypeNotFoundException</b> is thrown to indicate that a security operation
@@ -34,7 +33,7 @@ import org.springframework.http.HttpStatus;
 @Problem(
     type = "http://inception.digital/problems/security/user-directory-type-not-found",
     title = "The user directory type could not be found.",
-    status = HttpStatus.NOT_FOUND)
+    status = 404)
 @WebFault(
     name = "UserDirectoryTypeNotFoundException",
     targetNamespace = "http://inception.digital/security",

@@ -16,14 +16,12 @@
 
 package demo.model;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>DuplicateVehicleException</b> exception is thrown to indicate an error condition as a
@@ -36,7 +34,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Problem(
     type = "http://demo/problems/duplicate-vehicle-exception",
     title = "The vehicle already exists.",
-    status = HttpStatus.CONFLICT)
+    status = 409)
 @WebFault(
     name = "DuplicateVehicleException",
     targetNamespace = "http://demo",

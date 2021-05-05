@@ -16,12 +16,11 @@
 
 package digital.inception.bmi;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
 
 /**
  * The <b>DuplicateProcessDefinitionException</b> exception is thrown to indicate an error condition
@@ -35,7 +34,7 @@ import org.springframework.http.HttpStatus;
 @Problem(
     type = "http://inception.digital/problems/bmi/duplicate-process-definition",
     title = "A process definition with the specified ID already exists.",
-    status = HttpStatus.CONFLICT)
+    status = 409)
 @WebFault(
     name = "DuplicateProcessDefinitionException",
     targetNamespace = "http://inception.digital/bmi",

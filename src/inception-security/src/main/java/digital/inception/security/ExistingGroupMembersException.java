@@ -16,12 +16,11 @@
 
 package digital.inception.security;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
 
 /**
  * A <b>ExistingGroupMembersException</b> is thrown to indicate that a security operation failed as
@@ -34,7 +33,7 @@ import org.springframework.http.HttpStatus;
 @Problem(
     type = "http://inception.digital/problems/security/existing-group-members",
     title = "The group could not be deleted as it is still associated with one or more members.",
-    status = HttpStatus.CONFLICT)
+    status = 409)
 @WebFault(
     name = "ExistingGroupMembersException",
     targetNamespace = "http://inception.digital/security",

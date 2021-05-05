@@ -16,12 +16,11 @@
 
 package digital.inception.security;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
 
 /**
  * A <b>UserLockedException</b> is thrown to indicate that a security operation failed as a result
@@ -35,7 +34,7 @@ import org.springframework.http.HttpStatus;
     type = "http://inception.digital/problems/security/user-locked",
     title =
         "The user has exceeded the maximum number of failed password attempts and has been locked.",
-    status = HttpStatus.FORBIDDEN)
+    status = 403)
 @WebFault(
     name = "UserLockedException",
     targetNamespace = "http://inception.digital/security",

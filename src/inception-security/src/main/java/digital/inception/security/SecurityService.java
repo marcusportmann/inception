@@ -27,6 +27,7 @@ import digital.inception.mail.IMailService;
 import digital.inception.mail.MailTemplate;
 import digital.inception.mail.MailTemplateContentType;
 import java.lang.reflect.Constructor;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -49,7 +50,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.util.UriUtils;
 
 /**
  * The <b>SecurityService</b> class provides the Security Service implementation.
@@ -2727,9 +2727,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
             "resetPasswordUrl",
             resetPasswordUrl
                 + "?username="
-                + UriUtils.encodeQueryParam(user.getUsername(), StandardCharsets.UTF_8)
+                + URLEncoder.encode(user.getUsername(), StandardCharsets.UTF_8)
                 + "&securityCode="
-                + UriUtils.encodeQueryParam(securityCode, StandardCharsets.UTF_8));
+                + URLEncoder.encode(securityCode, StandardCharsets.UTF_8));
 
         mailService.sendMail(
             Collections.singletonList(user.getEmail()),

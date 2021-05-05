@@ -16,13 +16,11 @@
 
 package digital.inception.mail;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>DuplicateMailTemplateException</b> exception is thrown to indicate an error condition as a
@@ -36,7 +34,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Problem(
     type = "http://inception.digital/problems/mail/duplicate-mail-template",
     title = "A mail template with the specified ID already exists.",
-    status = HttpStatus.CONFLICT)
+    status = 409)
 @WebFault(
     name = "DuplicateMailTemplateException",
     targetNamespace = "http://inception.digital/mail",

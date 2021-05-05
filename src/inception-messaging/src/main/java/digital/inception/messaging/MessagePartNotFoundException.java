@@ -16,13 +16,12 @@
 
 package digital.inception.messaging;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
 
 /**
  * The <b>MessagePartNotFoundException</b> exception is thrown to indicate an error condition as a
@@ -35,7 +34,7 @@ import org.springframework.http.HttpStatus;
 @Problem(
     type = "http://inception.digital/problems/messaging/message-part-not-found",
     title = "The message part could not be found.",
-    status = HttpStatus.NOT_FOUND)
+    status = 404)
 @WebFault(
     name = "MessagePartNotFoundException",
     targetNamespace = "http://inception.digital/messaging",

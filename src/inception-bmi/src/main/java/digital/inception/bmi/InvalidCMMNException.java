@@ -16,12 +16,11 @@
 
 package digital.inception.bmi;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
 
 /**
  * The <b>InvalidCMMNException</b> exception is thrown to indicate an error condition as a result of
@@ -34,7 +33,7 @@ import org.springframework.http.HttpStatus;
 @Problem(
     type = "http://inception.digital/problems/bmi/invalid-cmmn",
     title = "The CMMN 1.1 XML data is invalid.",
-    status = HttpStatus.BAD_REQUEST)
+    status = 400)
 @WebFault(
     name = "InvalidCMMNException",
     targetNamespace = "http://inception.digital/bmi",

@@ -97,7 +97,7 @@
     <narayana.version>5.11.1.Final</narayana.version>
     <postgresql.version>42.2.19</postgresql.version>
     <spring-boot.version>2.4.5</spring-boot.version>
-    <spring-shell.version>2.0.0</spring-shell.version>
+    <spring-shell.version>2.0.1.RELEASE</spring-shell.version>
     <springdoc-openapi-ui.version>1.5.7</springdoc-openapi-ui.version>
     <sun-activation.version>1.2.0</sun-activation.version>
     <swagger-codegen-maven-plugin.version>3.0.25</swagger-codegen-maven-plugin.version>

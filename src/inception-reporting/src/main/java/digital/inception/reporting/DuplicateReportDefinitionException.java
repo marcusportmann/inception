@@ -16,12 +16,11 @@
 
 package digital.inception.reporting;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
 
 /**
  * The <b>DuplicateReportDefinitionException</b> exception is thrown to indicate an error condition
@@ -35,7 +34,7 @@ import org.springframework.http.HttpStatus;
 @Problem(
     type = "http://inception.digital/problems/reporting/duplicate-report-definition",
     title = "A report definition with the specified ID already exists.",
-    status = HttpStatus.CONFLICT)
+    status = 409)
 @WebFault(
     name = "DuplicateReportDefinitionException",
     targetNamespace = "http://inception.digital/reporting",

@@ -17,6 +17,7 @@
 package digital.inception.api;
 
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import digital.inception.core.service.ServiceUnavailableException;
 import java.io.ByteArrayOutputStream;
@@ -75,7 +76,7 @@ public class ProblemHandler {
     if (problem != null) {
       problemDetails.setType(problem.type());
       problemDetails.setTitle(problem.title());
-      problemDetails.setStatus(problem.status().value());
+      problemDetails.setStatus(problem.status());
 
     } else if (serviceException instanceof InvalidArgumentException) {
       problemDetails.setType("http://inception.digital/problems/invalid-argument");

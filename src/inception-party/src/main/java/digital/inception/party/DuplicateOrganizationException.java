@@ -16,13 +16,12 @@
 
 package digital.inception.party;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
 
 /**
  * The <b>DuplicateOrganizationException</b> exception is thrown to indicate an error condition as a
@@ -35,7 +34,7 @@ import org.springframework.http.HttpStatus;
 @Problem(
     type = "http://inception.digital/problems/party/duplicate-organization",
     title = "The organization already exists.",
-    status = HttpStatus.CONFLICT)
+    status = 409)
 @WebFault(
     name = "DuplicateOrganizationException",
     targetNamespace = "http://inception.digital/party",

@@ -16,9 +16,8 @@
 
 package digital.inception.oauth2.server.authorization.token;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
-import org.springframework.http.HttpStatus;
 
 /**
  * The <b>InvalidOAuth2RefreshTokenException</b> exception is thrown to indicate an error condition
@@ -31,7 +30,7 @@ import org.springframework.http.HttpStatus;
 @Problem(
     type = "http://inception.digital/problems/oauth2/invalid-oauth2-refresh-token",
     title = "The OAuth2 refresh token is invalid.",
-    status = HttpStatus.BAD_REQUEST)
+    status = 400)
 public class InvalidOAuth2RefreshTokenException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;

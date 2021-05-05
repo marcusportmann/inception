@@ -16,13 +16,11 @@
 
 package digital.inception.codes;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>DuplicateCodeException</b> exception is thrown to indicate an error condition as a result
@@ -36,7 +34,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Problem(
     type = "http://inception.digital/problems/codes/duplicate-code",
     title = "A code with the specified ID already exists for the code category.",
-    status = HttpStatus.CONFLICT)
+    status = 409)
 @WebFault(
     name = "DuplicateCodeException",
     targetNamespace = "http://inception.digital/codes",

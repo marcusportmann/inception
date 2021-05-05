@@ -16,6 +16,8 @@
 
 package digital.inception.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.util.JDBCUtil;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.json.DateTimeModule;
@@ -222,6 +224,16 @@ public class TestConfiguration {
   }
 
   /**
+   * Returns the Jackson2 object mapper.
+   *
+   * @return the Jackson2 object mapper
+   */
+  @Bean
+  public ObjectMapper objectMapper() {
+    return jackson2ObjectMapperBuilder().build().disable(SerializationFeature.INDENT_OUTPUT);
+  }
+
+  /**
    * Returns the Spring task executor to use for @Async method invocations.
    *
    * @return the Spring task executor to use for @Async method invocations
@@ -350,7 +362,6 @@ public class TestConfiguration {
    * @return the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
    *     processor package
    */
-  @Bean
   protected Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
     jackson2ObjectMapperBuilder.indentOutput(true);

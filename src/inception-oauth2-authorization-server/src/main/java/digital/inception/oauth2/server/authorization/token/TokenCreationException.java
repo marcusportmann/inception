@@ -16,10 +16,8 @@
 
 package digital.inception.oauth2.server.authorization.token;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>TokenCreationException</b> exception is thrown to indicate an error condition when
@@ -31,8 +29,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Problem(
     type = "http://inception.digital/problems/oauth2/token-creation",
-    title = "The OAuth2 token could not be created.",
-    status = HttpStatus.INTERNAL_SERVER_ERROR)
+    title = "The OAuth2 token could not be created.")
 public class TokenCreationException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;

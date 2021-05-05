@@ -74,7 +74,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -108,8 +107,8 @@ public class PartyServiceTest {
 
   private static int personCount;
 
-  /** The Jackson2 Object Mapper Builder */
-  @Autowired private Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
+  /** The Jackson2 object mapper. */
+  @Autowired private ObjectMapper objectMapper;
 
   /** The Party Service. */
   @Autowired private IPartyService partyService;
@@ -1837,8 +1836,6 @@ public class PartyServiceTest {
             0,
             100);
 
-    ObjectMapper objectMapper = jackson2ObjectMapperBuilder.build();
-
     Organization serializedOrganization =
         objectMapper.readValue(snapshots.getSnapshots().get(0).getData(), Organization.class);
 
@@ -2044,8 +2041,6 @@ public class PartyServiceTest {
             SortDirection.ASCENDING,
             0,
             100);
-
-    ObjectMapper objectMapper = jackson2ObjectMapperBuilder.build();
 
     Person serializedPerson =
         objectMapper.readValue(snapshots.getSnapshots().get(0).getData(), Person.class);

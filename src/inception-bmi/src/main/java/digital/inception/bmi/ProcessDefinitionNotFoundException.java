@@ -16,12 +16,11 @@
 
 package digital.inception.bmi;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
 
 /**
  * The <b>ProcessDefinitionNotFoundException</b> exception is thrown to indicate an error condition
@@ -34,7 +33,7 @@ import org.springframework.http.HttpStatus;
 @Problem(
     type = "http://inception.digital/problems/bmi/process-definition-not-found",
     title = "The process definition could not be found.",
-    status = HttpStatus.NOT_FOUND)
+    status = 404)
 @WebFault(
     name = "ProcessDefinitionNotFoundException",
     targetNamespace = "http://inception.digital/bmi",

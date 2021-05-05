@@ -16,13 +16,11 @@
 
 package digital.inception.scheduler;
 
-import digital.inception.api.Problem;
+import digital.inception.core.service.Problem;
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The <b>JobNotFoundException</b> exception is thrown to indicate an error condition as a result of
@@ -35,7 +33,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Problem(
     type = "http://inception.digital/problems/scheduler/job-not-found",
     title = "The job could not be found.",
-    status = HttpStatus.NOT_FOUND)
+    status = 404)
 @WebFault(
     name = "JobNotFoundException",
     targetNamespace = "http://inception.digital/scheduler",

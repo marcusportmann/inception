@@ -1506,6 +1506,6 @@
     <createIndex indexName="tax_numbers_party_id_ix" schemaName="party" tableName="tax_numbers">
       <column name="party_id"/>
     </createIndex>
-
   </changeSet>
+
 </databaseChangeLog>
