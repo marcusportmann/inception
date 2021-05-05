@@ -538,7 +538,7 @@
       <column name="code" type="nvarchar(30)" remarks="The code for the qualification type"/>
       <column name="field_of_study" type="nvarchar(50)" remarks="The code for the field of study for the qualification type"/>
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the qualification type"/>
-      <column name="tenant_id" type="nvarchar(10)" remarks="The Universally Unique Identifier (UUID) for the tenant the qualification type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the qualification type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the qualification type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the qualification type"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the qualification type"/>
