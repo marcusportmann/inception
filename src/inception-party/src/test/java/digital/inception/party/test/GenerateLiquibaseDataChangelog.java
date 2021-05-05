@@ -16,8 +16,49 @@
 
 package digital.inception.party.test;
 
+import digital.inception.party.AttributeType;
 import digital.inception.party.AttributeTypeCategory;
+import digital.inception.party.ConsentType;
+import digital.inception.party.ContactMechanismPurpose;
+import digital.inception.party.ContactMechanismRole;
+import digital.inception.party.ContactMechanismType;
+import digital.inception.party.EmploymentStatus;
+import digital.inception.party.EmploymentType;
+import digital.inception.party.ExternalReferenceType;
+import digital.inception.party.FieldOfStudy;
+import digital.inception.party.Gender;
 import digital.inception.party.IPartyReferenceService;
+import digital.inception.party.IdentityDocumentType;
+import digital.inception.party.LockType;
+import digital.inception.party.LockTypeCategory;
+import digital.inception.party.MaritalStatus;
+import digital.inception.party.MarriageType;
+import digital.inception.party.NextOfKinType;
+import digital.inception.party.Occupation;
+import digital.inception.party.PhysicalAddressPurpose;
+import digital.inception.party.PhysicalAddressRole;
+import digital.inception.party.PhysicalAddressType;
+import digital.inception.party.PreferenceType;
+import digital.inception.party.PreferenceTypeCategory;
+import digital.inception.party.QualificationType;
+import digital.inception.party.Race;
+import digital.inception.party.RelationshipPropertyType;
+import digital.inception.party.RelationshipType;
+import digital.inception.party.ResidencePermitType;
+import digital.inception.party.ResidencyStatus;
+import digital.inception.party.ResidentialType;
+import digital.inception.party.RolePurpose;
+import digital.inception.party.RoleType;
+import digital.inception.party.RoleTypeAttributeTypeConstraint;
+import digital.inception.party.RoleTypePreferenceTypeConstraint;
+import digital.inception.party.Segment;
+import digital.inception.party.SourceOfFundsType;
+import digital.inception.party.SourceOfWealthType;
+import digital.inception.party.StatusType;
+import digital.inception.party.StatusTypeCategory;
+import digital.inception.party.TaxNumberType;
+import digital.inception.party.TimeToContact;
+import digital.inception.party.Title;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -32,6 +73,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.util.StringUtils;
 
 /**
  * The <code>GenerateLiquibaseChangelog</code> class.
@@ -127,6 +169,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
 
   private void writeReferenceData(PrintWriter writer) throws Exception {
     for (String localeId : LOCALE_IDS) {
+      // Attribute Type Categories
       for (AttributeTypeCategory attributeTypeCategory :
           partyReferenceService.getAttributeTypeCategories(localeId)) {
 
@@ -159,779 +202,1345 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
 
       writer.println();
 
-      //    if (createContactMechanismTypeInserts) {
-      //      for (ContactMechanismType contactMechanismType :
-      //          referenceService.getContactMechanismTypes("en-US")) {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\" tableName=\"contact_mechanism_types\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + contactMechanismType.getCode() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\""
-      //                + contactMechanismType.getLocaleId()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\""
-      //                + contactMechanismType.getSortIndex()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + contactMechanismType.getName() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"plural\" value=\"" + contactMechanismType.getPlural() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + contactMechanismType.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
+      // Attribute Types
+      for (AttributeType attributeType : partyReferenceService.getAttributeTypes(localeId)) {
 
-      //    if (createContactMechanismRoleInserts) {
-      //      for (ContactMechanismRole contactMechanismRole :
-      //          referenceService.getContactMechanismRoles("en-US")) {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\" tableName=\"contact_mechanism_roles\">");
-      //        writer.println(
-      //            "      <column name=\"type\" value=\"" + contactMechanismRole.getType() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + contactMechanismRole.getCode() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\""
-      //                + contactMechanismRole.getLocaleId()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\""
-      //                + contactMechanismRole.getSortIndex()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + contactMechanismRole.getName() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + contactMechanismRole.getDescription()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"party_types\" value=\""
-      //                +
-      // StringUtils.arrayToCommaDelimitedString(contactMechanismRole.getPartyTypes())
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
+        if (attributeType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"attribute_types\">");
+          writer.println(
+              "      <column name=\"category\" value=\"" + attributeType.getCategory() + "\"/>");
+          writer.println("      <column name=\"code\" value=\"" + attributeType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + attributeType.getLocaleId() + "\"/>");
 
-      //    if (createEmploymentStatusInserts) {
-      //      for (EmploymentStatus employmentStatus :
-      // referenceService.getEmploymentStatuses("en-US")) {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\" tableName=\"employment_statuses\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + employmentStatus.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + employmentStatus.getLocaleId() +
-      // "\"/>");
-      //    if (employmentStatus.getSortIndex() != null) {
-      //      writer.println("  <column name=\"sort_index\" value=\"" +
-      // employmentStatus.getSortIndex() + "\"/>");
-      //    }
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + employmentStatus.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + employmentStatus.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
+          if (attributeType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + attributeType.getSortIndex()
+                    + "\"/>");
+          }
 
-      //    if (createEmploymentTypeInserts) {
-      //      for (EmploymentType employmentType : referenceService.getEmploymentTypes("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\"
-      // tableName=\"employment_types\">");
-      //        writer.println(
-      //            "      <column name=\"employment_status\" value=\""
-      //                + employmentType.getEmploymentStatus()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + employmentType.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + employmentType.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + employmentType.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + employmentType.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + employmentType.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
+          writer.println("      <column name=\"name\" value=\"" + attributeType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + attributeType.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(attributeType.getPartyTypes())
+                  + "\"/>");
+          if (attributeType.getUnitType() != null) {
+            writer.println(
+                "      <column name=\"unit_type\" value=\""
+                    + attributeType.getUnitType().code()
+                    + "\"/>");
+          }
+          writer.println(
+              "      <column name=\"value_type\" value=\""
+                  + attributeType.getValueType().code()
+                  + "\"/>");
 
-      //    if (createGenderInserts) {
-      //      for (Gender gender : referenceService.getGenders("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\" tableName=\"genders\">");
-      //        writer.println("      <column name=\"code\" value=\"" + gender.getCode() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + gender.getLocaleId() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + gender.getSortIndex() + "\"/>");
-      //        writer.println("      <column name=\"name\" value=\"" + gender.getName() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\"" + gender.getDescription() +
-      // "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
+          writer.println("    </insert>");
+        }
+      }
 
-      //    if (createIdentityDocumentTypeInserts) {
-      //      for (IdentityDocumentType identityDocumentType :
-      //          referenceService.getIdentityDocumentTypes("en-US")) {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\" tableName=\"identity_document_types\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + identityDocumentType.getCode() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\""
-      //                + identityDocumentType.getLocaleId()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\""
-      //                + identityDocumentType.getSortIndex()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + identityDocumentType.getName() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + identityDocumentType.getDescription()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"country_of_issue\" value=\""
-      //                + identityDocumentType.getCountryOfIssue()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"party_types\" value=\""
-      //                +
-      // StringUtils.arrayToCommaDelimitedString(identityDocumentType.getPartyTypes())
-      //                + "\"/>");
-      //
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createMaritalStatusInserts) {
-      //      for (MaritalStatus maritalStatus : referenceService.getMaritalStatuses("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\"
-      // tableName=\"marital_statuses\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + maritalStatus.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + maritalStatus.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + maritalStatus.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + maritalStatus.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + maritalStatus.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createMarriageTypeInserts) {
-      //      for (MarriageType marriageType : referenceService.getMarriageTypes("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\"
-      // tableName=\"marriage_types\">");
-      //        writer.println(
-      //            "      <column name=\"marital_status\" value=\""
-      //                + marriageType.getMaritalStatus()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + marriageType.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + marriageType.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + marriageType.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + marriageType.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\"" + marriageType.getDescription() +
-      // "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createMinorTypeInserts) {
-      //      for (MinorType minorType : referenceService.getMinorTypes("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\" tableName=\"minor_types\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + minorType.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + minorType.getLocaleId() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + minorType.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + minorType.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + minorType.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createNextOfKinInserts) {
-      //      for (NextOfKinType nextOfKinType : referenceService.getNextOfKinTypes("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\"
-      // tableName=\"next_of_kin_types\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + nextOfKinType.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + nextOfKinType.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + nextOfKinType.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + nextOfKinType.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + nextOfKinType.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createOccupationInserts) {
-      //      for (Occupation occupation : referenceService.getOccupations("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\" tableName=\"occupations\">");
-      //        writer.println("      <column name=\"code\" value=\"" + occupation.getCode() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + occupation.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + occupation.getSortIndex() +
-      // "\"/>");
-      //        writer.println("      <column name=\"name\" value=\"" + occupation.getName() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\"" + occupation.getDescription() +
-      // "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createAttributeTypeCategoryInserts) {
-      //      for (AttributeTypeCategory attributeTypeCategory :
-      //          referenceService.getAttributeTypeCategories("en-US")) {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\"
-      // tableName=\"attribute_type_categories\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + attributeTypeCategory.getCode() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\""
-      //                + attributeTypeCategory.getLocaleId()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\""
-      //                + attributeTypeCategory.getSortIndex()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + attributeTypeCategory.getName() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + attributeTypeCategory.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createAttributeTypeInserts) {
-      //      for (AttributeType attributeType :
-      //          referenceService.getAttributeTypes("en-US")) {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\" tableName=\"attribute_types\">");
-      //        writer.println(
-      //            "      <column name=\"category\" value=\"" + attributeType.getCategory() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + attributeType.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\""
-      //                + attributeType.getLocaleId()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\""
-      //                + attributeType.getSortIndex()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + attributeType.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + attributeType.getDescription()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"party_types\" value=\""
-      //                + StringUtils.arrayToCommaDelimitedString(attributeType.getPartyTypes())
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createRolePurposeInserts) {
-      //      for (RolePurpose rolePurpose : referenceService.getRolePurposes("en-US"))
-      // {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\" tableName=\"role_purposes\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + rolePurpose.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + rolePurpose.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\""
-      //                + rolePurpose.getSortIndex()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + rolePurpose.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + rolePurpose.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createRoleTypeInserts) {
-      //      for (RoleType roleType : referenceService.getRoleTypes("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\"
-      // tableName=\"role_types\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + roleType.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + roleType.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + roleType.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + roleType.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + roleType.getDescription()
-      //                + "\"/>");
-      //
-      //        writer.println(
-      //            "      <column name=\"party_types\" value=\""
-      //                + StringUtils.arrayToCommaDelimitedString(roleType.getPartyTypes())
-      //                + "\"/>");
-      //
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createPhysicalAddressPurposeInserts) {
-      //      for (PhysicalAddressPurpose physicalAddressPurpose :
-      //          referenceService.getPhysicalAddressPurposes("en-US")) {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\"
-      // tableName=\"physical_address_purposes\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + physicalAddressPurpose.getCode() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\""
-      //                + physicalAddressPurpose.getLocaleId()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\""
-      //                + physicalAddressPurpose.getSortIndex()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + physicalAddressPurpose.getName() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + physicalAddressPurpose.getDescription()
-      //                + "\"/>");
-      //
-      //        writer.println(
-      //            "      <column name=\"party_types\" value=\""
-      //                +
-      // StringUtils.arrayToCommaDelimitedString(physicalAddressPurpose.getPartyTypes())
-      //                + "\"/>");
-      //
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createPhysicalAddressTypeInserts) {
-      //      for (PhysicalAddressType physicalAddressType :
-      //          referenceService.getPhysicalAddressTypes("en-US")) {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\" tableName=\"physical_address_types\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + physicalAddressType.getCode() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\""
-      //                + physicalAddressType.getLocaleId()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\""
-      //                + physicalAddressType.getSortIndex()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + physicalAddressType.getName() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + physicalAddressType.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createPreferenceTypeCategoryInserts) {
-      //      for (PreferenceTypeCategory preferenceTypeCategory :
-      //          referenceService.getPreferenceTypeCategories("en-US")) {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\"
-      // tableName=\"preference_type_categories\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + preferenceTypeCategory.getCode() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\""
-      //                + preferenceTypeCategory.getLocaleId()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\""
-      //                + preferenceTypeCategory.getSortIndex()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + preferenceTypeCategory.getName() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + preferenceTypeCategory.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createPreferenceTypeInserts) {
-      //      for (PreferenceType preferenceType : referenceService.getPreferenceTypes("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\"
-      // tableName=\"preference_types\">");
-      //        writer.println(
-      //            "      <column name=\"category\" value=\"" + preferenceType.getCategory() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + preferenceType.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + preferenceType.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + preferenceType.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + preferenceType.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + preferenceType.getDescription()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"party_types\" value=\""
-      //                + StringUtils.arrayToCommaDelimitedString(preferenceType.getPartyTypes())
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createRaceInserts) {
-      //      for (Race race : referenceService.getRaces("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\" tableName=\"races\">");
-      //        writer.println("      <column name=\"code\" value=\"" + race.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + race.getLocaleId() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + race.getSortIndex() + "\"/>");
-      //        writer.println("      <column name=\"name\" value=\"" + race.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\"" + race.getDescription() + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createResidencePermitTypeInserts) {
-      //      for (ResidencePermitType residencePermitType :
-      //          referenceService.getResidencePermitTypes("en-US")) {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\" tableName=\"residence_permit_types\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + residencePermitType.getCode() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\""
-      //                + residencePermitType.getLocaleId()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\""
-      //                + residencePermitType.getSortIndex()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + residencePermitType.getName() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + residencePermitType.getDescription()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"country_of_issue\" value=\""
-      //                + residencePermitType.getCountryOfIssue()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createResidencyStatusInserts) {
-      //      for (ResidencyStatus residencyStatus : referenceService.getResidencyStatuses("en-US"))
-      // {
-      //
-      //        writer.println(
-      //            "    <insert schemaName=\"reference\" tableName=\"residency_statuses\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + residencyStatus.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + residencyStatus.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + residencyStatus.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + residencyStatus.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + residencyStatus.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createResidentialTypeInserts) {
-      //      for (ResidentialType residentialType : referenceService.getResidentialTypes("en-US"))
-      // {
-      //
-      //        writer.println("    <insert schemaName=\"reference\"
-      // tableName=\"residential_types\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + residentialType.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + residentialType.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + residentialType.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + residentialType.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + residentialType.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createSourceOfFundsInserts) {
-      //      for (SourceOfFunds sourceOfFunds : referenceService.getSourcesOfFunds("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\"
-      // tableName=\"sources_of_funds\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + sourceOfFunds.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + sourceOfFunds.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + sourceOfFunds.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + sourceOfFunds.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + sourceOfFunds.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createTaxNumberTypeInserts) {
-      //      for (TaxNumberType taxNumberType : referenceService.getTaxNumberTypes("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\"
-      // tableName=\"tax_number_types\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + taxNumberType.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + taxNumberType.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + taxNumberType.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + taxNumberType.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + taxNumberType.getDescription()
-      //                + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"country_of_issue\" value=\""
-      //                + taxNumberType.getCountryOfIssue()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createTimeToContactInserts) {
-      //      for (TimeToContact timeToContact : referenceService.getTimesToContact("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\"
-      // tableName=\"times_to_contact\">");
-      //        writer.println(
-      //            "      <column name=\"code\" value=\"" + timeToContact.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + timeToContact.getLocaleId() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + timeToContact.getSortIndex() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"name\" value=\"" + timeToContact.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\""
-      //                + timeToContact.getDescription()
-      //                + "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
-
-      //    if (createTitleInserts) {
-      //      for (Title title : referenceService.getTitles("en-US")) {
-      //
-      //        writer.println("    <insert schemaName=\"reference\" tableName=\"titles\">");
-      //        writer.println("      <column name=\"code\" value=\"" + title.getCode() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"locale_id\" value=\"" + title.getLocaleId() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"sort_index\" value=\"" + title.getSortIndex() + "\"/>");
-      //        writer.println("      <column name=\"name\" value=\"" + title.getName() + "\"/>");
-      //        writer.println(
-      //            "      <column name=\"abbreviation\" value=\"" + title.getAbbreviation() +
-      // "\"/>");
-      //        writer.println(
-      //            "      <column name=\"description\" value=\"" + title.getDescription() +
-      // "\"/>");
-      //        writer.println("    </insert>");
-      //      }
-      //
-      //      writer.println();
-      //    }
       writer.println();
+
+      // Consent Types
+      for (ConsentType consentType : partyReferenceService.getConsentTypes(localeId)) {
+
+        if (consentType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"consent_types\">");
+          writer.println("      <column name=\"code\" value=\"" + consentType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + consentType.getLocaleId() + "\"/>");
+
+          if (consentType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + consentType.getSortIndex() + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + consentType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + consentType.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
       writer.println();
+
+      // Contact Mechanism Purposes
+      for (ContactMechanismPurpose contactMechanismPurpose :
+          partyReferenceService.getContactMechanismPurposes(localeId)) {
+
+        if (contactMechanismPurpose.getTenantId() == null) {
+          writer.println(
+              "    <insert schemaName=\"party\" tableName=\"contact_mechanism_purposes\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + contactMechanismPurpose.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + contactMechanismPurpose.getLocaleId()
+                  + "\"/>");
+
+          if (contactMechanismPurpose.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + contactMechanismPurpose.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + contactMechanismPurpose.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + contactMechanismPurpose.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"contact_mechanism_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(
+                      contactMechanismPurpose.getContactMechanismTypes())
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(contactMechanismPurpose.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Contact Mechanism Types
+      for (ContactMechanismType contactMechanismType :
+          partyReferenceService.getContactMechanismTypes(localeId)) {
+
+        if (contactMechanismType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"contact_mechanism_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + contactMechanismType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + contactMechanismType.getLocaleId()
+                  + "\"/>");
+
+          if (contactMechanismType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + contactMechanismType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + contactMechanismType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"plural\" value=\"" + contactMechanismType.getPlural() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + contactMechanismType.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Contact Mechanism Roles
+      for (ContactMechanismRole contactMechanismRole :
+          partyReferenceService.getContactMechanismRoles(localeId)) {
+
+        if (contactMechanismRole.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"contact_mechanism_roles\">");
+          writer.println(
+              "      <column name=\"contact_mechanism_type\" value=\""
+                  + contactMechanismRole.getContactMechanismType()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"code\" value=\"" + contactMechanismRole.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + contactMechanismRole.getLocaleId()
+                  + "\"/>");
+
+          if (contactMechanismRole.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + contactMechanismRole.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + contactMechanismRole.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + contactMechanismRole.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(contactMechanismRole.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Employment Statuses
+      for (EmploymentStatus employmentStatus :
+          partyReferenceService.getEmploymentStatuses(localeId)) {
+
+        if (employmentStatus.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"employment_statuses\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + employmentStatus.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + employmentStatus.getLocaleId()
+                  + "\"/>");
+
+          if (employmentStatus.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + employmentStatus.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + employmentStatus.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + employmentStatus.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Employment Statuses
+      for (EmploymentType employmentType : partyReferenceService.getEmploymentTypes(localeId)) {
+
+        if (employmentType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"employment_types\">");
+          writer.println(
+              "      <column name=\"employment_status\" value=\""
+                  + employmentType.getEmploymentStatus()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"code\" value=\"" + employmentType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + employmentType.getLocaleId() + "\"/>");
+
+          if (employmentType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + employmentType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + employmentType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + employmentType.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // External Reference Types
+      for (ExternalReferenceType externalReferenceType :
+          partyReferenceService.getExternalReferenceTypes(localeId)) {
+
+        if (externalReferenceType.getTenantId() == null) {
+          writer.println(
+              "    <insert schemaName=\"party\" tableName=\"external_reference_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + externalReferenceType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + externalReferenceType.getLocaleId()
+                  + "\"/>");
+
+          if (externalReferenceType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + externalReferenceType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + externalReferenceType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + externalReferenceType.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(externalReferenceType.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Fields Of Study
+      for (FieldOfStudy fieldOfStudy : partyReferenceService.getFieldsOfStudy(localeId)) {
+
+        if (fieldOfStudy.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"fields_of_study\">");
+          writer.println("      <column name=\"code\" value=\"" + fieldOfStudy.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + fieldOfStudy.getLocaleId() + "\"/>");
+
+          if (fieldOfStudy.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + fieldOfStudy.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + fieldOfStudy.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + fieldOfStudy.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Genders
+      for (Gender gender : partyReferenceService.getGenders(localeId)) {
+
+        if (gender.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"genders\">");
+          writer.println("      <column name=\"code\" value=\"" + gender.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + gender.getLocaleId() + "\"/>");
+
+          if (gender.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + gender.getSortIndex() + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + gender.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\"" + gender.getDescription() + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Identity Document Types
+      for (IdentityDocumentType identityDocumentType :
+          partyReferenceService.getIdentityDocumentTypes(localeId)) {
+
+        if (identityDocumentType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"identity_document_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + identityDocumentType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + identityDocumentType.getLocaleId()
+                  + "\"/>");
+
+          if (identityDocumentType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + identityDocumentType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + identityDocumentType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + identityDocumentType.getDescription()
+                  + "\"/>");
+          if (identityDocumentType.getCountryOfIssue() != null) {
+            writer.println(
+                "      <column name=\"country_of_issue\" value=\""
+                    + identityDocumentType.getCountryOfIssue()
+                    + "\"/>");
+          }
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(identityDocumentType.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Lock Type Categories
+      for (LockTypeCategory lockTypeCategory :
+          partyReferenceService.getLockTypeCategories(localeId)) {
+
+        if (lockTypeCategory.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"lock_type_categories\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + lockTypeCategory.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + lockTypeCategory.getLocaleId()
+                  + "\"/>");
+
+          if (lockTypeCategory.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + lockTypeCategory.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + lockTypeCategory.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + lockTypeCategory.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Lock Types
+      for (LockType lockType : partyReferenceService.getLockTypes(localeId)) {
+
+        if (lockType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"lock_types\">");
+          writer.println(
+              "      <column name=\"category\" value=\"" + lockType.getCategory() + "\"/>");
+          writer.println("      <column name=\"code\" value=\"" + lockType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + lockType.getLocaleId() + "\"/>");
+
+          if (lockType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + lockType.getSortIndex() + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + lockType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\"" + lockType.getDescription() + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(lockType.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Marital Statuses
+      for (MaritalStatus maritalStatus : partyReferenceService.getMaritalStatuses(localeId)) {
+
+        if (maritalStatus.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"marital_statuses\">");
+          writer.println("      <column name=\"code\" value=\"" + maritalStatus.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + maritalStatus.getLocaleId() + "\"/>");
+
+          if (maritalStatus.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + maritalStatus.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + maritalStatus.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + maritalStatus.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Marriage Types
+      for (MarriageType marriageType : partyReferenceService.getMarriageTypes(localeId)) {
+
+        if (marriageType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"marriage_types\">");
+          writer.println(
+              "      <column name=\"marital_status\" value=\""
+                  + marriageType.getMaritalStatus()
+                  + "\"/>");
+          writer.println("      <column name=\"code\" value=\"" + marriageType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + marriageType.getLocaleId() + "\"/>");
+
+          if (marriageType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + marriageType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + marriageType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + marriageType.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Next of Kin Types
+      for (NextOfKinType nextOfKinType : partyReferenceService.getNextOfKinTypes(localeId)) {
+
+        if (nextOfKinType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"next_of_kin_types\">");
+          writer.println("      <column name=\"code\" value=\"" + nextOfKinType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + nextOfKinType.getLocaleId() + "\"/>");
+
+          if (nextOfKinType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + nextOfKinType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + nextOfKinType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + nextOfKinType.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Occupations
+      for (Occupation occupation : partyReferenceService.getOccupations(localeId)) {
+
+        if (occupation.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"occupations\">");
+          writer.println("      <column name=\"code\" value=\"" + occupation.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + occupation.getLocaleId() + "\"/>");
+
+          if (occupation.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + occupation.getSortIndex() + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + occupation.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\"" + occupation.getDescription() + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Physical Address Types
+      for (PhysicalAddressType physicalAddressType :
+          partyReferenceService.getPhysicalAddressTypes(localeId)) {
+
+        if (physicalAddressType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"physical_address_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + physicalAddressType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + physicalAddressType.getLocaleId()
+                  + "\"/>");
+
+          if (physicalAddressType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + physicalAddressType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + physicalAddressType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + physicalAddressType.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Physical Address Purposes
+      for (PhysicalAddressPurpose physicalAddressPurpose :
+          partyReferenceService.getPhysicalAddressPurposes(localeId)) {
+
+        if (physicalAddressPurpose.getTenantId() == null) {
+          writer.println(
+              "    <insert schemaName=\"party\" tableName=\"physical_address_purposes\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + physicalAddressPurpose.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + physicalAddressPurpose.getLocaleId()
+                  + "\"/>");
+
+          if (physicalAddressPurpose.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + physicalAddressPurpose.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + physicalAddressPurpose.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + physicalAddressPurpose.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(physicalAddressPurpose.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Physical Address Roles
+      for (PhysicalAddressRole physicalAddressRole :
+          partyReferenceService.getPhysicalAddressRoles(localeId)) {
+
+        if (physicalAddressRole.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"physical_address_roles\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + physicalAddressRole.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + physicalAddressRole.getLocaleId()
+                  + "\"/>");
+
+          if (physicalAddressRole.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + physicalAddressRole.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + physicalAddressRole.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + physicalAddressRole.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(physicalAddressRole.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Preference Type Categories
+      for (PreferenceTypeCategory preferenceTypeCategory :
+          partyReferenceService.getPreferenceTypeCategories(localeId)) {
+
+        if (preferenceTypeCategory.getTenantId() == null) {
+          writer.println(
+              "    <insert schemaName=\"party\" tableName=\"preference_type_categories\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + preferenceTypeCategory.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + preferenceTypeCategory.getLocaleId()
+                  + "\"/>");
+
+          if (preferenceTypeCategory.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + preferenceTypeCategory.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + preferenceTypeCategory.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + preferenceTypeCategory.getDescription()
+                  + "\"/>");
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Preference Types"
+      for (PreferenceType preferenceType : partyReferenceService.getPreferenceTypes(localeId)) {
+
+        if (preferenceType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"preference_types\">");
+          writer.println(
+              "      <column name=\"category\" value=\"" + preferenceType.getCategory() + "\"/>");
+          writer.println(
+              "      <column name=\"code\" value=\"" + preferenceType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + preferenceType.getLocaleId() + "\"/>");
+
+          if (preferenceType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + preferenceType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + preferenceType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + preferenceType.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(preferenceType.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Qualification Types
+      for (QualificationType qualificationType :
+          partyReferenceService.getQualificationTypes(localeId)) {
+
+        if (qualificationType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"qualification_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + qualificationType.getCode() + "\"/>");
+          if (qualificationType.getFieldOfStudy() != null) {
+            writer.println(
+                "      <column name=\"field_of_study\" value=\""
+                    + qualificationType.getFieldOfStudy()
+                    + "\"/>");
+          }
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + qualificationType.getLocaleId()
+                  + "\"/>");
+
+          if (qualificationType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + qualificationType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + qualificationType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + qualificationType.getDescription()
+                  + "\"/>");
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Races
+      for (Race race : partyReferenceService.getRaces(localeId)) {
+
+        if (race.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"races\">");
+          writer.println("      <column name=\"code\" value=\"" + race.getCode() + "\"/>");
+          writer.println("      <column name=\"locale_id\" value=\"" + race.getLocaleId() + "\"/>");
+
+          if (race.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + race.getSortIndex() + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + race.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\"" + race.getDescription() + "\"/>");
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Residence Permit Types
+      for (ResidencePermitType residencePermitType :
+          partyReferenceService.getResidencePermitTypes(localeId)) {
+
+        if (residencePermitType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"residence_permit_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + residencePermitType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + residencePermitType.getLocaleId()
+                  + "\"/>");
+
+          if (residencePermitType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + residencePermitType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + residencePermitType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + residencePermitType.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"country_of_issue\" value=\""
+                  + residencePermitType.getCountryOfIssue()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Residency Statuses
+      for (ResidencyStatus residencyStatus : partyReferenceService.getResidencyStatuses(localeId)) {
+
+        if (residencyStatus.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"residency_statuses\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + residencyStatus.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + residencyStatus.getLocaleId() + "\"/>");
+
+          if (residencyStatus.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + residencyStatus.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + residencyStatus.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + residencyStatus.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Residential Types
+      for (ResidentialType residentialType : partyReferenceService.getResidentialTypes(localeId)) {
+
+        if (residentialType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"residential_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + residentialType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + residentialType.getLocaleId() + "\"/>");
+
+          if (residentialType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + residentialType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + residentialType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + residentialType.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Role Purposes
+      for (RolePurpose rolePurpose : partyReferenceService.getRolePurposes(localeId)) {
+
+        if (rolePurpose.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"role_purposes\">");
+          writer.println("      <column name=\"code\" value=\"" + rolePurpose.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + rolePurpose.getLocaleId() + "\"/>");
+
+          if (rolePurpose.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + rolePurpose.getSortIndex() + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + rolePurpose.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + rolePurpose.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Role Types
+      for (RoleType roleType : partyReferenceService.getRoleTypes(localeId)) {
+
+        if (roleType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"role_types\">");
+          writer.println("      <column name=\"code\" value=\"" + roleType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + roleType.getLocaleId() + "\"/>");
+
+          if (roleType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + roleType.getSortIndex() + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + roleType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\"" + roleType.getDescription() + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(roleType.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Relationship Types
+      for (RelationshipType relationshipType :
+          partyReferenceService.getRelationshipTypes(localeId)) {
+
+        if (relationshipType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"relationship_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + relationshipType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + relationshipType.getLocaleId()
+                  + "\"/>");
+
+          if (relationshipType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + relationshipType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + relationshipType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + relationshipType.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"first_party_role\" value=\""
+                  + relationshipType.getFirstPartyRole()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"second_party_role\" value=\""
+                  + relationshipType.getSecondPartyRole()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Relationship Property Types
+      for (RelationshipPropertyType relationshipPropertyType :
+          partyReferenceService.getRelationshipPropertyTypes(localeId)) {
+
+        if (relationshipPropertyType.getTenantId() == null) {
+          writer.println(
+              "    <insert schemaName=\"party\" tableName=\"relationship_property_types\">");
+          writer.println(
+              "      <column name=\"relationship_type\" value=\"" + relationshipPropertyType.getRelationshipType() + "\"/>");
+          writer.println(
+              "      <column name=\"code\" value=\"" + relationshipPropertyType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + relationshipPropertyType.getLocaleId()
+                  + "\"/>");
+
+          if (relationshipPropertyType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + relationshipPropertyType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + relationshipPropertyType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + relationshipPropertyType.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"value_type\" value=\""
+                  + relationshipPropertyType.getValueType().code()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Segments
+      for (Segment segment : partyReferenceService.getSegments(localeId)) {
+
+        if (segment.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"segments\">");
+          writer.println("      <column name=\"code\" value=\"" + segment.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + segment.getLocaleId() + "\"/>");
+
+          if (segment.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + segment.getSortIndex() + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + segment.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\"" + segment.getDescription() + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(segment.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Source Of Funds Types
+      for (SourceOfFundsType sourceOfFundsType :
+          partyReferenceService.getSourceOfFundsTypes(localeId)) {
+
+        if (sourceOfFundsType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"source_of_funds_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + sourceOfFundsType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + sourceOfFundsType.getLocaleId()
+                  + "\"/>");
+
+          if (sourceOfFundsType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + sourceOfFundsType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + sourceOfFundsType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + sourceOfFundsType.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Source Of Wealth Types
+      for (SourceOfWealthType sourceOfWealthType :
+          partyReferenceService.getSourceOfWealthTypes(localeId)) {
+
+        if (sourceOfWealthType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"source_of_wealth_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + sourceOfWealthType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + sourceOfWealthType.getLocaleId()
+                  + "\"/>");
+
+          if (sourceOfWealthType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + sourceOfWealthType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + sourceOfWealthType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + sourceOfWealthType.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Status Type Categories
+      for (StatusTypeCategory statusTypeCategory :
+          partyReferenceService.getStatusTypeCategories(localeId)) {
+
+        if (statusTypeCategory.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"status_type_categories\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + statusTypeCategory.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + statusTypeCategory.getLocaleId()
+                  + "\"/>");
+
+          if (statusTypeCategory.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + statusTypeCategory.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + statusTypeCategory.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + statusTypeCategory.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Status Types
+      for (StatusType statusType : partyReferenceService.getStatusTypes(localeId)) {
+
+        if (statusType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"status_types\">");
+          writer.println(
+              "      <column name=\"category\" value=\"" + statusType.getCategory() + "\"/>");
+          writer.println("      <column name=\"code\" value=\"" + statusType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + statusType.getLocaleId() + "\"/>");
+
+          if (statusType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + statusType.getSortIndex() + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + statusType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\"" + statusType.getDescription() + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(statusType.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Tax Number Types
+      for (TaxNumberType taxNumberType : partyReferenceService.getTaxNumberTypes(localeId)) {
+
+        if (taxNumberType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"tax_number_types\">");
+          writer.println("      <column name=\"code\" value=\"" + taxNumberType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + taxNumberType.getLocaleId() + "\"/>");
+
+          if (taxNumberType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + taxNumberType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + taxNumberType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + taxNumberType.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"country_of_issue\" value=\""
+                  + taxNumberType.getCountryOfIssue()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"party_types\" value=\""
+                  + StringUtils.arrayToCommaDelimitedString(taxNumberType.getPartyTypes())
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Times To Contact
+      for (TimeToContact timeToContact : partyReferenceService.getTimesToContact(localeId)) {
+
+        if (timeToContact.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"times_to_contact\">");
+          writer.println("      <column name=\"code\" value=\"" + timeToContact.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + timeToContact.getLocaleId() + "\"/>");
+
+          if (timeToContact.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + timeToContact.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + timeToContact.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + timeToContact.getDescription()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Titles
+      for (Title title : partyReferenceService.getTitles(localeId)) {
+
+        if (title.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"titles\">");
+          writer.println("      <column name=\"code\" value=\"" + title.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + title.getLocaleId() + "\"/>");
+
+          if (title.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + title.getSortIndex() + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + title.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"abbreviation\" value=\"" + title.getAbbreviation() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\"" + title.getDescription() + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      writer.println();
+    }
+
+    // Role Type Attribute Type Constraints
+    for (RoleTypeAttributeTypeConstraint roleTypeAttributeTypeConstraint :
+        partyReferenceService.getRoleTypeAttributeTypeConstraints()) {
+
+      writer.println(
+          "    <insert schemaName=\"party\" tableName=\"role_type_attribute_type_constraints\">");
+      writer.println(
+          "      <column name=\"role_type\" value=\""
+              + roleTypeAttributeTypeConstraint.getRoleType()
+              + "\"/>");
+      writer.println(
+          "      <column name=\"attribute_type\" value=\""
+              + roleTypeAttributeTypeConstraint.getAttributeType()
+              + "\"/>");
+      writer.println(
+          "      <column name=\"attribute_type_qualifier\" value=\""
+              + roleTypeAttributeTypeConstraint.getAttributeTypeQualifier()
+              + "\"/>");
+      writer.println(
+          "      <column name=\"type\" value=\""
+              + roleTypeAttributeTypeConstraint.getType()
+              + "\"/>");
+      writer.println(
+          "      <column name=\"value\" value=\""
+              + roleTypeAttributeTypeConstraint.getValue()
+              + "\"/>");
+
+      writer.println("    </insert>");
+    }
+
+    writer.println();
+
+    // Role Type Preference Type Constraints
+    for (RoleTypePreferenceTypeConstraint roleTypePreferenceTypeConstraint :
+        partyReferenceService.getRoleTypePreferenceTypeConstraints()) {
+
+      writer.println(
+          "    <insert schemaName=\"party\" tableName=\"role_type_preference_type_constraints\">");
+      writer.println(
+          "      <column name=\"role_type\" value=\""
+              + roleTypePreferenceTypeConstraint.getRoleType()
+              + "\"/>");
+      writer.println(
+          "      <column name=\"preference_type\" value=\""
+              + roleTypePreferenceTypeConstraint.getPreferenceType()
+              + "\"/>");
+      writer.println(
+          "      <column name=\"type\" value=\""
+              + roleTypePreferenceTypeConstraint.getType()
+              + "\"/>");
+      writer.println(
+          "      <column name=\"value\" value=\""
+              + roleTypePreferenceTypeConstraint.getValue()
+              + "\"/>");
+
+      writer.println("    </insert>");
     }
   }
 }

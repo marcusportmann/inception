@@ -3393,7 +3393,6 @@
     </insert>
 
 
-
     <insert schemaName="reference" tableName="countries">
       <column name="code" value="ZZ"/>
       <column name="iso3_code" value="ZZZ"/>
@@ -6776,7 +6775,6 @@
       <column name="name" value="Western Cape"/>
       <column name="description" value="Western Cape"/>
     </insert>
-
 
 
   </changeSet>

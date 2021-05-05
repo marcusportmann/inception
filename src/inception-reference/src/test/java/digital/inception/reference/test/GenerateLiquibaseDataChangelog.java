@@ -306,7 +306,6 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
       writer.println();
 
       writer.println();
-      writer.println();
     }
   }
 }
