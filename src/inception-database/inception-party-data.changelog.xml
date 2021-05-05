@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="inception-party-data-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Party - Data - 1.0.0</comment>
+
+    <insert schemaName="party" tableName="attribute_type_categories">
+      <column name="code" value="anthropometric_measurements"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Anthropometric Measurements"/>
+      <column name="description" value="Anthropometric Measurements"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="attribute_type_categories">
+      <column name="code" value="anthropometric_measurements"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Anthropometric Measurements"/>
+      <column name="description" value="Anthropometric Measurements"/>
+    </insert>
+
+
+
+  </changeSet>
+</databaseChangeLog>
