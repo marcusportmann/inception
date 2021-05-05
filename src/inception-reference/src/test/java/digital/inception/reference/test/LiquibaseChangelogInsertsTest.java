@@ -27,6 +27,10 @@ import digital.inception.reference.MeasurementUnitType;
 import digital.inception.reference.Region;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +60,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
     })
 public class LiquibaseChangelogInsertsTest {
 
+  private static final Set<String> LOCALE_IDS = Set.of("en-US", "en-ZA");
+
   /** The Reference Service. */
   @Autowired private IReferenceService referenceService;
 
@@ -63,171 +69,214 @@ public class LiquibaseChangelogInsertsTest {
   @Test
   public void createLiquibaseChangelogInserts() throws Exception {
     boolean createLiquibaseInserts = true;
-    boolean createCountryInserts = createLiquibaseInserts && false;
-    boolean createLanguageInserts = createLiquibaseInserts && false;
-    boolean createMeasurementSystemInserts = createLiquibaseInserts && false;
-    boolean createMeasurementUnitTypeInserts = createLiquibaseInserts && false;
-    boolean createMeasurementUnitInserts = createLiquibaseInserts && false;
-    boolean createRegionInserts = createLiquibaseInserts && false;
+    boolean createCountryInserts = createLiquibaseInserts && true;
+    boolean createLanguageInserts = createLiquibaseInserts && true;
+    boolean createMeasurementSystemInserts = createLiquibaseInserts && true;
+    boolean createMeasurementUnitTypeInserts = createLiquibaseInserts && true;
+    boolean createMeasurementUnitInserts = createLiquibaseInserts && true;
+    boolean createRegionInserts = createLiquibaseInserts && true;
 
-    if (createCountryInserts) {
-      for (Country country : referenceService.getCountries("en-US")) {
+    String fileName =
+        System.getProperty("user.dir")
+            + File.separator
+            + "target"
+            + File.separator
+            + "reference-liquibase-inserts.txt";
 
-        if (country.getNationality().contains(",")) {
-          fail("Invalid nationality for country (" + country.getCode() + ")");
+    System.out.println("File Name: " + fileName);
+
+    PrintWriter writer = new PrintWriter(new FileWriter(fileName));
+
+    for (String localeId : LOCALE_IDS) {
+
+      if (createCountryInserts) {
+        for (Country country : referenceService.getCountries(localeId)) {
+
+          if (country.getNationality().contains(",")) {
+            fail("Invalid nationality for country (" + country.getCode() + ")");
+          }
+
+          writer.println("    <insert schemaName=\"reference\" tableName=\"countries\">");
+          writer.println("      <column name=\"code\" value=\"" + country.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"iso3_code\" value=\"" + country.getIso3Code() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + country.getLocaleId() + "\"/>");
+
+          if (country.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + country.getSortIndex() + "\"/>");
+          }
+
+          writer.println("      <column name=\"name\" value=\"" + country.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"short_name\" value=\"" + country.getShortName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\"" + country.getDescription() + "\"/>");
+          writer.println(
+              "      <column name=\"sovereign_state\" value=\""
+                  + country.getSovereignState()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"nationality\" value=\"" + country.getNationality() + "\"/>");
+          writer.println("    </insert>");
         }
 
-        System.out.println("<insert schemaName=\"reference\" tableName=\"countries\">");
-        System.out.println("  <column name=\"code\" value=\"" + country.getCode() + "\"/>");
-        System.out.println(
-            "  <column name=\"iso3_code\" value=\"" + country.getIso3Code() + "\"/>");
-        System.out.println(
-            "  <column name=\"locale_id\" value=\"" + country.getLocaleId() + "\"/>");
-
-        if (country.getSortIndex() != null) {
-          System.out.println(
-              "  <column name=\"sort_index\" value=\"" + country.getSortIndex() + "\"/>");
-        }
-
-        System.out.println("  <column name=\"name\" value=\"" + country.getName() + "\"/>");
-        System.out.println(
-            "  <column name=\"short_name\" value=\"" + country.getShortName() + "\"/>");
-        System.out.println(
-            "  <column name=\"description\" value=\"" + country.getDescription() + "\"/>");
-        System.out.println(
-            "  <column name=\"sovereign_state\" value=\"" + country.getSovereignState() + "\"/>");
-        System.out.println(
-            "  <column name=\"nationality\" value=\"" + country.getNationality() + "\"/>");
-        System.out.println("</insert>");
+        writer.println();
       }
 
-      System.out.println();
-    }
+      if (createLanguageInserts) {
+        for (Language language : referenceService.getLanguages(localeId)) {
 
-    if (createLanguageInserts) {
-      for (Language language : referenceService.getLanguages("en-US")) {
+          writer.println("    <insert schemaName=\"reference\" tableName=\"languages\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + language.getCode().toUpperCase() + "\"/>");
+          writer.println(
+              "      <column name=\"iso3_code\" value=\""
+                  + language.getIso3Code().toUpperCase()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + language.getLocaleId() + "\"/>");
 
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"languages\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + language.getCode().toUpperCase() + "\"/>");
-        System.out.println(
-            "      <column name=\"iso3_code\" value=\""
-                + language.getIso3Code().toUpperCase()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\"" + language.getLocaleId() + "\"/>");
+          if (language.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + language.getSortIndex() + "\"/>");
+          }
 
-        if (language.getSortIndex() != null) {
-          System.out.println(
-              "  <column name=\"sort_index\" value=\"" + language.getSortIndex() + "\"/>");
+          writer.println("      <column name=\"name\" value=\"" + language.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"short_name\" value=\"" + language.getShortName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\"" + language.getDescription() + "\"/>");
+          writer.println("    </insert>");
         }
 
-        System.out.println("      <column name=\"name\" value=\"" + language.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"short_name\" value=\"" + language.getShortName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\"" + language.getDescription() + "\"/>");
-        System.out.println("    </insert>");
+        writer.println();
       }
 
-      System.out.println();
-    }
+      if (createMeasurementSystemInserts) {
+        for (MeasurementSystem measurementSystem :
+            referenceService.getMeasurementSystems(localeId)) {
 
-    if (createMeasurementSystemInserts) {
-      for (MeasurementSystem measurementSystem : referenceService.getMeasurementSystems("en-US")) {
+          writer.println("    <insert schemaName=\"reference\" tableName=\"measurement_systems\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + measurementSystem.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + measurementSystem.getLocaleId()
+                  + "\"/>");
 
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"measurement_systems\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + measurementSystem.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\"" + measurementSystem.getLocaleId() + "\"/>");
+          if (measurementSystem.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + measurementSystem.getSortIndex()
+                    + "\"/>");
+          }
 
-        if (measurementSystem.getSortIndex() != null) {
-          System.out.println(
-              "  <column name=\"sort_index\" value=\"" + measurementSystem.getSortIndex() + "\"/>");
+          writer.println(
+              "      <column name=\"name\" value=\"" + measurementSystem.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + measurementSystem.getDescription()
+                  + "\"/>");
+          writer.println("    </insert>");
         }
 
-        System.out.println("      <column name=\"name\" value=\"" + measurementSystem.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\"" + measurementSystem.getDescription() + "\"/>");
-        System.out.println("    </insert>");
+        writer.println();
       }
 
-      System.out.println();
-    }
+      if (createMeasurementUnitTypeInserts) {
+        for (MeasurementUnitType measurementUnitType :
+            referenceService.getMeasurementUnitTypes(localeId)) {
 
-    if (createMeasurementUnitTypeInserts) {
-      for (MeasurementUnitType measurementUnitType : referenceService.getMeasurementUnitTypes("en-US")) {
+          writer.println(
+              "    <insert schemaName=\"reference\" tableName=\"measurement_unit_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + measurementUnitType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + measurementUnitType.getLocaleId()
+                  + "\"/>");
 
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"measurement_unit_types\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + measurementUnitType.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\"" + measurementUnitType.getLocaleId() + "\"/>");
+          if (measurementUnitType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + measurementUnitType.getSortIndex()
+                    + "\"/>");
+          }
 
-        if (measurementUnitType.getSortIndex() != null) {
-          System.out.println(
-              "  <column name=\"sort_index\" value=\"" + measurementUnitType.getSortIndex() + "\"/>");
+          writer.println(
+              "      <column name=\"name\" value=\"" + measurementUnitType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + measurementUnitType.getDescription()
+                  + "\"/>");
+          writer.println("    </insert>");
         }
 
-        System.out.println("      <column name=\"name\" value=\"" + measurementUnitType.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\"" + measurementUnitType.getDescription() + "\"/>");
-        System.out.println("    </insert>");
+        writer.println();
       }
 
-      System.out.println();
-    }
+      if (createMeasurementUnitInserts) {
+        for (MeasurementUnit measurementUnit : referenceService.getMeasurementUnits(localeId)) {
 
-    if (createMeasurementUnitInserts) {
-      for (MeasurementUnit measurementUnit : referenceService.getMeasurementUnits("en-US")) {
+          writer.println("    <insert schemaName=\"reference\" tableName=\"measurement_units\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + measurementUnit.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + measurementUnit.getLocaleId() + "\"/>");
 
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"measurement_units\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + measurementUnit.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\"" + measurementUnit.getLocaleId() + "\"/>");
+          if (measurementUnit.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + measurementUnit.getSortIndex()
+                    + "\"/>");
+          }
 
-        if (measurementUnit.getSortIndex() != null) {
-          System.out.println(
-              "  <column name=\"sort_index\" value=\"" + measurementUnit.getSortIndex() + "\"/>");
+          writer.println(
+              "      <column name=\"name\" value=\"" + measurementUnit.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + measurementUnit.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"system\" value=\"" + measurementUnit.getSystem() + "\"/>");
+          writer.println(
+              "      <column name=\"type\" value=\"" + measurementUnit.getType() + "\"/>");
+          writer.println("    </insert>");
         }
 
-        System.out.println("      <column name=\"name\" value=\"" + measurementUnit.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\"" + measurementUnit.getDescription() + "\"/>");
-        System.out.println(
-            "      <column name=\"system\" value=\"" + measurementUnit.getSystem() + "\"/>");
-        System.out.println(
-            "      <column name=\"type\" value=\"" + measurementUnit.getType() + "\"/>");
-        System.out.println("    </insert>");
+        writer.println();
       }
 
-      System.out.println();
-    }
+      if (createRegionInserts) {
+        for (Region region : referenceService.getRegions(localeId)) {
 
-    if (createRegionInserts) {
-      for (Region region : referenceService.getRegions("en-US")) {
+          writer.println("    <insert schemaName=\"reference\" tableName=\"regions\">");
+          writer.println("      <column name=\"country\" value=\"" + region.getCountry() + "\"/>");
+          writer.println("      <column name=\"code\" value=\"" + region.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + region.getLocaleId() + "\"/>");
 
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"regions\">");
-        System.out.println(
-            "      <column name=\"country\" value=\"" + region.getCountry() + "\"/>");
-        System.out.println("      <column name=\"code\" value=\"" + region.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\"" + region.getLocaleId() + "\"/>");
+          if (region.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\"" + region.getSortIndex() + "\"/>");
+          }
 
-        if (region.getSortIndex() != null) {
-          System.out.println(
-              "  <column name=\"sort_index\" value=\"" + region.getSortIndex() + "\"/>");
+          writer.println("      <column name=\"name\" value=\"" + region.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\"" + region.getDescription() + "\"/>");
+          writer.println("    </insert>");
         }
 
-        System.out.println("      <column name=\"name\" value=\"" + region.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\"" + region.getDescription() + "\"/>");
-        System.out.println("    </insert>");
+        writer.println();
       }
 
-      System.out.println();
+      writer.println();
+      writer.println();
     }
+
+    writer.flush();
+    writer.close();
   }
 }
