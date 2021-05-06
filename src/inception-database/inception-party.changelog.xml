@@ -1096,6 +1096,7 @@
       <column name="employer_address_line1" type="nvarchar(100)" remarks="The employer address line 1"/>
       <column name="employer_address_line2" type="nvarchar(100)" remarks="The employer address line 2"/>
       <column name="employer_address_line3" type="nvarchar(100)" remarks="The employer address line 3"/>
+      <column name="employer_address_line4" type="nvarchar(100)" remarks="The employer address line 4"/>
       <column name="employer_address_postal_code" type="nvarchar(30)" remarks="The employer address postal code"/>
       <column name="employer_address_region" type="nvarchar(30)" remarks="The ISO 3166-2 subdivision code for the employer address region"/>
       <column name="employer_address_suburb" type="nvarchar(50)" remarks="The employer address suburb"/>
@@ -1212,6 +1213,39 @@
       referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
     <createIndex indexName="locks_party_id_ix" schemaName="party" tableName="locks">
       <column name="party_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="next_of_kin" remarks="Next Of Kin">
+      <column name="address_city" type="nvarchar(50)" remarks="The next of kin address city"/>
+      <column name="address_country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the next of kin address country"/>
+      <column name="address_line1" type="nvarchar(100)" remarks="The next of kin address line 1"/>
+      <column name="address_line2" type="nvarchar(100)" remarks="The next of kin address line 2"/>
+      <column name="address_line3" type="nvarchar(100)" remarks="The next of kin address line 3"/>
+      <column name="address_line4" type="nvarchar(100)" remarks="The next of kin address line 4"/>
+      <column name="address_postal_code" type="nvarchar(30)" remarks="The next of kin address postal code"/>
+      <column name="address_region" type="nvarchar(30)" remarks="The ISO 3166-2 subdivision code for the next of kin address region"/>
+      <column name="address_suburb" type="nvarchar(50)" remarks="The next of kin address suburb"/>
+      <column name="created" type="timestamp" remarks="The date and time the next of kin was created"/>
+      <column name="email_address" type="nvarchar(100)" remarks="The e-mail address for the next of kin"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the next of kin"/>
+      <column name="mobile_number" type="nvarchar(100)" remarks="The mobile number for the next of kin"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the next of kin"/>
+      <column name="person_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the person the next of kin is associated with"/>
+      <column name="phone_number" type="nvarchar(100)" remarks="The phone number for the next of kin"/>
+      <column name="type" type="nvarchar(30)" remarks="The code for the next of kin type for the next of kin"/>
+      <column name="updated" type="timestamp" remarks="The date and time the next of kin was last updated"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="next_of_kin" columnNames="id"/>
+    <addNotNullConstraint schemaName="party" tableName="next_of_kin" columnName="created"/>
+    <addNotNullConstraint schemaName="party" tableName="next_of_kin" columnName="id"/>
+    <addNotNullConstraint schemaName="party" tableName="next_of_kin" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="next_of_kin" columnName="person_id"/>
+    <addNotNullConstraint schemaName="party" tableName="next_of_kin" columnName="type"/>
+    <addForeignKeyConstraint constraintName="next_of_kin_person_fk" baseTableSchemaName="party"
+      baseTableName="next_of_kin" baseColumnNames="person_id" referencedTableSchemaName="party"
+      referencedTableName="persons" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="next_of_kin_person_id_ix" schemaName="party" tableName="next_of_kin">
+      <column name="person_id"/>
     </createIndex>
 
     <createTable schemaName="party" tableName="physical_addresses" remarks="Physical Addresses">

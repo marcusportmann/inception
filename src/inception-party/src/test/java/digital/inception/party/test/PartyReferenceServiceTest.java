@@ -1022,7 +1022,7 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getRoleTypeAttributeTypeConstraints();
 
     assertEquals(
-        71,
+        72,
         retrievedRoleTypeAttributeTypeConstraints.size(),
         "The correct number of role type attribute type constraints was not retrieved");
 
@@ -1030,7 +1030,7 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getRoleTypeAttributeTypeConstraints("test_person_role");
 
     assertEquals(
-        56,
+        57,
         retrievedRoleTypeAttributeTypeConstraints.size(),
         "The correct number of role type attribute type constraints was not retrieved");
 

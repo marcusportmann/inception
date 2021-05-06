@@ -27,6 +27,7 @@ import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.LanguageProficiency;
 import digital.inception.party.Lock;
+import digital.inception.party.NextOfKin;
 import digital.inception.party.Person;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.Preference;
@@ -596,6 +597,42 @@ public class ValidPersonValidator extends PartyValidator
                 .addConstraintViolation();
 
             isValid = false;
+          }
+        }
+
+        // Validate next of kin
+        for (NextOfKin nextOfKin : person.getNextOfKin()) {
+          if (StringUtils.hasText(nextOfKin.getType())) {
+            if (!getPartyReferenceService()
+                .isValidNextOfKinType(
+                    person.getTenantId(), nextOfKin.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("nextOfKinType", nextOfKin.getType())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidNextOfKinType.message}")
+                  .addPropertyNode("nextOfKin")
+                  .addPropertyNode("type")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+
+          if (StringUtils.hasText(nextOfKin.getAddressCountry())) {
+            if (!getReferenceService().isValidCountry(nextOfKin.getAddressCountry())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter(
+                      "nextOfKinAddressCountry", nextOfKin.getAddressCountry())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidNextOfKinAddressCountry.message}")
+                  .addPropertyNode("nextOfKin")
+                  .addPropertyNode("addressCountry")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
           }
         }
 
@@ -1290,6 +1327,18 @@ public class ValidPersonValidator extends PartyValidator
                   person.getMeasurementSystem(),
                   "measurementSystem",
                   "{digital.inception.party.constraints.ValidPerson.measurementSystemRequiredForRoleType.message}",
+                  hibernateConstraintValidatorContext)) {
+                isValid = false;
+              }
+
+              break;
+
+            case "next_of_kin":
+              if (!validateRequiredAttributeConstraint(
+                  roleType,
+                  person.getMeasurementSystem(),
+                  "nextOfKin",
+                  "{digital.inception.party.constraints.ValidPerson.nextOfKinRequiredForRoleType.message}",
                   hibernateConstraintValidatorContext)) {
                 isValid = false;
               }

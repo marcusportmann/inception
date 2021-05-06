@@ -124,6 +124,7 @@ import org.springframework.util.StringUtils;
   "identityDocuments",
   "languageProficiencies",
   "locks",
+  "nextOfKin",
   "physicalAddresses",
   "preferences",
   "residencePermits",
@@ -178,6 +179,7 @@ import org.springframework.util.StringUtils;
       "identityDocuments",
       "languageProficiencies",
       "locks",
+      "nextOfKin",
       "physicalAddresses",
       "preferences",
       "residencePermits",
@@ -277,6 +279,15 @@ public class Person extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<Lock> locks = new HashSet<>();
+
+  /** The next of kin for the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "person",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<NextOfKin> nextOfKin = new HashSet<>();
 
   /** The physical addresses for the person. */
   @Valid
@@ -656,6 +667,20 @@ public class Person extends PartyBase implements Serializable {
     lock.setParty(this);
 
     locks.add(lock);
+  }
+
+  /**
+   * Add the next of kin for the person.
+   *
+   * @param nextOfKin the next of kin
+   */
+  public void addNextOfKin(NextOfKin nextOfKin) {
+    this.nextOfKin.removeIf(
+        existingNextOfKin -> Objects.equals(existingNextOfKin.getId(), nextOfKin.getId()));
+
+    nextOfKin.setPerson(this);
+
+    this.nextOfKin.add(nextOfKin);
   }
 
   /**
@@ -1376,6 +1401,46 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns the next of kin for the person.
+   *
+   * @return the next of kin for the person
+   */
+  @Schema(description = "The next of kin for the person")
+  @JsonProperty
+  @JsonManagedReference("nextOfKinReference")
+  @XmlElementWrapper(name = "NextOfKin")
+  @XmlElement(name = "NextOfKin")
+  public Set<NextOfKin> getNextOfKin() {
+    return nextOfKin;
+  }
+
+  /**
+   * Retrieve the next of kin with the specified ID for the person.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the next of kin
+   * @return an Optional containing the next of kin with the specified ID for the person or an empty
+   *     Optional if the next of kin could not be found
+   */
+  public Optional<NextOfKin> getNextOfKinWithId(UUID id) {
+    return nextOfKin.stream()
+        .filter(existingNextOfKin -> Objects.equals(existingNextOfKin.getId(), id))
+        .findFirst();
+  }
+
+  /**
+   * Retrieve the next of kin with the specified type for the person.
+   *
+   * @param type the code for the next of kin type
+   * @return an Optional containing the next of kin with the specified type for the person or an
+   *     empty Optional if the next of kin could not be found
+   */
+  public Optional<NextOfKin> getNextOfKinWithType(String type) {
+    return nextOfKin.stream()
+        .filter(existingNextOfKin -> Objects.equals(existingNextOfKin.getType(), type))
+        .findFirst();
+  }
+
+  /**
    * Returns the code for the occupation for the person.
    *
    * @return the code for the occupation for the person
@@ -1850,6 +1915,18 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns whether the person has a next of kin with the specified type.
+   *
+   * @param type the code for the next of kin type
+   * @return <b>true</b> if the person has a next of kin with the specified type or <b>false</b>
+   *     otherwise
+   */
+  public boolean hasNextOfKinWithType(String type) {
+    return nextOfKin.stream()
+        .anyMatch(exitingNextOfKin -> Objects.equals(exitingNextOfKin.getType(), type));
+  }
+
+  /**
    * Returns whether the person has a physical address with the specified role.
    *
    * @param role the code for the physical address role
@@ -2068,6 +2145,24 @@ public class Person extends PartyBase implements Serializable {
    */
   public void removeLockWithType(String type) {
     locks.removeIf(existingLock -> Objects.equals(existingLock.getType(), type));
+  }
+
+  /**
+   * Remove the next of kin with the specified ID for the person.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the next of kin
+   */
+  public void removeNextOfKinWithId(UUID id) {
+    nextOfKin.removeIf(existingNextOfKin -> Objects.equals(existingNextOfKin.getId(), id));
+  }
+
+  /**
+   * Remove the next of kin with the specified type for the person.
+   *
+   * @param type the code for the next of kin type
+   */
+  public void removeNextOfKinWithType(String type) {
+    nextOfKin.removeIf(existingNextOfKin -> Objects.equals(existingNextOfKin.getType(), type));
   }
 
   /**
@@ -2497,6 +2592,17 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setName(String name) {
     super.setName(name);
+  }
+
+  /**
+   * Set the next of kin for the person.
+   *
+   * @param nextOfKin the next of kin for the person
+   */
+  public void setNextOfKin(Set<NextOfKin> nextOfKin) {
+    nextOfKin.forEach(aNextOfKin -> aNextOfKin.setPerson(this));
+    this.nextOfKin.clear();
+    this.nextOfKin.addAll(nextOfKin);
   }
 
   /**

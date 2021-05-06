@@ -1547,6 +1547,7 @@ CREATE TABLE party.employments (
   employer_address_line1       VARCHAR(100),
   employer_address_line2       VARCHAR(100),
   employer_address_line3       VARCHAR(100),
+  employer_address_line4       VARCHAR(100),
   employer_address_postal_code VARCHAR(30),
   employer_address_region      VARCHAR(30),
   employer_address_suburb      VARCHAR(50),
@@ -1579,6 +1580,8 @@ COMMENT ON COLUMN party.employments.employer_address_line1 IS 'The employer addr
 COMMENT ON COLUMN party.employments.employer_address_line2 IS 'The employer address line 2';
 
 COMMENT ON COLUMN party.employments.employer_address_line3 IS 'The employer address line 3';
+
+COMMENT ON COLUMN party.employments.employer_address_line4 IS 'The employer address line 4';
 
 COMMENT ON COLUMN party.employments.employer_address_postal_code IS 'The employer address postal code';
 
@@ -1730,6 +1733,69 @@ COMMENT ON COLUMN party.locks.party_id IS 'The Universally Unique Identifier (UU
 COMMENT ON COLUMN party.locks.type IS 'The code for the lock type';
 
 COMMENT ON COLUMN party.locks.updated IS 'The date and time the lock was last updated';
+
+
+CREATE TABLE party.next_of_kin (
+  address_city        VARCHAR(50),
+  address_country     CHAR(2),
+  address_line1       VARCHAR(100),
+  address_line2       VARCHAR(100),
+  address_line3       VARCHAR(100),
+  address_line4       VARCHAR(100),
+  address_postal_code VARCHAR(30),
+  address_region      VARCHAR(30),
+  address_suburb      VARCHAR(50),
+  created             TIMESTAMP    NOT NULL,
+  email_address       VARCHAR(100),
+  id                  UUID         NOT NULL,
+  mobile_number       VARCHAR(50),
+  name                VARCHAR(100) NOT NULL,
+  person_id           UUID         NOT NULL,
+  phone_number        VARCHAR(50),
+  type                VARCHAR(30)  NOT NULL,
+  updated             TIMESTAMP,
+
+  PRIMARY KEY (id),
+  CONSTRAINT next_of_kin_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
+);
+
+CREATE INDEX next_of_kin_person_id_ix ON party.next_of_kin(person_id);
+
+COMMENT ON COLUMN party.next_of_kin.address_city IS 'The next of kin address city';
+
+COMMENT ON COLUMN party.next_of_kin.address_country IS 'The ISO 3166-1 alpha-2 code for the next of kin address country';
+
+COMMENT ON COLUMN party.next_of_kin.address_line1 IS 'The next of kin address line 1';
+
+COMMENT ON COLUMN party.next_of_kin.address_line2 IS 'The next of kin address line 2';
+
+COMMENT ON COLUMN party.next_of_kin.address_line3 IS 'The next of kin address line 3';
+
+COMMENT ON COLUMN party.next_of_kin.address_line4 IS 'The next of kin address line 4';
+
+COMMENT ON COLUMN party.next_of_kin.address_postal_code IS 'The next of kin address postal code';
+
+COMMENT ON COLUMN party.next_of_kin.address_region IS 'The ISO 3166-2 subdivision code for the next of kin address region';
+
+COMMENT ON COLUMN party.next_of_kin.address_suburb IS 'The next of kin address suburb';
+
+COMMENT ON COLUMN party.next_of_kin.created IS 'The date and time the next of kin was created';
+
+COMMENT ON COLUMN party.next_of_kin.email_address IS 'The e-mail address for the next of kin';
+
+COMMENT ON COLUMN party.next_of_kin.id IS 'The Universally Unique Identifier (UUID) for the next of kin';
+
+COMMENT ON COLUMN party.next_of_kin.mobile_number IS 'The mobile number for the next of kin';
+
+COMMENT ON COLUMN party.next_of_kin.name IS 'The name of the next of kin';
+
+COMMENT ON COLUMN party.next_of_kin.person_id IS 'The Universally Unique Identifier (UUID) for the person the next of kin is associated with';
+
+COMMENT ON COLUMN party.next_of_kin.phone_number IS 'The phone number for the next of kin';
+
+COMMENT ON COLUMN party.next_of_kin.type IS 'The code for the next of kin type for the next of kin';
+
+COMMENT ON COLUMN party.next_of_kin.updated IS 'The date and time the next of kin was last updated';
 
 
 CREATE TABLE party.physical_addresses (

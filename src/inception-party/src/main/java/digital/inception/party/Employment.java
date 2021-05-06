@@ -71,6 +71,7 @@ import org.hibernate.annotations.UpdateTimestamp;
   "employerAddressLine1",
   "employerAddressLine2",
   "employerAddressLine3",
+  "employerAddressLine4",
   "employerAddressSuburb",
   "employerAddressCity",
   "employerAddressRegion",
@@ -94,6 +95,7 @@ import org.hibernate.annotations.UpdateTimestamp;
       "employerAddressLine1",
       "employerAddressLine2",
       "employerAddressLine3",
+      "employerAddressLine4",
       "employerAddressSuburb",
       "employerAddressCity",
       "employerAddressRegion",
@@ -157,6 +159,14 @@ public class Employment implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "employer_address_line3", length = 100)
   private String employerAddressLine3;
+
+  /** The employer address line 4. */
+  @Schema(description = "The employer address line 4")
+  @JsonProperty
+  @XmlElement(name = "EmployerAddressLine4")
+  @Size(min = 1, max = 100)
+  @Column(name = "employer_address_line4", length = 100)
+  private String employerAddressLine4;
 
   /** The employer address postal code. */
   @Schema(description = "The employer address postal code")
@@ -286,8 +296,9 @@ public class Employment implements Serializable {
    * @param employerEmailAddress the employer e-mail address
    * @param employerContactPerson the employer contact person
    * @param employerAddressLine1 the employer address line 1
-   * @param employerAddressLine2 the employer address line 1
-   * @param employerAddressLine3 the employer address line 1
+   * @param employerAddressLine2 the employer address line 2
+   * @param employerAddressLine3 the employer address line 3
+   * @param employerAddressLine4 the employer address line 4
    * @param employerAddressSuburb the employer address suburb
    * @param employerAddressCity the employer address city
    * @param employerAddressRegion the employer address region
@@ -306,6 +317,7 @@ public class Employment implements Serializable {
       String employerAddressLine1,
       String employerAddressLine2,
       String employerAddressLine3,
+      String employerAddressLine4,
       String employerAddressSuburb,
       String employerAddressCity,
       String employerAddressRegion,
@@ -323,6 +335,7 @@ public class Employment implements Serializable {
     this.employerAddressLine1 = employerAddressLine1;
     this.employerAddressLine2 = employerAddressLine2;
     this.employerAddressLine3 = employerAddressLine3;
+    this.employerAddressLine4 = employerAddressLine4;
     this.employerAddressSuburb = employerAddressSuburb;
     this.employerAddressCity = employerAddressCity;
     this.employerAddressRegion = employerAddressRegion;
@@ -342,8 +355,9 @@ public class Employment implements Serializable {
    * @param employerEmailAddress the employer e-mail address
    * @param employerContactPerson the employer contact person
    * @param employerAddressLine1 the employer address line 1
-   * @param employerAddressLine2 the employer address line 1
-   * @param employerAddressLine3 the employer address line 1
+   * @param employerAddressLine2 the employer address line 2
+   * @param employerAddressLine3 the employer address line 3
+   * @param employerAddressLine4 the employer address line 4
    * @param employerAddressSuburb the employer address suburb
    * @param employerAddressCity the employer address city
    * @param employerAddressRegion the employer address region
@@ -361,6 +375,7 @@ public class Employment implements Serializable {
       String employerAddressLine1,
       String employerAddressLine2,
       String employerAddressLine3,
+      String employerAddressLine4,
       String employerAddressSuburb,
       String employerAddressCity,
       String employerAddressRegion,
@@ -377,6 +392,7 @@ public class Employment implements Serializable {
     this.employerAddressLine1 = employerAddressLine1;
     this.employerAddressLine2 = employerAddressLine2;
     this.employerAddressLine3 = employerAddressLine3;
+    this.employerAddressLine4 = employerAddressLine4;
     this.employerAddressSuburb = employerAddressSuburb;
     this.employerAddressCity = employerAddressCity;
     this.employerAddressRegion = employerAddressRegion;
@@ -525,6 +541,15 @@ public class Employment implements Serializable {
    */
   public String getEmployerAddressLine3() {
     return employerAddressLine3;
+  }
+
+  /**
+   * Set the employer address line 4.
+   *
+   * @return the employer address line 4
+   */
+  public String getEmployerAddressLine4() {
+    return employerAddressLine4;
   }
 
   /**
@@ -707,6 +732,15 @@ public class Employment implements Serializable {
    */
   public void setEmployerAddressLine3(String employerAddressLine3) {
     this.employerAddressLine3 = employerAddressLine3;
+  }
+
+  /**
+   * Returns the employer address line 4.
+   *
+   * @param employerAddressLine4 the employer address line 4
+   */
+  public void setEmployerAddressLine4(String employerAddressLine4) {
+    this.employerAddressLine4 = employerAddressLine4;
   }
 
   /**

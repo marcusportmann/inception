@@ -40,6 +40,7 @@ import digital.inception.party.LanguageProficiencyLevel;
 import digital.inception.party.Lock;
 import digital.inception.party.MeasurementSystem;
 import digital.inception.party.MeasurementUnit;
+import digital.inception.party.NextOfKin;
 import digital.inception.party.Organization;
 import digital.inception.party.OrganizationSortBy;
 import digital.inception.party.Organizations;
@@ -715,6 +716,8 @@ public class PartyServiceTest {
     employment.setEmployerContactPerson("Joe Bloggs");
     employment.setEmployerAddressLine1("3rd Floor Grove");
     employment.setEmployerAddressLine2("1 Discovery Place");
+    employment.setEmployerAddressLine3("Line 3");
+    employment.setEmployerAddressLine4("Line 4");
     employment.setEmployerAddressSuburb("Sandhurst");
     employment.setEmployerAddressCity("Sandton");
     employment.setEmployerAddressRegion("GP");
@@ -758,6 +761,67 @@ public class PartyServiceTest {
 
     partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
   }
+
+  /** Test the next of kin functionality. */
+  @Test
+  public void nextOfKinTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    NextOfKin nextOfKin = new NextOfKin();
+    nextOfKin.setId(UuidCreator.getShortPrefixComb());
+    nextOfKin.setType("father");
+    nextOfKin.setName("Joe Bloggs");
+    nextOfKin.setPhoneNumber("+27 11 555 1234");
+    nextOfKin.setMobileNumber("+27832763107");
+    nextOfKin.setEmailAddress("joe@zyx.com");
+    nextOfKin.setAddressLine1("3 Happy Place");
+    nextOfKin.setAddressLine2("17 Market Street");
+    nextOfKin.setAddressLine3("Line 3");
+    nextOfKin.setAddressLine4("Line 4");
+    nextOfKin.setAddressSuburb("Fairland");
+    nextOfKin.setAddressCity("Johannesburg");
+    nextOfKin.setAddressRegion("GP");
+    nextOfKin.setAddressCountry("ZA");
+    nextOfKin.setAddressPostalCode("2170");
+
+    person.addNextOfKin(nextOfKin);
+
+    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    Person retrievedPerson =
+        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    assertTrue(retrievedPerson.getNextOfKinWithId(nextOfKin.getId()).isPresent());
+
+    assertTrue(retrievedPerson.getNextOfKinWithType("father").isPresent());
+
+    compareNextOfKin(
+        person.getNextOfKinWithId(nextOfKin.getId()).get(),
+        retrievedPerson.getNextOfKinWithId(nextOfKin.getId()).get());
+
+    person.removeNextOfKinWithId(nextOfKin.getId());
+
+    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setNextOfKin(Set.of(new NextOfKin("brother", "Fred Bloggs")));
+
+    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+  }
+
+
+
 
   /** Test the external reference functionality. */
   @Test
@@ -1130,6 +1194,7 @@ public class PartyServiceTest {
             "",
             "",
             "",
+            "",
             "XX",
             "",
             null,
@@ -1141,7 +1206,7 @@ public class PartyServiceTest {
         partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        14,
+        15,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the person with an invalid employment");
   }
@@ -1276,6 +1341,24 @@ public class PartyServiceTest {
         5,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the person with an invalid language proficiency");
+  }
+
+  /** Test the invalid next of kin verification functionality. */
+  @Test
+  public void invalidNextOfKinTest() {
+    Person person = getTestBasicPersonDetails();
+
+    person.addNextOfKin(
+        new NextOfKin(
+            "invalid_next_of_kin_type", null, "", "", "", "", "", "", "", "", "", "", "XX", ""));
+
+    Set<ConstraintViolation<Person>> constraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        14,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the person with an invalid next of kin");
   }
 
   /** Test the invalid organization attribute test. */
@@ -2576,7 +2659,7 @@ public class PartyServiceTest {
         partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        54,
+        55,
         personConstraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid person");
 
@@ -3111,6 +3194,10 @@ public class PartyServiceTest {
         employment2.getEmployerAddressLine3(),
         "The employer address line 3 values for the employments do not match");
     assertEquals(
+        employment1.getEmployerAddressLine4(),
+        employment2.getEmployerAddressLine4(),
+        "The employer address line 4 values for the employments do not match");
+    assertEquals(
         employment1.getEmployerAddressPostalCode(),
         employment2.getEmployerAddressPostalCode(),
         "The employer address postal code values for the employments do not match");
@@ -3253,6 +3340,67 @@ public class PartyServiceTest {
         "The effective to values for the locks do not match");
     assertEquals(lock1.getParty(), lock2.getParty(), "The party values for the locks do not match");
     assertEquals(lock1.getType(), lock2.getType(), "The type values for the locks do not match");
+  }
+
+  private void compareNextOfKin(NextOfKin nextOfKin1, NextOfKin nextOfKin2) {
+    assertEquals(
+        nextOfKin1.getId(), nextOfKin2.getId(), "The id values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getType(),
+        nextOfKin2.getType(),
+        "The type values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getName(),
+        nextOfKin2.getName(),
+        "The name values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getPhoneNumber(),
+        nextOfKin2.getPhoneNumber(),
+        "The phone number values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getMobileNumber(),
+        nextOfKin2.getMobileNumber(),
+        "The mobile number values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getEmailAddress(),
+        nextOfKin2.getEmailAddress(),
+        "The email address values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getAddressLine1(),
+        nextOfKin2.getAddressLine1(),
+        "The address line 1 values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getAddressLine2(),
+        nextOfKin2.getAddressLine2(),
+        "The address line 2 values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getAddressLine3(),
+        nextOfKin2.getAddressLine3(),
+        "The address line 3 values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getAddressLine4(),
+        nextOfKin2.getAddressLine4(),
+        "The address line 4 values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getAddressSuburb(),
+        nextOfKin2.getAddressSuburb(),
+        "The address suburb values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getAddressCity(),
+        nextOfKin2.getAddressCity(),
+        "The address city values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getAddressRegion(),
+        nextOfKin2.getAddressRegion(),
+        "The address region values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getAddressCountry(),
+        nextOfKin2.getAddressCountry(),
+        "The address country values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getAddressPostalCode(),
+        nextOfKin2.getAddressPostalCode(),
+        "The address postal code values for the next of kin do not match");
   }
 
   private void compareOrganizations(Organization organization1, Organization organization2) {
@@ -3834,6 +3982,28 @@ public class PartyServiceTest {
 
       if (!foundLock) {
         fail("Failed to find the lock (" + person1Lock.getType() + ")");
+      }
+    }
+
+    assertEquals(
+        person1.getNextOfKin().size(),
+        person2.getNextOfKin().size(),
+        "The number of next of kin for the persons do not match");
+
+    for (NextOfKin person1NextOfKin : person1.getNextOfKin()) {
+      boolean foundEmployment = false;
+
+      for (NextOfKin person2NextOfKin : person2.getNextOfKin()) {
+        if (person1NextOfKin.getId().equals(person2NextOfKin.getId())) {
+
+          compareNextOfKin(person1NextOfKin, person2NextOfKin);
+
+          foundEmployment = true;
+        }
+      }
+
+      if (!foundEmployment) {
+        fail("Failed to find the next of kin (" + person1NextOfKin.getId() + ")");
       }
     }
 
