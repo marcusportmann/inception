@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import digital.inception.party.AssociationPropertyType;
+import digital.inception.party.AssociationType;
 import digital.inception.party.AttributeType;
 import digital.inception.party.AttributeTypeCategory;
 import digital.inception.party.ConsentType;
@@ -47,8 +49,6 @@ import digital.inception.party.PreferenceType;
 import digital.inception.party.PreferenceTypeCategory;
 import digital.inception.party.QualificationType;
 import digital.inception.party.Race;
-import digital.inception.party.RelationshipPropertyType;
-import digital.inception.party.RelationshipType;
 import digital.inception.party.ResidencePermitType;
 import digital.inception.party.ResidencyStatus;
 import digital.inception.party.ResidentialType;
@@ -100,6 +100,68 @@ public class PartyReferenceServiceTest {
 
   /** The Party Reference Service. */
   @Autowired private IPartyReferenceService partyReferenceService;
+
+  /** Test the association property type reference functionality. */
+  @Test
+  public void associationPropertyTypeTest() throws Exception {
+    List<AssociationPropertyType> retrievedAssociationPropertyTypes =
+        partyReferenceService.getAssociationPropertyTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        2,
+        retrievedAssociationPropertyTypes.size(),
+        "The correct number of association property types was not retrieved");
+
+    retrievedAssociationPropertyTypes =
+        partyReferenceService.getAssociationPropertyTypes(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        2,
+        retrievedAssociationPropertyTypes.size(),
+        "The correct number of association property types was not retrieved");
+
+    retrievedAssociationPropertyTypes =
+        partyReferenceService.getAssociationPropertyTypes(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        1,
+        retrievedAssociationPropertyTypes.size(),
+        "The correct number of association property types was not retrieved");
+  }
+
+  /** Test the association type reference functionality. */
+  @Test
+  public void associationTypeTest() throws Exception {
+    List<AssociationType> retrievedAssociationTypes =
+        partyReferenceService.getAssociationTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        22,
+        retrievedAssociationTypes.size(),
+        "The correct number of association types was not retrieved");
+
+    retrievedAssociationTypes =
+        partyReferenceService.getAssociationTypes(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        22,
+        retrievedAssociationTypes.size(),
+        "The correct number of association types was not retrieved");
+
+    retrievedAssociationTypes =
+        partyReferenceService.getAssociationTypes(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        21,
+        retrievedAssociationTypes.size(),
+        "The correct number of association types was not retrieved");
+  }
 
   /** Test the attribute type category reference functionality. */
   @Test
@@ -832,69 +894,6 @@ public class PartyReferenceServiceTest {
             IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(6, retrievedRaces.size(), "The correct number of races was not retrieved");
-  }
-
-  /** Test the relationship property type reference functionality. */
-  @Test
-  public void relationshipPropertyTypeTest() throws Exception {
-    List<RelationshipPropertyType> retrievedRelationshipPropertyTypes =
-        partyReferenceService.getRelationshipPropertyTypes(
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
-
-    assertEquals(
-        2,
-        retrievedRelationshipPropertyTypes.size(),
-        "The correct number of relationship property types was not retrieved");
-
-    retrievedRelationshipPropertyTypes =
-        partyReferenceService.getRelationshipPropertyTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
-
-    assertEquals(
-        2,
-        retrievedRelationshipPropertyTypes.size(),
-        "The correct number of relationship property types was not retrieved");
-
-    retrievedRelationshipPropertyTypes =
-        partyReferenceService.getRelationshipPropertyTypes(
-            UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
-
-    assertEquals(
-        1,
-        retrievedRelationshipPropertyTypes.size(),
-        "The correct number of relationship property types was not retrieved");
-  }
-
-  /** Test the relationship type reference functionality. */
-  @Test
-  public void relationshipTypeTest() throws Exception {
-    List<RelationshipType> retrievedRelationshipTypes =
-        partyReferenceService.getRelationshipTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
-
-    assertEquals(
-        22,
-        retrievedRelationshipTypes.size(),
-        "The correct number of relationship types was not retrieved");
-
-    retrievedRelationshipTypes =
-        partyReferenceService.getRelationshipTypes(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
-
-    assertEquals(
-        22,
-        retrievedRelationshipTypes.size(),
-        "The correct number of relationship types was not retrieved");
-
-    retrievedRelationshipTypes =
-        partyReferenceService.getRelationshipTypes(
-            UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
-
-    assertEquals(
-        21,
-        retrievedRelationshipTypes.size(),
-        "The correct number of relationship types was not retrieved");
   }
 
   /** Test the residence permit type reference functionality. */

@@ -21,19 +21,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>RelationshipPropertyTypeRepository</b> interface declares the repository for the <b>
- * RelationshipPropertyType</b> domain type.
+ * The <b>AssociationPropertyTypeRepository</b> interface declares the repository for the <b>
+ * AssociationPropertyType</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface RelationshipPropertyTypeRepository
-    extends JpaRepository<RelationshipPropertyType, RelationshipPropertyTypeId> {
+public interface AssociationPropertyTypeRepository
+    extends JpaRepository<AssociationPropertyType, AssociationPropertyTypeId> {
 
   @Query(
-      "select rpt from RelationshipPropertyType rpt order by rpt.localeId, -rpt.sortIndex DESC, rpt.name")
-  List<RelationshipPropertyType> findAll();
+      "select rpt from AssociationPropertyType rpt order by rpt.localeId, -rpt.sortIndex DESC, rpt.name")
+  List<AssociationPropertyType> findAll();
 
   @Query(
-      "select rpt from RelationshipPropertyType rpt where upper(rpt.localeId) = upper(:localeId) order by rpt.localeId, -rpt.sortIndex DESC, rpt.name")
-  List<RelationshipPropertyType> findByLocaleIdIgnoreCase(String localeId);
+      "select rpt from AssociationPropertyType rpt where upper(rpt.localeId) = upper(:localeId) order by rpt.localeId, -rpt.sortIndex DESC, rpt.name")
+  List<AssociationPropertyType> findByLocaleIdIgnoreCase(String localeId);
 }

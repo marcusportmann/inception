@@ -21,7 +21,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>ExternalReferenceId</b> class implements the ID class for the <b>ExternalReference</b> class.
+ * The <b>ExternalReferenceId</b> class implements the ID class for the <b>ExternalReference</b>
+ * class.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +31,10 @@ public class ExternalReferenceId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The Universally Unique Identifier (UUID) for the party the external reference is associated with. */
+  /**
+   * The Universally Unique Identifier (UUID) for the party the external reference is associated
+   * with.
+   */
   private UUID party;
 
   /** The code for the external reference type. */

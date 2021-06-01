@@ -762,67 +762,6 @@ public class PartyServiceTest {
     partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
-  /** Test the next of kin functionality. */
-  @Test
-  public void nextOfKinTest() throws Exception {
-    Person person = getTestBasicPersonDetails();
-
-    NextOfKin nextOfKin = new NextOfKin();
-    nextOfKin.setId(UuidCreator.getShortPrefixComb());
-    nextOfKin.setType("father");
-    nextOfKin.setName("Joe Bloggs");
-    nextOfKin.setPhoneNumber("+27 11 555 1234");
-    nextOfKin.setMobileNumber("+27832763107");
-    nextOfKin.setEmailAddress("joe@zyx.com");
-    nextOfKin.setAddressLine1("3 Happy Place");
-    nextOfKin.setAddressLine2("17 Market Street");
-    nextOfKin.setAddressLine3("Line 3");
-    nextOfKin.setAddressLine4("Line 4");
-    nextOfKin.setAddressSuburb("Fairland");
-    nextOfKin.setAddressCity("Johannesburg");
-    nextOfKin.setAddressRegion("GP");
-    nextOfKin.setAddressCountry("ZA");
-    nextOfKin.setAddressPostalCode("2170");
-
-    person.addNextOfKin(nextOfKin);
-
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
-
-    Person retrievedPerson =
-        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    assertTrue(retrievedPerson.getNextOfKinWithId(nextOfKin.getId()).isPresent());
-
-    assertTrue(retrievedPerson.getNextOfKinWithType("father").isPresent());
-
-    compareNextOfKin(
-        person.getNextOfKinWithId(nextOfKin.getId()).get(),
-        retrievedPerson.getNextOfKinWithId(nextOfKin.getId()).get());
-
-    person.removeNextOfKinWithId(nextOfKin.getId());
-
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
-
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    person.setNextOfKin(Set.of(new NextOfKin("brother", "Fred Bloggs")));
-
-    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
-
-    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
-
-    comparePersons(person, retrievedPerson);
-
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
-  }
-
-
-
-
   /** Test the external reference functionality. */
   @Test
   public void externalReferenceTest() throws Exception {
@@ -1878,6 +1817,64 @@ public class PartyServiceTest {
     compareOrganizations(organization, retrievedOrganization);
 
     partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+  }
+
+  /** Test the next of kin functionality. */
+  @Test
+  public void nextOfKinTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    NextOfKin nextOfKin = new NextOfKin();
+    nextOfKin.setId(UuidCreator.getShortPrefixComb());
+    nextOfKin.setType("father");
+    nextOfKin.setName("Joe Bloggs");
+    nextOfKin.setPhoneNumber("+27 11 555 1234");
+    nextOfKin.setMobileNumber("+27832763107");
+    nextOfKin.setEmailAddress("joe@zyx.com");
+    nextOfKin.setAddressLine1("3 Happy Place");
+    nextOfKin.setAddressLine2("17 Market Street");
+    nextOfKin.setAddressLine3("Line 3");
+    nextOfKin.setAddressLine4("Line 4");
+    nextOfKin.setAddressSuburb("Fairland");
+    nextOfKin.setAddressCity("Johannesburg");
+    nextOfKin.setAddressRegion("GP");
+    nextOfKin.setAddressCountry("ZA");
+    nextOfKin.setAddressPostalCode("2170");
+
+    person.addNextOfKin(nextOfKin);
+
+    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    Person retrievedPerson =
+        partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    assertTrue(retrievedPerson.getNextOfKinWithId(nextOfKin.getId()).isPresent());
+
+    assertTrue(retrievedPerson.getNextOfKinWithType("father").isPresent());
+
+    compareNextOfKin(
+        person.getNextOfKinWithId(nextOfKin.getId()).get(),
+        retrievedPerson.getNextOfKinWithId(nextOfKin.getId()).get());
+
+    person.removeNextOfKinWithId(nextOfKin.getId());
+
+    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    person.setNextOfKin(Set.of(new NextOfKin("brother", "Fred Bloggs")));
+
+    partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    retrievedPerson = partyService.getPerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the organization functionality. */

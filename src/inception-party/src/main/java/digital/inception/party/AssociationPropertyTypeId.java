@@ -20,24 +20,24 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>RelationshipPropertyTypeId</b> class implements the ID class for the
- * <b>RelationshipPropertyType</b> class.
+ * The <b>AssociationPropertyTypeId</b> class implements the ID class for the
+ * <b>AssociationPropertyType</b> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class RelationshipPropertyTypeId implements Serializable {
+public class AssociationPropertyTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the relationship property type. */
+  /** The code for the association type the association property type is associated with. */
+  private String associationType;
+
+  /** The code for the association property type. */
   private String code;
 
-  /** The Unicode locale identifier for the relationship property type. */
+  /** The Unicode locale identifier for the association property type. */
   private String localeId;
-
-  /** The code for the relationship type the relationship property type is associated with. */
-  private String relationshipType;
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -59,9 +59,9 @@ public class RelationshipPropertyTypeId implements Serializable {
       return false;
     }
 
-    RelationshipPropertyTypeId other = (RelationshipPropertyTypeId) object;
+    AssociationPropertyTypeId other = (AssociationPropertyTypeId) object;
 
-    return Objects.equals(relationshipType, other.relationshipType)
+    return Objects.equals(associationType, other.associationType)
         && Objects.equals(code, other.code)
         && Objects.equals(localeId, other.localeId);
   }
@@ -73,7 +73,7 @@ public class RelationshipPropertyTypeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((relationshipType == null) ? 0 : relationshipType.hashCode())
+    return ((associationType == null) ? 0 : associationType.hashCode())
         + ((code == null) ? 0 : code.hashCode())
         + ((localeId == null) ? 0 : localeId.hashCode());
   }

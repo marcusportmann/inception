@@ -16,6 +16,8 @@
 
 package digital.inception.party.test;
 
+import digital.inception.party.AssociationPropertyType;
+import digital.inception.party.AssociationType;
 import digital.inception.party.AttributeType;
 import digital.inception.party.AttributeTypeCategory;
 import digital.inception.party.ConsentType;
@@ -42,8 +44,6 @@ import digital.inception.party.PreferenceType;
 import digital.inception.party.PreferenceTypeCategory;
 import digital.inception.party.QualificationType;
 import digital.inception.party.Race;
-import digital.inception.party.RelationshipPropertyType;
-import digital.inception.party.RelationshipType;
 import digital.inception.party.ResidencePermitType;
 import digital.inception.party.ResidencyStatus;
 import digital.inception.party.ResidentialType;
@@ -169,6 +169,86 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
 
   private void writeReferenceData(PrintWriter writer) throws Exception {
     for (String localeId : LOCALE_IDS) {
+      // Association Types
+      for (AssociationType associationType : partyReferenceService.getAssociationTypes(localeId)) {
+
+        if (associationType.getTenantId() == null) {
+          writer.println("    <insert schemaName=\"party\" tableName=\"association_types\">");
+          writer.println(
+              "      <column name=\"code\" value=\"" + associationType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\"" + associationType.getLocaleId() + "\"/>");
+
+          if (associationType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + associationType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + associationType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + associationType.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"first_party_role\" value=\""
+                  + associationType.getFirstPartyRole()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"second_party_role\" value=\""
+                  + associationType.getSecondPartyRole()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
+      // Association Property Types
+      for (AssociationPropertyType associationPropertyType :
+          partyReferenceService.getAssociationPropertyTypes(localeId)) {
+
+        if (associationPropertyType.getTenantId() == null) {
+          writer.println(
+              "    <insert schemaName=\"party\" tableName=\"association_property_types\">");
+          writer.println(
+              "      <column name=\"association_type\" value=\""
+                  + associationPropertyType.getAssociationType()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"code\" value=\"" + associationPropertyType.getCode() + "\"/>");
+          writer.println(
+              "      <column name=\"locale_id\" value=\""
+                  + associationPropertyType.getLocaleId()
+                  + "\"/>");
+
+          if (associationPropertyType.getSortIndex() != null) {
+            writer.println(
+                "      <column name=\"sort_index\" value=\""
+                    + associationPropertyType.getSortIndex()
+                    + "\"/>");
+          }
+
+          writer.println(
+              "      <column name=\"name\" value=\"" + associationPropertyType.getName() + "\"/>");
+          writer.println(
+              "      <column name=\"description\" value=\""
+                  + associationPropertyType.getDescription()
+                  + "\"/>");
+          writer.println(
+              "      <column name=\"value_type\" value=\""
+                  + associationPropertyType.getValueType().code()
+                  + "\"/>");
+
+          writer.println("    </insert>");
+        }
+      }
+
+      writer.println();
+
       // Attribute Type Categories
       for (AttributeTypeCategory attributeTypeCategory :
           partyReferenceService.getAttributeTypeCategories(localeId)) {
@@ -1146,87 +1226,6 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
           writer.println(
               "      <column name=\"party_types\" value=\""
                   + StringUtils.arrayToCommaDelimitedString(roleType.getPartyTypes())
-                  + "\"/>");
-
-          writer.println("    </insert>");
-        }
-      }
-
-      writer.println();
-
-      // Relationship Types
-      for (RelationshipType relationshipType :
-          partyReferenceService.getRelationshipTypes(localeId)) {
-
-        if (relationshipType.getTenantId() == null) {
-          writer.println("    <insert schemaName=\"party\" tableName=\"relationship_types\">");
-          writer.println(
-              "      <column name=\"code\" value=\"" + relationshipType.getCode() + "\"/>");
-          writer.println(
-              "      <column name=\"locale_id\" value=\""
-                  + relationshipType.getLocaleId()
-                  + "\"/>");
-
-          if (relationshipType.getSortIndex() != null) {
-            writer.println(
-                "      <column name=\"sort_index\" value=\""
-                    + relationshipType.getSortIndex()
-                    + "\"/>");
-          }
-
-          writer.println(
-              "      <column name=\"name\" value=\"" + relationshipType.getName() + "\"/>");
-          writer.println(
-              "      <column name=\"description\" value=\""
-                  + relationshipType.getDescription()
-                  + "\"/>");
-          writer.println(
-              "      <column name=\"first_party_role\" value=\""
-                  + relationshipType.getFirstPartyRole()
-                  + "\"/>");
-          writer.println(
-              "      <column name=\"second_party_role\" value=\""
-                  + relationshipType.getSecondPartyRole()
-                  + "\"/>");
-
-          writer.println("    </insert>");
-        }
-      }
-
-      writer.println();
-
-      // Relationship Property Types
-      for (RelationshipPropertyType relationshipPropertyType :
-          partyReferenceService.getRelationshipPropertyTypes(localeId)) {
-
-        if (relationshipPropertyType.getTenantId() == null) {
-          writer.println(
-              "    <insert schemaName=\"party\" tableName=\"relationship_property_types\">");
-          writer.println(
-              "      <column name=\"relationship_type\" value=\"" + relationshipPropertyType.getRelationshipType() + "\"/>");
-          writer.println(
-              "      <column name=\"code\" value=\"" + relationshipPropertyType.getCode() + "\"/>");
-          writer.println(
-              "      <column name=\"locale_id\" value=\""
-                  + relationshipPropertyType.getLocaleId()
-                  + "\"/>");
-
-          if (relationshipPropertyType.getSortIndex() != null) {
-            writer.println(
-                "      <column name=\"sort_index\" value=\""
-                    + relationshipPropertyType.getSortIndex()
-                    + "\"/>");
-          }
-
-          writer.println(
-              "      <column name=\"name\" value=\"" + relationshipPropertyType.getName() + "\"/>");
-          writer.println(
-              "      <column name=\"description\" value=\""
-                  + relationshipPropertyType.getDescription()
-                  + "\"/>");
-          writer.println(
-              "      <column name=\"value_type\" value=\""
-                  + relationshipPropertyType.getValueType().code()
                   + "\"/>");
 
           writer.println("    </insert>");

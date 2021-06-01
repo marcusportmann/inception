@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateAdapter;
-import digital.inception.party.constraints.ValidRelationship;
+import digital.inception.party.constraints.ValidAssociation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -47,11 +47,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>Relationship</b> class holds the information for a relationship between two parties.
+ * The <b>Association</b> class holds the information for a association between two parties.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A relationship between two parties")
+@Schema(description = "A association between two parties")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",
@@ -62,9 +62,9 @@ import org.hibernate.annotations.UpdateTimestamp;
   "effectiveFrom",
   "effectiveTo"
 })
-@XmlRootElement(name = "Relationship", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "Association", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "Relationship",
+    name = "Association",
     namespace = "http://inception.digital/party",
     propOrder = {
       "id",
@@ -76,22 +76,22 @@ import org.hibernate.annotations.UpdateTimestamp;
       "effectiveTo"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidRelationship
+@ValidAssociation
 @Entity
-@Table(schema = "party", name = "relationships")
-public class Relationship implements Serializable {
+@Table(schema = "party", name = "associations")
+public class Association implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the relationship was created. */
+  /** The date and time the association was created. */
   @JsonIgnore
   @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The date the relationship is effective from. */
-  @Schema(description = "The date the relationship is effective from")
+  /** The date the association is effective from. */
+  @Schema(description = "The date the association is effective from")
   @JsonProperty
   @XmlElement(name = "EffectiveFrom")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -99,8 +99,8 @@ public class Relationship implements Serializable {
   @Column(name = "effective_from")
   private LocalDate effectiveFrom;
 
-  /** The date the relationship is effective to. */
-  @Schema(description = "The date the relationship is effective to")
+  /** The date the association is effective to. */
+  @Schema(description = "The date the association is effective to")
   @JsonProperty
   @XmlElement(name = "EffectiveTo")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -108,10 +108,10 @@ public class Relationship implements Serializable {
   @Column(name = "effective_to")
   private LocalDate effectiveTo;
 
-  /** The Universally Unique Identifier (UUID) for the first party in the relationship. */
+  /** The Universally Unique Identifier (UUID) for the first party in the association. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) for the first party in the relationship",
+          "The Universally Unique Identifier (UUID) for the first party in the association",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "FirstPartyId", required = true)
@@ -119,9 +119,9 @@ public class Relationship implements Serializable {
   @Column(name = "first_party_id", nullable = false)
   private UUID firstPartyId;
 
-  /** The Universally Unique Identifier (UUID) for the relationship. */
+  /** The Universally Unique Identifier (UUID) for the association. */
   @Schema(
-      description = "The Universally Unique Identifier (UUID) for the relationship",
+      description = "The Universally Unique Identifier (UUID) for the association",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -130,10 +130,10 @@ public class Relationship implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The Universally Unique Identifier (UUID) for the second party in the relationship. */
+  /** The Universally Unique Identifier (UUID) for the second party in the association. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) for the second party in the relationship",
+          "The Universally Unique Identifier (UUID) for the second party in the association",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SecondPartyId", required = true)
@@ -141,12 +141,10 @@ public class Relationship implements Serializable {
   @Column(name = "second_party_id", nullable = false)
   private UUID secondPartyId;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the tenant the relationship is associated with.
-   */
+  /** The Universally Unique Identifier (UUID) for the tenant the association is associated with. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) for the tenant the relationship is associated with",
+          "The Universally Unique Identifier (UUID) for the tenant the association is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
@@ -154,8 +152,8 @@ public class Relationship implements Serializable {
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
 
-  /** The code for the relationship type. */
-  @Schema(description = "The code for the relationship type", required = true)
+  /** The code for the association type. */
+  @Schema(description = "The code for the association type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -163,28 +161,28 @@ public class Relationship implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** The date and time the relationship was last updated. */
+  /** The date and time the association was last updated. */
   @JsonIgnore
   @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <b>Relationship</b>. */
-  public Relationship() {}
+  /** Constructs a new <b>Association</b>. */
+  public Association() {}
 
   /**
-   * Constructs a new <b>Relationship</b>.
+   * Constructs a new <b>Association</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship is
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association is
    *     associated with
-   * @param type the code for the relationship type
+   * @param type the code for the association type
    * @param firstPartyId the Universally Unique Identifier (UUID) for the first party in the
-   *     relationship
+   *     association
    * @param secondPartyId the Universally Unique Identifier (UUID) for the second party in the
-   *     relationship
+   *     association
    */
-  public Relationship(UUID tenantId, String type, UUID firstPartyId, UUID secondPartyId) {
+  public Association(UUID tenantId, String type, UUID firstPartyId, UUID secondPartyId) {
     this.id = UuidCreator.getShortPrefixComb();
     this.tenantId = tenantId;
     this.type = type;
@@ -193,18 +191,18 @@ public class Relationship implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Relationship</b>.
+   * Constructs a new <b>Association</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship is
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association is
    *     associated with
-   * @param type the code for the relationship type
+   * @param type the code for the association type
    * @param firstPartyId the Universally Unique Identifier (UUID) for the first party in the
-   *     relationship
+   *     association
    * @param secondPartyId the Universally Unique Identifier (UUID) for the second party in the
-   *     relationship
-   * @param effectiveFrom the date that the relationship is effective from
+   *     association
+   * @param effectiveFrom the date that the association is effective from
    */
-  public Relationship(
+  public Association(
       UUID tenantId, String type, UUID firstPartyId, UUID secondPartyId, LocalDate effectiveFrom) {
     this.id = UuidCreator.getShortPrefixComb();
     this.tenantId = tenantId;
@@ -215,19 +213,19 @@ public class Relationship implements Serializable {
   }
 
   /**
-   * Constructs a new <b>Relationship</b>.
+   * Constructs a new <b>Association</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship is
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association is
    *     associated with
-   * @param type the code for the relationship type
+   * @param type the code for the association type
    * @param firstPartyId the Universally Unique Identifier (UUID) for the first party in the
-   *     relationship
+   *     association
    * @param secondPartyId the Universally Unique Identifier (UUID) for the second party in the
-   *     relationship
-   * @param effectiveFrom the date that the relationship is effective from
-   * @param effectiveTo the date that the relationship is effective to
+   *     association
+   * @param effectiveFrom the date that the association is effective from
+   * @param effectiveTo the date that the association is effective to
    */
-  public Relationship(
+  public Association(
       UUID tenantId,
       String type,
       UUID firstPartyId,
@@ -263,70 +261,70 @@ public class Relationship implements Serializable {
       return false;
     }
 
-    Relationship other = (Relationship) object;
+    Association other = (Association) object;
 
     return Objects.equals(id, other.id);
   }
 
   /**
-   * Returns the date and time the relationship was created.
+   * Returns the date and time the association was created.
    *
-   * @return the date and time the relationship was created
+   * @return the date and time the association was created
    */
   public LocalDateTime getCreated() {
     return created;
   }
 
   /**
-   * Returns the date the relationship is effective from.
+   * Returns the date the association is effective from.
    *
-   * @return the date the relationship is effective from
+   * @return the date the association is effective from
    */
   public LocalDate getEffectiveFrom() {
     return effectiveFrom;
   }
 
   /**
-   * Returns the date the relationship is effective to.
+   * Returns the date the association is effective to.
    *
-   * @return the date the relationship is effective to
+   * @return the date the association is effective to
    */
   public LocalDate getEffectiveTo() {
     return effectiveTo;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the first party in the relationship.
+   * Returns the Universally Unique Identifier (UUID) for the first party in the association.
    *
-   * @return the Universally Unique Identifier (UUID) for the first party in the relationship
+   * @return the Universally Unique Identifier (UUID) for the first party in the association
    */
   public UUID getFirstPartyId() {
     return firstPartyId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the relationship.
+   * Returns the Universally Unique Identifier (UUID) for the association.
    *
-   * @return the Universally Unique Identifier (UUID) for the relationship
+   * @return the Universally Unique Identifier (UUID) for the association
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the second party in the relationship.
+   * Returns the Universally Unique Identifier (UUID) for the second party in the association.
    *
-   * @return the Universally Unique Identifier (UUID) for the second party in the relationship
+   * @return the Universally Unique Identifier (UUID) for the second party in the association
    */
   public UUID getSecondPartyId() {
     return secondPartyId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the relationship is associated
+   * Returns the Universally Unique Identifier (UUID) for the tenant the association is associated
    * with.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the relationship is associated
+   * @return the Universally Unique Identifier (UUID) for the tenant the association is associated
    *     with
    */
   public UUID getTenantId() {
@@ -334,18 +332,18 @@ public class Relationship implements Serializable {
   }
 
   /**
-   * Returns the code for the relationship type.
+   * Returns the code for the association type.
    *
-   * @return the code for the relationship type
+   * @return the code for the association type
    */
   public String getType() {
     return type;
   }
 
   /**
-   * Returns the date and time the relationship was last updated.
+   * Returns the date and time the association was last updated.
    *
-   * @return the date and time the relationship was last updated
+   * @return the date and time the association was last updated
    */
   public LocalDateTime getUpdated() {
     return updated;
@@ -362,57 +360,56 @@ public class Relationship implements Serializable {
   }
 
   /**
-   * Set the date the relationship is effective from.
+   * Set the date the association is effective from.
    *
-   * @param effectiveFrom the date the relationship is effective from
+   * @param effectiveFrom the date the association is effective from
    */
   public void setEffectiveFrom(LocalDate effectiveFrom) {
     this.effectiveFrom = effectiveFrom;
   }
 
   /**
-   * Set the date the relationship is effective to.
+   * Set the date the association is effective to.
    *
-   * @param effectiveTo the date the relationship is effective to
+   * @param effectiveTo the date the association is effective to
    */
   public void setEffectiveTo(LocalDate effectiveTo) {
     this.effectiveTo = effectiveTo;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the first party in the relationship.
+   * Set the Universally Unique Identifier (UUID) for the first party in the association.
    *
    * @param firstPartyId the Universally Unique Identifier (UUID) for the first party in the
-   *     relationship
+   *     association
    */
   public void setFirstPartyId(UUID firstPartyId) {
     this.firstPartyId = firstPartyId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the relationship.
+   * Set the Universally Unique Identifier (UUID) for the association.
    *
-   * @param id the Universally Unique Identifier (UUID) for the relationship
+   * @param id the Universally Unique Identifier (UUID) for the association
    */
   public void setId(UUID id) {
     this.id = id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the second party in the relationship.
+   * Set the Universally Unique Identifier (UUID) for the second party in the association.
    *
    * @param secondPartyId the Universally Unique Identifier (UUID) for the second party in the
-   *     relationship
+   *     association
    */
   public void setSecondPartyId(UUID secondPartyId) {
     this.secondPartyId = secondPartyId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the relationship is associated
-   * with.
+   * Set the Universally Unique Identifier (UUID) for the tenant the association is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship is
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association is
    *     associated with
    */
   public void setTenantId(UUID tenantId) {
@@ -420,9 +417,9 @@ public class Relationship implements Serializable {
   }
 
   /**
-   * Set the code for the relationship type.
+   * Set the code for the association type.
    *
-   * @param type the code for the relationship type
+   * @param type the code for the association type
    */
   public void setType(String type) {
     this.type = type;

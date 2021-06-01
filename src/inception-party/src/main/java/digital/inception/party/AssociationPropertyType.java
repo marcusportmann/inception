@@ -37,14 +37,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>RelationshipPropertyType</b> class holds the information for a relationship property type.
+ * The <b>AssociationPropertyType</b> class holds the information for a association property type.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A type of relationship property")
+@Schema(description = "A type of association property")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "relationshipType",
+  "associationType",
   "code",
   "localeId",
   "tenantId",
@@ -53,12 +53,12 @@ import javax.xml.bind.annotation.XmlType;
   "description",
   "valueType"
 })
-@XmlRootElement(name = "RelationshipPropertyType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "AssociationPropertyType", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "RelationshipPropertyType",
+    name = "AssociationPropertyType",
     namespace = "http://inception.digital/party",
     propOrder = {
-      "relationshipType",
+      "associationType",
       "code",
       "localeId",
       "tenantId",
@@ -69,14 +69,27 @@ import javax.xml.bind.annotation.XmlType;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "relationship_property_types")
-@IdClass(RelationshipPropertyTypeId.class)
-public class RelationshipPropertyType implements Serializable {
+@Table(schema = "party", name = "association_property_types")
+@IdClass(AssociationPropertyTypeId.class)
+public class AssociationPropertyType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the relationship property type. */
-  @Schema(description = "The code for the relationship property type", required = true)
+  /** The code for the association type the association property type is associated with. */
+  @Schema(
+      description =
+          "The code for the association type the association property type is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "AssociationType", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Id
+  @Column(name = "association_type", length = 30, nullable = false)
+  private String associationType;
+
+  /** The code for the association property type. */
+  @Schema(description = "The code for the association property type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -85,8 +98,8 @@ public class RelationshipPropertyType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the relationship property type. */
-  @Schema(description = "The description for the relationship property type", required = true)
+  /** The description for the association property type. */
+  @Schema(description = "The description for the association property type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -94,9 +107,9 @@ public class RelationshipPropertyType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the relationship property type. */
+  /** The Unicode locale identifier for the association property type. */
   @Schema(
-      description = "The Unicode locale identifier for the relationship property type",
+      description = "The Unicode locale identifier for the association property type",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
@@ -106,8 +119,8 @@ public class RelationshipPropertyType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the relationship property type. */
-  @Schema(description = "The name of the relationship property type", required = true)
+  /** The name of the association property type. */
+  @Schema(description = "The name of the association property type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -115,21 +128,8 @@ public class RelationshipPropertyType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The code for the relationship type the relationship property type is associated with. */
-  @Schema(
-      description =
-          "The code for the relationship type the relationship property type is associated with",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "RelationshipType", required = true)
-  @NotNull
-  @Size(min = 1, max = 30)
-  @Id
-  @Column(name = "relationship_type", length = 30, nullable = false)
-  private String relationshipType;
-
-  /** The sort index for the relationship property type. */
-  @Schema(description = "The sort index for the relationship property type", required = true)
+  /** The sort index for the association property type. */
+  @Schema(description = "The sort index for the association property type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
@@ -137,26 +137,26 @@ public class RelationshipPropertyType implements Serializable {
   private Integer sortIndex;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the relationship property type is
+   * The Universally Unique Identifier (UUID) for the tenant the association property type is
    * specific to.
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) for the tenant the relationship property type is specific to")
+          "The Universally Unique Identifier (UUID) for the tenant the association property type is specific to")
   @JsonProperty
   @XmlElement(name = "TenantId")
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** The value type for the relationship property type. */
-  @Schema(description = "The value type for the relationship property type", required = true)
+  /** The value type for the association property type. */
+  @Schema(description = "The value type for the association property type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "ValueType", required = true)
   @Column(name = "value_type", length = 10, nullable = false)
   private ValueType valueType;
 
-  /** Constructs a new <b>RelationshipPropertyType</b>. */
-  public RelationshipPropertyType() {}
+  /** Constructs a new <b>AssociationPropertyType</b>. */
+  public AssociationPropertyType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -178,72 +178,72 @@ public class RelationshipPropertyType implements Serializable {
       return false;
     }
 
-    RelationshipPropertyType other = (RelationshipPropertyType) object;
+    AssociationPropertyType other = (AssociationPropertyType) object;
 
-    return Objects.equals(relationshipType, other.relationshipType)
+    return Objects.equals(associationType, other.associationType)
         && Objects.equals(code, other.code)
         && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the relationship property type.
+   * Returns the code for the association type the association property type is associated with.
    *
-   * @return the code for the relationship property type
+   * @return the code for the association type the association property type is associated with
+   */
+  public String getAssociationType() {
+    return associationType;
+  }
+
+  /**
+   * Returns the code for the association property type.
+   *
+   * @return the code for the association property type
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the relationship property type.
+   * Returns the description for the association property type.
    *
-   * @return the description for the relationship property type
+   * @return the description for the association property type
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the relationship property type.
+   * Returns the Unicode locale identifier for the association property type.
    *
-   * @return the Unicode locale identifier for the relationship property type
+   * @return the Unicode locale identifier for the association property type
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the relationship property type.
+   * Returns the name of the association property type.
    *
-   * @return the name of the relationship property type
+   * @return the name of the association property type
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the code for the relationship type the relationship property type is associated with.
+   * Returns the sort index for the association property type.
    *
-   * @return the code for the relationship type the relationship property type is associated with
-   */
-  public String getRelationshipType() {
-    return relationshipType;
-  }
-
-  /**
-   * Returns the sort index for the relationship property type.
-   *
-   * @return the sort index for the relationship property type
+   * @return the sort index for the association property type
    */
   public Integer getSortIndex() {
     return sortIndex;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the relationship property type
+   * Returns the Universally Unique Identifier (UUID) for the tenant the association property type
    * is specific to.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the relationship property type
+   * @return the Universally Unique Identifier (UUID) for the tenant the association property type
    *     is specific to
    */
   public UUID getTenantId() {
@@ -251,9 +251,9 @@ public class RelationshipPropertyType implements Serializable {
   }
 
   /**
-   * Returns the value type for the relationship property type.
+   * Returns the value type for the association property type.
    *
-   * @return the value type for the relationship property type
+   * @return the value type for the association property type
    */
   public ValueType getValueType() {
     return valueType;
@@ -266,71 +266,71 @@ public class RelationshipPropertyType implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((relationshipType == null) ? 0 : relationshipType.hashCode())
+    return ((associationType == null) ? 0 : associationType.hashCode())
         + ((code == null) ? 0 : code.hashCode())
         + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
-   * Set the code for the relationship property type.
+   * Set the code for the association type the association property type is associated with.
    *
-   * @param code the code for the relationship property type
+   * @param category the code for the association type the association property type is associated
+   *     with
+   */
+  public void setAssociationType(String category) {
+    this.associationType = category;
+  }
+
+  /**
+   * Set the code for the association property type.
+   *
+   * @param code the code for the association property type
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the relationship property type.
+   * Set the description for the association property type.
    *
-   * @param description the description for the relationship property type
+   * @param description the description for the association property type
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the relationship property type.
+   * Set the Unicode locale identifier for the association property type.
    *
-   * @param localeId the Unicode locale identifier for the relationship property type
+   * @param localeId the Unicode locale identifier for the association property type
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the relationship property type.
+   * Set the name of the association property type.
    *
-   * @param name the name of the relationship property type
+   * @param name the name of the association property type
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the code for the relationship type the relationship property type is associated with.
+   * Set the sort index for the association property type.
    *
-   * @param category the code for the relationship type the relationship property type is associated
-   *     with
-   */
-  public void setRelationshipType(String category) {
-    this.relationshipType = category;
-  }
-
-  /**
-   * Set the sort index for the relationship property type.
-   *
-   * @param sortIndex the sort index for the relationship property type
+   * @param sortIndex the sort index for the association property type
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the relationship property type is
+   * Set the Universally Unique Identifier (UUID) for the tenant the association property type is
    * specific to.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association
    *     property type is specific to
    */
   public void setTenantId(UUID tenantId) {
@@ -338,9 +338,9 @@ public class RelationshipPropertyType implements Serializable {
   }
 
   /**
-   * Set the value type for the relationship property type.
+   * Set the value type for the association property type.
    *
-   * @param valueType the value type for the relationship property type
+   * @param valueType the value type for the association property type
    */
   public void setValueType(ValueType valueType) {
     this.valueType = valueType;

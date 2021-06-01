@@ -33,17 +33,17 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "EntityType", namespace = "http://inception.digital/party")
 public enum EntityType {
 
+  /** Association. */
+  @XmlEnumValue("Association")
+  ASSOCIATION("association", "A association"),
+
   /** Organization. */
   @XmlEnumValue("Organization")
   ORGANIZATION("organization", "An organization"),
 
   /** Person. */
   @XmlEnumValue("Person")
-  PERSON("person", "A person"),
-
-  /** Relationship. */
-  @XmlEnumValue("Relationship")
-  RELATIONSHIP("relationship", "A relationship");
+  PERSON("person", "A person");
 
   private final String code;
 
@@ -63,14 +63,14 @@ public enum EntityType {
   @JsonCreator
   public static EntityType fromCode(String code) {
     switch (code) {
+      case "association":
+        return EntityType.ASSOCIATION;
+
       case "organization":
         return EntityType.ORGANIZATION;
 
       case "person":
         return EntityType.PERSON;
-
-      case "relationship":
-        return EntityType.RELATIONSHIP;
 
       default:
         throw new RuntimeException(

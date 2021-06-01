@@ -21,18 +21,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>RelationshipTypeRepository</b> interface declares the repository for the <b>
- * RelationshipType</b> domain type.
+ * The <b>AssociationTypeRepository</b> interface declares the repository for the <b>
+ * AssociationType</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface RelationshipTypeRepository
-    extends JpaRepository<RelationshipType, RelationshipTypeId> {
+public interface AssociationTypeRepository
+    extends JpaRepository<AssociationType, AssociationTypeId> {
 
-  @Query("select rt from RelationshipType rt order by rt.localeId, -rt.sortIndex DESC, rt.name")
-  List<RelationshipType> findAll();
+  @Query("select rt from AssociationType rt order by rt.localeId, -rt.sortIndex DESC, rt.name")
+  List<AssociationType> findAll();
 
   @Query(
-      "select rt from RelationshipType rt where upper(rt.localeId) = upper(:localeId) order by rt.localeId, -rt.sortIndex DESC, rt.name")
-  List<RelationshipType> findByLocaleIdIgnoreCase(String localeId);
+      "select rt from AssociationType rt where upper(rt.localeId) = upper(:localeId) order by rt.localeId, -rt.sortIndex DESC, rt.name")
+  List<AssociationType> findByLocaleIdIgnoreCase(String localeId);
 }

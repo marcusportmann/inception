@@ -129,6 +129,7 @@ public class Attribute implements Serializable {
     "measurement_system",
     "middle_names",
     "name",
+    "nextOfKin",
     "occupation",
     "physical_address",
     "physical_addresses",

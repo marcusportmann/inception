@@ -740,10 +740,7 @@ public class PartyApi extends SecureApi {
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
-  @RequestMapping(
-      value = "/snapshots",
-      method = RequestMethod.GET,
-      produces = "application/json")
+  @RequestMapping(value = "/snapshots", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")

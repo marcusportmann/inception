@@ -23,18 +23,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>RelationshipRepository</b> interface declares the repository for the <b>Relationship</b>
+ * The <b>AssociationRepository</b> interface declares the repository for the <b>Association</b>
  * domain type.
  *
  * @author Marcus Portmann
  */
-public interface RelationshipRepository extends JpaRepository<Relationship, UUID> {
+public interface AssociationRepository extends JpaRepository<Association, UUID> {
 
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
-  Page<Relationship> findByTenantId(UUID tenantId, Pageable pageable);
+  Page<Association> findByTenantId(UUID tenantId, Pageable pageable);
 
-  Optional<Relationship> findByTenantIdAndId(UUID tenantId, UUID id);
+  Optional<Association> findByTenantIdAndId(UUID tenantId, UUID id);
 }

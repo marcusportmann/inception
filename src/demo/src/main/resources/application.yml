@@ -110,6 +110,10 @@ inception:
       jwt:
         rsa-public-key-location: classpath:META-INF/oauth2-jwt-key.pub
 
+  party:
+    data-store:
+      class-name: digital.inception.party.InternalPartyDataStore
+
   persistence:
     entity-packages: demo
 

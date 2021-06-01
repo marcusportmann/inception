@@ -37,11 +37,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>RelationshipType</b> class holds the information for a relationship type.
+ * The <b>AssociationType</b> class holds the information for a association type.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A type of relationship")
+@Schema(description = "A type of association")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "code",
@@ -53,9 +53,9 @@ import javax.xml.bind.annotation.XmlType;
   "firstPartyRole",
   "secondPartyRole"
 })
-@XmlRootElement(name = "RelationshipType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "AssociationType", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "RelationshipType",
+    name = "AssociationType",
     namespace = "http://inception.digital/party",
     propOrder = {
       "code",
@@ -69,14 +69,14 @@ import javax.xml.bind.annotation.XmlType;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "relationship_types")
-@IdClass(RelationshipTypeId.class)
-public class RelationshipType implements Serializable {
+@Table(schema = "party", name = "association_types")
+@IdClass(AssociationTypeId.class)
+public class AssociationType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the relationship type. */
-  @Schema(description = "The code for the relationship type", required = true)
+  /** The code for the association type. */
+  @Schema(description = "The code for the association type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -85,8 +85,8 @@ public class RelationshipType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the relationship type. */
-  @Schema(description = "The description for the relationship type", required = true)
+  /** The description for the association type. */
+  @Schema(description = "The description for the association type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -94,9 +94,9 @@ public class RelationshipType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The code for the role type for the first party in the relationship. */
+  /** The code for the role type for the first party in the association. */
   @Schema(
-      description = "The code for the role type for the first party in the relationship",
+      description = "The code for the role type for the first party in the association",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "FirstPartyRole", required = true)
@@ -105,8 +105,8 @@ public class RelationshipType implements Serializable {
   @Column(name = "first_party_role", length = 30, nullable = false)
   private String firstPartyRole;
 
-  /** The Unicode locale identifier for the relationship type. */
-  @Schema(description = "The Unicode locale identifier for the relationship type", required = true)
+  /** The Unicode locale identifier for the association type. */
+  @Schema(description = "The Unicode locale identifier for the association type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -115,8 +115,8 @@ public class RelationshipType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the relationship type. */
-  @Schema(description = "The name of the relationship type", required = true)
+  /** The name of the association type. */
+  @Schema(description = "The name of the association type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -124,9 +124,9 @@ public class RelationshipType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The code for the role type for the second party in the relationship. */
+  /** The code for the role type for the second party in the association. */
   @Schema(
-      description = "The code for the role type for the second party in the relationship",
+      description = "The code for the role type for the second party in the association",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SecondPartyRole", required = true)
@@ -135,8 +135,8 @@ public class RelationshipType implements Serializable {
   @Column(name = "second_party_role", length = 30, nullable = false)
   private String secondPartyRole;
 
-  /** The sort index for the relationship type. */
-  @Schema(description = "The sort index for the relationship type", required = true)
+  /** The sort index for the association type. */
+  @Schema(description = "The sort index for the association type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
@@ -144,18 +144,18 @@ public class RelationshipType implements Serializable {
   private Integer sortIndex;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the relationship type is specific to.
+   * The Universally Unique Identifier (UUID) for the tenant the association type is specific to.
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) for the tenant the relationship type is specific to")
+          "The Universally Unique Identifier (UUID) for the tenant the association type is specific to")
   @JsonProperty
   @XmlElement(name = "TenantId")
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>RelationshipType</b>. */
-  public RelationshipType() {}
+  /** Constructs a new <b>AssociationType</b>. */
+  public AssociationType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -177,79 +177,79 @@ public class RelationshipType implements Serializable {
       return false;
     }
 
-    RelationshipType other = (RelationshipType) object;
+    AssociationType other = (AssociationType) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the relationship type.
+   * Returns the code for the association type.
    *
-   * @return the code for the relationship type
+   * @return the code for the association type
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the relationship type.
+   * Returns the description for the association type.
    *
-   * @return the description for the relationship type
+   * @return the description for the association type
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the code for the role type for the first party in the relationship.
+   * Returns the code for the role type for the first party in the association.
    *
-   * @return the code for the role type for the first party in the relationship
+   * @return the code for the role type for the first party in the association
    */
   public String getFirstPartyRole() {
     return firstPartyRole;
   }
 
   /**
-   * Returns the Unicode locale identifier for the relationship type.
+   * Returns the Unicode locale identifier for the association type.
    *
-   * @return the Unicode locale identifier for the relationship type
+   * @return the Unicode locale identifier for the association type
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the relationship type.
+   * Returns the name of the association type.
    *
-   * @return the name of the relationship type
+   * @return the name of the association type
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the code for the role type for the second party in the relationship.
+   * Returns the code for the role type for the second party in the association.
    *
-   * @return the code for the role type for the second party in the relationship
+   * @return the code for the role type for the second party in the association
    */
   public String getSecondPartyRole() {
     return secondPartyRole;
   }
 
   /**
-   * Returns the sort index for the relationship type.
+   * Returns the sort index for the association type.
    *
-   * @return the sort index for the relationship type
+   * @return the sort index for the association type
    */
   public Integer getSortIndex() {
     return sortIndex;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the relationship type is
+   * Returns the Universally Unique Identifier (UUID) for the tenant the association type is
    * specific to.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the relationship type is
+   * @return the Universally Unique Identifier (UUID) for the tenant the association type is
    *     specific to
    */
   public UUID getTenantId() {
@@ -267,74 +267,74 @@ public class RelationshipType implements Serializable {
   }
 
   /**
-   * Set the code for the relationship type.
+   * Set the code for the association type.
    *
-   * @param code the code for the relationship type
+   * @param code the code for the association type
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the relationship type.
+   * Set the description for the association type.
    *
-   * @param description the description for the relationship type
+   * @param description the description for the association type
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the code for the role type for the first party in the relationship.
+   * Set the code for the role type for the first party in the association.
    *
-   * @param firstPartyRole the code for the role type for the first party in the relationship
+   * @param firstPartyRole the code for the role type for the first party in the association
    */
   public void setFirstPartyRole(String firstPartyRole) {
     this.firstPartyRole = firstPartyRole;
   }
 
   /**
-   * Set the Unicode locale identifier for the relationship type.
+   * Set the Unicode locale identifier for the association type.
    *
-   * @param localeId the Unicode locale identifier for the relationship type
+   * @param localeId the Unicode locale identifier for the association type
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the relationship type.
+   * Set the name of the association type.
    *
-   * @param name the name of the relationship type
+   * @param name the name of the association type
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the code for the role type for the second party in the relationship.
+   * Set the code for the role type for the second party in the association.
    *
-   * @param secondPartyRole the code for the role type for the second party in the relationship
+   * @param secondPartyRole the code for the role type for the second party in the association
    */
   public void setSecondPartyRole(String secondPartyRole) {
     this.secondPartyRole = secondPartyRole;
   }
 
   /**
-   * Set the sort index for the relationship type.
+   * Set the sort index for the association type.
    *
-   * @param sortIndex the sort index for the relationship type
+   * @param sortIndex the sort index for the association type
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the relationship type is specific
+   * Set the Universally Unique Identifier (UUID) for the tenant the association type is specific
    * to.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship type
-   *     is specific to
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association type is
+   *     specific to
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;

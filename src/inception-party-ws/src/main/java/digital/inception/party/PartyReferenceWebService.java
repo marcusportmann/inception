@@ -52,6 +52,40 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the association property type reference data for a specific locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association
+   *     property type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the association
+   *     property type reference data for
+   * @return the association property type reference data
+   */
+  @WebMethod(operationName = "GetAssociationPropertyTypes")
+  public List<AssociationPropertyType> getAssociationPropertyTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getAssociationPropertyTypes(tenantId, localeId);
+  }
+
+  /**
+   * Retrieve the association type reference data for a specific locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the association type
+   *     reference data for
+   * @return the association type reference data
+   */
+  @WebMethod(operationName = "GetAssociationTypes")
+  public List<AssociationType> getAssociationTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getAssociationTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the attribute type category reference data for a specific locale.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
@@ -457,40 +491,6 @@ public class PartyReferenceWebService {
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
     return partyReferenceService.getRaces(tenantId, localeId);
-  }
-
-  /**
-   * Retrieve the relationship property type reference data for a specific locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship
-   *     property type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship
-   *     property type reference data for
-   * @return the relationship property type reference data
-   */
-  @WebMethod(operationName = "GetRelationshipPropertyTypes")
-  public List<RelationshipPropertyType> getRelationshipPropertyTypes(
-      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
-      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return partyReferenceService.getRelationshipPropertyTypes(tenantId, localeId);
-  }
-
-  /**
-   * Retrieve the relationship type reference data for a specific locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship type
-   *     reference data for
-   * @return the relationship type reference data
-   */
-  @WebMethod(operationName = "GetRelationshipTypes")
-  public List<RelationshipType> getRelationshipTypes(
-      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
-      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return partyReferenceService.getRelationshipTypes(tenantId, localeId);
   }
 
   /**

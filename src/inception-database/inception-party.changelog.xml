@@ -696,59 +696,59 @@
     <addNotNullConstraint schemaName="party" tableName="role_type_preference_type_constraints" columnName="preference_type"/>
     <addNotNullConstraint schemaName="party" tableName="role_type_preference_type_constraints" columnName="type"/>
 
-    <createTable schemaName="party" tableName="relationship_types" remarks="Relationship Types">
-      <column name="code" type="nvarchar(30)" remarks="The code for the relationship type"/>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the relationship type"/>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the relationship type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the relationship type"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the relationship type"/>
-      <column name="description" type="nvarchar(200)" remarks="The description for the relationship type"/>
-      <column name="first_party_role" type="nvarchar(30)" remarks="The code for the role type for the first party in the relationship"/>
-      <column name="second_party_role" type="nvarchar(30)" remarks="The code for the role type for the second party in the relationship"/>
+    <createTable schemaName="party" tableName="association_types" remarks="Association Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the association type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the association type"/>
+      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the association type is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the association type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the association type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the association type"/>
+      <column name="first_party_role" type="nvarchar(30)" remarks="The code for the role type for the first party in the association"/>
+      <column name="second_party_role" type="nvarchar(30)" remarks="The code for the role type for the second party in the association"/>
     </createTable>
-    <addPrimaryKey schemaName="party" tableName="relationship_types" columnNames="code,locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_types" columnName="code"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_types" columnName="locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_types" columnName="name"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_types" columnName="description"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_types" columnName="first_party_role"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_types" columnName="second_party_role"/>
-    <addForeignKeyConstraint constraintName="relationships_first_party_role_fk" baseTableSchemaName="party"
-      baseTableName="relationship_types" baseColumnNames="first_party_role,locale_id" referencedTableSchemaName="party"
+    <addPrimaryKey schemaName="party" tableName="association_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="association_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="association_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="association_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="association_types" columnName="description"/>
+    <addNotNullConstraint schemaName="party" tableName="association_types" columnName="first_party_role"/>
+    <addNotNullConstraint schemaName="party" tableName="association_types" columnName="second_party_role"/>
+    <addForeignKeyConstraint constraintName="associations_first_party_role_fk" baseTableSchemaName="party"
+      baseTableName="association_types" baseColumnNames="first_party_role,locale_id" referencedTableSchemaName="party"
       referencedTableName="role_types" referencedColumnNames="code,locale_id" deleteCascade="true"/>
-    <addForeignKeyConstraint constraintName="relationships_second_party_role_fk" baseTableSchemaName="party"
-      baseTableName="relationship_types" baseColumnNames="second_party_role,locale_id" referencedTableSchemaName="party"
+    <addForeignKeyConstraint constraintName="associations_second_party_role_fk" baseTableSchemaName="party"
+      baseTableName="association_types" baseColumnNames="second_party_role,locale_id" referencedTableSchemaName="party"
       referencedTableName="role_types" referencedColumnNames="code,locale_id" deleteCascade="true"/>
-    <addDefaultValue schemaName="party" tableName="relationship_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="relationship_types_locale_id_ix" schemaName="party" tableName="relationship_types">
+    <addDefaultValue schemaName="party" tableName="association_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="association_types_locale_id_ix" schemaName="party" tableName="association_types">
       <column name="locale_id"/>
     </createIndex>
 
-    <createTable schemaName="party" tableName="relationship_property_types" remarks="Relationship Property Types">
-      <column name="relationship_type" type="nvarchar(30)" remarks="The code for the relationship type the relationship property type is associated with"/>
-      <column name="code" type="nvarchar(30)" remarks="The code for the relationship property type"/>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the relationship property type"/>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the relationship property type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the relationship property type"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the relationship property type"/>
-      <column name="description" type="nvarchar(200)" remarks="The description for the relationship property type"/>
-      <column name="value_type" type="nvarchar(10)" remarks="The code for the value type for the relationship property type"/>
+    <createTable schemaName="party" tableName="association_property_types" remarks="Association Property Types">
+      <column name="association_type" type="nvarchar(30)" remarks="The code for the association type the association property type is associated with"/>
+      <column name="code" type="nvarchar(30)" remarks="The code for the association property type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the association property type"/>
+      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the association property type is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the association property type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the association property type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the association property type"/>
+      <column name="value_type" type="nvarchar(10)" remarks="The code for the value type for the association property type"/>
     </createTable>
-    <addPrimaryKey schemaName="party" tableName="relationship_property_types" columnNames="relationship_type,code,locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_property_types" columnName="relationship_type"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_property_types" columnName="code"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_property_types" columnName="locale_id"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_property_types" columnName="name"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_property_types" columnName="description"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_property_types" columnName="value_type"/>
-    <addForeignKeyConstraint constraintName="relationship_property_types_relationship_type_fk" baseTableSchemaName="party"
-      baseTableName="relationship_property_types" baseColumnNames="relationship_type,locale_id" referencedTableSchemaName="party"
-      referencedTableName="relationship_types" referencedColumnNames="code,locale_id" deleteCascade="true"/>
-    <addDefaultValue schemaName="party" tableName="relationship_property_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="relationship_property_types_relationship_type_ix" schemaName="party" tableName="relationship_property_types">
-      <column name="relationship_type"/>
+    <addPrimaryKey schemaName="party" tableName="association_property_types" columnNames="association_type,code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="association_property_types" columnName="association_type"/>
+    <addNotNullConstraint schemaName="party" tableName="association_property_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="association_property_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="association_property_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="association_property_types" columnName="description"/>
+    <addNotNullConstraint schemaName="party" tableName="association_property_types" columnName="value_type"/>
+    <addForeignKeyConstraint constraintName="association_property_types_association_type_fk" baseTableSchemaName="party"
+      baseTableName="association_property_types" baseColumnNames="association_type,locale_id" referencedTableSchemaName="party"
+      referencedTableName="association_types" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+    <addDefaultValue schemaName="party" tableName="association_property_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="association_property_types_association_type_ix" schemaName="party" tableName="association_property_types">
+      <column name="association_type"/>
     </createIndex>
-    <createIndex indexName="relationship_property_types_locale_id_ix" schemaName="party" tableName="relationship_property_types">
+    <createIndex indexName="association_property_types_locale_id_ix" schemaName="party" tableName="association_property_types">
       <column name="locale_id"/>
     </createIndex>
 
@@ -996,6 +996,66 @@
       <column name="surname"/>
     </createIndex>
 
+    <createTable schemaName="party" tableName="associations" remarks="Associations">
+      <column name="created" type="timestamp" remarks="The date and time the association was created"/>
+      <column name="effective_from" type="date" remarks="The date that the association is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the association is effective to"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the association"/>
+      <column name="first_party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the first party in the association"/>
+      <column name="second_party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the second party in the association"/>
+      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the association is associated with"/>
+      <column name="type" type="nvarchar(30)" remarks="The code for the association type"/>
+      <column name="updated" type="timestamp" remarks="The date and time the association was last updated"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="associations" columnNames="id"/>
+    <addNotNullConstraint schemaName="party" tableName="associations" columnName="created"/>
+    <addNotNullConstraint schemaName="party" tableName="associations" columnName="id"/>
+    <addNotNullConstraint schemaName="party" tableName="associations" columnName="first_party_id"/>
+    <addNotNullConstraint schemaName="party" tableName="associations" columnName="second_party_id"/>
+    <addNotNullConstraint schemaName="party" tableName="associations" columnName="tenant_id"/>
+    <addNotNullConstraint schemaName="party" tableName="associations" columnName="type"/>
+    <addForeignKeyConstraint constraintName="associations_first_party_fk" baseTableSchemaName="party"
+      baseTableName="associations" baseColumnNames="first_party_id" referencedTableSchemaName="party"
+      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+    <addForeignKeyConstraint constraintName="associations_second_party_fk" baseTableSchemaName="party"
+      baseTableName="associations" baseColumnNames="second_party_id" referencedTableSchemaName="party"
+      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="associations_first_party_id_ix" schemaName="party" tableName="associations">
+      <column name="first_party_id"/>
+    </createIndex>
+    <createIndex indexName="associations_second_party_id_ix" schemaName="party" tableName="associations">
+      <column name="second_party_id"/>
+    </createIndex>
+    <createIndex indexName="associations_tenant_id_ix" schemaName="party" tableName="associations">
+      <column name="tenant_id"/>
+    </createIndex>
+    <createIndex indexName="associations_type_ix" schemaName="party" tableName="associations">
+      <column name="type"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="association_properties" remarks="Associations Properties">
+      <column name="created" type="timestamp" remarks="The date and time the association property was created"/>
+      <column name="association_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the association the association property is associated with"/>
+      <column name="type" type="nvarchar(30)" remarks="The code for the association property type"/>
+      <column name="updated" type="timestamp" remarks="The date and time the association property was last updated"/>
+      <column name="boolean_value" type="boolean" remarks="The boolean value for the association property"/>
+      <column name="date_value" type="date" remarks="The date value for the association property"/>
+      <column name="decimal_value" type="decimal(18,8)" remarks="The decimal value for the association property"/>
+      <column name="double_value" type="double" remarks="The double value for the association property"/>
+      <column name="integer_value" type="int" remarks="The integer value for the association property"/>
+      <column name="string_value" type="nvarchar(200)" remarks="The string value for the association property"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="association_properties" columnNames="association_id,type"/>
+    <addNotNullConstraint schemaName="party" tableName="association_properties" columnName="created"/>
+    <addNotNullConstraint schemaName="party" tableName="association_properties" columnName="association_id"/>
+    <addNotNullConstraint schemaName="party" tableName="association_properties" columnName="type"/>
+    <addForeignKeyConstraint constraintName="association_properties_association_fk" baseTableSchemaName="party"
+      baseTableName="association_properties" baseColumnNames="association_id" referencedTableSchemaName="party"
+      referencedTableName="associations" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="association_properties_association_id_ix" schemaName="party" tableName="association_properties">
+      <column name="association_id"/>
+    </createIndex>    
+    
     <createTable schemaName="party" tableName="attributes" remarks="Attributes">
       <column name="created" type="timestamp" remarks="The date and time the attribute was created"/>
       <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the attribute is associated with"/>
@@ -1312,66 +1372,6 @@
       referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
     <createIndex indexName="preferences_party_id_ix" schemaName="party" tableName="preferences">
       <column name="party_id"/>
-    </createIndex>
-
-    <createTable schemaName="party" tableName="relationships" remarks="Relationships">
-      <column name="created" type="timestamp" remarks="The date and time the relationship was created"/>
-      <column name="effective_from" type="date" remarks="The date that the relationship is effective from"/>
-      <column name="effective_to" type="date" remarks="The date that the relationship is effective to"/>
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the relationship"/>
-      <column name="first_party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the first party in the relationship"/>
-      <column name="second_party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the second party in the relationship"/>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the relationship is associated with"/>
-      <column name="type" type="nvarchar(30)" remarks="The code for the relationship type"/>
-      <column name="updated" type="timestamp" remarks="The date and time the relationship was last updated"/>
-    </createTable>
-    <addPrimaryKey schemaName="party" tableName="relationships" columnNames="id"/>
-    <addNotNullConstraint schemaName="party" tableName="relationships" columnName="created"/>
-    <addNotNullConstraint schemaName="party" tableName="relationships" columnName="id"/>
-    <addNotNullConstraint schemaName="party" tableName="relationships" columnName="first_party_id"/>
-    <addNotNullConstraint schemaName="party" tableName="relationships" columnName="second_party_id"/>
-    <addNotNullConstraint schemaName="party" tableName="relationships" columnName="tenant_id"/>
-    <addNotNullConstraint schemaName="party" tableName="relationships" columnName="type"/>
-    <addForeignKeyConstraint constraintName="relationships_first_party_fk" baseTableSchemaName="party"
-      baseTableName="relationships" baseColumnNames="first_party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
-    <addForeignKeyConstraint constraintName="relationships_second_party_fk" baseTableSchemaName="party"
-      baseTableName="relationships" baseColumnNames="second_party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
-    <createIndex indexName="relationships_first_party_id_ix" schemaName="party" tableName="relationships">
-      <column name="first_party_id"/>
-    </createIndex>
-    <createIndex indexName="relationships_second_party_id_ix" schemaName="party" tableName="relationships">
-      <column name="second_party_id"/>
-    </createIndex>
-    <createIndex indexName="relationships_tenant_id_ix" schemaName="party" tableName="relationships">
-      <column name="tenant_id"/>
-    </createIndex>
-    <createIndex indexName="relationships_type_ix" schemaName="party" tableName="relationships">
-      <column name="type"/>
-    </createIndex>
-
-    <createTable schemaName="party" tableName="relationship_properties" remarks="Relationship Properties">
-      <column name="created" type="timestamp" remarks="The date and time the relationship property was created"/>
-      <column name="relationship_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the relationship the relationship property is associated with"/>
-      <column name="type" type="nvarchar(30)" remarks="The code for the relationship property type"/>
-      <column name="updated" type="timestamp" remarks="The date and time the relationship property was last updated"/>
-      <column name="boolean_value" type="boolean" remarks="The boolean value for the relationship property"/>
-      <column name="date_value" type="date" remarks="The date value for the relationship property"/>
-      <column name="decimal_value" type="decimal(18,8)" remarks="The decimal value for the relationship property"/>
-      <column name="double_value" type="double" remarks="The double value for the relationship property"/>
-      <column name="integer_value" type="int" remarks="The integer value for the relationship property"/>
-      <column name="string_value" type="nvarchar(200)" remarks="The string value for the relationship property"/>
-    </createTable>
-    <addPrimaryKey schemaName="party" tableName="relationship_properties" columnNames="relationship_id,type"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_properties" columnName="created"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_properties" columnName="relationship_id"/>
-    <addNotNullConstraint schemaName="party" tableName="relationship_properties" columnName="type"/>
-    <addForeignKeyConstraint constraintName="relationship_properties_relationship_fk" baseTableSchemaName="party"
-      baseTableName="relationship_properties" baseColumnNames="relationship_id" referencedTableSchemaName="party"
-      referencedTableName="relationships" referencedColumnNames="id" deleteCascade="true"/>
-    <createIndex indexName="relationship_properties_relationship_id_ix" schemaName="party" tableName="relationship_properties">
-      <column name="relationship_id"/>
     </createIndex>
 
     <createTable schemaName="party" tableName="residence_permits" remarks="Residence Permits">

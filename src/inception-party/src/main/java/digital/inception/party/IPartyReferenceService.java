@@ -36,6 +36,74 @@ public interface IPartyReferenceService {
   UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
   /**
+   * Retrieve the value type for the first association property type with the specified code for any
+   * tenant or locale.
+   *
+   * @param associationPropertyTypeCode the code for the association property type
+   * @return the value type for the association property type
+   */
+  Optional<ValueType> getAssociationPropertyTypeValueType(String associationPropertyTypeCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the association property type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the association
+   *     property type reference data for
+   * @return the association property type reference data
+   */
+  List<AssociationPropertyType> getAssociationPropertyTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the association property type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association
+   *     property type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the association
+   *     property type reference data for
+   * @return the association property type reference data
+   */
+  List<AssociationPropertyType> getAssociationPropertyTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the association property type reference data for all locales.
+   *
+   * @return the association property type reference data
+   */
+  List<AssociationPropertyType> getAssociationPropertyTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the association type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the association type
+   *     reference data for
+   * @return the association type reference data
+   */
+  List<AssociationType> getAssociationTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the association type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the association type
+   *     reference data for
+   * @return the association type reference data
+   */
+  List<AssociationType> getAssociationTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the association type reference data for all locales.
+   *
+   * @return the association type reference data
+   */
+  List<AssociationType> getAssociationTypes() throws ServiceUnavailableException;
+
+  /**
    * Retrieve the attribute type category reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
@@ -770,74 +838,6 @@ public interface IPartyReferenceService {
   List<Race> getRaces() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the value type for the first relationship property type with the specified code for
-   * any tenant or locale.
-   *
-   * @param relationshipPropertyTypeCode the code for the relationship property type
-   * @return the value type for the relationship property type
-   */
-  Optional<ValueType> getRelationshipPropertyTypeValueType(String relationshipPropertyTypeCode)
-      throws ServiceUnavailableException;
-
-  /**
-   * Retrieve the relationship property type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship
-   *     property type reference data for
-   * @return the relationship property type reference data
-   */
-  List<RelationshipPropertyType> getRelationshipPropertyTypes(String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException;
-
-  /**
-   * Retrieve the relationship property type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship
-   *     property type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship
-   *     property type reference data for
-   * @return the relationship property type reference data
-   */
-  List<RelationshipPropertyType> getRelationshipPropertyTypes(UUID tenantId, String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException;
-
-  /**
-   * Retrieve the relationship property type reference data for all locales.
-   *
-   * @return the relationship property type reference data
-   */
-  List<RelationshipPropertyType> getRelationshipPropertyTypes() throws ServiceUnavailableException;
-
-  /**
-   * Retrieve the relationship type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship type
-   *     reference data for
-   * @return the relationship type reference data
-   */
-  List<RelationshipType> getRelationshipTypes(String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException;
-
-  /**
-   * Retrieve the relationship type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship type
-   *     reference data for
-   * @return the relationship type reference data
-   */
-  List<RelationshipType> getRelationshipTypes(UUID tenantId, String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException;
-
-  /**
-   * Retrieve the relationship type reference data for all locales.
-   *
-   * @return the relationship type reference data
-   */
-  List<RelationshipType> getRelationshipTypes() throws ServiceUnavailableException;
-
-  /**
    * Retrieve the residence permit type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
@@ -1249,6 +1249,32 @@ public interface IPartyReferenceService {
   List<Title> getTitles() throws ServiceUnavailableException;
 
   /**
+   * Check whether the code is a valid code for a association property type for the association
+   * type.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param associationTypeCode the code for the association type
+   * @param associationPropertyTypeCode the code for the association property type
+   * @return <b>true</b> if the code is a valid code for a association property type or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidAssociationPropertyType(
+      UUID tenantId, String associationTypeCode, String associationPropertyTypeCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a association type for the party type.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyTypeCode the code for the party type
+   * @param associationTypeCode the code for the association type
+   * @return <b>true</b> if the code is a valid code for a association type or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidAssociationType(UUID tenantId, String partyTypeCode, String associationTypeCode)
+      throws ServiceUnavailableException;
+
+  /**
    * Check whether the code is a valid code for an attribute type for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
@@ -1582,32 +1608,6 @@ public interface IPartyReferenceService {
    * @return <b>true</b> if the code is a valid code for a race or <b>false</b> otherwise
    */
   boolean isValidRace(UUID tenantId, String raceCode) throws ServiceUnavailableException;
-
-  /**
-   * Check whether the code is a valid code for a relationship property type for the relationship
-   * type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param relationshipTypeCode the code for the relationship type
-   * @param relationshipPropertyTypeCode the code for the relationship property type
-   * @return <b>true</b> if the code is a valid code for a relationship property type or
-   *     <b>false</b> otherwise
-   */
-  boolean isValidRelationshipPropertyType(
-      UUID tenantId, String relationshipTypeCode, String relationshipPropertyTypeCode)
-      throws ServiceUnavailableException;
-
-  /**
-   * Check whether the code is a valid code for a relationship type for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param relationshipTypeCode the code for the relationship type
-   * @return <b>true</b> if the code is a valid code for a relationship type or <b>false</b>
-   *     otherwise
-   */
-  boolean isValidRelationshipType(UUID tenantId, String partyTypeCode, String relationshipTypeCode)
-      throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a residence permit type.

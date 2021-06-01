@@ -946,7 +946,7 @@ COMMENT ON COLUMN party.role_type_preference_type_constraints.type IS 'The const
 COMMENT ON COLUMN party.role_type_preference_type_constraints.value IS 'The value to apply when validating the preference value';
 
 
-CREATE TABLE party.relationship_types (
+CREATE TABLE party.association_types (
   code              VARCHAR(30)  NOT NULL,
   locale_id         VARCHAR(10)  NOT NULL,
   tenant_id         UUID,
@@ -956,32 +956,32 @@ CREATE TABLE party.relationship_types (
   first_party_role  VARCHAR(30)  NOT NULL,
   second_party_role VARCHAR(30)  NOT NULL,
 
- PRIMARY KEY (code, locale_id),
- CONSTRAINT relationships_first_party_role_fk FOREIGN KEY (first_party_role, locale_id) REFERENCES party.role_types(code, locale_id) ON DELETE CASCADE,
- CONSTRAINT relationships_second_party_role_fk FOREIGN KEY (second_party_role, locale_id) REFERENCES party.role_types(code, locale_id) ON DELETE CASCADE
+  PRIMARY KEY (code, locale_id),
+  CONSTRAINT associations_first_party_role_fk FOREIGN KEY (first_party_role, locale_id) REFERENCES party.role_types(code, locale_id) ON DELETE CASCADE,
+  CONSTRAINT associations_second_party_role_fk FOREIGN KEY (second_party_role, locale_id) REFERENCES party.role_types(code, locale_id) ON DELETE CASCADE
 );
 
-CREATE INDEX relationship_types_locale_id_ix ON party.relationship_types(locale_id);
+CREATE INDEX association_types_locale_id_ix ON party.association_types(locale_id);
 
-COMMENT ON COLUMN party.relationship_types.code IS 'The code for the relationship type';
+COMMENT ON COLUMN party.association_types.code IS 'The code for the association type';
 
-COMMENT ON COLUMN party.relationship_types.locale_id IS 'The Unicode locale identifier for the relationship type';
+COMMENT ON COLUMN party.association_types.locale_id IS 'The Unicode locale identifier for the association type';
 
-COMMENT ON COLUMN party.relationship_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the relationship type is specific to';
+COMMENT ON COLUMN party.association_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the association type is specific to';
 
-COMMENT ON COLUMN party.relationship_types.sort_index IS 'The sort index for the relationship type';
+COMMENT ON COLUMN party.association_types.sort_index IS 'The sort index for the association type';
 
-COMMENT ON COLUMN party.relationship_types.name IS 'The name of the relationship type';
+COMMENT ON COLUMN party.association_types.name IS 'The name of the association type';
 
-COMMENT ON COLUMN party.relationship_types.description IS 'The description for the relationship type';
+COMMENT ON COLUMN party.association_types.description IS 'The description for the association type';
 
-COMMENT ON COLUMN party.relationship_types.first_party_role IS 'The code for the role type for the first party in the relationship';
+COMMENT ON COLUMN party.association_types.first_party_role IS 'The code for the role type for the first party in the association';
 
-COMMENT ON COLUMN party.relationship_types.second_party_role IS 'The code for the role type for the second party in the relationship';
+COMMENT ON COLUMN party.association_types.second_party_role IS 'The code for the role type for the second party in the association';
 
 
-CREATE TABLE party.relationship_property_types (
-  relationship_type VARCHAR(30)  NOT NULL,
+CREATE TABLE party.association_property_types (
+  association_type VARCHAR(30)  NOT NULL,
   code              VARCHAR(30)  NOT NULL,
   locale_id         VARCHAR(10)  NOT NULL,
   tenant_id         UUID,
@@ -990,29 +990,29 @@ CREATE TABLE party.relationship_property_types (
   description       VARCHAR(200) NOT NULL DEFAULT '',
   value_type        VARCHAR(10) NOT NULL,
 
-  PRIMARY KEY (relationship_type, code, locale_id),
-  CONSTRAINT relationship_property_types_relationship_type_fk FOREIGN KEY (relationship_type, locale_id) REFERENCES party.relationship_types(code, locale_id) ON DELETE CASCADE
+  PRIMARY KEY (association_type, code, locale_id),
+  CONSTRAINT association_property_types_association_type_fk FOREIGN KEY (association_type, locale_id) REFERENCES party.association_types(code, locale_id) ON DELETE CASCADE
 );
 
-CREATE INDEX relationship_property_types_relationship_type_ix ON party.relationship_property_types(relationship_type);
+CREATE INDEX association_property_types_association_type_ix ON party.association_property_types(association_type);
 
-CREATE INDEX relationship_property_types_locale_id_ix ON party.relationship_property_types(locale_id);
+CREATE INDEX association_property_types_locale_id_ix ON party.association_property_types(locale_id);
 
-COMMENT ON COLUMN party.relationship_property_types.relationship_type IS 'The code for the relationship type the relationship property type is associated with';
+COMMENT ON COLUMN party.association_property_types.association_type IS 'The code for the association type the association property type is associated with';
 
-COMMENT ON COLUMN party.relationship_property_types.code IS 'The code for the relationship property type';
+COMMENT ON COLUMN party.association_property_types.code IS 'The code for the association property type';
 
-COMMENT ON COLUMN party.relationship_property_types.locale_id IS 'The Unicode locale identifier for the relationship property type';
+COMMENT ON COLUMN party.association_property_types.locale_id IS 'The Unicode locale identifier for the association property type';
 
-COMMENT ON COLUMN party.relationship_property_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the relationship property type is specific to';
+COMMENT ON COLUMN party.association_property_types.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the association property type is specific to';
 
-COMMENT ON COLUMN party.relationship_property_types.sort_index IS 'The sort index for the relationship property type';
+COMMENT ON COLUMN party.association_property_types.sort_index IS 'The sort index for the association property type';
 
-COMMENT ON COLUMN party.relationship_property_types.name IS 'The name of the relationship property type';
+COMMENT ON COLUMN party.association_property_types.name IS 'The name of the association property type';
 
-COMMENT ON COLUMN party.relationship_property_types.description IS 'The description for the relationship property type';
+COMMENT ON COLUMN party.association_property_types.description IS 'The description for the association property type';
 
-COMMENT ON COLUMN party.relationship_property_types.value_type IS 'The code for the value type for the relationship property type';
+COMMENT ON COLUMN party.association_property_types.value_type IS 'The code for the value type for the association property type';
 
 
 CREATE TABLE party.segments (
@@ -1394,6 +1394,88 @@ COMMENT ON COLUMN party.persons.surname IS 'The surname for the person';
 COMMENT ON COLUMN party.persons.time_zone IS 'The time zone ID for the person';
 
 COMMENT ON COLUMN party.persons.title IS 'The code for the title for the person';
+
+
+CREATE TABLE party.associations (
+  created         TIMESTAMP   NOT NULL,
+  effective_from  DATE,
+  effective_to    DATE,
+  id              UUID        NOT NULL,
+  first_party_id  UUID        NOT NULL,
+  second_party_id UUID        NOT NULL,
+  tenant_id       UUID        NOT NULL,
+  type            VARCHAR(30) NOT NULL,
+  updated         TIMESTAMP,
+
+  PRIMARY KEY (id),
+  CONSTRAINT associations_first_party_fk FOREIGN KEY (first_party_id) REFERENCES party.parties(id) ON DELETE CASCADE,
+  CONSTRAINT associations_second_party_fk FOREIGN KEY (second_party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX associations_first_party_id_ix ON party.associations(first_party_id);
+
+CREATE INDEX associations_second_party_id_ix ON party.associations(second_party_id);
+
+CREATE INDEX associations_tenant_id_ix ON party.associations(tenant_id);
+
+CREATE INDEX associations_type_ix ON party.associations(type);
+
+COMMENT ON COLUMN party.associations.created IS 'The date and time the association was created';
+
+COMMENT ON COLUMN party.associations.effective_from IS 'The date that the association is effective from';
+
+COMMENT ON COLUMN party.associations.effective_to IS 'The date that the association is effective to';
+
+COMMENT ON COLUMN party.associations.id IS 'The Universally Unique Identifier (UUID) for the association';
+
+COMMENT ON COLUMN party.associations.first_party_id IS 'The Universally Unique Identifier (UUID) for the first party in the association';
+
+COMMENT ON COLUMN party.associations.second_party_id IS 'The Universally Unique Identifier (UUID) for the second party in the association';
+
+COMMENT ON COLUMN party.associations.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the association is associated with';
+
+COMMENT ON COLUMN party.associations.type IS 'The code for the association type';
+
+COMMENT ON COLUMN party.associations.updated IS 'The date and time the association was last updated';
+
+
+CREATE TABLE party.association_properties (
+  created         TIMESTAMP    NOT NULL,
+  association_id UUID         NOT NULL,
+  type            VARCHAR(30)  NOT NULL,
+  updated         TIMESTAMP,
+  boolean_value   BOOLEAN,
+  date_value      DATE,
+  decimal_value   DECIMAL(18,8),
+  double_value    DOUBLE,
+  integer_value   INTEGER,
+  string_value    VARCHAR(200),
+
+  PRIMARY KEY (association_id, type),
+  CONSTRAINT association_properties_association_fk FOREIGN KEY (association_id) REFERENCES party.associations(id) ON DELETE CASCADE
+);
+
+CREATE INDEX association_properties_association_id_ix ON party.association_properties(association_id);
+
+COMMENT ON COLUMN party.association_properties.created IS 'The date and time the association property was created';
+
+COMMENT ON COLUMN party.association_properties.association_id IS 'The Universally Unique Identifier (UUID) for the association the association property is associated with';
+
+COMMENT ON COLUMN party.association_properties.type IS 'The code for the association property type';
+
+COMMENT ON COLUMN party.association_properties.updated IS 'The date and time the association property was last updated';
+
+COMMENT ON COLUMN party.association_properties.boolean_value IS 'The boolean value for the association property';
+
+COMMENT ON COLUMN party.association_properties.date_value IS 'The date value for the association property';
+
+COMMENT ON COLUMN party.association_properties.decimal_value IS 'The decimal value for the association property';
+
+COMMENT ON COLUMN party.association_properties.double_value IS 'The double value for the association property';
+
+COMMENT ON COLUMN party.association_properties.integer_value IS 'The integer value for the association property';
+
+COMMENT ON COLUMN party.association_properties.string_value IS 'The string value for the association property';
 
 
 CREATE TABLE party.attributes (
@@ -1919,88 +2001,6 @@ COMMENT ON COLUMN party.preferences.type IS 'The code for the preference type';
 COMMENT ON COLUMN party.preferences.updated IS 'The date and time the preference was last updated';
 
 COMMENT ON COLUMN party.preferences.value IS 'The value for the preference';
-
-
-CREATE TABLE party.relationships (
-  created         TIMESTAMP   NOT NULL,
-  effective_from  DATE,
-  effective_to    DATE,
-  id              UUID        NOT NULL,
-  first_party_id  UUID        NOT NULL,
-  second_party_id UUID        NOT NULL,
-  tenant_id       UUID        NOT NULL,
-  type            VARCHAR(30) NOT NULL,
-  updated         TIMESTAMP,
-
-  PRIMARY KEY (id),
-  CONSTRAINT relationships_first_party_fk FOREIGN KEY (first_party_id) REFERENCES party.parties(id) ON DELETE CASCADE,
-  CONSTRAINT relationships_second_party_fk FOREIGN KEY (second_party_id) REFERENCES party.parties(id) ON DELETE CASCADE
-);
-
-CREATE INDEX relationships_first_party_id_ix ON party.relationships(first_party_id);
-
-CREATE INDEX relationships_second_party_id_ix ON party.relationships(second_party_id);
-
-CREATE INDEX relationships_tenant_id_ix ON party.relationships(tenant_id);
-
-CREATE INDEX relationships_type_ix ON party.relationships(type);
-
-COMMENT ON COLUMN party.relationships.created IS 'The date and time the relationship was created';
-
-COMMENT ON COLUMN party.relationships.effective_from IS 'The date that the relationship is effective from';
-
-COMMENT ON COLUMN party.relationships.effective_to IS 'The date that the relationship is effective to';
-
-COMMENT ON COLUMN party.relationships.id IS 'The Universally Unique Identifier (UUID) for the relationship';
-
-COMMENT ON COLUMN party.relationships.first_party_id IS 'The Universally Unique Identifier (UUID) for the first party in the relationship';
-
-COMMENT ON COLUMN party.relationships.second_party_id IS 'The Universally Unique Identifier (UUID) for the second party in the relationship';
-
-COMMENT ON COLUMN party.relationships.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the relationship is associated with';
-
-COMMENT ON COLUMN party.relationships.type IS 'The code for the relationship type';
-
-COMMENT ON COLUMN party.relationships.updated IS 'The date and time the relationship was last updated';
-
-
-CREATE TABLE party.relationship_properties (
-  created         TIMESTAMP    NOT NULL,
-  relationship_id UUID         NOT NULL,
-  type            VARCHAR(30)  NOT NULL,
-  updated         TIMESTAMP,
-  boolean_value   BOOLEAN,
-  date_value      DATE,
-  decimal_value   DECIMAL(18,8),
-  double_value    DOUBLE,
-  integer_value   INTEGER,
-  string_value    VARCHAR(200),
-
-  PRIMARY KEY (relationship_id, type),
-  CONSTRAINT relationship_properties_relationship_fk FOREIGN KEY (relationship_id) REFERENCES party.relationships(id) ON DELETE CASCADE
-);
-
-CREATE INDEX relationship_properties_relationship_id_ix ON party.relationship_properties(relationship_id);
-
-COMMENT ON COLUMN party.relationship_properties.created IS 'The date and time the relationship property was created';
-
-COMMENT ON COLUMN party.relationship_properties.relationship_id IS 'The Universally Unique Identifier (UUID) for the relationship the relationship property is associated with';
-
-COMMENT ON COLUMN party.relationship_properties.type IS 'The code for the relationship property type';
-
-COMMENT ON COLUMN party.relationship_properties.updated IS 'The date and time the relationship property was last updated';
-
-COMMENT ON COLUMN party.relationship_properties.boolean_value IS 'The boolean value for the relationship property';
-
-COMMENT ON COLUMN party.relationship_properties.date_value IS 'The date value for the relationship property';
-
-COMMENT ON COLUMN party.relationship_properties.decimal_value IS 'The decimal value for the relationship property';
-
-COMMENT ON COLUMN party.relationship_properties.double_value IS 'The double value for the relationship property';
-
-COMMENT ON COLUMN party.relationship_properties.integer_value IS 'The integer value for the relationship property';
-
-COMMENT ON COLUMN party.relationship_properties.string_value IS 'The string value for the relationship property';
 
 
 CREATE TABLE party.residence_permits (
@@ -4037,97 +4037,97 @@ INSERT INTO party.role_types (code, locale_id, name, description, party_types)
   VALUES ('supplier', 'en-ZA', 'Supplier', 'A person or organization that provides something needed such as a product or service', 'organization,person');
 
 
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('affiliation', 'en-US', 'Affiliation', 'A relationship between affiliates', 'affiliate', 'affiliate');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('association_membership', 'en-US', 'Association Membership', 'A relationship identifying an organization as a member of an association', 'association', 'association_member');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('civil_partnership', 'en-US', 'Civil Partnership', 'A legally recognized union with rights similar to those of marriage', 'civil_partner', 'civil_partner');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('company_shareholder', 'en-US', 'Company Shareholder', 'A relationship between a company and an organization or person that legally owns one or more shares of the share capital of the company', 'company', 'shareholder');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('company_subsidiary', 'en-US', 'Company Subsidiary', 'A relationship between a parent company or holding company and a subsidiary', 'company', 'subsidiary');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('competitor', 'en-US', 'Competitor', 'A relationship between two organizations that are engaged in commercial competition with each other', 'competitor', 'competitor');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('division_department', 'en-US', 'Division Department', 'A relationship between a division and a department that forms part of the division', 'division', 'department');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('directorship', 'en-US', 'Directorship', 'A relationship identifying a person as a directory of a company', 'company', 'director');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('employment', 'en-US', 'Employment', 'A relationship between two parties that is usually based on contract where work is paid for', 'employer', 'employee');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('family_membership', 'en-US', 'Family Membership', 'A relationship identifying a person as a member of a family', 'family', 'family_member');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('household_membership', 'en-US', 'Household Membership', 'A relationship identifying a person as a member of a household', 'household', 'household_member');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('joint_venture', 'en-US', 'Joint Venture', 'A relationship identifying an organization as a participant in a joint venture arrangement', 'joint_venture', 'organization');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('life_partnership', 'en-US', 'Life Partnership', 'A relationship between a parent and child', 'life_partner', 'life_partner');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('marriage', 'en-US', 'Marriage', 'A legally recognized union of two people as partners in a personal relationship ', 'spouse', 'spouse');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('organization_agency', 'en-US', 'Organization Agency', 'A relationship where an organization provides a particular service on behalf of another organization', 'organization', 'agency');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('organization_agent', 'en-US', 'Organization Agent', 'A relationship between an organization and a person who acts on behalf of the organization', 'organization', 'agent');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('organization_department', 'en-US', 'Organization Department', 'A relationship between an organization and a department that forms part of the organization', 'organization', 'department');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('organization_division', 'en-US', 'Organization Division', 'A relationship between an organization and a division that forms part of the organization', 'organization', 'division');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('parent_child', 'en-US', 'Parent-Child', 'A relationship between a parent and a child', 'parent', 'child');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('partnership', 'en-US', 'Partnership', 'A relationship between a partnership and one of its partners', 'partnership', 'partner');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('sibling', 'en-US', 'Sibling', 'A relationship between two children or offspring having one or both parents in common', 'sibling', 'sibling');
 
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('affiliation', 'en-ZA', 'Affiliation', 'A relationship between affiliates', 'affiliate', 'affiliate');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('association_membership', 'en-ZA', 'Association Membership', 'A relationship identifying an organization as a member of an association', 'association', 'association_member');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('civil_partnership', 'en-ZA', 'Civil Partnership', 'A legally recognized union with rights similar to those of marriage', 'civil_partner', 'civil_partner');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('company_shareholder', 'en-ZA', 'Company Shareholder', 'A relationship between a company and an organization or person that legally owns one or more shares of the share capital of the company', 'company', 'shareholder');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('company_subsidiary', 'en-ZA', 'Company Subsidiary', 'A relationship between a parent company or holding company and a subsidiary', 'company', 'subsidiary');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('competitor', 'en-ZA', 'Competitor', 'A relationship between two organizations that are engaged in commercial competition with each other', 'competitor', 'competitor');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('division_department', 'en-ZA', 'Division Department', 'A relationship between a division and a department that forms part of the division', 'division', 'department');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('directorship', 'en-ZA', 'Directorship', 'A relationship identifying a person as a directory of a company', 'company', 'director');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('employment', 'en-ZA', 'Employment', 'A relationship between two parties that is usually based on contract where work is paid for', 'employer', 'employee');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('family_membership', 'en-ZA', 'Family Membership', 'A relationship identifying a person as a member of a family', 'family', 'family_member');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('household_membership', 'en-ZA', 'Household Membership', 'A relationship identifying a person as a member of a household', 'household', 'household_member');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('joint_venture', 'en-ZA', 'Joint Venture', 'A relationship identifying an organization as a participant in a joint venture arrangement', 'joint_venture', 'organization');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('life_partnership', 'en-ZA', 'Life Partnership', 'A relationship between a parent and child', 'life_partner', 'life_partner');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('marriage', 'en-ZA', 'Marriage', 'A legally recognized union of two people as partners in a personal relationship ', 'spouse', 'spouse');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('organization_agency', 'en-ZA', 'Organization Agency', 'A relationship where an organization provides a particular service on behalf of another organization', 'organization', 'agency');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('organization_agent', 'en-ZA', 'Organization Agent', 'A relationship between an organization and a person who acts on behalf of the organization', 'organization', 'agent');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('organization_department', 'en-ZA', 'Organization Department', 'A relationship between an organization and a department that forms part of the organization', 'organization', 'department');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('organization_division', 'en-ZA', 'Organization Division', 'A relationship between an organization and a division that forms part of the organization', 'organization', 'division');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('parent_child', 'en-ZA', 'Parent-Child', 'A relationship between a parent and a child', 'parent', 'child');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('partnership', 'en-ZA', 'Partnership', 'A relationship between a partnership and one of its partners', 'partnership', 'partner');
-INSERT INTO party.relationship_types(code, locale_id, name, description, first_party_role, second_party_role)
+INSERT INTO party.association_types(code, locale_id, name, description, first_party_role, second_party_role)
   VALUES ('sibling', 'en-ZA', 'Sibling', 'A relationship between two children or offspring having one or both parents in common', 'sibling', 'sibling');
 
 
-INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, name, description, value_type)
+INSERT INTO party.association_property_types (association_type, code, locale_id, name, description, value_type)
   VALUES ('company_shareholder', 'shareholding', 'en-US', 'Shareholding', 'Shareholding', 'decimal');
 
-INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, name, description, value_type)
+INSERT INTO party.association_property_types (association_type, code, locale_id, name, description, value_type)
   VALUES ('company_shareholder', 'shareholding', 'en-ZA', 'Shareholding', 'Shareholding', 'decimal');
 
 

@@ -25,20 +25,20 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * The <b>ValidRelationship</b> annotation implements the custom constraint annotation used to apply
+ * The <b>ValidAssociation</b> annotation implements the custom constraint annotation used to apply
  * the person validation.
  *
  * @author Marcus Portmann
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidRelationshipValidator.class)
+@Constraint(validatedBy = ValidAssociationValidator.class)
 @Documented
-public @interface ValidRelationship {
+public @interface ValidAssociation {
 
   Class<?>[] groups() default {};
 
-  String message() default "{digital.inception.party.constraints.ValidRelationship.message}";
+  String message() default "{digital.inception.party.constraints.ValidAssociation.message}";
 
   Class<? extends Payload>[] payload() default {};
 }

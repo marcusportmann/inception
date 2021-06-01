@@ -16,21 +16,21 @@
 
 package digital.inception.party.constraints;
 
+import digital.inception.party.Association;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IPartyService;
-import digital.inception.party.Relationship;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * The <b>ValidRelationshipValidator</b> class implements the custom constraint validator for
- * validating a relationship.
+ * The <b>ValidAssociationValidator</b> class implements the custom constraint validator for
+ * validating a association.
  *
  * @author Marcus Portmann
  */
-public class ValidRelationshipValidator
-    implements ConstraintValidator<ValidRelationship, Relationship> {
+public class ValidAssociationValidator
+    implements ConstraintValidator<ValidAssociation, Association> {
 
   /** The Party Reference Service. */
   private final IPartyReferenceService partyReferenceService;
@@ -39,30 +39,30 @@ public class ValidRelationshipValidator
   private final IPartyService partyService;
 
   /**
-   * Constructs a new <b>ValidRelationshipValidator</b>.
+   * Constructs a new <b>ValidAssociationValidator</b>.
    *
    * @param partyService the Party Service
    * @param partyReferenceService the Party Reference Service
    */
   @Autowired
-  public ValidRelationshipValidator(
+  public ValidAssociationValidator(
       IPartyService partyService, IPartyReferenceService partyReferenceService) {
     this.partyService = partyService;
     this.partyReferenceService = partyReferenceService;
   }
 
-  /** Constructs a new <b>ValidRelationshipValidator</b>. */
-  public ValidRelationshipValidator() {
+  /** Constructs a new <b>ValidAssociationValidator</b>. */
+  public ValidAssociationValidator() {
     this.partyService = null;
     this.partyReferenceService = null;
   }
 
   @Override
-  public void initialize(ValidRelationship constraintAnnotation) {}
+  public void initialize(ValidAssociation constraintAnnotation) {}
 
   @Override
   public boolean isValid(
-      Relationship relationship, ConstraintValidatorContext constraintValidatorContext) {
+      Association association, ConstraintValidatorContext constraintValidatorContext) {
     if ((partyService != null) && (partyReferenceService != null)) {
       boolean isValid = true;
 

@@ -237,20 +237,6 @@ INSERT INTO party.role_types (code, locale_id, tenant_id,  name, description, pa
   VALUES ('test_second_person_role', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Second Person Role', 'Test Second Person Role', 'person');
 
 
-INSERT INTO party.relationship_types(code, locale_id, tenant_id, name, description, first_party_role, second_party_role)
-  VALUES ('test_relationship_type', 'en-US', '00000000-0000-0000-0000-000000000000', 'Test Relationship Type', 'Test Relationship Type', 'test_first_person_role', 'test_second_person_role');
-
-INSERT INTO party.relationship_types(code, locale_id, tenant_id, name, description, first_party_role, second_party_role)
-  VALUES ('test_relationship_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Relationship Type', 'Test Relationship Type', 'test_first_person_role', 'test_second_person_role');
-
-
-INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, tenant_id, sort_index, name, description, value_type)
-  VALUES ('test_relationship_type', 'test_relationship_property', 'en-US', '00000000-0000-0000-0000-000000000000', 666, 'Test Relationship Property', 'Test Relationship Property', 'string');
-
-INSERT INTO party.relationship_property_types (relationship_type, code, locale_id, tenant_id, sort_index, name, description, value_type)
-  VALUES ('test_relationship_type', 'test_relationship_property', 'en-ZA', '00000000-0000-0000-0000-000000000000', 666, 'Test Relationship Property', 'Test Relationship Property', 'string');
-
-
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, attribute_type_qualifier, type)
   VALUES ('test_person_role', 'consent', 'test_consent_type', 'required');
 INSERT INTO party.role_type_attribute_type_constraints(role_type, attribute_type, type)
@@ -431,6 +417,20 @@ INSERT INTO party.role_type_preference_type_constraints(role_type, preference_ty
   VALUES ('test_organization_role', 'test_preference', 'max_size', '20');
 INSERT INTO party.role_type_preference_type_constraints(role_type, preference_type, type, value)
   VALUES ('test_organization_role', 'test_preference', 'pattern', '^[0-9]*$');
+
+
+INSERT INTO party.association_types(code, locale_id, tenant_id, name, description, first_party_role, second_party_role)
+  VALUES ('test_association_type', 'en-US', '00000000-0000-0000-0000-000000000000', 'Test Association Type', 'Test Association Type', 'test_first_person_role', 'test_second_person_role');
+
+INSERT INTO party.association_types(code, locale_id, tenant_id, name, description, first_party_role, second_party_role)
+  VALUES ('test_association_type', 'en-ZA', '00000000-0000-0000-0000-000000000000', 'Test Association Type', 'Test Association Type', 'test_first_person_role', 'test_second_person_role');
+
+
+INSERT INTO party.association_property_types (association_type, code, locale_id, tenant_id, sort_index, name, description, value_type)
+  VALUES ('test_association_type', 'test_association_property', 'en-US', '00000000-0000-0000-0000-000000000000', 666, 'Test Association Property', 'Test Association Property', 'string');
+
+INSERT INTO party.association_property_types (association_type, code, locale_id, tenant_id, sort_index, name, description, value_type)
+  VALUES ('test_association_type', 'test_association_property', 'en-ZA', '00000000-0000-0000-0000-000000000000', 666, 'Test Association Property', 'Test Association Property', 'string');
 
 
 INSERT INTO party.segments (code, locale_id, tenant_id, name, description, party_types)

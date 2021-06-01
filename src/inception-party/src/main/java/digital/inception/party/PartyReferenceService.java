@@ -38,6 +38,12 @@ import org.springframework.util.StringUtils;
 @Service
 public class PartyReferenceService implements IPartyReferenceService {
 
+  /** The Association Property Type Repository. */
+  private final AssociationPropertyTypeRepository associationPropertyTypeRepository;
+
+  /** The Association Type Repository. */
+  private final AssociationTypeRepository associationTypeRepository;
+
   /** The Party Attribute Type Category Repository. */
   private final AttributeTypeCategoryRepository attributeTypeCategoryRepository;
 
@@ -113,12 +119,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Race Repository. */
   private final RaceRepository raceRepository;
 
-  /** The Relationship Property Type Repository. */
-  private final RelationshipPropertyTypeRepository relationshipPropertyTypeRepository;
-
-  /** The Relationship Type Repository. */
-  private final RelationshipTypeRepository relationshipTypeRepository;
-
   /** The Residence Permit Type Repository. */
   private final ResidencePermitTypeRepository residencePermitTypeRepository;
 
@@ -171,6 +171,8 @@ public class PartyReferenceService implements IPartyReferenceService {
   /**
    * Constructs a new <b>PartyReferenceService</b>.
    *
+   * @param associationPropertyTypeRepository the Association Property Type Repository
+   * @param associationTypeRepository the Association Type Repository
    * @param attributeTypeCategoryRepository the Attribute Type Category Repository
    * @param attributeTypeRepository the Attribute Type Repository
    * @param consentTypeRepository the Consent Type Repository
@@ -196,8 +198,6 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param preferenceTypeRepository the Preference Type Repository
    * @param qualificationTypeRepository the Qualification Type Repository
    * @param raceRepository the Race Repository
-   * @param relationshipPropertyTypeRepository the Relationship Property Type Repository
-   * @param relationshipTypeRepository the Relationship Type Repository
    * @param residencePermitTypeRepository the Residence Permit Type Repository
    * @param residencyStatusRepository the Residency Status Repository
    * @param residentialTypeRepository the Residential Type Repository
@@ -217,6 +217,8 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param titleRepository the Title Repository
    */
   public PartyReferenceService(
+      AssociationPropertyTypeRepository associationPropertyTypeRepository,
+      AssociationTypeRepository associationTypeRepository,
       AttributeTypeCategoryRepository attributeTypeCategoryRepository,
       AttributeTypeRepository attributeTypeRepository,
       ConsentTypeRepository consentTypeRepository,
@@ -242,8 +244,6 @@ public class PartyReferenceService implements IPartyReferenceService {
       PreferenceTypeRepository preferenceTypeRepository,
       QualificationTypeRepository qualificationTypeRepository,
       RaceRepository raceRepository,
-      RelationshipPropertyTypeRepository relationshipPropertyTypeRepository,
-      RelationshipTypeRepository relationshipTypeRepository,
       ResidencePermitTypeRepository residencePermitTypeRepository,
       ResidencyStatusRepository residencyStatusRepository,
       ResidentialTypeRepository residentialTypeRepository,
@@ -259,6 +259,8 @@ public class PartyReferenceService implements IPartyReferenceService {
       TaxNumberTypeRepository taxNumberTypeRepository,
       TimeToContactRepository timeToContactRepository,
       TitleRepository titleRepository) {
+    this.associationPropertyTypeRepository = associationPropertyTypeRepository;
+    this.associationTypeRepository = associationTypeRepository;
     this.attributeTypeCategoryRepository = attributeTypeCategoryRepository;
     this.attributeTypeRepository = attributeTypeRepository;
     this.consentTypeRepository = consentTypeRepository;
@@ -284,8 +286,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.preferenceTypeRepository = preferenceTypeRepository;
     this.qualificationTypeRepository = qualificationTypeRepository;
     this.raceRepository = raceRepository;
-    this.relationshipPropertyTypeRepository = relationshipPropertyTypeRepository;
-    this.relationshipTypeRepository = relationshipTypeRepository;
     this.residencePermitTypeRepository = residencePermitTypeRepository;
     this.residencyStatusRepository = residencyStatusRepository;
     this.residentialTypeRepository = residentialTypeRepository;
@@ -301,6 +301,154 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.taxNumberTypeRepository = taxNumberTypeRepository;
     this.timeToContactRepository = timeToContactRepository;
     this.titleRepository = titleRepository;
+  }
+
+  /**
+   * Retrieve the value type for the first association property type with the specified code for any
+   * tenant or locale.
+   *
+   * @param associationPropertyTypeCode the code for the association property type
+   * @return the value type for the association property type
+   */
+  @Override
+  @Cacheable(
+      cacheNames = "associationPropertyTypesValueTypes",
+      key = "#associationPropertyTypeCode")
+  public Optional<ValueType> getAssociationPropertyTypeValueType(String associationPropertyTypeCode)
+      throws ServiceUnavailableException {
+    try {
+      return self.getAssociationPropertyTypes().stream()
+          .filter(
+              associationPropertyType ->
+                  Objects.equals(associationPropertyType.getCode(), associationPropertyTypeCode))
+          .findFirst()
+          .map(associationPropertyType -> associationPropertyType.getValueType());
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the value type for the association property type ("
+              + associationPropertyTypeCode
+              + ")",
+          e);
+    }
+  }
+
+  /**
+   * Retrieve the association property type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the association
+   *     property type reference data for
+   * @return the association property type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'associationPropertyTypes.' + #localeId")
+  public List<AssociationPropertyType> getAssociationPropertyTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    try {
+      return associationPropertyTypeRepository.findByLocaleIdIgnoreCase(localeId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the association property type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the association property type reference data for all locales.
+   *
+   * @return the association property type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'associationPropertyTypes.ALL'")
+  public List<AssociationPropertyType> getAssociationPropertyTypes()
+      throws ServiceUnavailableException {
+    try {
+      return associationPropertyTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the association property type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the association property type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association
+   *     property type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the association
+   *     property type reference data for
+   * @return the association property type reference data
+   */
+  @Override
+  public List<AssociationPropertyType> getAssociationPropertyTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getAssociationPropertyTypes(localeId).stream()
+        .filter(
+            associationPropertyType ->
+                (associationPropertyType.getTenantId() == null
+                    || (Objects.equals(associationPropertyType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Retrieve the association type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the association type
+   *     reference data for
+   * @return the association type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'associationTypes.' + #localeId")
+  public List<AssociationType> getAssociationTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    try {
+      return associationTypeRepository.findByLocaleIdIgnoreCase(localeId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the association type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the association type reference data for all locales.
+   *
+   * @return the association type reference data
+   */
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'associationTypes.ALL'")
+  public List<AssociationType> getAssociationTypes() throws ServiceUnavailableException {
+    try {
+      return associationTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the association type reference data", e);
+    }
+  }
+
+  /**
+   * Retrieve the association type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association type
+   *     reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the association type
+   *     reference data for
+   * @return the association type reference data
+   */
+  @Override
+  public List<AssociationType> getAssociationTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getAssociationTypes(localeId).stream()
+        .filter(
+            associationType ->
+                (associationType.getTenantId() == null
+                    || (Objects.equals(associationType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
   }
 
   /**
@@ -1796,154 +1944,6 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
-   * Retrieve the value type for the first relationship property type with the specified code for
-   * any tenant or locale.
-   *
-   * @param relationshipPropertyTypeCode the code for the relationship property type
-   * @return the value type for the relationship property type
-   */
-  @Override
-  @Cacheable(
-      cacheNames = "relationshipPropertyTypesValueTypes",
-      key = "#relationshipPropertyTypeCode")
-  public Optional<ValueType> getRelationshipPropertyTypeValueType(
-      String relationshipPropertyTypeCode) throws ServiceUnavailableException {
-    try {
-      return self.getRelationshipPropertyTypes().stream()
-          .filter(
-              relationshipPropertyType ->
-                  Objects.equals(relationshipPropertyType.getCode(), relationshipPropertyTypeCode))
-          .findFirst()
-          .map(relationshipPropertyType -> relationshipPropertyType.getValueType());
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the value type for the relationship property type ("
-              + relationshipPropertyTypeCode
-              + ")",
-          e);
-    }
-  }
-
-  /**
-   * Retrieve the relationship property type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship
-   *     property type reference data for
-   * @return the relationship property type reference data
-   */
-  @Override
-  @Cacheable(cacheNames = "reference", key = "'relationshipPropertyTypes.' + #localeId")
-  public List<RelationshipPropertyType> getRelationshipPropertyTypes(String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(localeId)) {
-      throw new InvalidArgumentException("localeId");
-    }
-
-    try {
-      return relationshipPropertyTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the relationship property type reference data", e);
-    }
-  }
-
-  /**
-   * Retrieve the relationship property type reference data for all locales.
-   *
-   * @return the relationship property type reference data
-   */
-  @Override
-  @Cacheable(cacheNames = "reference", key = "'relationshipPropertyTypes.ALL'")
-  public List<RelationshipPropertyType> getRelationshipPropertyTypes()
-      throws ServiceUnavailableException {
-    try {
-      return relationshipPropertyTypeRepository.findAll();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the relationship property type reference data", e);
-    }
-  }
-
-  /**
-   * Retrieve the relationship property type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship
-   *     property type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship
-   *     property type reference data for
-   * @return the relationship property type reference data
-   */
-  @Override
-  public List<RelationshipPropertyType> getRelationshipPropertyTypes(UUID tenantId, String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getRelationshipPropertyTypes(localeId).stream()
-        .filter(
-            relationshipPropertyType ->
-                (relationshipPropertyType.getTenantId() == null
-                    || (Objects.equals(relationshipPropertyType.getTenantId(), tenantId))))
-        .collect(Collectors.toList());
-  }
-
-  /**
-   * Retrieve the relationship type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship type
-   *     reference data for
-   * @return the relationship type reference data
-   */
-  @Override
-  @Cacheable(cacheNames = "reference", key = "'relationshipTypes.' + #localeId")
-  public List<RelationshipType> getRelationshipTypes(String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(localeId)) {
-      throw new InvalidArgumentException("localeId");
-    }
-
-    try {
-      return relationshipTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the relationship type reference data", e);
-    }
-  }
-
-  /**
-   * Retrieve the relationship type reference data for all locales.
-   *
-   * @return the relationship type reference data
-   */
-  @Override
-  @Cacheable(cacheNames = "reference", key = "'relationshipTypes.ALL'")
-  public List<RelationshipType> getRelationshipTypes() throws ServiceUnavailableException {
-    try {
-      return relationshipTypeRepository.findAll();
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the relationship type reference data", e);
-    }
-  }
-
-  /**
-   * Retrieve the relationship type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the relationship type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the relationship type
-   *     reference data for
-   * @return the relationship type reference data
-   */
-  @Override
-  public List<RelationshipType> getRelationshipTypes(UUID tenantId, String localeId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getRelationshipTypes(localeId).stream()
-        .filter(
-            relationshipType ->
-                (relationshipType.getTenantId() == null
-                    || (Objects.equals(relationshipType.getTenantId(), tenantId))))
-        .collect(Collectors.toList());
-  }
-
-  /**
    * Retrieve the residence permit type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
@@ -2784,6 +2784,60 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   /**
+   * Check whether the code is a valid code for a association property type for the association
+   * type.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param associationTypeCode the code for the association type
+   * @param associationPropertyTypeCode the code for the association property type
+   * @return <b>true</b> if the code is a valid code for a association property type or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidAssociationPropertyType(
+      UUID tenantId, String associationTypeCode, String associationPropertyTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(associationPropertyTypeCode)) {
+      return false;
+    }
+
+    return self.getAssociationPropertyTypes().stream()
+        .anyMatch(
+            associationPropertyType ->
+                (associationPropertyType.getTenantId() == null
+                        || associationPropertyType.getTenantId().equals(tenantId))
+                    && Objects.equals(
+                        associationPropertyType.getAssociationType(), associationTypeCode)
+                    && Objects.equals(
+                        associationPropertyType.getCode(), associationPropertyTypeCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a association type for the party type.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyTypeCode the code for the party type
+   * @param associationTypeCode the code for the association type
+   * @return <b>true</b> if the code is a valid code for a association type or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidAssociationType(
+      UUID tenantId, String partyTypeCode, String associationTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(associationTypeCode)) {
+      return false;
+    }
+
+    return self.getAssociationTypes().stream()
+        .anyMatch(
+            associationType ->
+                (associationType.getTenantId() == null
+                        || Objects.equals(associationType.getTenantId(), tenantId))
+                    && Objects.equals(associationType.getCode(), associationTypeCode));
+  }
+
+  /**
    * Check whether the code is a valid code for an attribute type for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
@@ -3501,60 +3555,6 @@ public class PartyReferenceService implements IPartyReferenceService {
             race ->
                 (race.getTenantId() == null || Objects.equals(race.getTenantId(), tenantId))
                     && Objects.equals(race.getCode(), raceCode));
-  }
-
-  /**
-   * Check whether the code is a valid code for a relationship property type for the relationship
-   * type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param relationshipTypeCode the code for the relationship type
-   * @param relationshipPropertyTypeCode the code for the relationship property type
-   * @return <b>true</b> if the code is a valid code for a relationship property type or
-   *     <b>false</b> otherwise
-   */
-  @Override
-  public boolean isValidRelationshipPropertyType(
-      UUID tenantId, String relationshipTypeCode, String relationshipPropertyTypeCode)
-      throws ServiceUnavailableException {
-    if (!StringUtils.hasText(relationshipPropertyTypeCode)) {
-      return false;
-    }
-
-    return self.getRelationshipPropertyTypes().stream()
-        .anyMatch(
-            relationshipPropertyType ->
-                (relationshipPropertyType.getTenantId() == null
-                        || relationshipPropertyType.getTenantId().equals(tenantId))
-                    && Objects.equals(
-                        relationshipPropertyType.getRelationshipType(), relationshipTypeCode)
-                    && Objects.equals(
-                        relationshipPropertyType.getCode(), relationshipPropertyTypeCode));
-  }
-
-  /**
-   * Check whether the code is a valid code for a relationship type for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param relationshipTypeCode the code for the relationship type
-   * @return <b>true</b> if the code is a valid code for a relationship type or <b>false</b>
-   *     otherwise
-   */
-  @Override
-  public boolean isValidRelationshipType(
-      UUID tenantId, String partyTypeCode, String relationshipTypeCode)
-      throws ServiceUnavailableException {
-    if (!StringUtils.hasText(relationshipTypeCode)) {
-      return false;
-    }
-
-    return self.getRelationshipTypes().stream()
-        .anyMatch(
-            relationshipType ->
-                (relationshipType.getTenantId() == null
-                        || Objects.equals(relationshipType.getTenantId(), tenantId))
-                    && Objects.equals(relationshipType.getCode(), relationshipTypeCode));
   }
 
   /**

@@ -16,7 +16,6 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.ValidationError;
@@ -31,16 +30,13 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 /**
  * The <b>PartyService</b> class provides the Party Service implementation.
@@ -51,44 +47,37 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public class PartyService implements IPartyService {
 
-  /** The maximum number of filtered organizations. */
-  private static final int MAX_FILTERED_ORGANISATIONS = 100;
-
-  /** The maximum number of filtered parties. */
-  private static final int MAX_FILTERED_PARTIES = 100;
-
-  /** The maximum number of filtered persons. */
-  private static final int MAX_FILTERED_PERSONS = 100;
-
-  /** The maximum number of snapshots. */
-  private static final int MAX_SNAPSHOTS = 100;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(PartyService.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
 
-  /** /** The Organization Repository. */
-  private final OrganizationRepository organizationRepository;
-
-  /** The Party Repository. */
-  private final PartyRepository partyRepository;
-
-  /** The Person Repository. */
-  private final PersonRepository personRepository;
-
-  /** The Relationship Repository. */
-  private final RelationshipRepository relationshipRepository;
-
-  /** The Snapshot Repository. */
-  private final SnapshotRepository snapshotRepository;
-
   /** The JSR-303 validator. */
   private final Validator validator;
 
-  /** The Jackson 2 object mapper */
-  private final ObjectMapper objectMapper;
+  /** The party data store. */
+  private IPartyDataStore dataStore;
+
+  /** The fully qualified name of the Java class that implements the party data store. */
+  @Value("${inception.party.data-store.class-name:digital.inception.party.InternalPartyDataStore}")
+  private String dataStoreClassName;
+
+  /** The maximum number of filtered organizations that will be returned by the data store. */
+  @Value("${inception.party.max-filtered-organizations:#{100}}")
+  private int maxFilteredOrganizations;
+
+  /** The maximum number of filtered parties that will be returned by the data store. */
+  @Value("${inception.party.max-filtered-parties:#{100}}")
+  private int maxFilteredParties;
+
+  /** The maximum number of filtered persons that will be returned by the data store. */
+  @Value("${inception.party.max-filtered-persons:#{100}}")
+  private int maxFilteredPersons;
+
+  /** The maximum number of snapshots for a party that will be returned by the data store. */
+  @Value("${inception.party.max-snapshots:#{100}}")
+  private int maxSnapshots;
 
   /** The internal reference to the Party Service to enable caching. */
   @Resource private IPartyService self;
@@ -97,31 +86,43 @@ public class PartyService implements IPartyService {
    * Constructs a new <b>PartyService</b>.
    *
    * @param applicationContext the Spring application context
-   * @param objectMapper the Jackson2 object mapper
    * @param validator the JSR-303 validator
-   * @param organizationRepository the Organization Repository
-   * @param partyRepository the Party Repository
-   * @param personRepository the Person Repository
-   * @param relationshipRepository the Relationship Repository
-   * @param snapshotRepository the Snapshot Repository
    */
-  public PartyService(
-      ApplicationContext applicationContext,
-      ObjectMapper objectMapper,
-      Validator validator,
-      OrganizationRepository organizationRepository,
-      PartyRepository partyRepository,
-      PersonRepository personRepository,
-      RelationshipRepository relationshipRepository,
-      SnapshotRepository snapshotRepository) {
+  public PartyService(ApplicationContext applicationContext, Validator validator) {
+
     this.applicationContext = applicationContext;
-    this.objectMapper = objectMapper;
     this.validator = validator;
-    this.organizationRepository = organizationRepository;
-    this.partyRepository = partyRepository;
-    this.personRepository = personRepository;
-    this.relationshipRepository = relationshipRepository;
-    this.snapshotRepository = snapshotRepository;
+  }
+
+  /**
+   * Create the new association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param association the association
+   * @return the association
+   */
+  @Override
+  @Transactional
+  @CachePut(cacheNames = "associations", key = "#association.id")
+  public Association createAssociation(UUID tenantId, Association association)
+      throws InvalidArgumentException, DuplicateAssociationException, ServiceUnavailableException {
+    if (association == null) {
+      throw new InvalidArgumentException("association");
+    }
+
+    if (!Objects.equals(tenantId, association.getTenantId())) {
+      throw new InvalidArgumentException("association.tenantId");
+    }
+
+    Set<ConstraintViolation<Association>> constraintViolations =
+        validateAssociation(tenantId, association);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "association", ValidationError.toValidationErrors(constraintViolations));
+    }
+
+    return getDataStore().createAssociation(tenantId, association);
   }
 
   /**
@@ -152,31 +153,7 @@ public class PartyService implements IPartyService {
           "organization", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    try {
-      if (organizationRepository.existsById(organization.getId())) {
-        throw new DuplicateOrganizationException(organization.getId());
-      }
-
-      // Serialize the organization object as JSON
-      String organizationJson = objectMapper.writeValueAsString(organization);
-
-      organizationRepository.saveAndFlush(organization);
-
-      snapshotRepository.saveAndFlush(
-          new Snapshot(EntityType.ORGANIZATION, organization.getId(), organizationJson));
-
-      return organization;
-    } catch (DuplicateOrganizationException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the organization ("
-              + organization.getId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
+    return getDataStore().createOrganization(tenantId, organization);
   }
 
   /**
@@ -205,81 +182,7 @@ public class PartyService implements IPartyService {
           "person", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    try {
-      if (personRepository.existsById(person.getId())) {
-        throw new DuplicatePersonException(person.getId());
-      }
-
-      // Serialize the person object as JSON
-      String personJson = objectMapper.writeValueAsString(person);
-
-      personRepository.saveAndFlush(person);
-
-      snapshotRepository.saveAndFlush(new Snapshot(EntityType.PERSON, person.getId(), personJson));
-
-      return person;
-    } catch (DuplicatePersonException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the person (" + person.getId() + ") for the tenant (" + tenantId + ")",
-          e);
-    }
-  }
-
-  /**
-   * Create the new relationship.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param relationship the relationship
-   * @return the relationship
-   */
-  @Override
-  @Transactional
-  @CachePut(cacheNames = "relationships", key = "#relationship.id")
-  public Relationship createRelationship(UUID tenantId, Relationship relationship)
-      throws InvalidArgumentException, DuplicateRelationshipException, ServiceUnavailableException {
-    if (relationship == null) {
-      throw new InvalidArgumentException("relationship");
-    }
-
-    if (!Objects.equals(tenantId, relationship.getTenantId())) {
-      throw new InvalidArgumentException("relationship.tenantId");
-    }
-
-    Set<ConstraintViolation<Relationship>> constraintViolations =
-        validateRelationship(tenantId, relationship);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "relationship", ValidationError.toValidationErrors(constraintViolations));
-    }
-
-    try {
-      if (relationshipRepository.existsById(relationship.getId())) {
-        throw new DuplicateRelationshipException(relationship.getId());
-      }
-
-      // Serialize the relationship object as JSON
-      String relationshipJson = objectMapper.writeValueAsString(relationship);
-
-      relationshipRepository.saveAndFlush(relationship);
-
-      snapshotRepository.saveAndFlush(
-          new Snapshot(EntityType.RELATIONSHIP, relationship.getId(), relationshipJson));
-
-      return relationship;
-    } catch (DuplicateRelationshipException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the relationship ("
-              + relationship.getId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
+    return getDataStore().createPerson(tenantId, person);
   }
 
   /**
@@ -297,23 +200,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("organizationId");
     }
 
-    try {
-      if (!organizationRepository.existsByTenantIdAndId(tenantId, organizationId)) {
-        throw new OrganizationNotFoundException(tenantId, organizationId);
-      }
-
-      organizationRepository.deleteByTenantIdAndId(tenantId, organizationId);
-    } catch (OrganizationNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the organization ("
-              + organizationId
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
+    getDataStore().deleteOrganization(tenantId, organizationId);
   }
 
   /**
@@ -333,18 +220,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("partyId");
     }
 
-    try {
-      if (!partyRepository.existsByTenantIdAndId(tenantId, partyId)) {
-        throw new PartyNotFoundException(tenantId, partyId);
-      }
-
-      partyRepository.deleteByTenantIdAndId(tenantId, partyId);
-    } catch (PartyNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the party (" + partyId + ") for the tenant (" + tenantId + ")", e);
-    }
+    getDataStore().deleteParty(tenantId, partyId);
   }
 
   /**
@@ -362,18 +238,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("personId");
     }
 
-    try {
-      if (!personRepository.existsByTenantIdAndId(tenantId, personId)) {
-        throw new PersonNotFoundException(tenantId, personId);
-      }
-
-      personRepository.deleteByTenantIdAndId(tenantId, personId);
-    } catch (PersonNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the person (" + personId + ") for the tenant (" + tenantId + ")", e);
-    }
+    getDataStore().deletePerson(tenantId, personId);
   }
 
   /**
@@ -391,26 +256,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("organizationId");
     }
 
-    try {
-      Optional<Organization> organizationOptional =
-          organizationRepository.findByTenantIdAndId(tenantId, organizationId);
-
-      if (organizationOptional.isPresent()) {
-        return organizationOptional.get();
-      } else {
-        throw new OrganizationNotFoundException(tenantId, organizationId);
-      }
-    } catch (OrganizationNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the organization ("
-              + organizationId
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
+    return getDataStore().getOrganization(tenantId, organizationId);
   }
 
   /**
@@ -449,53 +295,18 @@ public class PartyService implements IPartyService {
       sortDirection = SortDirection.ASCENDING;
     }
 
-    try {
-      PageRequest pageRequest;
-
-      if (pageIndex == null) {
-        pageIndex = 0;
-      }
-
-      if (pageSize == null) {
-        pageSize = MAX_FILTERED_ORGANISATIONS;
-      }
-
-      if (sortBy == OrganizationSortBy.NAME) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_ORGANISATIONS),
-                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
-                "name");
-      } else {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_ORGANISATIONS),
-                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
-                "name");
-      }
-
-      Page<Organization> organizationPage;
-      if (StringUtils.hasText(filter)) {
-        organizationPage = organizationRepository.findFiltered("%" + filter + "%", pageRequest);
-      } else {
-        organizationPage = organizationRepository.findByTenantId(tenantId, pageRequest);
-      }
-
-      return new Organizations(
-          tenantId,
-          organizationPage.toList(),
-          organizationPage.getTotalElements(),
-          filter,
-          sortBy,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered organizations for the tenant (" + tenantId + ")", e);
+    if (pageIndex == null) {
+      pageIndex = 0;
     }
+
+    if (pageSize == null) {
+      pageSize = maxFilteredOrganizations;
+    } else {
+      pageSize = Math.min(pageSize, maxFilteredOrganizations);
+    }
+
+    return getDataStore()
+        .getOrganizations(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -529,32 +340,12 @@ public class PartyService implements IPartyService {
     }
 
     if (pageSize == null) {
-      pageSize = MAX_FILTERED_PARTIES;
+      pageSize = maxFilteredParties;
+    } else {
+      pageSize = Math.min(pageSize, maxFilteredParties);
     }
 
-    PageRequest pageRequest = PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_PARTIES));
-
-    try {
-
-      Page<Party> partyPage;
-      if (StringUtils.hasText(filter)) {
-        partyPage = partyRepository.findFiltered("%" + filter + "%", pageRequest);
-      } else {
-        partyPage = partyRepository.findByTenantId(tenantId, pageRequest);
-      }
-
-      return new Parties(
-          tenantId,
-          partyPage.toList(),
-          partyPage.getTotalElements(),
-          filter,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered parties for the tenant (" + tenantId + ")", e);
-    }
+    return getDataStore().getParties(tenantId, filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -571,20 +362,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("partyId");
     }
 
-    try {
-      Optional<Party> partyOptional = partyRepository.findByTenantIdAndId(tenantId, partyId);
-
-      if (partyOptional.isPresent()) {
-        return partyOptional.get();
-      } else {
-        throw new PartyNotFoundException(tenantId, partyId);
-      }
-    } catch (PartyNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the party (" + partyId + ") for the tenant (" + tenantId + ")", e);
-    }
+    return getDataStore().getParty(tenantId, partyId);
   }
 
   /**
@@ -602,20 +380,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("personId");
     }
 
-    try {
-      Optional<Person> personOptional = personRepository.findByTenantIdAndId(tenantId, personId);
-
-      if (personOptional.isPresent()) {
-        return personOptional.get();
-      } else {
-        throw new PersonNotFoundException(tenantId, personId);
-      }
-    } catch (PersonNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the person (" + personId + ") for the tenant (" + tenantId + ")", e);
-    }
+    return getDataStore().getPerson(tenantId, personId);
   }
 
   /**
@@ -638,6 +403,7 @@ public class PartyService implements IPartyService {
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
+
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
     }
@@ -654,53 +420,17 @@ public class PartyService implements IPartyService {
       sortDirection = SortDirection.ASCENDING;
     }
 
-    try {
-      PageRequest pageRequest;
-
-      if (pageIndex == null) {
-        pageIndex = 0;
-      }
-
-      if (pageSize == null) {
-        pageSize = MAX_FILTERED_PERSONS;
-      }
-
-      if (sortBy == PersonSortBy.PREFERRED_NAME) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_PERSONS),
-                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
-                "preferredName");
-      } else {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, MAX_FILTERED_PERSONS),
-                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
-                "name");
-      }
-
-      Page<Person> personPage;
-      if (StringUtils.hasText(filter)) {
-        personPage = personRepository.findFiltered("%" + filter + "%", pageRequest);
-      } else {
-        personPage = personRepository.findByTenantId(tenantId, pageRequest);
-      }
-
-      return new Persons(
-          tenantId,
-          personPage.toList(),
-          personPage.getTotalElements(),
-          filter,
-          sortBy,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered persons for the tenant (" + tenantId + ")", e);
+    if (pageIndex == null) {
+      pageIndex = 0;
     }
+
+    if (pageSize == null) {
+      pageSize = maxFilteredPersons;
+    } else {
+      pageSize = Math.min(pageSize, maxFilteredPersons);
+    }
+
+    return getDataStore().getPersons(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -740,61 +470,18 @@ public class PartyService implements IPartyService {
       sortDirection = SortDirection.ASCENDING;
     }
 
-    try {
-      PageRequest pageRequest;
-
-      if (pageIndex == null) {
-        pageIndex = 0;
-      }
-
-      if (pageSize == null) {
-        pageSize = MAX_FILTERED_PERSONS;
-      }
-
-      pageRequest =
-          PageRequest.of(
-              pageIndex,
-              Math.min(pageSize, MAX_FILTERED_PERSONS),
-              (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
-              "timestamp");
-
-      Page<Snapshot> snapshotPage;
-
-      if ((from != null) && (to != null)) {
-        snapshotPage =
-            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
-      } else if (from != null) {
-        snapshotPage =
-            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
-      } else if (to != null) {
-        snapshotPage =
-            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
-      } else {
-        snapshotPage =
-            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
-      }
-
-      return new Snapshots(
-          snapshotPage.toList(),
-          snapshotPage.getTotalElements(),
-          entityType,
-          entityId,
-          from,
-          to,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the snapshots for the entity ("
-              + entityId
-              + ") of type ("
-              + entityType.code()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
+    if (pageIndex == null) {
+      pageIndex = 0;
     }
+
+    if (pageSize == null) {
+      pageSize = maxSnapshots;
+    } else {
+      pageSize = Math.min(pageSize, maxSnapshots);
+    }
+
+    return getDataStore()
+        .getSnapshots(tenantId, entityType, entityId, from, to, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -812,12 +499,7 @@ public class PartyService implements IPartyService {
       throw new InvalidArgumentException("partyId");
     }
 
-    try {
-      return partyRepository.getTenantIdByPartyId(partyId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the tenant ID for the party (" + partyId + ")", e);
-    }
+    return getDataStore().getTenantIdForParty(partyId);
   }
 
   /**
@@ -844,31 +526,7 @@ public class PartyService implements IPartyService {
           "organization", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    try {
-      if (!organizationRepository.existsByTenantIdAndId(tenantId, organization.getId())) {
-        throw new OrganizationNotFoundException(tenantId, organization.getId());
-      }
-
-      // Serialize the organization object as JSON
-      String organizationJson = objectMapper.writeValueAsString(organization);
-
-      organizationRepository.saveAndFlush(organization);
-
-      snapshotRepository.saveAndFlush(
-          new Snapshot(EntityType.ORGANIZATION, organization.getId(), organizationJson));
-
-      return organization;
-    } catch (OrganizationNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to update the organization ("
-              + organization.getId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
+    return getDataStore().updateOrganization(tenantId, organization);
   }
 
   /**
@@ -894,26 +552,20 @@ public class PartyService implements IPartyService {
           "person", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    try {
-      if (!personRepository.existsByTenantIdAndId(tenantId, person.getId())) {
-        throw new PersonNotFoundException(tenantId, person.getId());
-      }
+    return getDataStore().updatePerson(tenantId, person);
+  }
 
-      // Serialize the person object as JSON
-      String personJson = objectMapper.writeValueAsString(person);
-
-      personRepository.saveAndFlush(person);
-
-      snapshotRepository.saveAndFlush(new Snapshot(EntityType.PERSON, person.getId(), personJson));
-
-      return person;
-    } catch (PersonNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to update the person (" + person.getId() + ") for the tenant (" + tenantId + ")",
-          e);
-    }
+  /**
+   * Validate the association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param association the association
+   * @return the constraint violations for the association
+   */
+  @Override
+  public Set<ConstraintViolation<Association>> validateAssociation(
+      UUID tenantId, Association association) {
+    return validator.validate(association);
   }
 
   /**
@@ -954,15 +606,34 @@ public class PartyService implements IPartyService {
   }
 
   /**
-   * Validate the relationship.
+   * Retrieve the party data store.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param relationship the relationship
-   * @return the constraint violations for the relationship
+   * @return the party data store
    */
-  @Override
-  public Set<ConstraintViolation<Relationship>> validateRelationship(
-      UUID tenantId, Relationship relationship) {
-    return validator.validate(relationship);
+  private IPartyDataStore getDataStore() throws ServiceUnavailableException {
+    if (dataStore == null) {
+      try {
+        Class<?> clazz =
+            Thread.currentThread().getContextClassLoader().loadClass(dataStoreClassName);
+
+        if (!IPartyDataStore.class.isAssignableFrom(clazz)) {
+          throw new ServiceUnavailableException(
+              "The party data store class ("
+                  + dataStoreClassName
+                  + ") does not implement the IPartyDataStore interface");
+        }
+
+        Class<? extends IPartyDataStore> dataStoreClass = clazz.asSubclass(IPartyDataStore.class);
+
+        dataStore = applicationContext.getAutowireCapableBeanFactory().createBean(dataStoreClass);
+
+        return dataStore;
+      } catch (Throwable e) {
+        throw new ServiceUnavailableException(
+            "Failed to initialize the party data store (" + dataStoreClassName + ")", e);
+      }
+    } else {
+      return dataStore;
+    }
   }
 }

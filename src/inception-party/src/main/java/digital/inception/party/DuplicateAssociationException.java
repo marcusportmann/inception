@@ -24,32 +24,32 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 
 /**
- * The <b>DuplicateRelationshipException</b> exception is thrown to indicate an error condition as a
- * result of an attempt to create a duplicate relationship.
+ * The <b>DuplicateAssociationException</b> exception is thrown to indicate an error condition as a
+ * result of an attempt to create a duplicate association.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @Problem(
-    type = "http://inception.digital/problems/party/duplicate-relationship",
-    title = "The relationship already exists.",
+    type = "http://inception.digital/problems/party/duplicate-association",
+    title = "The association already exists.",
     status = 409)
 @WebFault(
-    name = "DuplicateRelationshipException",
+    name = "DuplicateAssociationException",
     targetNamespace = "http://inception.digital/party",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class DuplicateRelationshipException extends ServiceException {
+public class DuplicateAssociationException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <b>DuplicateRelationshipException</b>.
+   * Constructs a new <b>DuplicateAssociationException</b>.
    *
-   * @param id the Universally Unique Identifier (UUID) for the relationship
+   * @param id the Universally Unique Identifier (UUID) for the association
    */
-  public DuplicateRelationshipException(UUID id) {
-    super("The relationship with the ID (" + id + ") already exists");
+  public DuplicateAssociationException(UUID id) {
+    super("The association with the ID (" + id + ") already exists");
   }
 }

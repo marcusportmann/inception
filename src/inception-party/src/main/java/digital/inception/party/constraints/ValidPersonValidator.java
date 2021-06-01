@@ -604,8 +604,7 @@ public class ValidPersonValidator extends PartyValidator
         for (NextOfKin nextOfKin : person.getNextOfKin()) {
           if (StringUtils.hasText(nextOfKin.getType())) {
             if (!getPartyReferenceService()
-                .isValidNextOfKinType(
-                    person.getTenantId(), nextOfKin.getType())) {
+                .isValidNextOfKinType(person.getTenantId(), nextOfKin.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("nextOfKinType", nextOfKin.getType())
                   .buildConstraintViolationWithTemplate(
@@ -622,8 +621,7 @@ public class ValidPersonValidator extends PartyValidator
           if (StringUtils.hasText(nextOfKin.getAddressCountry())) {
             if (!getReferenceService().isValidCountry(nextOfKin.getAddressCountry())) {
               hibernateConstraintValidatorContext
-                  .addMessageParameter(
-                      "nextOfKinAddressCountry", nextOfKin.getAddressCountry())
+                  .addMessageParameter("nextOfKinAddressCountry", nextOfKin.getAddressCountry())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidPerson.invalidNextOfKinAddressCountry.message}")
                   .addPropertyNode("nextOfKin")

@@ -18,23 +18,27 @@ package digital.inception.party;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
- * The <b>RelationshipTypeId</b> class implements the ID class for the <b>RelationshipType</b>
+ * The <b>AssociationPropertyId</b> class implements the ID class for the <b>AssociationProperty</b>
  * class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class RelationshipTypeId implements Serializable {
+public class AssociationPropertyId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the relationship type. */
-  private String code;
+  /**
+   * The Universally Unique Identifier (UUID) for the association the association property is
+   * associated with.
+   */
+  private UUID association;
 
-  /** The Unicode locale identifier for the relationship type. */
-  private String localeId;
+  /** The code for the association property type. */
+  private String type;
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -56,9 +60,9 @@ public class RelationshipTypeId implements Serializable {
       return false;
     }
 
-    RelationshipTypeId other = (RelationshipTypeId) object;
+    AssociationPropertyId other = (AssociationPropertyId) object;
 
-    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
+    return Objects.equals(association, other.association) && Objects.equals(type, other.type);
   }
 
   /**
@@ -68,6 +72,7 @@ public class RelationshipTypeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
+    return ((association == null) ? 0 : association.hashCode())
+        + ((type == null) ? 0 : type.hashCode());
   }
 }
