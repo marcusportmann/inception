@@ -37,6 +37,10 @@ public enum EntityType {
   @XmlEnumValue("Association")
   ASSOCIATION("association", "A association"),
 
+  /** Mandate. */
+  @XmlEnumValue("Mandate")
+  MANDATE("mandate", "A mandate"),
+
   /** Organization. */
   @XmlEnumValue("Organization")
   ORGANIZATION("organization", "An organization"),
@@ -65,6 +69,9 @@ public enum EntityType {
     switch (code) {
       case "association":
         return EntityType.ASSOCIATION;
+
+      case "mandate":
+        return EntityType.MANDATE;
 
       case "organization":
         return EntityType.ORGANIZATION;

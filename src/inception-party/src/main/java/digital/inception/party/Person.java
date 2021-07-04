@@ -460,7 +460,7 @@ public class Person extends PartyBase implements Serializable {
   @Column(table = "persons", name = "marriage_type", length = 30)
   private String marriageType;
 
-  /** The code for the measurement system for the person. */
+  /** The measurement system for the person. */
   @Column(table = "persons", name = "measurement_system", length = 30)
   private MeasurementSystem measurementSystem;
 
@@ -1357,11 +1357,11 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the code for the measurement system for the person.
+   * Returns the measurement system for the person.
    *
-   * @return the code for the measurement system for the person
+   * @return the measurement system for the person
    */
-  @Schema(description = "The code for the measurement system for the person")
+  @Schema(description = "The measurement system for the person")
   @JsonProperty
   @XmlElement(name = "MeasurementSystem")
   public MeasurementSystem getMeasurementSystem() {
@@ -2559,9 +2559,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the measurement system for the person.
+   * Set the measurement system for the person.
    *
-   * @param measurementSystem the code for the measurement system for the person
+   * @param measurementSystem the measurement system for the person
    */
   public void setMeasurementSystem(MeasurementSystem measurementSystem) {
     this.measurementSystem = measurementSystem;

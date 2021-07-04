@@ -1817,6 +1817,40 @@ COMMENT ON COLUMN party.locks.type IS 'The code for the lock type';
 COMMENT ON COLUMN party.locks.updated IS 'The date and time the lock was last updated';
 
 
+CREATE TABLE party.mandates (
+    created              TIMESTAMP   NOT NULL,
+    effective_from       DATE,
+    effective_to         DATE,
+    id                   UUID        NOT NULL,
+    required_mandataries VARCHAR(30) NOT NULL,
+    tenant_id            UUID        NOT NULL,
+    type                 VARCHAR(30) NOT NULL,
+    updated              TIMESTAMP,
+
+    PRIMARY KEY (id)
+);
+
+CREATE INDEX mandates_tenant_id_ix ON party.mandates(tenant_id);
+
+CREATE INDEX mandates_type_ix ON party.mandates(type);
+
+COMMENT ON COLUMN party.mandates.created IS 'The date and time the association was created';
+
+COMMENT ON COLUMN party.mandates.effective_from IS 'The date that the association is effective from';
+
+COMMENT ON COLUMN party.mandates.effective_to IS 'The date that the association is effective to';
+
+COMMENT ON COLUMN party.mandates.id IS 'The Universally Unique Identifier (UUID) for the association';
+
+COMMENT ON COLUMN party.mandates.required_mandataries IS 'The number of mandataries required to execute the mandate';
+
+COMMENT ON COLUMN party.mandates.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the association is associated with';
+
+COMMENT ON COLUMN party.mandates.type IS 'The code for the association type';
+
+COMMENT ON COLUMN party.mandates.updated IS 'The date and time the association was last updated';
+
+
 CREATE TABLE party.next_of_kin (
   address_city        VARCHAR(50),
   address_country     CHAR(2),

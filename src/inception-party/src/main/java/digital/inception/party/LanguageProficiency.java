@@ -84,6 +84,12 @@ public class LanguageProficiency implements Serializable {
   private String language;
 
   /** The listen proficiency level for the language. */
+  @Schema(
+      description = "The listen proficiency level for the language",
+      required = true,
+      allowableValues = {"beginner", "elementary", "intermediate", "advanced", "proficient"})
+  @JsonProperty(required = true)
+  @XmlElement(name = "ListenLevel", required = true)
   @NotNull
   @Column(name = "listen_level", length = 15, nullable = false)
   private LanguageProficiencyLevel listenLevel;
@@ -98,11 +104,23 @@ public class LanguageProficiency implements Serializable {
   private Person person;
 
   /** The read proficiency level for the language. */
+  @Schema(
+      description = "The read proficiency level for the language",
+      required = true,
+      allowableValues = {"beginner", "elementary", "intermediate", "advanced", "proficient"})
+  @JsonProperty(required = true)
+  @XmlElement(name = "ReadLevel", required = true)
   @NotNull
   @Column(name = "read_level", length = 15, nullable = false)
   private LanguageProficiencyLevel readLevel;
 
   /** The speak proficiency level for the language. */
+  @Schema(
+      description = "The speak proficiency level for the language",
+      required = true,
+      allowableValues = {"beginner", "elementary", "intermediate", "advanced", "proficient"})
+  @JsonProperty(required = true)
+  @XmlElement(name = "SpeakLevel", required = true)
   @NotNull
   @Column(name = "speak_level", length = 15, nullable = false)
   private LanguageProficiencyLevel speakLevel;
@@ -115,6 +133,12 @@ public class LanguageProficiency implements Serializable {
   private LocalDateTime updated;
 
   /** The write proficiency level for the language. */
+  @Schema(
+      description = "The write proficiency level for the language",
+      required = true,
+      allowableValues = {"beginner", "elementary", "intermediate", "advanced", "proficient"})
+  @JsonProperty(required = true)
+  @XmlElement(name = "WriteLevel", required = true)
   @NotNull
   @Column(name = "write_level", length = 15, nullable = false)
   private LanguageProficiencyLevel writeLevel;

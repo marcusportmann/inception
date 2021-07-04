@@ -25,20 +25,20 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * The <b>ValidAssociation</b> annotation implements the custom constraint annotation used to apply
- * the association validation.
+ * The <b>ValidMandate</b> annotation implements the custom constraint annotation used to apply
+ * the mandate validation.
  *
  * @author Marcus Portmann
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidAssociationValidator.class)
+@Constraint(validatedBy = ValidMandateValidator.class)
 @Documented
-public @interface ValidAssociation {
+public @interface ValidMandate {
 
   Class<?>[] groups() default {};
 
-  String message() default "{digital.inception.party.constraints.ValidAssociation.message}";
+  String message() default "{digital.inception.party.constraints.ValidMandate.message}";
 
   Class<? extends Payload>[] payload() default {};
 }
