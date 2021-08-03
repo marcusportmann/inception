@@ -22,7 +22,6 @@ import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
-import io.agroal.narayana.NarayanaTransactionIntegration;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -32,17 +31,16 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Properties;
 import javax.sql.DataSource;
-import javax.transaction.TransactionManager;
-import javax.transaction.TransactionSynchronizationRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
@@ -53,7 +51,10 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Configuration
-@ConditionalOnProperty(value = "inception.application.data-source.class-name")
+@ConditionalOnProperty({
+  "inception.application.data-source.class-name",
+  "inception.application.data-source.url"
+})
 @SuppressWarnings("unused")
 public class ApplicationDataSourceConfiguration {
 
@@ -94,9 +95,6 @@ public class ApplicationDataSourceConfiguration {
   @Value("${inception.application.data-source.class-name:#{null}}")
   private String className;
 
-  /** The application data source. */
-  private DataSource dataSource;
-
   /**
    * The resources on the classpath that contain the SQL statements used to initialize the in-memory
    * application database.
@@ -120,18 +118,6 @@ public class ApplicationDataSourceConfiguration {
   @Value("${inception.application.data-source.password:#{null}}")
   private String password;
 
-  /** Is transaction recovery enabled for the application database. */
-  @Value("${inception.application.data-source.recovery.enabled:#{false}}")
-  private boolean recoveryEnabled;
-
-  /** The recovery password for the application database. */
-  @Value("${inception.application.data-source.recovery.password:#{null}}")
-  private String recoveryPassword;
-
-  /** The recovery username for the application database. */
-  @Value("${inception.application.data-source.recovery.username:#{null}}")
-  private String recoveryUsername;
-
   /** The URL used to connect to the application database. */
   @Value("${inception.application.data-source.url:#{null}}")
   private String url;
@@ -154,19 +140,10 @@ public class ApplicationDataSourceConfiguration {
    *
    * @return the data source that can be used to interact with the in-memory database
    */
-  @Bean(name = "applicationDataSource")
-  @DependsOn({"transactionManager"})
-  public DataSource dataSource() {
+  @Bean
+  @Primary
+  public DataSource applicationDataSource() {
     try {
-      if ((className == null) || (url == null)) {
-        throw new ApplicationException("Failed to retrieve the application database configuration");
-      }
-
-      TransactionManager transactionManager = applicationContext.getBean(TransactionManager.class);
-
-      TransactionSynchronizationRegistry transactionSynchronizationRegistry =
-          applicationContext.getBean(TransactionSynchronizationRegistry.class);
-
       // See: https://agroal.github.io/docs.html
       Properties agroalProperties = new Properties();
       agroalProperties.setProperty(AgroalPropertiesReader.JDBC_URL, url);
@@ -177,17 +154,6 @@ public class ApplicationDataSourceConfiguration {
 
       if (StringUtils.hasText(password)) {
         agroalProperties.setProperty(AgroalPropertiesReader.CREDENTIAL, password);
-      }
-
-      if (recoveryEnabled) {
-        if (StringUtils.hasText(recoveryUsername)) {
-          agroalProperties.setProperty(AgroalPropertiesReader.RECOVERY_PRINCIPAL, recoveryUsername);
-        }
-
-        if (StringUtils.hasText(recoveryPassword)) {
-          agroalProperties.setProperty(
-              AgroalPropertiesReader.RECOVERY_CREDENTIAL, recoveryPassword);
-        }
       }
 
       agroalProperties.setProperty(AgroalPropertiesReader.PROVIDER_CLASS_NAME, className);
@@ -201,20 +167,20 @@ public class ApplicationDataSourceConfiguration {
           new AgroalPropertiesReader().readProperties(agroalProperties);
       AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier =
           agroalReaderProperties2.modify();
-      TransactionIntegration transactionIntegration =
-          new NarayanaTransactionIntegration(
-              transactionManager, transactionSynchronizationRegistry);
 
-      //    TransactionIntegration txIntegration2 = new NarayanaTransactionIntegration(
-      //      com.arjuna.ats.jta.TransactionManager.transactionManager(),
-      // transactionSynchronizationRegistry,
-      //      "java:/agroalds2", false, recoveryManagerService);
+      try {
+        TransactionIntegration transactionIntegration =
+            applicationContext.getBean(TransactionIntegration.class);
 
-      agroalDataSourceConfigurationSupplier
-          .connectionPoolConfiguration()
-          .transactionIntegration(transactionIntegration);
+        if (transactionIntegration != null) {
+          agroalDataSourceConfigurationSupplier
+              .connectionPoolConfiguration()
+              .transactionIntegration(transactionIntegration);
+        }
+      } catch (NoSuchBeanDefinitionException ignored) {
+      }
 
-      dataSource = AgroalDataSource.from(agroalDataSourceConfigurationSupplier);
+      DataSource dataSource = AgroalDataSource.from(agroalDataSourceConfigurationSupplier);
 
       //    /*
       //     * The SAP JDBC driver does not return a DataSource, instead it provides connections so
@@ -300,6 +266,66 @@ public class ApplicationDataSourceConfiguration {
     } catch (Throwable e) {
       throw new FatalBeanException("Failed to initialize the application data source", e);
     }
+  }
+
+  /**
+   * Returns the fully qualified name of the data source class used to connect to the application
+   * database.
+   *
+   * @return the fully qualified name of the data source class used to connect to the application
+   *     database
+   */
+  public String getClassName() {
+    return className;
+  }
+
+  /**
+   * Returns the maximum size of the database connection pool used to connect to the application
+   * database.
+   *
+   * @return the maximum size of the database connection pool used to connect to the application
+   *     database
+   */
+  public int getMaxPoolSize() {
+    return maxPoolSize;
+  }
+
+  /**
+   * Returns the minimum size of the database connection pool used to connect to the application
+   * database.
+   *
+   * @return the minimum size of the database connection pool used to connect to the application
+   *     database
+   */
+  public int getMinPoolSize() {
+    return minPoolSize;
+  }
+
+  /**
+   * Returns the password for the application database.
+   *
+   * @return the password for the application database
+   */
+  public String getPassword() {
+    return password;
+  }
+
+  /**
+   * Returns the URL used to connect to the application database.
+   *
+   * @return the URL used to connect to the application database
+   */
+  public String getUrl() {
+    return url;
+  }
+
+  /**
+   * Returns the username for the application database.
+   *
+   * @return the username for the application database
+   */
+  public String getUsername() {
+    return username;
   }
 
   private void loadSQL(DataSource dataSource, URL databaseInitResourceUrl)

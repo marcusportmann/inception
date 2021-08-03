@@ -34,6 +34,8 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -45,8 +47,6 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 
 /**
@@ -85,7 +85,6 @@ public class ContactMechanism implements Serializable {
   /** The date and time the contact mechanism was created. */
   @JsonIgnore
   @XmlTransient
-  @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
@@ -164,7 +163,6 @@ public class ContactMechanism implements Serializable {
   /** The date and time the contact mechanism was last updated. */
   @JsonIgnore
   @XmlTransient
-  @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
@@ -397,5 +395,15 @@ public class ContactMechanism implements Serializable {
    */
   public void setValue(String value) {
     this.value = value;
+  }
+
+  @PrePersist
+  protected void onCreate() {
+    created = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  protected void onUpdate() {
+    updated = LocalDateTime.now();
   }
 }

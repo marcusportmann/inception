@@ -34,6 +34,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -43,8 +45,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * The <b>Tenant</b> class holds the information for a tenant.
@@ -72,7 +72,6 @@ public class Tenant implements Serializable {
   /** The date and time the tenant was created. */
   @JsonIgnore
   @XmlTransient
-  @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
@@ -105,7 +104,6 @@ public class Tenant implements Serializable {
   /** The date and time the tenant was last updated. */
   @JsonIgnore
   @XmlTransient
-  @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
@@ -290,5 +288,15 @@ public class Tenant implements Serializable {
   public void unlinkUserDirectory(UserDirectory userDirectory) {
     userDirectories.remove(userDirectory);
     userDirectory.getTenants().remove(this);
+  }
+
+  @PrePersist
+  protected void onCreate() {
+    created = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  protected void onUpdate() {
+    updated = LocalDateTime.now();
   }
 }

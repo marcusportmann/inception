@@ -35,6 +35,8 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -46,8 +48,6 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 
 /**
@@ -171,7 +171,6 @@ public class Attribute implements Serializable {
   /** The date and time the attribute was created. */
   @JsonIgnore
   @XmlTransient
-  @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
@@ -242,7 +241,6 @@ public class Attribute implements Serializable {
   /** The date and time the attribute was last updated. */
   @JsonIgnore
   @XmlTransient
-  @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
@@ -652,5 +650,15 @@ public class Attribute implements Serializable {
    */
   public void setUnit(MeasurementUnit unit) {
     this.unit = unit;
+  }
+
+  @PrePersist
+  protected void onCreate() {
+    created = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  protected void onUpdate() {
+    updated = LocalDateTime.now();
   }
 }

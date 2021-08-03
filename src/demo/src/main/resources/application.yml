@@ -46,10 +46,6 @@ inception:
       url: jdbc:h2:mem:application;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
       min-pool-size: 5
       max-pool-size: 10
-#      recovery:
-#        enabled: false
-#        username: USERNAME
-#        password: PASSWORD
 
 #    data-source:
 #      class-name: org.postgresql.jdbc3.Jdbc3SimpleDataSource

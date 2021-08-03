@@ -70,7 +70,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.5.2</version>
+    <version>2.5.3</version>
   </parent>
 
   <properties>
@@ -94,9 +94,9 @@
     <jasperreports.version>6.17.0</jasperreports.version>
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
     <mssql-jdbc.version>9.2.1.jre11</mssql-jdbc.version>
-    <narayana.version>5.11.2.Final</narayana.version>
+    <narayana.version>5.12.0.Final</narayana.version>
     <postgresql.version>42.2.20</postgresql.version>
-    <spring-boot.version>2.5.2</spring-boot.version>
+    <spring-boot.version>2.5.3</spring-boot.version>
     <spring-shell.version>2.0.1.RELEASE</spring-shell.version>
     <springdoc-openapi-ui.version>1.5.9</springdoc-openapi-ui.version>
     <sun-activation.version>1.2.0</sun-activation.version>
@@ -330,6 +330,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-jta</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-kafka</artifactId>
         <version>${inception.version}</version>
       </dependency>
@@ -386,11 +391,6 @@
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-party-ws</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-persistence</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -478,11 +478,13 @@
         <artifactId>inception-test</artifactId>
         <version>${inception.version}</version>
       </dependency>
+      <!--
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-transaction</artifactId>
         <version>${inception.version}</version>
       </dependency>
+      -->
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-ws</artifactId>
@@ -509,6 +511,7 @@
     <module>inception-error-ws</module>
     <module>inception-core</module>
     <module>inception-json</module>
+    <module>inception-jta</module>
     <module>inception-kafka</module>
     <module>inception-mail</module>
     <module>inception-mail-api</module>
@@ -519,7 +522,6 @@
     <module>inception-party</module>
     <module>inception-party-api</module>
     <module>inception-party-ws</module>
-    <module>inception-persistence</module>
     <module>inception-reference</module>
     <module>inception-reference-api</module>
     <module>inception-reference-ws</module>
@@ -538,13 +540,13 @@
     <module>inception-sms-api</module>
     <module>inception-sms-ws</module>
     <module>inception-test</module>
-    <module>inception-transaction</module>
+    <!-- <module>inception-transaction</module> -->
     <module>inception-ws</module>
 
     <!-- Demo Modules -->
     <module>demo</module>
     <module>demo-client</module>
-    <module>demo-web</module>
+    <module>demo-basic</module>
 
   </modules>
 

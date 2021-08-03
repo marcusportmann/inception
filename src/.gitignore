@@ -8,7 +8,7 @@
 /**/.Spotlight-V100
 /**/.Trashes
 
-# Editors temporary files 
+# Editors temporary files
 /**/*~
 
 # IntelliJ IDEA
@@ -29,3 +29,5 @@ gradlew.bat
 /**/*.epoch
 *.lck
 *.log
+
+ObjectStore

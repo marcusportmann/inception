@@ -32,6 +32,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -44,8 +46,6 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * The <b>User</b> class holds the information for a user.
@@ -95,7 +95,6 @@ public class User implements Serializable {
   /** The date and time the user was created. */
   @JsonIgnore
   @XmlTransient
-  @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
@@ -225,7 +224,6 @@ public class User implements Serializable {
   /** The date and time the user was last updated. */
   @JsonIgnore
   @XmlTransient
-  @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
@@ -596,5 +594,15 @@ public class User implements Serializable {
    */
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  @PrePersist
+  protected void onCreate() {
+    created = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  protected void onUpdate() {
+    updated = LocalDateTime.now();
   }
 }

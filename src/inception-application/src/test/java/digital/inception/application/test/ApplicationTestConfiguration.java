@@ -16,17 +16,21 @@
 
 package digital.inception.application.test;
 
-import digital.inception.persistence.PersistenceUtil;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.jta.JtaTransactionManager;
 
 /**
  * The <b>ApplicationTestConfiguration</b> class.
@@ -58,23 +62,32 @@ public class ApplicationTestConfiguration {
    * @return the codes entity manager factory bean associated with the application data source
    */
   @Bean
-  @DependsOn("applicationDataSource")
-  public LocalContainerEntityManagerFactoryBean applicationTestEntityManagerFactory() {
+  public LocalContainerEntityManagerFactoryBean applicationTestEntityManagerFactory(
+      @Qualifier("applicationDataSource") DataSource dataSource,
+      JpaVendorAdapter jpaVendorAdapter,
+      PlatformTransactionManager platformTransactionManager) {
     try {
-      DataSource dataSource = applicationContext.getBean("applicationDataSource", DataSource.class);
+      LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
+          new LocalContainerEntityManagerFactoryBean();
 
-      PlatformTransactionManager platformTransactionManager =
-          applicationContext.getBean(PlatformTransactionManager.class);
+      entityManagerFactoryBean.setPersistenceUnitName("applicationTest");
 
-      return PersistenceUtil.createEntityManager(
-          "applicationTest",
-          dataSource,
-          platformTransactionManager,
-          "digital.inception.application.test");
+      entityManagerFactoryBean.setJtaDataSource(dataSource);
 
+      entityManagerFactoryBean.setPackagesToScan("digital.inception.application.test");
+
+      entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+
+      Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
+
+      if (platformTransactionManager instanceof JtaTransactionManager) {
+        jpaPropertyMap.put("hibernate.transaction.coordinator_class", "jta");
+        jpaPropertyMap.put("hibernate.transaction.jta.platform", "JBossTS");
+      }
+
+      return entityManagerFactoryBean;
     } catch (Throwable e) {
-      throw new FatalBeanException(
-          "Failed to initialize the application test entity manager factory bean", e);
+      throw new FatalBeanException("Failed to initialize the application test entity manager factory bean", e);
     }
   }
 }

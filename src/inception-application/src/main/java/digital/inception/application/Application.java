@@ -16,10 +16,15 @@
 
 package digital.inception.application;
 
+import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.support.MergedMessageSource;
+import digital.inception.json.DateTimeModule;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
+import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -27,11 +32,15 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 /**
  * The <b>Application</b> class provides the class that all application-specific application classes
@@ -46,10 +55,13 @@ import org.springframework.stereotype.Component;
 @EnableAsync
 @EnableScheduling
 @SuppressWarnings({"unused"})
-public abstract class Application extends ApplicationBase {
+public abstract class Application implements WebApplicationInitializer {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Application.class);
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
 
   /** The distributed in-memory caches. */
   Map<String, Map<?, ?>> caches = new ConcurrentHashMap<>();
@@ -60,7 +72,55 @@ public abstract class Application extends ApplicationBase {
    * @param applicationContext the Spring application context
    */
   protected Application(ApplicationContext applicationContext) {
-    super(applicationContext);
+    this.applicationContext = applicationContext;
+  }
+
+  /**
+   * Returns the Spring application context.
+   *
+   * @return the Spring application context
+   */
+  public ApplicationContext getApplicationContext() {
+    return applicationContext;
+  }
+
+  /**
+   * Returns the Jackson2 object mapper.
+   *
+   * @return the Jackson2 object mapper
+   */
+  @Bean
+  public ObjectMapper objectMapper() {
+    return jackson2ObjectMapperBuilder().build().disable(SerializationFeature.INDENT_OUTPUT);
+  }
+
+  @Override
+  public void onStartup(ServletContext container) {
+    // Create the 'root' Spring application context
+    AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+
+    container.addListener(new ContextLoaderListener(rootContext));
+  }
+
+  /**
+   * Returns the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
+   * processor package.
+   *
+   * @return the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
+   *     processor package
+   */
+  protected Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
+    Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
+    jackson2ObjectMapperBuilder.indentOutput(true);
+
+    /*
+     * Install the custom Jackson module that supports serializing and de-serializing ISO 8601 date
+     * and date/time values. The jackson-datatype-jsr310 module provided by Jackson was not used as
+     * it does not handle timezones correctly for LocalDateTime objects.
+     */
+    jackson2ObjectMapperBuilder.modulesToInstall(new DateTimeModule());
+
+    return jackson2ObjectMapperBuilder;
   }
 
   /**
@@ -74,6 +134,16 @@ public abstract class Application extends ApplicationBase {
     messageSource.setBasename("classpath*:messages");
 
     return messageSource;
+  }
+
+  /**
+   * Returns the metric registry.
+   *
+   * @return the metric registry
+   */
+  @Bean
+  protected MetricRegistry metricRegistry() {
+    return new MetricRegistry();
   }
 
   /**

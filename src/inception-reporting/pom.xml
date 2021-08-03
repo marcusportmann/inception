@@ -23,10 +23,14 @@
     <!-- Inception Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-persistence</artifactId>
+      <artifactId>inception-core</artifactId>
     </dependency>
 
     <!-- Dependencies -->
+    <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>javax.persistence-api</artifactId>
+    </dependency>
     <dependency>
       <groupId>net.sf.jasperreports</groupId>
       <artifactId>jasperreports</artifactId>
@@ -298,6 +302,10 @@
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
     </dependency>
 
     <!-- Provided Dependencies -->

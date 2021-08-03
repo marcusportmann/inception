@@ -21,15 +21,14 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.util.JDBCUtil;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.json.DateTimeModule;
-import digital.inception.persistence.JtaPlatform;
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
-import io.agroal.narayana.NarayanaTransactionIntegration;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -38,10 +37,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 import javax.sql.DataSource;
-import javax.transaction.TransactionManager;
-import javax.transaction.TransactionSynchronizationRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -52,12 +51,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -66,7 +66,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.jta.JtaTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -84,20 +84,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 @EnableCaching
 @EnableConfigurationProperties
 @EnableScheduling
+@EnableTransactionManagement
 @ComponentScan(
     basePackages = {"digital.inception"},
     lazyInit = true,
     excludeFilters = {
       @ComponentScan.Filter(value = SpringBootApplication.class, type = FilterType.ANNOTATION),
-      @ComponentScan.Filter(
-          pattern = "digital\\.inception\\.application\\.ApplicationDataSourceConfiguration",
-          type = FilterType.REGEX),
-      @ComponentScan.Filter(
-          pattern = "digital\\.inception\\.application\\.ApplicationTransactionManager",
-          type = FilterType.REGEX),
-      @ComponentScan.Filter(
-          pattern = "digital\\.inception\\.persistence\\.PersistenceConfiguration",
-          type = FilterType.REGEX),
       @ComponentScan.Filter(
           pattern = "digital\\.inception\\.bmi\\.BMIConfiguration",
           type = FilterType.REGEX)
@@ -157,9 +149,9 @@ public class TestConfiguration {
   @Value("classpath*:**/*-h2.sql")
   private Resource[] inMemoryInitResources;
 
-  /** The optional comma-delimited packages on the classpath to scan for JPA entities. */
-  @Value("${inception.persistence.entity-packages:#{null}}")
-  private String packagesToScanForEntities;
+  //  /** The optional comma-delimited packages on the classpath to scan for JPA entities. */
+  //  @Value("${inception.persistence.entity-packages:#{null}}")
+  //  private String packagesToScanForEntities;
 
   /**
    * Constructs a new <b>TestConfiguration</b>.
@@ -171,46 +163,77 @@ public class TestConfiguration {
   }
 
   /**
-   * Returns the application entity manager factory associated with the application data source.
+   * Initialize the in-memory application database and return a data source that can be used to
+   * interact with the database.
    *
-   * @return the application entity manager factory associated with the application data source
+   * <p>This data source returned by this method must be closed after use with the <b>close()</b>
+   * method.
+   *
+   * @return the data source that can be used to interact with the in-memory database
    */
   @Bean
-  @DependsOn("applicationDataSource")
-  public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory() {
-    LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
-        new LocalContainerEntityManagerFactoryBean();
+  @Primary
+  public DataSource applicationDataSource() {
+    synchronized (dataSourceLock) {
+      if (dataSource == null) {
+        try {
+          Properties agroalProperties = new Properties();
+          agroalProperties.setProperty(
+              AgroalPropertiesReader.JDBC_URL,
+              "jdbc:h2:mem:"
+                  + Thread.currentThread().getName()
+                  + ";AUTOCOMMIT=OFF;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
-    HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-    // EclipseLinkJpaVendorAdapter jpaVendorAdapter = new EclipseLinkJpaVendorAdapter();
-    jpaVendorAdapter.setGenerateDdl(false);
-    jpaVendorAdapter.setShowSql(true);
-    jpaVendorAdapter.setDatabase(Database.H2);
+          agroalProperties.setProperty(
+              AgroalPropertiesReader.PROVIDER_CLASS_NAME, "org.h2.jdbcx.JdbcDataSource");
+          agroalProperties.setProperty(AgroalPropertiesReader.MAX_SIZE, "5");
 
-    entityManagerFactoryBean.setPersistenceUnitName("application");
-    entityManagerFactoryBean.setJtaDataSource(dataSource());
-    entityManagerFactoryBean.setPackagesToScan(
-        StringUtils.toStringArray(packagesToScanForEntities()));
-    entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+          AgroalPropertiesReader agroalReaderProperties2 =
+              new AgroalPropertiesReader().readProperties(agroalProperties);
+          AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier =
+              agroalReaderProperties2.modify();
 
-    Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
+          TransactionIntegration transactionIntegration =
+              applicationContext.getBean(TransactionIntegration.class);
 
-    PlatformTransactionManager platformTransactionManager =
-        applicationContext.getBean(PlatformTransactionManager.class);
+          if (transactionIntegration != null) {
+            agroalDataSourceConfigurationSupplier
+                .connectionPoolConfiguration()
+                .transactionIntegration(transactionIntegration);
+          }
 
-    if (platformTransactionManager instanceof JtaTransactionManager) {
-      jpaPropertyMap.put(
-          "hibernate.transaction.jta.platform",
-          new JtaPlatform(((JtaTransactionManager) platformTransactionManager)));
+          dataSource =
+              new DataSourceProxy(AgroalDataSource.from(agroalDataSourceConfigurationSupplier));
+
+          /*
+           * Initialize the in-memory database using the SQL statements contained in the resources
+           * for the Inception framework in a specific order
+           */
+          for (String inMemoryDatabaseInitResourcePath : IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS) {
+            if (ResourceUtil.classpathResourceExists(inMemoryDatabaseInitResourcePath)) {
+              loadSQL(
+                  dataSource,
+                  ResourceUtil.getClasspathResourceURL(inMemoryDatabaseInitResourcePath));
+            }
+          }
+
+          /*
+           * Initialize the in-memory database using the SQL statements contained in any other
+           * resources.
+           */
+          for (Resource databaseInitResource : inMemoryInitResources) {
+            if ((StringUtils.hasText(databaseInitResource.getFilename()))
+                && (!databaseInitResource.getFilename().startsWith("inception-"))) {
+              loadSQL(dataSource, databaseInitResource.getURL());
+            }
+          }
+        } catch (Throwable e) {
+          throw new RuntimeException("Failed to initialize the in-memory application database", e);
+        }
+      }
+
+      return dataSource;
     }
-
-    // EclipseLink
-    //    jpaPropertyMap.put(
-    //        "eclipselink.target-server",
-    //        "digital.inception.persistence.EclipseLinkJtaTransactionController");
-    //    jpaPropertyMap.put("eclipselink.weaving", "false");
-
-    return entityManagerFactoryBean;
   }
 
   /**
@@ -221,6 +244,79 @@ public class TestConfiguration {
   @Bean
   public CacheManager cacheManager() {
     return new ConcurrentMapCacheManager();
+  }
+
+  /**
+   * Returns the application entity manager factory bean associated with the application data
+   * source.
+   *
+   * @return the application entity manager factory bean associated with the application data source
+   */
+  @Bean
+  @Primary
+  public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory(
+      @Qualifier("applicationDataSource") DataSource dataSource,
+      JpaVendorAdapter jpaVendorAdapter,
+      PlatformTransactionManager platformTransactionManager) {
+    LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
+        new LocalContainerEntityManagerFactoryBean();
+
+    entityManagerFactoryBean.setPersistenceUnitName("application");
+    entityManagerFactoryBean.setJtaDataSource(dataSource);
+    entityManagerFactoryBean.setPackagesToScan(
+        StringUtils.toStringArray(packagesToScanForEntities()));
+    entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+
+    Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
+    jpaPropertyMap.put("hibernate.transaction.coordinator_class", "jta");
+    jpaPropertyMap.put("hibernate.transaction.jta.platform", "JBossTS");
+
+    return entityManagerFactoryBean;
+  }
+
+  /**
+   * Returns the JPA vendor adapter, which configures the behaviour of the JPA ORM provider based on
+   * the type of database for the application data source.
+   *
+   * @returrn the JpaVendorAdapter, which configures the behaviour of the JPA ORM provider based on
+   *     the type of database for the application data source.
+   */
+  @Bean
+  public JpaVendorAdapter jpaVendorAdapter(
+      @Qualifier("applicationDataSource") DataSource dataSource) {
+    try {
+      HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+      jpaVendorAdapter.setGenerateDdl(false);
+
+      try (Connection connection = dataSource.getConnection()) {
+        DatabaseMetaData metaData = connection.getMetaData();
+
+        switch (metaData.getDatabaseProductName()) {
+          case "H2":
+            jpaVendorAdapter.setDatabase(Database.H2);
+            jpaVendorAdapter.setShowSql(true);
+
+            break;
+
+          case "Microsoft SQL Server":
+            jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
+            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
+            jpaVendorAdapter.setShowSql(false);
+
+            break;
+
+          default:
+            jpaVendorAdapter.setDatabase(Database.DEFAULT);
+            jpaVendorAdapter.setShowSql(false);
+
+            break;
+        }
+
+        return jpaVendorAdapter;
+      }
+    } catch (Throwable e) {
+      throw new FatalBeanException("Failed to initialize the JpaVendorAdapter bean", e);
+    }
   }
 
   /**
@@ -267,95 +363,6 @@ public class TestConfiguration {
   }
 
   /**
-   * Initialize the in-memory application database and return a data source that can be used to
-   * interact with the database.
-   *
-   * <p>This data source returned by this method must be closed after use with the <b>close()</b>
-   * method.
-   *
-   * @return the data source that can be used to interact with the in-memory database
-   */
-  @Bean(name = "applicationDataSource")
-  @DependsOn({"transactionManager"})
-  protected DataSource dataSource() {
-    synchronized (dataSourceLock) {
-      if (dataSource == null) {
-        try {
-          TransactionManager transactionManager =
-              applicationContext.getBean(TransactionManager.class);
-
-          TransactionSynchronizationRegistry transactionSynchronizationRegistry =
-              applicationContext.getBean(TransactionSynchronizationRegistry.class);
-
-          Properties agroalProperties = new Properties();
-          agroalProperties.setProperty(
-              AgroalPropertiesReader.JDBC_URL,
-              "jdbc:h2:mem:"
-                  + Thread.currentThread().getName()
-                  + ";AUTOCOMMIT=OFF;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
-
-          // db2Agroal.setProperty(AgroalPropertiesReader.PRINCIPAL, AgroalH2Utils.DB_USER);
-          // db2Agroal.setProperty(AgroalPropertiesReader.CREDENTIAL, AgroalH2Utils.DB_PASSWORD);
-          // db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_PRINCIPAL,
-          // AgroalH2Utils.DB_USER);
-          // db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_CREDENTIAL,
-          // AgroalH2Utils.DB_PASSWORD);
-          agroalProperties.setProperty(
-              AgroalPropertiesReader.PROVIDER_CLASS_NAME, "org.h2.jdbcx.JdbcDataSource");
-          agroalProperties.setProperty(AgroalPropertiesReader.MAX_SIZE, "10");
-
-          AgroalPropertiesReader agroalReaderProperties2 =
-              new AgroalPropertiesReader().readProperties(agroalProperties);
-          AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier =
-              agroalReaderProperties2.modify();
-          TransactionIntegration transactionIntegration =
-              new NarayanaTransactionIntegration(
-                  transactionManager, transactionSynchronizationRegistry);
-
-          //        TransactionIntegration txIntegration2 = new NarayanaTransactionIntegration(
-          //          com.arjuna.ats.jta.TransactionManager.transactionManager(),
-          // transactionSynchronizationRegistry,
-          //          "java:/agroalds2", false, recoveryManagerService);
-
-          agroalDataSourceConfigurationSupplier
-              .connectionPoolConfiguration()
-              .transactionIntegration(transactionIntegration);
-
-          dataSource =
-              new DataSourceProxy(AgroalDataSource.from(agroalDataSourceConfigurationSupplier));
-
-          /*
-           * Initialize the in-memory database using the SQL statements contained in the resources
-           * for the Inception framework in a specific order
-           */
-          for (String inMemoryDatabaseInitResourcePath : IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS) {
-            if (ResourceUtil.classpathResourceExists(inMemoryDatabaseInitResourcePath)) {
-              loadSQL(
-                  dataSource,
-                  ResourceUtil.getClasspathResourceURL(inMemoryDatabaseInitResourcePath));
-            }
-          }
-
-          /*
-           * Initialize the in-memory database using the SQL statements contained in any other
-           * resources.
-           */
-          for (Resource databaseInitResource : inMemoryInitResources) {
-            if ((StringUtils.hasText(databaseInitResource.getFilename()))
-                && (!databaseInitResource.getFilename().startsWith("inception-"))) {
-              loadSQL(dataSource, databaseInitResource.getURL());
-            }
-          }
-        } catch (Throwable e) {
-          throw new RuntimeException("Failed to initialize the in-memory application database", e);
-        }
-      }
-
-      return dataSource;
-    }
-  }
-
-  /**
    * Returns the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
    * processor package.
    *
@@ -384,19 +391,20 @@ public class TestConfiguration {
   protected List<String> packagesToScanForEntities() {
     List<String> packagesToScan = new ArrayList<>();
 
-    // Add the packages to scan for entities explicitly specified in the configuration property
-    if (StringUtils.hasText(this.packagesToScanForEntities)) {
-      for (String packageToScanForEntities : this.packagesToScanForEntities.split(",")) {
-        // Replace any existing packages to scan with the higher level package
-        packagesToScan.removeIf(
-            packageToScan -> packageToScan.startsWith(packageToScanForEntities));
-
-        // Check if there is a higher level package already being scanned
-        if (packagesToScan.stream().noneMatch(packageToScanForEntities::startsWith)) {
-          packagesToScan.add(packageToScanForEntities);
-        }
-      }
-    }
+    //    // Add the packages to scan for entities explicitly specified in the configuration
+    // property
+    //    if (StringUtils.hasText(this.packagesToScanForEntities)) {
+    //      for (String packageToScanForEntities : this.packagesToScanForEntities.split(",")) {
+    //        // Replace any existing packages to scan with the higher level package
+    //        packagesToScan.removeIf(
+    //            packageToScan -> packageToScan.startsWith(packageToScanForEntities));
+    //
+    //        // Check if there is a higher level package already being scanned
+    //        if (packagesToScan.stream().noneMatch(packageToScanForEntities::startsWith)) {
+    //          packagesToScan.add(packageToScanForEntities);
+    //        }
+    //      }
+    //    }
 
     // Add the base packages specified using the EnableJpaRepositories annotation
     Map<String, Object> annotatedBeans =

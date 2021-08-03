@@ -47,3 +47,6 @@ Thumbs.db
 
 # Build files
 projects/demo/.browserslistrc
+
+ObjectStore
+

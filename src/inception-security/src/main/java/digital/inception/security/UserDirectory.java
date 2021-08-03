@@ -40,6 +40,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.Valid;
@@ -54,8 +56,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -86,7 +86,6 @@ public class UserDirectory implements Serializable {
   /** The date and time the user directory was created. */
   @JsonIgnore
   @XmlTransient
-  @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
@@ -137,7 +136,6 @@ public class UserDirectory implements Serializable {
   /** The date and time the user directory was last updated. */
   @JsonIgnore
   @XmlTransient
-  @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
@@ -361,5 +359,15 @@ public class UserDirectory implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  @PrePersist
+  protected void onCreate() {
+    created = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  protected void onUpdate() {
+    updated = LocalDateTime.now();
   }
 }

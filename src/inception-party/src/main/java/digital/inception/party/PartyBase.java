@@ -25,14 +25,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * The <b>PartyBase</b> class holds the information common to all types of parties and is the base
@@ -64,7 +64,6 @@ public class PartyBase implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The date and time the party was created. */
-  @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
@@ -94,7 +93,6 @@ public class PartyBase implements Serializable {
   private PartyType type;
 
   /** The date and time the party was last updated. */
-  @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
@@ -270,5 +268,15 @@ public class PartyBase implements Serializable {
    */
   public void setType(PartyType partyType) {
     this.type = partyType;
+  }
+
+  @PrePersist
+  protected void onCreate() {
+    created = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  protected void onUpdate() {
+    updated = LocalDateTime.now();
   }
 }
