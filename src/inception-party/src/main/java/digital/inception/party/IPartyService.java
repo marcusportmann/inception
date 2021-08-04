@@ -77,15 +77,6 @@ public interface IPartyService {
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException;
 
   /**
-   * Delete the party.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   */
-  void deleteParty(UUID tenantId, UUID partyId)
-      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
-
-  /**
    * Delete the person.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant

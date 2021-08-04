@@ -44,30 +44,27 @@ inception:
     data-source:
       class-name: org.h2.jdbcx.JdbcDataSource
       url: jdbc:h2:mem:application;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-      min-pool-size: 5
-      max-pool-size: 10
+      min-pool-size: 1
+      max-pool-size: 5
+      liquibase:
+        enabled: true
+        change-log: classpath:db/demo.changelog.xml
+
+
 
 #    data-source:
-#      class-name: org.postgresql.jdbc3.Jdbc3SimpleDataSource
+#      class-name: org.postgresql.xa.PGXADataSource
 #      url: jdbc:postgresql://localhost:5432/demo
 #      username: demo
 #      password: demo
 #      min-pool-size: 5
 #      max-pool-size: 10
-#      recovery:
-#        enabled: false
-#        username: USERNAME
-#        password: PASSWORD
 
 #    data-source:
 #      class-name: com.microsoft.sqlserver.jdbc.SQLServerXADataSource
 #      url: jdbc:sqlserver://192.168.185.130:1433;databaseName=Demo;user=Demo;password=Password1
 #      min-pool-size: 5
 #      max-pool-size: 10
-#      recovery:
-#        enabled: false
-#        username: USERNAME
-#        password: PASSWORD
 
   cache:
     hazelcast:

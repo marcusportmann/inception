@@ -93,6 +93,7 @@
     <jaxb-xew-plugin.version>1.11</jaxb-xew-plugin.version>
     <jasperreports.version>6.17.0</jasperreports.version>
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
+    <liquibase-slf4j.version>4.0.0</liquibase-slf4j.version>
     <mssql-jdbc.version>9.2.1.jre11</mssql-jdbc.version>
     <narayana.version>5.12.0.Final</narayana.version>
     <postgresql.version>42.2.20</postgresql.version>
@@ -117,6 +118,11 @@
         <groupId>com.github.f4b6a3</groupId>
         <artifactId>uuid-creator</artifactId>
         <version>${uuid-creator.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.mattbertolini</groupId>
+        <artifactId>liquibase-slf4j</artifactId>
+        <version>${liquibase-slf4j.version}</version>
       </dependency>
       <dependency>
         <groupId>com.microsoft.sqlserver</groupId>

@@ -6,20 +6,25 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+  <property name="blob_type" value="blob" dbms="h2"/>
   <property name="blob_type" value="bytea" dbms="postgresql"/>
   <property name="blob_type" value="blob" dbms="oracle"/>
   <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="h2"/>
   <property name="now" value="now()" dbms="postgresql"/>
   <property name="now" value="sysdate" dbms="oracle"/>
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-security-1.0.0" author="Marcus Portmann">
     <comment>Inception - Security - 1.0.0</comment>
+    <sql dbms="h2" endDelimiter=";">
+      CREATE SCHEMA IF NOT EXISTS security
+    </sql>
     <sql dbms="postgresql" endDelimiter=";">
-      create schema security
+      CREATE SCHEMA IF NOT EXISTS security
     </sql>
     <sql dbms="mssql" endDelimiter=";">
-      create schema security
+      CREATE SCHEMA security
     </sql>
 
     <createTable schemaName="security" tableName="tenants" remarks="Tenants">

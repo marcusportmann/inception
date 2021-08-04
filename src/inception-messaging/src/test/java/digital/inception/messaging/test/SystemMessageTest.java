@@ -212,7 +212,7 @@ public class SystemMessageTest {
 
       List<Code> testCodes = new ArrayList<>();
 
-      for (int i = 1; i <= 10; i++) {
+      for (int i = 100; i <= 110; i++) {
         Code testStandardCode =
             new Code(
                 "Test Standard Code ID " + i,
@@ -328,7 +328,7 @@ public class SystemMessageTest {
 
       List<Code> testCodes = new ArrayList<>();
 
-      for (int i = 1; i <= 10; i++) {
+      for (int i = 200; i <= 210; i++) {
         Code testStandardCode =
             new Code(
                 "Test Standard Code ID " + i,

@@ -18,6 +18,7 @@ package digital.inception.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import digital.inception.core.liquibase.InceptionLiquibaseChangeLogs;
 import digital.inception.core.util.JDBCUtil;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.json.DateTimeModule;
@@ -37,6 +38,14 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 import javax.sql.DataSource;
+import liquibase.Contexts;
+import liquibase.LabelExpression;
+import liquibase.Liquibase;
+import liquibase.configuration.HubConfiguration;
+import liquibase.configuration.LiquibaseConfiguration;
+import liquibase.database.DatabaseFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.resource.ClassLoaderResourceAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
@@ -98,27 +107,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class TestConfiguration {
 
   private static final String[] IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS = {
-    // Core modules
-    "digital/inception/core/inception-core-h2.sql",
-    "digital/inception/application/inception-application-h2.sql",
-    "digital/inception/test/inception-test-h2.sql",
     // Utility modules
-    "digital/inception/audit/inception-audit-h2.sql",
-    "digital/inception/audit/test/inception-audit-test-h2.sql",
-    "digital/inception/bmi/inception-bmi-h2.sql",
-    "digital/inception/bmi/test/inception-bmi-test-h2.sql",
     "digital/inception/bmi/inception-camunda-h2.sql",
     "digital/inception/bmi/test/inception-camunda-test-h2.sql",
-    "digital/inception/codes/inception-codes-h2.sql",
-    "digital/inception/codes/test/inception-codes-test/h2.sql",
-    "digital/inception/config/inception-config-h2.sql",
-    "digital/inception/config/test/inception-config-test-h2.sql",
-    "digital/inception/error/inception-error-h2.sql",
-    "digital/inception/error/test/inception-error-test-h2.sql",
-    "digital/inception/mail/inception-mail-h2.sql",
-    "digital/inception/mail/test/inception-mail-test-h2.sql",
-    "digital/inception/messaging/inception-messaging-h2.sql",
-    "digital/inception/messaging/test/inception-messaging-test-h2.sql",
     "digital/inception/reporting/inception-reporting-h2.sql",
     "digital/inception/reporting/test/inception-reporting-test-h2.sql",
     "digital/inception/scheduler/inception-scheduler-h2.sql",
@@ -128,7 +119,7 @@ public class TestConfiguration {
     "digital/inception/sms/inception-sms-h2.sql",
     // Business Modules
     "digital/inception/reference/inception-reference-h2.sql",
-    "digital/inception/reference/test/inception-reference-test-h2.sql",
+
     "digital/inception/party/inception-party-h2.sql",
     "digital/inception/party/test/inception-party-test-h2.sql"
   };
@@ -204,6 +195,40 @@ public class TestConfiguration {
 
           dataSource =
               new DataSourceProxy(AgroalDataSource.from(agroalDataSourceConfigurationSupplier));
+
+          // Initialize the in-memory database using Liquibase changeSets
+          LiquibaseConfiguration.getInstance().getConfiguration(HubConfiguration.class).setLiquibaseHubMode("OFF");
+
+          try (Connection connection = dataSource.getConnection()) {
+            liquibase.database.Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+
+            for (String changeLogFile : InceptionLiquibaseChangeLogs.CORE_CHANGE_LOGS) {
+              if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+                Liquibase liquibase =
+                    new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+                liquibase.update(new Contexts(), new LabelExpression());
+                liquibase.update(new Contexts("test"), new LabelExpression());
+              }
+            }
+
+            for (String changeLogFile : InceptionLiquibaseChangeLogs.UTILITY_CHANGE_LOGS) {
+              if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+                Liquibase liquibase =
+                    new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+                liquibase.update(new Contexts(), new LabelExpression());
+                liquibase.update(new Contexts("test"), new LabelExpression());
+              }
+            }
+
+            for (String changeLogFile : InceptionLiquibaseChangeLogs.BUSINESS_CHANGE_LOGS) {
+              if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+                Liquibase liquibase =
+                    new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+                liquibase.update(new Contexts(), new LabelExpression());
+                liquibase.update(new Contexts("test"), new LabelExpression());
+              }
+            }
+          }
 
           /*
            * Initialize the in-memory database using the SQL statements contained in the resources

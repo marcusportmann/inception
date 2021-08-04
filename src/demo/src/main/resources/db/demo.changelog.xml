@@ -26,17 +26,17 @@
     </sql>
 
     <createTable schemaName="demo" tableName="data" remarks="Data">
-      <column name="id" type="bigint" remarks="The ID for the data"/>
-      <column name="name" type="nvarchar(100)" remarks="The name for the data"/>
+      <column name="id" type="bigint" remarks="The ID for the data">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name for the data">
+        <constraints nullable="false"/>
+      </column>
       <column name="integer_value" type="int" remarks="The integer value for the data"/>
       <column name="string_value" type="nvarchar(4000)" remarks="The string value for the data"/>
       <column name="date_value" type="date" remarks="The date value for the data"/>
       <column name="timestamp_value" type="timestamp" remarks="The timestamp value for the data"/>
     </createTable>
-    <addPrimaryKey schemaName="demo" tableName="data" columnNames="id"/>
-    <addNotNullConstraint schemaName="demo" tableName="data" columnName="id"/>
-    <addNotNullConstraint schemaName="demo" tableName="data" columnName="name"/>
   </changeSet>
-
 
 </databaseChangeLog>

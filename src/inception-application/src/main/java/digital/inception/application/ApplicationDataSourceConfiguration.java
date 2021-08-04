@@ -16,6 +16,7 @@
 
 package digital.inception.application;
 
+import digital.inception.core.liquibase.InceptionLiquibaseChangeLogs;
 import digital.inception.core.util.JDBCUtil;
 import digital.inception.core.util.ResourceUtil;
 import io.agroal.api.AgroalDataSource;
@@ -31,17 +32,31 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Properties;
 import javax.sql.DataSource;
+import liquibase.Contexts;
+import liquibase.LabelExpression;
+import liquibase.Liquibase;
+import liquibase.configuration.HubConfiguration;
+import liquibase.configuration.LiquibaseConfiguration;
+import liquibase.database.DatabaseFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.integration.spring.SpringResourceAccessor;
+import liquibase.resource.ClassLoaderResourceAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StringUtils;
 
 /**
@@ -51,26 +66,20 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Configuration
+@EnableAutoConfiguration(
+    exclude = {DataSourceAutoConfiguration.class, LiquibaseAutoConfiguration.class})
 @ConditionalOnProperty({
   "inception.application.data-source.class-name",
   "inception.application.data-source.url"
 })
 @SuppressWarnings("unused")
-public class ApplicationDataSourceConfiguration {
+public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
+
+
 
   private static final String[] IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS = {
-    // Core modules
-    "digital/inception/core/inception-core-h2.sql",
-    "digital/inception/application/inception-application-h2.sql",
     // Utility modules
-    "digital/inception/audit/inception-audit-h2.sql",
-    "digital/inception/bmi/inception-bmi-h2.sql",
     "digital/inception/bmi/inception-camunda-h2.sql",
-    "digital/inception/codes/inception-codes-h2.sql",
-    "digital/inception/config/inception-config-h2.sql",
-    "digital/inception/error/inception-error-h2.sql",
-    "digital/inception/mail/inception-mail-h2.sql",
-    "digital/inception/messaging/inception-messaging-h2.sql",
     "digital/inception/reporting/inception-reporting-h2.sql",
     "digital/inception/scheduler/inception-scheduler-h2.sql",
     "digital/inception/security/inception-security-h2.sql",
@@ -78,8 +87,6 @@ public class ApplicationDataSourceConfiguration {
     // Business Modules
     "digital/inception/reference/inception-reference-h2.sql",
     "digital/inception/party/inception-party-h2.sql",
-    // Banking Modules
-    "digital/inception/banking/inception-banking-customer-h2.sql",
   };
 
   /* Logger */
@@ -102,6 +109,14 @@ public class ApplicationDataSourceConfiguration {
   @Value("classpath*:**/*-h2.sql")
   private Resource[] inMemoryInitResources;
 
+  /** The Liquibase change log. */
+  @Value("${inception.application.data-source.liquibase.change-log:#{null}}")
+  private String liquibaseChangeLog;
+
+  /** Is Liquibase enabled? */
+  @Value("${inception.application.data-source.liquibase.enabled:#{false}}")
+  private boolean liquibaseEnabled;
+
   /**
    * The maximum size of the database connection pool used to connect to the application database.
    */
@@ -117,6 +132,9 @@ public class ApplicationDataSourceConfiguration {
   /** The password for the application database. */
   @Value("${inception.application.data-source.password:#{null}}")
   private String password;
+
+  /** The Spring resource loader. */
+  private ResourceLoader resourceLoader;
 
   /** The URL used to connect to the application database. */
   @Value("${inception.application.data-source.url:#{null}}")
@@ -230,6 +248,53 @@ public class ApplicationDataSourceConfiguration {
         }
       }
 
+      // Initialize the in-memory database using Liquibase changeSets
+      if (isInMemoryH2Database || liquibaseEnabled) {
+        if (isInMemoryH2Database) {
+          logger.info("Initializing the in-memory H2 database using Liquibase");
+        }
+
+        LiquibaseConfiguration.getInstance()
+            .getConfiguration(HubConfiguration.class)
+            .setLiquibaseHubMode("OFF");
+
+        try (Connection connection = dataSource.getConnection()) {
+          liquibase.database.Database database =
+              DatabaseFactory.getInstance()
+                  .findCorrectDatabaseImplementation(new JdbcConnection(connection));
+
+          for (String changeLogFile : InceptionLiquibaseChangeLogs.CORE_CHANGE_LOGS) {
+            if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+              Liquibase liquibase =
+                  new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+              liquibase.update(new Contexts(), new LabelExpression());
+            }
+          }
+
+          for (String changeLogFile : InceptionLiquibaseChangeLogs.UTILITY_CHANGE_LOGS) {
+            if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+              Liquibase liquibase =
+                  new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+              liquibase.update(new Contexts(), new LabelExpression());
+            }
+          }
+
+          for (String changeLogFile : InceptionLiquibaseChangeLogs.BUSINESS_CHANGE_LOGS) {
+            if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+              Liquibase liquibase =
+                  new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+              liquibase.update(new Contexts(), new LabelExpression());
+            }
+          }
+
+          if (StringUtils.hasText(liquibaseChangeLog)) {
+            SpringResourceAccessor resourceAccessor = new SpringResourceAccessor(resourceLoader);
+            Liquibase liquibase = new Liquibase(liquibaseChangeLog, resourceAccessor, database);
+            liquibase.update(new Contexts(), new LabelExpression());
+          }
+        }
+      }
+
       if (isInMemoryH2Database) {
         logger.info("Initializing the in-memory H2 database");
 
@@ -326,6 +391,16 @@ public class ApplicationDataSourceConfiguration {
    */
   public String getUsername() {
     return username;
+  }
+
+  /**
+   * Set the Spring resource loader.
+   *
+   * @param resourceLoader the Spring resource loader
+   */
+  @Override
+  public void setResourceLoader(ResourceLoader resourceLoader) {
+    this.resourceLoader = resourceLoader;
   }
 
   private void loadSQL(DataSource dataSource, URL databaseInitResourceUrl)

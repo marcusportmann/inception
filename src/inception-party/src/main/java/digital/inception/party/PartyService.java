@@ -204,26 +204,6 @@ public class PartyService implements IPartyService {
   }
 
   /**
-   * Delete the party.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   */
-  @Override
-  @Transactional
-  @CacheEvict(
-      cacheNames = {"organizations", "persons"},
-      key = "#partyId")
-  public void deleteParty(UUID tenantId, UUID partyId)
-      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
-    if (partyId == null) {
-      throw new InvalidArgumentException("partyId");
-    }
-
-    getDataStore().deleteParty(tenantId, partyId);
-  }
-
-  /**
    * Delete the person.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
