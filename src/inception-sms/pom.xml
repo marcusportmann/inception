@@ -18,19 +18,15 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-jpa</artifactId>
+    </dependency>
 
     <!-- Dependencies -->
     <dependency>
-      <groupId>javax.persistence</groupId>
-      <artifactId>javax.persistence-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webflux</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-jpa</artifactId>
     </dependency>
 
     <!-- JAX-WS Dependencies -->

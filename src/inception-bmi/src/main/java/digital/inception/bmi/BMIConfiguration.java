@@ -17,7 +17,7 @@
 package digital.inception.bmi;
 
 import digital.inception.core.util.ServiceUtil;
-import java.util.Map;
+import digital.inception.jpa.JpaUtil;
 import javax.sql.DataSource;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
@@ -28,10 +28,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.jta.JtaTransactionManager;
 
 /**
  * The <b>BMIConfiguration</b> class provides the Spring configuration for the Business Modeling and
@@ -76,36 +74,16 @@ public class BMIConfiguration {
   /**
    * Returns the bmi entity manager factory bean associated with the application data source.
    *
+   * @param dataSource the application data source
+   * @param platformTransactionManager the platform transaction manager
    * @return the bmi entity manager factory bean associated with the application data source
    */
   @Bean
   public LocalContainerEntityManagerFactoryBean bmiEntityManagerFactory(
       @Qualifier("applicationDataSource") DataSource dataSource,
-      JpaVendorAdapter jpaVendorAdapter,
       PlatformTransactionManager platformTransactionManager) {
-    try {
-      LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
-          new LocalContainerEntityManagerFactoryBean();
-
-      entityManagerFactoryBean.setPersistenceUnitName("bmi");
-
-      entityManagerFactoryBean.setJtaDataSource(dataSource);
-
-      entityManagerFactoryBean.setPackagesToScan("digital.inception.bmi");
-
-      entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-
-      Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
-
-      if (platformTransactionManager instanceof JtaTransactionManager) {
-        jpaPropertyMap.put("hibernate.transaction.coordinator_class", "jta");
-        jpaPropertyMap.put("hibernate.transaction.jta.platform", "JBossTS");
-      }
-
-      return entityManagerFactoryBean;
-    } catch (Throwable e) {
-      throw new FatalBeanException("Failed to initialize the bmi entity manager factory bean", e);
-    }
+    return JpaUtil.createEntityManager(
+        "bmi", dataSource, platformTransactionManager, "digital.inception.bmi");
   }
 
   /**

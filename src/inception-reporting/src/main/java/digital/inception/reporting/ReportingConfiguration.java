@@ -16,18 +16,15 @@
 
 package digital.inception.reporting;
 
-import java.util.Map;
+import digital.inception.jpa.JpaUtil;
 import javax.sql.DataSource;
-import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.jta.JtaTransactionManager;
 
 /**
  * The <b>ReportingConfiguration</b> class provides the Spring configuration for the Reporting
@@ -56,36 +53,15 @@ public class ReportingConfiguration {
   /**
    * Returns the reporting entity manager factory bean associated with the application data source.
    *
+   * @param dataSource the application data source
+   * @param platformTransactionManager the platform transaction manager
    * @return the reporting entity manager factory bean associated with the application data source
    */
   @Bean
   public LocalContainerEntityManagerFactoryBean reportingEntityManagerFactory(
       @Qualifier("applicationDataSource") DataSource dataSource,
-      JpaVendorAdapter jpaVendorAdapter,
       PlatformTransactionManager platformTransactionManager) {
-    try {
-      LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
-          new LocalContainerEntityManagerFactoryBean();
-
-      entityManagerFactoryBean.setPersistenceUnitName("reporting");
-
-      entityManagerFactoryBean.setJtaDataSource(dataSource);
-
-      entityManagerFactoryBean.setPackagesToScan("digital.inception.reporting");
-
-      entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-
-      Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
-
-      if (platformTransactionManager instanceof JtaTransactionManager) {
-        jpaPropertyMap.put("hibernate.transaction.coordinator_class", "jta");
-        jpaPropertyMap.put("hibernate.transaction.jta.platform", "JBossTS");
-      }
-
-      return entityManagerFactoryBean;
-    } catch (Throwable e) {
-      throw new FatalBeanException(
-          "Failed to initialize the reporting entity manager factory bean", e);
-    }
+    return JpaUtil.createEntityManager(
+        "reporting", dataSource, platformTransactionManager, "digital.inception.reporting");
   }
 }

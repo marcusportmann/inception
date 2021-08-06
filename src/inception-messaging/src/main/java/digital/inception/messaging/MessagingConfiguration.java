@@ -16,19 +16,16 @@
 
 package digital.inception.messaging;
 
-import java.util.Map;
+import digital.inception.jpa.JpaUtil;
 import javax.sql.DataSource;
-import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.jta.JtaTransactionManager;
 
 /**
  * The <b>MessagingConfiguration</b> class provides the Spring configuration for the Messaging
@@ -58,36 +55,15 @@ public class MessagingConfiguration {
   /**
    * Returns the messaging entity manager factory bean associated with the application data source.
    *
+   * @param dataSource the application data source
+   * @param platformTransactionManager the platform transaction manager
    * @return the messaging entity manager factory bean associated with the application data source
    */
   @Bean
   public LocalContainerEntityManagerFactoryBean messagingEntityManagerFactory(
       @Qualifier("applicationDataSource") DataSource dataSource,
-      JpaVendorAdapter jpaVendorAdapter,
       PlatformTransactionManager platformTransactionManager) {
-    try {
-      LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
-          new LocalContainerEntityManagerFactoryBean();
-
-      entityManagerFactoryBean.setPersistenceUnitName("messaging");
-
-      entityManagerFactoryBean.setJtaDataSource(dataSource);
-
-      entityManagerFactoryBean.setPackagesToScan("digital.inception.messaging");
-
-      entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-
-      Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
-
-      if (platformTransactionManager instanceof JtaTransactionManager) {
-        jpaPropertyMap.put("hibernate.transaction.coordinator_class", "jta");
-        jpaPropertyMap.put("hibernate.transaction.jta.platform", "JBossTS");
-      }
-
-      return entityManagerFactoryBean;
-    } catch (Throwable e) {
-      throw new FatalBeanException(
-          "Failed to initialize the messaging entity manager factory bean", e);
-    }
+    return JpaUtil.createEntityManager(
+        "messaging", dataSource, platformTransactionManager, "digital.inception.messaging");
   }
 }

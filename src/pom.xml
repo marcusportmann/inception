@@ -80,30 +80,30 @@
 
     <inception.version>1.0.0-SNAPSHOT</inception.version>
 
-    <agroal-pool.version>1.11</agroal-pool.version>
+    <agroal-pool.version>1.12</agroal-pool.version>
     <avro.version>1.10.2</avro.version>
-    <camunda.version>7.14.0</camunda.version>
+    <camunda.version>7.15.0</camunda.version>
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
-    <commons-io.version>2.9.0</commons-io.version>
-    <cxf.version>3.4.3</cxf.version>
+    <commons-io.version>2.11.0</commons-io.version>
+    <cxf.version>3.4.4</cxf.version>
     <freemarker.version>2.3.31</freemarker.version>
     <glassfish-jaxb-runtime.version>2.4.0-b180830.0438</glassfish-jaxb-runtime.version>
     <groovy.version>3.0.8</groovy.version>
-    <hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
+    <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
     <jaxb-xew-plugin.version>1.11</jaxb-xew-plugin.version>
     <jasperreports.version>6.17.0</jasperreports.version>
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
     <liquibase-slf4j.version>4.0.0</liquibase-slf4j.version>
     <mssql-jdbc.version>9.2.1.jre11</mssql-jdbc.version>
     <narayana.version>5.12.0.Final</narayana.version>
-    <postgresql.version>42.2.20</postgresql.version>
+    <postgresql.version>42.2.23</postgresql.version>
     <spring-boot.version>2.5.3</spring-boot.version>
     <spring-shell.version>2.0.1.RELEASE</spring-shell.version>
-    <springdoc-openapi-ui.version>1.5.9</springdoc-openapi-ui.version>
+    <springdoc-openapi-ui.version>1.5.10</springdoc-openapi-ui.version>
     <sun-activation.version>1.2.0</sun-activation.version>
-    <swagger-codegen-maven-plugin.version>3.0.26</swagger-codegen-maven-plugin.version>
-    <swagger.version>2.1.9</swagger.version>
-    <uuid-creator.version>3.4.1</uuid-creator.version>
+    <swagger-codegen-maven-plugin.version>3.0.27</swagger-codegen-maven-plugin.version>
+    <swagger.version>2.1.10</swagger.version>
+    <uuid-creator.version>3.7.3</uuid-creator.version>
     <wss4j-ws-security-common.version>2.2.6</wss4j-ws-security-common.version>
   </properties>
 
@@ -331,6 +331,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-jpa</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-json</artifactId>
         <version>${inception.version}</version>
       </dependency>
@@ -517,6 +522,7 @@
     <module>inception-error-ws</module>
     <module>inception-core</module>
     <module>inception-json</module>
+    <module>inception-jpa</module>
     <module>inception-jta</module>
     <module>inception-kafka</module>
     <module>inception-mail</module>

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.liquibase.InceptionLiquibaseChangeLogs;
 import digital.inception.core.util.JDBCUtil;
 import digital.inception.core.util.ResourceUtil;
+import digital.inception.jpa.JpaUtil;
 import digital.inception.json.DateTimeModule;
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
@@ -29,7 +30,6 @@ import io.agroal.api.transaction.TransactionIntegration;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -49,7 +49,6 @@ import liquibase.integration.spring.SpringResourceAccessor;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -69,10 +68,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.Database;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -250,7 +246,6 @@ public class TestConfiguration implements ResourceLoaderAware {
               }
             }
 
-
             if (StringUtils.hasText(liquibaseChangeLog)) {
               SpringResourceAccessor resourceAccessor = new SpringResourceAccessor(resourceLoader);
               Liquibase liquibase = new Liquibase(liquibaseChangeLog, resourceAccessor, database);
@@ -293,28 +288,20 @@ public class TestConfiguration implements ResourceLoaderAware {
    * Returns the application entity manager factory bean associated with the application data
    * source.
    *
+   * @param dataSource the application data source
+   * @param platformTransactionManager the platform transaction manager
    * @return the application entity manager factory bean associated with the application data source
    */
   @Bean
   @Primary
   public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory(
       @Qualifier("applicationDataSource") DataSource dataSource,
-      JpaVendorAdapter jpaVendorAdapter,
       PlatformTransactionManager platformTransactionManager) {
-    LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
-        new LocalContainerEntityManagerFactoryBean();
-
-    entityManagerFactoryBean.setPersistenceUnitName("application");
-    entityManagerFactoryBean.setJtaDataSource(dataSource);
-    entityManagerFactoryBean.setPackagesToScan(
+    return JpaUtil.createEntityManager(
+        "application",
+        dataSource,
+        platformTransactionManager,
         StringUtils.toStringArray(packagesToScanForEntities()));
-    entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-
-    Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
-    jpaPropertyMap.put("hibernate.transaction.coordinator_class", "jta");
-    jpaPropertyMap.put("hibernate.transaction.jta.platform", "JBossTS");
-
-    return entityManagerFactoryBean;
   }
 
   /**
@@ -325,51 +312,6 @@ public class TestConfiguration implements ResourceLoaderAware {
   @Bean
   public CacheManager cacheManager() {
     return new ConcurrentMapCacheManager();
-  }
-
-  /**
-   * Returns the JPA vendor adapter, which configures the behaviour of the JPA ORM provider based on
-   * the type of database for the application data source.
-   *
-   * @returrn the JpaVendorAdapter, which configures the behaviour of the JPA ORM provider based on
-   *     the type of database for the application data source.
-   */
-  @Bean
-  public JpaVendorAdapter jpaVendorAdapter(
-      @Qualifier("applicationDataSource") DataSource dataSource) {
-    try {
-      HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-      jpaVendorAdapter.setGenerateDdl(false);
-
-      try (Connection connection = dataSource.getConnection()) {
-        DatabaseMetaData metaData = connection.getMetaData();
-
-        switch (metaData.getDatabaseProductName()) {
-          case "H2":
-            jpaVendorAdapter.setDatabase(Database.H2);
-            jpaVendorAdapter.setShowSql(true);
-
-            break;
-
-          case "Microsoft SQL Server":
-            jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
-            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
-            jpaVendorAdapter.setShowSql(false);
-
-            break;
-
-          default:
-            jpaVendorAdapter.setDatabase(Database.DEFAULT);
-            jpaVendorAdapter.setShowSql(false);
-
-            break;
-        }
-
-        return jpaVendorAdapter;
-      }
-    } catch (Throwable e) {
-      throw new FatalBeanException("Failed to initialize the JpaVendorAdapter bean", e);
-    }
   }
 
   /**
