@@ -1,8 +1,8 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 
 @import 'mixins';
 
-@include mat-core();
+@include mat.core();
 
 $inception-palette-base:  #20a8d8 !default;
 
@@ -37,52 +37,52 @@ $inception-palette: (
   A400: $inception-palette-A400,
   A700: $inception-palette-A700,
   contrast: (
-    50: $light-primary-text,
-    100: $light-primary-text,
-    200: $light-primary-text,
-    300: $light-primary-text,
-    400: $light-primary-text,
-    500: $light-primary-text,
-    600: $dark-primary-text,
-    700: $dark-primary-text,
-    800: $dark-primary-text,
-    900: $dark-primary-text,
-    A100: $light-primary-text,
-    A200: $light-primary-text,
-    A400: $light-primary-text,
-    A700: $dark-primary-text,
+    50: white,
+    100: white,
+    200: white,
+    300: white,
+    400: white,
+    500: white,
+    600: rgba(black, 0.87),
+    700: rgba(black, 0.87),
+    800: rgba(black, 0.87),
+    900: rgba(black, 0.87),
+    A100: white,
+    A200: white,
+    A400: white,
+    A700: rgba(black, 0.87),
   )
 );
 
-$custom-primary: mat-palette($inception-palette);
-$custom-accent:  mat-palette($mat-grey);
+$custom-primary: mat.define-palette($inception-palette);
+$custom-accent:  mat.define-palette(mat.$grey-palette);
 
-$inception-theme: mat-light-theme($custom-primary, $custom-accent);
+$inception-theme: mat.define-light-theme($custom-primary, $custom-accent);
 
-@include angular-material-theme($inception-theme);
+@include mat.all-component-themes($inception-theme);
 
-$inception-typography: mat-typography-config(
+$inception-typography: mat.define-typography-config(
   $font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-  $display-4:     mat-typography-level(112px, 112px, 300),
-  $display-3:     mat-typography-level(56px, 56px, 400),
-  $display-2:     mat-typography-level(45px, 48px, 400),
-  $display-1:     mat-typography-level(34px, 40px, 400),
-  $headline:      mat-typography-level(1rem, 32px, 500),
-  $title:         mat-typography-level(20px, 32px, 500),
-  $subheading-2:  mat-typography-level(16px, 28px, 400),
-  $subheading-1:  mat-typography-level(15px, 24px, 400),
-  $body-2:        mat-typography-level(1rem, 24px, 500),
-  $body-1:        mat-typography-level(1rem, 20px, 400),
-  $caption:       mat-typography-level(12px, 20px, 400),
-  $button:        mat-typography-level(1rem, 14px, 500),
+  $display-4:     mat.define-typography-level(112px, 112px, 300),
+  $display-3:     mat.define-typography-level(56px, 56px, 400),
+  $display-2:     mat.define-typography-level(45px, 48px, 400),
+  $display-1:     mat.define-typography-level(34px, 40px, 400),
+  $headline:      mat.define-typography-level(1rem, 32px, 500),
+  $title:         mat.define-typography-level(20px, 32px, 500),
+  $subheading-2:  mat.define-typography-level(16px, 28px, 400),
+  $subheading-1:  mat.define-typography-level(15px, 24px, 400),
+  $body-2:        mat.define-typography-level(1rem, 24px, 500),
+  $body-1:        mat.define-typography-level(1rem, 20px, 400),
+  $caption:       mat.define-typography-level(12px, 20px, 400),
+  $button:        mat.define-typography-level(1rem, 14px, 500),
     // Line-height must be unit-less fraction of the font-size.
-  $input:         mat-typography-level(1rem, 1.125, 400)
+  $input:         mat.define-typography-level(1rem, 1.125, 400)
 );
 
 $foreground: map-get($inception-theme, foreground);
 $background: map-get($inception-theme, background);
 
-@include angular-material-typography($inception-typography);
+@include mat.all-component-typographies($inception-typography);
 
 * {
   &:active,
@@ -412,15 +412,15 @@ mat-cell, mat-footer-cell, mat-header-cell {
 }
 
 .mat-header-label {
-  color: mat-color($foreground, secondary-text);
+  color: mat.get-color-from-palette($foreground, secondary-text);
 }
 
 .mat-checkbox-label {
-  color: mat-color($foreground, secondary-text);
+  color: mat.get-color-from-palette($foreground, secondary-text);
 }
 
 .mat-radio-label {
-  color: mat-color($foreground, secondary-text);
+  color: mat.get-color-from-palette($foreground, secondary-text);
 }
 
 
@@ -501,7 +501,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid $gray-200;
-  color: mat-color($foreground, secondary-text);
+  color: mat.get-color-from-palette($foreground, secondary-text);
   font-weight: bold;
   min-height: 48px;
   padding-right: 6px;
@@ -509,7 +509,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 
 .mat-nested-table {
   display: block;
-  background: mat-color($background, 'card');
+  background: mat.get-color-from-palette($background, 'card');
   margin-left: 6px;
   margin-right: 6px;
 
@@ -526,7 +526,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
     border-width: 0;
     border-bottom-width: 1px;
     border-style: solid;
-    border-bottom-color: mat-color($foreground, divider);
+    border-bottom-color: mat.get-color-from-palette($foreground, divider);
   }
 
   .mat-nested-header-cell, .mat-nested-cell {
@@ -536,11 +536,11 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
   }
 
   .mat-nested-header-cell {
-    color: mat-color($foreground, secondary-text);
+    color: mat.get-color-from-palette($foreground, secondary-text);
   }
 
   .mat-nested-cell, .mat-nested-footer-cell {
-    color: mat-color($foreground, text);
+    color: mat.get-color-from-palette($foreground, text);
   }
 
   .mat-nested-header-cell, .mat-nested-cell, .mat-nested-footer-cell {
@@ -584,12 +584,12 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 .mat-table-header, .mat-table, .mat-nested-table-header, .mat-nested-table {
   .mat-icon-button {
     font-size: 0.8rem;
-    color: mat-color($foreground, secondary-text);
+    color: mat.get-color-from-palette($foreground, secondary-text);
     width: 30px !important;
     height: 30px !important;
     line-height: 24px !important;
     vertical-align: middle;
-    border: 1px solid mat-color($foreground, secondary-text);
+    border: 1px solid mat.get-color-from-palette($foreground, secondary-text);
     margin-right: 6px;
   }
 
