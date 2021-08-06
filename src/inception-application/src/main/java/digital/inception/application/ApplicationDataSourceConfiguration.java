@@ -75,18 +75,9 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
 
-
-
   private static final String[] IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS = {
     // Utility modules
-    "digital/inception/bmi/inception-camunda-h2.sql",
-    "digital/inception/reporting/inception-reporting-h2.sql",
-    "digital/inception/scheduler/inception-scheduler-h2.sql",
-    "digital/inception/security/inception-security-h2.sql",
-    "digital/inception/sms/inception-sms-h2.sql",
-    // Business Modules
-    "digital/inception/reference/inception-reference-h2.sql",
-    "digital/inception/party/inception-party-h2.sql",
+    "digital/inception/bmi/inception-camunda-h2.sql"
   };
 
   /* Logger */
@@ -112,6 +103,10 @@ public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
   /** The Liquibase change log. */
   @Value("${inception.application.data-source.liquibase.change-log:#{null}}")
   private String liquibaseChangeLog;
+
+  /** Execute the Liquibase data change logs. */
+  @Value("${inception.application.data-source.liquibase.data-change-logs:#{true}}")
+  private boolean liquibaseDataChangeLogs;
 
   /** Is Liquibase enabled? */
   @Value("${inception.application.data-source.liquibase.enabled:#{false}}")
@@ -284,6 +279,17 @@ public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
               Liquibase liquibase =
                   new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
               liquibase.update(new Contexts(), new LabelExpression());
+            }
+          }
+
+          if (liquibaseDataChangeLogs) {
+            for (String changeLogFile : InceptionLiquibaseChangeLogs.BUSINESS_DATA_CHANGE_LOGS) {
+              if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+                Liquibase liquibase =
+                    new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+                liquibase.update(new Contexts(), new LabelExpression());
+                liquibase.update(new Contexts("test"), new LabelExpression());
+              }
             }
           }
 

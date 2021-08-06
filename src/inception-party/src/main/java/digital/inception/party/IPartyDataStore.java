@@ -69,6 +69,15 @@ public interface IPartyDataStore {
       throws OrganizationNotFoundException, ServiceUnavailableException;
 
   /**
+   * Delete the party.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   */
+  void deleteParty(UUID tenantId, UUID partyId)
+      throws PartyNotFoundException, ServiceUnavailableException;
+
+  /**
    * Delete the person.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant

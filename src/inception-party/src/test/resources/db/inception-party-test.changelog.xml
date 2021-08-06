@@ -1,0 +1,1460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="h2"/>
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="json_type" value="clob" dbms="h2"/>
+  <property name="json_type" value="jsonb" dbms="postgresql"/>
+  <property name="json_type" value="oson" dbms="oracle"/>
+  <property name="json_type" value="nvarchar(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="h2"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
+
+  <changeSet id="inception-party-test-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Party - Test - 1.0.0</comment>
+
+    <insert schemaName="party" tableName="attribute_type_categories">
+      <column name="code" value="test_attribute_type_category"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Attribute Type Category"/>
+      <column name="description" value="Test Attribute Type Category"/>
+    </insert>
+
+    <insert schemaName="party" tableName="attribute_type_categories">
+      <column name="code" value="test_attribute_type_category"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Attribute Type Category"/>
+      <column name="description" value="Test Attribute Type Category"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_attribute_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Attribute Type"/>
+      <column name="description" value="Test Attribute Type"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="string"/>
+    </insert>
+
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_attribute_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Attribute Type"/>
+      <column name="description" value="Test Attribute Type"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="string"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="consent_types">
+      <column name="code" value="test_consent_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Consent Type"/>
+      <column name="description" value="Test Consent Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="consent_types">
+      <column name="code" value="test_consent_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Consent Type"/>
+      <column name="description" value="Test Consent Type"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="code" value="test_purpose"/>
+      <column name="contact_mechanism_types" value="test_contact_mechanism_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Purpose"/>
+      <column name="description" value="Test Purpose"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="code" value="test_purpose"/>
+      <column name="contact_mechanism_types" value="test_contact_mechanism_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Purpose"/>
+      <column name="description" value="Test Purpose"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="contact_mechanism_types">
+      <column name="code" value="test_contact_mechanism_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Contact Mechanism Type"/>
+      <column name="plural" value="Test Contact Mechanism Types"/>
+      <column name="description" value="Test Contact Mechanism Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="contact_mechanism_types">
+      <column name="code" value="test_contact_mechanism_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Contact Mechanism Type"/>
+      <column name="plural" value="Test Contact Mechanism Types"/>
+      <column name="description" value="Test Contact Mechanism Type"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="contact_mechanism_roles">
+      <column name="contact_mechanism_type" value="test_contact_mechanism_type"/>
+      <column name="code" value="test_contact_mechanism_role"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Personal Mobile Number"/>
+      <column name="description" value="Personal Mobile Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="contact_mechanism_roles">
+      <column name="contact_mechanism_type" value="test_contact_mechanism_type"/>
+      <column name="code" value="test_contact_mechanism_role"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Personal Mobile Number"/>
+      <column name="description" value="Personal Mobile Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="employment_statuses">
+      <column name="code" value="test_employment_status"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Employment Status"/>
+      <column name="description" value="Test Employment Status"/>
+    </insert>
+
+    <insert schemaName="party" tableName="employment_statuses">
+      <column name="code" value="test_employment_status"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Employment Status"/>
+      <column name="description" value="Test Employment Status"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="test_employment_status"/>
+      <column name="code" value="test_employment_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Employment Type"/>
+      <column name="description" value="Test Employment Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="employment_types">
+      <column name="employment_status" value="test_employment_status"/>
+      <column name="code" value="test_employment_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Employment Type"/>
+      <column name="description" value="Test Employment Type"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="external_reference_types">
+      <column name="code" value="test_external_reference_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test External Reference Type"/>
+      <column name="description" value="Test External Reference Type"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="external_reference_types">
+      <column name="code" value="test_external_reference_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test External Reference Type"/>
+      <column name="description" value="Test External Reference Type"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="fields_of_study">
+      <column name="code" value="test_field_of_study"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Field Of Study"/>
+      <column name="description" value="Test Field Of Study"/>
+    </insert>
+
+    <insert schemaName="party" tableName="fields_of_study">
+      <column name="code" value="test_field_of_study"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Field Of Study"/>
+      <column name="description" value="Test Field Of Study"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="genders">
+      <column name="code" value="test_gender"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Gender"/>
+      <column name="description" value="Test Gender"/>
+    </insert>
+
+    <insert schemaName="party" tableName="genders">
+      <column name="code" value="test_gender"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Gender"/>
+      <column name="description" value="Test Gender"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="identity_document_types">
+      <column name="code" value="test_identity_document_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Identity Document Type"/>
+      <column name="description" value="Test Identity Document Type"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="identity_document_types">
+      <column name="code" value="test_identity_document_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Identity Document Type"/>
+      <column name="description" value="Test Identity Document Type"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="lock_type_categories">
+      <column name="code" value="test_lock_type_category"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Lock Type Category"/>
+      <column name="description" value="Test Lock Type Category"/>
+    </insert>
+
+    <insert schemaName="party" tableName="lock_type_categories">
+      <column name="code" value="test_lock_type_category"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Lock Type Category"/>
+      <column name="description" value="Test Lock Type Category"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="lock_types">
+      <column name="category" value="test_lock_type_category"/>
+      <column name="code" value="test_lock_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Lock"/>
+      <column name="description" value="Test Lock"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="lock_types">
+      <column name="category" value="test_lock_type_category"/>
+      <column name="code" value="test_lock_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Lock"/>
+      <column name="description" value="Test Lock"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="marital_statuses">
+      <column name="code" value="test_marital_status"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Marital Status"/>
+      <column name="description" value="Test Marital Status"/>
+    </insert>
+
+    <insert schemaName="party" tableName="marital_statuses">
+      <column name="code" value="test_marital_status"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Marital Status"/>
+      <column name="description" value="Test Marital Status"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="marriage_types">
+      <column name="marital_status" value="test_marital_status"/>
+      <column name="code" value="test_marriage_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Marriage Type"/>
+      <column name="description" value="Test Marriage Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="marriage_types">
+      <column name="marital_status" value="test_marital_status"/>
+      <column name="code" value="test_marriage_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Marriage Type"/>
+      <column name="description" value="Test Marriage Type"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="minor_types">
+      <column name="code" value="test_minor_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Minor Type"/>
+      <column name="description" value="Test Minor Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="minor_types">
+      <column name="code" value="test_minor_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Minor Type"/>
+      <column name="description" value="Test Minor Type"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="test_next_of_kin_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Next Of Kin Type"/>
+      <column name="description" value="Test Next Of Kin Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="next_of_kin_types">
+      <column name="code" value="test_next_of_kin_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Next Of Kin Type"/>
+      <column name="description" value="Test Next Of Kin Type"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="test_occupation"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Occupation"/>
+      <column name="description" value="Test Occupation"/>
+    </insert>
+
+    <insert schemaName="party" tableName="occupations">
+      <column name="code" value="test_occupation"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Occupation"/>
+      <column name="description" value="Test Occupation"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="test_physical_address_purpose"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Physical Address Purpose"/>
+      <column name="description" value="Test Physical Address Purpose"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="test_physical_address_purpose"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Physical Address Purpose"/>
+      <column name="description" value="Test Physical Address Purpose"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="physical_address_roles">
+      <column name="code" value="test_physical_address_role"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Physical Address Role"/>
+      <column name="description" value="Test Physical Address Role"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+
+    <insert schemaName="party" tableName="physical_address_roles">
+      <column name="code" value="test_physical_address_role"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Physical Address Role"/>
+      <column name="description" value="Test Physical Address Role"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="preference_type_categories">
+      <column name="code" value="test_preference_type_category"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Preference Type Category"/>
+      <column name="description" value="Test Preference Type Category"/>
+    </insert>
+
+    <insert schemaName="party" tableName="preference_type_categories">
+      <column name="code" value="test_preference_type_category"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Preference Type Category"/>
+      <column name="description" value="Test Preference Type Category"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="test_preference_type_category"/>
+      <column name="code" value="test_contact_mechanism_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Contact Mechanism Type"/>
+      <column name="description" value="Test Contact Mechanism Type"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="test_preference_type_category"/>
+      <column name="code" value="test_country"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Country"/>
+      <column name="description" value="Test Country"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="test_preference_type_category"/>
+      <column name="code" value="test_language"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Language"/>
+      <column name="description" value="Test Language"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="test_preference_type_category"/>
+      <column name="code" value="test_preference"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Preference"/>
+      <column name="description" value="Test Preference"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="test_preference_type_category"/>
+      <column name="code" value="test_size"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Size"/>
+      <column name="description" value="Test Size"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="test_preference_type_category"/>
+      <column name="code" value="test_contact_mechanism_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Contact Mechanism Type"/>
+      <column name="description" value="Test Contact Mechanism Type"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="test_preference_type_category"/>
+      <column name="code" value="test_country"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Country"/>
+      <column name="description" value="Test Country"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="test_preference_type_category"/>
+      <column name="code" value="test_language"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Language"/>
+      <column name="description" value="Test Language"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="test_preference_type_category"/>
+      <column name="code" value="test_preference"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Preference"/>
+      <column name="description" value="Test Preference"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="preference_types">
+      <column name="category" value="test_preference_type_category"/>
+      <column name="code" value="test_size"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Size"/>
+      <column name="description" value="Test Size"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="qualification_types">
+      <column name="code" value="test_qualification_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Qualification Type"/>
+      <column name="description" value="Test Qualification Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="qualification_types">
+      <column name="code" value="test_qualification_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Qualification Type"/>
+      <column name="description" value="Test Qualification Type"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="races">
+      <column name="code" value="test_race"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Race"/>
+      <column name="description" value="Test Race"/>
+    </insert>
+
+    <insert schemaName="party" tableName="races">
+      <column name="code" value="test_race"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Race"/>
+      <column name="description" value="Test Race"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="residence_permit_types">
+      <column name="code" value="test_residence_permit_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Residence Permit Type"/>
+      <column name="description" value="Test Residence Permit Type"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+
+    <insert schemaName="party" tableName="residence_permit_types">
+      <column name="code" value="test_residence_permit_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Residence Permit Type"/>
+      <column name="description" value="Test Residence Permit Type"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+
+    <insert schemaName="party" tableName="residency_statuses">
+      <column name="code" value="test_residency_status"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Residency Status"/>
+      <column name="description" value="Test Residency Status"/>
+    </insert>
+
+    <insert schemaName="party" tableName="residency_statuses">
+      <column name="code" value="test_residency_status"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Residency Status"/>
+      <column name="description" value="Test Residency Status"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="residential_types">
+      <column name="code" value="test_residential_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Residential Type"/>
+      <column name="description" value="Test Residential Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="residential_types">
+      <column name="code" value="test_residential_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Residential Type"/>
+      <column name="description" value="Test Residential Type"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="role_purposes">
+      <column name="code" value="test_role_purpose"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Role Purpose"/>
+      <column name="description" value="Test Role Purpose"/>
+    </insert>
+
+    <insert schemaName="party" tableName="role_purposes">
+      <column name="code" value="test_role_purpose"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Role Purpose"/>
+      <column name="description" value="Test Role Purpose"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="role_types">
+      <column name="code" value="test_organization_role"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Organization Role"/>
+      <column name="description" value="Test Organization Role"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="role_types">
+      <column name="code" value="test_person_role"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Person Role"/>
+      <column name="description" value="Test Person Role"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="role_types">
+      <column name="code" value="test_first_person_role"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test First Person Role"/>
+      <column name="description" value="Test First Person Role"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="role_types">
+      <column name="code" value="test_second_person_role"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Second Person Role"/>
+      <column name="description" value="Test Second Person Role"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="role_types">
+      <column name="code" value="test_organization_role"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Organization Role"/>
+      <column name="description" value="Test Organization Role"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="role_types">
+      <column name="code" value="test_person_role"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Person Role"/>
+      <column name="description" value="Test Person Role"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="role_types">
+      <column name="code" value="test_first_person_role"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test First Person Role"/>
+      <column name="description" value="Test First Person Role"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="role_types">
+      <column name="code" value="test_second_person_role"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Second Person Role"/>
+      <column name="description" value="Test Second Person Role"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="consent"/>
+      <column name="attribute_type_qualifier" value="test_consent_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="contact_mechanisms"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="contact_mechanism"/>
+      <column name="attribute_type_qualifier" value="email_address"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="contact_mechanism"/>
+      <column name="attribute_type_qualifier" value="fax_number"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="contact_mechanism"/>
+      <column name="attribute_type_qualifier" value="mobile_number"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="contact_mechanism"/>
+      <column name="attribute_type_qualifier" value="phone_number"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="countries_of_citizenship"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="countries_of_tax_residence"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="country_of_birth"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="country_of_residence"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="date_of_birth"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="date_of_death"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="educations"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="employment_status"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="employment_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="employments"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="external_reference"/>
+      <column name="attribute_type_qualifier" value="test_external_reference_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="gender"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="given_name"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="highest_qualification_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="identity_document"/>
+      <column name="attribute_type_qualifier" value="test_identity_document_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="identity_documents"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="initials"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="language"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="language_proficiencies"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="marital_status"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="marital_status_date"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="marriage_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="measurement_system"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="next_of_kin"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="occupation"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="physical_addresses"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="physical_address"/>
+      <column name="attribute_type_qualifier" value="residential"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="preferred_name"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="race"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="residence_permits"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="residency_status"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="residential_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="segment_allocations"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="sources_of_funds"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="sources_of_wealth"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="surname"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="tax_numbers"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="time_zone"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="title"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_attribute"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_attribute"/>
+      <column name="type" value="min_size"/>
+      <column name="value" value="5"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_attribute"/>
+      <column name="type" value="max_size"/>
+      <column name="value" value="20"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_attribute"/>
+      <column name="type" value="pattern"/>
+      <column name="value" value="^[a-zA-Z0-9]*$"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_contact_mechanism_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_contact_mechanism_type"/>
+      <column name="type" value="reference"/>
+      <column name="value" value="contact_mechanism_type"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_country"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_country"/>
+      <column name="type" value="reference"/>
+      <column name="value" value="country"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_language"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_language"/>
+      <column name="type" value="reference"/>
+      <column name="value" value="language"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_size"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="attribute_type" value="test_size"/>
+      <column name="type" value="size"/>
+      <column name="value" value="10"/>
+    </insert>
+
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="contact_mechanisms"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="contact_mechanism"/>
+      <column name="attribute_type_qualifier" value="email_address"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="contact_mechanism"/>
+      <column name="attribute_type_qualifier" value="fax_number"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="contact_mechanism"/>
+      <column name="attribute_type_qualifier" value="mobile_number"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="contact_mechanism"/>
+      <column name="attribute_type_qualifier" value="phone_number"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="countries_of_tax_residence"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="external_reference"/>
+      <column name="attribute_type_qualifier" value="test_external_reference_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="identity_documents"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="physical_addresses"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="physical_address"/>
+      <column name="attribute_type_qualifier" value="main"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="segment_allocations"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="tax_numbers"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="test_attribute"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="test_attribute"/>
+      <column name="type" value="size"/>
+      <column name="value" value="10"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="attribute_type" value="test_attribute"/>
+      <column name="type" value="pattern"/>
+      <column name="value" value="^[0-9]*$"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_preference"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_preference"/>
+      <column name="type" value="min_size"/>
+      <column name="value" value="5"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_preference"/>
+      <column name="type" value="max_size"/>
+      <column name="value" value="20"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_preference"/>
+      <column name="type" value="pattern"/>
+      <column name="value" value="^[a-zA-Z0-9]*$"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_contact_mechanism_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_contact_mechanism_type"/>
+      <column name="type" value="reference"/>
+      <column name="value" value="contact_mechanism_type"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_country"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_country"/>
+      <column name="type" value="reference"/>
+      <column name="value" value="country"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_language"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_language"/>
+      <column name="type" value="reference"/>
+      <column name="value" value="language"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_size"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_person_role"/>
+      <column name="preference_type" value="test_size"/>
+      <column name="type" value="size"/>
+      <column name="value" value="10"/>
+    </insert>
+
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="preference_type" value="test_preference"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="preference_type" value="test_preference"/>
+      <column name="type" value="min_size"/>
+      <column name="value" value="5"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="preference_type" value="test_preference"/>
+      <column name="type" value="max_size"/>
+      <column name="value" value="20"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="test_organization_role"/>
+      <column name="preference_type" value="test_preference"/>
+      <column name="type" value="pattern"/>
+      <column name="value" value="^[0-9]*$"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="association_types">
+      <column name="code" value="test_association_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Association Type"/>
+      <column name="description" value="Test Association Type"/>
+      <column name="first_party_role" value="test_first_person_role"/>
+      <column name="second_party_role" value="test_second_person_role"/>
+    </insert>
+
+    <insert schemaName="party" tableName="association_types">
+      <column name="code" value="test_association_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Association Type"/>
+      <column name="description" value="Test Association Type"/>
+      <column name="first_party_role" value="test_first_person_role"/>
+      <column name="second_party_role" value="test_second_person_role"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_association_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Association Property"/>
+      <column name="description" value="Test Association Property"/>
+      <column name="value_type" value="string"/>
+    </insert>
+
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_association_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Association Property"/>
+      <column name="description" value="Test Association Property"/>
+      <column name="value_type" value="string"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="test_organization_segment"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Organization Segment"/>
+      <column name="description" value="Test Organization Segment"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="test_person_segment"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Person Segment"/>
+      <column name="description" value="Test Person Segment"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="test_organization_segment"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Organization Segment"/>
+      <column name="description" value="Test Organization Segment"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="test_person_segment"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Person Segment"/>
+      <column name="description" value="Test Person Segment"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="source_of_funds_types">
+      <column name="code" value="test_source_of_funds_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Source Of Funds Type"/>
+      <column name="description" value="Test Source Of Funds Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="source_of_funds_types">
+      <column name="code" value="test_source_of_funds_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Source Of Funds Type"/>
+      <column name="description" value="Test Source Of Funds Type"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="source_of_wealth_types">
+      <column name="code" value="test_source_of_wealth_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Source Of Wealth Type"/>
+      <column name="description" value="Test Source Of Wealth Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="source_of_wealth_types">
+      <column name="code" value="test_source_of_wealth_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Source Of Wealth Type"/>
+      <column name="description" value="Test Source Of Wealth Type"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="status_type_categories">
+      <column name="code" value="test_status_type_category"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Status Type Category"/>
+      <column name="description" value="Test Status Type Category"/>
+    </insert>
+
+    <insert schemaName="party" tableName="status_type_categories">
+      <column name="code" value="test_status_type_category"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Status Type Category"/>
+      <column name="description" value="Test Status Type Category"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="status_types">
+      <column name="category" value="test_status_type_category"/>
+      <column name="code" value="test_status_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Status Type"/>
+      <column name="description" value="Test Status Type"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="status_types">
+      <column name="category" value="test_status_type_category"/>
+      <column name="code" value="test_status_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Status Type"/>
+      <column name="description" value="Test Status Type"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="tax_number_types">
+      <column name="code" value="test_tax_number_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Tax Number Type"/>
+      <column name="description" value="Test Tax Number Type"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="tax_number_types">
+      <column name="code" value="test_tax_number_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Tax Number Type"/>
+      <column name="description" value="Test Tax Number Type"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="times_to_contact">
+      <column name="code" value="test_time_to_contact"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Time To Contact"/>
+      <column name="description" value="Test Time To Contact"/>
+    </insert>
+
+    <insert schemaName="party" tableName="times_to_contact">
+      <column name="code" value="test_time_to_contact"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Time To Contact"/>
+      <column name="description" value="Test Time To Contact"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="test_title"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Title"/>
+      <column name="abbreviation" value="Tst."/>
+      <column name="description" value="Test Title"/>
+    </insert>
+
+    <insert schemaName="party" tableName="titles">
+      <column name="code" value="test_title"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="666"/>
+      <column name="name" value="Test Title"/>
+      <column name="abbreviation" value="Tst."/>
+      <column name="description" value="Test Title"/>
+    </insert>
+
+  </changeSet>
+
+</databaseChangeLog>

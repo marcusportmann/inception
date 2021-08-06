@@ -218,6 +218,29 @@ public class InternalPartyDataStore implements IPartyDataStore {
   }
 
   /**
+   * Delete the party.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   */
+  @Override
+  public void deleteParty(UUID tenantId, UUID partyId)
+      throws PartyNotFoundException, ServiceUnavailableException {
+    try {
+      if (!partyRepository.existsByTenantIdAndId(tenantId, partyId)) {
+        throw new PartyNotFoundException(tenantId, partyId);
+      }
+
+      partyRepository.deleteByTenantIdAndId(tenantId, partyId);
+    } catch (PartyNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the party (" + partyId + ") for the tenant (" + tenantId + ")", e);
+    }
+  }
+
+  /**
    * Delete the person.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant

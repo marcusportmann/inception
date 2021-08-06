@@ -6,9 +6,11 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+  <property name="blob_type" value="bytea" dbms="h2"/>
   <property name="blob_type" value="bytea" dbms="postgresql"/>
   <property name="blob_type" value="blob" dbms="oracle"/>
   <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="h2"/>
   <property name="now" value="now()" dbms="postgresql"/>
   <property name="now" value="sysdate" dbms="oracle"/>
   <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
@@ -37,6 +39,110 @@
       <column name="date_value" type="date" remarks="The date value for the data"/>
       <column name="timestamp_value" type="timestamp" remarks="The timestamp value for the data"/>
     </createTable>
+
+    <createTable schemaName="demo" tableName="vehicles" remarks="Vehicles">
+      <column name="created" type="timestamp" remarks="The date and time the vehicle was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the vehicle">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the vehicle">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the vehicle type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the vehicle was last updated"/>
+    </createTable>
+    <createIndex indexName="vehicles_type_ix" schemaName="demo" tableName="vehicles">
+      <column name="type"/>
+    </createIndex>
+
+    <createTable schemaName="demo" tableName="cars" remarks="Cars">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the car">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="number_of_doors" type="int" remarks="The number of doors for the car">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="cars_vehicle_fk"
+      baseTableSchemaName="demo" baseTableName="cars" baseColumnNames="id"
+      referencedTableSchemaName="demo" referencedTableName="vehicles"
+      referencedColumnNames="id"/>
+
+    <createTable schemaName="demo" tableName="vehicle_attribute_types" remarks="Vehicle Attribute Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the vehicle attribute type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(50)" remarks="The name of the vehicle attribute type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the vehicle attribute type">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable schemaName="demo" tableName="vehicle_attributes" remarks="Vehicle Attributes">
+      <column name="created" type="timestamp" remarks="The date and time the vehicle attribute was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="vehicle_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the vehicle the vehicle attribute is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the vehicle attribute type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the vehicle attribute was updated"/>
+      <column name="value" type="nvarchar(100)" remarks="The value for the vehicle attribute">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="vehicle_attributes_vehicle_fk"
+      baseTableSchemaName="demo" baseTableName="vehicle_attributes" baseColumnNames="vehicle_id"
+      referencedTableSchemaName="demo" referencedTableName="vehicles"
+      referencedColumnNames="id"/>
+    <addForeignKeyConstraint constraintName="vehicle_attributes_vehicle_attribute_type_fk"
+      baseTableSchemaName="demo" baseTableName="vehicle_attributes" baseColumnNames="type"
+      referencedTableSchemaName="demo" referencedTableName="vehicle_attribute_types"
+      referencedColumnNames="code"/>
+
+    <insert schemaName="security" tableName="tenants">
+      <column name="id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
+      <column name="name" value="Demo"/>
+      <column name="status" value="1"/>
+      <column name="created" value="${now}"/>
+    </insert>
+
+    <insert schemaName="security" tableName="user_directories">
+      <column name="id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
+      <column name="type" value="InternalUserDirectory"/>
+      <column name="name" value="Demo Internal User Directory"/>
+      <column name="configuration">
+        <![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>]]>
+      </column>
+      <column name="created" value="${now}"/>
+    </insert>
+
+<!--    <insert schemaName="security" tableName="user_directories">-->
+<!--      <column name="id" value="595d13ac-22d6-4ce2-b898-3add4658a748"/>-->
+<!--      <column name="type" value="LDAPUserDirectory"/>-->
+<!--      <column name="name" value="Demo LDAP User Directory"/>-->
+<!--      <column name="configuration">-->
+<!--        <![CDATA[-->
+<!--          <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>Host</name><value>localhost</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>cn=root,o=demo</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=demo,ou=applications,o=demo</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=demo,ou=applications,o=demo</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=demo,ou=applications,o=demo</value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserNameAttribute</name><value>cn</value></parameter><parameter><name>UserPreferredNameAttribute</name><value>nickName</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>-->
+<!--        ]]>-->
+<!--      </column>-->
+<!--      <column name="created" value="${now}"/>-->
+<!--    </insert>-->
+
+
+
   </changeSet>
 
+
+
 </databaseChangeLog>
+
+

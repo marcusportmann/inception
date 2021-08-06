@@ -2054,9 +2054,9 @@ public class PartyServiceTest {
         filteredParties.getParties().size(),
         "The correct number of filtered parties was not retrieved");
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deleteParty(IPartyService.DEFAULT_TENANT_ID, person.getId());
 
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+    partyService.deleteParty(IPartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
   /** Test the person functionality. */
@@ -2482,7 +2482,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
+    partyService.deleteParty(IPartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the preference functionality. */

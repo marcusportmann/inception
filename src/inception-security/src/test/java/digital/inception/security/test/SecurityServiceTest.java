@@ -72,9 +72,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
@@ -115,6 +117,10 @@ public class SecurityServiceTest {
 
   /** The Security Service. */
   @Autowired ISecurityService securityService;
+
+  @Autowired
+  @Qualifier("applicationDataSource")
+  private DataSource dataSource;
 
   private static synchronized User getNumberedTestUserDetails(UUID userDirectoryId, int number) {
     User user = new User();
@@ -1121,8 +1127,7 @@ public class SecurityServiceTest {
 
     List<String> retrievedRoleCodes =
         securityService.getRoleCodesForUser(
-            SecurityService.DEFAULT_USER_DIRECTORY_ID,
-            SecurityService.ADMINISTRATOR_USERNAME);
+            SecurityService.DEFAULT_USER_DIRECTORY_ID, SecurityService.ADMINISTRATOR_USERNAME);
 
     assertEquals(
         1, retrievedRoleCodes.size(), "The correct number of role codes was not retrieved");
@@ -1134,8 +1139,7 @@ public class SecurityServiceTest {
 
     List<GroupRole> retrievedGroupRoles =
         securityService.getRolesForGroup(
-            SecurityService.DEFAULT_USER_DIRECTORY_ID,
-            SecurityService.ADMINISTRATORS_GROUP_NAME);
+            SecurityService.DEFAULT_USER_DIRECTORY_ID, SecurityService.ADMINISTRATORS_GROUP_NAME);
 
     assertEquals(
         1, retrievedGroupRoles.size(), "The correct number of group roles was not retrieved");
@@ -1147,8 +1151,7 @@ public class SecurityServiceTest {
 
     retrievedRoleCodes =
         securityService.getRoleCodesForGroup(
-            SecurityService.DEFAULT_USER_DIRECTORY_ID,
-            SecurityService.ADMINISTRATORS_GROUP_NAME);
+            SecurityService.DEFAULT_USER_DIRECTORY_ID, SecurityService.ADMINISTRATORS_GROUP_NAME);
 
     assertEquals(
         1, retrievedRoleCodes.size(), "The correct number of role codes was not retrieved");

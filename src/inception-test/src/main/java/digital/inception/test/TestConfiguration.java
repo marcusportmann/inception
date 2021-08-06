@@ -45,6 +45,7 @@ import liquibase.configuration.HubConfiguration;
 import liquibase.configuration.LiquibaseConfiguration;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
+import liquibase.integration.spring.SpringResourceAccessor;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,12 +58,14 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -104,24 +107,12 @@ import org.springframework.web.reactive.function.client.WebClient;
           type = FilterType.REGEX)
     })
 @SuppressWarnings("WeakerAccess")
-public class TestConfiguration {
+public class TestConfiguration implements ResourceLoaderAware {
 
   private static final String[] IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS = {
     // Utility modules
     "digital/inception/bmi/inception-camunda-h2.sql",
-    "digital/inception/bmi/test/inception-camunda-test-h2.sql",
-    "digital/inception/reporting/inception-reporting-h2.sql",
-    "digital/inception/reporting/test/inception-reporting-test-h2.sql",
-    "digital/inception/scheduler/inception-scheduler-h2.sql",
-    "digital/inception/scheduler/test/inception-scheduler-test-h2.sql",
-    "digital/inception/security/inception-security-h2.sql",
-    "digital/inception/security/test/inception-security-test-h2.sql",
-    "digital/inception/sms/inception-sms-h2.sql",
-    // Business Modules
-    "digital/inception/reference/inception-reference-h2.sql",
-
-    "digital/inception/party/inception-party-h2.sql",
-    "digital/inception/party/test/inception-party-test-h2.sql"
+    "digital/inception/bmi/test/inception-camunda-test-h2.sql"
   };
 
   private static final Object dataSourceLock = new Object();
@@ -140,9 +131,16 @@ public class TestConfiguration {
   @Value("classpath*:**/*-h2.sql")
   private Resource[] inMemoryInitResources;
 
-  //  /** The optional comma-delimited packages on the classpath to scan for JPA entities. */
-  //  @Value("${inception.persistence.entity-packages:#{null}}")
-  //  private String packagesToScanForEntities;
+  /** The Liquibase change log. */
+  @Value("${inception.application.data-source.liquibase.change-log:#{null}}")
+  private String liquibaseChangeLog;
+
+  /** Execute the Liquibase data change logs. */
+  @Value("${inception.application.data-source.liquibase.data-change-logs:#{true}}")
+  private boolean liquibaseDataChangeLogs;
+
+  /** The Spring resource loader. */
+  private ResourceLoader resourceLoader;
 
   /**
    * Constructs a new <b>TestConfiguration</b>.
@@ -152,6 +150,10 @@ public class TestConfiguration {
   public TestConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }
+
+  //  /** The optional comma-delimited packages on the classpath to scan for JPA entities. */
+  //  @Value("${inception.persistence.entity-packages:#{null}}")
+  //  private String packagesToScanForEntities;
 
   /**
    * Initialize the in-memory application database and return a data source that can be used to
@@ -173,7 +175,7 @@ public class TestConfiguration {
               AgroalPropertiesReader.JDBC_URL,
               "jdbc:h2:mem:"
                   + Thread.currentThread().getName()
-                  + ";AUTOCOMMIT=OFF;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+                  + ";AUTOCOMMIT=OFF;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE");
 
           agroalProperties.setProperty(
               AgroalPropertiesReader.PROVIDER_CLASS_NAME, "org.h2.jdbcx.JdbcDataSource");
@@ -197,17 +199,20 @@ public class TestConfiguration {
               new DataSourceProxy(AgroalDataSource.from(agroalDataSourceConfigurationSupplier));
 
           // Initialize the in-memory database using Liquibase changeSets
-          LiquibaseConfiguration.getInstance().getConfiguration(HubConfiguration.class).setLiquibaseHubMode("OFF");
+          LiquibaseConfiguration.getInstance()
+              .getConfiguration(HubConfiguration.class)
+              .setLiquibaseHubMode("OFF");
 
           try (Connection connection = dataSource.getConnection()) {
-            liquibase.database.Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+            liquibase.database.Database database =
+                DatabaseFactory.getInstance()
+                    .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
             for (String changeLogFile : InceptionLiquibaseChangeLogs.CORE_CHANGE_LOGS) {
               if (ResourceUtil.classpathResourceExists(changeLogFile)) {
                 Liquibase liquibase =
                     new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
                 liquibase.update(new Contexts(), new LabelExpression());
-                liquibase.update(new Contexts("test"), new LabelExpression());
               }
             }
 
@@ -216,7 +221,6 @@ public class TestConfiguration {
                 Liquibase liquibase =
                     new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
                 liquibase.update(new Contexts(), new LabelExpression());
-                liquibase.update(new Contexts("test"), new LabelExpression());
               }
             }
 
@@ -225,8 +229,32 @@ public class TestConfiguration {
                 Liquibase liquibase =
                     new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
                 liquibase.update(new Contexts(), new LabelExpression());
-                liquibase.update(new Contexts("test"), new LabelExpression());
               }
+            }
+
+            if (liquibaseDataChangeLogs) {
+              for (String changeLogFile : InceptionLiquibaseChangeLogs.BUSINESS_DATA_CHANGE_LOGS) {
+                if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+                  Liquibase liquibase =
+                      new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+                  liquibase.update(new Contexts(), new LabelExpression());
+                }
+              }
+            }
+
+            for (String changeLogFile : InceptionLiquibaseChangeLogs.TEST_CHANGE_LOGS) {
+              if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+                Liquibase liquibase =
+                    new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+                liquibase.update(new Contexts(), new LabelExpression());
+              }
+            }
+
+
+            if (StringUtils.hasText(liquibaseChangeLog)) {
+              SpringResourceAccessor resourceAccessor = new SpringResourceAccessor(resourceLoader);
+              Liquibase liquibase = new Liquibase(liquibaseChangeLog, resourceAccessor, database);
+              liquibase.update(new Contexts(), new LabelExpression());
             }
           }
 
@@ -262,16 +290,6 @@ public class TestConfiguration {
   }
 
   /**
-   * Returns the cache manager.
-   *
-   * @return the cache manager
-   */
-  @Bean
-  public CacheManager cacheManager() {
-    return new ConcurrentMapCacheManager();
-  }
-
-  /**
    * Returns the application entity manager factory bean associated with the application data
    * source.
    *
@@ -297,6 +315,16 @@ public class TestConfiguration {
     jpaPropertyMap.put("hibernate.transaction.jta.platform", "JBossTS");
 
     return entityManagerFactoryBean;
+  }
+
+  /**
+   * Returns the cache manager.
+   *
+   * @return the cache manager
+   */
+  @Bean
+  public CacheManager cacheManager() {
+    return new ConcurrentMapCacheManager();
   }
 
   /**
@@ -352,6 +380,16 @@ public class TestConfiguration {
   @Bean
   public ObjectMapper objectMapper() {
     return jackson2ObjectMapperBuilder().build().disable(SerializationFeature.INDENT_OUTPUT);
+  }
+
+  /**
+   * Set the Spring resource loader.
+   *
+   * @param resourceLoader the Spring resource loader
+   */
+  @Override
+  public void setResourceLoader(ResourceLoader resourceLoader) {
+    this.resourceLoader = resourceLoader;
   }
 
   /**

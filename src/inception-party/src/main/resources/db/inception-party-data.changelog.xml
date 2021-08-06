@@ -2840,7 +2840,7 @@
       <column name="party_types" value="organization,person"/>
     </insert>
 
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="affiliation"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Affiliation"/>
@@ -2848,7 +2848,7 @@
       <column name="first_party_role" value="affiliate"/>
       <column name="second_party_role" value="affiliate"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="association_membership"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Association Membership"/>
@@ -2856,7 +2856,7 @@
       <column name="first_party_role" value="association"/>
       <column name="second_party_role" value="association_member"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="civil_partnership"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Civil Partnership"/>
@@ -2864,7 +2864,7 @@
       <column name="first_party_role" value="civil_partner"/>
       <column name="second_party_role" value="civil_partner"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="company_shareholder"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Company Shareholder"/>
@@ -2872,7 +2872,7 @@
       <column name="first_party_role" value="company"/>
       <column name="second_party_role" value="shareholder"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="company_subsidiary"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Company Subsidiary"/>
@@ -2880,7 +2880,7 @@
       <column name="first_party_role" value="company"/>
       <column name="second_party_role" value="subsidiary"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="competitor"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Competitor"/>
@@ -2888,7 +2888,7 @@
       <column name="first_party_role" value="competitor"/>
       <column name="second_party_role" value="competitor"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="directorship"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Directorship"/>
@@ -2896,7 +2896,7 @@
       <column name="first_party_role" value="company"/>
       <column name="second_party_role" value="director"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="division_department"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Division Department"/>
@@ -2904,7 +2904,7 @@
       <column name="first_party_role" value="division"/>
       <column name="second_party_role" value="department"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="employment"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Employment"/>
@@ -2912,7 +2912,7 @@
       <column name="first_party_role" value="employer"/>
       <column name="second_party_role" value="employee"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="family_membership"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Family Membership"/>
@@ -2920,7 +2920,7 @@
       <column name="first_party_role" value="family"/>
       <column name="second_party_role" value="family_member"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="household_membership"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Household Membership"/>
@@ -2928,7 +2928,7 @@
       <column name="first_party_role" value="household"/>
       <column name="second_party_role" value="household_member"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="joint_venture"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Joint Venture"/>
@@ -2936,7 +2936,7 @@
       <column name="first_party_role" value="joint_venture"/>
       <column name="second_party_role" value="organization"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="life_partnership"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Life Partnership"/>
@@ -2944,7 +2944,7 @@
       <column name="first_party_role" value="life_partner"/>
       <column name="second_party_role" value="life_partner"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="marriage"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Marriage"/>
@@ -2952,7 +2952,7 @@
       <column name="first_party_role" value="spouse"/>
       <column name="second_party_role" value="spouse"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_agency"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Organization Agency"/>
@@ -2960,7 +2960,7 @@
       <column name="first_party_role" value="organization"/>
       <column name="second_party_role" value="agency"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_agent"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Organization Agent"/>
@@ -2968,7 +2968,7 @@
       <column name="first_party_role" value="organization"/>
       <column name="second_party_role" value="agent"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_department"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Organization Department"/>
@@ -2976,7 +2976,7 @@
       <column name="first_party_role" value="organization"/>
       <column name="second_party_role" value="department"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_division"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Organization Division"/>
@@ -2984,7 +2984,7 @@
       <column name="first_party_role" value="organization"/>
       <column name="second_party_role" value="division"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="parent_child"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Parent-Child"/>
@@ -2992,7 +2992,7 @@
       <column name="first_party_role" value="parent"/>
       <column name="second_party_role" value="child"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="partnership"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Partnership"/>
@@ -3000,7 +3000,7 @@
       <column name="first_party_role" value="partnership"/>
       <column name="second_party_role" value="partner"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="sibling"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Sibling"/>
@@ -3009,8 +3009,8 @@
       <column name="second_party_role" value="sibling"/>
     </insert>
 
-    <insert schemaName="party" tableName="relationship_property_types">
-      <column name="relationship_type" value="company_shareholder"/>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="company_shareholder"/>
       <column name="code" value="shareholding"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Shareholding"/>
@@ -6386,7 +6386,7 @@
       <column name="party_types" value="organization,person"/>
     </insert>
 
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="affiliation"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Affiliation"/>
@@ -6394,7 +6394,7 @@
       <column name="first_party_role" value="affiliate"/>
       <column name="second_party_role" value="affiliate"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="association_membership"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Association Membership"/>
@@ -6402,7 +6402,7 @@
       <column name="first_party_role" value="association"/>
       <column name="second_party_role" value="association_member"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="civil_partnership"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Civil Partnership"/>
@@ -6410,7 +6410,7 @@
       <column name="first_party_role" value="civil_partner"/>
       <column name="second_party_role" value="civil_partner"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="company_shareholder"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Company Shareholder"/>
@@ -6418,7 +6418,7 @@
       <column name="first_party_role" value="company"/>
       <column name="second_party_role" value="shareholder"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="company_subsidiary"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Company Subsidiary"/>
@@ -6426,7 +6426,7 @@
       <column name="first_party_role" value="company"/>
       <column name="second_party_role" value="subsidiary"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="competitor"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Competitor"/>
@@ -6434,7 +6434,7 @@
       <column name="first_party_role" value="competitor"/>
       <column name="second_party_role" value="competitor"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="directorship"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Directorship"/>
@@ -6442,7 +6442,7 @@
       <column name="first_party_role" value="company"/>
       <column name="second_party_role" value="director"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="division_department"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Division Department"/>
@@ -6450,7 +6450,7 @@
       <column name="first_party_role" value="division"/>
       <column name="second_party_role" value="department"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="employment"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Employment"/>
@@ -6458,7 +6458,7 @@
       <column name="first_party_role" value="employer"/>
       <column name="second_party_role" value="employee"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="family_membership"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Family Membership"/>
@@ -6466,7 +6466,7 @@
       <column name="first_party_role" value="family"/>
       <column name="second_party_role" value="family_member"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="household_membership"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Household Membership"/>
@@ -6474,7 +6474,7 @@
       <column name="first_party_role" value="household"/>
       <column name="second_party_role" value="household_member"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="joint_venture"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Joint Venture"/>
@@ -6482,7 +6482,7 @@
       <column name="first_party_role" value="joint_venture"/>
       <column name="second_party_role" value="organization"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="life_partnership"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Life Partnership"/>
@@ -6490,7 +6490,7 @@
       <column name="first_party_role" value="life_partner"/>
       <column name="second_party_role" value="life_partner"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="marriage"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Marriage"/>
@@ -6498,7 +6498,7 @@
       <column name="first_party_role" value="spouse"/>
       <column name="second_party_role" value="spouse"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_agency"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Organization Agency"/>
@@ -6506,7 +6506,7 @@
       <column name="first_party_role" value="organization"/>
       <column name="second_party_role" value="agency"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_agent"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Organization Agent"/>
@@ -6514,7 +6514,7 @@
       <column name="first_party_role" value="organization"/>
       <column name="second_party_role" value="agent"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_department"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Organization Department"/>
@@ -6522,7 +6522,7 @@
       <column name="first_party_role" value="organization"/>
       <column name="second_party_role" value="department"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_division"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Organization Division"/>
@@ -6530,7 +6530,7 @@
       <column name="first_party_role" value="organization"/>
       <column name="second_party_role" value="division"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="parent_child"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Parent-Child"/>
@@ -6538,7 +6538,7 @@
       <column name="first_party_role" value="parent"/>
       <column name="second_party_role" value="child"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="partnership"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Partnership"/>
@@ -6546,7 +6546,7 @@
       <column name="first_party_role" value="partnership"/>
       <column name="second_party_role" value="partner"/>
     </insert>
-    <insert schemaName="party" tableName="relationship_types">
+    <insert schemaName="party" tableName="association_types">
       <column name="code" value="sibling"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Sibling"/>
@@ -6555,8 +6555,8 @@
       <column name="second_party_role" value="sibling"/>
     </insert>
 
-    <insert schemaName="party" tableName="relationship_property_types">
-      <column name="relationship_type" value="company_shareholder"/>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="company_shareholder"/>
       <column name="code" value="shareholding"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Shareholding"/>
@@ -7099,601 +7099,6 @@
       <column name="abbreviation" value="Unknown"/>
       <column name="description" value="Unknown"/>
     </insert>
-
-
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="contact_mechanism"/>
-      <column name="attribute_type_qualifier" value="email_address"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="contact_mechanism"/>
-      <column name="attribute_type_qualifier" value="fax_number"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="contact_mechanism"/>
-      <column name="attribute_type_qualifier" value="mobile_number"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="contact_mechanism"/>
-      <column name="attribute_type_qualifier" value="phone_number"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="contact_mechanisms"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="countries_of_tax_residence"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="external_reference"/>
-      <column name="attribute_type_qualifier" value="test_external_reference_type"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="identity_documents"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="physical_address"/>
-      <column name="attribute_type_qualifier" value="main"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="physical_addresses"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="segment_allocations"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="tax_numbers"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="test_attribute"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="PATTERN"/>
-      <column name="value" value="^[0-9]*$"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="test_attribute"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="attribute_type" value="test_attribute"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="SIZE"/>
-      <column name="value" value="10"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="consent"/>
-      <column name="attribute_type_qualifier" value="test_consent_type"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="contact_mechanism"/>
-      <column name="attribute_type_qualifier" value="email_address"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="contact_mechanism"/>
-      <column name="attribute_type_qualifier" value="fax_number"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="contact_mechanism"/>
-      <column name="attribute_type_qualifier" value="mobile_number"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="contact_mechanism"/>
-      <column name="attribute_type_qualifier" value="phone_number"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="contact_mechanisms"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="countries_of_citizenship"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="countries_of_tax_residence"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="country_of_birth"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="country_of_residence"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="date_of_birth"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="date_of_death"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="educations"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="employment_status"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="employment_type"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="employments"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="external_reference"/>
-      <column name="attribute_type_qualifier" value="test_external_reference_type"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="gender"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="given_name"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="highest_qualification_type"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="identity_document"/>
-      <column name="attribute_type_qualifier" value="test_identity_document_type"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="identity_documents"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="initials"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="language"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="language_proficiencies"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="marital_status"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="marital_status_date"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="marriage_type"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="measurement_system"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="occupation"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="physical_address"/>
-      <column name="attribute_type_qualifier" value="residential"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="physical_addresses"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="preferred_name"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="race"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="residence_permits"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="residency_status"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="residential_type"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="segment_allocations"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="sources_of_funds"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="sources_of_wealth"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="surname"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="tax_numbers"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_attribute"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="MAX_SIZE"/>
-      <column name="value" value="20"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_attribute"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="MIN_SIZE"/>
-      <column name="value" value="5"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_attribute"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="PATTERN"/>
-      <column name="value" value="^[a-zA-Z0-9]*$"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_attribute"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_contact_mechanism_type"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REFERENCE"/>
-      <column name="value" value="contact_mechanism_type"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_contact_mechanism_type"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_country"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REFERENCE"/>
-      <column name="value" value="country"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_country"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_language"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REFERENCE"/>
-      <column name="value" value="language"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_language"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_size"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="test_size"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="SIZE"/>
-      <column name="value" value="10"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="time_zone"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="attribute_type" value="title"/>
-      <column name="attribute_type_qualifier" value=""/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="preference_type" value="test_preference"/>
-      <column name="type" value="MAX_SIZE"/>
-      <column name="value" value="20"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="preference_type" value="test_preference"/>
-      <column name="type" value="MIN_SIZE"/>
-      <column name="value" value="5"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="preference_type" value="test_preference"/>
-      <column name="type" value="PATTERN"/>
-      <column name="value" value="^[0-9]*$"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_organization_role"/>
-      <column name="preference_type" value="test_preference"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_contact_mechanism_type"/>
-      <column name="type" value="REFERENCE"/>
-      <column name="value" value="contact_mechanism_type"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_contact_mechanism_type"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_country"/>
-      <column name="type" value="REFERENCE"/>
-      <column name="value" value="country"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_country"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_language"/>
-      <column name="type" value="REFERENCE"/>
-      <column name="value" value="language"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_language"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_preference"/>
-      <column name="type" value="MAX_SIZE"/>
-      <column name="value" value="20"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_preference"/>
-      <column name="type" value="MIN_SIZE"/>
-      <column name="value" value="5"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_preference"/>
-      <column name="type" value="PATTERN"/>
-      <column name="value" value="^[a-zA-Z0-9]*$"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_preference"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_size"/>
-      <column name="type" value="REQUIRED"/>
-      <column name="value" value="null"/>
-    </insert>
-    <insert schemaName="party" tableName="role_type_preference_type_constraints">
-      <column name="role_type" value="test_person_role"/>
-      <column name="preference_type" value="test_size"/>
-      <column name="type" value="SIZE"/>
-      <column name="value" value="10"/>
-    </insert>
   </changeSet>
+
 </databaseChangeLog>

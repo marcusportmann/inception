@@ -31,6 +31,8 @@ import org.springframework.data.repository.query.Param;
  */
 public interface PartyRepository extends JpaRepository<Party, UUID> {
 
+  void deleteByTenantIdAndId(UUID tenantId, UUID id);
+
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
   @Query("select p from Party p")

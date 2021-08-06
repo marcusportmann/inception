@@ -6,7 +6,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-  <property name="blob_type" value="blob" dbms="h2"/>
+  <property name="blob_type" value="bytea" dbms="h2"/>
   <property name="blob_type" value="bytea" dbms="postgresql"/>
   <property name="blob_type" value="blob" dbms="oracle"/>
   <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
@@ -28,88 +28,79 @@
     </sql>
 
     <createTable schemaName="security" tableName="tenants" remarks="Tenants">
-      <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the tenant"/>
-      <column name="name" type="nvarchar(100)" remarks="The name of the tenant"/>
-      <column name="status" type="int" remarks="The status for the tenant"/>
-      <column name="created" type="timestamp"
-        remarks="The date and time the tenant was created"/>
-      <column name="updated" type="timestamp"
-        remarks="The date and time the tenant was last updated"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the tenant">
+        <constraints nullable="false"/>
+      </column>
+      <column name="status" type="int" remarks="The status for the tenant">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created" type="timestamp" remarks="The date and time the tenant was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the tenant was last updated"/>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="tenants" columnNames="id"/>
-    <addNotNullConstraint schemaName="security" tableName="tenants" columnName="id"/>
-    <addNotNullConstraint schemaName="security" tableName="tenants" columnName="name"/>
-    <addNotNullConstraint schemaName="security" tableName="tenants" columnName="status"/>
-    <addNotNullConstraint schemaName="security" tableName="tenants" columnName="created"/>
     <createIndex indexName="tenants_name_ix" schemaName="security" tableName="tenants">
       <column name="name"/>
     </createIndex>
 
-    <createTable schemaName="security" tableName="user_directory_types"
-      remarks="User Directory Types">
-      <column name="code" type="nvarchar(100)"
-        remarks="The code for the user directory type"/>
-      <column name="name" type="nvarchar(100)" remarks="The name of the user directory type"/>
-      <column name="user_directory_class" type="nvarchar(1000)"
-        remarks="The fully qualified name of the Java class that implements the user directory type"/>
+    <createTable schemaName="security" tableName="user_directory_types" remarks="User Directory Types">
+      <column name="code" type="nvarchar(100)" remarks="The code for the user directory type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the user directory type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_directory_class" type="nvarchar(1000)" remarks="The fully qualified name of the Java class that implements the user directory type">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="user_directory_types" columnNames="code"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directory_types" columnName="code"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directory_types" columnName="name"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directory_types"
-      columnName="user_directory_class"/>
 
     <createTable schemaName="security" tableName="user_directories" remarks="User Directories">
-      <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the user directory"/>
-      <column name="type" type="nvarchar(100)"
-        remarks="The code for the user directory type"/>
-      <column name="name" type="nvarchar(100)" remarks="The name of the user directory"/>
-      <column name="configuration" type="nvarchar(4000)"
-        remarks="The XML configuration data for the user directory"/>
-      <column name="created" type="timestamp"
-        remarks="The date and time the user directory was created"/>
-      <column name="updated" type="timestamp"
-        remarks="The date and time the user directory was last updated"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the user directory">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(100)" remarks="The code for the user directory type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the user directory">
+        <constraints nullable="false"/>
+      </column>
+      <column name="configuration" type="nvarchar(4000)" remarks="The XML configuration data for the user directory">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created" type="timestamp" remarks="The date and time the user directory was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the user directory was last updated"/>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="user_directories" columnNames="id"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="id"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="type"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="name"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directories"
-      columnName="configuration"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="created"/>
     <addForeignKeyConstraint constraintName="user_directories_user_directory_type_fk"
       baseTableSchemaName="security" baseTableName="user_directories" baseColumnNames="type"
       referencedTableSchemaName="security" referencedTableName="user_directory_types"
-      referencedColumnNames="code" deleteCascade="true"/>
+      referencedColumnNames="code" onDelete="CASCADE"/>
     <createIndex indexName="user_directories_name_ix" schemaName="security"
       tableName="user_directories">
       <column name="name"/>
     </createIndex>
 
-    <createTable schemaName="security" tableName="user_directory_to_tenant_map"
-      remarks="User Directory To Tenant Mappings">
-      <column name="user_directory_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the user directory"/>
-      <column name="tenant_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the tenant"/>
+    <createTable schemaName="security" tableName="user_directory_to_tenant_map" remarks="User Directory To Tenant Mappings">
+      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the user directory">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="user_directory_to_tenant_map"
-      columnNames="user_directory_id, tenant_id"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directory_to_tenant_map"
-      columnName="user_directory_id"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directory_to_tenant_map"
-      columnName="tenant_id"/>
     <addForeignKeyConstraint constraintName="user_directory_to_tenant_map_user_directory_fk"
       baseTableSchemaName="security" baseTableName="user_directory_to_tenant_map"
       baseColumnNames="user_directory_id" referencedTableSchemaName="security"
-      referencedTableName="user_directories" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="user_directories" referencedColumnNames="id" onDelete="CASCADE"/>
     <addForeignKeyConstraint constraintName="user_directory_to_tenant_map_tenant_fk"
       baseTableSchemaName="security" baseTableName="user_directory_to_tenant_map"
       baseColumnNames="tenant_id" referencedTableSchemaName="security"
-      referencedTableName="tenants" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="tenants" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="user_directory_to_tenant_map_user_directory_id_ix"
       schemaName="security" tableName="user_directory_to_tenant_map">
       <column name="user_directory_id"/>
@@ -120,49 +111,39 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="users" remarks="Users">
-      <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the user"/>
-      <column name="user_directory_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the user directory the user is associated with"/>
-      <column name="username" type="nvarchar(100)" remarks="The username for the user"/>
-      <column name="status" type="int" remarks="The status for the user"/>
-      <column name="name" type="nvarchar(100)" remarks="The name of the user"/>
-      <column name="preferred_name" type="nvarchar(100)"
-        remarks="The preferred name for the user'"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the user">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the user directory the user is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="username" type="nvarchar(100)" remarks="The username for the user">
+        <constraints nullable="false"/>
+      </column>
+      <column name="status" type="int" remarks="The status for the user">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" defaultValue="" remarks="The name of the user">
+        <constraints nullable="false"/>
+      </column>
+      <column name="preferred_name" type="nvarchar(100)" remarks="The preferred name for the user'"/>
       <column name="phone_number" type="nvarchar(100)" remarks="The phone number for the user"/>
       <column name="mobile_number" type="nvarchar(100)" remarks="The mobile number for the user"/>
       <column name="email" type="nvarchar(100)" remarks="The e-mail address for the user"/>
-      <column name="password" type="nvarchar(100)" remarks="The password for the user"/>
-      <column name="password_attempts" type="int"
-        remarks="The number of failed attempts to authenticate the user"/>
-      <column name="password_expiry" type="timestamp"
-        remarks="The date and time that the user''s password expires"/>
-      <column name="created" type="timestamp"
-        remarks="The date and time the user was created"/>
-      <column name="updated" type="timestamp"
-        remarks="The date and time the user was last updated"/>
+      <column name="password" type="nvarchar(100)" remarks="The password for the user">
+        <constraints nullable="false"/>
+      </column>
+      <column name="password_attempts" type="int" defaultValue="0" remarks="The number of failed attempts to authenticate the user">
+        <constraints nullable="false"/>
+      </column>
+      <column name="password_expiry" type="timestamp" remarks="The date and time that the user''s password expires">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created" type="timestamp" remarks="The date and time the user was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the user was last updated"/>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="users" columnNames="id"/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="id"/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="user_directory_id"/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="username"/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="status"/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="name"
-      defaultNullValue=""/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="preferred_name"
-      defaultNullValue=""/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="phone_number"
-      defaultNullValue=""/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="mobile_number"
-      defaultNullValue=""/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="email"
-      defaultNullValue=""/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="password"
-      defaultNullValue=""/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="password_attempts"
-      defaultNullValue="0"/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="password_expiry"/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="created"/>
     <addForeignKeyConstraint constraintName="users_user_directory_fk" baseTableSchemaName="security"
       baseTableName="users" baseColumnNames="user_directory_id" referencedTableSchemaName="security"
       referencedTableName="user_directories" referencedColumnNames="id"/>
@@ -183,24 +164,21 @@
       <column name="user_directory_id"/>
     </createIndex>
 
-    <createTable schemaName="security" tableName="users_password_history"
-      remarks="User Password History">
-      <column name="user_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the user"/>
-      <column name="changed" type="timestamp"
-        remarks="When the password change took place for the user"/>
-      <column name="password" type="nvarchar(100)" remarks="The password for the user"/>
+    <createTable schemaName="security" tableName="users_password_history" remarks="User Password History">
+      <column name="user_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the user">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="changed" type="timestamp" remarks="When the password change took place for the user">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="password" type="nvarchar(100)" remarks="The password for the user">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="users_password_history"
-      columnNames="user_id, changed"/>
-    <addNotNullConstraint schemaName="security" tableName="users_password_history"
-      columnName="user_id"/>
-    <addNotNullConstraint schemaName="security" tableName="users_password_history"
-      columnName="changed"/>
     <addForeignKeyConstraint constraintName="users_password_history_user_id_fk"
       baseTableSchemaName="security" baseTableName="users_password_history"
       baseColumnNames="user_id" referencedTableSchemaName="security" referencedTableName="users"
-      referencedColumnNames="id" deleteCascade="true"/>
+      referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="users_password_history_user_id_ix" schemaName="security"
       tableName="users_password_history">
       <column name="user_id"/>
@@ -211,22 +189,21 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="groups" remarks="Groups">
-      <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the group"/>
-      <column name="user_directory_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the user directory the group is associated with"/>
-      <column name="name" type="nvarchar(100)" remarks="The name of the group"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the group">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the user directory the group is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the group">
+        <constraints nullable="false"/>
+      </column>
       <column name="description" type="nvarchar(100)" remarks="A description for the group"/>
-      <column name="created" type="timestamp"
-        remarks="The date and time the group was created"/>
-      <column name="updated" type="timestamp"
-        remarks="The date and time the group was last updated"/>
+      <column name="created" type="timestamp" remarks="The date and time the group was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the group was last updated"/>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="groups" columnNames="id"/>
-    <addNotNullConstraint schemaName="security" tableName="groups" columnName="id"/>
-    <addNotNullConstraint schemaName="security" tableName="groups" columnName="user_directory_id"/>
-    <addNotNullConstraint schemaName="security" tableName="groups" columnName="name"/>
-    <addNotNullConstraint schemaName="security" tableName="groups" columnName="created"/>
     <addForeignKeyConstraint constraintName="groups_user_directory_fk"
       baseTableSchemaName="security" baseTableName="groups" baseColumnNames="user_directory_id"
       referencedTableSchemaName="security" referencedTableName="user_directories"
@@ -234,32 +211,27 @@
     <createIndex indexName="groups_user_directory_id_ix" schemaName="security" tableName="groups">
       <column name="user_directory_id"/>
     </createIndex>
-    <createIndex indexName="groups_user_directory_id_name_ix" schemaName="security"
-      tableName="groups" unique="true">
+    <createIndex indexName="groups_user_directory_id_name_ix" schemaName="security" tableName="groups" unique="true">
       <column name="user_directory_id"/>
       <column name="name"/>
     </createIndex>
 
-    <createTable schemaName="security" tableName="user_to_group_map"
-      remarks="User To Group Mappings">
-      <column name="user_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the user"/>
-      <column name="group_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the group"/>
+    <createTable schemaName="security" tableName="user_to_group_map" remarks="User To Group Mappings">
+      <column name="user_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the user">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="group_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the group">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="user_to_group_map"
-      columnNames="user_id, group_id"/>
-    <addNotNullConstraint schemaName="security" tableName="user_to_group_map" columnName="user_id"/>
-    <addNotNullConstraint schemaName="security" tableName="user_to_group_map"
-      columnName="group_id"/>
     <addForeignKeyConstraint constraintName="user_to_group_map_user_fk"
       baseTableSchemaName="security" baseTableName="user_to_group_map" baseColumnNames="user_id"
       referencedTableSchemaName="security" referencedTableName="users" referencedColumnNames="id"
-      deleteCascade="true"/>
+      onDelete="CASCADE"/>
     <addForeignKeyConstraint constraintName="user_to_group_map_group_fk"
       baseTableSchemaName="security" baseTableName="user_to_group_map" baseColumnNames="group_id"
       referencedTableSchemaName="security" referencedTableName="groups" referencedColumnNames="id"
-      deleteCascade="true"/>
+      onDelete="CASCADE"/>
     <createIndex indexName="user_to_group_map_user_id_ix" schemaName="security"
       tableName="user_to_group_map">
       <column name="user_id"/>
@@ -270,45 +242,41 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="functions" remarks="Functions">
-      <column name="code" type="nvarchar(100)"
-        remarks="The code for the function"/>
-      <column name="name" type="nvarchar(100)" remarks="The name of the function"/>
+      <column name="code" type="nvarchar(100)" remarks="The code for the function">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the function">
+        <constraints nullable="false"/>
+      </column>
       <column name="description" type="nvarchar(100)" remarks="A description for the function'"/>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="functions" columnNames="code"/>
-    <addNotNullConstraint schemaName="security" tableName="functions" columnName="code"/>
-    <addNotNullConstraint schemaName="security" tableName="functions" columnName="name"/>
 
     <createTable schemaName="security" tableName="roles" remarks="Roles">
-      <column name="code" type="nvarchar(100)" remarks="The code for the role"/>
-      <column name="name" type="nvarchar(100)" remarks="The name of the role"/>
+      <column name="code" type="nvarchar(100)" remarks="The code for the role">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the role">
+        <constraints nullable="false"/>
+      </column>
       <column name="description" type="nvarchar(100)" remarks="The description for the role"/>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="roles" columnNames="code"/>
-    <addNotNullConstraint schemaName="security" tableName="roles" columnName="code"/>
-    <addNotNullConstraint schemaName="security" tableName="roles" columnName="name"/>
 
-    <createTable schemaName="security" tableName="function_to_role_map"
-      remarks="Function To Role Mappings">
-      <column name="function_code" type="nvarchar(100)"
-        remarks="The code for the function"/>
-      <column name="role_code" type="nvarchar(100)"
-        remarks="The code for the role"/>
+    <createTable schemaName="security" tableName="function_to_role_map" remarks="Function To Role Mappings">
+      <column name="function_code" type="nvarchar(100)" remarks="The code for the function">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="role_code" type="nvarchar(100)" remarks="The code for the role">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="function_to_role_map"
-      columnNames="function_code, role_code"/>
-    <addNotNullConstraint schemaName="security" tableName="function_to_role_map"
-      columnName="function_code"/>
-    <addNotNullConstraint schemaName="security" tableName="function_to_role_map"
-      columnName="role_code"/>
     <addForeignKeyConstraint constraintName="function_to_role_map_function_fk"
       baseTableSchemaName="security" baseTableName="function_to_role_map"
       baseColumnNames="function_code" referencedTableSchemaName="security"
-      referencedTableName="functions" referencedColumnNames="code" deleteCascade="true"/>
+      referencedTableName="functions" referencedColumnNames="code" onDelete="CASCADE"/>
     <addForeignKeyConstraint constraintName="function_to_role_map_role_fk"
       baseTableSchemaName="security" baseTableName="function_to_role_map"
       baseColumnNames="role_code" referencedTableSchemaName="security" referencedTableName="roles"
-      referencedColumnNames="code" deleteCascade="true"/>
+      referencedColumnNames="code" onDelete="CASCADE"/>
     <createIndex indexName="function_to_role_map_function_code_ix" schemaName="security"
       tableName="function_to_role_map">
       <column name="function_code"/>
@@ -318,27 +286,22 @@
       <column name="role_code"/>
     </createIndex>
 
-    <createTable schemaName="security" tableName="role_to_group_map"
-      remarks="Role To Group Mappings">
-      <column name="role_code" type="nvarchar(100)"
-        remarks="The code for the role"/>
-      <column name="group_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) for the group"/>
+    <createTable schemaName="security" tableName="role_to_group_map" remarks="Role To Group Mappings">
+      <column name="role_code" type="nvarchar(100)" remarks="The code for the role">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="group_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the group">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="role_to_group_map"
-      columnNames="role_code, group_id"/>
-    <addNotNullConstraint schemaName="security" tableName="role_to_group_map"
-      columnName="role_code"/>
-    <addNotNullConstraint schemaName="security" tableName="role_to_group_map"
-      columnName="group_id"/>
     <addForeignKeyConstraint constraintName="role_to_group_map_role_fk"
       baseTableSchemaName="security" baseTableName="role_to_group_map" baseColumnNames="role_code"
       referencedTableSchemaName="security" referencedTableName="roles" referencedColumnNames="code"
-      deleteCascade="true"/>
+      onDelete="CASCADE"/>
     <addForeignKeyConstraint constraintName="role_to_group_map_group_fk"
       baseTableSchemaName="security" baseTableName="role_to_group_map" baseColumnNames="group_id"
       referencedTableSchemaName="security" referencedTableName="groups" referencedColumnNames="id"
-      deleteCascade="true"/>
+      onDelete="CASCADE"/>
     <createIndex indexName="role_to_group_map_role_code_ix" schemaName="security"
       tableName="role_to_group_map">
       <column name="role_code"/>
@@ -349,24 +312,21 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="password_resets" remarks="Password Resets">
-      <column name="username" type="nvarchar(100)"
-        remarks="The username for the user associated with the password reset"/>
-      <column name="requested" type="timestamp"
-        remarks="The date and time the password reset was requested"/>
-      <column name="status" type="int" remarks="The status of the password reset"/>
-      <column name="security_code_hash" type="nvarchar(100)" remarks="The security code hash"/>
-      <column name="completed" type="timestamp"
-        remarks="The date and time the password reset was completed"/>
-      <column name="expired" type="timestamp"
-        remarks="The date and time the password reset expired"/>
+      <column name="username" type="nvarchar(100)" remarks="The username for the user associated with the password reset">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="requested" type="timestamp" remarks="The date and time the password reset was requested">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="status" type="int" remarks="The status of the password reset">
+        <constraints nullable="false"/>
+      </column>
+      <column name="security_code_hash" type="nvarchar(100)" remarks="The security code hash">
+        <constraints nullable="false"/>
+      </column>
+      <column name="completed" type="timestamp" remarks="The date and time the password reset was completed"/>
+      <column name="expired" type="timestamp" remarks="The date and time the password reset expired"/>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="password_resets"
-      columnNames="username, requested"/>
-    <addNotNullConstraint schemaName="security" tableName="password_resets" columnName="username"/>
-    <addNotNullConstraint schemaName="security" tableName="password_resets" columnName="requested"/>
-    <addNotNullConstraint schemaName="security" tableName="password_resets" columnName="status"/>
-    <addNotNullConstraint schemaName="security" tableName="password_resets"
-      columnName="security_code_hash"/>
     <createIndex indexName="password_resets_username_ix" schemaName="security"
       tableName="password_resets">
       <column name="username"/>
@@ -414,7 +374,7 @@
       <column name="phone_number" value=""/>
       <column name="mobile_number" value=""/>
       <column name="email" value=""/>
-      <column name="password" value="GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0="/>
+      <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00 GMT"/>
       <column name="created" value="${now}"/>

@@ -6,7 +6,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-  <property name="blob_type" value="blob" dbms="h2"/>
+  <property name="blob_type" value="bytea" dbms="h2"/>
   <property name="blob_type" value="bytea" dbms="postgresql"/>
   <property name="blob_type" value="blob" dbms="oracle"/>
   <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
@@ -79,7 +79,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="attribute_types_attribute_type_category_fk" baseTableSchemaName="party"
       baseTableName="attribute_types" baseColumnNames="category, locale_id" referencedTableSchemaName="party"
-      referencedTableName="attribute_type_categories" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+      referencedTableName="attribute_type_categories" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="attribute_types_category_ix" schemaName="party" tableName="attribute_types">
       <column name="category"/>
     </createIndex>
@@ -180,7 +180,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="contact_mechanism_roles_contact_mechanism_type_fk" baseTableSchemaName="party"
       baseTableName="contact_mechanism_roles" baseColumnNames="contact_mechanism_type,locale_id" referencedTableSchemaName="party"
-      referencedTableName="contact_mechanism_types" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+      referencedTableName="contact_mechanism_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="contact_mechanism_roles_contact_mechanism_type_ix" schemaName="party" tableName="contact_mechanism_roles">
       <column name="contact_mechanism_type"/>
     </createIndex>
@@ -233,7 +233,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="employment_types_employment_status_fk" baseTableSchemaName="party"
       baseTableName="employment_types" baseColumnNames="employment_status,locale_id" referencedTableSchemaName="party"
-      referencedTableName="employment_statuses" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+      referencedTableName="employment_statuses" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <addDefaultValue schemaName="party" tableName="employment_types" columnName="description" defaultValue=""/>
     <createIndex indexName="employment_types_employment_status_ix" schemaName="party" tableName="employment_types">
       <column name="employment_status"/>
@@ -376,7 +376,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="lock_types_lock_type_category_fk" baseTableSchemaName="party"
       baseTableName="lock_types" baseColumnNames="category, locale_id" referencedTableSchemaName="party"
-      referencedTableName="lock_type_categories" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+      referencedTableName="lock_type_categories" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="lock_types_category_ix" schemaName="party" tableName="lock_types">
       <column name="category"/>
     </createIndex>
@@ -425,7 +425,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="marriage_types_marital_status_fk" baseTableSchemaName="party"
       baseTableName="marriage_types" baseColumnNames="marital_status,locale_id" referencedTableSchemaName="party"
-      referencedTableName="marital_statuses" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+      referencedTableName="marital_statuses" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="marriage_types_marital_status_ix" schemaName="party" tableName="marriage_types">
       <column name="marital_status"/>
     </createIndex>
@@ -604,7 +604,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="preference_types_preference_type_category_fk" baseTableSchemaName="party"
       baseTableName="preference_types" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
-      referencedTableName="preference_type_categories" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+      referencedTableName="preference_type_categories" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="preference_types_category_ix" schemaName="party" tableName="preference_types">
       <column name="category"/>
     </createIndex>
@@ -631,7 +631,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="qualification_types_field_of_study_fk" baseTableSchemaName="party"
       baseTableName="qualification_types" baseColumnNames="field_of_study,locale_id" referencedTableSchemaName="party"
-      referencedTableName="fields_of_study" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+      referencedTableName="fields_of_study" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="qualification_types_locale_id_ix" schemaName="party" tableName="qualification_types">
       <column name="locale_id"/>
     </createIndex>
@@ -818,10 +818,10 @@
     </createTable>
     <addForeignKeyConstraint constraintName="associations_first_party_role_fk" baseTableSchemaName="party"
       baseTableName="association_types" baseColumnNames="first_party_role,locale_id" referencedTableSchemaName="party"
-      referencedTableName="role_types" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+      referencedTableName="role_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <addForeignKeyConstraint constraintName="associations_second_party_role_fk" baseTableSchemaName="party"
       baseTableName="association_types" baseColumnNames="second_party_role,locale_id" referencedTableSchemaName="party"
-      referencedTableName="role_types" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+      referencedTableName="role_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="association_types_locale_id_ix" schemaName="party" tableName="association_types">
       <column name="locale_id"/>
     </createIndex>
@@ -850,7 +850,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="association_property_types_association_type_fk" baseTableSchemaName="party"
       baseTableName="association_property_types" baseColumnNames="association_type,locale_id" referencedTableSchemaName="party"
-      referencedTableName="association_types" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+      referencedTableName="association_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="association_property_types_association_type_ix" schemaName="party" tableName="association_property_types">
       <column name="association_type"/>
     </createIndex>
@@ -965,7 +965,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="status_types_status_type_category_fk" baseTableSchemaName="party"
       baseTableName="status_types" baseColumnNames="category, locale_id" referencedTableSchemaName="party"
-      referencedTableName="status_type_categories" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+      referencedTableName="status_type_categories" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="status_types_category_ix" schemaName="party" tableName="status_types">
       <column name="category"/>
     </createIndex>
@@ -1078,7 +1078,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="organizations_party_fk" baseTableSchemaName="party"
       baseTableName="organizations" baseColumnNames="id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
 
     <createTable schemaName="party" tableName="persons" remarks="Persons">
       <column name="countries_of_citizenship" type="nvarchar(30)" remarks="The comma-delimited ISO 3166-1 alpha-2 codes for the countries of citizenship for the person"/>
@@ -1114,7 +1114,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="persons_party_fk" baseTableSchemaName="party"
       baseTableName="persons" baseColumnNames="id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="persons_date_of_birth_ix" schemaName="party" tableName="persons">
       <column name="date_of_birth"/>
     </createIndex>
@@ -1150,10 +1150,10 @@
     </createTable>
     <addForeignKeyConstraint constraintName="associations_first_party_fk" baseTableSchemaName="party"
       baseTableName="associations" baseColumnNames="first_party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <addForeignKeyConstraint constraintName="associations_second_party_fk" baseTableSchemaName="party"
       baseTableName="associations" baseColumnNames="second_party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="associations_first_party_id_ix" schemaName="party" tableName="associations">
       <column name="first_party_id"/>
     </createIndex>
@@ -1187,7 +1187,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="association_properties_association_fk" baseTableSchemaName="party"
       baseTableName="association_properties" baseColumnNames="association_id" referencedTableSchemaName="party"
-      referencedTableName="associations" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="associations" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="association_properties_association_id_ix" schemaName="party" tableName="association_properties">
       <column name="association_id"/>
     </createIndex>    
@@ -1213,7 +1213,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="attributes_party_fk" baseTableSchemaName="party"
       baseTableName="attributes" baseColumnNames="party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="attributes_party_id_ix" schemaName="party" tableName="attributes">
       <column name="party_id"/>
     </createIndex>
@@ -1234,7 +1234,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="consents_person_fk" baseTableSchemaName="party"
       baseTableName="consents" baseColumnNames="person_id" referencedTableSchemaName="party"
-      referencedTableName="persons" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="persons" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="consents_person_id_ix" schemaName="party" tableName="consents">
       <column name="person_id"/>
     </createIndex>
@@ -1260,7 +1260,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="contact_mechanisms_party_fk" baseTableSchemaName="party"
       baseTableName="contact_mechanisms" baseColumnNames="party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="contact_mechanisms_party_id_ix" schemaName="party" tableName="contact_mechanisms">
       <column name="party_id"/>
     </createIndex>
@@ -1293,7 +1293,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="educations_person_fk" baseTableSchemaName="party"
       baseTableName="educations" baseColumnNames="person_id" referencedTableSchemaName="party"
-      referencedTableName="persons" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="persons" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="educations_person_id_ix" schemaName="party" tableName="educations">
       <column name="person_id"/>
     </createIndex>
@@ -1333,7 +1333,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="employments_person_fk" baseTableSchemaName="party"
       baseTableName="employments" baseColumnNames="person_id" referencedTableSchemaName="party"
-      referencedTableName="persons" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="persons" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="employments_person_id_ix" schemaName="party" tableName="employments">
       <column name="person_id"/>
     </createIndex>
@@ -1355,7 +1355,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="external_references_party_fk" baseTableSchemaName="party"
       baseTableName="external_references" baseColumnNames="party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="external_references_party_id_ix" schemaName="party" tableName="external_references">
       <column name="party_id"/>
     </createIndex>
@@ -1388,7 +1388,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="identity_documents_party_fk" baseTableSchemaName="party"
       baseTableName="identity_documents" baseColumnNames="party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="identity_documents_party_id_ix" schemaName="party" tableName="identity_documents">
       <column name="party_id"/>
     </createIndex>
@@ -1419,7 +1419,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="language_proficiencies_person_fk" baseTableSchemaName="party"
       baseTableName="language_proficiencies" baseColumnNames="person_id" referencedTableSchemaName="party"
-      referencedTableName="persons" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="persons" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="language_proficiencies_person_id_ix" schemaName="party" tableName="language_proficiencies">
       <column name="person_id"/>
     </createIndex>
@@ -1440,7 +1440,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="locks_party_fk" baseTableSchemaName="party"
       baseTableName="locks" baseColumnNames="party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="locks_party_id_ix" schemaName="party" tableName="locks">
       <column name="party_id"/>
     </createIndex>
@@ -1477,7 +1477,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="next_of_kin_person_fk" baseTableSchemaName="party"
       baseTableName="next_of_kin" baseColumnNames="person_id" referencedTableSchemaName="party"
-      referencedTableName="persons" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="persons" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="next_of_kin_person_id_ix" schemaName="party" tableName="next_of_kin">
       <column name="person_id"/>
     </createIndex>
@@ -1530,7 +1530,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="physical_addresses_party_fk" baseTableSchemaName="party"
       baseTableName="physical_addresses" baseColumnNames="party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="physical_addresses_party_id_ix" schemaName="party" tableName="physical_addresses">
       <column name="party_id"/>
     </createIndex>
@@ -1552,7 +1552,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="preferences_party_fk" baseTableSchemaName="party"
       baseTableName="preferences" baseColumnNames="party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="preferences_party_id_ix" schemaName="party" tableName="preferences">
       <column name="party_id"/>
     </createIndex>
@@ -1584,7 +1584,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="residence_permits_person_fk" baseTableSchemaName="party"
       baseTableName="residence_permits" baseColumnNames="person_id" referencedTableSchemaName="party"
-      referencedTableName="persons" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="persons" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="residence_permits_person_id_ix" schemaName="party" tableName="residence_permits">
       <column name="person_id"/>
     </createIndex>
@@ -1606,7 +1606,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="roles_party_fk" baseTableSchemaName="party"
       baseTableName="roles" baseColumnNames="party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="roles_party_id_ix" schemaName="party" tableName="roles">
       <column name="party_id"/>
     </createIndex>
@@ -1627,7 +1627,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="segment_allocations_party_fk" baseTableSchemaName="party"
       baseTableName="segment_allocations" baseColumnNames="party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="segment_allocations_party_id_ix" schemaName="party" tableName="segment_allocations">
       <column name="party_id"/>
     </createIndex>
@@ -1675,7 +1675,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="sources_of_funds_person_fk" baseTableSchemaName="party"
       baseTableName="sources_of_funds" baseColumnNames="person_id" referencedTableSchemaName="party"
-      referencedTableName="persons" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="persons" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="sources_of_funds_person_id_ix" schemaName="party" tableName="sources_of_funds">
       <column name="person_id"/>
     </createIndex>
@@ -1697,7 +1697,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="sources_of_wealth_person_fk" baseTableSchemaName="party"
       baseTableName="sources_of_wealth" baseColumnNames="person_id" referencedTableSchemaName="party"
-      referencedTableName="persons" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="persons" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="sources_of_wealth_person_id_ix" schemaName="party" tableName="sources_of_wealth">
       <column name="person_id"/>
     </createIndex>
@@ -1718,7 +1718,7 @@
     </createTable>
     <addForeignKeyConstraint constraintName="statuses_party_fk" baseTableSchemaName="party"
       baseTableName="statuses" baseColumnNames="party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="statuses_party_id_ix" schemaName="party" tableName="statuses">
       <column name="party_id"/>
     </createIndex>
@@ -1743,10 +1743,16 @@
     </createTable>
     <addForeignKeyConstraint constraintName="tax_numbers_party_fk" baseTableSchemaName="party"
       baseTableName="tax_numbers" baseColumnNames="party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" deleteCascade="true"/>
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="tax_numbers_party_id_ix" schemaName="party" tableName="tax_numbers">
       <column name="party_id"/>
     </createIndex>
   </changeSet>
 
 </databaseChangeLog>
+
+
+
+
+
+

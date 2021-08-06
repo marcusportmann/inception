@@ -97,6 +97,20 @@ public class PartyWebService {
   }
 
   /**
+   * Delete the party.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   */
+  @WebMethod(operationName = "DeleteParty")
+  public void deleteParty(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "PartyId") @XmlElement(required = true) UUID partyId)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    partyService.deleteParty(tenantId, partyId);
+  }
+
+  /**
    * Delete the person.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
