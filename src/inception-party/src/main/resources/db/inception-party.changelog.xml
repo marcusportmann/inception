@@ -234,7 +234,6 @@
     <addForeignKeyConstraint constraintName="employment_types_employment_status_fk" baseTableSchemaName="party"
       baseTableName="employment_types" baseColumnNames="employment_status,locale_id" referencedTableSchemaName="party"
       referencedTableName="employment_statuses" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
-    <addDefaultValue schemaName="party" tableName="employment_types" columnName="description" defaultValue=""/>
     <createIndex indexName="employment_types_employment_status_ix" schemaName="party" tableName="employment_types">
       <column name="employment_status"/>
     </createIndex>
@@ -532,7 +531,6 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addDefaultValue schemaName="party" tableName="physical_address_purposes" columnName="description" defaultValue=""/>
     <createIndex indexName="physical_address_purposes_locale_id_ix" schemaName="party" tableName="physical_address_purposes">
       <column name="locale_id"/>
     </createIndex>
