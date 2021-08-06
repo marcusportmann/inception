@@ -105,6 +105,8 @@ public class ProblemHandler {
     problemDetails.setDetail(serviceException.getMessage());
 
     if (inDebugMode) {
+      logger.error(serviceException.getMessage(), serviceException);
+
       problemDetails.setStackTrace(dumpStackTrace(serviceException));
     }
 

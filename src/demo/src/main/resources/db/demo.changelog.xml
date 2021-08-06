@@ -138,6 +138,11 @@
 <!--    </insert>-->
 
 
+    <insert schemaName="security" tableName="user_directories">
+      <column name="" value=""/>
+    </insert>
+
+
 
   </changeSet>
 
