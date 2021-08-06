@@ -1149,12 +1149,12 @@ public class InternalUserDirectory extends UserDirectoryBase {
   public String getUserName(String username)
       throws UserNotFoundException, ServiceUnavailableException {
     try {
-      String userName =
+      Optional<String> userNameOptional =
           getUserRepository()
               .getNameByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
-      if (StringUtils.hasText(userName)) {
-        return userName;
+      if (userNameOptional.isPresent()) {
+        return userNameOptional.get();
       } else {
         throw new UserNotFoundException(username);
       }

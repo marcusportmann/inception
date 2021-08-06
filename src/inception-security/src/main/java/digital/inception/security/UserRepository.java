@@ -53,15 +53,6 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   long countFiltered(
       @Param("userDirectoryId") UUID userDirectoryId, @Param("filter") String filter);
 
-  @Query(
-      value =
-          "select password from security.users_password_history "
-              + "where user_id = :userId and changed > :after",
-      nativeQuery = true)
-  List<String> getPasswordHistory(
-      @Param("userId") UUID userId,
-      @Param("after") LocalDateTime after);
-
   @Modifying
   @Query("delete from User u where u.id = :userId")
   void deleteById(@Param("userId") UUID userId);
@@ -102,7 +93,16 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   @Query(
       "select u.name from User u where ((lower(u.username) = lower(:username)) "
           + "and u.userDirectoryId = :userDirectoryId)")
-  String getNameByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
+  Optional<String> getNameByUserDirectoryIdAndUsernameIgnoreCase(
+      UUID userDirectoryId, String username);
+
+  @Query(
+      value =
+          "select password from security.users_password_history "
+              + "where user_id = :userId and changed > :after",
+      nativeQuery = true)
+  List<String> getPasswordHistory(
+      @Param("userId") UUID userId, @Param("after") LocalDateTime after);
 
   @Query("select r.code from User u join u.groups as g join g.roles as r where u.id = :userId")
   List<String> getRoleCodesByUserId(@Param("userId") UUID userId);
