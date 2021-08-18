@@ -70,6 +70,37 @@ public class ProcessService implements IProcessService {
   }
 
   /**
+   * Delete the existing process definition.
+   *
+   * @param processDefinitionId the ID for the process definition
+   */
+  @Override
+  @Transactional
+  public void deleteProcessDefinition(String processDefinitionId)
+      throws ProcessDefinitionNotFoundException, ServiceUnavailableException {
+    try {
+      ProcessDefinitionQuery processDefinitionQuery =
+          processEngine.getRepositoryService().createProcessDefinitionQuery();
+      processDefinitionQuery.processDefinitionKey(processDefinitionId);
+
+      if (processDefinitionQuery.count() == 0)  {
+        throw new ProcessDefinitionNotFoundException(processDefinitionId);
+      }
+
+      List<ProcessDefinition> processsDefinitions = processDefinitionQuery.list();
+
+      for (ProcessDefinition processDefinition : processsDefinitions) {
+        processEngine.getRepositoryService().deleteProcessDefinition(processDefinition.getId());
+      }
+    } catch (ProcessDefinitionNotFoundException e)  {
+      throw e;
+    }
+    catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to delete the process definition", e);
+    }
+  }
+
+  /**
    * Create the new process definition.
    *
    * @param processDefinitionData the BPMN XML data for the process definition(s)

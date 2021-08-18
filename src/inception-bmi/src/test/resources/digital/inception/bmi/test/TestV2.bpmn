@@ -1,71 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://test.process.inception.digital" exporter="Camunda Modeler" exporterVersion="3.5.0">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://test.process.inception.digital" exporter="Camunda Modeler" exporterVersion="4.9.0">
   <process id="Inception.Test" name="Test" isExecutable="true" camunda:versionTag="2.0.0">
     <startEvent id="StartEvent" name="Start" camunda:async="true" />
     <endEvent id="EndEvent" name="End" />
     <scriptTask id="TestScriptTask" name="Test Script Task" scriptFormat="groovy">
-      <script>println "Test Script Task"</script>
+      <extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="TestVariable">${TestVariable}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </extensionElements>
+      <script>println "Test Script Task"
+println "TestVariable = " + TestVariable
+println "TestVariable = " + execution.getVariable("TestVariable")</script>
     </scriptTask>
-    <scriptTask id="AnotherTestScriptTask" name="Another Test Script Task" scriptFormat="groovy">
-      <script>println "Another Test Script Task"
-
-def userDirectoryIdOptional = securityService.getUserDirectoryIdForUser("Administrator")
-
-if (userDirectoryIdOptional.isPresent()) {
-  def userDirectoryId = userDirectoryIdOptional.get();
-
-  println "The User Directory ID for the Administrator user is " + userDirectoryId
-
-  def roles = securityService.getRoleCodesForUser(userDirectoryId, "Administrator")
-
-  println "Found " + roles.size() + " roles for the Administrator user"
-} </script>
-    </scriptTask>
-    <userTask id="TestUserTask" name="Test User Task" camunda:candidateGroups="Administrators" />
+    <userTask id="TestUserTask" name="Test User Task" camunda:candidateGroups="Administrators">
+      <incoming>Flow_1q7qekg</incoming>
+    </userTask>
     <sequenceFlow id="flow1" sourceRef="StartEvent" targetRef="TestScriptTask" />
-    <sequenceFlow id="flow2" sourceRef="TestScriptTask" targetRef="AnotherTestScriptTask" />
-    <sequenceFlow id="flow3" sourceRef="AnotherTestScriptTask" targetRef="TestUserTask" />
+    <sequenceFlow id="flow2" sourceRef="TestScriptTask" targetRef="Activity_0cxvcvq" />
     <sequenceFlow id="flow4" sourceRef="TestUserTask" targetRef="EndEvent" />
+    <callActivity id="Activity_0cxvcvq" name="Embedded Task" calledElement="Inception.TestEmbedded">
+      <incoming>flow2</incoming>
+      <outgoing>Flow_1q7qekg</outgoing>
+    </callActivity>
+    <sequenceFlow id="Flow_1q7qekg" sourceRef="Activity_0cxvcvq" targetRef="TestUserTask" />
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_Inception.Test">
     <bpmndi:BPMNPlane id="BPMNPlane_Inception.Test" bpmnElement="Inception.Test">
+      <bpmndi:BPMNEdge id="BPMNEdge_flow4" bpmnElement="flow4">
+        <omgdi:waypoint x="752" y="106" />
+        <omgdi:waypoint x="797" y="106" />
+        <omgdi:waypoint x="797" y="105" />
+        <omgdi:waypoint x="842" y="105" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow2" bpmnElement="flow2">
+        <omgdi:waypoint x="355" y="107" />
+        <omgdi:waypoint x="450" y="107" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow1" bpmnElement="flow1">
+        <omgdi:waypoint x="195" y="107" />
+        <omgdi:waypoint x="250" y="107" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1q7qekg_di" bpmnElement="Flow_1q7qekg">
+        <omgdi:waypoint x="550" y="107" />
+        <omgdi:waypoint x="647" y="107" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="BPMNShape_StartEvent" bpmnElement="StartEvent">
         <omgdc:Bounds x="160" y="90" width="35" height="35" />
         <bpmndi:BPMNLabel>
           <omgdc:Bounds x="166" y="125" width="24" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_EndEvent" bpmnElement="EndEvent">
-        <omgdc:Bounds x="730" y="90" width="35" height="35" />
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="738" y="125" width="20" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_TestTask" bpmnElement="TestScriptTask">
         <omgdc:Bounds x="250" y="80" width="105" height="55" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_AnotherTestTask" bpmnElement="AnotherTestScriptTask">
-        <omgdc:Bounds x="410" y="80" width="105" height="55" />
+      <bpmndi:BPMNShape id="Activity_1p8aftw_di" bpmnElement="Activity_0cxvcvq">
+        <omgdc:Bounds x="450" y="67" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_UserTask" bpmnElement="TestUserTask">
-        <omgdc:Bounds x="570" y="80" width="105" height="55" />
+        <omgdc:Bounds x="647" y="79" width="105" height="55" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="BPMNEdge_flow1" bpmnElement="flow1">
-        <omgdi:waypoint x="195" y="107" />
-        <omgdi:waypoint x="250" y="107" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_flow2" bpmnElement="flow2">
-        <omgdi:waypoint x="355" y="107" />
-        <omgdi:waypoint x="410" y="107" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_flow3" bpmnElement="flow3">
-        <omgdi:waypoint x="515" y="107" />
-        <omgdi:waypoint x="570" y="107" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_flow4" bpmnElement="flow4">
-        <omgdi:waypoint x="675" y="107" />
-        <omgdi:waypoint x="730" y="107" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BPMNShape_EndEvent" bpmnElement="EndEvent">
+        <omgdc:Bounds x="842" y="88" width="35" height="35" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="850" y="123" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </definitions>

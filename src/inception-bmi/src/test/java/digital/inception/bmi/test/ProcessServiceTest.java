@@ -28,7 +28,9 @@ import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.repository.Deployment;
@@ -161,10 +163,7 @@ public class ProcessServiceTest {
       fail("Failed to retrieve the summary for the process definition (Inception.Test)");
     }
 
-    //    Map<String, Object> parameters = new HashMap<>();
-    //
-    //    processService.startProcessInstance("Inception.Test", parameters);
-
+    processService.deleteProcessDefinition("Inception.Test");
   }
 
   /** Test the process engine. */
@@ -189,6 +188,8 @@ public class ProcessServiceTest {
     byte[] testProcessV2DefinitionData =
         ResourceUtil.getClasspathResource("digital/inception/bmi/test/TestV2.bpmn");
 
+    processService.createProcessDefinition(testProcessV1DefinitionData);
+
     processDefinitionSummaries = processService.validateBPMN(testProcessV2DefinitionData);
 
     assertEquals(
@@ -201,24 +202,17 @@ public class ProcessServiceTest {
         processDefinitionSummaries.get(0).getId(),
         "The correct process definition ID was not retrieved for version 1 of the Inception.Test process");
 
-    processService.createProcessDefinition(testProcessV2DefinitionData);
+    processService.updateProcessDefinition(testProcessV2DefinitionData);
 
     byte[] testEmbeddedProcessDefinitionData =
         ResourceUtil.getClasspathResource("digital/inception/bmi/test/TestEmbedded.bpmn");
 
     processService.createProcessDefinition(testEmbeddedProcessDefinitionData);
 
-
-
-//    DeploymentBuilder processDeploymentV1 = processEngine.getRepositoryService().createDeployment();
-//    processDeploymentV1.addInputStream(
-//        processDefinitionSummaries.get(0).getId() + ".bpmn",
-//        new ByteArrayInputStream(testProcessV2Data));
-//
-//    Deployment deploymentV1 = processDeploymentV1.deploy();
-
     List<ProcessDefinition> processDefinitions =
         processEngine.getRepositoryService().createProcessDefinitionQuery().latestVersion().list();
+
+    assertEquals(2, processDefinitions.size(), "The correct number of process definitions was not retrieved");
 
     boolean foundProcessDefinition = false;
 
@@ -234,7 +228,11 @@ public class ProcessServiceTest {
       fail("Failed to find the process definition (Inception.Test)");
     }
 
-    processEngine.getRuntimeService().startProcessInstanceByKey("Inception.Test");
+    Map<String, Object> processInstanceParameters = new HashMap<>();
+
+    processInstanceParameters.put("TestVariable", "MyTestVariable");
+
+    processService.startProcessInstance("Inception.Test", processInstanceParameters);
 
     /*
      * The test process starts asynchronously, so we need to ensure it starts executing by executing
@@ -310,5 +308,7 @@ public class ProcessServiceTest {
         "Failed to confirm that the task owner has been changed to to jill");
 
     processEngine.getTaskService().complete(taskId);
+
+    processService.deleteProcessDefinition("Inception.Test");
   }
 }

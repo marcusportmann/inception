@@ -38,13 +38,13 @@ public interface IProcessService {
   List<ProcessDefinitionSummary> createProcessDefinition(byte[] processDefinitionData)
       throws InvalidBPMNException, DuplicateProcessDefinitionException, ServiceUnavailableException;
 
-  /// **
-  // * Delete the existing process definition.
-  // *
-  // * @param processDefinitionId the ID for the process definition
-  // */
-  // void deleteProcessDefinition(String processDefinitionId)
-  //  throws ProcessDefinitionNotFoundException, ServiceUnavailableException;
+  /**
+   * Delete the existing process definition.
+   *
+   * @param processDefinitionId the ID for the process definition
+   */
+  void deleteProcessDefinition(String processDefinitionId)
+      throws ProcessDefinitionNotFoundException, ServiceUnavailableException;
 
   /// **
   // * Retrieve the process definition.

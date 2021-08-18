@@ -97,7 +97,6 @@ public class BMIConfiguration {
       SpringProcessEngineConfiguration processEngineConfiguration =
           new SpringProcessEngineConfiguration();
       processEngineConfiguration.setApplicationContext(applicationContext);
-      processEngineConfiguration.setCmmnEnabled(true);
       processEngineConfiguration.setDatabaseSchema("CAMUNDA");
       processEngineConfiguration.setDatabaseSchemaUpdate(
           ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
@@ -108,6 +107,7 @@ public class BMIConfiguration {
 
       // Disable specific capabilities
       processEngineConfiguration.setAuthorizationEnabled(false);
+      processEngineConfiguration.setCmmnEnabled(false);
       processEngineConfiguration.setDbHistoryUsed(false);
       processEngineConfiguration.setDbIdentityUsed(false);
       processEngineConfiguration.setDmnEnabled(false);
