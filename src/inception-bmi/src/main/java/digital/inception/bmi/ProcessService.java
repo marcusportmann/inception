@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -94,12 +95,12 @@ public class ProcessService implements IProcessService {
             "The BPMN 2.0 XML data does not contain a single process definition");
       }
 
-      DeploymentBuilder processDeployment = processEngine.getRepositoryService().createDeployment();
-      processDeployment.addInputStream(
+      DeploymentBuilder deploymentBuilder = processEngine.getRepositoryService().createDeployment();
+      deploymentBuilder.addInputStream(
           processDefinitionSummaries.get(0).getId() + ".bpmn",
           new ByteArrayInputStream(processDefinitionData));
 
-      Deployment deployment = processDeployment.deploy();
+      Deployment deployment = deploymentBuilder.deploy();
 
       return processDefinitionSummaries;
     } catch (InvalidBPMNException | DuplicateProcessDefinitionException e) {
@@ -211,12 +212,12 @@ public class ProcessService implements IProcessService {
             "The BPMN 2.0 XML data does not contain a single process definition");
       }
 
-      DeploymentBuilder processDeployment = processEngine.getRepositoryService().createDeployment();
-      processDeployment.addInputStream(
+      DeploymentBuilder deploymentBuilder = processEngine.getRepositoryService().createDeployment();
+      deploymentBuilder.addInputStream(
           processDefinitionSummaries.get(0).getId() + ".bpmn",
           new ByteArrayInputStream(processDefinitionData));
 
-      Deployment deployment = processDeployment.deploy();
+      Deployment deployment = deploymentBuilder.deploy();
 
       return processDefinitionSummaries;
     } catch (InvalidBPMNException | ProcessDefinitionNotFoundException e) {

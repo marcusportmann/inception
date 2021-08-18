@@ -48,6 +48,8 @@ public class InceptionLiquibaseChangeLogs {
   public static final String[] UTILITY_CHANGE_LOGS = {
     "db/inception-audit.changelog.xml",
     "db/inception-bmi.changelog.xml",
+    "db/camunda-engine.changelog.xml",
+    "db/camunda-case-engine.changelog.xml",
     "db/inception-codes.changelog.xml",
     "db/inception-config.changelog.xml",
     "db/inception-error.changelog.xml",

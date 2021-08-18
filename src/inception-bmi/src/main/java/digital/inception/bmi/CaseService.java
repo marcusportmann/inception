@@ -34,7 +34,6 @@ import org.camunda.bpm.engine.repository.CaseDefinition;
 import org.camunda.bpm.engine.repository.CaseDefinitionQuery;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.repository.DeploymentWithDefinitions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -91,7 +90,7 @@ public class CaseService implements ICaseService {
    * Create the new case definition.
    *
    * @param caseDefinitionData the CMMN XML data for the case definition(s)
-   * @return the case definition summaries for the CMMN casees defined by the CMMN XML data
+   * @return the case definition summaries for the CMMN cases defined by the CMMN XML data
    */
   @Override
   @Transactional
@@ -111,12 +110,12 @@ public class CaseService implements ICaseService {
             "The CMMN 1.1 XML data does not contain a single case definition");
       }
 
-      DeploymentBuilder caseDeployment = processEngine.getRepositoryService().createDeployment();
-      caseDeployment.addInputStream(
+      DeploymentBuilder deploymentBuilder = processEngine.getRepositoryService().createDeployment();
+      deploymentBuilder.addInputStream(
           caseDefinitionSummaries.get(0).getId() + ".cmmn",
           new ByteArrayInputStream(caseDefinitionData));
 
-      Deployment deployment = caseDeployment.deploy();
+      Deployment deployment = deploymentBuilder.deploy();
 
       return caseDefinitionSummaries;
     } catch (InvalidCMMNException | DuplicateCaseDefinitionException e) {
@@ -155,7 +154,7 @@ public class CaseService implements ICaseService {
    * Update the case definition(s).
    *
    * @param caseDefinitionData the CMMN XML data for the case definition(s)
-   * @return the case definition summaries for the CMMN casees defined by the CMMN XML data
+   * @return the case definition summaries for the CMMN cases defined by the CMMN XML data
    */
   @Override
   @Transactional
@@ -175,12 +174,12 @@ public class CaseService implements ICaseService {
             "The CMMN 1.1 XML data does not contain a single case definition");
       }
 
-      DeploymentBuilder caseDeployment = processEngine.getRepositoryService().createDeployment();
-      caseDeployment.addInputStream(
+      DeploymentBuilder deploymentBuilder = processEngine.getRepositoryService().createDeployment();
+      deploymentBuilder.addInputStream(
           caseDefinitionSummaries.get(0).getId() + ".cmmn",
           new ByteArrayInputStream(caseDefinitionData));
 
-      Deployment deployment = caseDeployment.deploy();
+      Deployment deployment = deploymentBuilder.deploy();
 
       return caseDefinitionSummaries;
     } catch (InvalidCMMNException | CaseDefinitionNotFoundException e) {
@@ -194,7 +193,7 @@ public class CaseService implements ICaseService {
    * Validate the CMMN XML data.
    *
    * @param cmmnXml the CMMN XML data
-   * @return the case definition summaries for the CMMN casees if the CMMN XML data was successfully
+   * @return the case definition summaries for the CMMN cases if the CMMN XML data was successfully
    *     validated
    */
   public List<CaseDefinitionSummary> validateCMMN(byte[] cmmnXml)
@@ -304,7 +303,7 @@ public class CaseService implements ICaseService {
    * Validate the CMMN XML data.
    *
    * @param cmmnXml the CMMN XML data
-   * @return the case definition summaries for the CMMN casees if the CMMN XML data was successfully
+   * @return the case definition summaries for the CMMN cases if the CMMN XML data was successfully
    *     validated
    */
   public List<CaseDefinitionSummary> validateCMMN(String cmmnXml)

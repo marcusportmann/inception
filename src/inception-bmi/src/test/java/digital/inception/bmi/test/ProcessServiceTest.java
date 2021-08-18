@@ -19,8 +19,6 @@ package digital.inception.bmi.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import digital.inception.bmi.CaseDefinitionSummary;
-import digital.inception.bmi.ICaseService;
 import digital.inception.bmi.IProcessService;
 import digital.inception.bmi.ProcessDefinitionSummary;
 import digital.inception.core.util.ResourceUtil;
@@ -30,17 +28,12 @@ import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.sql.DataSource;
 import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.repository.CaseDefinitionQuery;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.CaseExecution;
 import org.camunda.bpm.engine.runtime.Job;
 import org.camunda.bpm.engine.runtime.JobQuery;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -70,7 +63,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ExtendWith(SpringExtension.class)
 @ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
-    classes = {TestConfiguration.class},
+    classes = {TestConfiguration.class, ProcessServiceTestConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
@@ -83,9 +76,6 @@ public class ProcessServiceTest {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ProcessServiceTest.class);
 
-  /** The Case Service. */
-  @Autowired private ICaseService caseService;
-
   /** The data source used to provide connections to the application database. */
   @Autowired
   @Qualifier("applicationDataSource")
@@ -96,20 +86,6 @@ public class ProcessServiceTest {
 
   /** The Process Service. */
   @Autowired private IProcessService processService;
-
-  /** Test the case definition functionality. */
-  //@Test
-  public void caseDefinitionTest() throws Exception {
-    byte[] testCaseData = ResourceUtil.getClasspathResource("digital/inception/bmi/test/Test.cmmn");
-
-    List<CaseDefinitionSummary> caseDefinitionSummaries =
-        caseService.createCaseDefinition(testCaseData);
-
-    caseDefinitionSummaries = caseService.updateCaseDefinition(testCaseData);
-
-    int xxx = 0;
-    xxx++;
-  }
 
   /** Check database test. */
   // @Test
@@ -192,13 +168,13 @@ public class ProcessServiceTest {
   }
 
   /** Test the process engine. */
-  //@Test
+  @Test
   public void processEngineTest() throws Exception {
-    byte[] testProcessV1Data =
+    byte[] testProcessV1DefinitionData =
         ResourceUtil.getClasspathResource("digital/inception/bmi/test/TestV1.bpmn");
 
     List<ProcessDefinitionSummary> processDefinitionSummaries =
-        processService.validateBPMN(testProcessV1Data);
+        processService.validateBPMN(testProcessV1DefinitionData);
 
     assertEquals(
         1,
@@ -210,10 +186,10 @@ public class ProcessServiceTest {
         processDefinitionSummaries.get(0).getId(),
         "The correct process definition ID was not retrieved for version 1 of the Inception.Test process definition");
 
-    byte[] testProcessV2Data =
+    byte[] testProcessV2DefinitionData =
         ResourceUtil.getClasspathResource("digital/inception/bmi/test/TestV2.bpmn");
 
-    processDefinitionSummaries = processService.validateBPMN(testProcessV2Data);
+    processDefinitionSummaries = processService.validateBPMN(testProcessV2DefinitionData);
 
     assertEquals(
         1,
@@ -225,12 +201,21 @@ public class ProcessServiceTest {
         processDefinitionSummaries.get(0).getId(),
         "The correct process definition ID was not retrieved for version 1 of the Inception.Test process");
 
-    DeploymentBuilder processDeploymentV1 = processEngine.getRepositoryService().createDeployment();
-    processDeploymentV1.addInputStream(
-        processDefinitionSummaries.get(0).getId() + ".bpmn",
-        new ByteArrayInputStream(testProcessV2Data));
+    processService.createProcessDefinition(testProcessV2DefinitionData);
 
-    Deployment deploymentV1 = processDeploymentV1.deploy();
+    byte[] testEmbeddedProcessDefinitionData =
+        ResourceUtil.getClasspathResource("digital/inception/bmi/test/TestEmbedded.bpmn");
+
+    processService.createProcessDefinition(testEmbeddedProcessDefinitionData);
+
+
+
+//    DeploymentBuilder processDeploymentV1 = processEngine.getRepositoryService().createDeployment();
+//    processDeploymentV1.addInputStream(
+//        processDefinitionSummaries.get(0).getId() + ".bpmn",
+//        new ByteArrayInputStream(testProcessV2Data));
+//
+//    Deployment deploymentV1 = processDeploymentV1.deploy();
 
     List<ProcessDefinition> processDefinitions =
         processEngine.getRepositoryService().createProcessDefinitionQuery().latestVersion().list();
@@ -252,7 +237,7 @@ public class ProcessServiceTest {
     processEngine.getRuntimeService().startProcessInstanceByKey("Inception.Test");
 
     /*
-     * The test process starts asynchronously so we need to ensure it starts executing by executing
+     * The test process starts asynchronously, so we need to ensure it starts executing by executing
      * the associated job.
      */
     JobQuery jobQuery = processEngine.getManagementService().createJobQuery();
@@ -325,74 +310,5 @@ public class ProcessServiceTest {
         "Failed to confirm that the task owner has been changed to to jill");
 
     processEngine.getTaskService().complete(taskId);
-  }
-
-  /** Test the process with case functionality. */
-  // @Test
-  public void processWithCaseTest() throws Exception {
-    byte[] testEmbeddedProcessData =
-        ResourceUtil.getClasspathResource("digital/inception/bmi/test/TestEmbedded.bpmn");
-
-    processService.createProcessDefinition(testEmbeddedProcessData);
-
-    byte[] testWithCaseProcessData =
-        ResourceUtil.getClasspathResource("digital/inception/bmi/test/TestWithCase.bpmn");
-
-    processService.createProcessDefinition(testWithCaseProcessData);
-
-    byte[] testCaseData = ResourceUtil.getClasspathResource("digital/inception/bmi/test/Test.cmmn");
-
-    DeploymentBuilder testCaseDeploymentBuilder =
-        processEngine.getRepositoryService().createDeployment();
-    testCaseDeploymentBuilder.addInputStream("Test.cmmn", new ByteArrayInputStream(testCaseData));
-
-    Deployment testCaseDeployment = testCaseDeploymentBuilder.deploy();
-
-    CaseDefinitionQuery caseDefinitionQuery =
-        processEngine.getRepositoryService().createCaseDefinitionQuery();
-
-    List<CaseDefinition> caseDefinitions = caseDefinitionQuery.list();
-
-    Map<String, Object> variables = new HashMap<>();
-
-    variables.put("TestVariableName", "TestVariableValue");
-
-    processEngine
-        .getRuntimeService()
-        .startProcessInstanceByKey("Inception.TestWithCase", variables);
-
-    JobQuery jobQuery = processEngine.getManagementService().createJobQuery();
-
-    List<Job> jobs = jobQuery.list();
-
-    ProcessInstanceQuery processInstanceQuery =
-        processEngine.getRuntimeService().createProcessInstanceQuery();
-    processInstanceQuery.processDefinitionKey("Inception.TestWithCase");
-
-    List<ProcessInstance> processInstances = processInstanceQuery.list();
-
-    TaskQuery taskQuery =
-        processEngine.getTaskService().createTaskQuery().taskCandidateGroup("Administrators");
-
-    List<Task> tasks = taskQuery.list();
-
-    List<CaseExecution> caseExecutions =
-        processEngine.getCaseService().createCaseExecutionQuery().caseDefinitionKey("Test").list();
-
-    for (CaseExecution caseExecution : caseExecutions) {
-      boolean isActive = caseExecution.isActive();
-
-      if (!isActive) {
-        processEngine.getCaseService().manuallyStartCaseExecution(caseExecution.getId());
-      }
-    }
-
-    taskQuery =
-        processEngine.getTaskService().createTaskQuery().taskCandidateGroup("Administrators");
-
-    tasks = taskQuery.list();
-
-    int xxx = 0;
-    xxx++;
   }
 }

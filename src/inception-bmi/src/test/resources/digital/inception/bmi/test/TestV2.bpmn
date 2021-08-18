@@ -9,13 +9,17 @@
     <scriptTask id="AnotherTestScriptTask" name="Another Test Script Task" scriptFormat="groovy">
       <script>println "Another Test Script Task"
 
-def userDirectoryId = securityService.getUserDirectoryIdForUser("Administrator")
+def userDirectoryIdOptional = securityService.getUserDirectoryIdForUser("Administrator")
 
-println "The User Directory ID for the Administrator user is " + userDirectoryId
+if (userDirectoryIdOptional.isPresent()) {
+  def userDirectoryId = userDirectoryIdOptional.get();
 
-def roles = securityService.getRoleCodesForUser(userDirectoryId, "Administrator")
+  println "The User Directory ID for the Administrator user is " + userDirectoryId
 
-println "Found " + roles.size() + " roles for the Administrator user"</script>
+  def roles = securityService.getRoleCodesForUser(userDirectoryId, "Administrator")
+
+  println "Found " + roles.size() + " roles for the Administrator user"
+} </script>
     </scriptTask>
     <userTask id="TestUserTask" name="Test User Task" camunda:candidateGroups="Administrators" />
     <sequenceFlow id="flow1" sourceRef="StartEvent" targetRef="TestScriptTask" />

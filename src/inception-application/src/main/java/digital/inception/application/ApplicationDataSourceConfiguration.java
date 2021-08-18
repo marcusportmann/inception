@@ -75,11 +75,6 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
 
-  private static final String[] IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS = {
-    // Utility modules
-    "digital/inception/bmi/inception-camunda-h2.sql"
-  };
-
   /* Logger */
   private static final Logger logger =
       LoggerFactory.getLogger(ApplicationDataSourceConfiguration.class);
@@ -303,17 +298,6 @@ public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
 
       if (isInMemoryH2Database) {
         logger.info("Initializing the in-memory H2 database");
-
-        /*
-         * Initialize the in-memory database using the SQL statements contained in the resources
-         * for the Inception framework in a specific order
-         */
-        for (String inMemoryDatabaseInitResourcePath : IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS) {
-          if (ResourceUtil.classpathResourceExists(inMemoryDatabaseInitResourcePath)) {
-            loadSQL(
-                dataSource, ResourceUtil.getClasspathResourceURL(inMemoryDatabaseInitResourcePath));
-          }
-        }
 
         /*
          * Initialize the in-memory database using the SQL statements contained in any other

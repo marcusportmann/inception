@@ -22,6 +22,8 @@
     </encoder>
   </appender>
 
+  <logger name="org.camunda" level="info" />
+
   <logger name="liquibase.hub" level="ERROR" />
   <logger name="liquibase.lockservice" level="WARN" />
   <logger name="liquibase.changelog.StandardChangeLogHistoryService" level="WARN" />

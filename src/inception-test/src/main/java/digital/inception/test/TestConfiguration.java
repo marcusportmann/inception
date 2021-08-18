@@ -105,12 +105,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @SuppressWarnings("WeakerAccess")
 public class TestConfiguration implements ResourceLoaderAware {
 
-  private static final String[] IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS = {
-    // Utility modules
-    "digital/inception/bmi/inception-camunda-h2.sql",
-    "digital/inception/bmi/test/inception-camunda-test-h2.sql"
-  };
-
   private static final Object dataSourceLock = new Object();
 
   /* Logger */
@@ -250,18 +244,6 @@ public class TestConfiguration implements ResourceLoaderAware {
               SpringResourceAccessor resourceAccessor = new SpringResourceAccessor(resourceLoader);
               Liquibase liquibase = new Liquibase(liquibaseChangeLog, resourceAccessor, database);
               liquibase.update(new Contexts(), new LabelExpression());
-            }
-          }
-
-          /*
-           * Initialize the in-memory database using the SQL statements contained in the resources
-           * for the Inception framework in a specific order
-           */
-          for (String inMemoryDatabaseInitResourcePath : IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS) {
-            if (ResourceUtil.classpathResourceExists(inMemoryDatabaseInitResourcePath)) {
-              loadSQL(
-                  dataSource,
-                  ResourceUtil.getClasspathResourceURL(inMemoryDatabaseInitResourcePath));
             }
           }
 

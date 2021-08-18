@@ -28,11 +28,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
- * The <b>ProcessServiceTestConfiguration/code> class.
+ * The <b>CasesServiceTestConfiguration/code> class.
  *
  * @author Marcus Portmann
  */
-public class ProcessServiceTestConfiguration {
+public class CaseServiceTestConfiguration {
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -47,13 +47,13 @@ public class ProcessServiceTestConfiguration {
   private final PlatformTransactionManager transactionManager;
 
   /**
-   * Constructs a new <b>ProcessServiceTestConfiguration</b>.
+   * Constructs a new <b>CaseServiceTestConfiguration</b>.
    *
    * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database
    * @param transactionManager the Spring platform transaction manager
    */
-  public ProcessServiceTestConfiguration(
+  public CaseServiceTestConfiguration(
       ApplicationContext applicationContext,
       @Qualifier("applicationDataSource") DataSource dataSource,
       PlatformTransactionManager transactionManager) {
@@ -83,7 +83,7 @@ public class ProcessServiceTestConfiguration {
 
       // Disable specific capabilities
       processEngineConfiguration.setAuthorizationEnabled(false);
-      processEngineConfiguration.setCmmnEnabled(false);
+      processEngineConfiguration.setCmmnEnabled(true);
       processEngineConfiguration.setDbHistoryUsed(false);
       processEngineConfiguration.setDbIdentityUsed(false);
       processEngineConfiguration.setDmnEnabled(false);
