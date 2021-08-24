@@ -1,3 +1,5 @@
+@use "sass:math";
+
 // IE10&11 Flexbox fix
 @media all and (-ms-high-contrast: none) {
   html {
@@ -631,9 +633,11 @@ admin-root {
     .navbar-brand {
       position: absolute;
       left: 50%;
-      margin-left: - (($admin-header-brand-width / 2) + 24);
+      margin-left: - (math.div($admin-header-brand-width, 2) + 24);
     }
   }
+
+
 
   .admin-body {
     margin-top: $admin-header-height;

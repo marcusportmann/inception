@@ -1,3 +1,5 @@
+@use "sass:math";
+
 //
 // Base styles
 //
@@ -33,7 +35,7 @@
     background-color: #fff;
     border: 1px solid $border-color;
     transition: .15s ease-out;
-    @include border-radius($border-radius / 2);
+    @include border-radius(math.div($border-radius, 2));
   }
 }
 
