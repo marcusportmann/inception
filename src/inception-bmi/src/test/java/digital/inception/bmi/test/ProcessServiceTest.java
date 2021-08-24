@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
 import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
@@ -260,12 +261,14 @@ public class ProcessServiceTest {
 
     // Retrieve the tasks for the Administrators group
     TaskQuery taskQuery =
-        processEngine.getTaskService().createTaskQuery().taskCandidateGroup("Administrators");
+        processEngine.getTaskService().createTaskQuery().taskCandidateGroup("Administrators").initializeFormKeys();
     List<Task> tasks = taskQuery.list();
 
     assertEquals(1, tasks.size(), "Failed to find the task for the Administrators group");
 
     String taskId = tasks.get(0).getId();
+
+    TaskFormData taskFormData =  processEngine.getFormService().getTaskFormData(taskId);
 
     processEngine.getTaskService().claim(taskId, "jack");
 
