@@ -27,6 +27,10 @@
     <!-- Inception Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-application</artifactId>
     </dependency>
     <!--
@@ -39,6 +43,15 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-cache</artifactId>
     </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-jta</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-ws</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-codes-api</artifactId>
@@ -62,10 +75,6 @@
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-error-ws</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-jta</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -105,10 +114,6 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
       <artifactId>inception-scheduler-api</artifactId>
     </dependency>
     <dependency>
@@ -130,10 +135,6 @@
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-sms-ws</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-ws</artifactId>
     </dependency>
 
     <!-- Dependencies -->
@@ -160,11 +161,6 @@
     </dependency>
 
     <!-- Test Dependencies -->
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-test</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-test</artifactId>

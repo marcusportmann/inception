@@ -267,6 +267,12 @@ Complete the following steps to create a new application based on the Inception 
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
+            <artifactId>inception-jta</artifactId>
+          </dependency>
+
+
+          <dependency>
+            <groupId>digital.inception</groupId>
             <artifactId>inception-codes-api</artifactId>
           </dependency>
           <dependency>
@@ -291,10 +297,6 @@ Complete the following steps to create a new application based on the Inception 
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
-            <artifactId>inception-persistence</artifactId>
-          </dependency>
-          <dependency>
-            <groupId>digital.inception</groupId>
             <artifactId>inception-reporting-api</artifactId>
           </dependency>
           <dependency>
@@ -307,6 +309,10 @@ Complete the following steps to create a new application based on the Inception 
           </dependency>
 
           <!-- Dependencies -->
+          <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+          </dependency>
           <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
