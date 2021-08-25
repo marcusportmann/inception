@@ -24,7 +24,7 @@
   </parent>
 
   <dependencies>
-    <!-- Inception Dependencies -->
+    <!-- Inception Core Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-api</artifactId>
@@ -52,6 +52,7 @@
       <artifactId>inception-ws</artifactId>
     </dependency>
 
+    <!-- Inception Module Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-codes-api</artifactId>

@@ -72,9 +72,11 @@ public class ApiSecurityExpressionRoot extends SecurityExpressionRoot
         this.isSecurityEnabled =
             Boolean.parseBoolean(
                 applicationContext.getEnvironment().getProperty("inception.api.security.enabled"));
+      } else  {
+        this.isSecurityEnabled = (!this.inDebugMode);
       }
     } catch (Throwable e) {
-      this.isSecurityEnabled = !this.inDebugMode;
+      this.isSecurityEnabled = (!this.inDebugMode);
     }
   }
 

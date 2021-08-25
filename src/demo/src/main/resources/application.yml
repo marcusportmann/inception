@@ -33,9 +33,9 @@ server:
 
 
 inception:
-  api:
-    security:
-      enabled: false
+  #  api:
+  #    security:
+  #      enabled: false
 
   debug:
     enabled: true

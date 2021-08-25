@@ -86,12 +86,12 @@ Complete the following steps to setup MailSlurper on MacOS.
 4. Launch the *createcredentials* binary in a Terminal window and enter the username as
    *inception* and password as *inception* when prompted.
 
-   NOTE: You may need to enable the execution of the *mailslurper* binary under
-   **System Preferences > Security & Privacy > General**
+   **NOTE:** You may need to enable the execution of the *mailslurper* binary under
+   *System Preferences > Security & Privacy > General*
 5. Launch the *mailslurper* binary in a Terminal window.
 
-   NOTE: You may need to enable the execution of the *mailslurper* binary under
-   **System Preferences > Security & Privacy > General**
+   **NOTE:** You may need to enable the execution of the *mailslurper* binary under
+   *System Preferences > Security & Privacy > General*
 
 
 ### Checkout and build the Inception Framework on MacOS
@@ -256,7 +256,7 @@ Complete the following steps to create a new application based on the Inception 
         </parent>
 
         <dependencies>
-          <!-- Inception Dependencies -->
+          <!-- Inception Core Dependencies -->
           <dependency>
             <groupId>digital.inception</groupId>
             <artifactId>inception-api</artifactId>
@@ -270,7 +270,7 @@ Complete the following steps to create a new application based on the Inception 
             <artifactId>inception-jta</artifactId>
           </dependency>
 
-
+          <!-- Inception Module Dependencies -->
           <dependency>
             <groupId>digital.inception</groupId>
             <artifactId>inception-codes-api</artifactId>
@@ -321,6 +321,11 @@ Complete the following steps to create a new application based on the Inception 
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
           </dependency>
+          <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+          </dependency>
+
 
           <!-- Test Dependencies -->
           <dependency>
@@ -381,7 +386,8 @@ Complete the following steps to create a new application based on the Inception 
       mkdir -p src/main/java/demo
       mkdir -p src/main/resources/demo
       ```
-   4. Add the Spring Boot Configuration class, e.g. *src/main/java/demo/DemoConfiguration.java*.
+   4. Add the Spring Boot Configuration class using the naming convention ***ApplicationName*Configuration**,
+      e.g. *src/main/java/demo/DemoConfiguration.java*.
       ```
       package demo;
 
@@ -397,8 +403,8 @@ Complete the following steps to create a new application based on the Inception 
           basePackages = {"demo"})
       public class DemoConfiguration {}
       ```
-   5. Add the Spring Boot Application class,
-      e.g. *src/main/java/demo/DemoApplication.java*, that extends the
+   5. Add the Spring Boot Application class using the naming convention ***ApplicationName*Application**,
+      e.g. *src/main/java/demo/DemoApplication.java*, which extends the
       Inception Framework application class (digital.inception.application.Application).
       ```
       package demo;
@@ -440,8 +446,54 @@ Complete the following steps to create a new application based on the Inception 
         }
       }
       ```
-   6. Add the Spring application configuration file, *src/main/resources/application.yml*,
+   6. Add the Liquibase changelog for the application using the naming convention
+      **src/main/resources/db/*application-name*.changelog.xml**, e.g.
+      *src/main/resources/db/demo.changelog.xml*, to the project. This file will
+      contain all the Liquibase changesets used to initialize both the in-memory H2
+      database and the environment-specific databases for the application.
+      This database allows developers to run the application locally while developing the
+      application and is also used to execute all Junit tests for the application as part
+      of the build process.
+
+      **NOTE:** You need to update the *changeSet id* and the *application schema* name.
+      ```
+      <?xml version="1.0" encoding="UTF-8"?>
+
+      <databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+               http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+        <property name="blob_type" value="bytea" dbms="h2"/>
+        <property name="blob_type" value="bytea" dbms="postgresql"/>
+        <property name="blob_type" value="blob" dbms="oracle"/>
+        <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+        <property name="now" value="now()" dbms="h2"/>
+        <property name="now" value="now()" dbms="postgresql"/>
+        <property name="now" value="sysdate" dbms="oracle"/>
+        <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
+
+        <changeSet id="demo-1.0.0" author="">
+          <sql dbms="h2" endDelimiter=";">
+            CREATE SCHEMA IF NOT EXISTS demo
+          </sql>
+          <sql dbms="postgresql" endDelimiter=";">
+            CREATE SCHEMA IF NOT EXISTS demo
+          </sql>
+          <sql dbms="mssql" endDelimiter=";">
+            CREATE SCHEMA demo
+          </sql>
+
+
+        </changeSet>
+      </databaseChangeLog>
+      ```
+   7. Add the Spring application configuration file, *src/main/resources/application.yml*,
       changing the *spring.application.name* value to the name of the application.
+
+      **NOTE:** You need to update the *spring.application.name* and
+      *inception.application.data-source.liquibase.change-log* configuration properties.
       ```
       server:
         port: 8080
@@ -453,6 +505,12 @@ Complete the following steps to create a new application based on the Inception 
             url: jdbc:h2:mem:application;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
             min-pool-size: 5
             max-pool-size: 10
+            liquibase:
+              enabled: true
+              change-log: classpath:db/demo.changelog.xml
+        debug:
+          enabled: true
+
         oauth2:
           authorization-server:
             jwt:
@@ -469,27 +527,6 @@ Complete the following steps to create a new application based on the Inception 
       springdoc:
         writer-with-order-by-keys: true
       ```
-   6. Add the in-memory H2 database script for the application,
-      e.g. *src/main/resources/demo/demo-h2.sql*, to the project. This
-      file will contain all the Data Definition Language (DDL) and Data Manipulation
-      Language (DML) commands use to initialize the in-memory H2 database for the
-      application. This database allows developers to run the application locally while
-      developing the application and is also used to execute all Junit tests for the
-      application as part of the build process.
-      ```
-      -- -------------------------------------------------------------------------------------------------
-      -- CREATE SCHEMAS
-      -- -------------------------------------------------------------------------------------------------
-
-
-      -- -------------------------------------------------------------------------------------------------
-      -- CREATE TABLES
-      -- -------------------------------------------------------------------------------------------------
-
-
-      -- -------------------------------------------------------------------------------------------------
-      -- POPULATE TABLES
-      -- -------------------------------------------------------------------------------------------------
 4. Setup the Angular front-end for the application.
 
    1. Execute the following command under the *src/main* directory to create the new
@@ -546,10 +583,10 @@ Complete the following steps to create a new application based on the Inception 
    4. Execute the following commands under the *src/main/frontend* directory to install the
       dependencies for the *ngx-inception* library.
       ```
-      npm install --save @angular/cdk@11
-      npm install --save @angular/localize@11
-      npm install --save @angular/material@11
-      npm install --save @angular/material-moment-adapter@11
+      npm install --save @angular/cdk@12
+      npm install --save @angular/localize@12
+      npm install --save @angular/material@12
+      npm install --save @angular/material-moment-adapter@12
       npm install --save @auth0/angular-jwt@5
       npm install --save @fortawesome/fontawesome-free@5
       npm install --save bootstrap@4
