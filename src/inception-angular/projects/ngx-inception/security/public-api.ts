@@ -14,4 +14,32 @@
  * limitations under the License.
  */
 
-export * from './src/security';
+export * from './src/services/security-services.module';
+export * from './src/services/group';
+export * from './src/services/group-member';
+export * from './src/services/group-member-type';
+export * from './src/services/group-members';
+export * from './src/services/group-role';
+export * from './src/services/groups';
+export * from './src/services/tenant';
+export * from './src/services/tenant-status';
+export * from './src/services/tenant-user-directory';
+export * from './src/services/tenants';
+export * from './src/services/password-change';
+export * from './src/services/password-change-reason';
+export * from './src/services/role';
+export * from './src/services/security.service.errors';
+export * from './src/services/security.service';
+export * from './src/services/user';
+export * from './src/services/user-directory';
+export * from './src/services/user-directory-capabilities';
+export * from './src/services/user-directory-parameter';
+export * from './src/services/user-directory-summaries';
+export * from './src/services/user-directory-summary';
+export * from './src/services/user-directory-type';
+export * from './src/services/user-sort-by';
+export * from './src/services/user-status';
+export * from './src/services/users';
+export * from './src/views/security-title-resolver';
+export * from './src/views/security-views.module';
+export * from './src/views/user-profile.component';

@@ -14,4 +14,9 @@
  * limitations under the License.
  */
 
-export * from './src/reference';
+export * from './src/services/reference-services.module';
+export * from './src/services/reference.service';
+//export * from './src/services/reference.service.errors';
+export * from './src/services/country';
+export * from './src/services/language';
+export * from './src/services/region';

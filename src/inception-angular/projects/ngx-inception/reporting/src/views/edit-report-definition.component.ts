@@ -18,9 +18,10 @@ import {AfterViewInit, Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, Base64, DialogService, Error,
-  FileValidator, InvalidArgumentError, ServiceUnavailableError, SpinnerService
-} from 'ngx-inception';
+  AccessDeniedError, Base64, Error, FileValidator, InvalidArgumentError, ServiceUnavailableError
+} from 'ngx-inception/core';
+import {DialogService} from 'ngx-inception/dialog';
+import {AdminContainerView, BackNavigation, SpinnerService} from 'ngx-inception/layout';
 import {finalize, first} from 'rxjs/operators';
 import {ReportDefinition} from '../services/report-definition';
 import {ReportingService} from '../services/reporting.service';

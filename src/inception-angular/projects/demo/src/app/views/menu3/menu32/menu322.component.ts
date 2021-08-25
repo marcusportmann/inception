@@ -16,7 +16,7 @@
 
 import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {AdminContainerView, BackNavigation} from 'ngx-inception';
+import {AdminContainerView, BackNavigation} from 'ngx-inception/layout';
 import {Observable} from 'rxjs';
 
 /**

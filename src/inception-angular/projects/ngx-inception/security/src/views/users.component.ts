@@ -21,10 +21,12 @@ import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, ConfirmationDialogComponent, DialogService, Error,
-  InvalidArgumentError, ServiceUnavailableError, Session, SessionService, SortDirection,
-  SpinnerService, TableFilterComponent
-} from 'ngx-inception';
+  AccessDeniedError, Error, InvalidArgumentError, ServiceUnavailableError, SortDirection,
+  TableFilterComponent
+} from 'ngx-inception/core';
+import {ConfirmationDialogComponent, DialogService} from 'ngx-inception/dialog';
+import {AdminContainerView, SpinnerService} from 'ngx-inception/layout';
+import {Session, SessionService} from 'ngx-inception/session';
 import {BehaviorSubject, merge, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
 import {finalize, first, map, tap} from 'rxjs/operators';
 import {SecurityService} from '../services/security.service';

@@ -14,4 +14,10 @@
  * limitations under the License.
  */
 
-export * from './src/reporting';
+export * from './src/services/reporting-services.module';
+export * from './src/services/report-definition';
+export * from './src/services/report-definition-summary';
+export * from './src/services/reporting.service.errors';
+export * from './src/services/reporting.service';
+export * from './src/views/reporting-title-resolver';
+export * from './src/views/reporting-views.module';

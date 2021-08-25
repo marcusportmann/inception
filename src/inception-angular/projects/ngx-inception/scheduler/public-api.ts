@@ -14,4 +14,11 @@
  * limitations under the License.
  */
 
-export * from './src/scheduler';
+export * from './src/services/scheduler-services.module';
+export * from './src/services/job';
+export * from './src/services/job-parameter';
+export * from './src/services/job-status';
+export * from './src/services/scheduler.service.errors';
+export * from './src/services/scheduler.service';
+export * from './src/views/scheduler-title-resolver';
+export * from './src/views/scheduler-views.module';

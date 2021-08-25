@@ -15,7 +15,7 @@
  */
 
 import {HttpErrorResponse} from '@angular/common/http';
-import {Error, HttpError, ProblemDetails} from 'ngx-inception';
+import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
 
 /**
  * The DuplicateJobError class holds the information for a duplicate job error.

@@ -14,4 +14,26 @@
  * limitations under the License.
  */
 
-export * from './src/party';
+export * from './src/services/party-services.module';
+export * from './src/services/party.service';
+//export * from './src/services/party.service.errors';
+export * from './src/services/party-reference.service';
+//export * from './src/services/party-reference.service.errors';
+
+export * from './src/services/contact-mechanism-role';
+export * from './src/services/contact-mechanism-type';
+export * from './src/services/employment-status';
+export * from './src/services/employment-type';
+export * from './src/services/gender';
+export * from './src/services/identity-document-type';
+export * from './src/services/marital-status';
+export * from './src/services/marriage-type';
+export * from './src/services/next-of-kin-type';
+export * from './src/services/occupation';
+export * from './src/services/residence-permit-type';
+export * from './src/services/race';
+export * from './src/services/residency-status';
+export * from './src/services/residential-type';
+export * from './src/services/source-of-funds-type';
+export * from './src/services/tax-number-type';
+export * from './src/services/title';

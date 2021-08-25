@@ -17,8 +17,9 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import '@angular/localize/init';
 import {RouterModule, Routes} from '@angular/router';
-import {CoreModule} from 'ngx-inception';
+import {CoreModule} from 'ngx-inception/core';
 import {ExpiredPasswordTitleResolver} from './expired-password-title-resolver';
 import {ExpiredPasswordComponent} from './expired-password.component';
 import {ForgottenPasswordTitleResolver} from './forgotten-password-title-resolver';

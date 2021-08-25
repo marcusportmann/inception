@@ -21,9 +21,10 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, ConfirmationDialogComponent, DialogService,
-  Error, InvalidArgumentError, ServiceUnavailableError, SpinnerService
-} from 'ngx-inception';
+  AccessDeniedError, Error, InvalidArgumentError, ServiceUnavailableError
+} from 'ngx-inception/core';
+import {ConfirmationDialogComponent, DialogService} from 'ngx-inception/dialog';
+import {AdminContainerView, BackNavigation, SpinnerService} from 'ngx-inception/layout';
 import {finalize, first} from 'rxjs/operators';
 import {Code} from '../services/code';
 import {CodesService} from '../services/codes.service';

@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export * from './src/login';
+export * from './src/views/login-views.module';

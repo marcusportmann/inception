@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
+import '@angular/localize/init'
+
 import {CommonModule, HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import {Injector, ModuleWithProviders, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import '@angular/localize/init'
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 import {RouterModule} from '@angular/router';
-import {CoreModule} from './core/core.module';
-import {DialogModule} from './dialog/dialog.module';
-import {INCEPTION_CONFIG, InceptionConfig} from './inception-config';
-import {setInceptionInjector} from './inception-injector';
-import {LayoutModule} from './layout/layout.module';
+import {CoreModule} from 'ngx-inception/core';
+import {DialogModule} from 'ngx-inception/dialog';
+import {INCEPTION_CONFIG, InceptionConfig} from 'ngx-inception/core';
+import {setInceptionInjector} from 'ngx-inception/core';
+import {LayoutModule} from 'ngx-inception/layout';
 import {NgxInceptionComponent} from './ngx-inception.component';
-import {CanActivateFunctionGuard} from './session/routing/can-activate-function-guard';
-import {DisabledFunctionGuard} from './session/routing/disabled-function-guard';
-import {SessionModule} from "./session/session.module";
+import {CanActivateFunctionGuard} from 'ngx-inception/session'
+import {DisabledFunctionGuard} from 'ngx-inception/session';
+import {SessionModule} from 'ngx-inception/session';
 
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/
@@ -107,4 +108,6 @@ export class InceptionModule {
     };
   }
 }
+
+
 

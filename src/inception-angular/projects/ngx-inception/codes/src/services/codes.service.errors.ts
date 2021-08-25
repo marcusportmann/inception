@@ -15,7 +15,7 @@
  */
 
 import {HttpErrorResponse} from '@angular/common/http';
-import {Error, HttpError, ProblemDetails} from 'ngx-inception';
+import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
 
 /**
  * The CodeCategoryNotFoundError class holds the information for a code category not found error.

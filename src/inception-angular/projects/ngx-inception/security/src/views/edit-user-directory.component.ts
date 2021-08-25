@@ -17,10 +17,9 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {
-  AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
-} from 'ngx-inception';
+import {AccessDeniedError, Error, InvalidArgumentError, ServiceUnavailableError} from 'ngx-inception/core';
+import {DialogService} from 'ngx-inception/dialog';
+import {AdminContainerView, BackNavigation, SpinnerService} from 'ngx-inception/layout';
 import {combineLatest, Subscription} from 'rxjs';
 import {finalize, first, pairwise, startWith} from 'rxjs/operators';
 import {SecurityService} from '../services/security.service';

@@ -14,4 +14,10 @@
  * limitations under the License.
  */
 
-export * from './src/config';
+export * from './src/services/config-services.module';
+export * from './src/services/config.service.errors';
+export * from './src/services/config.service';
+export * from './src/services/config';
+
+export * from './src/views/configs-title-resolver';
+export * from './src/views/config-views.module';

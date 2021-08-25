@@ -16,7 +16,7 @@
 
 import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AdminContainerView} from 'ngx-inception';
+import {AdminContainerView} from 'ngx-inception/layout';
 
 /**
  * The SecurityOverviewComponent class implements the security overview component.

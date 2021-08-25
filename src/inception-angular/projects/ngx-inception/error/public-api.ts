@@ -14,4 +14,8 @@
  * limitations under the License.
  */
 
-export * from './src/error';
+//export * from './src/services/error.service.errors';
+export * from './src/services/error.service';
+export * from './src/services/error-report';
+export * from './src/services/error-report-summary';
+export * from './src/views/error-views.module';

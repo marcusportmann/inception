@@ -19,9 +19,10 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, DialogService, Error, InformationDialogComponent, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
-} from 'ngx-inception';
+  AccessDeniedError, Error, InvalidArgumentError, ServiceUnavailableError
+} from 'ngx-inception/core';
+import {DialogService, InformationDialogComponent} from 'ngx-inception/dialog';
+import {SpinnerService} from 'ngx-inception/layout';
 import {SecurityService} from "ngx-inception/security";
 import {finalize, first} from 'rxjs/operators';
 

@@ -18,8 +18,11 @@ import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/
 import {Inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  ProblemDetails, ServiceUnavailableError, SessionService, SortDirection
-} from 'ngx-inception';
+  ProblemDetails, ServiceUnavailableError, SortDirection
+} from 'ngx-inception/core';
+
+import {SessionService} from 'ngx-inception/session';
+
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {Group} from './group';

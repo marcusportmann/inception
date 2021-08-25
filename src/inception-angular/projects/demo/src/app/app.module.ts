@@ -17,10 +17,40 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+// import {
+//   InceptionAppModule, InceptionConfig, InceptionModule, NavigationBadge, NavigationItem,
+//   NavigationTitle
+// } from 'ngx-inception';
+
 import {
-  InceptionAppModule, InceptionConfig, InceptionModule, NavigationBadge, NavigationItem,
-  NavigationTitle
+  InceptionModule, InceptionAppModule
 } from 'ngx-inception';
+
+import {
+  InceptionConfig
+} from 'ngx-inception/core';
+
+
+import {
+
+
+  NavigationBadge, NavigationItem,
+  NavigationTitle
+} from 'ngx-inception/layout';
+
+
+
+// import {
+//   InceptionAppModule, InceptionConfig, InceptionModule, NavigationBadge, NavigationItem,
+//   NavigationTitle
+// } from 'ngx-inception';
+//
+// import {
+//   InceptionAppModule, InceptionConfig, InceptionModule, NavigationBadge, NavigationItem,
+//   NavigationTitle
+// } from 'ngx-inception';
+
+
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 
