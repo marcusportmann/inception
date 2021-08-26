@@ -20,11 +20,10 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, Error, InvalidArgumentError, ServiceUnavailableError, SortDirection,
+  AccessDeniedError, AdminContainerView, BackNavigation, ConfirmationDialogComponent, DialogService,
+  Error, InvalidArgumentError, ServiceUnavailableError, SortDirection, SpinnerService,
   TableFilterComponent
 } from 'ngx-inception/core';
-import {ConfirmationDialogComponent, DialogService} from 'ngx-inception/dialog';
-import {AdminContainerView, BackNavigation, SpinnerService} from 'ngx-inception/layout';
 import {merge, Subscription} from 'rxjs';
 import {finalize, first, tap} from 'rxjs/operators';
 import {GroupMember} from '../services/group-member';

@@ -19,10 +19,9 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, Error, InvalidArgumentError, ServiceUnavailableError
+  AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
+  ServiceUnavailableError, SpinnerService
 } from 'ngx-inception/core';
-import {DialogService} from 'ngx-inception/dialog';
-import {AdminContainerView, BackNavigation, SpinnerService} from 'ngx-inception/layout';
 import {finalize, first} from 'rxjs/operators';
 import {Job} from '../services/job';
 import {JobParameter} from '../services/job-parameter';

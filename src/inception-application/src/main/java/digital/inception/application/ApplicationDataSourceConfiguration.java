@@ -16,7 +16,7 @@
 
 package digital.inception.application;
 
-import digital.inception.core.liquibase.InceptionLiquibaseChangeLogs;
+import digital.inception.core.liquibase.InceptionLiquibaseChangelogs;
 import digital.inception.core.util.JDBCUtil;
 import digital.inception.core.util.ResourceUtil;
 import io.agroal.api.AgroalDataSource;
@@ -95,13 +95,13 @@ public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
   @Value("classpath*:**/*-h2.sql")
   private Resource[] inMemoryInitResources;
 
-  /** The Liquibase change log. */
-  @Value("${inception.application.data-source.liquibase.change-log:#{null}}")
-  private String liquibaseChangeLog;
+  /** The Liquibase changelog. */
+  @Value("${inception.application.data-source.liquibase.changelog:#{null}}")
+  private String liquibaseChangelog;
 
-  /** Execute the Liquibase data change logs. */
-  @Value("${inception.application.data-source.liquibase.data-change-logs:#{true}}")
-  private boolean liquibaseDataChangeLogs;
+  /** Execute the Liquibase data changelogs. */
+  @Value("${inception.application.data-source.liquibase.data-changelogs:#{true}}")
+  private boolean liquibaseDataChangelogs;
 
   /** Is Liquibase enabled? */
   @Value("${inception.application.data-source.liquibase.enabled:#{false}}")
@@ -253,44 +253,58 @@ public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
               DatabaseFactory.getInstance()
                   .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
-          for (String changeLogFile : InceptionLiquibaseChangeLogs.CORE_CHANGE_LOGS) {
-            if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+          for (String changelogFile : InceptionLiquibaseChangelogs.CORE_CHANGELOGS) {
+            if (ResourceUtil.classpathResourceExists(changelogFile)) {
               Liquibase liquibase =
-                  new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+                  new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
+
+              logger.info("Applying Liquibase changelog: "  + changelogFile);
+
               liquibase.update(new Contexts(), new LabelExpression());
             }
           }
 
-          for (String changeLogFile : InceptionLiquibaseChangeLogs.UTILITY_CHANGE_LOGS) {
-            if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+          for (String changelogFile : InceptionLiquibaseChangelogs.UTILITY_CHANGELOGS) {
+            if (ResourceUtil.classpathResourceExists(changelogFile)) {
               Liquibase liquibase =
-                  new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+                  new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
+
+              logger.info("Applying Liquibase changelog: "  + changelogFile);
+
               liquibase.update(new Contexts(), new LabelExpression());
             }
           }
 
-          for (String changeLogFile : InceptionLiquibaseChangeLogs.BUSINESS_CHANGE_LOGS) {
-            if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+          for (String changelogFile : InceptionLiquibaseChangelogs.BUSINESS_CHANGELOGS) {
+            if (ResourceUtil.classpathResourceExists(changelogFile)) {
               Liquibase liquibase =
-                  new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+                  new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
+
+              logger.info("Applying Liquibase changelog: "  + changelogFile);
+
               liquibase.update(new Contexts(), new LabelExpression());
             }
           }
 
-          if (liquibaseDataChangeLogs) {
-            for (String changeLogFile : InceptionLiquibaseChangeLogs.BUSINESS_DATA_CHANGE_LOGS) {
-              if (ResourceUtil.classpathResourceExists(changeLogFile)) {
+          if (liquibaseDataChangelogs) {
+            for (String changelogFile : InceptionLiquibaseChangelogs.BUSINESS_DATA_CHANGELOGS) {
+              if (ResourceUtil.classpathResourceExists(changelogFile)) {
                 Liquibase liquibase =
-                    new Liquibase(changeLogFile, new ClassLoaderResourceAccessor(), database);
+                    new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
+
+                logger.info("Applying Liquibase changelog: "  + changelogFile);
+
                 liquibase.update(new Contexts(), new LabelExpression());
-                liquibase.update(new Contexts("test"), new LabelExpression());
               }
             }
           }
 
-          if (StringUtils.hasText(liquibaseChangeLog)) {
+          if (StringUtils.hasText(liquibaseChangelog)) {
             SpringResourceAccessor resourceAccessor = new SpringResourceAccessor(resourceLoader);
-            Liquibase liquibase = new Liquibase(liquibaseChangeLog, resourceAccessor, database);
+            Liquibase liquibase = new Liquibase(liquibaseChangelog, resourceAccessor, database);
+
+            logger.info("Applying Liquibase changelog: "  + liquibaseChangelog);
+
             liquibase.update(new Contexts(), new LabelExpression());
           }
         }

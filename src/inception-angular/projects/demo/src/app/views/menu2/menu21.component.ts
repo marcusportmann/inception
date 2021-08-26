@@ -18,7 +18,7 @@ import {HttpClient} from "@angular/common/http";
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {Error} from 'ngx-inception/core';
-import {SpinnerService} from 'ngx-inception/layout';
+import {SpinnerService} from 'ngx-inception/core';
 import {PartyService} from "ngx-inception/party";
 
 

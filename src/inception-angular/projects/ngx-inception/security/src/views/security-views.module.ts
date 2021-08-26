@@ -18,8 +18,7 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
-import {CoreModule} from 'ngx-inception/core';
-import {CanActivateFunctionGuard, SessionModule} from 'ngx-inception/session';
+import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
 import {EditGroupTitleResolver} from './edit-group-title-resolver';
 import {EditGroupComponent} from './edit-group.component';
 import {EditTenantTitleResolver} from './edit-tenant-title-resolver';
@@ -347,7 +346,7 @@ const routes: Routes = [{
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
 
     // Inception modules
-    CoreModule, SessionModule
+    CoreModule
   ],
   providers: [
     // Resolvers

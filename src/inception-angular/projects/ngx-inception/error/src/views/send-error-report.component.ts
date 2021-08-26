@@ -18,9 +18,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Error, ProblemDetails} from 'ngx-inception/core';
-import {DialogService, InformationDialogComponent} from 'ngx-inception/dialog';
-import {SpinnerService} from 'ngx-inception/layout';
+import {
+  DialogService, Error, InformationDialogComponent, ProblemDetails, SpinnerService
+} from 'ngx-inception/core';
 import {first, map} from 'rxjs/operators';
 import {ErrorService} from '../services/error.service';
 

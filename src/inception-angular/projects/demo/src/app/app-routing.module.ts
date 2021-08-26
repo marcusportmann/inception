@@ -18,12 +18,8 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {
-  AdminContainerComponent, NotFoundComponent, SimpleContainerComponent
-} from 'ngx-inception/layout';
-
-import {
-  CanActivateFunctionGuard
-} from 'ngx-inception/session';
+  AdminContainerComponent, CanActivateFunctionGuard, NotFoundComponent, SimpleContainerComponent
+} from 'ngx-inception/core';
 
 import {UserProfileComponent} from 'ngx-inception/security';
 import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';

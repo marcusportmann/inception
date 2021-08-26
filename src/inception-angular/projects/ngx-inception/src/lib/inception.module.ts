@@ -14,100 +14,77 @@
  * limitations under the License.
  */
 
-import '@angular/localize/init'
-
-import {CommonModule, HashLocationStrategy, LocationStrategy} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
-import {Injector, ModuleWithProviders, NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
-import {RouterModule} from '@angular/router';
-import {CoreModule} from 'ngx-inception/core';
-import {DialogModule} from 'ngx-inception/dialog';
-import {INCEPTION_CONFIG, InceptionConfig} from 'ngx-inception/core';
-import {setInceptionInjector} from 'ngx-inception/core';
-import {LayoutModule} from 'ngx-inception/layout';
+import {NgModule} from '@angular/core';
 import {NgxInceptionComponent} from './ngx-inception.component';
-import {CanActivateFunctionGuard} from 'ngx-inception/session'
-import {DisabledFunctionGuard} from 'ngx-inception/session';
-import {SessionModule} from 'ngx-inception/session';
 
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
-export const INCEPTION_DATE_FORMATS = {
-  parse: {
-    dateInput: 'LL',
-  },
-  display: {
-    dateInput: 'YYYY-MM-DD',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
-
-/**
- * The InceptionModule class implements the Inception framework module.
- *
- * @author Marcus Portmann
- */
 @NgModule({
-  declarations: [
-    // Components
-    NgxInceptionComponent
-  ],
-  imports: [
-    // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
-
-    // Inception modules
-    CoreModule, DialogModule.forRoot(), LayoutModule.forRoot(), SessionModule.forRoot(),
-  ],
-  exports: [
-    // Angular modules
-    CommonModule, FormsModule, HttpClientModule, ReactiveFormsModule, RouterModule,
-
-    // Inception modules
-    CoreModule, DialogModule, LayoutModule, SessionModule,
-
-    // Components
-    NgxInceptionComponent
-  ]
+  declarations: [],
+  imports: [],
+  exports: []
 })
 export class InceptionModule {
-  constructor(injector: Injector) {
-    setInceptionInjector(injector);
-  }
-
-  // TODO: MOVE THE PROVISION OF THE INCEPTION CONFIGURATION TO THE APPLICATION MODULE -- MARCUS
-  static forRoot(config: InceptionConfig): ModuleWithProviders<InceptionModule> {
-    return {
-      ngModule: InceptionModule,
-      providers: [{
-        provide: INCEPTION_CONFIG,
-        useValue: config
-      }, {
-        provide: LocationStrategy,
-        useClass: HashLocationStrategy,
-      }, {
-        provide: DateAdapter,
-        useClass: MomentDateAdapter,
-        deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-      }, {
-        provide: MAT_DATE_FORMATS,
-        useValue: INCEPTION_DATE_FORMATS
-      }, {
-        provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-        useValue: {appearance: 'standard'}
-      },
-        // Function Guards
-        CanActivateFunctionGuard, DisabledFunctionGuard
-      ]
-    };
+  constructor() {
   }
 }
 
 
-
+// /**
+//  * The InceptionModule class implements the Inception framework module.
+//  *
+//  * @author Marcus Portmann
+//  */
+// @NgModule({
+//   declarations: [
+//     // Components
+//     NgxInceptionComponent
+//   ],
+//   imports: [
+//     // Angular modules
+//     CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
+//
+//     // Inception modules
+//     CoreModule.forRoot(), LayoutModule.forRoot(),
+//   ],
+//   exports: [
+//     // Angular modules
+//     CommonModule, FormsModule, HttpClientModule, ReactiveFormsModule, RouterModule,
+//
+//     // Inception modules
+//     CoreModule, LayoutModule,
+//
+//     // Components
+//     NgxInceptionComponent
+//   ]
+// })
+// export class InceptionModule {
+//   constructor(injector: Injector) {
+//     setInceptionInjector(injector);
+//   }
+//
+//   // TODO: MOVE THE PROVISION OF THE INCEPTION CONFIGURATION TO THE APPLICATION MODULE -- MARCUS
+//   static forRoot(config: InceptionConfig): ModuleWithProviders<InceptionModule> {
+//     return {
+//       ngModule: InceptionModule,
+//       providers: [{
+//         provide: INCEPTION_CONFIG,
+//         useValue: config
+//       }, {
+//         provide: LocationStrategy,
+//         useClass: HashLocationStrategy,
+//       }, {
+//         provide: DateAdapter,
+//         useClass: MomentDateAdapter,
+//         deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+//       }, {
+//         provide: MAT_DATE_FORMATS,
+//         useValue: INCEPTION_DATE_FORMATS
+//       }, {
+//         provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+//         useValue: {appearance: 'standard'}
+//       },
+//         // Function Guards
+//         CanActivateFunctionGuard, DisabledFunctionGuard
+//       ]
+//     };
+//   }
+// }

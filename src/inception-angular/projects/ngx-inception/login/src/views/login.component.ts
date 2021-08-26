@@ -18,13 +18,10 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, Error, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  ServiceUnavailableError
+  AccessDeniedError, DialogService, Error, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
+  PasswordExpiredError, ServiceUnavailableError, Session, SessionService, SpinnerService
 } from 'ngx-inception/core';
-import {DialogService} from 'ngx-inception/dialog';
-import {SpinnerService} from 'ngx-inception/layout';
 import {SecurityService, Tenant, Tenants} from 'ngx-inception/security';
-import {PasswordExpiredError, Session, SessionService} from 'ngx-inception/session';
 import {finalize, first, map} from 'rxjs/operators';
 
 /**

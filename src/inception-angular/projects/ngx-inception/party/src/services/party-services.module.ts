@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import '@angular/localize/init';
-
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import {ModuleWithProviders, NgModule} from '@angular/core';
+import '@angular/localize/init';
 import {PartyReferenceService} from "./party-reference.service";
 import {PartyService} from "./party.service";
 

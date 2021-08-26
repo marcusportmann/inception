@@ -22,12 +22,12 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 //   NavigationTitle
 // } from 'ngx-inception';
 
-import {
-  InceptionModule, InceptionAppModule
-} from 'ngx-inception';
+// import {
+//   InceptionModule, InceptionAppModule
+// } from 'ngx-inception';
 
 import {
-  InceptionConfig
+  CoreModule, InceptionAppModule, InceptionConfig
 } from 'ngx-inception/core';
 
 
@@ -36,7 +36,7 @@ import {
 
   NavigationBadge, NavigationItem,
   NavigationTitle
-} from 'ngx-inception/layout';
+} from 'ngx-inception/core';
 
 
 
@@ -90,12 +90,12 @@ const ngxInceptionConfig: InceptionConfig = {
   bootstrap: [AppComponent],
   declarations: [AppComponent
   ],
-  exports: [InceptionModule],
+  exports: [CoreModule],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
-    InceptionModule.forRoot(ngxInceptionConfig)
+    CoreModule.forRoot(ngxInceptionConfig)
   ]
 })
 export class AppModule extends InceptionAppModule {

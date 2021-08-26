@@ -20,10 +20,9 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, Error, InvalidArgumentError, ServiceUnavailableError
+  AccessDeniedError, AdminContainerView, BackNavigation, ConfirmationDialogComponent, DialogService,
+  Error, InvalidArgumentError, ServiceUnavailableError, SpinnerService
 } from 'ngx-inception/core';
-import {ConfirmationDialogComponent, DialogService} from 'ngx-inception/dialog';
-import {AdminContainerView, BackNavigation, SpinnerService} from 'ngx-inception/layout';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {finalize, first} from 'rxjs/operators';
 import {GroupRole} from '../services/group-role';
