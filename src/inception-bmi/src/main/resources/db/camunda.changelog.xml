@@ -793,4 +793,140 @@
 
   </changeSet>
 
+  <!--
+  Extracted from the following files:
+
+  camunda-bpm-platform/engine/src/main/resources/org/camunda/bpm/engine/db/create/activiti.postgres.create.case.engine.sql
+
+  NOTE: Some entries in the activiti.postgres.create.case.engine.sql file impact the core tables
+        defined in the activiti.postgres.create.engine.sql file, and as a result were moved to the
+        change sets in the camunda-engine.changelog.xml file.
+  -->
+  <changeSet id="camunda-case-engine-7.15.0" author="Marcus Portmann">
+    <comment>Camunda - Engine - 7.15.0</comment>
+    <sql dbms="h2" endDelimiter=";">
+      CREATE SCHEMA IF NOT EXISTS CAMUNDA
+    </sql>
+    <sql dbms="postgresql" endDelimiter=";">
+      CREATE SCHEMA IF NOT EXISTS CAMUNDA
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      CREATE SCHEMA CAMUNDA
+    </sql>
+
+    <createTable schemaName="CAMUNDA" tableName="ACT_RE_CASE_DEF">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="CATEGORY_" type="nvarchar(255)"/>
+      <column name="NAME_" type="nvarchar(255)"/>
+      <column name="KEY_" type="nvarchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="VERSION_" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DEPLOYMENT_ID_" type="nvarchar(64)"/>
+      <column name="RESOURCE_NAME_" type="nvarchar(4000)"/>
+      <column name="DGRM_RESOURCE_NAME_" type="nvarchar(4000)"/>
+      <column name="TENANT_ID_" type="nvarchar(64)"/>
+      <column name="HISTORY_TTL_" type="int"/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_CASE_DEF_TENANT_ID" schemaName="CAMUNDA" tableName="ACT_RE_CASE_DEF">
+      <column name="TENANT_ID_"/>
+    </createIndex>
+
+    <createTable schemaName="CAMUNDA" tableName="ACT_RU_CASE_EXECUTION">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="CASE_INST_ID_" type="nvarchar(64)"/>
+      <column name="SUPER_CASE_EXEC_" type="nvarchar(64)"/>
+      <column name="SUPER_EXEC_" type="nvarchar(64)"/>
+      <column name="BUSINESS_KEY_" type="nvarchar(255)"/>
+      <column name="PARENT_ID_" type="nvarchar(64)"/>
+      <column name="CASE_DEF_ID_" type="nvarchar(64)"/>
+      <column name="ACT_ID_" type="nvarchar(255)"/>
+      <column name="PREV_STATE_" type="int"/>
+      <column name="CURRENT_STATE_" type="int"/>
+      <column name="REQUIRED_" type="boolean"/>
+      <column name="TENANT_ID_" type="nvarchar(64)"/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_CASE_EXEC_BUSKEY" schemaName="CAMUNDA" tableName="ACT_RU_CASE_EXECUTION">
+      <column name="BUSINESS_KEY_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_CASE_EXE_CASE_INST" schemaName="CAMUNDA" tableName="ACT_RU_CASE_EXECUTION">
+      <column name="CASE_INST_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_CASE_EXE_PARENT" schemaName="CAMUNDA" tableName="ACT_RU_CASE_EXECUTION">
+      <column name="PARENT_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_CASE_EXE_CASE_DEF" schemaName="CAMUNDA" tableName="ACT_RU_CASE_EXECUTION">
+      <column name="CASE_DEF_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_CASE_EXEC_TENANT_ID" schemaName="CAMUNDA" tableName="ACT_RU_CASE_EXECUTION">
+      <column name="TENANT_ID_"/>
+    </createIndex>
+
+    <createTable schemaName="CAMUNDA" tableName="ACT_RU_CASE_SENTRY_PART">
+      <column name="ID_" type="nvarchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="REV_" type="int"/>
+      <column name="CASE_INST_ID_" type="nvarchar(64)"/>
+      <column name="CASE_EXEC_ID_" type="nvarchar(64)"/>
+      <column name="SENTRY_ID_" type="nvarchar(255)"/>
+      <column name="TYPE_" type="nvarchar(255)"/>
+      <column name="SOURCE_CASE_EXEC_ID_" type="nvarchar(64)"/>
+      <column name="STANDARD_EVENT_" type="nvarchar(255)"/>
+      <column name="SOURCE_" type="nvarchar(255)"/>
+      <column name="VARIABLE_EVENT_" type="nvarchar(255)"/>
+      <column name="VARIABLE_NAME_" type="nvarchar(255)"/>
+      <column name="SATISFIED_" type="boolean"/>
+      <column name="TENANT_ID_" type="nvarchar(64)"/>
+    </createTable>
+    <createIndex indexName="ACT_IDX_CASE_SENTRY_CASE_INST" schemaName="CAMUNDA" tableName="ACT_RU_CASE_SENTRY_PART">
+      <column name="CASE_INST_ID_"/>
+    </createIndex>
+    <createIndex indexName="ACT_IDX_CASE_SENTRY_CASE_EXEC" schemaName="CAMUNDA" tableName="ACT_RU_CASE_SENTRY_PART">
+      <column name="CASE_EXEC_ID_"/>
+    </createIndex>
+
+
+    <addForeignKeyConstraint constraintName="ACT_FK_CASE_EXE_CASE_INST" baseTableSchemaName="CAMUNDA"
+      baseTableName="ACT_RU_CASE_EXECUTION" baseColumnNames="CASE_INST_ID_" referencedTableSchemaName="CAMUNDA"
+      referencedTableName="ACT_RU_CASE_EXECUTION" referencedColumnNames="ID_"/>
+    <addForeignKeyConstraint constraintName="ACT_FK_CASE_EXE_PARENT" baseTableSchemaName="CAMUNDA"
+      baseTableName="ACT_RU_CASE_EXECUTION" baseColumnNames="PARENT_ID_" referencedTableSchemaName="CAMUNDA"
+      referencedTableName="ACT_RU_CASE_EXECUTION" referencedColumnNames="ID_"/>
+    <addForeignKeyConstraint constraintName="ACT_FK_CASE_EXE_CASE_DEF" baseTableSchemaName="CAMUNDA"
+      baseTableName="ACT_RU_CASE_EXECUTION" baseColumnNames="CASE_DEF_ID_" referencedTableSchemaName="CAMUNDA"
+      referencedTableName="ACT_RE_CASE_DEF" referencedColumnNames="ID_"/>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_VAR_CASE_EXE" baseTableSchemaName="CAMUNDA"
+      baseTableName="ACT_RU_VARIABLE" baseColumnNames="CASE_EXECUTION_ID_" referencedTableSchemaName="CAMUNDA"
+      referencedTableName="ACT_RU_CASE_EXECUTION" referencedColumnNames="ID_"/>
+    <addForeignKeyConstraint constraintName="ACT_FK_VAR_CASE_INST" baseTableSchemaName="CAMUNDA"
+      baseTableName="ACT_RU_VARIABLE" baseColumnNames="CASE_INST_ID_" referencedTableSchemaName="CAMUNDA"
+      referencedTableName="ACT_RU_CASE_EXECUTION" referencedColumnNames="ID_"/>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_TASK_CASE_EXE" baseTableSchemaName="CAMUNDA"
+      baseTableName="ACT_RU_TASK" baseColumnNames="CASE_EXECUTION_ID_" referencedTableSchemaName="CAMUNDA"
+      referencedTableName="ACT_RU_CASE_EXECUTION" referencedColumnNames="ID_"/>
+    <addForeignKeyConstraint constraintName="ACT_FK_TASK_CASE_DEF" baseTableSchemaName="CAMUNDA"
+      baseTableName="ACT_RU_TASK" baseColumnNames="CASE_DEF_ID_" referencedTableSchemaName="CAMUNDA"
+      referencedTableName="ACT_RE_CASE_DEF" referencedColumnNames="ID_"/>
+
+    <addForeignKeyConstraint constraintName="ACT_FK_CASE_SENTRY_CASE_INST" baseTableSchemaName="CAMUNDA"
+      baseTableName="ACT_RU_CASE_SENTRY_PART" baseColumnNames="CASE_INST_ID_" referencedTableSchemaName="CAMUNDA"
+      referencedTableName="ACT_RU_CASE_EXECUTION" referencedColumnNames="ID_"/>
+    <addForeignKeyConstraint constraintName="ACT_FK_CASE_SENTRY_CASE_EXEC" baseTableSchemaName="CAMUNDA"
+      baseTableName="ACT_RU_CASE_SENTRY_PART" baseColumnNames="CASE_EXEC_ID_" referencedTableSchemaName="CAMUNDA"
+      referencedTableName="ACT_RU_CASE_EXECUTION" referencedColumnNames="ID_"/>
+
+  </changeSet>
+
+
 </databaseChangeLog>

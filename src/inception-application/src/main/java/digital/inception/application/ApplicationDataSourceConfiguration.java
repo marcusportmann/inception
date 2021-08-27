@@ -16,20 +16,13 @@
 
 package digital.inception.application;
 
-import digital.inception.core.liquibase.InceptionLiquibaseChangelogs;
-import digital.inception.core.util.JDBCUtil;
-import digital.inception.core.util.ResourceUtil;
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
-import java.io.IOException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import javax.sql.DataSource;
 import liquibase.Contexts;
@@ -39,7 +32,6 @@ import liquibase.configuration.HubConfiguration;
 import liquibase.configuration.LiquibaseConfiguration;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.integration.spring.SpringResourceAccessor;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,12 +43,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StringUtils;
 
 /**
@@ -73,7 +63,7 @@ import org.springframework.util.StringUtils;
   "inception.application.data-source.url"
 })
 @SuppressWarnings("unused")
-public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
+public class ApplicationDataSourceConfiguration {
 
   /* Logger */
   private static final Logger logger =
@@ -88,23 +78,18 @@ public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
   @Value("${inception.application.data-source.class-name:#{null}}")
   private String className;
 
+  /** Execute the Liquibase changelogs using the data context. */
+  @Value("${inception.application.data-source.liquibase.apply-data-context:#{true}}")
+  private boolean liquibaseApplyDataContext;
+
   /**
-   * The resources on the classpath that contain the SQL statements used to initialize the in-memory
-   * application database.
+   * The Liquibase changelog resources on the classpath used to initialize the application database.
    */
-  @Value("classpath*:**/*-h2.sql")
-  private Resource[] inMemoryInitResources;
-
-  /** The Liquibase changelog. */
-  @Value("${inception.application.data-source.liquibase.changelog:#{null}}")
-  private String liquibaseChangelog;
-
-  /** Execute the Liquibase data changelogs. */
-  @Value("${inception.application.data-source.liquibase.data-changelogs:#{true}}")
-  private boolean liquibaseDataChangelogs;
+  @Value("classpath*:**/db/*.changelog.xml")
+  private Resource[] liquibaseChangelogResources;
 
   /** Is Liquibase enabled? */
-  @Value("${inception.application.data-source.liquibase.enabled:#{false}}")
+  @Value("${inception.application.data-source.liquibase.enabled:#{true}}")
   private boolean liquibaseEnabled;
 
   /**
@@ -122,9 +107,6 @@ public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
   /** The password for the application database. */
   @Value("${inception.application.data-source.password:#{null}}")
   private String password;
-
-  /** The Spring resource loader. */
-  private ResourceLoader resourceLoader;
 
   /** The URL used to connect to the application database. */
   @Value("${inception.application.data-source.url:#{null}}")
@@ -253,80 +235,30 @@ public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
               DatabaseFactory.getInstance()
                   .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
-          for (String changelogFile : InceptionLiquibaseChangelogs.CORE_CHANGELOGS) {
-            if (ResourceUtil.classpathResourceExists(changelogFile)) {
+          for (Resource changelogResource : liquibaseChangelogResources) {
+            if (!changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
+              String changelogFile = "db/" + changelogResource.getFilename();
+
+              logger.info("Applying Liquibase changelog: " + changelogResource.getFilename());
+
               Liquibase liquibase =
                   new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
-
-              logger.info("Applying Liquibase changelog: "  + changelogFile);
 
               liquibase.update(new Contexts(), new LabelExpression());
             }
           }
 
-          for (String changelogFile : InceptionLiquibaseChangelogs.UTILITY_CHANGELOGS) {
-            if (ResourceUtil.classpathResourceExists(changelogFile)) {
+          for (Resource changelogResource : liquibaseChangelogResources) {
+            if (changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
+              String changelogFile = "db/" + changelogResource.getFilename();
+
+              logger.info("Applying Liquibase data changelog: " + changelogResource.getFilename());
+
               Liquibase liquibase =
                   new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
 
-              logger.info("Applying Liquibase changelog: "  + changelogFile);
-
               liquibase.update(new Contexts(), new LabelExpression());
             }
-          }
-
-          for (String changelogFile : InceptionLiquibaseChangelogs.BUSINESS_CHANGELOGS) {
-            if (ResourceUtil.classpathResourceExists(changelogFile)) {
-              Liquibase liquibase =
-                  new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
-
-              logger.info("Applying Liquibase changelog: "  + changelogFile);
-
-              liquibase.update(new Contexts(), new LabelExpression());
-            }
-          }
-
-          if (liquibaseDataChangelogs) {
-            for (String changelogFile : InceptionLiquibaseChangelogs.BUSINESS_DATA_CHANGELOGS) {
-              if (ResourceUtil.classpathResourceExists(changelogFile)) {
-                Liquibase liquibase =
-                    new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
-
-                logger.info("Applying Liquibase changelog: "  + changelogFile);
-
-                liquibase.update(new Contexts(), new LabelExpression());
-              }
-            }
-          }
-
-          if (StringUtils.hasText(liquibaseChangelog)) {
-            SpringResourceAccessor resourceAccessor = new SpringResourceAccessor(resourceLoader);
-            Liquibase liquibase = new Liquibase(liquibaseChangelog, resourceAccessor, database);
-
-            logger.info("Applying Liquibase changelog: "  + liquibaseChangelog);
-
-            liquibase.update(new Contexts(), new LabelExpression());
-          }
-        }
-      }
-
-      if (isInMemoryH2Database) {
-        logger.info("Initializing the in-memory H2 database");
-
-        /*
-         * Initialize the in-memory database using the SQL statements contained in any other
-         * resources for the application.
-         */
-        for (Resource inMemoryInitResource : inMemoryInitResources) {
-          if ((StringUtils.hasText(inMemoryInitResource.getFilename()))
-              && (!inMemoryInitResource.getFilename().contains("inception-"))) {
-
-            logger.info(
-                "Executing the SQL statements in the file '"
-                    + inMemoryInitResource.getFilename()
-                    + "'");
-
-            loadSQL(dataSource, inMemoryInitResource.getURL());
           }
         }
       }
@@ -395,37 +327,5 @@ public class ApplicationDataSourceConfiguration implements ResourceLoaderAware {
    */
   public String getUsername() {
     return username;
-  }
-
-  /**
-   * Set the Spring resource loader.
-   *
-   * @param resourceLoader the Spring resource loader
-   */
-  @Override
-  public void setResourceLoader(ResourceLoader resourceLoader) {
-    this.resourceLoader = resourceLoader;
-  }
-
-  private void loadSQL(DataSource dataSource, URL databaseInitResourceUrl)
-      throws IOException, SQLException {
-    try {
-      // Load the SQL statements used to initialize the database tables
-      List<String> sqlStatements = JDBCUtil.loadSQL(databaseInitResourceUrl);
-
-      // Get a connection to the in-memory database
-      try (Connection connection = dataSource.getConnection()) {
-        for (String sqlStatement : sqlStatements) {
-          LoggerFactory.getLogger(Application.class)
-              .debug("Executing SQL statement: " + sqlStatement);
-
-          try (Statement statement = connection.createStatement()) {
-            statement.execute(sqlStatement);
-          }
-        }
-      }
-    } catch (SQLException e) {
-      throw e;
-    }
   }
 }

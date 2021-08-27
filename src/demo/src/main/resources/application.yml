@@ -48,7 +48,6 @@ inception:
       max-pool-size: 5
       liquibase:
         enabled: true
-        changelog: classpath:db/demo.changelog.xml
 
 
 

@@ -18,20 +18,13 @@ package digital.inception.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import digital.inception.core.liquibase.InceptionLiquibaseChangelogs;
-import digital.inception.core.util.JDBCUtil;
-import digital.inception.core.util.ResourceUtil;
 import digital.inception.jpa.JpaUtil;
 import digital.inception.json.DateTimeModule;
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
-import java.io.IOException;
-import java.net.URL;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +38,6 @@ import liquibase.configuration.HubConfiguration;
 import liquibase.configuration.LiquibaseConfiguration;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.integration.spring.SpringResourceAccessor;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,14 +49,12 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -103,7 +93,7 @@ import org.springframework.web.reactive.function.client.WebClient;
           type = FilterType.REGEX)
     })
 @SuppressWarnings("WeakerAccess")
-public class TestConfiguration implements ResourceLoaderAware {
+public class TestConfiguration {
 
   private static final Object dataSourceLock = new Object();
 
@@ -114,23 +104,15 @@ public class TestConfiguration implements ResourceLoaderAware {
 
   private final ApplicationContext applicationContext;
 
+  /** Execute the Liquibase changelogs using the data context. */
+  @Value("${inception.application.data-source.liquibase.apply-data-context:#{true}}")
+  private boolean liquibaseApplyDataContext;
+
   /**
-   * The resources on the classpath that contain the SQL statements used to initialize the in-memory
-   * application database.
+   * The Liquibase changelog resources on the classpath used to initialize the application database.
    */
-  @Value("classpath*:**/*-h2.sql")
-  private Resource[] inMemoryInitResources;
-
-  /** The Liquibase changelog. */
-  @Value("${inception.application.data-source.liquibase.changelog:#{null}}")
-  private String liquibaseChangeLog;
-
-  /** Execute the Liquibase data changelogs. */
-  @Value("${inception.application.data-source.liquibase.data-changelogs:#{true}}")
-  private boolean liquibaseDataChangeLogs;
-
-  /** The Spring resource loader. */
-  private ResourceLoader resourceLoader;
+  @Value("classpath*:**/db/*.changelog.xml")
+  private Resource[] liquibaseChangelogResources;
 
   /**
    * Constructs a new <b>TestConfiguration</b>.
@@ -140,10 +122,6 @@ public class TestConfiguration implements ResourceLoaderAware {
   public TestConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }
-
-  //  /** The optional comma-delimited packages on the classpath to scan for JPA entities. */
-  //  @Value("${inception.persistence.entity-packages:#{null}}")
-  //  private String packagesToScanForEntities;
 
   /**
    * Initialize the in-memory application database and return a data source that can be used to
@@ -198,81 +176,30 @@ public class TestConfiguration implements ResourceLoaderAware {
                 DatabaseFactory.getInstance()
                     .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
-            for (String changelogFile : InceptionLiquibaseChangelogs.CORE_CHANGELOGS) {
-              if (ResourceUtil.classpathResourceExists(changelogFile)) {
+            for (Resource changelogResource : liquibaseChangelogResources) {
+              if (!changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
+                String changelogFile = "db/" + changelogResource.getFilename();
+
+                logger.info("Applying Liquibase changelog: " + changelogResource.getFilename());
+
                 Liquibase liquibase =
                     new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
-
-                logger.info("Applying Liquibase changelog: "  + changelogFile);
 
                 liquibase.update(new Contexts(), new LabelExpression());
               }
             }
 
-            for (String changelogFile : InceptionLiquibaseChangelogs.UTILITY_CHANGELOGS) {
-              if (ResourceUtil.classpathResourceExists(changelogFile)) {
+            for (Resource changelogResource : liquibaseChangelogResources) {
+              if (changelogResource.getFilename().toLowerCase().endsWith("-data.changelog.xml")) {
+                String changelogFile = "db/" + changelogResource.getFilename();
+
+                logger.info("Applying Liquibase data changelog: " + changelogResource.getFilename());
+
                 Liquibase liquibase =
                     new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
 
-                logger.info("Applying Liquibase changelog: "  + changelogFile);
-
                 liquibase.update(new Contexts(), new LabelExpression());
               }
-            }
-
-            for (String changelogFile : InceptionLiquibaseChangelogs.BUSINESS_CHANGELOGS) {
-              if (ResourceUtil.classpathResourceExists(changelogFile)) {
-                Liquibase liquibase =
-                    new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
-
-                logger.info("Applying Liquibase changelog: "  + changelogFile);
-
-                liquibase.update(new Contexts(), new LabelExpression());
-              }
-            }
-
-            if (liquibaseDataChangeLogs) {
-              for (String changelogFile : InceptionLiquibaseChangelogs.BUSINESS_DATA_CHANGELOGS) {
-                if (ResourceUtil.classpathResourceExists(changelogFile)) {
-                  Liquibase liquibase =
-                      new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
-
-                  logger.info("Applying Liquibase changelog: "  + changelogFile);
-
-                  liquibase.update(new Contexts(), new LabelExpression());
-                }
-              }
-            }
-
-            for (String changelogFile : InceptionLiquibaseChangelogs.TEST_CHANGELOGS) {
-              if (ResourceUtil.classpathResourceExists(changelogFile)) {
-                Liquibase liquibase =
-                    new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
-
-                logger.info("Applying Liquibase changelog: "  + changelogFile);
-
-                liquibase.update(new Contexts(), new LabelExpression());
-              }
-            }
-
-            if (StringUtils.hasText(liquibaseChangeLog)) {
-              SpringResourceAccessor resourceAccessor = new SpringResourceAccessor(resourceLoader);
-              Liquibase liquibase = new Liquibase(liquibaseChangeLog, resourceAccessor, database);
-
-              logger.info("Applying Liquibase changelog: "  + liquibaseChangeLog);
-
-              liquibase.update(new Contexts(), new LabelExpression());
-            }
-          }
-
-          /*
-           * Initialize the in-memory database using the SQL statements contained in any other
-           * resources.
-           */
-          for (Resource databaseInitResource : inMemoryInitResources) {
-            if ((StringUtils.hasText(databaseInitResource.getFilename()))
-                && (!databaseInitResource.getFilename().startsWith("inception-"))) {
-              loadSQL(dataSource, databaseInitResource.getURL());
             }
           }
         } catch (Throwable e) {
@@ -322,16 +249,6 @@ public class TestConfiguration implements ResourceLoaderAware {
   @Bean
   public ObjectMapper objectMapper() {
     return jackson2ObjectMapperBuilder().build().disable(SerializationFeature.INDENT_OUTPUT);
-  }
-
-  /**
-   * Set the Spring resource loader.
-   *
-   * @param resourceLoader the Spring resource loader
-   */
-  @Override
-  public void setResourceLoader(ResourceLoader resourceLoader) {
-    this.resourceLoader = resourceLoader;
   }
 
   /**
@@ -396,21 +313,6 @@ public class TestConfiguration implements ResourceLoaderAware {
   protected List<String> packagesToScanForEntities() {
     List<String> packagesToScan = new ArrayList<>();
 
-    //    // Add the packages to scan for entities explicitly specified in the configuration
-    // property
-    //    if (StringUtils.hasText(this.packagesToScanForEntities)) {
-    //      for (String packageToScanForEntities : this.packagesToScanForEntities.split(",")) {
-    //        // Replace any existing packages to scan with the higher level package
-    //        packagesToScan.removeIf(
-    //            packageToScan -> packageToScan.startsWith(packageToScanForEntities));
-    //
-    //        // Check if there is a higher level package already being scanned
-    //        if (packagesToScan.stream().noneMatch(packageToScanForEntities::startsWith)) {
-    //          packagesToScan.add(packageToScanForEntities);
-    //        }
-    //      }
-    //    }
-
     // Add the base packages specified using the EnableJpaRepositories annotation
     Map<String, Object> annotatedBeans =
         applicationContext.getBeansWithAnnotation(EnableJpaRepositories.class);
@@ -441,33 +343,5 @@ public class TestConfiguration implements ResourceLoaderAware {
             + StringUtils.collectionToDelimitedString(packagesToScan, ","));
 
     return packagesToScan;
-  }
-
-  private void loadSQL(DataSource dataSource, URL databaseInitResourceUrl)
-      throws IOException, SQLException {
-    try {
-      // Load the SQL statements used to initialize the database tables
-      List<String> sqlStatements = JDBCUtil.loadSQL(databaseInitResourceUrl);
-
-      // Get a connection to the in-memory database
-      try (Connection connection = dataSource.getConnection()) {
-        for (String sqlStatement : sqlStatements) {
-          try (Statement statement = connection.createStatement()) {
-            statement.execute(sqlStatement);
-          }
-        }
-
-        connection.commit();
-      }
-    } catch (SQLException e) {
-      try (Connection connection = dataSource.getConnection()) {
-        JDBCUtil.shutdownHsqlDatabase(connection);
-      } catch (Throwable f) {
-        LoggerFactory.getLogger(TestConfiguration.class)
-            .error("Failed to shutdown the in-memory application database: " + e.getMessage());
-      }
-
-      throw e;
-    }
   }
 }

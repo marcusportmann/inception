@@ -492,8 +492,7 @@ Complete the following steps to create a new application based on the Inception 
    7. Add the Spring application configuration file, *src/main/resources/application.yml*,
       changing the *spring.application.name* value to the name of the application.
 
-      **NOTE:** You need to update the *spring.application.name* and
-      *inception.application.data-source.liquibase.change-log* configuration properties.
+      **NOTE:** You need to update the *spring.application.name* property.
       ```
       server:
         port: 8080
@@ -505,9 +504,6 @@ Complete the following steps to create a new application based on the Inception 
             url: jdbc:h2:mem:application;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
             min-pool-size: 5
             max-pool-size: 10
-            liquibase:
-              enabled: true
-              change-log: classpath:db/demo.changelog.xml
         debug:
           enabled: true
 
