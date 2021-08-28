@@ -521,9 +521,9 @@
     <module>inception-error-api</module>
     <module>inception-error-ws</module>
     <module>inception-core</module>
-    <module>inception-json</module>
     <module>inception-jpa</module>
     <module>inception-jta</module>
+    <module>inception-json</module>
     <module>inception-kafka</module>
     <module>inception-mail</module>
     <module>inception-mail-api</module>

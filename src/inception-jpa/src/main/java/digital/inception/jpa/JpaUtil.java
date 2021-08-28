@@ -32,6 +32,7 @@ import org.springframework.transaction.jta.JtaTransactionManager;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class JpaUtil {
 
   /**

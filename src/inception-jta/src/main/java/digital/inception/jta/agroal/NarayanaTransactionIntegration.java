@@ -30,6 +30,11 @@ import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 import javax.transaction.xa.XAResource;
 
+/**
+ * The <b>NarayanaTransactionIntegration</b> class.
+ *
+ * @author Marcus Portmann
+ */
 public class NarayanaTransactionIntegration
     implements io.agroal.api.transaction.TransactionIntegration {
 
