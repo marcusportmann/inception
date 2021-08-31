@@ -98,8 +98,8 @@ public interface ISchedulerService {
    *
    * <p>The job will be locked to prevent duplicate processing.
    *
-   * @return an Optional containing the next job that is scheduled for execution or an empty Optional if no jobs are currently
-   *     scheduled for execution
+   * @return an Optional containing the next job that is scheduled for execution or an empty
+   *     Optional if no jobs are currently scheduled for execution
    */
   Optional<Job> getNextJobScheduledForExecution() throws ServiceUnavailableException;
 
@@ -126,7 +126,8 @@ public interface ISchedulerService {
    * @param status the current status of the jobs that have been locked
    * @param newStatus the new status for the jobs that have been unlocked
    */
-  void resetJobLocks(JobStatus status, JobStatus newStatus) throws ServiceUnavailableException;
+  void resetJobLocks(JobStatus status, JobStatus newStatus)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Schedule the next unscheduled job for execution.
