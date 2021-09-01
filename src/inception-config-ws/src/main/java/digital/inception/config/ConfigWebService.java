@@ -16,8 +16,8 @@
 
 package digital.inception.config;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -55,6 +55,9 @@ public class ConfigWebService {
    * Delete the config.
    *
    * @param key the key for the config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ConfigNotFoundException if the config could not be found
+   * @throws ServiceUnavailableException if the config could not be deleted
    */
   @WebMethod(operationName = "DeleteConfig")
   public void deleteConfig(@WebParam(name = "Key") @XmlElement(required = true) String key)
@@ -67,11 +70,13 @@ public class ConfigWebService {
    *
    * @param key the key for the config
    * @return the config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ConfigNotFoundException if the config could not be found
+   * @throws ServiceUnavailableException if the config could not be retrieved
    */
   @WebMethod(operationName = "GetConfig")
   @WebResult(name = "Config")
-  public Config getConfig(
-      @WebParam(name = "Key") @XmlElement(required = true) String key)
+  public Config getConfig(@WebParam(name = "Key") @XmlElement(required = true) String key)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
     return configService.getConfig(key);
   }
@@ -81,11 +86,13 @@ public class ConfigWebService {
    *
    * @param key the key for the config
    * @return the config value
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ConfigNotFoundException if the config could not be found
+   * @throws ServiceUnavailableException if the config value could not be retrieved
    */
   @WebMethod(operationName = "GetConfigValue")
   @WebResult(name = "ConfigValue")
-  public String getConfigValue(
-      @WebParam(name = "Key") @XmlElement(required = true) String key)
+  public String getConfigValue(@WebParam(name = "Key") @XmlElement(required = true) String key)
       throws InvalidArgumentException, ConfigNotFoundException, ServiceUnavailableException {
     return configService.getString(key);
   }
@@ -94,6 +101,7 @@ public class ConfigWebService {
    * Retrieve all the configs.
    *
    * @return all the configs
+   * @throws ServiceUnavailableException if the configs could not be retrieved
    */
   @WebMethod(operationName = "GetConfigs")
   @WebResult(name = "Config")
@@ -105,10 +113,11 @@ public class ConfigWebService {
    * Set the config.
    *
    * @param config the config
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the config could not be set
    */
   @WebMethod(operationName = "SetConfig")
-  public void setConfig(
-      @WebParam(name = "Config") @XmlElement(required = true) Config config)
+  public void setConfig(@WebParam(name = "Config") @XmlElement(required = true) Config config)
       throws InvalidArgumentException, ServiceUnavailableException {
     configService.setConfig(config);
   }

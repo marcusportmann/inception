@@ -46,10 +46,7 @@ public class DemoConfiguration {
         .group("demo")
         .packagesToScan("demo")
         .addOpenApiCustomiser(
-            openApi ->
-                openApi.info(new Info().title("Demo API").version(Version.PROJECT_VERSION)))
+            openApi -> openApi.info(new Info().title("Demo API").version(Version.PROJECT_VERSION)))
         .build();
   }
-
-
 }

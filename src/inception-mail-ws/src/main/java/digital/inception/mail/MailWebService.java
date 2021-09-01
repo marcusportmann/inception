@@ -16,8 +16,8 @@
 
 package digital.inception.mail;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -55,6 +55,9 @@ public class MailWebService {
    * Create the new mail template.
    *
    * @param mailTemplate the mail template to create
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateMailTemplateException if the mail template already exists
+   * @throws ServiceUnavailableException if the mail template could not be created
    */
   @WebMethod(operationName = "CreateMailTemplate")
   public void createMailTemplate(
@@ -67,6 +70,9 @@ public class MailWebService {
    * Delete the mail template.
    *
    * @param mailTemplateId the ID for the mail template
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MailTemplateNotFoundException if the mail template could not be found
+   * @throws ServiceUnavailableException if the mail template could not be deleted
    */
   @WebMethod(operationName = "DeleteMailTemplate")
   public void deleteMailTemplate(
@@ -80,6 +86,9 @@ public class MailWebService {
    *
    * @param mailTemplateId the ID for the mail template
    * @return the mail template
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MailTemplateNotFoundException if the mail template could not be found
+   * @throws ServiceUnavailableException if the mail template could not be retrieved
    */
   @WebMethod(operationName = "GetMailTemplate")
   @WebResult(name = "MailTemplate")
@@ -94,6 +103,9 @@ public class MailWebService {
    *
    * @param mailTemplateId the ID for the mail template
    * @return the name of the mail template
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MailTemplateNotFoundException if the mail template could not be found
+   * @throws ServiceUnavailableException if the name of the mail template could not be retrieved
    */
   @WebMethod(operationName = "GetMailTemplateName")
   @WebResult(name = "MailTemplateName")
@@ -107,6 +119,7 @@ public class MailWebService {
    * Retrieve the mail template summaries.
    *
    * @return the mail template summaries
+   * @throws ServiceUnavailableException if the mail template summaries could not be retrieved
    */
   @WebMethod(operationName = "GetMailTemplateSummaries")
   @WebResult(name = "MailTemplateSummary")
@@ -118,6 +131,7 @@ public class MailWebService {
    * Retrieve the mail templates.
    *
    * @return the mail templates
+   * @throws ServiceUnavailableException if the mail templates could not be retrieved
    */
   @WebMethod(operationName = "GetMailTemplates")
   @WebResult(name = "MailTemplate")
@@ -129,6 +143,9 @@ public class MailWebService {
    * Update the mail template.
    *
    * @param mailTemplate the mail template
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MailTemplateNotFoundException if the mail template could not be found
+   * @throws ServiceUnavailableException if the mail template could not be updated
    */
   @WebMethod(operationName = "UpdateMailTemplate")
   public void updateMailTemplate(

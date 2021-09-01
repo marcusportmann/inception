@@ -54,6 +54,8 @@ public class ErrorWebService {
    * Create the new error report.
    *
    * @param errorReport the error report to create
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the error report could not be created
    */
   @WebMethod(operationName = "CreateErrorReport")
   public void createErrorReport(
@@ -71,6 +73,8 @@ public class ErrorWebService {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the error report summaries
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the error report summaries could not be retrieved
    */
   public ErrorReportSummaries getErrorReportSummaries(
       String filter,

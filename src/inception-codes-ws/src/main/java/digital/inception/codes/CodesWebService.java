@@ -16,8 +16,8 @@
 
 package digital.inception.codes;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +58,10 @@ public class CodesWebService {
    * Create the new code.
    *
    * @param code the code to create
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateCodeException if the code already exists
+   * @throws CodeCategoryNotFoundException if the code category could not be found
+   * @throws ServiceUnavailableException if the code could not be created
    */
   @WebMethod(operationName = "CreateCode")
   public void createCode(@WebParam(name = "Code") @XmlElement(required = true) Code code)
@@ -70,6 +74,9 @@ public class CodesWebService {
    * Create the new code category.
    *
    * @param codeCategory the code category to create
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateCodeCategoryException if the code category already exists
+   * @throws ServiceUnavailableException if the code category could not be created
    */
   @WebMethod(operationName = "CreateCodeCategory")
   public void createCodeCategory(
@@ -82,6 +89,10 @@ public class CodesWebService {
    * Delete the code.
    *
    * @param codeCategoryId the ID for the code category
+   * @param codeId the ID for the code
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeNotFoundException if the code could not be found
+   * @throws ServiceUnavailableException if the code could not be deleted
    */
   @WebMethod(operationName = "DeleteCode")
   public void deleteCode(
@@ -95,6 +106,9 @@ public class CodesWebService {
    * Delete the code category.
    *
    * @param codeCategoryId the ID for the code category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeCategoryNotFoundException if the code category could not be found
+   * @throws ServiceUnavailableException if the code category could not be deleted
    */
   @WebMethod(operationName = "DeleteCodeCategory")
   public void deleteCodeCategory(
@@ -109,6 +123,9 @@ public class CodesWebService {
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code
    * @return the code
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeNotFoundException if the code could not be found
+   * @throws ServiceUnavailableException if the code could not be retrieved
    */
   @WebMethod(operationName = "GetCode")
   @WebResult(name = "Code")
@@ -123,6 +140,7 @@ public class CodesWebService {
    * Retrieve all the code categories.
    *
    * @return all the code categories
+   * @throws ServiceUnavailableException if the code categories could not be retrieved
    */
   @WebMethod(operationName = "GetCodeCategories")
   @WebResult(name = "CodeCategory")
@@ -135,6 +153,9 @@ public class CodesWebService {
    *
    * @param codeCategoryId the ID for the code category
    * @return the code category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeCategoryNotFoundException if the code category could not be found
+   * @throws ServiceUnavailableException if the code category could not be retrieved
    */
   @WebMethod(operationName = "GetCodeCategory")
   @WebResult(name = "CodeCategory")
@@ -149,6 +170,9 @@ public class CodesWebService {
    *
    * @param codeCategoryId the ID for the code category
    * @return the XML or JSON data for the code category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeCategoryNotFoundException if the code category could not be found
+   * @throws ServiceUnavailableException if the code category data could not be retrieved
    */
   @WebMethod(operationName = "GetCodeCategoryData")
   @WebResult(name = "CodeCategoryData")
@@ -165,6 +189,9 @@ public class CodesWebService {
    *
    * @param codeCategoryId the ID for the code category
    * @return the name of the code category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeCategoryNotFoundException if the code category could not be found
+   * @throws ServiceUnavailableException if the name of the code category could not be retrieved
    */
   @WebMethod(operationName = "GetCodeCategoryName")
   @WebResult(name = "GetCodeCategoryName")
@@ -178,6 +205,7 @@ public class CodesWebService {
    * Retrieve the summaries for all the code categories.
    *
    * @return the summaries for all the code categories
+   * @throws ServiceUnavailableException if the code category summaries could not be retrieved
    */
   @WebMethod(operationName = "GetCodeCategorySummaries")
   @WebResult(name = "CodeCategorySummary")
@@ -190,6 +218,10 @@ public class CodesWebService {
    *
    * @param codeCategoryId the ID for the code category
    * @return the date and time the code category was last updated
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeCategoryNotFoundException if the code category could not be found
+   * @throws ServiceUnavailableException if the date and time the code category was last updated
+   *     could not be retrieved
    */
   @WebMethod(operationName = "GetCodeCategoryUpdated")
   @WebResult(name = "CodeCategoryUpdated")
@@ -209,6 +241,9 @@ public class CodesWebService {
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code
    * @return the name of the code
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeNotFoundException if the code could not be found
+   * @throws ServiceUnavailableException if the name of the code could not be retrieved
    */
   @WebMethod(operationName = "GetCodeName")
   @WebResult(name = "CodeName")
@@ -224,6 +259,9 @@ public class CodesWebService {
    *
    * @param codeCategoryId the ID for the code category
    * @return the codes for the code category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeCategoryNotFoundException if the code category could not be found
+   * @throws ServiceUnavailableException if the codes for the code category could not be retrieved
    */
   @WebMethod(operationName = "GetCodes")
   @WebResult(name = "Code")
@@ -237,6 +275,9 @@ public class CodesWebService {
    * Update the code.
    *
    * @param code the code to update
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeNotFoundException if the code could not be found
+   * @throws ServiceUnavailableException if the code could not be updated
    */
   @WebMethod(operationName = "UpdateCode")
   public void updateCode(@WebParam(name = "Code") @XmlElement(required = true) Code code)
@@ -248,6 +289,9 @@ public class CodesWebService {
    * Update the code category.
    *
    * @param codeCategory the code category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeCategoryNotFoundException if the code category could not be found
+   * @throws ServiceUnavailableException if the code category could not be updated
    */
   @WebMethod(operationName = "UpdateCodeCategory")
   public void updateCodeCategory(

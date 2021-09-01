@@ -34,6 +34,8 @@ public interface ISMSService {
    * Create the new SMS.
    *
    * @param sms the <b>SMS</b> instance containing the information for the SMS
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the SMS could not be created
    */
   void createSMS(SMS sms) throws InvalidArgumentException, ServiceUnavailableException;
 
@@ -41,6 +43,9 @@ public interface ISMSService {
    * Delete the existing SMS.
    *
    * @param smsId the ID for the SMS
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws SMSNotFoundException if the SMS could not be found
+   * @throws ServiceUnavailableException if the SMS could not be deleted
    */
   void deleteSMS(UUID smsId)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException;
@@ -59,13 +64,16 @@ public interface ISMSService {
    *
    * @return an Optional containing the next SMS that has been queued for sending or an empty
    *     Optional if no SMSs are currently queued for sending
+   * @throws ServiceUnavailableException if the next SMS queued for sending could not be retrieved
    */
   Optional<SMS> getNextSMSQueuedForSending() throws ServiceUnavailableException;
 
   /**
-   * Returns the number of SMS credits remaining.
+   * Retrieve the number of SMS credits remaining.
    *
    * @return the number of SMS credits remaining
+   * @throws ServiceUnavailableException if the number of SMS credits remaining could not be
+   *     retrieved
    */
   int getNumberOfSMSCreditsRemaining() throws ServiceUnavailableException;
 
@@ -74,6 +82,9 @@ public interface ISMSService {
    *
    * @param smsId the ID for the SMS
    * @return the SMS
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws SMSNotFoundException if the SMS could not be found
+   * @throws ServiceUnavailableException if the SMS could not be retrieved
    */
   SMS getSMS(UUID smsId)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException;
@@ -83,8 +94,11 @@ public interface ISMSService {
    *
    * @param status the current status of the SMSs that have been locked
    * @param newStatus the new status for the SMSs that have been unlocked
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the SMS locks could not be reset
    */
-  void resetSMSLocks(SMSStatus status, SMSStatus newStatus) throws ServiceUnavailableException;
+  void resetSMSLocks(SMSStatus status, SMSStatus newStatus)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Send the SMS.
@@ -93,6 +107,8 @@ public interface ISMSService {
    *
    * @param mobileNumber the mobile number
    * @param message the message
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the SMS could not be sent
    */
   void sendSMS(String mobileNumber, String message)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -106,6 +122,8 @@ public interface ISMSService {
    * @param mobileNumber the mobile number
    * @param message the message
    * @return <b>true</b> if the SMS was sent successfully or <b>false</b> otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the SMS could not be sent synchronously
    */
   boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -115,6 +133,9 @@ public interface ISMSService {
    *
    * @param smsId the ID for the SMS
    * @param status the new status for the SMS
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws SMSNotFoundException if the SMS could not be found
+   * @throws ServiceUnavailableException if the status could not be set for the SMS
    */
   void setSMSStatus(UUID smsId, SMSStatus status)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException;
@@ -124,6 +145,9 @@ public interface ISMSService {
    *
    * @param smsId the ID for the SMS
    * @param status the new status for the unlocked SMS
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws SMSNotFoundException if the SMS could not be found
+   * @throws ServiceUnavailableException if the SMS could not be unlocked
    */
   void unlockSMS(UUID smsId, SMSStatus status)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException;

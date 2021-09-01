@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.jpa;
-
-import java.io.Serializable;
-
-/**
- * The <b>Identifiable</b> interface defines the interface that must be implemented by JPA entity
- * classes that have an ID that can be explicitly specified in place of an automatically generated
- * value for an identity column in the database.
- *
- * @param <T> the ID type for the entity
- * @author Marcus Portmann
- */
-public interface Identifiable<T extends Serializable> {
-
-  /**
-   * Returns the ID for the entity.
-   *
-   * @return the ID for the entity
-   */
-  T getId();
-}
+@javax.xml.bind.annotation.XmlSchema(
+    namespace = "http://inception.digital/reference",
+    elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
+    xmlns = {
+        @javax.xml.bind.annotation.XmlNs(
+            prefix = "core",
+            namespaceURI = "http://inception.digital/core"),
+        @javax.xml.bind.annotation.XmlNs(
+            prefix = "reference",
+            namespaceURI = "http://inception.digital/reference"),
+    })
+package digital.inception.reference;

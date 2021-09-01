@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -56,7 +56,7 @@ public class ReferenceService implements IReferenceService {
   private final RegionRepository regionRepository;
 
   /** The internal reference to the Reference Service to enable caching. */
-  @Resource private IReferenceService self;
+  @Autowired private IReferenceService self;
 
   /**
    * Constructs a new <b>ReferenceService</b>.
@@ -83,11 +83,6 @@ public class ReferenceService implements IReferenceService {
     this.regionRepository = regionRepository;
   }
 
-  /**
-   * Retrieve the country reference data for all locales.
-   *
-   * @return the country reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'countries.ALL'")
   public List<Country> getCountries() throws ServiceUnavailableException {
@@ -98,13 +93,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the country reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the country reference
-   *     data for
-   * @return the country reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'countries.' + #localeId")
   public List<Country> getCountries(String localeId)
@@ -120,11 +108,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the language reference data for all locales.
-   *
-   * @return the language reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'languages.ALL'")
   public List<Language> getLanguages() throws ServiceUnavailableException {
@@ -135,13 +118,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the language reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the language reference
-   *     data for
-   * @return the language reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'languages.' + #localeId")
   public List<Language> getLanguages(String localeId)
@@ -157,11 +133,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the measurement system reference data for all locales.
-   *
-   * @return the measurement system reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'measurementSystems.ALL'")
   public List<MeasurementSystem> getMeasurementSystems() throws ServiceUnavailableException {
@@ -173,13 +144,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the measurement system reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement system
-   *     reference data for
-   * @return the measurement system reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'measurementSystems.' + #localeId")
   public List<MeasurementSystem> getMeasurementSystems(String localeId)
@@ -196,11 +160,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the measurement unit type reference data for all locales.
-   *
-   * @return the measurement unit type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'measurementUnitTypes.ALL'")
   public List<MeasurementUnitType> getMeasurementUnitTypes() throws ServiceUnavailableException {
@@ -212,13 +171,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the measurement unit type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
-   *     type reference data for
-   * @return the measurement unit type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'measurementUnitTypes.' + #localeId")
   public List<MeasurementUnitType> getMeasurementUnitTypes(String localeId)
@@ -235,11 +187,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the measurement unit reference data for all locales.
-   *
-   * @return the measurement unit reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'measurementUnits.ALL'")
   public List<MeasurementUnit> getMeasurementUnits() throws ServiceUnavailableException {
@@ -251,13 +198,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the measurement unit reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
-   *     reference data for
-   * @return the measurement unit reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'measurementUnits.' + #localeId")
   public List<MeasurementUnit> getMeasurementUnits(String localeId)
@@ -274,11 +214,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the region reference data for all locales.
-   *
-   * @return the region reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'regions.ALL'")
   public List<Region> getRegions() throws ServiceUnavailableException {
@@ -289,13 +224,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the region reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the region reference
-   *     data for
-   * @return the region reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'regions.' + #localeId")
   public List<Region> getRegions(String localeId)
@@ -311,11 +239,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the time zone reference data for all locales.
-   *
-   * @return the time zone reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'timeZones.ALL'")
   public List<TimeZone> getTimeZones() throws ServiceUnavailableException {
@@ -350,13 +273,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Retrieve the time zone reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the time zone
-   *     reference data for
-   * @return the time zone reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'timeZones.' + #localeId")
   public List<TimeZone> getTimeZones(String localeId)
@@ -396,12 +312,6 @@ public class ReferenceService implements IReferenceService {
     }
   }
 
-  /**
-   * Check whether the code is a valid code for a country.
-   *
-   * @param countryCode the code for the country
-   * @return <b>true</b> if the code is a valid code for a country or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidCountry(String countryCode) throws ServiceUnavailableException {
     if (!StringUtils.hasText(countryCode)) {
@@ -411,13 +321,6 @@ public class ReferenceService implements IReferenceService {
     return self.getCountries().stream().anyMatch(country -> country.getCode().equals(countryCode));
   }
 
-  /**
-   * Check whether the code is a valid ISO 639-1 alpha-2 code for a language.
-   *
-   * @param languageCode the code for the language
-   * @return <b>true</b> if the code is a valid ISO 639-1 alpha-2 code for a language or
-   *     <b>false</b> otherwise
-   */
   @Override
   public boolean isValidLanguage(String languageCode) throws ServiceUnavailableException {
     if (!StringUtils.hasText(languageCode)) {
@@ -428,13 +331,6 @@ public class ReferenceService implements IReferenceService {
         .anyMatch(language -> language.getCode().equals(languageCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a measurement system.
-   *
-   * @param measurementSystemCode the code for the measurement system
-   * @return <b>true</b> if the code is a valid code for a measurement system or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidMeasurementSystem(String measurementSystemCode)
       throws ServiceUnavailableException {
@@ -446,13 +342,6 @@ public class ReferenceService implements IReferenceService {
         .anyMatch(measurementSystem -> measurementSystem.getCode().equals(measurementSystemCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a measurement unit.
-   *
-   * @param measurementUnitCode the code for the measurement unit
-   * @return <b>true</b> if the code is a valid code for a measurement unit or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidMeasurementUnit(String measurementUnitCode)
       throws ServiceUnavailableException {
@@ -464,13 +353,6 @@ public class ReferenceService implements IReferenceService {
         .anyMatch(measurementUnit -> measurementUnit.getCode().equals(measurementUnitCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a measurement unit type.
-   *
-   * @param measurementUnitTypeCode the code for the measurement unit type
-   * @return <b>true</b> if the code is a valid code for a measurement unit type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidMeasurementUnitType(String measurementUnitTypeCode)
       throws ServiceUnavailableException {
@@ -483,12 +365,6 @@ public class ReferenceService implements IReferenceService {
             measurementUnitType -> measurementUnitType.getCode().equals(measurementUnitTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a region.
-   *
-   * @param regionCode the code for the region
-   * @return <b>true</b> if the code is a valid code for a region or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidRegion(String regionCode) throws ServiceUnavailableException {
     if (!StringUtils.hasText(regionCode)) {
@@ -498,12 +374,6 @@ public class ReferenceService implements IReferenceService {
     return self.getRegions().stream().anyMatch(region -> region.getCode().equals(regionCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a time zone.
-   *
-   * @param timeZoneCode the code for the time zone
-   * @return <b>true</b> if the code is a valid code for a time zone or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidTimeZone(String timeZoneCode) {
     if (!StringUtils.hasText(timeZoneCode)) {

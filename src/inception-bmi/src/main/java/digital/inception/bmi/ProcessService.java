@@ -16,6 +16,7 @@
 
 package digital.inception.bmi;
 
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.xml.XmlSchemaClasspathInputSource;
@@ -24,7 +25,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -39,6 +39,7 @@ import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -69,48 +70,15 @@ public class ProcessService implements IProcessService {
     this.processEngine = processEngine;
   }
 
-  /**
-   * Delete the existing process definition.
-   *
-   * @param processDefinitionId the ID for the process definition
-   */
-  @Override
-  @Transactional
-  public void deleteProcessDefinition(String processDefinitionId)
-      throws ProcessDefinitionNotFoundException, ServiceUnavailableException {
-    try {
-      ProcessDefinitionQuery processDefinitionQuery =
-          processEngine.getRepositoryService().createProcessDefinitionQuery();
-      processDefinitionQuery.processDefinitionKey(processDefinitionId);
-
-      if (processDefinitionQuery.count() == 0)  {
-        throw new ProcessDefinitionNotFoundException(processDefinitionId);
-      }
-
-      List<ProcessDefinition> processsDefinitions = processDefinitionQuery.list();
-
-      for (ProcessDefinition processDefinition : processsDefinitions) {
-        processEngine.getRepositoryService().deleteProcessDefinition(processDefinition.getId());
-      }
-    } catch (ProcessDefinitionNotFoundException e)  {
-      throw e;
-    }
-    catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to delete the process definition", e);
-    }
-  }
-
-  /**
-   * Create the new process definition.
-   *
-   * @param processDefinitionData the BPMN XML data for the process definition(s)
-   * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
-   */
   @Override
   @Transactional
   public List<ProcessDefinitionSummary> createProcessDefinition(byte[] processDefinitionData)
-      throws InvalidBPMNException, DuplicateProcessDefinitionException,
+      throws InvalidArgumentException, InvalidBPMNException, DuplicateProcessDefinitionException,
           ServiceUnavailableException {
+    if ((processDefinitionData == null) || (processDefinitionData.length == 0)) {
+      throw new InvalidArgumentException("processDefinitionData");
+    }
+
     try {
       List<ProcessDefinitionSummary> processDefinitionSummaries =
           validateBPMN(processDefinitionData);
@@ -141,11 +109,36 @@ public class ProcessService implements IProcessService {
     }
   }
 
-  /**
-   * Returns the summaries for all the process definitions.
-   *
-   * @return the summaries for all the process definitions
-   */
+  @Override
+  @Transactional
+  public void deleteProcessDefinition(String processDefinitionId)
+      throws InvalidArgumentException, ProcessDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(processDefinitionId)) {
+      throw new InvalidArgumentException("processDefinitionId");
+    }
+
+    try {
+      ProcessDefinitionQuery processDefinitionQuery =
+          processEngine.getRepositoryService().createProcessDefinitionQuery();
+      processDefinitionQuery.processDefinitionKey(processDefinitionId);
+
+      if (processDefinitionQuery.count() == 0) {
+        throw new ProcessDefinitionNotFoundException(processDefinitionId);
+      }
+
+      List<ProcessDefinition> processsDefinitions = processDefinitionQuery.list();
+
+      for (ProcessDefinition processDefinition : processsDefinitions) {
+        processEngine.getRepositoryService().deleteProcessDefinition(processDefinition.getId());
+      }
+    } catch (ProcessDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to delete the process definition", e);
+    }
+  }
+
   @Override
   public List<ProcessDefinitionSummary> getProcessDefinitionSummaries()
       throws ServiceUnavailableException {
@@ -170,15 +163,13 @@ public class ProcessService implements IProcessService {
     }
   }
 
-  /**
-   * Check whether the process definition exists.
-   *
-   * @param processDefinitionId the ID for the process definition
-   * @return <b>true</b> if the process definition exists or <b>false</b> otherwise
-   */
   @Override
   public boolean processDefinitionExists(String processDefinitionId)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(processDefinitionId)) {
+      throw new InvalidArgumentException("processDefinitionId");
+    }
+
     try {
       ProcessDefinitionQuery processDefinitionQuery =
           processEngine.getRepositoryService().createProcessDefinitionQuery();
@@ -191,16 +182,19 @@ public class ProcessService implements IProcessService {
     }
   }
 
-  /**
-   * Start a process instance.
-   *
-   * @param processDefinitionId the ID for the process definition
-   * @param parameters the parameters for the process instance
-   */
   @Override
   @Transactional
   public void startProcessInstance(String processDefinitionId, Map<String, Object> parameters)
-      throws ProcessDefinitionNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException, ProcessDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(processDefinitionId)) {
+      throw new InvalidArgumentException("processDefinitionId");
+    }
+
+    if (parameters == null) {
+      throw new InvalidArgumentException("parameters");
+    }
+
     try {
       if (!processDefinitionExists(processDefinitionId)) {
         throw new ProcessDefinitionNotFoundException(processDefinitionId);
@@ -218,16 +212,15 @@ public class ProcessService implements IProcessService {
     }
   }
 
-  /**
-   * Update the process definition(s).
-   *
-   * @param processDefinitionData the BPMN XML data for the process definition(s)
-   * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
-   */
   @Override
   @Transactional
   public List<ProcessDefinitionSummary> updateProcessDefinition(byte[] processDefinitionData)
-      throws InvalidBPMNException, ProcessDefinitionNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException, InvalidBPMNException, ProcessDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if ((processDefinitionData == null) || (processDefinitionData.length == 0)) {
+      throw new InvalidArgumentException("processDefinitionData");
+    }
+
     try {
       List<ProcessDefinitionSummary> processDefinitionSummaries =
           validateBPMN(processDefinitionData);
@@ -258,29 +251,23 @@ public class ProcessService implements IProcessService {
     }
   }
 
-  /**
-   * Validate the BPMN XML data.
-   *
-   * @param bpmnXml the BPMN XML data
-   * @return the process definition summaries for the BPMN processes if the BPMN XML data was
-   *     successfully validated
-   */
   @Override
   public List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
-      throws InvalidBPMNException, ServiceUnavailableException {
+      throws InvalidArgumentException, InvalidBPMNException, ServiceUnavailableException {
+    if (!StringUtils.hasText(bpmnXml)) {
+      throw new InvalidArgumentException("bpmnXml");
+    }
+
     return validateBPMN(bpmnXml.getBytes(StandardCharsets.UTF_8));
   }
 
-  /**
-   * Validate the BPMN XML data.
-   *
-   * @param bpmnXml the BPMN XML data
-   * @return the process definition summaries for the BPMN processes if the BPMN XML data was
-   *     successfully validated
-   */
   @Override
   public List<ProcessDefinitionSummary> validateBPMN(byte[] bpmnXml)
-      throws InvalidBPMNException, ServiceUnavailableException {
+      throws InvalidArgumentException, InvalidBPMNException, ServiceUnavailableException {
+    if ((bpmnXml == null) || (bpmnXml.length == 0)) {
+      throw new InvalidArgumentException("bpmnXml");
+    }
+
     try {
       SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 

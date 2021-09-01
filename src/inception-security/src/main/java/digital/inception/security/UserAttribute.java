@@ -162,6 +162,8 @@ public class UserAttribute implements Serializable {
    * @param list the user attributes to search
    * @param name the name of the attribute
    * @return the binary value for the user attribute with the specified name in the specified list
+   * @throws UserAttributeException if the binary value could not be retrieved for the user
+   *     attribute
    */
   public static byte[] getBinaryValue(List<UserAttribute> list, String name)
       throws UserAttributeException {
@@ -193,6 +195,8 @@ public class UserAttribute implements Serializable {
    * @param name the name of the attribute
    * @return the <b>BigDecimal</b> value for the user attribute with the specified name in the
    *     specified list
+   * @throws UserAttributeException if the decimal value could not be retrieved for the user
+   *     attribute
    */
   public static BigDecimal getDecimalValue(List<UserAttribute> list, String name)
       throws UserAttributeException {
@@ -224,6 +228,8 @@ public class UserAttribute implements Serializable {
    * @param name the name of the attribute
    * @return the <b>double</b> value for the user attribute with the specified name in the specified
    *     list
+   * @throws UserAttributeException if the double value could not be retrieved for the user
+   *     attribute
    */
   public static double getDoubleValue(List<UserAttribute> list, String name)
       throws UserAttributeException {
@@ -248,13 +254,15 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <b>long</b> value for the user attribute with the specified name in the specified
+   * Returns the <b>int</b> value for the user attribute with the specified name in the specified
    * list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
    * @return the <b>int</b> value for the user attribute with the specified name in the specified
    *     list
+   * @throws UserAttributeException if the integer value could not be retrieved for the user
+   *     attribute
    */
   public static int getIntegerValue(List<UserAttribute> list, String name)
       throws UserAttributeException {
@@ -286,6 +294,7 @@ public class UserAttribute implements Serializable {
    * @param name the name of the attribute
    * @return the <b>long</b> value for the user attribute with the specified name in the specified
    *     list
+   * @throws UserAttributeException if the long value could not be retrieved for the user attribute
    */
   public static long getLongValue(List<UserAttribute> list, String name)
       throws UserAttributeException {
@@ -317,6 +326,8 @@ public class UserAttribute implements Serializable {
    * @param name the name of the attribute
    * @return the <b>String</b> value for the user attribute with the specified name in the specified
    *     list
+   * @throws UserAttributeException if the string value could not be retrieved for the user
+   *     attribute
    */
   public static String getStringValue(List<UserAttribute> list, String name)
       throws UserAttributeException {
@@ -339,6 +350,7 @@ public class UserAttribute implements Serializable {
    * @param list the user attributes to search
    * @param name the name of the attribute
    * @param value the binary value for the user attribute
+   * @throws UserAttributeException if the binary value could not be set for the user attribute
    */
   public static void setBinaryValue(List<UserAttribute> list, String name, BinaryBuffer value)
       throws UserAttributeException {
@@ -351,6 +363,7 @@ public class UserAttribute implements Serializable {
    * @param list the user attributes to search
    * @param name the name of the attribute
    * @param value the binary value for the user attribute
+   * @throws UserAttributeException if the binary value could not be set for the user attribute
    */
   public static void setBinaryValue(List<UserAttribute> list, String name, byte[] value)
       throws UserAttributeException {
@@ -376,6 +389,7 @@ public class UserAttribute implements Serializable {
    * @param list the user attributes to search
    * @param name the name of the attribute
    * @param value the <b>BigDecimal</b> value for the user attribute
+   * @throws UserAttributeException if the decimal value could not be set for the user attribute
    */
   public static void setDecimalValue(List<UserAttribute> list, String name, BigDecimal value)
       throws UserAttributeException {
@@ -401,6 +415,7 @@ public class UserAttribute implements Serializable {
    * @param list the user attributes to search
    * @param name the name of the attribute
    * @param value the <b>double</b> value for the user attribute
+   * @throws UserAttributeException if the double value could not be set for the user attribute
    */
   public static void setDoubleValue(List<UserAttribute> list, String name, double value)
       throws UserAttributeException {
@@ -425,6 +440,7 @@ public class UserAttribute implements Serializable {
    * @param list the user attributes to search
    * @param name the name of the attribute
    * @param value the <b>int</b> value for the user attribute
+   * @throws UserAttributeException if the integer value could not be set for the user attribute
    */
   public static void setIntegerValue(List<UserAttribute> list, String name, int value)
       throws UserAttributeException {
@@ -449,6 +465,7 @@ public class UserAttribute implements Serializable {
    * @param list the user attributes to search
    * @param name the name of the attribute
    * @param value the <b>long</b> value for the user attribute
+   * @throws UserAttributeException if the long value could not be set for the user attribute
    */
   public static void setLongValue(List<UserAttribute> list, String name, long value)
       throws UserAttributeException {
@@ -474,6 +491,7 @@ public class UserAttribute implements Serializable {
    * @param list the user attributes to search
    * @param name the name of the attribute
    * @param value the <b>String</b> value for the user attribute
+   * @throws UserAttributeException if the string value could not be set for the user attribute
    */
   public static void setStringValue(List<UserAttribute> list, String name, String value)
       throws UserAttributeException {
@@ -496,6 +514,8 @@ public class UserAttribute implements Serializable {
    * Returns the binary value for the user attribute.
    *
    * @return the binary value for the user attribute
+   * @throws UserAttributeException if the binary value could not be retrieved for the user
+   *     attribute
    */
   public byte[] getBinaryValue() throws UserAttributeException {
     try {
@@ -510,6 +530,8 @@ public class UserAttribute implements Serializable {
    * Returns the <b>BigDecimal</b> value for the user attribute.
    *
    * @return the <b>BigDecimal</b> value for the user attribute
+   * @throws UserAttributeException if the decimal value could not be retrieved for the user
+   *     attribute
    */
   public BigDecimal getDecimalValue() throws UserAttributeException {
     try {
@@ -524,6 +546,8 @@ public class UserAttribute implements Serializable {
    * Returns the <b>double</b> value for the user attribute.
    *
    * @return the <b>double</b> value for the user attribute
+   * @throws UserAttributeException if the double value could not be retrieved for the user
+   *     attribute
    */
   public double getDoubleValue() throws UserAttributeException {
     try {
@@ -538,6 +562,8 @@ public class UserAttribute implements Serializable {
    * Returns the <b>int</b> value for the user attribute.
    *
    * @return the <b>int</b> value for the user attribute
+   * @throws UserAttributeException if the integer value could not be retrieved for the user
+   *     attribute
    */
   public int getIntegerValue() throws UserAttributeException {
     try {
@@ -552,6 +578,7 @@ public class UserAttribute implements Serializable {
    * Returns the <b>long</b> value for the user attribute.
    *
    * @return the <b>long</b> value for the user attribute
+   * @throws UserAttributeException if the long value could not be retrieved for the user attribute
    */
   public long getLongValue() throws UserAttributeException {
     try {

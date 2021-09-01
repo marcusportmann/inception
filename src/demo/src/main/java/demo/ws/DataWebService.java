@@ -18,8 +18,8 @@ package demo.ws;
 
 import demo.model.Data;
 import demo.model.IDataService;
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -56,6 +56,7 @@ public class DataWebService {
    * Returns all the data.
    *
    * @return all the data
+   * @throws ServiceUnavailableException if the data could not be retrieved
    */
   @WebMethod(operationName = "GetAllData")
   @WebResult(name = "Data")
@@ -67,6 +68,7 @@ public class DataWebService {
    * Retrieve the data.
    *
    * @return the data
+   * @throws ServiceUnavailableException if the data could not be retrieved
    */
   @WebMethod(operationName = "GetData")
   @WebResult(name = "Data")
@@ -82,7 +84,11 @@ public class DataWebService {
     return data;
   }
 
-  /** Test the exception handling. */
+  /**
+   * Test the exception handling.
+   *
+   * @throws ServiceUnavailableException if an exception is thrown
+   */
   @WebMethod(operationName = "TestExceptionHandling")
   public void testExceptionHandling() throws ServiceUnavailableException {
     throw new ServiceUnavailableException("Testing 1.. 2.. 3..");
@@ -92,17 +98,12 @@ public class DataWebService {
    * Test the local date time mapping.
    *
    * @param localDateTime the local date time
+   * @return the local date time
    */
   @WebMethod(operationName = "TestLocalDateTime")
   public LocalDateTime testLocalDateTime(
-      @WebParam(name = "LocalDateTime") @XmlElement(required = true) LocalDateTime localDateTime)
-      throws ServiceUnavailableException {
-    if (true) {
-      throw new ServiceUnavailableException("Testing 1.. 2.. 3...");
-    }
-
+      @WebParam(name = "LocalDateTime") @XmlElement(required = true) LocalDateTime localDateTime) {
     System.out.println("localDateTime = " + localDateTime);
-
     return localDateTime;
   }
 
@@ -110,24 +111,24 @@ public class DataWebService {
    * Test the zoned date time mapping.
    *
    * @param zonedDateTime the zoned date time
+   * @return the zoned date time
    */
   @WebMethod(operationName = "TestZonedDateTime")
   public ZonedDateTime testZonedDateTime(
-      @WebParam(name = "ZonedDateTime") @XmlElement(required = true) ZonedDateTime zonedDateTime)
-      throws ServiceUnavailableException {
-    if (false) {
-      throw new ServiceUnavailableException("Testing 1.. 2.. 3...");
-    }
-
+      @WebParam(name = "ZonedDateTime") @XmlElement(required = true) ZonedDateTime zonedDateTime) {
     System.out.println("zonedDateTime = " + zonedDateTime);
-
     return zonedDateTime;
   }
 
-  /** Validate the data. */
+  /**
+   * Validate the data.
+   *
+   * @param data the data to validate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the data could not be validated
+   */
   @WebMethod(operationName = "ValidateData")
-  public void validateData(
-      @WebParam(name = "Data") @XmlElement(required = true) Data data)
+  public void validateData(@WebParam(name = "Data") @XmlElement(required = true) Data data)
       throws InvalidArgumentException, ServiceUnavailableException {
     dataService.validateData(data);
   }

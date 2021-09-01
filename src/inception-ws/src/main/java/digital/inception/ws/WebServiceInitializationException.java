@@ -19,7 +19,8 @@ package digital.inception.ws;
 import digital.inception.core.exception.RichRuntimeException;
 
 /**
- * The <b></b> exception is thrown to indicate an error condition when initializing a web service.
+ * The <b>WebServiceInitializationException</b> exception is thrown to indicate an error condition
+ * when initializing a web service.
  *
  * @author Marcus Portmann
  */

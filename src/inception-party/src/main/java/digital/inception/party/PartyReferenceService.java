@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -166,7 +166,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   private final TitleRepository titleRepository;
 
   /** The internal reference to the Party Reference Service to enable caching. */
-  @Resource private IPartyReferenceService self;
+  @Autowired private IPartyReferenceService self;
 
   /**
    * Constructs a new <b>PartyReferenceService</b>.
@@ -303,13 +303,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.titleRepository = titleRepository;
   }
 
-  /**
-   * Retrieve the value type for the first association property type with the specified code for any
-   * tenant or locale.
-   *
-   * @param associationPropertyTypeCode the code for the association property type
-   * @return the value type for the association property type
-   */
   @Override
   @Cacheable(
       cacheNames = "associationPropertyTypesValueTypes",
@@ -332,13 +325,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the association property type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the association
-   *     property type reference data for
-   * @return the association property type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'associationPropertyTypes.' + #localeId")
   public List<AssociationPropertyType> getAssociationPropertyTypes(String localeId)
@@ -355,11 +341,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the association property type reference data for all locales.
-   *
-   * @return the association property type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'associationPropertyTypes.ALL'")
   public List<AssociationPropertyType> getAssociationPropertyTypes()
@@ -372,15 +353,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the association property type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association
-   *     property type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the association
-   *     property type reference data for
-   * @return the association property type reference data
-   */
   @Override
   public List<AssociationPropertyType> getAssociationPropertyTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -392,13 +364,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the association type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the association type
-   *     reference data for
-   * @return the association type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'associationTypes.' + #localeId")
   public List<AssociationType> getAssociationTypes(String localeId)
@@ -415,11 +380,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the association type reference data for all locales.
-   *
-   * @return the association type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'associationTypes.ALL'")
   public List<AssociationType> getAssociationTypes() throws ServiceUnavailableException {
@@ -431,15 +391,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the association type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the association type
-   *     reference data for
-   * @return the association type reference data
-   */
   @Override
   public List<AssociationType> getAssociationTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -451,13 +402,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the attribute type category reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
-   *     category reference data for
-   * @return the attribute type category reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'attributeTypeCategories.' + #localeId")
   public List<AttributeTypeCategory> getAttributeTypeCategories(String localeId)
@@ -474,11 +418,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the attribute type category reference data for all locales.
-   *
-   * @return the attribute type category reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'attributeTypeCategories.ALL'")
   public List<AttributeTypeCategory> getAttributeTypeCategories()
@@ -491,15 +430,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the attribute type category reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
-   *     category reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
-   *     category reference data for
-   * @return the attribute type category reference data
-   */
   @Override
   public List<AttributeTypeCategory> getAttributeTypeCategories(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -511,13 +441,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the value type for the first attribute type with the specified code for any tenant or
-   * locale.
-   *
-   * @param attributeTypeCode the code for the attribute type
-   * @return the value type for the attribute type
-   */
   @Override
   @Cacheable(cacheNames = "attributeTypesValueTypes", key = "#attributeTypeCode")
   public Optional<ValueType> getAttributeTypeValueType(String attributeTypeCode)
@@ -534,13 +457,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the attribute type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
-   *     reference data for
-   * @return the attribute type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'attributeTypes.' + #localeId")
   public List<AttributeType> getAttributeTypes(String localeId)
@@ -557,11 +473,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the attribute type reference data for all locales.
-   *
-   * @return the attribute type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'attributeTypes.ALL'")
   public List<AttributeType> getAttributeTypes() throws ServiceUnavailableException {
@@ -573,15 +484,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the attribute type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
-   *     reference data for
-   * @return the attribute type reference data
-   */
   @Override
   public List<AttributeType> getAttributeTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -593,13 +495,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the consent type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
-   *     reference data for
-   * @return the consent type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'consentTypes.' + #localeId")
   public List<ConsentType> getConsentTypes(String localeId)
@@ -616,11 +511,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the consent type reference data for all locales.
-   *
-   * @return the consent type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'consentTypes.ALL'")
   public List<ConsentType> getConsentTypes() throws ServiceUnavailableException {
@@ -632,15 +522,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the consent type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the consent type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
-   *     reference data for
-   * @return the consent type reference data
-   */
   @Override
   public List<ConsentType> getConsentTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -652,13 +533,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the contact mechanism purpose reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purpose reference data for
-   * @return the contact mechanism purpose reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'contactMechanismPurposes.' + #localeId")
   public List<ContactMechanismPurpose> getContactMechanismPurposes(String localeId)
@@ -675,11 +549,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the contact mechanism purpose reference data for all locales.
-   *
-   * @return the contact mechanism purpose reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'contactMechanismPurposes.ALL'")
   public List<ContactMechanismPurpose> getContactMechanismPurposes()
@@ -692,15 +561,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the contact mechanism purpose reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
-   *     purpose reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purpose reference data for
-   * @return the contact mechanism purpose reference data
-   */
   @Override
   public List<ContactMechanismPurpose> getContactMechanismPurposes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -712,13 +572,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the contact mechanism role reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     role reference data for
-   * @return the contact mechanism role reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'contactMechanismRoles.' + #localeId")
   public List<ContactMechanismRole> getContactMechanismRoles(String localeId)
@@ -735,11 +588,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the contact mechanism role reference data for all locales.
-   *
-   * @return the contact mechanism role reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'contactMechanismRoles.ALL'")
   public List<ContactMechanismRole> getContactMechanismRoles() throws ServiceUnavailableException {
@@ -751,15 +599,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the contact mechanism role reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
-   *     role reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     role reference data for
-   * @return the contact mechanism role reference data
-   */
   @Override
   public List<ContactMechanismRole> getContactMechanismRoles(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -771,13 +610,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the contact mechanism type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     type reference data for
-   * @return the contact mechanism type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'contactMechanismTypes.' + #localeId")
   public List<ContactMechanismType> getContactMechanismTypes(String localeId)
@@ -794,11 +626,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the contact mechanism type reference data for all locales.
-   *
-   * @return the contact mechanism type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'contactMechanismTypes.ALL'")
   public List<ContactMechanismType> getContactMechanismTypes() throws ServiceUnavailableException {
@@ -810,15 +637,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the contact mechanism type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
-   *     type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     type reference data for
-   * @return the contact mechanism type reference data
-   */
   @Override
   public List<ContactMechanismType> getContactMechanismTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -830,13 +648,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the employment status reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
-   *     reference data for
-   * @return the employment status reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'employmentStatuses.' + #localeId")
   public List<EmploymentStatus> getEmploymentStatuses(String localeId)
@@ -853,11 +664,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the employment status reference data for all locales.
-   *
-   * @return the employment status reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'employmentStatuses.ALL'")
   public List<EmploymentStatus> getEmploymentStatuses() throws ServiceUnavailableException {
@@ -869,15 +675,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the employment status reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment status
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
-   *     reference data for
-   * @return the employment status reference data
-   */
   @Override
   public List<EmploymentStatus> getEmploymentStatuses(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -889,13 +686,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the employment type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
-   *     reference data for
-   * @return the employment type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'employmentTypes.' + #localeId")
   public List<EmploymentType> getEmploymentTypes(String localeId)
@@ -912,11 +702,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the employment type reference data for all locales.
-   *
-   * @return the employment type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'employmentTypes.ALL'")
   public List<EmploymentType> getEmploymentTypes() throws ServiceUnavailableException {
@@ -928,15 +713,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the employment type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
-   *     reference data for
-   * @return the employment type reference data
-   */
   @Override
   public List<EmploymentType> getEmploymentTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -948,13 +724,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the external reference type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the external reference
-   *     type reference data for
-   * @return the external reference type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'externalReferenceTypes.' + #localeId")
   public List<ExternalReferenceType> getExternalReferenceTypes(String localeId)
@@ -971,11 +740,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the external reference type reference data for all locales.
-   *
-   * @return the external reference type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'externalReferenceTypes.ALL'")
   public List<ExternalReferenceType> getExternalReferenceTypes()
@@ -988,15 +752,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the external reference type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the external reference
-   *     type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the external reference
-   *     type reference data for
-   * @return the external reference type reference data
-   */
   @Override
   public List<ExternalReferenceType> getExternalReferenceTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1008,13 +763,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the fields of study reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
-   *     reference data for
-   * @return the fields of study reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'fieldsOfStudy.' + #localeId")
   public List<FieldOfStudy> getFieldsOfStudy(String localeId)
@@ -1031,11 +779,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the fields of study reference data for all locales.
-   *
-   * @return the fields of study reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'fieldsOfStudy.ALL'")
   public List<FieldOfStudy> getFieldsOfStudy() throws ServiceUnavailableException {
@@ -1047,15 +790,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the fields of study reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the fields of study
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
-   *     reference data for
-   * @return the fields of study reference data
-   */
   @Override
   public List<FieldOfStudy> getFieldsOfStudy(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1067,13 +801,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the gender reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
-   *     data for
-   * @return the gender reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'genders.' + #localeId")
   public List<Gender> getGenders(String localeId)
@@ -1089,11 +816,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the gender reference data for all locales.
-   *
-   * @return the gender reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'genders.ALL'")
   public List<Gender> getGenders() throws ServiceUnavailableException {
@@ -1104,15 +826,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the gender reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the gender reference
-   *     data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
-   *     data for
-   * @return the gender reference data
-   */
   @Override
   public List<Gender> getGenders(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1123,13 +836,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the identity document type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
-   *     type reference data for
-   * @return the identity document type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'identityDocumentTypes.' + #localeId")
   public List<IdentityDocumentType> getIdentityDocumentTypes(String localeId)
@@ -1146,11 +852,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the identity document type reference data for all locales.
-   *
-   * @return the identity document type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'identityDocumentTypes.ALL'")
   public List<IdentityDocumentType> getIdentityDocumentTypes() throws ServiceUnavailableException {
@@ -1162,15 +863,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the identity document type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the identity document
-   *     type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
-   *     type reference data for
-   * @return the identity document type reference data
-   */
   @Override
   public List<IdentityDocumentType> getIdentityDocumentTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1182,13 +874,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the lock type category reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
-   *     reference data for
-   * @return the lock type category reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'lockTypeCategories.' + #localeId")
   public List<LockTypeCategory> getLockTypeCategories(String localeId)
@@ -1205,11 +890,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the lock type category reference data for all locales.
-   *
-   * @return the lock type category reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'lockTypeCategories.ALL'")
   public List<LockTypeCategory> getLockTypeCategories() throws ServiceUnavailableException {
@@ -1221,15 +901,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the lock type category reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type category
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
-   *     reference data for
-   * @return the lock type category reference data
-   */
   @Override
   public List<LockTypeCategory> getLockTypeCategories(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1241,13 +912,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the lock type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
-   *     reference data for
-   * @return the lock type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'lockTypes.' + #localeId")
   public List<LockType> getLockTypes(String localeId)
@@ -1263,11 +927,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the lock type reference data for all locales.
-   *
-   * @return the lock type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'lockTypes.ALL'")
   public List<LockType> getLockTypes() throws ServiceUnavailableException {
@@ -1278,15 +937,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the lock type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type reference
-   *     data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
-   *     reference data for
-   * @return the lock type reference data
-   */
   @Override
   public List<LockType> getLockTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1298,13 +948,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the marital status reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
-   *     reference data for
-   * @return the marital status reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'maritalStatuses.' + #localeId")
   public List<MaritalStatus> getMaritalStatuses(String localeId)
@@ -1321,11 +964,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the marital status reference data for all locales.
-   *
-   * @return the marital status reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'maritalStatuses.ALL'")
   public List<MaritalStatus> getMaritalStatuses() throws ServiceUnavailableException {
@@ -1337,15 +975,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the marital status reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marital status
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
-   *     reference data for
-   * @return the marital status reference data
-   */
   @Override
   public List<MaritalStatus> getMaritalStatuses(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1357,13 +986,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the marriage type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
-   *     reference data
-   * @return the marriage type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'marriageTypes.' + #localeId")
   public List<MarriageType> getMarriageTypes(String localeId)
@@ -1380,11 +1002,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the marriage type reference data for all locales.
-   *
-   * @return the marriage type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'marriageTypes.ALL'")
   public List<MarriageType> getMarriageTypes() throws ServiceUnavailableException {
@@ -1396,15 +1013,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the marriage type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marriage type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
-   *     reference data
-   * @return the marriage type reference data
-   */
   @Override
   public List<MarriageType> getMarriageTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1416,13 +1024,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the next of kin type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
-   *     reference data for
-   * @return the next of kin type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'nextOfKinTypes.' + #localeId")
   public List<NextOfKinType> getNextOfKinTypes(String localeId)
@@ -1439,11 +1040,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the next of kin type reference data for all locales.
-   *
-   * @return the next of kin type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'nextOfKinTypes.ALL'")
   public List<NextOfKinType> getNextOfKinTypes() throws ServiceUnavailableException {
@@ -1455,15 +1051,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the next of kin type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the next of kin type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
-   *     reference data for
-   * @return the next of kin type reference data
-   */
   @Override
   public List<NextOfKinType> getNextOfKinTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1475,13 +1062,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the occupation reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
-   *     reference data for
-   * @return the occupation reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'occupations.' + #localeId")
   public List<Occupation> getOccupations(String localeId)
@@ -1497,11 +1077,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the occupation reference data for all locales.
-   *
-   * @return the occupation reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'occupations.ALL'")
   public List<Occupation> getOccupations() throws ServiceUnavailableException {
@@ -1512,15 +1087,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the occupation reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the occupation
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
-   *     reference data for
-   * @return the occupation reference data
-   */
   @Override
   public List<Occupation> getOccupations(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1532,13 +1098,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the physical address purpose reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     purpose reference data for
-   * @return the physical address purpose reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'physicalAddressPurposes.' + #localeId")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(String localeId)
@@ -1555,11 +1114,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the physical address purpose reference data for all locales.
-   *
-   * @return the physical address purpose reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'physicalAddressPurposes.ALL'")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes()
@@ -1572,15 +1126,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the physical address purpose reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
-   *     purpose reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     purpose reference data for
-   * @return the physical address purpose reference data
-   */
   @Override
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1592,13 +1137,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the physical address role reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     role reference data for
-   * @return the physical address role reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'physicalAddressRoles.' + #localeId")
   public List<PhysicalAddressRole> getPhysicalAddressRoles(String localeId)
@@ -1615,11 +1153,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the physical address role reference data for all locales.
-   *
-   * @return the physical address role reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'physicalAddressRoles.ALL'")
   public List<PhysicalAddressRole> getPhysicalAddressRoles() throws ServiceUnavailableException {
@@ -1631,15 +1164,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the physical address role reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
-   *     role reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     role reference data for
-   * @return the physical address role reference data
-   */
   @Override
   public List<PhysicalAddressRole> getPhysicalAddressRoles(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1651,13 +1175,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the physical address type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     type reference data for
-   * @return the physical address type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'physicalAddressTypes.' + #localeId")
   public List<PhysicalAddressType> getPhysicalAddressTypes(String localeId)
@@ -1674,11 +1191,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the physical address type reference data for all locales.
-   *
-   * @return the physical address type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'physicalAddressTypes.ALL'")
   public List<PhysicalAddressType> getPhysicalAddressTypes() throws ServiceUnavailableException {
@@ -1690,15 +1202,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the physical address type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
-   *     type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     type reference data for
-   * @return the physical address type reference data
-   */
   @Override
   public List<PhysicalAddressType> getPhysicalAddressTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1710,13 +1213,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the preference type category reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     category reference data for
-   * @return the preference type category reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'preferenceTypeCategories.' + #localeId")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
@@ -1733,11 +1229,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the preference type category reference data for all locales.
-   *
-   * @return the preference type category reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'preferenceTypeCategories.ALL'")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories()
@@ -1750,15 +1241,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the preference type category reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
-   *     category reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     category reference data for
-   * @return the preference type category reference data
-   */
   @Override
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1770,13 +1252,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the preference type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     reference data for
-   * @return the preference type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'preferenceTypes.' + #localeId")
   public List<PreferenceType> getPreferenceTypes(String localeId)
@@ -1793,11 +1268,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the preference type reference data for all locales.
-   *
-   * @return the preference type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'preferenceTypes.ALL'")
   public List<PreferenceType> getPreferenceTypes() throws ServiceUnavailableException {
@@ -1809,15 +1279,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the preference type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     reference data for
-   * @return the preference type reference data
-   */
   @Override
   public List<PreferenceType> getPreferenceTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1829,13 +1290,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the qualification type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
-   *     reference data for
-   * @return the qualification type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'qualificationTypes.' + #localeId")
   public List<QualificationType> getQualificationTypes(String localeId)
@@ -1852,11 +1306,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the qualification type reference data for all locales.
-   *
-   * @return the qualification type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'qualificationTypes.ALL'")
   public List<QualificationType> getQualificationTypes() throws ServiceUnavailableException {
@@ -1868,15 +1317,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the qualification type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the qualification type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
-   *     reference data for
-   * @return the qualification type reference data
-   */
   @Override
   public List<QualificationType> getQualificationTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1888,13 +1328,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the race reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
-   *     data for
-   * @return the race reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'races.' + #localeId")
   public List<Race> getRaces(String localeId)
@@ -1910,11 +1343,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the race reference data for all locales.
-   *
-   * @return the race reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'races.ALL'")
   public List<Race> getRaces() throws ServiceUnavailableException {
@@ -1925,15 +1353,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the race reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the race reference data
-   *     is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
-   *     data for
-   * @return the race reference data
-   */
   @Override
   public List<Race> getRaces(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1943,13 +1362,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the residence permit type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
-   *     type reference data for
-   * @return the residence permit type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'residencePermitTypes.' + #localeId")
   public List<ResidencePermitType> getResidencePermitTypes(String localeId)
@@ -1966,11 +1378,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the residence permit type reference data for all locales.
-   *
-   * @return the residence permit type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'residencePermitTypes.ALL'")
   public List<ResidencePermitType> getResidencePermitTypes() throws ServiceUnavailableException {
@@ -1982,15 +1389,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the residence permit type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residence permit
-   *     type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
-   *     type reference data for
-   * @return the residence permit type reference data
-   */
   @Override
   public List<ResidencePermitType> getResidencePermitTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2002,13 +1400,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the residency status reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
-   *     reference data for
-   * @return the residency status reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'residencyStatuses.' + #localeId")
   public List<ResidencyStatus> getResidencyStatuses(String localeId)
@@ -2025,11 +1416,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the residency status reference data for all locales.
-   *
-   * @return the residency status reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'residencyStatuses.ALL'")
   public List<ResidencyStatus> getResidencyStatuses() throws ServiceUnavailableException {
@@ -2041,15 +1427,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the residency status reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residency status
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
-   *     reference data for
-   * @return the residency status reference data
-   */
   @Override
   public List<ResidencyStatus> getResidencyStatuses(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2061,13 +1438,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the residential type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
-   *     reference data for
-   * @return the residential type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'residentialTypes.' + #localeId")
   public List<ResidentialType> getResidentialTypes(String localeId)
@@ -2084,11 +1454,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the residential type reference data for all locales.
-   *
-   * @return the residential type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'residentialTypes.ALL'")
   public List<ResidentialType> getResidentialTypes() throws ServiceUnavailableException {
@@ -2100,15 +1465,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the residential type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residential type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
-   *     reference data for
-   * @return the residential type reference data
-   */
   @Override
   public List<ResidentialType> getResidentialTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2120,13 +1476,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the role purpose reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
-   *     reference data for
-   * @return the role purpose reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'rolePurposes.' + #localeId")
   public List<RolePurpose> getRolePurposes(String localeId)
@@ -2143,11 +1492,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the role purpose reference data for all locales.
-   *
-   * @return the role purpose reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'rolePurposes.ALL'")
   public List<RolePurpose> getRolePurposes() throws ServiceUnavailableException {
@@ -2159,15 +1503,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the role purpose reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role purpose
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
-   *     reference data for
-   * @return the role purpose reference data
-   */
   @Override
   public List<RolePurpose> getRolePurposes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2179,11 +1514,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the role type attribute type constraints for all role types.
-   *
-   * @return the role type attribute type constraints
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'roleTypeAttributeTypeConstraints.ALL'")
   public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints()
@@ -2197,12 +1527,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the role type attribute type constraints for a specific role type.
-   *
-   * @param roleType the code for the role type to retrieve the attribute constraints for
-   * @return the role type attribute type constraints
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'roleTypeAttributeTypeConstraints.' + #roleType")
   public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(String roleType)
@@ -2220,11 +1544,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the role type preference type constraints for all role types.
-   *
-   * @return the role type preference type constraints
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'roleTypePreferenceTypeConstraints.ALL'")
   public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints()
@@ -2238,12 +1557,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the role type preference type constraints for a specific role type.
-   *
-   * @param roleType the code for the role type to retrieve the preference constraints for
-   * @return the role type preference type constraints
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'roleTypePreferenceTypeConstraints.' + #roleType")
   public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
@@ -2261,13 +1574,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the role type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role type
-   *     reference data for
-   * @return the role type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'roleTypes.' + #localeId")
   public List<RoleType> getRoleTypes(String localeId)
@@ -2283,11 +1589,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the role type reference data for all locales.
-   *
-   * @return the role type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'roleTypes.ALL'")
   public List<RoleType> getRoleTypes() throws ServiceUnavailableException {
@@ -2298,15 +1599,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the role type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role type reference
-   *     data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role type
-   *     reference data for
-   * @return the role type reference data
-   */
   @Override
   public List<RoleType> getRoleTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2318,13 +1610,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the segment reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
-   *     data for
-   * @return the segment reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'segments.' + #localeId")
   public List<Segment> getSegments(String localeId)
@@ -2340,11 +1625,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the segment reference data for all locales.
-   *
-   * @return the segment reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'segments.ALL'")
   public List<Segment> getSegments() throws ServiceUnavailableException {
@@ -2355,15 +1635,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the segment reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the segment reference
-   *     data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
-   *     data for
-   * @return the segment reference data
-   */
   @Override
   public List<Segment> getSegments(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2375,13 +1646,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the source of funds type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
-   *     type reference data
-   * @return the source of funds type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'sourceOfFundsTypes.' + #localeId")
   public List<SourceOfFundsType> getSourceOfFundsTypes(String localeId)
@@ -2398,11 +1662,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the source of funds type reference data for all locales.
-   *
-   * @return the source of funds type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'sourceOfFundsTypes.ALL'")
   public List<SourceOfFundsType> getSourceOfFundsTypes() throws ServiceUnavailableException {
@@ -2414,15 +1673,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the source of funds type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of funds
-   *     type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
-   *     type reference data
-   * @return the source of funds type reference data
-   */
   @Override
   public List<SourceOfFundsType> getSourceOfFundsTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2434,13 +1684,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the source of wealth type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
-   *     type reference data for
-   * @return the source of wealth type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'sourceOfWealthTypes.' + #localeId")
   public List<SourceOfWealthType> getSourceOfWealthTypes(String localeId)
@@ -2457,11 +1700,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the source of wealth type reference data for all locales.
-   *
-   * @return the source of wealth type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'sourceOfWealthTypes.ALL'")
   public List<SourceOfWealthType> getSourceOfWealthTypes() throws ServiceUnavailableException {
@@ -2473,15 +1711,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the source of wealth type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of wealth
-   *     type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
-   *     type reference data for
-   * @return the source of wealth type reference data
-   */
   @Override
   public List<SourceOfWealthType> getSourceOfWealthTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2493,13 +1722,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the status type category reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
-   *     category reference data for
-   * @return the status type category reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'statusTypeCategories.' + #localeId")
   public List<StatusTypeCategory> getStatusTypeCategories(String localeId)
@@ -2516,11 +1738,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the status type category reference data for all locales.
-   *
-   * @return the status type category reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'statusTypeCategories.ALL'")
   public List<StatusTypeCategory> getStatusTypeCategories() throws ServiceUnavailableException {
@@ -2532,15 +1749,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the status type category reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
-   *     category reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
-   *     category reference data for
-   * @return the status type category reference data
-   */
   @Override
   public List<StatusTypeCategory> getStatusTypeCategories(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2552,13 +1760,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the status type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
-   *     reference data for
-   * @return the status type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'statusTypes.' + #localeId")
   public List<StatusType> getStatusTypes(String localeId)
@@ -2574,11 +1775,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the status type reference data for all locales.
-   *
-   * @return the status type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'statusTypes.ALL'")
   public List<StatusType> getStatusTypes() throws ServiceUnavailableException {
@@ -2589,15 +1785,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the status type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
-   *     reference data for
-   * @return the status type reference data
-   */
   @Override
   public List<StatusType> getStatusTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2609,13 +1796,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the tax number type reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
-   *     reference data for
-   * @return the tax number type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'taxNumberTypes.' + #localeId")
   public List<TaxNumberType> getTaxNumberTypes(String localeId)
@@ -2632,11 +1812,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the tax number type reference data for all locales.
-   *
-   * @return the tax number type reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'taxNumberTypes.ALL'")
   public List<TaxNumberType> getTaxNumberTypes() throws ServiceUnavailableException {
@@ -2648,15 +1823,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the tax number type reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the tax number type
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
-   *     reference data for
-   * @return the tax number type reference data
-   */
   @Override
   public List<TaxNumberType> getTaxNumberTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2668,13 +1834,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the times to contact reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
-   *     reference data for
-   * @return the times to contact reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'timesToContact.' + #localeId")
   public List<TimeToContact> getTimesToContact(String localeId)
@@ -2691,11 +1850,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the times to contact reference data for all locales.
-   *
-   * @return the times to contact reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'timesToContact.ALL'")
   public List<TimeToContact> getTimesToContact() throws ServiceUnavailableException {
@@ -2707,15 +1861,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the times to contact reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the times to contact
-   *     reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
-   *     reference data for
-   * @return the times to contact reference data
-   */
   @Override
   public List<TimeToContact> getTimesToContact(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2727,13 +1872,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieve the title reference data for a specific locale.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
-   *     data for
-   * @return the title reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'titles.' + #localeId")
   public List<Title> getTitles(String localeId)
@@ -2749,11 +1887,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the title reference data for all locales.
-   *
-   * @return the title reference data
-   */
   @Override
   @Cacheable(cacheNames = "reference", key = "'titles.ALL'")
   public List<Title> getTitles() throws ServiceUnavailableException {
@@ -2764,15 +1897,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Retrieve the title reference data for a specific tenant and locale.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the title reference
-   *     data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
-   *     data for
-   * @return the title reference data
-   */
   @Override
   public List<Title> getTitles(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -2783,16 +1907,6 @@ public class PartyReferenceService implements IPartyReferenceService {
         .collect(Collectors.toList());
   }
 
-  /**
-   * Check whether the code is a valid code for a association property type for the association
-   * type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param associationTypeCode the code for the association type
-   * @param associationPropertyTypeCode the code for the association property type
-   * @return <b>true</b> if the code is a valid code for a association property type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidAssociationPropertyType(
       UUID tenantId, String associationTypeCode, String associationPropertyTypeCode)
@@ -2812,15 +1926,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                         associationPropertyType.getCode(), associationPropertyTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a association type for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param associationTypeCode the code for the association type
-   * @return <b>true</b> if the code is a valid code for a association type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidAssociationType(
       UUID tenantId, String partyTypeCode, String associationTypeCode)
@@ -2837,14 +1942,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(associationType.getCode(), associationTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for an attribute type for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param attributeTypeCode the code for the attribute type
-   * @return <b>true</b> if the code is a valid code for an attribute type or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidAttributeType(UUID tenantId, String partyTypeCode, String attributeTypeCode)
       throws ServiceUnavailableException {
@@ -2861,14 +1958,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && attributeType.isValidForPartyType(partyTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for an attribute type category.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param attributeTypeCategoryCode the code for the attribute type category
-   * @return <b>true</b> if the code is a valid code for an attribute type category or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidAttributeTypeCategory(UUID tenantId, String attributeTypeCategoryCode)
       throws ServiceUnavailableException {
@@ -2884,13 +1973,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(attributeTypeCategory.getCode(), attributeTypeCategoryCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a consent type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param consentTypeCode the code for the consent type
-   * @return <b>true</b> if the code is a valid code for a consent type or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidConsentType(UUID tenantId, String consentTypeCode)
       throws ServiceUnavailableException {
@@ -2906,16 +1988,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(consentType.getCode(), consentTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a contact mechanism purpose for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param contactMechanismTypeCode the code for the contact mechanism type
-   * @param contactMechanismPurposeCode the code for the contact mechanism purpose
-   * @return <b>true</b> if the code is a valid code for a contact mechanism purpose or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidContactMechanismPurpose(
       UUID tenantId,
@@ -2939,16 +2011,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                         contactMechanismPurpose.getCode(), contactMechanismPurposeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a contact mechanism role for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param contactMechanismTypeCode the code for the contact mechanism type
-   * @param contactMechanismRoleCode the code for the contact mechanism role
-   * @return <b>true</b> if the code is a valid code for a contact mechanism role or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidContactMechanismRole(
       UUID tenantId,
@@ -2972,14 +2034,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(contactMechanismRole.getCode(), contactMechanismRoleCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a contact mechanism type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param contactMechanismTypeCode the code for the contact mechanism type
-   * @return <b>true</b> if the code is a valid code for a contact mechanism type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidContactMechanismType(UUID tenantId, String contactMechanismTypeCode)
       throws ServiceUnavailableException {
@@ -2995,14 +2049,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(contactMechanismType.getCode(), contactMechanismTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for an employment status.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param employmentStatusCode the code for the employment status
-   * @return <b>true</b> if the code is a valid code for an employment status or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidEmploymentStatus(UUID tenantId, String employmentStatusCode)
       throws ServiceUnavailableException {
@@ -3018,15 +2064,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(employmentStatus.getCode(), employmentStatusCode));
   }
 
-  /**
-   * Check whether the code is a valid code for an employment type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param employmentStatusCode the code for the employment status
-   * @param employmentTypeCode the code for the employment type
-   * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidEmploymentType(
       UUID tenantId, String employmentStatusCode, String employmentTypeCode)
@@ -3044,14 +2081,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(employmentType.getEmploymentStatus(), employmentStatusCode));
   }
 
-  /**
-   * Check whether the code is a valid code for an employment type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param employmentTypeCode the code for the employment type
-   * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidEmploymentType(UUID tenantId, String employmentTypeCode)
       throws ServiceUnavailableException {
@@ -3067,15 +2096,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(employmentType.getCode(), employmentTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for an external reference type for the party type
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param externalReferenceTypeCode the code for the external reference type
-   * @return <b>true</b> if the code is a valid code for an external reference type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidExternalReferenceType(
       UUID tenantId, String partyTypeCode, String externalReferenceTypeCode)
@@ -3093,13 +2113,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && externalReferenceType.isValidForPartyType(partyTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a field of study.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param fieldOfStudyCode the code for the field of study
-   * @return <b>true</b> if the code is a valid code for a field of study or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidFieldOfStudy(UUID tenantId, String fieldOfStudyCode)
       throws ServiceUnavailableException {
@@ -3115,13 +2128,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(fieldOfStudy.getCode(), fieldOfStudyCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a gender.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param genderCode the code for the gender
-   * @return <b>true</b> if the code is a valid code for a gender or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidGender(UUID tenantId, String genderCode)
       throws ServiceUnavailableException {
@@ -3136,15 +2142,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(gender.getCode(), genderCode));
   }
 
-  /**
-   * Check whether the code is a valid code for an identity document type for the party type
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param identityDocumentTypeCode the code for the identity document type
-   * @return <b>true</b> if the code is a valid code for an identity document type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidIdentityDocumentType(
       UUID tenantId, String partyTypeCode, String identityDocumentTypeCode)
@@ -3162,14 +2159,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && identityDocumentType.isValidForPartyType(partyTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a lock type for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param lockTypeCode the code for the lock type
-   * @return <b>true</b> if the code is a valid code for a lock type or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidLockType(UUID tenantId, String partyTypeCode, String lockTypeCode)
       throws ServiceUnavailableException {
@@ -3185,14 +2174,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && lockType.isValidForPartyType(partyTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a lock type category.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param lockTypeCategoryCode the code for the lock type category
-   * @return <b>true</b> if the code is a valid code for a lock type category or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidLockTypeCategory(UUID tenantId, String lockTypeCategoryCode)
       throws ServiceUnavailableException {
@@ -3208,13 +2189,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(lockTypeCategory.getCode(), lockTypeCategoryCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a marital status.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param maritalStatusCode the code for the marital status
-   * @return <b>true</b> if the code is a valid code for a marital status or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidMaritalStatus(UUID tenantId, String maritalStatusCode)
       throws ServiceUnavailableException {
@@ -3230,14 +2204,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(maritalStatus.getCode(), maritalStatusCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a marriage type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param maritalStatusCode the code for the marital status
-   * @param marriageTypeCode the code for the marriage type
-   * @return <b>true</b> if the code is a valid code for a marriage type or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidMarriageType(
       UUID tenantId, String maritalStatusCode, String marriageTypeCode)
@@ -3271,15 +2237,6 @@ public class PartyReferenceService implements IPartyReferenceService {
     }
   }
 
-  /**
-   * Check whether the measurement unit is valid for the attribute type with the specified code.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param attributeTypeCode the code for the attribute type
-   * @param measurementUnit the measurement unit
-   * @return <b>true</b> if the measurement unit is valid for the attribute type with the specified
-   *     code or <b>false</b> otherwise
-   */
   public boolean isValidMeasurementUnitForAttributeType(
       UUID tenantId, String attributeTypeCode, MeasurementUnit measurementUnit)
       throws ServiceUnavailableException {
@@ -3298,14 +2255,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                         measurementUnit == null ? null : measurementUnit.getType()));
   }
 
-  /**
-   * Check whether the code is a valid code for a next of kin type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param nextOfKinTypeCode the code for the next of kin type
-   * @return <b>true</b> if the code is a valid code for a next of kin type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidNextOfKinType(UUID tenantId, String nextOfKinTypeCode)
       throws ServiceUnavailableException {
@@ -3321,13 +2270,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(nextOfKinType.getCode(), nextOfKinTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for an occupation.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param occupationCode the code for the occupation
-   * @return <b>true</b> if the code is a valid code for an occupation or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidOccupation(UUID tenantId, String occupationCode)
       throws ServiceUnavailableException {
@@ -3343,15 +2285,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(occupation.getCode(), occupationCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a physical address purpose for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param physicalAddressPurposeCode the code for the physical address purpose
-   * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidPhysicalAddressPurpose(
       UUID tenantId, String partyTypeCode, String physicalAddressPurposeCode)
@@ -3369,14 +2302,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && physicalAddressPurpose.isValidForPartyType(partyTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a physical address purpose.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param physicalAddressPurposeCode the code for the physical address purpose
-   * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidPhysicalAddressPurpose(UUID tenantId, String physicalAddressPurposeCode)
       throws ServiceUnavailableException {
@@ -3393,15 +2318,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                         physicalAddressPurpose.getCode(), physicalAddressPurposeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a physical address role for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param physicalAddressRoleCode the code for the physical address role
-   * @return <b>true</b> if the code is a valid code for a physical address role or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidPhysicalAddressRole(
       UUID tenantId, String partyTypeCode, String physicalAddressRoleCode)
@@ -3419,14 +2335,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && physicalAddressRole.isValidForPartyType(partyTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a physical address role.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param physicalAddressRoleCode the code for the physical address role
-   * @return <b>true</b> if the code is a valid code for a physical address role or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidPhysicalAddressRole(UUID tenantId, String physicalAddressRoleCode)
       throws ServiceUnavailableException {
@@ -3442,14 +2350,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(physicalAddressRole.getCode(), physicalAddressRoleCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a physical address type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param physicalAddressTypeCode the code for the physical address type
-   * @return <b>true</b> if the code is a valid code for a physical address type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidPhysicalAddressType(UUID tenantId, String physicalAddressTypeCode)
       throws ServiceUnavailableException {
@@ -3465,14 +2365,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(physicalAddressType.getCode(), physicalAddressTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a preference type for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param preferenceTypeCode the code for the preference type
-   * @return <b>true</b> if the code is a valid code for a preference type or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidPreferenceType(
       UUID tenantId, String partyTypeCode, String preferenceTypeCode)
@@ -3490,14 +2382,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && preferenceType.isValidForPartyType(partyTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a preference type category.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param preferenceTypeCategoryCode the code for the preference type category
-   * @return <b>true</b> if the code is a valid code for a preference type category or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidPreferenceTypeCategory(UUID tenantId, String preferenceTypeCategoryCode)
       throws ServiceUnavailableException {
@@ -3514,14 +2398,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                         preferenceTypeCategory.getCode(), preferenceTypeCategoryCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a qualification type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param qualificationTypeCode the code for the qualification type
-   * @return <b>true</b> if the code is a valid code for a qualification type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidQualificationType(UUID tenantId, String qualificationTypeCode)
       throws ServiceUnavailableException {
@@ -3537,13 +2413,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(qualificationType.getCode(), qualificationTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a race.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param raceCode the code for the race
-   * @return <b>true</b> if the code is a valid code for a race or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidRace(UUID tenantId, String raceCode) throws ServiceUnavailableException {
     if (!StringUtils.hasText(raceCode)) {
@@ -3557,14 +2426,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(race.getCode(), raceCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a residence permit type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param residencePermitTypeCode the code for the residence permit type
-   * @return <b>true</b> if the code is a valid code for a residence permit type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidResidencePermitType(UUID tenantId, String residencePermitTypeCode)
       throws ServiceUnavailableException {
@@ -3580,14 +2441,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(residencePermitType.getCode(), residencePermitTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a residency status.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param residencyStatusCode the code for the residency status
-   * @return <b>true</b> if the code is a valid code for a residency status or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidResidencyStatus(UUID tenantId, String residencyStatusCode)
       throws ServiceUnavailableException {
@@ -3603,14 +2456,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(residencyStatus.getCode(), residencyStatusCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a residential type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param residentialTypeCode the code for the residential type
-   * @return <b>true</b> if the code is a valid code for a residential type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidResidentialType(UUID tenantId, String residentialTypeCode)
       throws ServiceUnavailableException {
@@ -3626,13 +2471,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(residentialType.getCode(), residentialTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a role purpose.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param rolePurposeCode the code for the role purpose
-   * @return <b>true</b> if the code is a valid code for a role purpose or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidRolePurpose(UUID tenantId, String rolePurposeCode)
       throws ServiceUnavailableException {
@@ -3648,14 +2486,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(rolePurpose.getCode(), rolePurposeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a role type for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param roleTypeCode the code for the role type
-   * @return <b>true</b> if the code is a valid code for a role type or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidRoleType(UUID tenantId, String partyTypeCode, String roleTypeCode)
       throws ServiceUnavailableException {
@@ -3671,13 +2501,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && roleType.isValidForPartyType(partyTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a segment.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param segmentCode the code for the segment
-   * @return <b>true</b> if the code is a valid code for a segment or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidSegment(UUID tenantId, String segmentCode)
       throws ServiceUnavailableException {
@@ -3692,14 +2515,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(segment.getCode(), segmentCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a source of funds type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param sourceOfFundsTypeCode the code for the source of funds type
-   * @return <b>true</b> if the code is a valid code for a source of funds type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidSourceOfFundsType(UUID tenantId, String sourceOfFundsTypeCode)
       throws ServiceUnavailableException {
@@ -3715,14 +2530,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(sourceOfFunds.getCode(), sourceOfFundsTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a source of wealth type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param sourceOfWealthTypeCode the code for the source of wealth type
-   * @return <b>true</b> if the code is a valid code for a source of wealth type or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidSourceOfWealthType(UUID tenantId, String sourceOfWealthTypeCode)
       throws ServiceUnavailableException {
@@ -3738,14 +2545,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(sourceOfWealth.getCode(), sourceOfWealthTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a status type for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param statusTypeCode the code for the status type
-   * @return <b>true</b> if the code is a valid code for a status type or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidStatusType(UUID tenantId, String partyTypeCode, String statusTypeCode)
       throws ServiceUnavailableException {
@@ -3762,14 +2561,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && statusType.isValidForPartyType(partyTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a status type category.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param statusTypeCategoryCode the code for the status type category
-   * @return <b>true</b> if the code is a valid code for a status type category or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isValidStatusTypeCategory(UUID tenantId, String statusTypeCategoryCode)
       throws ServiceUnavailableException {
@@ -3785,14 +2576,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(statusTypeCategory.getCode(), statusTypeCategoryCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a tax number type for the party type.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
-   * @param taxNumberTypeCode the code for the tax number type
-   * @return <b>true</b> if the code is a valid code for a tax number type or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidTaxNumberType(UUID tenantId, String partyTypeCode, String taxNumberTypeCode)
       throws ServiceUnavailableException {
@@ -3809,13 +2592,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && taxNumberType.isValidForPartyType(partyTypeCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a time to contact.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param timeToContactCode the code for the time to contact
-   * @return <b>true</b> if the code is a valid code for a time to contact or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidTimeToContact(UUID tenantId, String timeToContactCode)
       throws ServiceUnavailableException {
@@ -3831,13 +2607,6 @@ public class PartyReferenceService implements IPartyReferenceService {
                     && Objects.equals(timeToContact.getCode(), timeToContactCode));
   }
 
-  /**
-   * Check whether the code is a valid code for a title.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param titleCode the code for the title
-   * @return <b>true</b> if the code is a valid code for a title or <b>false</b> otherwise
-   */
   @Override
   public boolean isValidTitle(UUID tenantId, String titleCode) throws ServiceUnavailableException {
     if (!StringUtils.hasText(titleCode)) {

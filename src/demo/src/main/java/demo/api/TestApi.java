@@ -17,7 +17,6 @@
 package demo.api;
 
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.sms.smsportal.AuthenticationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,10 +30,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 /**
- * The <b>TestRestController</b> class.
+ * The <b>TestApi</b> class.
  *
  * @author Marcus Portmann
  */
@@ -56,7 +54,11 @@ public class TestApi {
     this.webClientBuilder = webClientBuilder;
   }
 
-  /** Test the exception handling. */
+  /**
+   * Test the exception handling.
+   *
+   * @throws ServiceUnavailableException if an error occurred
+   */
   @RequestMapping(value = "/test-exception-handling", method = RequestMethod.GET)
   public void testExceptionHandling() throws ServiceUnavailableException {
     throw new ServiceUnavailableException("Testing 1.. 2.. 3..");
@@ -66,6 +68,7 @@ public class TestApi {
    * Test the local date time mapping.
    *
    * @param localDateTime the local date time
+   * @return the local date time
    */
   @Operation(
       summary = "Test the local date time serialization",
@@ -78,47 +81,17 @@ public class TestApi {
   public LocalDateTime testLocalDateTime(
       @Parameter(name = "localDateTime", description = "The local date time", required = true)
           @RequestParam("localDateTime")
-          LocalDateTime localDateTime)
-      throws ServiceUnavailableException {
+          LocalDateTime localDateTime) {
     System.out.println("localDateTime = " + localDateTime);
 
     return localDateTime;
-  }
-
-  @RequestMapping(
-      value = "/test-web-client",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  public AuthenticationResponse testWebClient() throws ServiceUnavailableException {
-    try {
-      WebClient webClient =
-          webClientBuilder
-              .baseUrl("https://rest.smsportal.com/v1")
-              .defaultHeaders(header -> header.setBasicAuth("", ""))
-              .build();
-
-      Mono<AuthenticationResponse> response =
-          webClient
-              .get()
-              .uri("/Authentication")
-              .retrieve()
-              .bodyToFlux(AuthenticationResponse.class)
-              .single();
-
-      AuthenticationResponse authenticationResponse = response.block();
-
-      System.out.println("Token: " + authenticationResponse.getToken());
-
-      return authenticationResponse;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to test the web client", e);
-    }
   }
 
   /**
    * Test the zoned date time mapping.
    *
    * @param zonedDateTime the zoned date time
+   * @return the zoned date time
    */
   @Operation(
       summary = "Test the zoned date time serialization",
@@ -131,8 +104,7 @@ public class TestApi {
   public ZonedDateTime testZonedDateTime(
       @Parameter(name = "zonedDateTime", description = "The zoned date time", required = true)
           @RequestParam("zonedDateTime")
-          ZonedDateTime zonedDateTime)
-      throws ServiceUnavailableException {
+          ZonedDateTime zonedDateTime) {
     System.out.println("zonedDateTime = " + zonedDateTime);
 
     return zonedDateTime;

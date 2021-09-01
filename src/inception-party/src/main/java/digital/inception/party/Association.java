@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
- * The <b>Association</b> class holds the information for a association between two parties.
+ * The <b>Association</b> class holds the information for an association between two parties.
  *
  * @author Marcus Portmann
  */

@@ -72,6 +72,8 @@ public class ReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the country reference
    *     data for
    * @return the country reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the country reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the country reference data for a specific locale",
@@ -119,6 +121,8 @@ public class ReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the language reference
    *     data for
    * @return the language reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the language reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the language reference data for a specific locale",
@@ -166,6 +170,9 @@ public class ReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the measurement system
    *     reference data for
    * @return the measurement system reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement system reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the measurement system reference data for a specific locale",
@@ -216,6 +223,9 @@ public class ReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
    *     type reference data for
    * @return the measurement unit type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement unit type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the measurement unit type reference data for a specific locale",
@@ -266,6 +276,9 @@ public class ReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
    *     reference data
    * @return the measurement unit reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement unit reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the measurement unit reference data for a specific locale",
@@ -316,6 +329,8 @@ public class ReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the region reference
    *     data for
    * @return the region reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the region reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the region reference data for a specific locale",
@@ -363,6 +378,8 @@ public class ReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the time zone
    *     reference data for
    * @return the time zone reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the time zones reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the time zone reference data for a specific locale",

@@ -68,6 +68,9 @@ public class ReportingWebService {
    * Create the new report definition.
    *
    * @param reportDefinition the report definition to create
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateReportDefinitionException if the report definition already exists
+   * @throws ServiceUnavailableException if the report definition could not be created
    */
   @WebMethod(operationName = "CreateReportDefinition")
   public void createReportDefinition(
@@ -82,6 +85,9 @@ public class ReportingWebService {
    * Delete the report definition.
    *
    * @param reportDefinitionId the ID for the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the report definition could not be deleted
    */
   @WebMethod(operationName = "DeleteReportDefinition")
   public void deleteReportDefinition(
@@ -97,6 +103,9 @@ public class ReportingWebService {
    * @param reportDefinitionId the ID for the report definition
    * @param reportParameters the report parameters
    * @return the PDF report
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the PDF report could not be generated
    */
   @WebMethod(operationName = "GenerateReport")
   @WebResult(name = "Report")
@@ -126,10 +135,13 @@ public class ReportingWebService {
   }
 
   /**
-   * Get the report definition.
+   * Retrieve the report definition.
    *
    * @param reportDefinitionId the ID for the report definition
    * @return the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the report definition could not be retrieved
    */
   @WebMethod(operationName = "GetReportDefinition")
   @WebResult(name = "ReportDefinition")
@@ -145,6 +157,9 @@ public class ReportingWebService {
    *
    * @param reportDefinitionId the ID for the report definition
    * @return the name of report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the name of the report definition could not be retrieved
    */
   @WebMethod(operationName = "GetReportDefinitionName")
   @WebResult(name = "ReportDefinitionName")
@@ -159,6 +174,7 @@ public class ReportingWebService {
    * Retrieve the report definition summaries.
    *
    * @return the report definition summaries
+   * @throws ServiceUnavailableException if the report definition summaries could not be retrieved
    */
   @WebMethod(operationName = "GetReportDefinitionSummaries")
   @WebResult(name = "ReportDefinitionSummary")
@@ -171,6 +187,7 @@ public class ReportingWebService {
    * Retrieve the report definitions.
    *
    * @return the report definitions
+   * @throws ServiceUnavailableException if the report definitions could not be retrieved
    */
   @WebMethod(operationName = "GetReportDefinitions")
   @WebResult(name = "ReportDefinition")
@@ -182,6 +199,9 @@ public class ReportingWebService {
    * Update the report definition.
    *
    * @param reportDefinition the report definition
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ReportDefinitionNotFoundException if the report definition could not be found
+   * @throws ServiceUnavailableException if the report definition could not be updated
    */
   @WebMethod(operationName = "UpdateReportDefinition")
   public void updateReportDefinition(

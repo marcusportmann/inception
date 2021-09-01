@@ -43,6 +43,8 @@ public class Parser {
    *
    * @param data the binary data representation of the WBXML document
    * @return the WBXML object hierarchy
+   * @throws IOException if binary data representation of the WBXML document could not be read
+   * @throws ParserException if the WBXML data is invalid
    */
   public Document parse(byte[] data) throws IOException, ParserException {
     // Local variables

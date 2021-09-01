@@ -35,6 +35,7 @@ public interface IReferenceService {
    * Retrieve the country reference data for all locales.
    *
    * @return the country reference data
+   * @throws ServiceUnavailableException if the country reference data could not be retrieved
    */
   List<Country> getCountries() throws ServiceUnavailableException;
 
@@ -44,6 +45,8 @@ public interface IReferenceService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the country reference
    *     data for
    * @return the country reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the country reference data could not be retrieved
    */
   List<Country> getCountries(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -52,6 +55,7 @@ public interface IReferenceService {
    * Retrieve the language reference data for all locales.
    *
    * @return the language reference data
+   * @throws ServiceUnavailableException if the language reference data could not be retrieved
    */
   List<Language> getLanguages() throws ServiceUnavailableException;
 
@@ -61,6 +65,8 @@ public interface IReferenceService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the language reference
    *     data for
    * @return the language reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the language reference data could not be retrieved
    */
   List<Language> getLanguages(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -69,6 +75,8 @@ public interface IReferenceService {
    * Retrieve the measurement system reference data for all locales.
    *
    * @return the measurement system reference data
+   * @throws ServiceUnavailableException if the measurement system reference data could not be
+   *     retrieved
    */
   List<MeasurementSystem> getMeasurementSystems() throws ServiceUnavailableException;
 
@@ -78,6 +86,9 @@ public interface IReferenceService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the measurement system
    *     reference data for
    * @return the measurement system reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement system reference data could not be
+   *     retrieved
    */
   List<MeasurementSystem> getMeasurementSystems(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -86,6 +97,8 @@ public interface IReferenceService {
    * Retrieve the measurement unit type reference data for all locales.
    *
    * @return the measurement unit type reference data
+   * @throws ServiceUnavailableException if the measurement unit type reference data could not be
+   *     retrieved
    */
   List<MeasurementUnitType> getMeasurementUnitTypes() throws ServiceUnavailableException;
 
@@ -95,6 +108,9 @@ public interface IReferenceService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
    *     type reference data for
    * @return the measurement unit type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement unit type reference data could not be
+   *     retrieved
    */
   List<MeasurementUnitType> getMeasurementUnitTypes(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -103,6 +119,8 @@ public interface IReferenceService {
    * Retrieve the measurement unit reference data for all locales.
    *
    * @return the measurement unit reference data
+   * @throws ServiceUnavailableException if the measurement unit reference data could not be
+   *     retrieved
    */
   List<MeasurementUnit> getMeasurementUnits() throws ServiceUnavailableException;
 
@@ -112,6 +130,9 @@ public interface IReferenceService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
    *     reference data for
    * @return the measurement unit reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement unit reference data could not be
+   *     retrieved
    */
   List<MeasurementUnit> getMeasurementUnits(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -120,6 +141,7 @@ public interface IReferenceService {
    * Retrieve the region reference data for all locales.
    *
    * @return the region reference data
+   * @throws ServiceUnavailableException if the region reference data could not be retrieved
    */
   List<Region> getRegions() throws ServiceUnavailableException;
 
@@ -129,6 +151,8 @@ public interface IReferenceService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the region reference
    *     data for
    * @return the region reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the region reference data could not be retrieved
    */
   List<Region> getRegions(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -137,6 +161,7 @@ public interface IReferenceService {
    * Retrieve the time zone reference data for all locales.
    *
    * @return the time zones reference data
+   * @throws ServiceUnavailableException if the time zones reference data could not be retrieved
    */
   List<TimeZone> getTimeZones() throws ServiceUnavailableException;
 
@@ -146,6 +171,8 @@ public interface IReferenceService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the time zone
    *     reference data for
    * @return the time zone reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the time zones reference data could not be retrieved
    */
   List<TimeZone> getTimeZones(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -155,6 +182,7 @@ public interface IReferenceService {
    *
    * @param countryCode the code for the country
    * @return <b>true</b> if the code is a valid code for a country or <b>false</b> otherwise
+   * @throws ServiceUnavailableException if the country code check failed
    */
   boolean isValidCountry(String countryCode) throws ServiceUnavailableException;
 
@@ -164,6 +192,7 @@ public interface IReferenceService {
    * @param languageCode the code for the language
    * @return <b>true</b> if the code is a valid ISO 639-1 alpha-2 code for a language or
    *     <b>false</b> otherwise
+   * @throws ServiceUnavailableException if the language code check failed
    */
   boolean isValidLanguage(String languageCode) throws ServiceUnavailableException;
 
@@ -173,6 +202,7 @@ public interface IReferenceService {
    * @param measurementSystemCode the code for the measurement system
    * @return <b>true</b> if the code is a valid code for a measurement system or <b>false</b>
    *     otherwise
+   * @throws ServiceUnavailableException if the measurement system code check failed
    */
   boolean isValidMeasurementSystem(String measurementSystemCode) throws ServiceUnavailableException;
 
@@ -182,6 +212,7 @@ public interface IReferenceService {
    * @param measurementUnitCode the code for the measurement unit
    * @return <b>true</b> if the code is a valid code for a measurement unit or <b>false</b>
    *     otherwise
+   * @throws ServiceUnavailableException if the measurement unit code check failed
    */
   boolean isValidMeasurementUnit(String measurementUnitCode) throws ServiceUnavailableException;
 
@@ -191,6 +222,7 @@ public interface IReferenceService {
    * @param measurementUnitTypeCode the code for the measurement unit type
    * @return <b>true</b> if the code is a valid code for a measurement unit type or <b>false</b>
    *     otherwise
+   * @throws ServiceUnavailableException if the measurement unit type code check failed
    */
   boolean isValidMeasurementUnitType(String measurementUnitTypeCode)
       throws ServiceUnavailableException;
@@ -200,6 +232,7 @@ public interface IReferenceService {
    *
    * @param regionCode the code for the region
    * @return <b>true</b> if the code is a valid code for a region or <b>false</b> otherwise
+   * @throws ServiceUnavailableException if the region code check failed
    */
   boolean isValidRegion(String regionCode) throws ServiceUnavailableException;
 
@@ -208,6 +241,7 @@ public interface IReferenceService {
    *
    * @param timeZoneCode the code for the time zone
    * @return <b>true</b> if the code is a valid code for a time zone or <b>false</b> otherwise
+   * @throws ServiceUnavailableException if the time zone code check failed
    */
   boolean isValidTimeZone(String timeZoneCode) throws ServiceUnavailableException;
 }

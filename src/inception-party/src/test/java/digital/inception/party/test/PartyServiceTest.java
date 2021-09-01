@@ -505,7 +505,7 @@ public class PartyServiceTest {
 
   /** Test the contact mechanism purpose validation functionality. */
   @Test
-  public void contactMechanismPurposeValidationTest() {
+  public void contactMechanismPurposeValidationTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.addContactMechanism(
@@ -985,7 +985,7 @@ public class PartyServiceTest {
 
   /** Test the invalid building address verification functionality. */
   @Test
-  public void invalidBuildingAddressTest() {
+  public void invalidBuildingAddressTest() throws Exception {
     PhysicalAddress invalidAddress =
         new PhysicalAddress(PhysicalAddressType.BUILDING, PhysicalAddressRole.RESIDENTIAL);
 
@@ -1040,7 +1040,7 @@ public class PartyServiceTest {
 
   /** Test the invalid complex address verification functionality. */
   @Test
-  public void invalidComplexAddressTest() {
+  public void invalidComplexAddressTest() throws Exception {
 
     // Validate an empty invalid address
     // Required: Complex Name, Complex Unit Number, Street Name, City, Country Code, Postal Code
@@ -1098,7 +1098,7 @@ public class PartyServiceTest {
 
   /** Test the invalid education verification functionality. */
   @Test
-  public void invalidEducationTest() {
+  public void invalidEducationTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.setHighestQualificationType("invalid_qualification_type");
@@ -1118,7 +1118,7 @@ public class PartyServiceTest {
 
   /** Test the invalid employment verification functionality. */
   @Test
-  public void invalidEmploymentTest() {
+  public void invalidEmploymentTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.addEmployment(
@@ -1152,7 +1152,7 @@ public class PartyServiceTest {
 
   /** Test the invalid farm address verification functionality. */
   @Test
-  public void invalidFarmAddressTest() {
+  public void invalidFarmAddressTest() throws Exception {
     // Validate an empty invalid address
     // Required: Farm Number, Country Code, Postal Code
     PhysicalAddress invalidAddress =
@@ -1208,7 +1208,7 @@ public class PartyServiceTest {
 
   /** Test the invalid international address verification functionality. */
   @Test
-  public void invalidInternationalAddressTest() {
+  public void invalidInternationalAddressTest() throws Exception {
     // Validate an empty invalid address
     // Required: Line 1, Country Code, Postal Code
     PhysicalAddress invalidAddress =
@@ -1265,7 +1265,7 @@ public class PartyServiceTest {
 
   /** Test the invalid language proficiency verification functionality. */
   @Test
-  public void invalidLanguageProficiencyTest() {
+  public void invalidLanguageProficiencyTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     LanguageProficiency languageProficiency = new LanguageProficiency();
@@ -1284,7 +1284,7 @@ public class PartyServiceTest {
 
   /** Test the invalid next of kin verification functionality. */
   @Test
-  public void invalidNextOfKinTest() {
+  public void invalidNextOfKinTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.addNextOfKin(
@@ -1302,7 +1302,7 @@ public class PartyServiceTest {
 
   /** Test the invalid organization attribute test. */
   @Test
-  public void invalidOrganizationAttributeTest() {
+  public void invalidOrganizationAttributeTest() throws Exception {
     Organization organization = getTestBasicOrganizationDetails();
 
     organization.addAttribute(new Attribute("given_name", "Given Name"));
@@ -1319,7 +1319,7 @@ public class PartyServiceTest {
 
   /** Test the invalid organization external reference test. */
   @Test
-  public void invalidOrganizationExternalReferenceTest() {
+  public void invalidOrganizationExternalReferenceTest() throws Exception {
     Organization organization = getTestBasicOrganizationDetails();
 
     organization.addExternalReference(
@@ -1337,7 +1337,7 @@ public class PartyServiceTest {
 
   /** Test the invalid organization segment allocation test. */
   @Test
-  public void invalidOrganizationSegmentAllocationTest() {
+  public void invalidOrganizationSegmentAllocationTest() throws Exception {
     Organization organization = getTestBasicOrganizationDetails();
 
     organization.addSegmentAllocation(new SegmentAllocation("invalid_segment_allocation"));
@@ -1353,7 +1353,7 @@ public class PartyServiceTest {
 
   /** Test the invalid person attribute functionality. */
   @Test
-  public void invalidPersonAttributeTest() {
+  public void invalidPersonAttributeTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.addAttribute(new Attribute("given_name", "Given Name"));
@@ -1371,7 +1371,7 @@ public class PartyServiceTest {
 
   /** Test the invalid person consent functionality. */
   @Test
-  public void invalidPersonConsentTest() {
+  public void invalidPersonConsentTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.addConsent(new Consent("invalid_consent"));
@@ -1387,7 +1387,7 @@ public class PartyServiceTest {
 
   /** Test the invalid person external reference test. */
   @Test
-  public void invalidPersonExternalReferenceTest() {
+  public void invalidPersonExternalReferenceTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.addExternalReference(
@@ -1405,7 +1405,7 @@ public class PartyServiceTest {
 
   /** Test the invalid person segment allocation test. */
   @Test
-  public void invalidPersonSegmentAllocationTest() {
+  public void invalidPersonSegmentAllocationTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.addSegmentAllocation(new SegmentAllocation("invalid_segment_allocation"));
@@ -1421,7 +1421,7 @@ public class PartyServiceTest {
 
   /** Test the invalid person source of funds functionality. */
   @Test
-  public void invalidPersonSourceOfFundsTest() {
+  public void invalidPersonSourceOfFundsTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.addSourceOfFunds(new SourceOfFunds("invalid_source_of_funds"));
@@ -1437,7 +1437,7 @@ public class PartyServiceTest {
 
   /** Test the invalid person source of wealth functionality. */
   @Test
-  public void invalidPersonSourceOfWealthTest() {
+  public void invalidPersonSourceOfWealthTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.addSourceOfWealth(new SourceOfWealth("invalid_source_of_wealth"));
@@ -1453,7 +1453,7 @@ public class PartyServiceTest {
 
   /** Test the invalid person time zone functionality. */
   @Test
-  public void invalidPersonTimeZoneTest() {
+  public void invalidPersonTimeZoneTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.setTimeZone("invalid_time_zone");
@@ -1469,7 +1469,7 @@ public class PartyServiceTest {
 
   /** Test the invalid physical address purpose for party type verification functionality. */
   @Test
-  public void invalidPhysicalAddressPurposeForPartyTypeTest() {
+  public void invalidPhysicalAddressPurposeForPartyTypeTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     PhysicalAddress invalidAddress =
@@ -1495,7 +1495,7 @@ public class PartyServiceTest {
 
   /** Test the invalid physical address type verification functionality. */
   @Test
-  public void invalidPhysicalAddressTypeRoleAndPurposeTest() {
+  public void invalidPhysicalAddressTypeRoleAndPurposeTest() throws Exception {
     PhysicalAddress invalidAddress =
         new PhysicalAddress(
             "invalid physical address type",
@@ -1517,7 +1517,7 @@ public class PartyServiceTest {
 
   /** Test the invalid site address verification functionality. */
   @Test
-  public void invalidSiteAddressTest() {
+  public void invalidSiteAddressTest() throws Exception {
     // Validate an empty invalid address
     // Required: Site Block, Site Number, City, Country Code, Postal Code
     PhysicalAddress invalidAddress =
@@ -1573,7 +1573,7 @@ public class PartyServiceTest {
 
   /** Test the invalid street address verification functionality. */
   @Test
-  public void invalidStreetAddressTest() {
+  public void invalidStreetAddressTest() throws Exception {
     // Validate an empty invalid address
     // Required: Street Name, City, Country Code, Postal Code
     PhysicalAddress invalidAddress =
@@ -1630,7 +1630,7 @@ public class PartyServiceTest {
 
   /** Test the invalid unstructured address verification functionality. */
   @Test
-  public void invalidUnstructuredAddressTest() {
+  public void invalidUnstructuredAddressTest() throws Exception {
     // Validate an empty invalid address
     // Required: Line 1, Country Code, Postal Code
     PhysicalAddress invalidAddress =
@@ -2647,7 +2647,7 @@ public class PartyServiceTest {
 
   /** Test the role type attribute type constraint functionality. */
   @Test
-  public void roleTypeAttributeTypeConstraintTest() {
+  public void roleTypeAttributeTypeConstraintTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
     person.addRole(new Role("test_person_role"));
@@ -3012,7 +3012,7 @@ public class PartyServiceTest {
 
   /** Test the organization validation functionality. */
   @Test
-  public void validateOrganizationTest() {
+  public void validateOrganizationTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
 
     Set<ConstraintViolation<Organization>> constraintViolations =
@@ -3025,7 +3025,7 @@ public class PartyServiceTest {
 
   /** Test the party validation functionality. */
   @Test
-  public void validatePartyTest() {
+  public void validatePartyTest() throws Exception {
     Party party = getTestPartyDetails();
 
     Set<ConstraintViolation<Party>> constraintViolations =
@@ -3038,7 +3038,7 @@ public class PartyServiceTest {
 
   /** Test the person validation functionality. */
   @Test
-  public void validatePersonTest() {
+  public void validatePersonTest() throws Exception {
     Person person = getTestCompletePersonDetails(true);
 
     Set<ConstraintViolation<Person>> constraintViolations =

@@ -93,7 +93,7 @@ public class WebServiceClientSecurityHelper {
    * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with digest
    *     authentication
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
   public static <T> T getDigestAuthenticationServiceProxy(
       Class<?> serviceClass,
@@ -151,7 +151,7 @@ public class WebServiceClientSecurityHelper {
    * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with basic HTTP
    *     authentication
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
   public static <T> T getHTTPAuthenticationServiceProxy(
       Class<?> serviceClass,
@@ -214,7 +214,7 @@ public class WebServiceClientSecurityHelper {
    * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with transport
    *     level security using mutual SSL authentication
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
   @SuppressWarnings("unchecked")
   public static <T> T getMutualSSLServiceProxy(
@@ -291,7 +291,7 @@ public class WebServiceClientSecurityHelper {
    * @param <T> the Java interface for the web service
    * @return the web service proxy for the web service that supports SSL without validating the
    *     server certificate
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
   @SuppressWarnings("unchecked")
   public static <T> T getNoTrustServiceProxy(
@@ -356,7 +356,7 @@ public class WebServiceClientSecurityHelper {
    * @param serviceEndpoint the URL giving the web service endpoint
    * @param <T> the Java interface for the web service
    * @return the web service proxy for the unsecured web service
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
   public static <T> T getServiceProxy(
       Class<?> serviceClass,
@@ -377,7 +377,7 @@ public class WebServiceClientSecurityHelper {
    * @param handlerResolver the web service handler resolver
    * @param <T> the Java interface for the web service
    * @return the web service proxy for the unsecured web service
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
   public static <T> T getServiceProxy(
       Class<?> serviceClass,
@@ -401,7 +401,7 @@ public class WebServiceClientSecurityHelper {
    * @param useClientCache should the web service client cached be used
    * @param <T> the Java interface for the web service
    * @return the web service proxy for the unsecured web service
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
   public static <T> T getServiceProxy(
       Class<?> serviceClass,
@@ -464,7 +464,7 @@ public class WebServiceClientSecurityHelper {
    * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with message
    *     level security using the Web Services Security Username Token profile
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
   public static <T> T getWSSecurityUsernameTokenServiceProxy(
       Class<?> serviceClass,
@@ -498,7 +498,7 @@ public class WebServiceClientSecurityHelper {
    * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with message
    *     level security using the Web Services Security Username Token profile
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
   public static <T> T getWSSecurityUsernameTokenServiceProxy(
       Class<?> serviceClass,
@@ -564,7 +564,7 @@ public class WebServiceClientSecurityHelper {
    * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with message
    *     level security using the Web Services Security X.509 Certificate Token profile
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
   public static <T> T getWSSecurityX509CertificateServiceProxy(
       Class<?> serviceClass,
@@ -602,7 +602,7 @@ public class WebServiceClientSecurityHelper {
    * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with message
    *     level security using the Web Services Security X.509 Certificate Token profile
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
    */
   public static <T> T getWSSecurityX509CertificateServiceProxy(
       Class<?> serviceClass,
@@ -676,7 +676,7 @@ public class WebServiceClientSecurityHelper {
    * @param serviceClass the Java web service client class
    * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
    * @return the web service client
-   * @throws WebServiceClientSecurityException
+   * @throws WebServiceClientSecurityException if the web service client could not be retrieved
    */
   private static WebServiceClient getWebServiceClient(
       Class<?> serviceClass, String wsdlResourcePath) throws WebServiceClientSecurityException {

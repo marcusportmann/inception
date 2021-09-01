@@ -75,6 +75,11 @@ public class SecurityWebService {
    * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the name of the group member
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the group member could not be added to the group
    */
   @WebMethod(operationName = "AddMemberToGroup")
   public void addMemberToGroup(
@@ -83,7 +88,7 @@ public class SecurityWebService {
       @WebParam(name = "MemberType") @XmlElement(required = true) GroupMemberType memberType,
       @WebParam(name = "MemberName") @XmlElement(required = true) String memberName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          UserNotFoundException, ExistingGroupMemberException, ServiceUnavailableException {
+          UserNotFoundException, ServiceUnavailableException {
     securityService.addMemberToGroup(userDirectoryId, groupName, memberType, memberName);
   }
 
@@ -93,6 +98,11 @@ public class SecurityWebService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param roleCode the code for the role
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws RoleNotFoundException if the role could not be found
+   * @throws ServiceUnavailableException if the role could not be added to the group
    */
   @WebMethod(operationName = "AddRoleToGroup")
   public void addRoleToGroup(
@@ -100,7 +110,7 @@ public class SecurityWebService {
       @WebParam(name = "GroupName") @XmlElement(required = true) String groupName,
       @WebParam(name = "RoleCode") @XmlElement(required = true) String roleCode)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          RoleNotFoundException, ExistingGroupRoleException, ServiceUnavailableException {
+          RoleNotFoundException, ServiceUnavailableException {
     securityService.addRoleToGroup(userDirectoryId, groupName, roleCode);
   }
 
@@ -109,13 +119,17 @@ public class SecurityWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the user directory could not be added to the tenant
    */
   @WebMethod(operationName = "AddUserDirectoryToTenant")
   public void addUserDirectoryToTenant(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, TenantNotFoundException, UserDirectoryNotFoundException,
-          ExistingTenantUserDirectoryException, ServiceUnavailableException {
+          ServiceUnavailableException {
     securityService.addUserDirectoryToTenant(tenantId, userDirectoryId);
   }
 
@@ -125,6 +139,10 @@ public class SecurityWebService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @param passwordChange the password change
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the password could not be administratively changed
    */
   @WebMethod(operationName = "AdminChangePassword")
   public void adminChangePassword(
@@ -165,6 +183,14 @@ public class SecurityWebService {
    *
    * @param username the username for the user
    * @param passwordChange the password change
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws AuthenticationFailedException if the authentication failed
+   * @throws InvalidSecurityCodeException if the security code is invalid
+   * @throws ExistingPasswordException if the user has previously used the new password
+   * @throws UserLockedException if the user is locked
+   * @throws ServiceUnavailableException if the password could not be changed
    */
   @WebMethod(operationName = "ChangePassword")
   public void changePassword(
@@ -228,6 +254,10 @@ public class SecurityWebService {
    * Create the new group.
    *
    * @param group the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws DuplicateGroupException if the group already exists
+   * @throws ServiceUnavailableException if the group could not be created
    */
   @WebMethod(operationName = "CreateGroup")
   public void createGroup(@WebParam(name = "Group") @XmlElement(required = true) Group group)
@@ -241,6 +271,9 @@ public class SecurityWebService {
    *
    * @param tenant the tenant to create
    * @param createUserDirectory should a new internal user directory be created for the tenant
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateTenantException if the tenant already exists
+   * @throws ServiceUnavailableException if the tenant could not be created
    */
   @WebMethod(operationName = "CreateTenant")
   public void createTenant(
@@ -257,6 +290,10 @@ public class SecurityWebService {
    * @param user the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked create the user locked
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws DuplicateUserException if the user already exists
+   * @throws ServiceUnavailableException if the user could not be created
    */
   @WebMethod(operationName = "CreateUser")
   public void createUser(
@@ -273,6 +310,9 @@ public class SecurityWebService {
    * Create the new user directory.
    *
    * @param userDirectory the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateUserDirectoryException if the user directory already exists
+   * @throws ServiceUnavailableException if the user directory could not be created
    */
   @WebMethod(operationName = "CreateUserDirectory")
   public void createUserDirectory(
@@ -287,6 +327,11 @@ public class SecurityWebService {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ExistingGroupMembersException if the group has existing members
+   * @throws ServiceUnavailableException if the group could not be deleted
    */
   @WebMethod(operationName = "DeleteGroup")
   public void deleteGroup(
@@ -301,6 +346,9 @@ public class SecurityWebService {
    * Delete the tenant.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the tenant could not be deleted
    */
   @WebMethod(operationName = "DeleteTenant")
   public void deleteTenant(@WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
@@ -313,6 +361,10 @@ public class SecurityWebService {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the user could not be deleted
    */
   @WebMethod(operationName = "DeleteUser")
   public void deleteUser(
@@ -327,6 +379,9 @@ public class SecurityWebService {
    * Delete the user directory.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the user directory could not be deleted
    */
   @WebMethod(operationName = "DeleteUserDirectory")
   public void deleteUserDirectory(
@@ -341,6 +396,10 @@ public class SecurityWebService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @return the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the group could not be retrieved
    */
   @WebMethod(operationName = "GetGroup")
   @WebResult(name = "Group")
@@ -357,6 +416,9 @@ public class SecurityWebService {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the group names
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the group names could not be retrieved
    */
   @WebMethod(operationName = "GetGroupNames")
   @WebResult(name = "GroupName")
@@ -372,6 +434,11 @@ public class SecurityWebService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the names of the groups the user is a member of
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the names of the groups the user is a member of could
+   *     not be retrieved
    */
   @WebMethod(operationName = "GetGroupNamesForUser")
   @WebResult(name = "GroupName")
@@ -392,6 +459,9 @@ public class SecurityWebService {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the groups
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the groups could not be retrieved
    */
   @WebMethod(operationName = "GetGroups")
   @WebResult(name = "Groups")
@@ -406,7 +476,7 @@ public class SecurityWebService {
   }
 
   /**
-   * Retrieve the group members.
+   * Retrieve the group members for the group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
@@ -414,6 +484,11 @@ public class SecurityWebService {
    * @param sortDirection the optional sort direction to apply to the group members
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
+   * @return the group members for the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the group members could not be retrieved for the group
    */
   @WebMethod(operationName = "GetMembersForGroup")
   @WebResult(name = "GroupMembers")
@@ -436,6 +511,11 @@ public class SecurityWebService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @return the codes for the roles that have been assigned to the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the codes for the roles assigned to the group could not
+   *     be retrieved
    */
   @WebMethod(operationName = "GetRoleCodesForGroup")
   @WebResult(name = "RoleCode")
@@ -451,6 +531,7 @@ public class SecurityWebService {
    * Retrieve all the roles.
    *
    * @return the roles
+   * @throws ServiceUnavailableException if the roles could not be retrieved
    */
   @WebMethod(operationName = "GetRoles")
   @WebResult(name = "Role")
@@ -464,6 +545,11 @@ public class SecurityWebService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @return the roles that have been assigned to the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the codes for the roles assigned to the group could not
+   *     be retrieved
    */
   @WebMethod(operationName = "GetRolesForGroup")
   @WebResult(name = "GroupRole")
@@ -488,6 +574,9 @@ public class SecurityWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the tenant
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the tenant could not be retrieved
    */
   @WebMethod(operationName = "GetTenant")
   @WebResult(name = "Tenant")
@@ -501,6 +590,9 @@ public class SecurityWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the name of the tenant
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the name of the tenant could not be retrieved
    */
   @WebMethod(operationName = "GetTenantName")
   @WebResult(name = "TenantName")
@@ -511,13 +603,15 @@ public class SecurityWebService {
   }
 
   /**
-   * Retrieve the filtered tenants using pagination.
+   * Retrieve the tenants.
    *
    * @param filter the optional filter to apply to the tenants
    * @param sortDirection the optional sort direction to apply to the tenants
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the tenants
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the tenants could not be retrieved
    */
   @WebMethod(operationName = "GetTenants")
   @WebResult(name = "Tenant")
@@ -535,6 +629,10 @@ public class SecurityWebService {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the tenants the user directory is associated with
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the tenants could not be retrieved for the user
+   *     directory
    */
   @WebMethod(operationName = "GetTenantsForUserDirectory")
   @WebResult(name = "Tenant")
@@ -550,6 +648,10 @@ public class SecurityWebService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the user could not be retrieved
    */
   @WebMethod(operationName = "GetUser")
   @WebResult(name = "User")
@@ -576,6 +678,8 @@ public class SecurityWebService {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the user directories
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the user directories could not be retrieved
    */
   @WebMethod(operationName = "GetUserDirectories")
   @WebResult(name = "UserDirectories")
@@ -593,6 +697,10 @@ public class SecurityWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the user directories the tenant is associated with
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the user directories could not be retrieved for the
+   *     tenant
    */
   @WebMethod(operationName = "GetUserDirectoriesForTenant")
   @WebResult(name = "UserDirectory")
@@ -607,6 +715,9 @@ public class SecurityWebService {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the user directory could not be retrieved
    */
   @WebMethod(operationName = "GetUserDirectory")
   @WebResult(name = "UserDirectory")
@@ -621,6 +732,9 @@ public class SecurityWebService {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the capabilities the user directory supports
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the user directory capabilities could not be retrieved
    */
   @WebMethod(operationName = "GetUserDirectoryCapabilities")
   @WebResult(name = "UserDirectoryCapabilities")
@@ -635,6 +749,9 @@ public class SecurityWebService {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the name of user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the name of the user directory could not be retrieved
    */
   @WebMethod(operationName = "GetUserDirectoryName")
   @WebResult(name = "UserDirectoryName")
@@ -652,6 +769,8 @@ public class SecurityWebService {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the summaries for the user directories
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the user directory summaries could not be retrieved
    */
   @WebMethod(operationName = "GetUserDirectorySummaries")
   @WebResult(name = "UserDirectorySummaries")
@@ -669,6 +788,10 @@ public class SecurityWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the summaries for the user directories the tenant is associated with
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the user directory summaries could not be retrieved for
+   *     the tenant
    */
   @WebMethod(operationName = "GetUserDirectorySummariesForTenant")
   @WebResult(name = "UserDirectorySummary")
@@ -683,6 +806,11 @@ public class SecurityWebService {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the user directory type for the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserDirectoryTypeNotFoundException if the user directory type could not be found
+   * @throws ServiceUnavailableException if the user directory type could not be retrieved for the
+   *     user directory
    */
   @WebMethod(operationName = "GetUserDirectoryTypeForUserDirectory")
   @WebResult(name = "UserDirectoryType")
@@ -697,6 +825,7 @@ public class SecurityWebService {
    * Retrieve the user directory types.
    *
    * @return the user directory types
+   * @throws ServiceUnavailableException if the user directory types could not be retrieved
    */
   @WebMethod(operationName = "GetUserDirectoryTypes")
   @WebResult(name = "UserDirectoryType")
@@ -710,6 +839,10 @@ public class SecurityWebService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the name of the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the name of the user could not be retrieved
    */
   @WebMethod(operationName = "GetUserName")
   @WebResult(name = "UserName")
@@ -731,6 +864,9 @@ public class SecurityWebService {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the users
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the users could not be retrieved
    */
   @WebMethod(operationName = "GetUsers")
   @WebResult(name = "Users")
@@ -753,6 +889,11 @@ public class SecurityWebService {
    * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the name of the group member
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws GroupMemberNotFoundException if the group member could not be found
+   * @throws ServiceUnavailableException if the group member could not be removed from the group
    */
   @WebMethod(operationName = "RemoveMemberFromGroup")
   public void removeMemberFromGroup(
@@ -771,6 +912,11 @@ public class SecurityWebService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param roleCode the code for the role
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws GroupRoleNotFoundException if the group role could not be found
+   * @throws ServiceUnavailableException if the role could not be removed from the group
    */
   @WebMethod(operationName = "RemoveRoleFromGroup")
   public void removeRoleFromGroup(
@@ -787,6 +933,10 @@ public class SecurityWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws TenantUserDirectoryNotFoundException if the tenant user directory could not be found
+   * @throws ServiceUnavailableException if the user directory could not be removed from the tenant
    */
   @WebMethod(operationName = "RemoveUserDirectoryFromTenant")
   public void removeUserDirectoryFromTenant(
@@ -802,6 +952,9 @@ public class SecurityWebService {
    *
    * @param username the username for the user
    * @param resetPasswordUrl the reset password URL
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the password reset could not be initiated
    */
   @WebMethod(operationName = "ResetPassword")
   public void resetPassword(
@@ -815,6 +968,10 @@ public class SecurityWebService {
    * Update the group.
    *
    * @param group the group
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws GroupNotFoundException if the group could not be found
+   * @throws ServiceUnavailableException if the group could not be updated
    */
   @WebMethod(operationName = "UpdateGroup")
   public void updateGroup(@WebParam(name = "Group") @XmlElement(required = true) Group group)
@@ -827,6 +984,9 @@ public class SecurityWebService {
    * Update the tenant.
    *
    * @param tenant the tenant
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws TenantNotFoundException if the tenant could not be found
+   * @throws ServiceUnavailableException if the tenant could not be updated
    */
   @WebMethod(operationName = "UpdateTenant")
   public void updateTenant(@WebParam(name = "Tenant") @XmlElement(required = true) Tenant tenant)
@@ -840,6 +1000,10 @@ public class SecurityWebService {
    * @param user the user
    * @param expirePassword expire the user's password
    * @param lockUser lock the user
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws UserNotFoundException if the user could not be found
+   * @throws ServiceUnavailableException if the user could not be updated
    */
   @WebMethod(operationName = "UpdateUser")
   public void updateUser(
@@ -855,6 +1019,9 @@ public class SecurityWebService {
    * Update the user directory.
    *
    * @param userDirectory the user directory
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws UserDirectoryNotFoundException if the user directory could not be found
+   * @throws ServiceUnavailableException if the user directory could not be updated
    */
   @WebMethod(operationName = "UpdateUserDirectory")
   public void updateUserDirectory(

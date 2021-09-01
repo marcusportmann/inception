@@ -16,9 +16,9 @@
 
 package demo.model;
 
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.service.InvalidArgumentException;
 
 /**
  * The <b>IVehicleService</b> interface defines the functionality that must be provided by a Vehicle
@@ -33,6 +33,9 @@ public interface IVehicleService {
    * Create the new car.
    *
    * @param car the car
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateCarException if the car already exists
+   * @throws ServiceUnavailableException if the car could not be created
    */
   void createCar(Car car)
       throws InvalidArgumentException, DuplicateCarException, ServiceUnavailableException;
@@ -41,6 +44,9 @@ public interface IVehicleService {
    * Create the new vehicle.
    *
    * @param vehicle the vehicle
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateVehicleException if the vehicle already exists
+   * @throws ServiceUnavailableException if the vehicle could not be created
    */
   void createVehicle(Vehicle vehicle)
       throws InvalidArgumentException, DuplicateVehicleException, ServiceUnavailableException;
@@ -53,6 +59,8 @@ public interface IVehicleService {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the cars
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the cars could not be retrieved
    */
   Cars getCars(String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -65,6 +73,8 @@ public interface IVehicleService {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the vehicles
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the vehicles could not be retrieved
    */
   Vehicles getVehicles(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)

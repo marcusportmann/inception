@@ -84,13 +84,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     this.snapshotRepository = snapshotRepository;
   }
 
-  /**
-   * Create the new association.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param association the association
-   * @return the association
-   */
   @Override
   public Association createAssociation(UUID tenantId, Association association)
       throws DuplicateAssociationException, ServiceUnavailableException {
@@ -121,13 +114,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Create the new organization.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organization the organization
-   * @return the organization
-   */
   @Override
   public Organization createOrganization(UUID tenantId, Organization organization)
       throws DuplicateOrganizationException, ServiceUnavailableException {
@@ -158,12 +144,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Create the new person.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param person the person
-   */
   @Override
   public Person createPerson(UUID tenantId, Person person)
       throws DuplicatePersonException, ServiceUnavailableException {
@@ -189,12 +169,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Delete the organization.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
-   */
   @Override
   public void deleteOrganization(UUID tenantId, UUID organizationId)
       throws OrganizationNotFoundException, ServiceUnavailableException {
@@ -217,12 +191,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Delete the party.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   */
   @Override
   public void deleteParty(UUID tenantId, UUID partyId)
       throws PartyNotFoundException, ServiceUnavailableException {
@@ -240,12 +208,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Delete the person.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
-   */
   @Override
   public void deletePerson(UUID tenantId, UUID personId)
       throws PersonNotFoundException, ServiceUnavailableException {
@@ -263,13 +225,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Retrieve the organization.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
-   * @return the organization
-   */
   @Override
   public Organization getOrganization(UUID tenantId, UUID organizationId)
       throws OrganizationNotFoundException, ServiceUnavailableException {
@@ -295,17 +250,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Retrieve the organizations.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param filter the optional filter to apply to the organizations
-   * @param sortBy the optional method used to sort the organizations e.g. by name
-   * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the organizations
-   */
   @Override
   public Organizations getOrganizations(
       UUID tenantId,
@@ -356,16 +300,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Retrieve the parties.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param filter the optional filter to apply to the parties
-   * @param sortDirection the optional sort direction to apply to the parties
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the parties
-   */
   @Override
   public Parties getParties(
       UUID tenantId,
@@ -399,13 +333,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Retrieve the party.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @return the party
-   */
   @Override
   public Party getParty(UUID tenantId, UUID partyId)
       throws PartyNotFoundException, ServiceUnavailableException {
@@ -425,13 +352,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Retrieve the person.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
-   * @return the person
-   */
   @Override
   public Person getPerson(UUID tenantId, UUID personId)
       throws PersonNotFoundException, ServiceUnavailableException {
@@ -451,17 +371,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Retrieve the persons.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param filter the optional filter to apply to the persons
-   * @param sortBy the optional method used to sort the persons e.g. by name
-   * @param sortDirection the optional sort direction to apply to the persons
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the persons
-   */
   @Override
   public Persons getPersons(
       UUID tenantId,
@@ -512,19 +421,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Retrieve the snapshots for an entity.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param entityType the type of entity
-   * @param entityId the Universally Unique Identifier (UUID) for the entity
-   * @param from the optional date to retrieve the snapshots from
-   * @param to the optional date to retrieve the snapshots to
-   * @param sortDirection the optional sort direction to apply to the snapshots
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the snapshots
-   */
   @Override
   public Snapshots getSnapshots(
       UUID tenantId,
@@ -585,13 +481,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Retrieve the Universally Unique Identifier (UUID) for the tenant the party is associated with.
-   *
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @return an Optional containing the Universally Unique Identifier (UUID) for the tenant the
-   *     party is associated with or an empty Optional if the party could not be found
-   */
   @Override
   public Optional<UUID> getTenantIdForParty(UUID partyId) throws ServiceUnavailableException {
     try {
@@ -602,13 +491,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Update the organization.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organization the organization
-   * @return the organization
-   */
   @Override
   public Organization updateOrganization(UUID tenantId, Organization organization)
       throws OrganizationNotFoundException, ServiceUnavailableException {
@@ -639,13 +521,6 @@ public class InternalPartyDataStore implements IPartyDataStore {
     }
   }
 
-  /**
-   * Update the person.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param person the person
-   * @return the person
-   */
   @Override
   public Person updatePerson(UUID tenantId, Person person)
       throws PersonNotFoundException, ServiceUnavailableException {

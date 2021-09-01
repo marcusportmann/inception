@@ -77,6 +77,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the association
    *     property type reference data for
    * @return the association property type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the association property type reference data could not
+   *     be retrieved
    */
   @Operation(
       summary = "Retrieve the association property type reference data for a specific locale",
@@ -139,6 +142,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the association type
    *     reference data for
    * @return the association type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the association type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the association type reference data for a specific locale",
@@ -201,6 +207,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
    *     category reference data for
    * @return the attribute type category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the attribute type category reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the attribute type category reference data for a specific locale",
@@ -263,6 +272,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
    *     reference data for
    * @return the attribute type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the attribute type reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the attribute type reference data for a specific locale",
@@ -325,6 +336,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
    *     reference data for
    * @return the consent type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the consent type reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the consent type reference data for a specific locale",
@@ -387,6 +400,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     purpose reference data for
    * @return the contact mechanism purpose reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the contact mechanism purpose reference data could not
+   *     be retrieved
    */
   @Operation(
       summary = "Retrieve the contact mechanism purpose reference data for a specific locale",
@@ -449,6 +465,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     role reference data for
    * @return the contact mechanism role reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the contact mechanism role reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the contact mechanism role reference data for a specific locale",
@@ -511,6 +530,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     type reference data for
    * @return the contact mechanism type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the contact mechanism type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the contact mechanism type reference data for a specific locale",
@@ -573,6 +595,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
    *     reference data for
    * @return the employment status reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the employment status reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the employment status reference data for a specific locale",
@@ -635,6 +660,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
    *     reference data for
    * @return the employment type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the employment type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the employment type reference data for a specific locale",
@@ -697,6 +725,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
    *     reference data for
    * @return the fields of study reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the fields of study reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the fields of study reference data for a specific locale",
@@ -759,6 +790,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
    *     data for
    * @return the gender reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the gender reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the gender reference data for a specific locale",
@@ -818,6 +851,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
    *     type reference data for
    * @return the identity document type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the identity document type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the identity document type reference data for a specific locale",
@@ -880,6 +916,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
    *     reference data for
    * @return the lock type category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the lock type category reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the lock type category reference data for a specific locale",
@@ -942,6 +981,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
    *     reference data for
    * @return the lock type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the lock type reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the lock type reference data for a specific locale",
@@ -1001,6 +1042,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
    *     reference data for
    * @return the marital status reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the marital status reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the marital status reference data for a specific locale",
@@ -1063,6 +1106,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
    *     reference data
    * @return the marriage type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the marriage type reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the marriage type reference data for a specific locale",
@@ -1125,6 +1170,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
    *     reference data for
    * @return the next of kin type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the next of kin type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the next of kin type reference data for a specific locale",
@@ -1187,6 +1235,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
    *     reference data for
    * @return the occupation reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the occupation reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the occupation reference data for a specific locale",
@@ -1246,6 +1296,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     purpose reference data for
    * @return the physical address purpose reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the physical address purpose reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the physical address purpose reference data for a specific locale",
@@ -1308,6 +1361,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     role reference data for
    * @return the physical address role reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the physical address role reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the physical address role reference data for a specific locale",
@@ -1370,6 +1426,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     type reference data for
    * @return the physical address type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the physical address type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the physical address type reference data for a specific locale",
@@ -1432,6 +1491,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
    *     category reference data for
    * @return the preference type category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the preference type category reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the preference type category reference data for a specific locale",
@@ -1494,6 +1556,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
    *     reference data for
    * @return the preference type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the preference type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the preference type reference data for a specific locale",
@@ -1556,6 +1621,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
    *     reference data for
    * @return the qualification type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the qualification type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the qualification type reference data for a specific locale",
@@ -1618,6 +1686,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
    *     data for
    * @return the race reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the race reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the race reference data for a specific locale",
@@ -1677,6 +1747,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
    *     type reference data for
    * @return the residence permit type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the residence permit type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the residence permit type reference data for a specific locale",
@@ -1739,6 +1812,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
    *     reference data for
    * @return the residency status reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the residency status reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the residency status reference data for a specific locale",
@@ -1801,6 +1877,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
    *     reference data for
    * @return the residential type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the residential type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the residential type reference data for a specific locale",
@@ -1863,6 +1942,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
    *     reference data for
    * @return the role purpose reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the role purpose reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the role purpose reference data for a specific locale",
@@ -1922,6 +2003,9 @@ public class PartyReferenceApi extends SecureApi {
    *
    * @param roleType the code for the role type to retrieve the attribute constraints for
    * @return the role type attribute type constraints
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the role type attribute type constraints for a specific
+   *     role type could not be retrieved
    */
   @Operation(
       summary = "Retrieve the role type attribute type constraints",
@@ -1967,6 +2051,9 @@ public class PartyReferenceApi extends SecureApi {
    *
    * @param roleType the code for the role type to retrieve the preference constraints for
    * @return the role type preference type constraints
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the role type preference type constraints for a specific
+   *     role type could not be retrieved
    */
   @Operation(
       summary = "Retrieve the role type preference type constraints",
@@ -2015,6 +2102,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the role type
    *     reference data for
    * @return the role type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the role type reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the role type reference data for a specific locale",
@@ -2074,6 +2163,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
    *     data for
    * @return the segment reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the segment reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the segment reference data for a specific locale",
@@ -2133,6 +2224,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
    *     type reference data
    * @return the source of funds type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the source of funds type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the source of funds type reference data for a specific locale",
@@ -2195,6 +2289,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
    *     type reference data for
    * @return the source of wealth type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the source of wealth type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the source of wealth type reference data for a specific locale",
@@ -2257,6 +2354,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
    *     category reference data for
    * @return the status type category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the status type category reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the status type category reference data for a specific locale",
@@ -2319,6 +2419,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
    *     reference data for
    * @return the status type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the status type reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the status type reference data for a specific locale",
@@ -2381,6 +2483,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
    *     reference data for
    * @return the tax number type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the tax number type reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the tax number type reference data for a specific locale",
@@ -2443,6 +2548,9 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
    *     reference data for
    * @return the times to contact reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the times to contact reference data could not be
+   *     retrieved
    */
   @Operation(
       summary = "Retrieve the times to contact reference data for a specific locale",
@@ -2505,6 +2613,8 @@ public class PartyReferenceApi extends SecureApi {
    * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
    *     data for
    * @return the title reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the title reference data could not be retrieved
    */
   @Operation(
       summary = "Retrieve the title reference data for a specific locale",

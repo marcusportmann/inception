@@ -24,7 +24,7 @@ import javax.xml.ws.WebFault;
 
 /**
  * A <b>FunctionNotFoundException</b> is thrown to indicate that a security operation failed as a
- * result of an authorised function that could not be found.
+ * result of a function that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

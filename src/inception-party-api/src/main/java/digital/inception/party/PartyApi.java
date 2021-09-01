@@ -77,6 +77,9 @@ public class PartyApi extends SecureApi {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organization the organization
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateOrganizationException if the organization already exists
+   * @throws ServiceUnavailableException if the organization could not be created
    */
   @Operation(summary = "Create the organization", description = "Create the organization")
   @ApiResponses(
@@ -152,6 +155,9 @@ public class PartyApi extends SecureApi {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param person the person
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicatePersonException if the person already exists
+   * @throws ServiceUnavailableException if the person could not be created
    */
   @Operation(summary = "Create the person", description = "Create the person")
   @ApiResponses(
@@ -222,6 +228,9 @@ public class PartyApi extends SecureApi {
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organizationId the Universally Unique Identifier (UUID) for the organization
    * @return the organization
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws OrganizationNotFoundException if the organization could not be found
+   * @throws ServiceUnavailableException if the organization could not be retrieved
    */
   @Operation(summary = "Retrieve the organization", description = "Retrieve the organization")
   @ApiResponses(
@@ -300,6 +309,8 @@ public class PartyApi extends SecureApi {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the organizations
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the organizations could not be retrieved
    */
   @Operation(summary = "Retrieve the organizations", description = "Retrieve the organizations")
   @ApiResponses(
@@ -391,6 +402,8 @@ public class PartyApi extends SecureApi {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the parties
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the parties could not be retrieved
    */
   @Operation(summary = "Retrieve the parties", description = "Retrieve the parties")
   @ApiResponses(
@@ -470,6 +483,9 @@ public class PartyApi extends SecureApi {
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyId the Universally Unique Identifier (UUID) for the party
    * @return the party
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the party could not be retrieved
    */
   @Operation(summary = "Retrieve the party", description = "Retrieve the party")
   @ApiResponses(
@@ -544,6 +560,9 @@ public class PartyApi extends SecureApi {
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param personId the Universally Unique Identifier (UUID) for the person
    * @return the person
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PersonNotFoundException if the person could not be found
+   * @throws ServiceUnavailableException if the person could not be retrieved
    */
   @Operation(summary = "Retrieve the person", description = "Retrieve the person")
   @ApiResponses(
@@ -622,6 +641,8 @@ public class PartyApi extends SecureApi {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the persons
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the persons could not be retrieved
    */
   @Operation(summary = "Retrieve the persons", description = "Retrieve the persons")
   @ApiResponses(
@@ -712,6 +733,8 @@ public class PartyApi extends SecureApi {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the snapshots
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the snapshots for the entity could not be retrieved
    */
   @Operation(summary = "Retrieve the snapshots", description = "Retrieve the snapshots")
   @ApiResponses(
@@ -801,6 +824,9 @@ public class PartyApi extends SecureApi {
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organizationId the ID for the organization
    * @param organization the organization
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws OrganizationNotFoundException if the organization could not be found
+   * @throws ServiceUnavailableException if the organization could not be updated
    */
   @Operation(summary = "Update the organization", description = "Update the organization")
   @ApiResponses(
@@ -894,6 +920,9 @@ public class PartyApi extends SecureApi {
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param personId the ID for the person
    * @param person the person
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PersonNotFoundException if the person could not be found
+   * @throws ServiceUnavailableException if the person could not be updated
    */
   @Operation(summary = "Update the person", description = "Update the person")
   @ApiResponses(
@@ -976,3 +1005,9 @@ public class PartyApi extends SecureApi {
     partyService.updatePerson(tenantId, person);
   }
 }
+
+/**
+ * TODO:
+ * - Add operations for managing associations, i.e. create, delete, retrieve, update
+ * - Add operations for deleting a person or an organization
+ */

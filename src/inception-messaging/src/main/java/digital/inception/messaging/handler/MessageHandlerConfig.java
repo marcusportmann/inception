@@ -180,7 +180,7 @@ public class MessageHandlerConfig {
   }
 
   /**
-   * The <b>MessageConfig</b> inner class stores the configuration information for a a message that
+   * The <b>MessageConfig</b> inner class stores the configuration information for a message that
    * a message handler is capable of processing.
    */
   public class MessageConfig {

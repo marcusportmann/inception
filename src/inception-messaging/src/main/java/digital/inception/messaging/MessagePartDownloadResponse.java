@@ -73,6 +73,7 @@ public class MessagePartDownloadResponse {
    * stored in the specified WBXML document.
    *
    * @param document the WBXML document containing the message part download response information
+   * @throws MessagingException if the message part download response could not initialised
    */
   public MessagePartDownloadResponse(Document document) throws MessagingException {
     Element rootElement = document.getRootElement();

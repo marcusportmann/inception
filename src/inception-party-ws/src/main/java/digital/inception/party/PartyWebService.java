@@ -59,6 +59,9 @@ public class PartyWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organization the organization
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateOrganizationException if the organization already exists
+   * @throws ServiceUnavailableException if the organization could not be created
    */
   @WebMethod(operationName = "CreateOrganization")
   public void createOrganization(
@@ -73,6 +76,9 @@ public class PartyWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param person the person
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicatePersonException if the person already exists
+   * @throws ServiceUnavailableException if the person could not be created
    */
   @WebMethod(operationName = "CreatePerson")
   public void createPerson(
@@ -87,6 +93,9 @@ public class PartyWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws OrganizationNotFoundException if the organization could not be found
+   * @throws ServiceUnavailableException if the organization could not be deleted
    */
   @WebMethod(operationName = "DeleteOrganization")
   public void deleteOrganization(
@@ -101,6 +110,9 @@ public class PartyWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the party could not be deleted
    */
   @WebMethod(operationName = "DeleteParty")
   public void deleteParty(
@@ -115,6 +127,9 @@ public class PartyWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param personId the Universally Unique Identifier (UUID) for the person
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PersonNotFoundException if the person could not be found
+   * @throws ServiceUnavailableException if the person could not be deleted
    */
   @WebMethod(operationName = "DeletePerson")
   public void deletePerson(
@@ -130,6 +145,9 @@ public class PartyWebService {
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organizationId the Universally Unique Identifier (UUID) for the organization
    * @return the organization
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws OrganizationNotFoundException if the organization could not be found
+   * @throws ServiceUnavailableException if the organization could not be retrieved
    */
   @WebMethod(operationName = "GetOrganization")
   public Organization getOrganization(
@@ -149,6 +167,8 @@ public class PartyWebService {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the organizations
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the organizations could not be retrieved
    */
   @WebMethod(operationName = "GetOrganizations")
   public Organizations getOrganizations(
@@ -172,6 +192,8 @@ public class PartyWebService {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the parties
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the parties could not be retrieved
    */
   @WebMethod(operationName = "GetParties")
   public Parties getParties(
@@ -190,6 +212,9 @@ public class PartyWebService {
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param partyId the Universally Unique Identifier (UUID) for the party
    * @return the party
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the party could not be retrieved
    */
   @WebMethod(operationName = "GetParty")
   public Party getParty(
@@ -205,6 +230,9 @@ public class PartyWebService {
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param personId the Universally Unique Identifier (UUID) for the person
    * @return the person
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PersonNotFoundException if the person could not be found
+   * @throws ServiceUnavailableException if the person could not be retrieved
    */
   @WebMethod(operationName = "GetPerson")
   public Person getPerson(
@@ -224,6 +252,8 @@ public class PartyWebService {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the persons
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the persons could not be retrieved
    */
   @WebMethod(operationName = "GetPersons")
   public Persons getPersons(
@@ -238,7 +268,7 @@ public class PartyWebService {
   }
 
   /**
-   * Retrieve the snapshots for the party.
+   * Retrieve the snapshots for an entity.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param entityType the type of entity
@@ -249,6 +279,8 @@ public class PartyWebService {
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    * @return the snapshots
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the snapshots for the entity could not be retrieved
    */
   @WebMethod(operationName = "GetSnapshots")
   public Snapshots getSnapshots(
@@ -261,7 +293,7 @@ public class PartyWebService {
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
-      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     return partyService.getSnapshots(
         tenantId, entityType, entityId, from, to, sortDirection, pageIndex, pageSize);
   }
@@ -271,6 +303,9 @@ public class PartyWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param organization the organization
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws OrganizationNotFoundException if the organization could not be found
+   * @throws ServiceUnavailableException if the organization could not be updated
    */
   @WebMethod(operationName = "UpdateOrganization")
   public void updateOrganization(
@@ -285,6 +320,9 @@ public class PartyWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param person the person
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PersonNotFoundException if the person could not be found
+   * @throws ServiceUnavailableException if the person could not be updated
    */
   @WebMethod(operationName = "UpdatePerson")
   public void updatePerson(

@@ -136,11 +136,6 @@ public class SMSService implements ISMSService {
     this.smsRepository = smsRepository;
   }
 
-  /**
-   * Create the new SMS.
-   *
-   * @param sms the <b>SMS</b> instance containing the information for the SMS
-   */
   @Override
   @Transactional
   public void createSMS(SMS sms) throws InvalidArgumentException, ServiceUnavailableException {
@@ -157,11 +152,6 @@ public class SMSService implements ISMSService {
     }
   }
 
-  /**
-   * Delete the existing SMS.
-   *
-   * @param smsId the ID for the SMS
-   */
   @Override
   @Transactional
   public void deleteSMS(UUID smsId)
@@ -183,24 +173,11 @@ public class SMSService implements ISMSService {
     }
   }
 
-  /**
-   * Returns the maximum number of send attempts for a SMS.
-   *
-   * @return the maximum number of send attempts for a SMS
-   */
   @Override
   public int getMaximumSendAttempts() {
     return maximumSendAttempts;
   }
 
-  /**
-   * Retrieve the next SMS that has been queued for sending.
-   *
-   * <p>The SMS will be locked to prevent duplicate sending.
-   *
-   * @return an Optional containing the next SMS that has been queued for sending or an empty
-   *     Optional if no SMSs are currently queued for sending
-   */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public Optional<SMS> getNextSMSQueuedForSending() throws ServiceUnavailableException {
@@ -239,11 +216,6 @@ public class SMSService implements ISMSService {
     }
   }
 
-  /**
-   * Returns the number of SMS credits remaining.
-   *
-   * @return the number of SMS credits remaining
-   */
   @Override
   public int getNumberOfSMSCreditsRemaining() throws ServiceUnavailableException {
     if (PROVIDER_SMS_PORTAL.equalsIgnoreCase(useProvider)) {}
@@ -276,12 +248,6 @@ public class SMSService implements ISMSService {
     //    }
   }
 
-  /**
-   * Retrieve the SMS.
-   *
-   * @param smsId the ID for the SMS
-   * @return the SMS
-   */
   @Override
   public SMS getSMS(UUID smsId)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException {
@@ -305,16 +271,18 @@ public class SMSService implements ISMSService {
     }
   }
 
-  /**
-   * Reset the SMS locks.
-   *
-   * @param status the current status of the SMSs that have been locked
-   * @param newStatus the new status for the SMSs that have been unlocked
-   */
   @Override
   @Transactional
   public void resetSMSLocks(SMSStatus status, SMSStatus newStatus)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (status == null) {
+      throw new InvalidArgumentException("status");
+    }
+
+    if (newStatus == null) {
+      throw new InvalidArgumentException("newStatus");
+    }
+
     try {
       smsRepository.resetSMSLocks(status, newStatus, instanceName);
     } catch (Throwable e) {
@@ -328,14 +296,7 @@ public class SMSService implements ISMSService {
     }
   }
 
-  /**
-   * Send the SMS.
-   *
-   * <p>This will queue the SMS for sending. The SMS will actually be sent asynchronously.
-   *
-   * @param mobileNumber the mobile number
-   * @param message the message
-   */
+  @Override
   public void sendSMS(String mobileNumber, String message)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(mobileNumber)) {
@@ -358,16 +319,7 @@ public class SMSService implements ISMSService {
     }
   }
 
-  /**
-   * Send the SMS synchronously.
-   *
-   * <p>This will NOT queue the SMS for sending. The SMS will actually be sent synchronously.
-   *
-   * @param smsId the ID of the SMS
-   * @param mobileNumber the mobile number
-   * @param message the message
-   * @return <b>true</b> if the SMS was sent successfully or <b>false</b> otherwise
-   */
+  @Override
   public boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (smsId == null) {
@@ -497,12 +449,6 @@ public class SMSService implements ISMSService {
     }
   }
 
-  /**
-   * Set the status for the SMS.
-   *
-   * @param smsId the ID for the SMS
-   * @param status the new status for the SMS
-   */
   @Override
   @Transactional
   public void setSMSStatus(UUID smsId, SMSStatus status)
@@ -530,18 +476,16 @@ public class SMSService implements ISMSService {
     }
   }
 
-  /**
-   * Unlock the SMS.
-   *
-   * @param smsId the ID for the SMS
-   * @param status the new status for the unlocked SMS
-   */
   @Override
   @Transactional
   public void unlockSMS(UUID smsId, SMSStatus status)
       throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException {
     if (smsId == null) {
       throw new InvalidArgumentException("smsId");
+    }
+
+    if (status == null) {
+      throw new InvalidArgumentException("status");
     }
 
     try {

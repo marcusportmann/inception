@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>AssociationType</b> class holds the information for a association type.
+ * The <b>AssociationType</b> class holds the information for an association type.
  *
  * @author Marcus Portmann
  */

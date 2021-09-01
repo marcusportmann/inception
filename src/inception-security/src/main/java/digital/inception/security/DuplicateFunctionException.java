@@ -24,7 +24,7 @@ import javax.xml.ws.WebFault;
 
 /**
  * A <b>DuplicateFunctionException</b> is thrown to indicate that a security operation failed as a
- * result of a duplicate authorised function.
+ * result of a duplicate function.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

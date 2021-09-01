@@ -16,12 +16,12 @@
 
 package demo.model;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 
 /**
- * The <b>IDemoService</b> interface defines the functionality that must be provided by a Data
+ * The <b>IDataService</b> interface defines the functionality that must be provided by a Data
  * Service implementation.
  *
  * @author Marcus Portmann
@@ -33,16 +33,22 @@ public interface IDataService {
    * Create the data.
    *
    * @param data the data
+   * @throws ServiceUnavailableException if the data could not be created
    */
   void createData(Data data) throws ServiceUnavailableException;
 
-  /** Create the sample data. */
+  /**
+   * Create the sample data.
+   *
+   * @throws ServiceUnavailableException if the sample data could not be created
+   */
   void createSampleData() throws ServiceUnavailableException;
 
   /**
    * Returns the data.
    *
    * @return the data
+   * @throws ServiceUnavailableException if the data could not be retrieved
    */
   List<Data> getAllData() throws ServiceUnavailableException;
 
@@ -51,13 +57,16 @@ public interface IDataService {
    *
    * @param id the ID for the data
    * @return the data
+   * @throws ServiceUnavailableException if the data could not be retrieved
    */
   Data getData(long id) throws ServiceUnavailableException;
 
   /**
    * Validate the data.
    *
-   * @return the validation errors
+   * @param data the data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the data could not be validated
    */
   void validateData(Data data) throws InvalidArgumentException, ServiceUnavailableException;
 }

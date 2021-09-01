@@ -261,7 +261,7 @@ public class Message {
    *
    * @param document the WBXML document containing the message information
    */
-  public Message(Document document) throws MessagingException {
+  public Message(Document document) {
     Element rootElement = document.getRootElement();
 
     rootElement.getAttributeValue("id").ifPresent(id -> this.id = UUID.fromString(id));

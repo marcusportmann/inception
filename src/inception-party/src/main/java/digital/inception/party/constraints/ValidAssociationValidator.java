@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * The <b>ValidAssociationValidator</b> class implements the custom constraint validator for
- * validating a association.
+ * validating an association.
  *
  * @author Marcus Portmann
  */

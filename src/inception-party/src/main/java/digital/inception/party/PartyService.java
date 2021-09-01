@@ -25,11 +25,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -80,7 +80,7 @@ public class PartyService implements IPartyService {
   private int maxSnapshots;
 
   /** The internal reference to the Party Service to enable caching. */
-  @Resource private IPartyService self;
+  @Autowired private IPartyService self;
 
   /**
    * Constructs a new <b>PartyService</b>.
@@ -94,13 +94,6 @@ public class PartyService implements IPartyService {
     this.validator = validator;
   }
 
-  /**
-   * Create the new association.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param association the association
-   * @return the association
-   */
   @Override
   @Transactional
   @CachePut(cacheNames = "associations", key = "#association.id")
@@ -125,13 +118,6 @@ public class PartyService implements IPartyService {
     return getDataStore().createAssociation(tenantId, association);
   }
 
-  /**
-   * Create the new organization.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organization the organization
-   * @return the organization
-   */
   @Override
   @Transactional
   @CachePut(cacheNames = "organizations", key = "#organization.id")
@@ -156,12 +142,6 @@ public class PartyService implements IPartyService {
     return getDataStore().createOrganization(tenantId, organization);
   }
 
-  /**
-   * Create the new person.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param person the person
-   */
   @Override
   @Transactional
   @CachePut(cacheNames = "persons", key = "#person.id")
@@ -185,12 +165,6 @@ public class PartyService implements IPartyService {
     return getDataStore().createPerson(tenantId, person);
   }
 
-  /**
-   * Delete the organization.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
-   */
   @Override
   @Transactional
   @CacheEvict(cacheNames = "organizations", key = "#organizationId")
@@ -203,12 +177,6 @@ public class PartyService implements IPartyService {
     getDataStore().deleteOrganization(tenantId, organizationId);
   }
 
-  /**
-   * Delete the party.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   */
   @Override
   @Transactional
   @CacheEvict(
@@ -223,12 +191,6 @@ public class PartyService implements IPartyService {
     getDataStore().deleteParty(tenantId, partyId);
   }
 
-  /**
-   * Delete the person.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
-   */
   @Override
   @Transactional
   @CacheEvict(cacheNames = "persons", key = "#personId")
@@ -241,13 +203,6 @@ public class PartyService implements IPartyService {
     getDataStore().deletePerson(tenantId, personId);
   }
 
-  /**
-   * Retrieve the organization.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
-   * @return the organization
-   */
   @Override
   @Cacheable(cacheNames = "organizations", key = "#organizationId")
   public Organization getOrganization(UUID tenantId, UUID organizationId)
@@ -259,17 +214,6 @@ public class PartyService implements IPartyService {
     return getDataStore().getOrganization(tenantId, organizationId);
   }
 
-  /**
-   * Retrieve the organizations.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param filter the optional filter to apply to the organizations
-   * @param sortBy the optional method used to sort the organizations e.g. by name
-   * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the organizations
-   */
   @Override
   public Organizations getOrganizations(
       UUID tenantId,
@@ -309,16 +253,6 @@ public class PartyService implements IPartyService {
         .getOrganizations(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
-  /**
-   * Retrieve the parties.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param filter the optional filter to apply to the parties
-   * @param sortDirection the optional sort direction to apply to the parties
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the parties
-   */
   @Override
   public Parties getParties(
       UUID tenantId,
@@ -348,13 +282,6 @@ public class PartyService implements IPartyService {
     return getDataStore().getParties(tenantId, filter, sortDirection, pageIndex, pageSize);
   }
 
-  /**
-   * Retrieve the party.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @return the party
-   */
   @Override
   public Party getParty(UUID tenantId, UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
@@ -365,13 +292,6 @@ public class PartyService implements IPartyService {
     return getDataStore().getParty(tenantId, partyId);
   }
 
-  /**
-   * Retrieve the person.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
-   * @return the person
-   */
   @Override
   @Cacheable(cacheNames = "persons", key = "#personId")
   public Person getPerson(UUID tenantId, UUID personId)
@@ -383,17 +303,6 @@ public class PartyService implements IPartyService {
     return getDataStore().getPerson(tenantId, personId);
   }
 
-  /**
-   * Retrieve the persons.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param filter the optional filter to apply to the persons
-   * @param sortBy the optional method used to sort the persons e.g. by name
-   * @param sortDirection the optional sort direction to apply to the persons
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the persons
-   */
   @Override
   public Persons getPersons(
       UUID tenantId,
@@ -433,19 +342,6 @@ public class PartyService implements IPartyService {
     return getDataStore().getPersons(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
-  /**
-   * Retrieve the snapshots for an entity.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param entityType the type of entity
-   * @param entityId the Universally Unique Identifier (UUID) for the entity
-   * @param from the optional date to retrieve the snapshots from
-   * @param to the optional date to retrieve the snapshots to
-   * @param sortDirection the optional sort direction to apply to the snapshots
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the snapshots
-   */
   @Override
   @Transactional
   public Snapshots getSnapshots(
@@ -484,13 +380,6 @@ public class PartyService implements IPartyService {
         .getSnapshots(tenantId, entityType, entityId, from, to, sortDirection, pageIndex, pageSize);
   }
 
-  /**
-   * Retrieve the Universally Unique Identifier (UUID) for the tenant the party is associated with.
-   *
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @return an Optional containing the Universally Unique Identifier (UUID) for the tenant the
-   *     party is associated with or an empty Optional if the party could not be found
-   */
   @Override
   @Cacheable(cacheNames = "partyTenantIds", key = "#partyId")
   public Optional<UUID> getTenantIdForParty(UUID partyId)
@@ -502,13 +391,6 @@ public class PartyService implements IPartyService {
     return getDataStore().getTenantIdForParty(partyId);
   }
 
-  /**
-   * Update the organization.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organization the organization
-   * @return the organization
-   */
   @Override
   @Transactional
   @CachePut(cacheNames = "organizations", key = "#organization.id")
@@ -529,13 +411,6 @@ public class PartyService implements IPartyService {
     return getDataStore().updateOrganization(tenantId, organization);
   }
 
-  /**
-   * Update the person.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param person the person
-   * @return the person
-   */
   @Override
   @Transactional
   @CachePut(cacheNames = "persons", key = "#person.id")
@@ -555,60 +430,51 @@ public class PartyService implements IPartyService {
     return getDataStore().updatePerson(tenantId, person);
   }
 
-  /**
-   * Validate the association.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param association the association
-   * @return the constraint violations for the association
-   */
   @Override
   public Set<ConstraintViolation<Association>> validateAssociation(
-      UUID tenantId, Association association) {
-    return validator.validate(association);
+      UUID tenantId, Association association) throws ServiceUnavailableException {
+    try {
+      return validator.validate(association);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to validate the association", e);
+    }
   }
 
-  /**
-   * Validate the organization.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organization the organization
-   * @return the constraint violations for the organization
-   */
   @Override
   public Set<ConstraintViolation<Organization>> validateOrganization(
-      UUID tenantId, Organization organization) {
-    return validator.validate(organization);
+      UUID tenantId, Organization organization) throws ServiceUnavailableException {
+    try {
+      return validator.validate(organization);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to validate the organization", e);
+    }
   }
 
-  /**
-   * Validate the party.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param party the party
-   * @return the constraint violations for the party
-   */
   @Override
-  public Set<ConstraintViolation<Party>> validateParty(UUID tenantId, Party party) {
-    return validator.validate(party);
+  public Set<ConstraintViolation<Party>> validateParty(UUID tenantId, Party party)
+      throws ServiceUnavailableException {
+    try {
+      return validator.validate(party);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to validate the party", e);
+    }
   }
 
-  /**
-   * Validate the person.
-   *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param person the person
-   * @return the constraint violations for the person
-   */
   @Override
-  public Set<ConstraintViolation<Person>> validatePerson(UUID tenantId, Person person) {
-    return validator.validate(person);
+  public Set<ConstraintViolation<Person>> validatePerson(UUID tenantId, Person person)
+      throws ServiceUnavailableException {
+    try {
+      return validator.validate(person);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to validate the person", e);
+    }
   }
 
   /**
    * Retrieve the party data store.
    *
    * @return the party data store
+   * @throws ServiceUnavailableException if the party data store could not be retrieved
    */
   private IPartyDataStore getDataStore() throws ServiceUnavailableException {
     if (dataStore == null) {

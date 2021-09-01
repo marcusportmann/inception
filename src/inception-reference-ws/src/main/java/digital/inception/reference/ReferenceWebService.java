@@ -56,6 +56,8 @@ public class ReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the country reference
    *     data for
    * @return the country reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the country reference data could not be retrieved
    */
   @WebMethod(operationName = "GetCountries")
   public List<Country> getCountries(
@@ -70,6 +72,8 @@ public class ReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the language reference
    *     data for
    * @return the language reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the language reference data could not be retrieved
    */
   @WebMethod(operationName = "GetLanguages")
   public List<Language> getLanguages(
@@ -84,6 +88,9 @@ public class ReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the measurement system
    *     reference data for
    * @return the measurement system reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement system reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetMeasurementSystems")
   public List<MeasurementSystem> getMeasurementSystems(
@@ -98,6 +105,9 @@ public class ReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
    *     type reference data for
    * @return the measurement unit type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement unit type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetMeasurementUnitTypes")
   public List<MeasurementUnitType> getMeasurementUnitTypes(
@@ -112,6 +122,9 @@ public class ReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
    *     reference data for
    * @return the measurement unit reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the measurement unit reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetMeasurementUnits")
   public List<MeasurementUnit> getMeasurementUnits(
@@ -126,6 +139,8 @@ public class ReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the region reference
    *     data for
    * @return the region reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the region reference data could not be retrieved
    */
   @WebMethod(operationName = "GetRegions")
   public List<Region> getRegions(
@@ -140,6 +155,8 @@ public class ReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the time zone
    *     reference data for
    * @return the time zone reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the time zones reference data could not be retrieved
    */
   @WebMethod(operationName = "GetTimeZones")
   public List<TimeZone> getTimeZones(

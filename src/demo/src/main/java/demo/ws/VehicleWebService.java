@@ -19,8 +19,9 @@ package demo.ws;
 import demo.model.Car;
 import demo.model.DuplicateCarException;
 import demo.model.IVehicleService;
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
+import digital.inception.mail.DuplicateMailTemplateException;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -55,6 +56,9 @@ public class VehicleWebService {
    * Create the new car.
    *
    * @param car the car
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateCarException if the car already exists
+   * @throws ServiceUnavailableException if the car could not be created
    */
   @WebMethod(operationName = "CreateCar")
   public void createCode(@WebParam(name = "Car") @XmlElement(required = true) Car car)

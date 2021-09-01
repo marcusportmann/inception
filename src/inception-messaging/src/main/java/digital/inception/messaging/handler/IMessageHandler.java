@@ -40,6 +40,7 @@ public interface IMessageHandler {
    * @param message the message to process
    * @return an Optional containing the response message or an empty Optional if no response message
    *     exists
+   * @throws MessageHandlerException if the message could not be processed
    */
   Optional<Message> processMessage(Message message) throws MessageHandlerException;
 }

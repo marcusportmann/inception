@@ -49,6 +49,7 @@ public class CXFMutualSSLSecurityProxyConfigurator {
    * @param trustStore the key store containing the certificates that will be used to verify the
    *     remote server when authenticating using mutual SSL authentication
    * @param disableServerTrustChecking disable trust checking of the remote server certificate
+   * @throws Exception if the proxy could not be configured
    */
   public static void configureProxy(
       Object proxy,

@@ -42,7 +42,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import javax.annotation.Resource;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -56,6 +55,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
@@ -144,7 +144,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   private int processingRetryDelay;
 
   /** The internal reference to the Messaging Service for transaction management. */
-  @Resource private IMessagingService self;
+  @Autowired private IMessagingService self;
 
   /**
    * Constructs a new <b>MessagingService</b>.
@@ -168,7 +168,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     this.archivedMessageRepository = archivedMessageRepository;
   }
 
-  /** Initialize the Messaging Service. */
   @Override
   public void afterPropertiesSet() {
     logger.info("Initializing the Messaging Service (" + instanceName + ")");
@@ -189,14 +188,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Have all the parts been queued for assembly for the message?
-   *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
-   * @param totalParts the total number of parts for the message
-   * @return <b>true</b> if all the parts for the message have been queued for assembly or
-   *     <b>false</b> otherwise
-   */
   @Override
   public boolean allMessagePartsForMessageQueuedForAssembly(UUID messageId, int totalParts)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -220,11 +211,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Archive the message.
-   *
-   * @param message the message to archive
-   */
   @Override
   @Transactional
   public void archiveMessage(Message message)
@@ -243,12 +229,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Assemble the message from the message parts that have been queued for assembly.
-   *
-   * @param messageId sthe Universally Unique Identifier (UUID) for the message
-   * @param totalParts the total number of parts for the message
-   */
   @Override
   @Transactional
   public void assembleMessage(UUID messageId, int totalParts)
@@ -352,37 +332,16 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Returns <b>true</b> if the Messaging Service is capable of processing the specified message or
-   * <b>false</b> otherwise.
-   *
-   * @param message the message to process
-   * @return <b>true</b> if the Messaging Service is capable of processing the specified message or
-   *     <b>false</b> otherwise
-   */
   @Override
   public boolean canProcessMessage(Message message) {
     return messageHandlers.containsKey(message.getType());
   }
 
-  /**
-   * Returns <b>true</b> if the Messaging Service is capable of queueing the specified message part
-   * for assembly or <b>false</b> otherwise.
-   *
-   * @param messagePart the message part to queue for assembly
-   * @return <b>true</b> if the Messaging Service is capable of queueing the specified message part
-   *     for assembly or <b>false</b> otherwise
-   */
   @Override
   public boolean canQueueMessagePartForAssembly(MessagePart messagePart) {
     return messageHandlers.containsKey(messagePart.getMessageType());
   }
 
-  /**
-   * Create the new message.
-   *
-   * @param message the <b>Message</b> instance containing the information for the message
-   */
   @Override
   @Transactional
   public void createMessage(Message message)
@@ -397,12 +356,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Create the new message part.
-   *
-   * @param messagePart the <b>MessagePart</b> instance containing the information for the message
-   *     part
-   */
   @Override
   @Transactional
   public void createMessagePart(MessagePart messagePart)
@@ -417,12 +370,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Decrypt the message.
-   *
-   * @param message the message to decrypt
-   * @return <b>true</b> if the message data was decrypted successfully or <b>false</b> otherwise
-   */
   @Override
   public boolean decryptMessage(Message message) throws MessagingException {
     // If the message is already decrypted then stop here
@@ -502,11 +449,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Delete the message.
-   *
-   * @param message the message to delete
-   */
   @Override
   @Transactional
   public void deleteMessage(Message message)
@@ -518,11 +460,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     deleteMessage(message.getId());
   }
 
-  /**
-   * Delete the message.
-   *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
-   */
   @Override
   @Transactional
   public void deleteMessage(UUID messageId)
@@ -544,11 +481,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Delete the message part.
-   *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
-   */
   @Override
   @Transactional
   public void deleteMessagePart(UUID messagePartId)
@@ -571,11 +503,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Delete the message parts for the message.
-   *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
-   */
   @Override
   @Transactional
   public void deleteMessagePartsForMessage(UUID messageId)
@@ -592,13 +519,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Derive the user-device encryption key.
-   *
-   * @param username the username for the user e.g. test1
-   * @param deviceId the Universally Unique Identifier (UUID) for the device
-   * @return the user-device encryption key
-   */
   @Override
   public byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId)
       throws MessagingException {
@@ -626,12 +546,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Encrypt the message.
-   *
-   * @param message the message to encrypt
-   * @return <b>true</b> if the message data was encrypted successfully or <b>false</b> otherwise
-   */
   @Override
   public boolean encryptMessage(Message message) throws MessagingException {
     // If the message is already encrypted then stop here
@@ -685,21 +599,10 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Returns the maximum number of times processing will be attempted for a message.
-   *
-   * @return the maximum number of times processing will be attempted for a message
-   */
   public int getMaximumProcessingAttempts() {
     return maximumProcessingAttempts;
   }
 
-  /**
-   * Retrieve the message.
-   *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
-   * @return the message
-   */
   @Override
   public Message getMessage(UUID messageId)
       throws InvalidArgumentException, MessageNotFoundException, ServiceUnavailableException {
@@ -723,14 +626,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Retrieve the message parts queued for assembly for the message.
-   *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
-   * @param lockName the name of the lock that should be applied to the message parts queued for
-   *     assembly when they are retrieved
-   * @return the message parts queued for assembly for the message
-   */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public List<MessagePart> getMessagePartsQueuedForAssembly(UUID messageId, String lockName)
@@ -764,14 +659,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Get the message parts for a user that have been queued for download by a particular remote
-   * device.
-   *
-   * @param username the username for the user
-   * @param deviceId the Universally Unique Identifier (UUID) for the device
-   * @return the message parts that have been queued for download by a particular remote device
-   */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   @SuppressWarnings("resource")
@@ -826,14 +713,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Get the messages for a user that have been queued for download by a particular remote device.
-   *
-   * @param username the username for the user
-   * @param deviceId the Universally Unique Identifier (UUID) for the device
-   * @return the messages for a user that have been queued for download by a particular remote
-   *     device
-   */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   @SuppressWarnings("resource")
@@ -914,14 +793,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Retrieve the next message that has been queued for processing.
-   *
-   * <p>The message will be locked to prevent duplicate processing.
-   *
-   * @return an Optional containing the next message that has been queued for processing or an empty
-   *     Optional if no messages are currently queued for processing
-   */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public Optional<Message> getNextMessageQueuedForProcessing() throws ServiceUnavailableException {
@@ -959,34 +830,16 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Should the specified message be archived?
-   *
-   * @param message the message
-   * @return <b>true</b> if the message should be archived or <b>false</b> otherwise
-   */
   @Override
   public boolean isArchivableMessage(Message message) {
     return isArchivableMessage(message.getType());
   }
 
-  /**
-   * Can the specified message be processed asynchronously?
-   *
-   * @param message the message
-   * @return <b>true</b> if the message can be processed asynchronously or <b>false</b> otherwise
-   */
   @Override
   public boolean isAsynchronousMessage(Message message) {
     return isAsynchronousMessage(message.getType());
   }
 
-  /**
-   * Has the message already been archived?
-   *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
-   * @return <b>true</b> if the message has already been archived or <b>false</b> otherwise
-   */
   @Override
   public boolean isMessageArchived(UUID messageId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1002,13 +855,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Has the message part already been queued for assembly?
-   *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
-   * @return <b>true</b> if the message part has already been queued for assembly or <b>false</b>
-   *     otherwise
-   */
   @Override
   public boolean isMessagePartQueuedForAssembly(UUID messagePartId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1026,34 +872,16 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Should the specified message be be processed securely?
-   *
-   * @param message the message
-   * @return <b>true</b> if the message is secure or <b>false</b> otherwise
-   */
   @Override
   public boolean isSecureMessage(Message message) {
     return isSecureMessage(message.getType());
   }
 
-  /**
-   * Should the specified message be processed synchronously?
-   *
-   * @param message the message
-   * @return <b>true</b> if the message should be processed synchronously or <b>false</b> otherwise
-   */
+  @Override
   public boolean isSynchronousMessage(Message message) {
     return isSynchronousMessage(message.getType());
   }
 
-  /**
-   * Process the message.
-   *
-   * @param message the message to process
-   * @return an Optional containing the response message or an empty Optional if no response message
-   *     exists
-   */
   @Override
   public Optional<Message> processMessage(Message message)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1088,11 +916,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Queue the specified message for download by a remote device.
-   *
-   * @param message the message to queue
-   */
   @Override
   @Transactional
   public void queueMessageForDownload(Message message)
@@ -1191,11 +1014,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     archiveMessage(message);
   }
 
-  /**
-   * Queue the specified message for processing.
-   *
-   * @param message the message to queue
-   */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void queueMessageForProcessing(Message message)
@@ -1232,12 +1050,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Queue the specified message for processing and process the message using the Background Message
-   * Processor.
-   *
-   * @param message the message to queue
-   */
   @Override
   @Transactional
   public void queueMessageForProcessingAndProcessMessage(Message message)
@@ -1256,11 +1068,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Queue the specified message part for assembly.
-   *
-   * @param messagePart the message part to queue
-   */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void queueMessagePartForAssembly(MessagePart messagePart)
@@ -1297,13 +1104,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Queue the specified message part for assembly and if all the parts of the message have been
-   * queued for assembly then assemble the message using the Background Message Part Assembler and
-   * process the message using the Background Message Processor.
-   *
-   * @param messagePart the message part to queue
-   */
   @Override
   @Transactional
   public void queueMessagePartForAssemblyAndAssembleAndProcessMessage(MessagePart messagePart)
@@ -1327,16 +1127,18 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Reset the locks for the messages.
-   *
-   * @param status the current status of the messages that have been locked
-   * @param newStatus the new status for the messages that have been unlocked
-   */
   @Override
   @Transactional
   public void resetMessageLocks(MessageStatus status, MessageStatus newStatus)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (status == null) {
+      throw new InvalidArgumentException("status");
+    }
+
+    if (newStatus == null) {
+      throw new InvalidArgumentException("newStatus");
+    }
+
     try {
       messageRepository.resetStatusAndLocksForMessagesWithStatusAndLock(
           status, newStatus, instanceName);
@@ -1351,16 +1153,18 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Reset the locks for the message parts.
-   *
-   * @param status the current status of the message parts that have been locked
-   * @param newStatus the new status for the message parts that have been unlocked
-   */
   @Override
   @Transactional
   public void resetMessagePartLocks(MessagePartStatus status, MessagePartStatus newStatus)
-      throws ServiceUnavailableException {
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (status == null) {
+      throw new InvalidArgumentException("status");
+    }
+
+    if (newStatus == null) {
+      throw new InvalidArgumentException("newStatus");
+    }
+
     try {
       messagePartRepository.resetStatusAndLocksForMessagePartsWithStatusAndLock(
           status, newStatus, instanceName);
@@ -1375,12 +1179,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Set the status for a message part.
-   *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
-   * @param status the new status
-   */
   @Override
   @Transactional
   public void setMessagePartStatus(UUID messagePartId, MessagePartStatus status)
@@ -1402,12 +1200,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Set the status for a message.
-   *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
-   * @param status the new status
-   */
   @Override
   @Transactional
   public void setMessageStatus(UUID messageId, MessageStatus status)
@@ -1429,12 +1221,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Unlock the message.
-   *
-   * @param message the message to unlock
-   * @param status the new status for the unlocked message
-   */
   @Override
   @Transactional
   public void unlockMessage(Message message, MessageStatus status)
@@ -1459,12 +1245,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Unlock a locked message part.
-   *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
-   * @param status the new status for the unlocked message part
-   */
   @Override
   @Transactional
   public void unlockMessagePart(UUID messagePartId, MessagePartStatus status)
@@ -1486,7 +1266,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /** Initialize the configuration for the Messaging Service. */
   private void initConfiguration() throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(encryptionKeyBase64)) {
@@ -1501,7 +1280,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /** Initialize the message handlers. */
   private void initMessageHandlers() {
     // Initialize each message handler
     for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
@@ -1573,13 +1351,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /**
-   * Should a message with the specified type be archived?
-   *
-   * @param type the code for the message type
-   * @return <b>true</b> if a message with the specified type should be archived or <b>false</b>
-   *     otherwise
-   */
   private boolean isArchivableMessage(String type) {
     // TODO: Add caching of this check
 
@@ -1593,13 +1364,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     return false;
   }
 
-  /**
-   * Can a message with the specified type be processed asynchronously?
-   *
-   * @param type the code for the message type
-   * @return <b>true</b> if a message with the specified type can be processed asynchronously or
-   *     <b>false</b> otherwise
-   */
   private boolean isAsynchronousMessage(String type) {
     // TODO: Add caching of this check
 
@@ -1613,13 +1377,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     return false;
   }
 
-  /**
-   * Should a message with the specified type be processed securely?
-   *
-   * @param type the code for the message type
-   * @return <b>true</b> if a message with the specified type should be processed securely or
-   *     <b>false</b> otherwise
-   */
   private boolean isSecureMessage(String type) {
     // TODO: Add caching of this check
 
@@ -1633,13 +1390,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     return false;
   }
 
-  /**
-   * Can a message with the specified type be processed synchronously?
-   *
-   * @param type the code for the message type
-   * @return <b>true</b> if a message with the specified type can be processed synchronously or
-   *     <b>false</b> otherwise
-   */
   private boolean isSynchronousMessage(String type) {
     // TODO: Add caching of this check
 
@@ -1653,10 +1403,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     return false;
   }
 
-  /**
-   * Read the messaging configuration from all the <i>META-INF/MessagingConfig.xml</i> configuration
-   * files that can be found on the classpath.
-   */
   private void readMessagingConfig() throws ServiceUnavailableException {
     try {
       messageHandlersConfig = new ArrayList<>();

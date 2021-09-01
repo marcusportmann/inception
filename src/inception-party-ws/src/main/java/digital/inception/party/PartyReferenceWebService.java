@@ -59,6 +59,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the association
    *     property type reference data for
    * @return the association property type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the association property type reference data could not
+   *     be retrieved
    */
   @WebMethod(operationName = "GetAssociationPropertyTypes")
   public List<AssociationPropertyType> getAssociationPropertyTypes(
@@ -76,6 +79,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the association type
    *     reference data for
    * @return the association type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the association type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetAssociationTypes")
   public List<AssociationType> getAssociationTypes(
@@ -93,6 +99,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
    *     category reference data for
    * @return the attribute type category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the attribute type category reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetAttributeTypeCategories")
   public List<AttributeTypeCategory> getAttributeTypeCategories(
@@ -110,6 +119,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
    *     reference data for
    * @return the attribute type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the attribute type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetAttributeTypes")
   public List<AttributeType> getAttributeTypes(
@@ -127,6 +138,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
    *     reference data for
    * @return the consent type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the consent type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetConsentTypes")
   public List<ConsentType> getConsentTypes(
@@ -144,6 +157,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     purpose reference data for
    * @return the contact mechanism purpose reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the contact mechanism purpose reference data could not
+   *     be retrieved
    */
   @WebMethod(operationName = "GetContactMechanismPurposes")
   public List<ContactMechanismPurpose> getContactMechanismPurposes(
@@ -161,6 +177,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     role reference data for
    * @return the contact mechanism role reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the contact mechanism role reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetContactMechanismRoles")
   public List<ContactMechanismRole> getContactMechanismRoles(
@@ -178,6 +197,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     type reference data for
    * @return the contact mechanism type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the contact mechanism type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetContactMechanismTypes")
   public List<ContactMechanismType> getContactMechanismTypes(
@@ -195,6 +217,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
    *     reference data for
    * @return the employment status reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the employment status reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetEmploymentStatuses")
   public List<EmploymentStatus> getEmploymentStatuses(
@@ -212,6 +237,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
    *     reference data for
    * @return the employment type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the employment type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetEmploymentTypes")
   public List<EmploymentType> getEmploymentTypes(
@@ -229,6 +257,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
    *     reference data for
    * @return the fields of study reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the fields of study reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetFieldsOfStudy")
   public List<FieldOfStudy> getFieldsOfStudy(
@@ -246,6 +277,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
    *     data for
    * @return the gender reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the gender reference data could not be retrieved
    */
   @WebMethod(operationName = "GetGenders")
   public List<Gender> getGenders(
@@ -263,6 +296,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
    *     type reference data for
    * @return the identity document type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the identity document type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetIdentityDocumentTypes")
   public List<IdentityDocumentType> getIdentityDocumentTypes(
@@ -280,6 +316,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
    *     reference data for
    * @return the lock type category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the lock type category reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetLockTypeCategories")
   public List<LockTypeCategory> getLockTypeCategories(
@@ -297,6 +336,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
    *     reference data for
    * @return the lock type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the lock type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetLockTypes")
   public List<LockType> getLockTypes(
@@ -314,6 +355,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
    *     reference data for
    * @return the marital status reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the marital status reference data could not be retrieved
    */
   @WebMethod(operationName = "GetMaritalStatuses")
   public List<MaritalStatus> getMaritalStatuses(
@@ -331,6 +374,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
    *     reference data
    * @return the marriage type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the marriage type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetMarriageTypes")
   public List<MarriageType> getMarriageTypes(
@@ -348,6 +393,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
    *     reference data for
    * @return the next of kin type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the next of kin type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetNextOfKinTypes")
   public List<NextOfKinType> getNextOfKinTypes(
@@ -365,6 +413,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
    *     reference data for
    * @return the occupation reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the occupation reference data could not be retrieved
    */
   @WebMethod(operationName = "GetOccupations")
   public List<Occupation> getOccupations(
@@ -382,6 +432,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     purpose reference data for
    * @return the physical address purpose reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the physical address purpose reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetPhysicalAddressPurposes")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(
@@ -399,6 +452,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     role reference data for
    * @return the physical address role reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the physical address role reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetPhysicalAddressRoles")
   public List<PhysicalAddressRole> getPhysicalAddressRoles(
@@ -416,6 +472,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     type reference data for
    * @return the physical address type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the physical address type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetPhysicalAddressTypes")
   public List<PhysicalAddressType> getPhysicalAddressTypes(
@@ -433,6 +492,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
    *     category reference data for
    * @return the preference type category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the preference type category reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetPreferenceTypeCategories")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(
@@ -450,6 +512,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
    *     reference data for
    * @return the preference type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the preference type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetPreferenceTypes")
   public List<PreferenceType> getPreferenceTypes(
@@ -467,6 +532,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
    *     reference data for
    * @return the qualification type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the qualification type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetQualificationTypes")
   public List<QualificationType> getQualificationTypes(
@@ -484,6 +552,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
    *     data for
    * @return the race reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the race reference data could not be retrieved
    */
   @WebMethod(operationName = "GetRaces")
   public List<Race> getRaces(
@@ -501,6 +571,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
    *     type reference data for
    * @return the residence permit type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the residence permit type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetResidencePermitTypes")
   public List<ResidencePermitType> getResidencePermitTypes(
@@ -518,6 +591,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
    *     reference data for
    * @return the residency status reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the residency status reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetResidencyStatuses")
   public List<ResidencyStatus> getResidencyStatuses(
@@ -535,6 +611,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
    *     reference data for
    * @return the residential type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the residential type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetResidentialTypes")
   public List<ResidentialType> getResidentialTypes(
@@ -552,6 +631,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
    *     reference data for
    * @return the role purpose reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the role purpose reference data could not be retrieved
    */
   @WebMethod(operationName = "GetRolePurposes")
   public List<RolePurpose> getRolePurposes(
@@ -566,6 +647,9 @@ public class PartyReferenceWebService {
    *
    * @param roleType the code for the role type to retrieve the attribute constraints for
    * @return the role type attribute type constraints
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the role type attribute type constraints for a specific
+   *     role type could not be retrieved
    */
   @WebMethod(operationName = "GetRoleTypeAttributeTypeConstraints")
   public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(
@@ -579,6 +663,9 @@ public class PartyReferenceWebService {
    *
    * @param roleType the code for the role type to retrieve the preference constraints for
    * @return the role type preference type constraints
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the role type preference type constraints for a specific
+   *     role type could not be retrieved
    */
   @WebMethod(operationName = "GetRoleTypePreferenceTypeConstraints")
   public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
@@ -595,6 +682,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the role type
    *     reference data for
    * @return the role type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the role type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetRoleTypes")
   public List<RoleType> getRoleTypes(
@@ -612,6 +701,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
    *     data for
    * @return the segment reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the segment reference data could not be retrieved
    */
   @WebMethod(operationName = "GetSegments")
   public List<Segment> getSegments(
@@ -629,6 +720,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
    *     type reference data
    * @return the source of funds type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the source of funds type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetSourceOfFundsTypes")
   public List<SourceOfFundsType> getSourceOfFundsTypes(
@@ -646,6 +740,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
    *     type reference data for
    * @return the source of wealth type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the source of wealth type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetSourceOfWealthTypes")
   public List<SourceOfWealthType> getSourceOfWealthTypes(
@@ -663,6 +760,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
    *     category reference data for
    * @return the status type category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the status type category reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetStatusTypeCategories")
   public List<StatusTypeCategory> getStatusTypeCategories(
@@ -680,6 +780,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
    *     reference data for
    * @return the status type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the status type reference data could not be retrieved
    */
   @WebMethod(operationName = "GetStatusTypes")
   public List<StatusType> getStatusTypes(
@@ -697,6 +799,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
    *     reference data for
    * @return the tax number type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the tax number type reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetTaxNumberTypes")
   public List<TaxNumberType> getTaxNumberTypes(
@@ -714,6 +819,9 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
    *     reference data for
    * @return the times to contact reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the times to contact reference data could not be
+   *     retrieved
    */
   @WebMethod(operationName = "GetTimesToContact")
   public List<TimeToContact> getTimesToContact(
@@ -731,6 +839,8 @@ public class PartyReferenceWebService {
    * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
    *     data for
    * @return the title reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the title reference data could not be retrieved
    */
   @WebMethod(operationName = "GetTitles")
   public List<Title> getTitles(

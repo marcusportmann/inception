@@ -81,6 +81,7 @@ public class MessageResult {
    * Constructs a new <b>MessageResult</b>.
    *
    * @param document the WBXML document containing the message result information
+   * @throws MessagingException if the message result could not initialised
    */
   public MessageResult(Document document) throws MessagingException {
     Element rootElement = document.getRootElement();

@@ -88,6 +88,7 @@ public class MessageTranslator {
    * @param encryptionIV the encryption initialization vector
    * @param data the message data to decrypt
    * @return the decrypted message data
+   * @throws MessagingException if the message data could not be decrypted
    */
   public static byte[] decryptMessageData(byte[] encryptionKey, byte[] encryptionIV, byte[] data)
       throws MessagingException {
@@ -115,6 +116,7 @@ public class MessageTranslator {
    * @param encryptionIV the encryption initialization vector
    * @param data the message data to encrypt
    * @return the encrypted message data
+   * @throws MessagingException if the message data could not be encrypted
    */
   public static byte[] encryptMessageData(byte[] encryptionKey, byte[] encryptionIV, byte[] data)
       throws MessagingException {
@@ -142,6 +144,7 @@ public class MessageTranslator {
    * @param messageData the WBXML-based message data object to populate
    * @param <T> the message data type for the WBXML-based message data
    * @return the WBXML-based message data
+   * @throws MessagingException if the WBXML-based message data could not be retrieved from the message
    */
   public <T extends WbxmlMessageData> T fromMessage(Message message, T messageData)
       throws MessagingException {
@@ -196,6 +199,7 @@ public class MessageTranslator {
    * @param messageData the WBXML-based message data
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @return the message that can be sent via the messaging infrastructure
+   * @throws MessagingException if the message containing the WBXML-based message data could not be created
    */
   public Message toMessage(WbxmlMessageData messageData, UUID correlationId)
       throws MessagingException {
@@ -249,6 +253,7 @@ public class MessageTranslator {
    *
    * @param messageData the WBXML-based message data
    * @return the message that can be sent via the messaging infrastructure
+   * @throws MessagingException if the message containing the WBXML-based message data could not be created
    */
   public Message toMessage(WbxmlMessageData messageData) throws MessagingException {
     return toMessage(messageData, null);
@@ -259,6 +264,7 @@ public class MessageTranslator {
    *
    * @param data the message data to return the SHA-256 hash for
    * @return the SHA-256 hash for the message data
+   * @throws MessagingException if the SHA-256 hash for the message data could not be generated
    */
   private String getMessageDataHash(byte[] data) throws MessagingException {
     try {

@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <b>DataRestController</b> class.
+ * The <b>DataApi</b> class.
  *
  * @author Marcus Portmann
  */
@@ -62,7 +62,8 @@ public class DataApi {
   /**
    * Returns all the data.
    *
-   * @return all the data
+   * @return the data
+   * @throws ServiceUnavailableException if the data could not be retrieved
    */
   @RequestMapping(value = "/all-data", method = RequestMethod.GET, produces = "application/json")
   public List<Data> getAllData() throws ServiceUnavailableException {
@@ -73,6 +74,7 @@ public class DataApi {
    * Retrieve the data.
    *
    * @return the data
+   * @throws ServiceUnavailableException if the data could not be retrieved
    */
   @RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json")
   public Data getData() throws ServiceUnavailableException {
@@ -87,7 +89,13 @@ public class DataApi {
     return data;
   }
 
-  /** Validate the data. */
+  /**
+   * Validate the data.
+   *
+   * @param data the data to validate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the data could not be validated
+   */
   @Operation(summary = "Validate the data", description = "Validate the data")
   @ApiResponses(
       value = {
@@ -99,13 +107,13 @@ public class DataApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "500",
             description =
