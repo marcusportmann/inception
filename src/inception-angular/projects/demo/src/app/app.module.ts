@@ -20,7 +20,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {
   CoreModule, InceptionAppModule, InceptionConfig, NavigationBadge, NavigationItem, NavigationTitle
-} from '@inception/ngx-inception/core';
+} from 'ngx-inception/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';

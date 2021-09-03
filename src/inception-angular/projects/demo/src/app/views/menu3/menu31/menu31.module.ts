@@ -17,7 +17,7 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {CoreModule} from '@inception/ngx-inception/core';
+import {CoreModule} from 'ngx-inception/core';
 import {Menu311Component} from './menu311.component';
 import {Menu312Component} from './menu312.component';
 

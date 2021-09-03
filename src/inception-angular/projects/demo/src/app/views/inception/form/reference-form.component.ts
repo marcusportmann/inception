@@ -18,7 +18,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  Country, Language, ReferenceService, Region} from '@inception/ngx-inception/reference';
+  Country, Language, ReferenceService, Region} from 'ngx-inception/reference';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime, first, map, startWith} from 'rxjs/operators';
 

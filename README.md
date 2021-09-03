@@ -1,8 +1,8 @@
 # Inception Framework
 
 ## Overview
-The Inception Framework enables the rapid development of Java back-end and Angular
-front-end applications.
+The Inception Framework enables the rapid development of applications with a Java 
+back-end and Angular front-end.
 
 ## Quickstart for MacOS
 
@@ -626,17 +626,17 @@ Complete the following steps to create a new application based on the Inception 
       npm install --save-dev codelyzer
       ```
    6. Execute the following command under the *src/main/frontend* directory to install the
-      local *ngx-inception* library dependency using a relative path.
+      *ngx-inception* library dependency.
       ```
-      npm install ../../../../inception/src/inception-angular/dist/@inception/ngx-inception
+      npm install --save ngx-inception@1.0.0-SNAPSHOT
       ```
    7. Add the path mapping for the ngx-inception library to the *src/main/frontend/tsconfig.app.json* file.
       ```
       "compilerOptions": {
         ...,
         "paths": {
-          "@inception/ngx-inception/*": [
-            "./node_modules/@inception/ngx-inception/*"
+          "ngx-inception/*": [
+            "./node_modules/ngx-inception/*"
           ]
         }
       },
@@ -655,7 +655,7 @@ Complete the following steps to create a new application based on the Inception 
 
       import {
         CoreModule, InceptionAppModule, InceptionConfig, NavigationBadge, NavigationItem, NavigationTitle
-      } from '@absaoss/ngx-inception/core';
+      } from 'ngx-inception/core';
 
       ...
       ```
@@ -823,7 +823,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-          import {CodesViewsModule} from '@absaoss/ngx-inception/codes';
+          import {CodesViewsModule} from 'ngx-inception/codes';
 
           @NgModule({
             imports: [CodesViewsModule]
@@ -835,7 +835,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-          import {ConfigViewsModule} from '@absaoss/ngx-inception/config';
+          import {ConfigViewsModule} from 'ngx-inception/config';
 
           @NgModule({
             imports: [ConfigViewsModule]
@@ -847,7 +847,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-          import {ErrorViewsModule} from '@absaoss/ngx-inception/error';
+          import {ErrorViewsModule} from 'ngx-inception/error';
 
           @NgModule({
             imports: [ErrorViewsModule]
@@ -859,7 +859,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-          import {LoginViewsModule} from '@absaoss/ngx-inception/login';
+          import {LoginViewsModule} from 'ngx-inception/login';
 
           @NgModule({
             imports: [LoginViewsModule]
@@ -871,7 +871,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-          import {MailViewsModule} from '@absaoss/ngx-inception/mail';
+          import {MailViewsModule} from 'ngx-inception/mail';
 
           @NgModule({
             imports: [MailViewsModule]
@@ -883,7 +883,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-          import {ReportingViewsModule} from '@absaoss/ngx-inception/reporting';
+          import {ReportingViewsModule} from 'ngx-inception/reporting';
 
           @NgModule({
             imports: [ReportingViewsModule]
@@ -895,7 +895,7 @@ Complete the following steps to create a new application based on the Inception 
           following contents.
           ```
           import {NgModule} from '@angular/core';
-          import {SchedulerViewsModule} from '@absaoss/ngx-inception/scheduler';
+          import {SchedulerViewsModule} from 'ngx-inception/scheduler';
 
           @NgModule({
             imports: [SchedulerViewsModule]
@@ -908,7 +908,7 @@ Complete the following steps to create a new application based on the Inception 
           ```
           import {NgModule} from '@angular/core';
 
-          import {SecurityViewsModule} from '@absaoss/ngx-inception/security';
+          import {SecurityViewsModule} from 'ngx-inception/security';
 
           @NgModule({
             imports: [SecurityViewsModule]
@@ -922,12 +922,12 @@ Complete the following steps to create a new application based on the Inception 
        import {CommonModule} from '@angular/common';
        import {NgModule} from '@angular/core';
        import {RouterModule, Routes} from '@angular/router';
-       import {CodeCategoriesTitleResolver} from '@absaoss/ngx-inception/codes';
-       import {ConfigsTitleResolver} from '@absaoss/ngx-inception/config';
-       import {MailTitleResolver} from '@absaoss/ngx-inception/mail';
-       import {ReportingTitleResolver} from '@absaoss/ngx-inception/reporting';
-       import {SchedulerTitleResolver} from '@absaoss/ngx-inception/scheduler';
-       import {SecurityTitleResolver} from '@absaoss/ngx-inception/security';
+       import {CodeCategoriesTitleResolver} from 'ngx-inception/codes';
+       import {ConfigsTitleResolver} from 'ngx-inception/config';
+       import {MailTitleResolver} from 'ngx-inception/mail';
+       import {ReportingTitleResolver} from 'ngx-inception/reporting';
+       import {SchedulerTitleResolver} from 'ngx-inception/scheduler';
+       import {SecurityTitleResolver} from 'ngx-inception/security';
        import {AdministrationTitleResolver} from './administration-title-resolver';
        import {AdministrationComponent} from './administration.component';
        import {SystemTitleResolver} from './system-title-resolver';
@@ -1115,8 +1115,8 @@ Complete the following steps to create a new application based on the Inception 
        import {RouterModule, Routes} from '@angular/router';
        import {
          AdminContainerComponent, CanActivateFunctionGuard, NotFoundComponent, SimpleContainerComponent
-       } from '@absaoss/ngx-inception/core';
-       import {UserProfileComponent} from '@absaoss/ngx-inception/security';
+       } from 'ngx-inception/core';
+       import {UserProfileComponent} from 'ngx-inception/security';
        import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
 
        export const routes: Routes = [{

@@ -15,7 +15,7 @@
  */
 
 import {NgModule} from '@angular/core';
-import {SecurityViewsModule} from '@inception/ngx-inception/security';
+import {SecurityViewsModule} from 'ngx-inception/security';
 
 @NgModule({
   imports: [SecurityViewsModule]

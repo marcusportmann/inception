@@ -17,8 +17,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Session, SessionService} from '@inception/ngx-inception/core';
-import {Tenant} from '@inception/ngx-inception/security';
+import {Session, SessionService} from 'ngx-inception/core';
+import {Tenant} from 'ngx-inception/security';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime, first, map, startWith} from 'rxjs/operators';
 

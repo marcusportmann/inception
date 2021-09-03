@@ -22,7 +22,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {
   AccessDeniedError, AdminContainerView, BackNavigation, ConfirmationDialogComponent, DialogService,
   Error, InvalidArgumentError, ServiceUnavailableError, SpinnerService
-} from '@inception/ngx-inception/core';
+} from 'ngx-inception/core';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {finalize, first} from 'rxjs/operators';
 import {GroupRole} from '../services/group-role';

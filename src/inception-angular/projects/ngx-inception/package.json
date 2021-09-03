@@ -1,6 +1,14 @@
 {
-  "name": "@inception/ngx-inception",
+  "name": "ngx-inception",
   "version": "1.0.0-SNAPSHOT",
+  "description": "Inception Framework Angular Library",
+  "homepage": "https://github.com/marcusportmann/inception",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Marcus Portmann",
+    "email": "marcus@mmp.guru",
+    "url": "https://github.com/marcusportmann"
+  },
   "peerDependencies": {
     "@angular/animations": "~12.2.0",
     "@angular/cdk": "~12.2.0",

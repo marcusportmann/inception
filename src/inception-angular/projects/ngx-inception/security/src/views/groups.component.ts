@@ -24,7 +24,7 @@ import {
   AccessDeniedError, AdminContainerView, ConfirmationDialogComponent, DialogService, Error,
   InvalidArgumentError, ServiceUnavailableError, Session, SessionService, SortDirection,
   SpinnerService, TableFilterComponent
-} from '@inception/ngx-inception/core';
+} from 'ngx-inception/core';
 import {BehaviorSubject, merge, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
 import {finalize, first, map, tap} from 'rxjs/operators';
 import {GroupDatasource} from '../services/group.datasource';

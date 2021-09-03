@@ -21,7 +21,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {
   AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
   ServiceUnavailableError, SpinnerService
-} from '@inception/ngx-inception/core';
+} from 'ngx-inception/core';
 import {finalize, first} from 'rxjs/operators';
 import {Job} from '../services/job';
 import {JobParameter} from '../services/job-parameter';

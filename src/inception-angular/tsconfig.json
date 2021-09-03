@@ -12,11 +12,11 @@
     "declaration": false,
     "downlevelIteration": true,
     "paths": {
-      "@inception/ngx-inception": [
-        "dist/@inception/ngx-inception"
+      "ngx-inception": [
+        "dist/ngx-inception"
       ],
-      "@inception/ngx-inception/*": [
-        "dist/@inception/ngx-inception/*"
+      "ngx-inception/*": [
+        "dist/ngx-inception/*"
       ]
     },
     "experimentalDecorators": true,
