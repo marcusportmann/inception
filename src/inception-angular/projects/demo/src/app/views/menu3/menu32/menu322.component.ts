@@ -25,7 +25,13 @@ import {Observable} from 'rxjs';
  * @author Marcus Portmann
  */
 @Component({
-  template: `Menu 3.2.2`
+  template: `
+    <mat-card class="flex-grow-1">
+      <mat-card-content>
+        Menu 3.2.2
+      </mat-card-content>
+    </mat-card>
+  `
 })
 export class Menu322Component extends AdminContainerView {
 
@@ -42,7 +48,7 @@ export class Menu322Component extends AdminContainerView {
    * Tne back navigation for admin container view.
    */
   get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@demo_menu322_back_navigation:Menu 3.1.1`,
+    return new BackNavigation($localize`:@@demo_menu322_back_navigation:Menu 3.2.1`,
       ['../menu321'], {relativeTo: this.activatedRoute});
   }
 

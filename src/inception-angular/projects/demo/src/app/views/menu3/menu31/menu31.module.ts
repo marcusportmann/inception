@@ -16,8 +16,8 @@
 
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-
 import {RouterModule, Routes} from '@angular/router';
+import {CoreModule} from '@inception/ngx-inception/core';
 import {Menu311Component} from './menu311.component';
 import {Menu312Component} from './menu312.component';
 
@@ -46,9 +46,12 @@ const routes: Routes = [{
  * @author Marcus Portmann
  */
 @NgModule({
-  imports: [CommonModule,
+  imports: [
+    // Angular modules
+    CommonModule, RouterModule.forChild(routes),
 
-    RouterModule.forChild(routes)
+    // Inception modules
+    CoreModule
   ],
   declarations: [Menu311Component, Menu312Component]
 })

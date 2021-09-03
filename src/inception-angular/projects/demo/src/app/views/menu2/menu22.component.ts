@@ -15,7 +15,6 @@
  */
 
 import {Component} from '@angular/core';
-import {PartyService} from '@inception/ngx-inception/party';
 
 /**
  * The Menu22Component class implements the menu 2.2 component.
@@ -26,22 +25,13 @@ import {PartyService} from '@inception/ngx-inception/party';
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content>
-        <div class="row">
-          <div class="col m-1">
-            <button mat-flat-button color="primary" (click)="doIt()">Do It</button>
-          </div>
-        </div>
+        Menu 2.2
       </mat-card-content>
     </mat-card>
   `
 })
 export class Menu22Component {
 
-  constructor(private partyService: PartyService) {
+  constructor() {
   }
-
-  doIt(): void {
-    this.partyService.doIt();
-  }
-
 }

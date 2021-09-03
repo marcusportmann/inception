@@ -16,8 +16,8 @@
 
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-
 import {RouterModule, Routes} from '@angular/router';
+import {CoreModule} from '@inception/ngx-inception/core';
 import {Menu321TitleResolver} from './menu321-title-resolver';
 import {Menu321Component} from './menu321.component';
 import {Menu322TitleResolver} from './menu322-title-resolver';
@@ -48,9 +48,12 @@ const routes: Routes = [{
  * @author Marcus Portmann
  */
 @NgModule({
-  imports: [CommonModule,
+  imports: [
+    // Angular modules
+    CommonModule, RouterModule.forChild(routes),
 
-    RouterModule.forChild(routes)
+    // Inception modules
+    CoreModule
   ],
   declarations: [Menu321Component, Menu322Component],
   providers: [Menu321TitleResolver, Menu322TitleResolver]

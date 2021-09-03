@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-import {HttpClient} from '@angular/common/http';
 import {Component} from '@angular/core';
-import {Router} from '@angular/router';
-import {Error} from '@inception/ngx-inception/core';
-import {SpinnerService} from '@inception/ngx-inception/core';
-import {PartyService} from '@inception/ngx-inception/party';
 
 /**
  * The Menu21Component class implements the menu 2.1 component.
@@ -30,67 +25,13 @@ import {PartyService} from '@inception/ngx-inception/party';
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content>
-        <div class="row">
-          <div class="col m-1">
-            <button mat-flat-button color="primary" (click)="testErrorReporting()">Test Error
-              Reporting
-            </button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col m-1">
-            <button mat-flat-button color="primary" (click)="testSpinner()">Test Spinner</button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col m-1">
-            <button mat-flat-button color="primary" (click)="testExceptionHandling()">Test Exception
-              Handling
-            </button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col m-1">
-            <button mat-flat-button color="primary" (click)="doIt()">Do It</button>
-          </div>
-        </div>
+        Menu 2.1
       </mat-card-content>
     </mat-card>
   `
 })
 export class Menu21Component {
 
-  constructor(private router: Router, private httpClient: HttpClient, private partyService: PartyService, private spinnerService: SpinnerService) {
-  }
-
-  doIt(): void {
-    this.partyService.doIt();
-  }
-
-  testErrorReporting(): void {
-
-    const error: Error = new Error('Testing 1.. 2.. 3..');
-
-    this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-  }
-
-  testExceptionHandling(): void {
-    this.httpClient.get('http://localhost:8080/api/test/test-exception-handling', {reportProgress: true}).subscribe(
-      (next: any) => {
-        console.log('next: ', next)
-      },
-      (error: any) => {
-        console.log('error: ', error)
-      },
-      () => console.log('complete')
-    );
-  }
-
-  testSpinner(): void {
-    this.spinnerService.showSpinner();
-
-    setTimeout(() => {
-      this.spinnerService.hideSpinner();
-    }, 600000);
+  constructor() {
   }
 }

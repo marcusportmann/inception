@@ -23,7 +23,13 @@ import {TitleBarService} from '@inception/ngx-inception/core';
  * @author Marcus Portmann
  */
 @Component({
-  template: `Menu 3.2.1`
+  template: `
+    <mat-card class="flex-grow-1">
+      <mat-card-content>
+        Menu 3.2.1
+      </mat-card-content>
+    </mat-card>
+  `
 })
 export class Menu321Component implements AfterViewInit {
 

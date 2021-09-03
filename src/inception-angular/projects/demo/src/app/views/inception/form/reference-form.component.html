@@ -5,7 +5,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Country</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('country')" required="true" [matAutocomplete]="countryAutocomplete">
+            <input type="text" matInput formControlName="country" autocompleteSelectionRequired required="true" [matAutocomplete]="countryAutocomplete">
             <mat-autocomplete autoActiveFirstOption #countryAutocomplete="matAutocomplete" [displayWith]="displayCountry">
               <mat-option *ngFor="let country of filteredCountries$ | async" [value]="country">
                 {{country.shortName}}
@@ -21,7 +21,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Language</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('language')" required="true" [matAutocomplete]="languageAutocomplete">
+            <input type="text" matInput formControlName="language" autocompleteSelectionRequired required="true" [matAutocomplete]="languageAutocomplete">
             <mat-autocomplete autoActiveFirstOption #languageAutocomplete="matAutocomplete" [displayWith]="displayLanguage">
               <mat-option *ngFor="let language of filteredLanguages$ | async" [value]="language">
                 {{language.name}}
@@ -37,7 +37,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Region</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('region')" required="true" [matAutocomplete]="regionAutocomplete">
+            <input type="text" matInput formControlName="region" autocompleteSelectionRequired required="true" [matAutocomplete]="regionAutocomplete">
             <mat-autocomplete autoActiveFirstOption #regionAutocomplete="matAutocomplete" [displayWith]="displayRegion">
               <mat-option *ngFor="let region of filteredRegions$ | async" [value]="region">
                 {{region.name}}
@@ -50,7 +50,7 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-card-actions class="align-right">
+    <mat-card-actions align="end">
       <button type="button" mat-flat-button color="link">Cancel</button>
       <button type="button" mat-flat-button color="primary" (click)="ok()">OK</button>
     </mat-card-actions>

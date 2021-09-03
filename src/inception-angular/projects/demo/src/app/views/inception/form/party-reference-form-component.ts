@@ -564,7 +564,7 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     console.log('Residence Permit Type = ', this.partyReferenceForm.get('residencePermitType')!.value);
     console.log('Residency Status = ', this.partyReferenceForm.get('residencyStatus')!.value);
     console.log('Residential Type = ', this.partyReferenceForm.get('residentialType')!.value);
-    console.log('Source Of Funds = ', this.partyReferenceForm.get('sourceOfFunds')!.value);
+    console.log('Source Of Funds = ', this.partyReferenceForm.get('sourceOfFundsType')!.value);
     console.log('Tax Number Type = ', this.partyReferenceForm.get('taxNumberType')!.value);
     console.log('Title = ', this.partyReferenceForm.get('title')!.value);
   }

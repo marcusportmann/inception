@@ -5,7 +5,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Contact Mechanism Role</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('contactMechanismRole')" required="true" [matAutocomplete]="contactMechanismRoleAutocomplete">
+            <input type="text" matInput formControlName="contactMechanismRole" autocompleteSelectionRequired required="true" [matAutocomplete]="contactMechanismRoleAutocomplete">
             <mat-autocomplete autoActiveFirstOption #contactMechanismRoleAutocomplete="matAutocomplete" [displayWith]="displayContactMechanismRole">
               <mat-option *ngFor="let contactMechanismRole of filteredContactMechanismRoles$ | async" [value]="contactMechanismRole">
                 {{contactMechanismRole.name}}
@@ -21,7 +21,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Contact Mechanism Type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('contactMechanismType')" required="true" [matAutocomplete]="contactMechanismTypeAutocomplete">
+            <input type="text" matInput formControlName="contactMechanismType" autocompleteSelectionRequired required="true" [matAutocomplete]="contactMechanismTypeAutocomplete">
             <mat-autocomplete autoActiveFirstOption #contactMechanismTypeAutocomplete="matAutocomplete" [displayWith]="displayContactMechanismType">
               <mat-option *ngFor="let contactMechanismType of filteredContactMechanismTypes$ | async" [value]="contactMechanismType">
                 {{contactMechanismType.name}}
@@ -37,7 +37,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Employment status</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('employmentStatus')" required="true" [matAutocomplete]="employmentStatusAutocomplete">
+            <input type="text" matInput formControlName="employmentStatus" autocompleteSelectionRequired required="true" [matAutocomplete]="employmentStatusAutocomplete">
             <mat-autocomplete autoActiveFirstOption #employmentStatusAutocomplete="matAutocomplete" [displayWith]="displayEmploymentStatus">
               <mat-option *ngFor="let employmentStatus of filteredEmploymentStatuses$ | async" [value]="employmentStatus">
                 {{employmentStatus.name}}
@@ -53,7 +53,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Employment type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('employmentType')" required="true" [matAutocomplete]="employmentTypeAutocomplete">
+            <input type="text" matInput formControlName="employmentType" autocompleteSelectionRequired required="true" [matAutocomplete]="employmentTypeAutocomplete">
             <mat-autocomplete autoActiveFirstOption #employmentTypeAutocomplete="matAutocomplete" [displayWith]="displayEmploymentType">
               <mat-option *ngFor="let employmentType of filteredEmploymentTypes$ | async" [value]="employmentType">
                 {{employmentType.name}}
@@ -69,7 +69,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Gender</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('gender')" required="true" [matAutocomplete]="genderAutocomplete">
+            <input type="text" matInput formControlName="gender" autocompleteSelectionRequired required="true" [matAutocomplete]="genderAutocomplete">
             <mat-autocomplete autoActiveFirstOption #genderAutocomplete="matAutocomplete" [displayWith]="displayGender">
               <mat-option *ngFor="let gender of filteredGenders$ | async" [value]="gender">
                 {{gender.name}}
@@ -85,7 +85,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Identity document type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('identityDocumentType')" required="true" [matAutocomplete]="identityDocumentTypeAutocomplete">
+            <input type="text" matInput formControlName="identityDocumentType" autocompleteSelectionRequired required="true" [matAutocomplete]="identityDocumentTypeAutocomplete">
             <mat-autocomplete autoActiveFirstOption #identityDocumentTypeAutocomplete="matAutocomplete" [displayWith]="displayIdentityDocumentType">
               <mat-option *ngFor="let identityDocumentType of filteredIdentityDocumentTypes$ | async" [value]="identityDocumentType">
                 {{identityDocumentType.name}}
@@ -101,7 +101,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Marital status</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('maritalStatus')" required="true" [matAutocomplete]="maritalStatusAutocomplete">
+            <input type="text" matInput formControlName="maritalStatus" autocompleteSelectionRequired required="true" [matAutocomplete]="maritalStatusAutocomplete">
             <mat-autocomplete autoActiveFirstOption #maritalStatusAutocomplete="matAutocomplete" [displayWith]="displayMaritalStatus">
               <mat-option *ngFor="let maritalStatus of filteredMaritalStatuses$ | async" [value]="maritalStatus">
                 {{maritalStatus.name}}
@@ -117,7 +117,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Marriage type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('marriageType')" required="true" [matAutocomplete]="marriageTypeAutocomplete">
+            <input type="text" matInput formControlName="marriageType" autocompleteSelectionRequired required="true" [matAutocomplete]="marriageTypeAutocomplete">
             <mat-autocomplete autoActiveFirstOption #marriageTypeAutocomplete="matAutocomplete" [displayWith]="displayMarriageType">
               <mat-option *ngFor="let marriageType of filteredMarriageTypes$ | async" [value]="marriageType">
                 {{marriageType.name}}
@@ -133,7 +133,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Next of kin type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('nextOfKinType')" required="true" [matAutocomplete]="nextOfKinTypeAutocomplete">
+            <input type="text" matInput formControlName="nextOfKinType" autocompleteSelectionRequired required="true" [matAutocomplete]="nextOfKinTypeAutocomplete">
             <mat-autocomplete autoActiveFirstOption #nextOfKinTypeAutocomplete="matAutocomplete" [displayWith]="displayNextOfKinType">
               <mat-option *ngFor="let nextOfKinType of filteredNextOfKinTypes$ | async" [value]="nextOfKinType">
                 {{nextOfKinType.name}}
@@ -149,7 +149,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Occupation</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('occupation')" required="true" [matAutocomplete]="occupationAutocomplete">
+            <input type="text" matInput formControlName="occupation" autocompleteSelectionRequired required="true" [matAutocomplete]="occupationAutocomplete">
             <mat-autocomplete autoActiveFirstOption #occupationAutocomplete="matAutocomplete" [displayWith]="displayOccupation">
               <mat-option *ngFor="let occupation of filteredOccupations$ | async" [value]="occupation">
                 {{occupation.name}}
@@ -165,7 +165,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Race</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('race')" required="true" [matAutocomplete]="raceAutocomplete">
+            <input type="text" matInput formControlName="race" autocompleteSelectionRequired required="true" [matAutocomplete]="raceAutocomplete">
             <mat-autocomplete autoActiveFirstOption #raceAutocomplete="matAutocomplete" [displayWith]="displayRace">
               <mat-option *ngFor="let race of filteredRaces$ | async" [value]="race">
                 {{race.name}}
@@ -181,7 +181,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Residence permit type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('residencePermitType')" required="true" [matAutocomplete]="residencePermitTypeAutocomplete">
+            <input type="text" matInput formControlName="residencePermitType" autocompleteSelectionRequired required="true" [matAutocomplete]="residencePermitTypeAutocomplete">
             <mat-autocomplete autoActiveFirstOption #residencePermitTypeAutocomplete="matAutocomplete" [displayWith]="displayResidencePermitType">
               <mat-option *ngFor="let residencePermitType of filteredResidencePermitTypes$ | async" [value]="residencePermitType">
                 {{residencePermitType.name}}
@@ -197,7 +197,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Residency status</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('residencyStatus')" required="true" [matAutocomplete]="residencyStatusAutocomplete">
+            <input type="text" matInput formControlName="residencyStatus" autocompleteSelectionRequired required="true" [matAutocomplete]="residencyStatusAutocomplete">
             <mat-autocomplete autoActiveFirstOption #residencyStatusAutocomplete="matAutocomplete" [displayWith]="displayResidencyStatus">
               <mat-option *ngFor="let residencyStatus of filteredResidencyStatuses$ | async" [value]="residencyStatus">
                 {{residencyStatus.name}}
@@ -213,7 +213,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Residential type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('residentialType')" required="true" [matAutocomplete]="residentialTypeAutocomplete">
+            <input type="text" matInput formControlName="residentialType" autocompleteSelectionRequired required="true" [matAutocomplete]="residentialTypeAutocomplete">
             <mat-autocomplete autoActiveFirstOption #residentialTypeAutocomplete="matAutocomplete" [displayWith]="displayResidentialType">
               <mat-option *ngFor="let residentialType of filteredResidentialTypes$ | async" [value]="residentialType">
                 {{residentialType.name}}
@@ -229,7 +229,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Source of funds type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('sourceOfFundsType')" required="true" [matAutocomplete]="sourceOfFundsTypeAutocomplete">
+            <input type="text" matInput formControlName="sourceOfFundsType" autocompleteSelectionRequired required="true" [matAutocomplete]="sourceOfFundsTypeAutocomplete">
             <mat-autocomplete autoActiveFirstOption #sourceOfFundsTypeAutocomplete="matAutocomplete" [displayWith]="displaySourceOfFundsType">
               <mat-option *ngFor="let sourceOfFundsType of filteredSourceOfFundsTypes$ | async" [value]="sourceOfFundsType">
                 {{sourceOfFundsType.name}}
@@ -245,7 +245,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Tax number type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('taxNumberType')" required="true" [matAutocomplete]="taxNumberTypeAutocomplete">
+            <input type="text" matInput formControlName="taxNumberType" autocompleteSelectionRequired required="true" [matAutocomplete]="taxNumberTypeAutocomplete">
             <mat-autocomplete autoActiveFirstOption #taxNumberTypeAutocomplete="matAutocomplete" [displayWith]="displayTaxNumberType">
               <mat-option *ngFor="let taxNumberType of filteredTaxNumberTypes$ | async" [value]="taxNumberType">
                 {{taxNumberType.name}}
@@ -261,7 +261,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Title</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="partyReferenceForm.get('title')" required="true" [matAutocomplete]="titleAutocomplete">
+            <input type="text" matInput formControlName="title" autocompleteSelectionRequired required="true" [matAutocomplete]="titleAutocomplete">
             <mat-autocomplete autoActiveFirstOption #titleAutocomplete="matAutocomplete" [displayWith]="displayTitle">
               <mat-option *ngFor="let title of filteredTitles$ | async" [value]="title">
                 {{title.name}}
@@ -274,7 +274,7 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-card-actions class="align-right">
+    <mat-card-actions align="end">
       <button type="button" mat-flat-button color="link">Cancel</button>
       <button type="button" mat-flat-button color="primary" (click)="ok()">OK</button>
     </mat-card-actions>
