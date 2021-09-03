@@ -11,6 +11,12 @@
 
   <packaging>pom</packaging>
 
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.5.4</version>
+  </parent>
+
   <repositories>
     <!--
     <repository>
@@ -60,25 +66,37 @@
       </snapshots>
     </pluginRepository>
     -->
+    <!--
     <pluginRepository>
       <id>spring-milestones</id>
       <name>Spring Milestones</name>
       <url>https://repo.spring.io/milestone</url>
     </pluginRepository>
+    -->
   </pluginRepositories>
 
-  <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.5.4</version>
-  </parent>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <scm>
+    <connection>scm:git:git://github.com/marcusportmann/inception.git</connection>
+    <developerConnection>scm:git:git@github.com:marcusportmann/inception.git</developerConnection>
+    <url>https://github.com/marcusportmann/inception</url>
+    <tag>HEAD</tag>
+  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>11</java.version>
-
-    <inception.version>1.0.0-SNAPSHOT</inception.version>
 
     <agroal-pool.version>1.12</agroal-pool.version>
     <avro.version>1.10.2</avro.version>
@@ -262,249 +280,247 @@
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-application</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-audit</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-bmi</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-cache</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-codes</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-codes-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-codes-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-config</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-config-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-config-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-core</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-error</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-error-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-error-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-jpa</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-json</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-jta</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-kafka</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-mail</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-mail-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-mail-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-messaging</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-messaging-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-messaging-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-oauth2-authorization-server</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-oauth2-resource-server</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-party</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-party-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-party-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-reference</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-reference-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-reference-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-reporting</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-reporting-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-reporting-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-scheduler</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-scheduler-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-scheduler-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-security</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-security-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-security-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-sms</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-sms-api</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-sms-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-test</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
-      <!--
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-transaction</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      -->
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-ws</artifactId>
-        <version>${inception.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <modules>
+    <!-- Demo Modules -->
+    <module>demo</module>
+    <module>demo-client</module>
+    <module>demo-basic</module>
+  
     <!-- Inception Modules -->
     <module>inception-api</module>
     <module>inception-application</module>
@@ -552,14 +568,7 @@
     <module>inception-sms-api</module>
     <module>inception-sms-ws</module>
     <module>inception-test</module>
-    <!-- <module>inception-transaction</module> -->
     <module>inception-ws</module>
-
-    <!-- Demo Modules -->
-    <module>demo</module>
-    <module>demo-client</module>
-    <module>demo-basic</module>
-
   </modules>
 
   <build>
@@ -615,8 +624,74 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Plugins required to publish to Maven Central -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <localCheckout>true</localCheckout>
+          <pushChanges>false</pushChanges>
+          <mavenExecutorId>forked-path</mavenExecutorId>
+          <arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <stagingRepository>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</stagingRepository>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-gitexe</artifactId>
+            <version>1.9.5</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+        <executions>
+          <execution>
+            <id>default-deploy</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>deploy</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <!-- GPG Signature on release -->
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
 

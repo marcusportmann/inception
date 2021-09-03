@@ -16,7 +16,7 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
-import {INCEPTION_CONFIG, InceptionConfig} from 'ngx-inception/core';
+import {INCEPTION_CONFIG, InceptionConfig} from '@inception/ngx-inception/core';
 
 /**
  * The Party Service implementation.s

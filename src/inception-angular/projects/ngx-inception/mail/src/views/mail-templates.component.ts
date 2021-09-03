@@ -23,7 +23,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {
   AccessDeniedError, AdminContainerView, ConfirmationDialogComponent, DialogService, Error,
   InvalidArgumentError, ServiceUnavailableError, SpinnerService
-} from 'ngx-inception/core';
+} from '@inception/ngx-inception/core';
 import {finalize, first} from 'rxjs/operators';
 import {MailTemplateContentType} from '../services/mail-template-content-type';
 import {MailTemplateSummary} from '../services/mail-template-summary';

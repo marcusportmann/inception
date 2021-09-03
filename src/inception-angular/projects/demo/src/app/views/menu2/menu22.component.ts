@@ -15,7 +15,7 @@
  */
 
 import {Component} from '@angular/core';
-import {PartyService} from 'ngx-inception/party';
+import {PartyService} from '@inception/ngx-inception/party';
 
 /**
  * The Menu22Component class implements the menu 2.2 component.

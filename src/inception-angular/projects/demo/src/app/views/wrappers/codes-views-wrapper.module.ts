@@ -15,7 +15,7 @@
  */
 
 import {NgModule} from '@angular/core';
-import {CodesViewsModule} from 'ngx-inception/codes';
+import {CodesViewsModule} from '@inception/ngx-inception/codes';
 
 @NgModule({
   imports: [CodesViewsModule]

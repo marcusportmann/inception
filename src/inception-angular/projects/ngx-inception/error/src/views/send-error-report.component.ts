@@ -20,7 +20,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   DialogService, Error, InformationDialogComponent, ProblemDetails, SpinnerService
-} from 'ngx-inception/core';
+} from '@inception/ngx-inception/core';
 import {first, map} from 'rxjs/operators';
 import {ErrorService} from '../services/error.service';
 

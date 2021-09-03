@@ -15,7 +15,7 @@
  */
 
 import {NgModule} from '@angular/core';
-import {LoginViewsModule} from 'ngx-inception/login';
+import {LoginViewsModule} from '@inception/ngx-inception/login';
 
 @NgModule({
   imports: [LoginViewsModule]

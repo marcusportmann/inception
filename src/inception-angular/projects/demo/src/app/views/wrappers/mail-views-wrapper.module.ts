@@ -15,7 +15,7 @@
  */
 
 import {NgModule} from '@angular/core';
-import {MailViewsModule} from 'ngx-inception/mail';
+import {MailViewsModule} from '@inception/ngx-inception/mail';
 
 @NgModule({
   imports: [MailViewsModule]

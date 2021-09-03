@@ -22,7 +22,7 @@ import {
   IdentityDocumentType, MaritalStatus, MarriageType, NextOfKinType, Occupation,
   PartyReferenceService, Race, ResidencePermitType, ResidencyStatus, ResidentialType,
   SourceOfFundsType, TaxNumberType, Title
-} from "ngx-inception/party";
+} from '@inception/ngx-inception/party';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime, first, map, startWith} from 'rxjs/operators';
 

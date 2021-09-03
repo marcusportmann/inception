@@ -15,7 +15,7 @@
  */
 
 import {NgModule} from '@angular/core';
-import {ReportingViewsModule} from 'ngx-inception/reporting';
+import {ReportingViewsModule} from '@inception/ngx-inception/reporting';
 
 @NgModule({
   imports: [ReportingViewsModule]

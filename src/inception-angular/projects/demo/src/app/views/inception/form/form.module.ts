@@ -18,7 +18,7 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
-import {CoreModule} from 'ngx-inception/core';
+import {CoreModule} from '@inception/ngx-inception/core';
 import {ExampleFormComponent} from './example-form.component';
 import {PartyReferenceFormComponent} from './party-reference-form-component';
 import {ReferenceFormComponent} from './reference-form.component';

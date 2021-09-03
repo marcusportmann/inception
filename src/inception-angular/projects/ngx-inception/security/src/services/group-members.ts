@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {SortDirection} from 'ngx-inception/core';
+import {SortDirection} from '@inception/ngx-inception/core';
 import {GroupMember} from './group-member';
 
 /**

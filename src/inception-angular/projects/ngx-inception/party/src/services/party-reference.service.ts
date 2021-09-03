@@ -18,26 +18,26 @@ import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, ServiceUnavailableError
-} from 'ngx-inception/core';
+} from '@inception/ngx-inception/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {ContactMechanismRole} from "./contact-mechanism-role";
-import {ContactMechanismType} from "./contact-mechanism-type";
-import {EmploymentStatus} from "./employment-status";
-import {EmploymentType} from "./employment-type";
-import {Gender} from "./gender";
-import {IdentityDocumentType} from "./identity-document-type";
-import {MaritalStatus} from "./marital-status";
-import {MarriageType} from "./marriage-type";
-import {NextOfKinType} from "./next-of-kin-type";
-import {Occupation} from "./occupation";
-import {Race} from "./race";
-import {ResidencePermitType} from "./residence-permit-type";
-import {ResidencyStatus} from "./residency-status";
-import {ResidentialType} from "./residential-type";
-import {SourceOfFundsType} from "./source-of-funds-type";
-import {TaxNumberType} from "./tax-number-type";
-import {Title} from "./title";
+import {ContactMechanismRole} from './contact-mechanism-role';
+import {ContactMechanismType} from './contact-mechanism-type';
+import {EmploymentStatus} from './employment-status';
+import {EmploymentType} from './employment-type';
+import {Gender} from './gender';
+import {IdentityDocumentType} from './identity-document-type';
+import {MaritalStatus} from './marital-status';
+import {MarriageType} from './marriage-type';
+import {NextOfKinType} from './next-of-kin-type';
+import {Occupation} from './occupation';
+import {Race} from './race';
+import {ResidencePermitType} from './residence-permit-type';
+import {ResidencyStatus} from './residency-status';
+import {ResidentialType} from './residential-type';
+import {SourceOfFundsType} from './source-of-funds-type';
+import {TaxNumberType} from './tax-number-type';
+import {Title} from './title';
 
 /**
  * The Party Reference Service implementation.

@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-import {HttpClient} from "@angular/common/http";
+import {HttpClient} from '@angular/common/http';
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {Error} from 'ngx-inception/core';
-import {SpinnerService} from 'ngx-inception/core';
-import {PartyService} from "ngx-inception/party";
-
-
-//import PartyService = party.PartyService;
-
-
-// import {party
-// import PartyService = party.PartyService;
-//
-// .PartyService} from "ngx-inception";
-//import {PartyService} from "../../../../../../dist/ngx-inception/lib/party/services/party.service";
+import {Error} from '@inception/ngx-inception/core';
+import {SpinnerService} from '@inception/ngx-inception/core';
+import {PartyService} from '@inception/ngx-inception/party';
 
 /**
  * The Menu21Component class implements the menu 2.1 component.

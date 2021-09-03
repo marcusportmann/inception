@@ -28,7 +28,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {
   CoreModule, InceptionAppModule, InceptionConfig
-} from 'ngx-inception/core';
+} from '@inception/ngx-inception/core';
 
 
 import {
@@ -36,7 +36,7 @@ import {
 
   NavigationBadge, NavigationItem,
   NavigationTitle
-} from 'ngx-inception/core';
+} from '@inception/ngx-inception/core';
 
 
 
