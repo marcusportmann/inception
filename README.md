@@ -614,8 +614,7 @@ Complete the following steps to create a new application based on the Inception 
       npm install --save @angular/material-moment-adapter@12
       npm install --save @auth0/angular-jwt@5
       npm install --save @fortawesome/fontawesome-free@5
-      npm install --save bootstrap@4
-      npm install --save jquery@3
+      npm install --save bootstrap@4      
       npm install --save moment@2
       npm install --save ngx-perfect-scrollbar@10
       npm install --save string-template@1
@@ -628,7 +627,7 @@ Complete the following steps to create a new application based on the Inception 
    6. Execute the following command under the *src/main/frontend* directory to install the
       *ngx-inception* library dependency.
       ```
-      npm install --save ngx-inception@1.0.0-SNAPSHOT
+      npm install --save ngx-inception@1.0
       ```
    7. Add the path mapping for the ngx-inception library to the *src/main/frontend/tsconfig.app.json* file.
       ```
