@@ -68,6 +68,9 @@ public class ValidAssociationValidator
 
       return isValid;
     } else {
+
+
+
       return true;
     }
   }

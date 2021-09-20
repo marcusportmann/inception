@@ -77,6 +77,18 @@ public interface IPartyService {
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException;
 
   /**
+   * Delete the association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws AssociationNotFoundException if the association could not be found
+   * @throws ServiceUnavailableException if the association could not be deleted
+   */
+  void deleteAssociation(UUID tenantId, UUID associationId)
+      throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException;
+
+  /**
    * Delete the organization.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
@@ -111,6 +123,19 @@ public interface IPartyService {
    */
   void deletePerson(UUID tenantId, UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @return the association
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws AssociationNotFoundException if the association could not be found
+   * @throws ServiceUnavailableException if the association could not be retrieved
+   */
+  Association getAssociation(UUID tenantId, UUID associationId)
+      throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the organization.

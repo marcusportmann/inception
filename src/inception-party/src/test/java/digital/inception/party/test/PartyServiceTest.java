@@ -24,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.party.Association;
+import digital.inception.party.AssociationProperty;
 import digital.inception.party.Attribute;
 import digital.inception.party.Consent;
 import digital.inception.party.ContactMechanism;
@@ -539,6 +541,36 @@ public class PartyServiceTest {
         1,
         organizationConstraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid organization");
+  }
+
+  /**
+   * Test the association functionality.
+   */
+  @Test
+  public void associationTest() throws Exception {
+    Person person = getTestCompletePersonDetails(true);
+
+    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    Organization organization = getTestOrganizationDetails();
+
+    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    Association association = new Association(IPartyService.DEFAULT_TENANT_ID,  "company_shareholder", organization.getId(), person.getId(), LocalDate.now());
+
+    association.addProperty(new AssociationProperty("shareholding", new BigDecimal("50.1")));
+
+    partyService.createAssociation(IPartyService.DEFAULT_TENANT_ID, association);
+
+    Association retrievedAssociation = partyService.getAssociation(IPartyService.DEFAULT_TENANT_ID, association.getId());
+
+    compareAssociations(association, retrievedAssociation);
+
+    partyService.deleteAssociation(IPartyService.DEFAULT_TENANT_ID, association.getId());
+
+    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+
+    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the contactMechanism functionality. */
@@ -4422,5 +4454,61 @@ public class PartyServiceTest {
         taxNumber1.getType(),
         taxNumber2.getType(),
         "The type values for the tax numbers do not match");
+  }
+
+  private void compareAssociations(Association association1, Association association2) {
+    assertEquals(
+        association1.getEffectiveFrom(),
+        association2.getEffectiveFrom(),
+        "The effective from values for the associations do not match");
+    assertEquals(
+        association1.getEffectiveTo(),
+        association2.getEffectiveTo(),
+        "The effective to values for the associations do not match");
+    assertEquals(
+        association1.getFirstPartyId(),
+        association2.getFirstPartyId(),
+        "The first party ID values for the associations do not match");
+    assertEquals(
+        association1.getId(),
+        association2.getId(),
+        "The ID values for the associations do not match");
+    assertEquals(
+        association1.getSecondPartyId(),
+        association2.getSecondPartyId(),
+        "The second party ID values for the associations do not match");
+    assertEquals(
+        association1.getTenantId(),
+        association2.getTenantId(),
+        "The tenant ID values for the associations do not match");
+    assertEquals(
+        association1.getType(),
+        association2.getType(),
+        "The type values for the associations do not match");
+
+    assertEquals(
+        association1.getProperties().size(),
+        association2.getProperties().size(),
+        "The number of properties for the associations do not match");
+
+    for (AssociationProperty association1Property : association1.getProperties()) {
+      boolean foundAssociationProperty = false;
+
+      for (AssociationProperty association2Property : association2.getProperties()) {
+        if (association1Property.getType().equals(association2Property.getType())) {
+
+          //compareAssociationProperties(association1Property, association2Property);
+
+          foundAssociationProperty = true;
+        }
+      }
+
+      if (!foundAssociationProperty) {
+        fail(
+            "Failed to find the association property ("
+                + association1Property.getType()
+                + ")");
+      }
+    }
   }
 }

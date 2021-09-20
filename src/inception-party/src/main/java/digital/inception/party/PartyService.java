@@ -167,6 +167,18 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
+  @CacheEvict(cacheNames = "associations", key = "#associationId")
+  public void deleteAssociation(UUID tenantId, UUID associationId)
+      throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
+    if (associationId == null) {
+      throw new InvalidArgumentException("associationId");
+    }
+
+    getDataStore().deleteAssociation(tenantId, associationId);
+  }
+
+  @Override
+  @Transactional
   @CacheEvict(cacheNames = "organizations", key = "#organizationId")
   public void deleteOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
@@ -201,6 +213,17 @@ public class PartyService implements IPartyService {
     }
 
     getDataStore().deletePerson(tenantId, personId);
+  }
+
+  @Override
+  @Cacheable(cacheNames = "associations", key = "#associationId")
+  public Association getAssociation(UUID tenantId, UUID associationId)
+      throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
+    if (associationId == null) {
+      throw new InvalidArgumentException("associationId");
+    }
+
+    return getDataStore().getAssociation(tenantId, associationId);
   }
 
   @Override

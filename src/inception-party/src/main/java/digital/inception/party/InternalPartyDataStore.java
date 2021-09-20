@@ -170,6 +170,28 @@ public class InternalPartyDataStore implements IPartyDataStore {
   }
 
   @Override
+  public void deleteAssociation(UUID tenantId, UUID associationId)
+      throws AssociationNotFoundException, ServiceUnavailableException {
+    try {
+      if (!associationRepository.existsByTenantIdAndId(tenantId, associationId)) {
+        throw new AssociationNotFoundException(tenantId, associationId);
+      }
+
+      associationRepository.deleteByTenantIdAndId(tenantId, associationId);
+    } catch (AssociationNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the association ("
+              + associationId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void deleteOrganization(UUID tenantId, UUID organizationId)
       throws OrganizationNotFoundException, ServiceUnavailableException {
     try {
@@ -222,6 +244,31 @@ public class InternalPartyDataStore implements IPartyDataStore {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to delete the person (" + personId + ") for the tenant (" + tenantId + ")", e);
+    }
+  }
+
+  @Override
+  public Association getAssociation(UUID tenantId, UUID associationId)
+      throws AssociationNotFoundException, ServiceUnavailableException {
+    try {
+      Optional<Association> associationOptional =
+          associationRepository.findByTenantIdAndId(tenantId, associationId);
+
+      if (associationOptional.isPresent()) {
+        return associationOptional.get();
+      } else {
+        throw new AssociationNotFoundException(tenantId, associationId);
+      }
+    } catch (AssociationNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the association ("
+              + associationId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 

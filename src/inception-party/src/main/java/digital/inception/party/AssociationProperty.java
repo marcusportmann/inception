@@ -51,12 +51,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>AssociationProperty</b> class holds the information for an association property for a
+ * The <b>AssociationProperty</b> class holds the information for an association property for an
  * association.
  *
  * @author Marcus Portmann
  */
-@Schema(name = "AssociationProperty", description = "A association property for an association")
+@Schema(name = "AssociationProperty", description = "An association property for an association")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "type",
@@ -82,7 +82,7 @@ import org.springframework.util.StringUtils;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "association propertys")
+@Table(schema = "party", name = "association_properties")
 @IdClass(AssociationPropertyId.class)
 public class AssociationProperty implements Serializable {
 

@@ -18,6 +18,7 @@ package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
@@ -27,19 +28,27 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
@@ -82,6 +91,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Association implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The properties for the association. */
+  @Valid
+  @OneToMany(
+      mappedBy = "association",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<AssociationProperty> properties = new HashSet<>();
 
   /** The date and time the association was created. */
   @JsonIgnore
@@ -240,6 +258,20 @@ public class Association implements Serializable {
   }
 
   /**
+   * Add the property for the association.
+   *
+   * @param property the property
+   */
+  public void addProperty(AssociationProperty property) {
+    properties.removeIf(
+        existingProperty -> Objects.equals(existingProperty.getType(), existingProperty.getType()));
+
+    property.setAssociation(this);
+
+    properties.add(property);
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -310,6 +342,33 @@ public class Association implements Serializable {
   }
 
   /**
+   * Returns the properties for the association.
+   *
+   * @return the properties for the association
+   */
+  @Schema(description = "The properties for the association")
+  @JsonProperty
+  @JsonManagedReference("propertyReference")
+  @XmlElementWrapper(name = "Properties")
+  @XmlElement(name = "Property")
+  public Set<AssociationProperty> getProperties() {
+    return properties;
+  }
+
+  /**
+   * Retrieve the property with the specified type for the association.
+   *
+   * @param type the code for the association property type
+   * @return an Optional containing the property with the specified type for the association or an
+   *     empty Optional if the property could not be found
+   */
+  public Optional<AssociationProperty> getPropertyWithType(String type) {
+    return properties.stream()
+        .filter(attribute -> Objects.equals(attribute.getType(), type))
+        .findFirst();
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) for the second party in the association.
    *
    * @return the Universally Unique Identifier (UUID) for the second party in the association
@@ -348,6 +407,17 @@ public class Association implements Serializable {
   }
 
   /**
+   * Returns whether the association has a property with the specified type.
+   *
+   * @param type the code for the association property type
+   * @return <b>true</b> if the association has a property with the specified type or <b>false</b>
+   *     otherwise
+   */
+  public boolean hasPropertyWithType(String type) {
+    return properties.stream().anyMatch(property -> Objects.equals(property.getType(), type));
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -355,6 +425,15 @@ public class Association implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
+   * Remove the property with the specified type for the association.
+   *
+   * @param type the code for the association property type
+   */
+  public void removePropertyWithType(String type) {
+    properties.removeIf(existingProperty -> Objects.equals(existingProperty.getType(), type));
   }
 
   /**
@@ -392,6 +471,17 @@ public class Association implements Serializable {
    */
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Set the properties for the association.
+   *
+   * @param properties the properties for the association
+   */
+  public void setProperties(Set<AssociationProperty> properties) {
+    properties.forEach(property -> property.setAssociation(this));
+    this.properties.clear();
+    this.properties.addAll(properties);
   }
 
   /**

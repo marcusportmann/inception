@@ -814,10 +814,10 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="associations_first_party_role_fk" baseTableSchemaName="party"
+    <addForeignKeyConstraint constraintName="association_types_first_party_role_fk" baseTableSchemaName="party"
       baseTableName="association_types" baseColumnNames="first_party_role,locale_id" referencedTableSchemaName="party"
       referencedTableName="role_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="associations_second_party_role_fk" baseTableSchemaName="party"
+    <addForeignKeyConstraint constraintName="association_types_second_party_role_fk" baseTableSchemaName="party"
       baseTableName="association_types" baseColumnNames="second_party_role,locale_id" referencedTableSchemaName="party"
       referencedTableName="role_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="association_types_locale_id_ix" schemaName="party" tableName="association_types">
@@ -1165,7 +1165,7 @@
       <column name="type"/>
     </createIndex>
 
-    <createTable schemaName="party" tableName="association_properties" remarks="Associations Properties">
+    <createTable schemaName="party" tableName="association_properties" remarks="Association Properties">
       <column name="created" type="timestamp" remarks="The date and time the association property was created">
         <constraints nullable="false"/>
       </column>
