@@ -86,10 +86,18 @@ public class InternalPartyDataStore implements IPartyDataStore {
 
   @Override
   public Association createAssociation(UUID tenantId, Association association)
-      throws DuplicateAssociationException, ServiceUnavailableException {
+      throws DuplicateAssociationException, PartyNotFoundException, ServiceUnavailableException {
     try {
       if (associationRepository.existsById(association.getId())) {
         throw new DuplicateAssociationException(association.getId());
+      }
+
+      if (!partyRepository.existsByTenantIdAndId(tenantId, association.getFirstPartyId())) {
+        throw new PartyNotFoundException(tenantId, association.getFirstPartyId());
+      }
+
+      if (!partyRepository.existsByTenantIdAndId(tenantId, association.getSecondPartyId())) {
+        throw new PartyNotFoundException(tenantId, association.getSecondPartyId());
       }
 
       // Serialize the association object as JSON
@@ -101,7 +109,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
           new Snapshot(EntityType.ASSOCIATION, association.getId(), associationJson));
 
       return association;
-    } catch (DuplicateAssociationException e) {
+    } catch (DuplicateAssociationException | PartyNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -265,6 +273,63 @@ public class InternalPartyDataStore implements IPartyDataStore {
       throw new ServiceUnavailableException(
           "Failed to retrieve the association ("
               + associationId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public Associations getAssociationsForParty(
+      UUID tenantId,
+      UUID partyId,
+      AssociationSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws PartyNotFoundException, ServiceUnavailableException {
+    try {
+      if (!partyRepository.existsByTenantIdAndId(tenantId, partyId)) {
+        throw new PartyNotFoundException(tenantId, partyId);
+      }
+
+      PageRequest pageRequest;
+
+      if (sortBy == AssociationSortBy.TYPE) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                pageSize,
+                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
+                "type");
+      } else {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                pageSize,
+                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
+                "type");
+      }
+
+      Page<Association> associationPage =
+          associationRepository.findByTenantIdAndPartyId(tenantId, partyId, pageRequest);
+
+      return new Associations(
+          tenantId,
+          partyId,
+          associationPage.toList(),
+          associationPage.getTotalElements(),
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize);
+    } catch (PartyNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the associations for the party ("
+              + partyId
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -535,6 +600,36 @@ public class InternalPartyDataStore implements IPartyDataStore {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the tenant ID for the party (" + partyId + ")", e);
+    }
+  }
+
+  @Override
+  public Association updateAssociation(UUID tenantId, Association association)
+      throws AssociationNotFoundException, ServiceUnavailableException {
+    try {
+      if (!associationRepository.existsByTenantIdAndId(tenantId, association.getId())) {
+        throw new AssociationNotFoundException(tenantId, association.getId());
+      }
+
+      // Serialize the association object as JSON
+      String associationJson = objectMapper.writeValueAsString(association);
+
+      associationRepository.saveAndFlush(association);
+
+      snapshotRepository.saveAndFlush(
+          new Snapshot(EntityType.ASSOCIATION, association.getId(), associationJson));
+
+      return association;
+    } catch (AssociationNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the association ("
+              + association.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 

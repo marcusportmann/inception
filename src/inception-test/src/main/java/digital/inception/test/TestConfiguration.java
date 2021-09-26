@@ -79,7 +79,6 @@ import org.springframework.web.reactive.function.client.WebClient;
  */
 @Configuration
 @EnableAsync
-@EnableCaching
 @EnableConfigurationProperties
 @EnableScheduling
 @EnableTransactionManagement

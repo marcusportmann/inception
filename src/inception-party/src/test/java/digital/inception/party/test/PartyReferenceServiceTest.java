@@ -108,7 +108,7 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getAssociationPropertyTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        2,
+        7,
         retrievedAssociationPropertyTypes.size(),
         "The correct number of association property types was not retrieved");
 
@@ -117,7 +117,7 @@ public class PartyReferenceServiceTest {
             IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        2,
+        7,
         retrievedAssociationPropertyTypes.size(),
         "The correct number of association property types was not retrieved");
 

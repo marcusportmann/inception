@@ -45,10 +45,12 @@ public interface IPartyService {
    * @return the association
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateAssociationException if the association already exists
+   * @throws PartyNotFoundException if one or more parties for the association could not be found
    * @throws ServiceUnavailableException if the association could not be created
    */
   Association createAssociation(UUID tenantId, Association association)
-      throws InvalidArgumentException, DuplicateAssociationException, ServiceUnavailableException;
+      throws InvalidArgumentException, DuplicateAssociationException, PartyNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Create the new organization.
@@ -136,6 +138,29 @@ public interface IPartyService {
    */
   Association getAssociation(UUID tenantId, UUID associationId)
       throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the associations for the party.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param sortBy the optional method used to sort the associations e.g. by type
+   * @param sortDirection the optional sort direction to apply to the associations
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the associations
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the associations could not be retrieved
+   */
+  Associations getAssociationsForParty(
+      UUID tenantId,
+      UUID partyId,
+      AssociationSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the organization.
@@ -278,6 +303,21 @@ public interface IPartyService {
    */
   Optional<UUID> getTenantIdForParty(UUID partyId)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Update the association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param association the association
+   * @return the association
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws AssociationNotFoundException if the association could not be found
+   * @throws PartyNotFoundException if one or more parties for the association could not be found
+   * @throws ServiceUnavailableException if the association could not be updated
+   */
+  Association updateAssociation(UUID tenantId, Association association)
+      throws InvalidArgumentException, AssociationNotFoundException, PartyNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Update the organization.

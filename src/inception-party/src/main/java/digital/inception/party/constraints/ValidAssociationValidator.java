@@ -21,7 +21,10 @@ import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IPartyService;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import javax.validation.ValidationException;
+import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>ValidAssociationValidator</b> class implements the custom constraint validator for
@@ -66,11 +69,32 @@ public class ValidAssociationValidator
     if ((partyService != null) && (partyReferenceService != null)) {
       boolean isValid = true;
 
+      // Disable the default constraint violation
+      constraintValidatorContext.disableDefaultConstraintViolation();
+
+      HibernateConstraintValidatorContext hibernateConstraintValidatorContext =
+          constraintValidatorContext.unwrap(HibernateConstraintValidatorContext.class);
+
+      try {
+        // Validate association type
+        if (StringUtils.hasText(association.getType())
+            && (!partyReferenceService
+            .isValidAssociationType(association.getTenantId(), association.getType()))) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("type", association.getType())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidAssociation.invalidType.message}")
+              .addPropertyNode("type")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+      } catch (Throwable e) {
+        throw new ValidationException("Failed to validate the association", e);
+      }
+
       return isValid;
     } else {
-
-
-
       return true;
     }
   }

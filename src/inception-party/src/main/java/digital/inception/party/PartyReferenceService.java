@@ -1927,8 +1927,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   @Override
-  public boolean isValidAssociationType(
-      UUID tenantId, String partyTypeCode, String associationTypeCode)
+  public boolean isValidAssociationType(UUID tenantId, String associationTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(associationTypeCode)) {
       return false;

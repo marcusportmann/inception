@@ -63,6 +63,10 @@ public class PartyService implements IPartyService {
   @Value("${inception.party.data-store.class-name:digital.inception.party.InternalPartyDataStore}")
   private String dataStoreClassName;
 
+  /** The maximum number of associations that will be returned by the data store. */
+  @Value("${inception.party.max-associations:#{100}}")
+  private int maxAssociations;
+
   /** The maximum number of filtered organizations that will be returned by the data store. */
   @Value("${inception.party.max-filtered-organizations:#{100}}")
   private int maxFilteredOrganizations;
@@ -98,7 +102,12 @@ public class PartyService implements IPartyService {
   @Transactional
   @CachePut(cacheNames = "associations", key = "#association.id")
   public Association createAssociation(UUID tenantId, Association association)
-      throws InvalidArgumentException, DuplicateAssociationException, ServiceUnavailableException {
+      throws InvalidArgumentException, DuplicateAssociationException, PartyNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (association == null) {
       throw new InvalidArgumentException("association");
     }
@@ -123,6 +132,10 @@ public class PartyService implements IPartyService {
   @CachePut(cacheNames = "organizations", key = "#organization.id")
   public Organization createOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (organization == null) {
       throw new InvalidArgumentException("organization");
     }
@@ -147,6 +160,10 @@ public class PartyService implements IPartyService {
   @CachePut(cacheNames = "persons", key = "#person.id")
   public Person createPerson(UUID tenantId, Person person)
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (person == null) {
       throw new InvalidArgumentException("person");
     }
@@ -170,6 +187,10 @@ public class PartyService implements IPartyService {
   @CacheEvict(cacheNames = "associations", key = "#associationId")
   public void deleteAssociation(UUID tenantId, UUID associationId)
       throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (associationId == null) {
       throw new InvalidArgumentException("associationId");
     }
@@ -182,6 +203,10 @@ public class PartyService implements IPartyService {
   @CacheEvict(cacheNames = "organizations", key = "#organizationId")
   public void deleteOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
@@ -196,6 +221,10 @@ public class PartyService implements IPartyService {
       key = "#partyId")
   public void deleteParty(UUID tenantId, UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (partyId == null) {
       throw new InvalidArgumentException("partyId");
     }
@@ -208,6 +237,10 @@ public class PartyService implements IPartyService {
   @CacheEvict(cacheNames = "persons", key = "#personId")
   public void deletePerson(UUID tenantId, UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (personId == null) {
       throw new InvalidArgumentException("personId");
     }
@@ -219,6 +252,10 @@ public class PartyService implements IPartyService {
   @Cacheable(cacheNames = "associations", key = "#associationId")
   public Association getAssociation(UUID tenantId, UUID associationId)
       throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (associationId == null) {
       throw new InvalidArgumentException("associationId");
     }
@@ -227,9 +264,60 @@ public class PartyService implements IPartyService {
   }
 
   @Override
+  public Associations getAssociationsForParty(
+      UUID tenantId,
+      UUID partyId,
+      AssociationSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (partyId == null) {
+      throw new InvalidArgumentException("partyId");
+    }
+
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortBy == null) {
+      sortBy = AssociationSortBy.TYPE;
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.ASCENDING;
+    }
+
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+
+    if (pageSize == null) {
+      pageSize = maxAssociations;
+    } else {
+      pageSize = Math.min(pageSize, maxAssociations);
+    }
+
+    return getDataStore()
+        .getAssociationsForParty(tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  @Override
   @Cacheable(cacheNames = "organizations", key = "#organizationId")
   public Organization getOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
@@ -246,6 +334,10 @@ public class PartyService implements IPartyService {
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
     }
@@ -284,6 +376,10 @@ public class PartyService implements IPartyService {
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
     }
@@ -308,6 +404,10 @@ public class PartyService implements IPartyService {
   @Override
   public Party getParty(UUID tenantId, UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (partyId == null) {
       throw new InvalidArgumentException("partyId");
     }
@@ -319,6 +419,10 @@ public class PartyService implements IPartyService {
   @Cacheable(cacheNames = "persons", key = "#personId")
   public Person getPerson(UUID tenantId, UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (personId == null) {
       throw new InvalidArgumentException("personId");
     }
@@ -335,6 +439,9 @@ public class PartyService implements IPartyService {
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
 
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
@@ -377,6 +484,10 @@ public class PartyService implements IPartyService {
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
     }
@@ -416,9 +527,38 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
+  @CachePut(cacheNames = "associations", key = "#association.id")
+  public Association updateAssociation(UUID tenantId, Association association)
+      throws InvalidArgumentException, AssociationNotFoundException, PartyNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (association == null) {
+      throw new InvalidArgumentException("association");
+    }
+
+    Set<ConstraintViolation<Association>> constraintViolations =
+        validateAssociation(tenantId, association);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "association", ValidationError.toValidationErrors(constraintViolations));
+    }
+
+    return getDataStore().updateAssociation(tenantId, association);
+  }
+
+  @Override
+  @Transactional
   @CachePut(cacheNames = "organizations", key = "#organization.id")
   public Organization updateOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (organization == null) {
       throw new InvalidArgumentException("organization");
     }
@@ -439,6 +579,10 @@ public class PartyService implements IPartyService {
   @CachePut(cacheNames = "persons", key = "#person.id")
   public Person updatePerson(UUID tenantId, Person person)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (person == null) {
       throw new InvalidArgumentException("person");
     }

@@ -108,7 +108,7 @@
       <column name="code" value="test_contact_mechanism_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Contact Mechanism Type"/>
       <column name="plural" value="Test Contact Mechanism Types"/>
       <column name="description" value="Test Contact Mechanism Type"/>
@@ -118,7 +118,7 @@
       <column name="code" value="test_contact_mechanism_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Contact Mechanism Type"/>
       <column name="plural" value="Test Contact Mechanism Types"/>
       <column name="description" value="Test Contact Mechanism Type"/>
@@ -131,7 +131,7 @@
       <column name="code" value="test_contact_mechanism_role"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Personal Mobile Number"/>
       <column name="description" value="Personal Mobile Number"/>
       <column name="party_types" value="person"/>
@@ -142,7 +142,7 @@
       <column name="code" value="test_contact_mechanism_role"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Personal Mobile Number"/>
       <column name="description" value="Personal Mobile Number"/>
       <column name="party_types" value="person"/>
@@ -173,7 +173,7 @@
       <column name="code" value="test_employment_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Employment Type"/>
       <column name="description" value="Test Employment Type"/>
     </insert>
@@ -183,7 +183,7 @@
       <column name="code" value="test_employment_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Employment Type"/>
       <column name="description" value="Test Employment Type"/>
     </insert>
@@ -194,7 +194,7 @@
       <column name="code" value="test_external_reference_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test External Reference Type"/>
       <column name="description" value="Test External Reference Type"/>
       <column name="party_types" value="organization,person"/>
@@ -204,7 +204,7 @@
       <column name="code" value="test_external_reference_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test External Reference Type"/>
       <column name="description" value="Test External Reference Type"/>
       <column name="party_types" value="organization,person"/>
@@ -234,7 +234,7 @@
       <column name="code" value="test_gender"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Gender"/>
       <column name="description" value="Test Gender"/>
     </insert>
@@ -243,7 +243,7 @@
       <column name="code" value="test_gender"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Gender"/>
       <column name="description" value="Test Gender"/>
     </insert>
@@ -254,7 +254,7 @@
       <column name="code" value="test_identity_document_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Identity Document Type"/>
       <column name="description" value="Test Identity Document Type"/>
       <column name="country_of_issue" value="ZA"/>
@@ -265,7 +265,7 @@
       <column name="code" value="test_identity_document_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Identity Document Type"/>
       <column name="description" value="Test Identity Document Type"/>
       <column name="country_of_issue" value="ZA"/>
@@ -318,7 +318,7 @@
       <column name="code" value="test_marital_status"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Marital Status"/>
       <column name="description" value="Test Marital Status"/>
     </insert>
@@ -327,7 +327,7 @@
       <column name="code" value="test_marital_status"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Marital Status"/>
       <column name="description" value="Test Marital Status"/>
     </insert>
@@ -339,7 +339,7 @@
       <column name="code" value="test_marriage_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Marriage Type"/>
       <column name="description" value="Test Marriage Type"/>
     </insert>
@@ -349,7 +349,7 @@
       <column name="code" value="test_marriage_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Marriage Type"/>
       <column name="description" value="Test Marriage Type"/>
     </insert>
@@ -360,7 +360,7 @@
       <column name="code" value="test_minor_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Minor Type"/>
       <column name="description" value="Test Minor Type"/>
     </insert>
@@ -369,7 +369,7 @@
       <column name="code" value="test_minor_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Minor Type"/>
       <column name="description" value="Test Minor Type"/>
     </insert>
@@ -568,7 +568,7 @@
       <column name="code" value="test_qualification_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Qualification Type"/>
       <column name="description" value="Test Qualification Type"/>
     </insert>
@@ -577,7 +577,7 @@
       <column name="code" value="test_qualification_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Qualification Type"/>
       <column name="description" value="Test Qualification Type"/>
     </insert>
@@ -588,7 +588,7 @@
       <column name="code" value="test_race"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Race"/>
       <column name="description" value="Test Race"/>
     </insert>
@@ -597,7 +597,7 @@
       <column name="code" value="test_race"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Race"/>
       <column name="description" value="Test Race"/>
     </insert>
@@ -608,7 +608,7 @@
       <column name="code" value="test_residence_permit_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Residence Permit Type"/>
       <column name="description" value="Test Residence Permit Type"/>
       <column name="country_of_issue" value="ZA"/>
@@ -618,7 +618,7 @@
       <column name="code" value="test_residence_permit_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Residence Permit Type"/>
       <column name="description" value="Test Residence Permit Type"/>
       <column name="country_of_issue" value="ZA"/>
@@ -628,7 +628,7 @@
       <column name="code" value="test_residency_status"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Residency Status"/>
       <column name="description" value="Test Residency Status"/>
     </insert>
@@ -637,7 +637,7 @@
       <column name="code" value="test_residency_status"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Residency Status"/>
       <column name="description" value="Test Residency Status"/>
     </insert>
@@ -648,7 +648,7 @@
       <column name="code" value="test_residential_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Residential Type"/>
       <column name="description" value="Test Residential Type"/>
     </insert>
@@ -657,7 +657,7 @@
       <column name="code" value="test_residential_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Residential Type"/>
       <column name="description" value="Test Residential Type"/>
     </insert>
@@ -1250,29 +1250,127 @@
     </insert>
 
 
-
     <insert schemaName="party" tableName="association_property_types">
       <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_association_property"/>
+      <column name="code" value="test_boolean_property"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
-      <column name="name" value="Test Association Property"/>
-      <column name="description" value="Test Association Property"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Boolean Property"/>
+      <column name="description" value="Test Association Boolean Property"/>
+      <column name="value_type" value="boolean"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_date_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Date Property"/>
+      <column name="description" value="Test Association Date Property"/>
+      <column name="value_type" value="date"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_decimal_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Decimal Property"/>
+      <column name="description" value="Test Association Decimal Property"/>
+      <column name="value_type" value="decimal"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_double_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Double Property"/>
+      <column name="description" value="Test Association Double Property"/>
+      <column name="value_type" value="double"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_integer_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Integer Property"/>
+      <column name="description" value="Test Association Integer Property"/>
+      <column name="value_type" value="integer"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_string_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association String Property"/>
+      <column name="description" value="Test Association String Property"/>
       <column name="value_type" value="string"/>
     </insert>
 
     <insert schemaName="party" tableName="association_property_types">
       <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_association_property"/>
+      <column name="code" value="test_boolean_property"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
-      <column name="name" value="Test Association Property"/>
-      <column name="description" value="Test Association Property"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Boolean Property"/>
+      <column name="description" value="Test Association Boolean Property"/>
+      <column name="value_type" value="boolean"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_date_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Date Property"/>
+      <column name="description" value="Test Association Date Property"/>
+      <column name="value_type" value="date"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_decimal_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Decimal Property"/>
+      <column name="description" value="Test Association Decimal Property"/>
+      <column name="value_type" value="decimal"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_double_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Double Property"/>
+      <column name="description" value="Test Association Double Property"/>
+      <column name="value_type" value="double"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_integer_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Integer Property"/>
+      <column name="description" value="Test Association Integer Property"/>
+      <column name="value_type" value="integer"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_string_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association String Property"/>
+      <column name="description" value="Test Association String Property"/>
       <column name="value_type" value="string"/>
     </insert>
-
 
 
     <insert schemaName="party" tableName="segments">
@@ -1315,7 +1413,7 @@
       <column name="code" value="test_source_of_funds_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Source Of Funds Type"/>
       <column name="description" value="Test Source Of Funds Type"/>
     </insert>
@@ -1324,7 +1422,7 @@
       <column name="code" value="test_source_of_funds_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Source Of Funds Type"/>
       <column name="description" value="Test Source Of Funds Type"/>
     </insert>
@@ -1335,7 +1433,7 @@
       <column name="code" value="test_source_of_wealth_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Source Of Wealth Type"/>
       <column name="description" value="Test Source Of Wealth Type"/>
     </insert>
@@ -1344,7 +1442,7 @@
       <column name="code" value="test_source_of_wealth_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Source Of Wealth Type"/>
       <column name="description" value="Test Source Of Wealth Type"/>
     </insert>
@@ -1395,7 +1493,7 @@
       <column name="code" value="test_tax_number_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Tax Number Type"/>
       <column name="description" value="Test Tax Number Type"/>
       <column name="country_of_issue" value="ZA"/>
@@ -1406,7 +1504,7 @@
       <column name="code" value="test_tax_number_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Tax Number Type"/>
       <column name="description" value="Test Tax Number Type"/>
       <column name="country_of_issue" value="ZA"/>
@@ -1419,7 +1517,7 @@
       <column name="code" value="test_time_to_contact"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Time To Contact"/>
       <column name="description" value="Test Time To Contact"/>
     </insert>
@@ -1428,7 +1526,7 @@
       <column name="code" value="test_time_to_contact"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Time To Contact"/>
       <column name="description" value="Test Time To Contact"/>
     </insert>
@@ -1439,7 +1537,7 @@
       <column name="code" value="test_title"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Title"/>
       <column name="abbreviation" value="Tst."/>
       <column name="description" value="Test Title"/>
@@ -1449,7 +1547,7 @@
       <column name="code" value="test_title"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="666"/>
+      <column name="sort_index" value="1000"/>
       <column name="name" value="Test Title"/>
       <column name="abbreviation" value="Tst."/>
       <column name="description" value="Test Title"/>

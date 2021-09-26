@@ -55,6 +55,25 @@ public class PartyWebService {
   }
 
   /**
+   * Create the new association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param association the association
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateAssociationException if the association already exists
+   * @throws PartyNotFoundException if one or more parties for the association could not be found
+   * @throws ServiceUnavailableException if the association could not be created
+   */
+  @WebMethod(operationName = "CreateAssociation")
+  public void createAssociation(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "Association") @XmlElement(required = true) Association association)
+      throws InvalidArgumentException, DuplicateAssociationException, PartyNotFoundException,
+          ServiceUnavailableException {
+    partyService.createAssociation(tenantId, association);
+  }
+
+  /**
    * Create the new organization.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
@@ -86,6 +105,23 @@ public class PartyWebService {
       @WebParam(name = "Person") @XmlElement(required = true) Person person)
       throws InvalidArgumentException, DuplicatePersonException, ServiceUnavailableException {
     partyService.createPerson(tenantId, person);
+  }
+
+  /**
+   * Delete the association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws AssociationNotFoundException if the association could not be found
+   * @throws ServiceUnavailableException if the association could not be deleted
+   */
+  @WebMethod(operationName = "DeleteAssociation")
+  public void deleteAssociation(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "AssociationId") @XmlElement(required = true) UUID associationId)
+      throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
+    partyService.deleteAssociation(tenantId, associationId);
   }
 
   /**
@@ -137,6 +173,51 @@ public class PartyWebService {
       @WebParam(name = "PersonId") @XmlElement(required = true) UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     partyService.deletePerson(tenantId, personId);
+  }
+
+  /**
+   * Retrieve the association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @return the association
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws AssociationNotFoundException if the association could not be found
+   * @throws ServiceUnavailableException if the association could not be retrieved
+   */
+  @WebMethod(operationName = "GetAssociation")
+  public Association getAssociation(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "AssociationId") @XmlElement(required = true) UUID associationId)
+      throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
+    return partyService.getAssociation(tenantId, associationId);
+  }
+
+  /**
+   * Retrieve the associations for the party.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param sortBy the optional method used to sort the associations e.g. by type
+   * @param sortDirection the optional sort direction to apply to the associations
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the associations
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the associations could not be retrieved
+   */
+  @WebMethod(operationName = "GetAssociationsForParty")
+  public Associations getAssociationsForParty(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "PartyId") @XmlElement(required = true) UUID partyId,
+      @WebParam(name = "SortBy") @XmlElement AssociationSortBy sortBy,
+      @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    return partyService.getAssociationsForParty(
+        tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -296,6 +377,25 @@ public class PartyWebService {
       throws InvalidArgumentException, ServiceUnavailableException {
     return partyService.getSnapshots(
         tenantId, entityType, entityId, from, to, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
+   * Update the association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param association the association
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws AssociationNotFoundException if the association could not be found
+   * @throws PartyNotFoundException if one or more parties for the association could not be found
+   * @throws ServiceUnavailableException if the association could not be updated
+   */
+  @WebMethod(operationName = "UpdateAssociation")
+  public void updateAssociation(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "Association") @XmlElement(required = true) Association association)
+      throws InvalidArgumentException, AssociationNotFoundException, PartyNotFoundException,
+          ServiceUnavailableException {
+    partyService.updateAssociation(tenantId, association);
   }
 
   /**

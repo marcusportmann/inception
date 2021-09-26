@@ -73,6 +73,92 @@ public class PartyApi extends SecureApi {
   }
 
   /**
+   * Create the new association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param association the association
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateAssociationException if the association already exists
+   * @throws PartyNotFoundException if one or more parties for the association could not be found
+   * @throws ServiceUnavailableException if the association could not be created
+   */
+  @Operation(summary = "Create the association", description = "Create the association")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The association was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "One or more parties for the association could not be found",
+              content =
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "An association with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/associations",
+      method = RequestMethod.POST,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.AssociationAdministration')")
+  public void createAssociation(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The association to create",
+              required = true)
+          @RequestBody
+          Association association)
+      throws InvalidArgumentException, DuplicateAssociationException, PartyNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(association.getTenantId())) {
+      throw new AccessDeniedException(
+          "Access denied to the tenant (" + association.getTenantId() + ")");
+    }
+
+    partyService.createAssociation(tenantId, association);
+  }
+
+  /**
    * Create the new organization.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
@@ -220,6 +306,402 @@ public class PartyApi extends SecureApi {
     }
 
     partyService.createPerson(tenantId, person);
+  }
+
+  /**
+   * Delete the association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws AssociationNotFoundException if the association could not be found
+   * @throws ServiceUnavailableException if the association could not be deleted
+   */
+  @Operation(summary = "Delete the association", description = "Delete the association")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The association was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The association could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/associations/{associationId}",
+      method = RequestMethod.DELETE,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.AssociationAdministration')")
+  public void deleteAssociation(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "associationId",
+              description = "The Universally Unique Identifier (UUID) for the association",
+              required = true)
+          @PathVariable
+          UUID associationId)
+      throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
+    partyService.deleteAssociation(tenantId, associationId);
+  }
+
+  /**
+   * Delete the organization.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws OrganizationNotFoundException if the organization could not be found
+   * @throws ServiceUnavailableException if the organization could not be deleted
+   */
+  @Operation(summary = "Delete the organization", description = "Delete the organization")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The organization was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The organization could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/organizations/{organizationId}",
+      method = RequestMethod.DELETE,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration')")
+  public void deleteOrganization(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "organizationId",
+              description = "The Universally Unique Identifier (UUID) for the organization",
+              required = true)
+          @PathVariable
+          UUID organizationId)
+      throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
+    partyService.deleteOrganization(tenantId, organizationId);
+  }
+
+  /**
+   * Delete the person.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param personId the Universally Unique Identifier (UUID) for the person
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PersonNotFoundException if the person could not be found
+   * @throws ServiceUnavailableException if the person could not be deleted
+   */
+  @Operation(summary = "Delete the person", description = "Delete the person")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The person was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The person could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/persons/{personId}",
+      method = RequestMethod.DELETE,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration')")
+  public void deletePerson(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "personId",
+              description = "The Universally Unique Identifier (UUID) for the person",
+              required = true)
+          @PathVariable
+          UUID personId)
+      throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
+    partyService.deletePerson(tenantId, personId);
+  }
+
+  /**
+   * Retrieve the association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @return the association
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws AssociationNotFoundException if the association could not be found
+   * @throws ServiceUnavailableException if the association could not be retrieved
+   */
+  @Operation(summary = "Retrieve the association", description = "Retrieve the association")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The association could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/associations/{associationId}",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.AssociationAdministration')")
+  public Association getAssociation(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "associationId",
+              description = "The Universally Unique Identifier (UUID) for the association",
+              required = true)
+          @PathVariable
+          UUID associationId)
+      throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return partyService.getAssociation(tenantId, associationId);
+  }
+
+  /**
+   * Retrieve the associations for the party.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param sortBy the optional method used to sort the associations e.g. by type
+   * @param sortDirection the optional sort direction to apply to the associations
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the associations
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the associations could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the associations for the party",
+      description = "Retrieve the associations for the party")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The party could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/parties/{partyId}/associations",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration') or hasAuthority('FUNCTION_Party.AssociationAdministration')")
+  public Associations getAssociationsForParty(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "partyId",
+              description = "The Universally Unique Identifier (UUID) for the party",
+              required = true)
+          @PathVariable
+          UUID partyId,
+      @Parameter(
+              name = "sortBy",
+              description = "The optional method used to sort the associations e.g. by type")
+          @RequestParam(value = "sortBy", required = false)
+          AssociationSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the associations")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    if (partyId == null) {
+      throw new InvalidArgumentException("partyId");
+    }
+
+    return partyService.getAssociationsForParty(
+        tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -819,10 +1301,107 @@ public class PartyApi extends SecureApi {
   }
 
   /**
+   * Update the association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @param association the association
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws AssociationNotFoundException if the association could not be found
+   * @throws PartyNotFoundException if one or more parties for the association could not be found
+   * @throws ServiceUnavailableException if the association could not be updated
+   */
+  @Operation(summary = "Update the association", description = "Update the association")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The association was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The association could not be found or one or more parties for the association could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/associations/{associationId}",
+      method = RequestMethod.PUT,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.AssociationAdministration')")
+  public void updateAssociation(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The Universally Unique Identifier (UUID) for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "associationId",
+              description = "The Universally Unique Identifier (UUID) for the association",
+              required = true)
+          @PathVariable
+          UUID associationId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The association to update",
+              required = true)
+          @RequestBody
+          Association association)
+      throws InvalidArgumentException, AssociationNotFoundException, PartyNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    if (associationId == null) {
+      throw new InvalidArgumentException("associationId");
+    }
+
+    if (association == null) {
+      throw new InvalidArgumentException("association");
+    }
+
+    if (!associationId.equals(association.getId())) {
+      throw new InvalidArgumentException("association");
+    }
+
+    partyService.updateAssociation(tenantId, association);
+  }
+
+  /**
    * Update the organization.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the ID for the organization
+   * @param organizationId the Universally Unique Identifier (UUID) for the organization
    * @param organization the organization
    * @throws InvalidArgumentException if an argument is invalid
    * @throws OrganizationNotFoundException if the organization could not be found
@@ -883,7 +1462,7 @@ public class PartyApi extends SecureApi {
           UUID tenantId,
       @Parameter(
               name = "organizationId",
-              description = "The ID for the organization",
+              description = "The Universally Unique Identifier (UUID) for the organization",
               required = true)
           @PathVariable
           UUID organizationId,
@@ -918,7 +1497,7 @@ public class PartyApi extends SecureApi {
    * Update the person.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the ID for the person
+   * @param personId the Universally Unique Identifier (UUID) for the person
    * @param person the person
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PersonNotFoundException if the person could not be found
@@ -975,7 +1554,10 @@ public class PartyApi extends SecureApi {
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
-      @Parameter(name = "personId", description = "The ID for the person", required = true)
+      @Parameter(
+              name = "personId",
+              description = "The Universally Unique Identifier (UUID) for the person",
+              required = true)
           @PathVariable
           UUID personId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -1005,9 +1587,3 @@ public class PartyApi extends SecureApi {
     partyService.updatePerson(tenantId, person);
   }
 }
-
-/**
- * TODO:
- * - Add operations for managing associations, i.e. create, delete, retrieve, update
- * - Add operations for deleting a person or an organization
- */

@@ -26,6 +26,8 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.party.Association;
 import digital.inception.party.AssociationProperty;
+import digital.inception.party.AssociationSortBy;
+import digital.inception.party.Associations;
 import digital.inception.party.Attribute;
 import digital.inception.party.Consent;
 import digital.inception.party.ContactMechanism;
@@ -116,21 +118,6 @@ public class PartyServiceTest {
   /** The Party Service. */
   @Autowired private IPartyService partyService;
 
-  private static synchronized Organization getTestOrganizationDetails() {
-    organizationCount++;
-
-    Organization organization =
-        new Organization(IPartyService.DEFAULT_TENANT_ID, "Organization Name " + organizationCount);
-
-    organization.addIdentityDocument(
-        new IdentityDocument(
-            "za_company_registration", "ZA", LocalDate.of(2006, 4, 2), "2006/123456/23"));
-
-    organization.addRole(new Role("employer"));
-
-    return organization;
-  }
-
   private static synchronized Organization getTestBasicOrganizationDetails() {
     organizationCount++;
 
@@ -138,11 +125,10 @@ public class PartyServiceTest {
         IPartyService.DEFAULT_TENANT_ID, "Organization Name " + organizationCount);
   }
 
-  private static synchronized Party getTestPartyDetails() {
-    partyCount++;
+  private static synchronized Person getTestBasicPersonDetails() {
+    personCount++;
 
-    return new Party(
-        IPartyService.DEFAULT_TENANT_ID, PartyType.ORGANIZATION, "Party Name " + partyCount);
+    return new Person(IPartyService.DEFAULT_TENANT_ID, "Full Name " + personCount);
   }
 
   private static synchronized Person getTestCompletePersonDetails(boolean isMarried) {
@@ -362,10 +348,110 @@ public class PartyServiceTest {
     return person;
   }
 
-  private static synchronized Person getTestBasicPersonDetails() {
-    personCount++;
+  private static synchronized Organization getTestOrganizationDetails() {
+    organizationCount++;
 
-    return new Person(IPartyService.DEFAULT_TENANT_ID, "Full Name " + personCount);
+    Organization organization =
+        new Organization(IPartyService.DEFAULT_TENANT_ID, "Organization Name " + organizationCount);
+
+    organization.addIdentityDocument(
+        new IdentityDocument(
+            "za_company_registration", "ZA", LocalDate.of(2006, 4, 2), "2006/123456/23"));
+
+    organization.addRole(new Role("employer"));
+
+    return organization;
+  }
+
+  private static synchronized Party getTestPartyDetails() {
+    partyCount++;
+
+    return new Party(
+        IPartyService.DEFAULT_TENANT_ID, PartyType.ORGANIZATION, "Party Name " + partyCount);
+  }
+
+  /** Test the association functionality. */
+  @Test
+  public void associationTest() throws Exception {
+    Person firstPerson = getTestCompletePersonDetails(true);
+
+    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, firstPerson);
+
+    Person secondPerson = getTestCompletePersonDetails(true);
+
+    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, secondPerson);
+
+    Association association =
+        new Association(
+            IPartyService.DEFAULT_TENANT_ID,
+            "test_association_type",
+            firstPerson.getId(),
+            secondPerson.getId(),
+            LocalDate.now());
+
+    association.addProperty(new AssociationProperty("test_boolean_property", true));
+    association.addProperty(new AssociationProperty("test_date_property", LocalDate.now()));
+    association.addProperty(
+        new AssociationProperty("test_decimal_property", new BigDecimal("82.6")));
+    association.addProperty(new AssociationProperty("test_double_property", 12345.6789));
+    association.addProperty(
+        new AssociationProperty("test_integer_property", Integer.valueOf(123456789)));
+    association.addProperty(new AssociationProperty("test_string_property", "String Value"));
+
+    assertEquals(
+        "String Value",
+        association.getPropertyWithType("test_string_property").get().getStringValue());
+    assertEquals(true, association.hasPropertyWithType("test_string_property"));
+
+    partyService.createAssociation(IPartyService.DEFAULT_TENANT_ID, association);
+
+    Associations associations =
+        partyService.getAssociationsForParty(
+            IPartyService.DEFAULT_TENANT_ID,
+            firstPerson.getId(),
+            AssociationSortBy.TYPE,
+            SortDirection.ASCENDING,
+            0,
+            100);
+
+    assertEquals(
+        1,
+        associations.getAssociations().size(),
+        "The incorrect number of associations was retrieved");
+
+    compareAssociations(association, associations.getAssociations().get(0));
+
+    Association retrievedAssociation =
+        partyService.getAssociation(IPartyService.DEFAULT_TENANT_ID, association.getId());
+
+    assertEquals(
+        6,
+        retrievedAssociation.getProperties().size(),
+        "The incorrect number of association properties was retrieved");
+
+    compareAssociations(association, retrievedAssociation);
+
+    association.removePropertyWithType("test_string_property");
+    assertFalse(association.hasPropertyWithType("test_string_property"));
+
+    association.removePropertyWithType("test_date_property");
+    assertFalse(association.hasPropertyWithType("test_date_property"));
+
+    partyService.updateAssociation(IPartyService.DEFAULT_TENANT_ID, association);
+
+    retrievedAssociation =
+        partyService.getAssociation(IPartyService.DEFAULT_TENANT_ID, association.getId());
+
+    assertEquals(
+        4,
+        retrievedAssociation.getProperties().size(),
+        "The incorrect number of association properties was retrieved");
+
+    partyService.deleteAssociation(IPartyService.DEFAULT_TENANT_ID, association.getId());
+
+    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, firstPerson.getId());
+
+    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, secondPerson.getId());
   }
 
   /** Test the attribute functionality. */
@@ -541,36 +627,6 @@ public class PartyServiceTest {
         1,
         organizationConstraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid organization");
-  }
-
-  /**
-   * Test the association functionality.
-   */
-  @Test
-  public void associationTest() throws Exception {
-    Person person = getTestCompletePersonDetails(true);
-
-    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
-
-    Organization organization = getTestOrganizationDetails();
-
-    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
-
-    Association association = new Association(IPartyService.DEFAULT_TENANT_ID,  "company_shareholder", organization.getId(), person.getId(), LocalDate.now());
-
-    association.addProperty(new AssociationProperty("shareholding", new BigDecimal("50.1")));
-
-    partyService.createAssociation(IPartyService.DEFAULT_TENANT_ID, association);
-
-    Association retrievedAssociation = partyService.getAssociation(IPartyService.DEFAULT_TENANT_ID, association.getId());
-
-    compareAssociations(association, retrievedAssociation);
-
-    partyService.deleteAssociation(IPartyService.DEFAULT_TENANT_ID, association.getId());
-
-    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
-
-    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, person.getId());
   }
 
   /** Test the contactMechanism functionality. */
@@ -3081,6 +3137,98 @@ public class PartyServiceTest {
     }
   }
 
+  private void compareAssociationProperties(
+      AssociationProperty associationProperty1, AssociationProperty associationProperty2) {
+    assertEquals(
+        associationProperty1.getBooleanValue(),
+        associationProperty2.getBooleanValue(),
+        "The boolean value values for the association properties do not match");
+    assertEquals(
+        associationProperty1.getDateValue(),
+        associationProperty2.getDateValue(),
+        "The date value values for the association properties do not match");
+    if (associationProperty1.getDecimalValue() != null) {
+      assertTrue(
+          associationProperty1.getDecimalValue().compareTo(associationProperty2.getDecimalValue())
+              == 0,
+          "The decimal value values for the association properties do not match");
+    } else {
+      assertEquals(
+          associationProperty1.getDecimalValue(),
+          associationProperty2.getDecimalValue(),
+          "The decimal value values for the association properties do not match");
+    }
+    assertEquals(
+        associationProperty1.getDoubleValue(),
+        associationProperty2.getDoubleValue(),
+        "The double value values for the association properties do not match");
+    assertEquals(
+        associationProperty1.getIntegerValue(),
+        associationProperty2.getIntegerValue(),
+        "The integer value values for the association properties do not match");
+    assertEquals(
+        associationProperty1.getStringValue(),
+        associationProperty2.getStringValue(),
+        "The string value values for the association properties do not match");
+    assertEquals(
+        associationProperty1.getType(),
+        associationProperty2.getType(),
+        "The type values for the association properties do not match");
+  }
+
+  private void compareAssociations(Association association1, Association association2) {
+    assertEquals(
+        association1.getEffectiveFrom(),
+        association2.getEffectiveFrom(),
+        "The effective from values for the associations do not match");
+    assertEquals(
+        association1.getEffectiveTo(),
+        association2.getEffectiveTo(),
+        "The effective to values for the associations do not match");
+    assertEquals(
+        association1.getFirstPartyId(),
+        association2.getFirstPartyId(),
+        "The first party ID values for the associations do not match");
+    assertEquals(
+        association1.getId(),
+        association2.getId(),
+        "The ID values for the associations do not match");
+    assertEquals(
+        association1.getSecondPartyId(),
+        association2.getSecondPartyId(),
+        "The second party ID values for the associations do not match");
+    assertEquals(
+        association1.getTenantId(),
+        association2.getTenantId(),
+        "The tenant ID values for the associations do not match");
+    assertEquals(
+        association1.getType(),
+        association2.getType(),
+        "The type values for the associations do not match");
+
+    assertEquals(
+        association1.getProperties().size(),
+        association2.getProperties().size(),
+        "The number of properties for the associations do not match");
+
+    for (AssociationProperty association1Property : association1.getProperties()) {
+      boolean foundAssociationProperty = false;
+
+      for (AssociationProperty association2Property : association2.getProperties()) {
+        if (association1Property.getType().equals(association2Property.getType())) {
+
+          compareAssociationProperties(association1Property, association2Property);
+
+          foundAssociationProperty = true;
+        }
+      }
+
+      if (!foundAssociationProperty) {
+        fail("Failed to find the association property (" + association1Property.getType() + ")");
+      }
+    }
+  }
+
   private void compareAttributes(Attribute attribute1, Attribute attribute2) {
     assertEquals(
         attribute1.getType(),
@@ -4454,61 +4602,5 @@ public class PartyServiceTest {
         taxNumber1.getType(),
         taxNumber2.getType(),
         "The type values for the tax numbers do not match");
-  }
-
-  private void compareAssociations(Association association1, Association association2) {
-    assertEquals(
-        association1.getEffectiveFrom(),
-        association2.getEffectiveFrom(),
-        "The effective from values for the associations do not match");
-    assertEquals(
-        association1.getEffectiveTo(),
-        association2.getEffectiveTo(),
-        "The effective to values for the associations do not match");
-    assertEquals(
-        association1.getFirstPartyId(),
-        association2.getFirstPartyId(),
-        "The first party ID values for the associations do not match");
-    assertEquals(
-        association1.getId(),
-        association2.getId(),
-        "The ID values for the associations do not match");
-    assertEquals(
-        association1.getSecondPartyId(),
-        association2.getSecondPartyId(),
-        "The second party ID values for the associations do not match");
-    assertEquals(
-        association1.getTenantId(),
-        association2.getTenantId(),
-        "The tenant ID values for the associations do not match");
-    assertEquals(
-        association1.getType(),
-        association2.getType(),
-        "The type values for the associations do not match");
-
-    assertEquals(
-        association1.getProperties().size(),
-        association2.getProperties().size(),
-        "The number of properties for the associations do not match");
-
-    for (AssociationProperty association1Property : association1.getProperties()) {
-      boolean foundAssociationProperty = false;
-
-      for (AssociationProperty association2Property : association2.getProperties()) {
-        if (association1Property.getType().equals(association2Property.getType())) {
-
-          //compareAssociationProperties(association1Property, association2Property);
-
-          foundAssociationProperty = true;
-        }
-      }
-
-      if (!foundAssociationProperty) {
-        fail(
-            "Failed to find the association property ("
-                + association1Property.getType()
-                + ")");
-      }
-    }
   }
 }

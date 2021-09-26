@@ -69,7 +69,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
   "firstPartyId",
   "secondPartyId",
   "effectiveFrom",
-  "effectiveTo"
+  "effectiveTo",
+  "properties"
 })
 @XmlRootElement(name = "Association", namespace = "http://inception.digital/party")
 @XmlType(
@@ -82,7 +83,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
       "firstPartyId",
       "secondPartyId",
       "effectiveFrom",
-      "effectiveTo"
+      "effectiveTo",
+      "properties"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidAssociation
@@ -93,6 +95,11 @@ public class Association implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The properties for the association. */
+  @Schema(description = "The properties for the association")
+  @JsonProperty
+  @JsonManagedReference
+  @XmlElementWrapper(name = "Properties")
+  @XmlElement(name = "Property")
   @Valid
   @OneToMany(
       mappedBy = "association",
@@ -264,7 +271,7 @@ public class Association implements Serializable {
    */
   public void addProperty(AssociationProperty property) {
     properties.removeIf(
-        existingProperty -> Objects.equals(existingProperty.getType(), existingProperty.getType()));
+        existingProperty -> Objects.equals(existingProperty.getType(), property.getType()));
 
     property.setAssociation(this);
 
@@ -346,11 +353,6 @@ public class Association implements Serializable {
    *
    * @return the properties for the association
    */
-  @Schema(description = "The properties for the association")
-  @JsonProperty
-  @JsonManagedReference("propertyReference")
-  @XmlElementWrapper(name = "Properties")
-  @XmlElement(name = "Property")
   public Set<AssociationProperty> getProperties() {
     return properties;
   }

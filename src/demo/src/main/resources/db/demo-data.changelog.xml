@@ -64,13 +64,28 @@
     <insert schemaName="security" tableName="users">
       <column name="id" value="54166574-6564-468a-b845-8a5c127a4345"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
-      <column name="username" valueComputed="LOWER('joe')"/>
+      <column name="username" valueComputed="LOWER('jack')"/>
       <column name="status" value="1"/>
-      <column name="name" value="Joe Bloggs"/>
-      <column name="preferred_name" value="Joe"/>
+      <column name="name" value="Jack Hill"/>
+      <column name="preferred_name" value="Jack"/>
       <column name="phone_number" value=""/>
       <column name="mobile_number" value=""/>
-      <column name="email" value="joe@demo.com"/>
+      <column name="email" value="jack@demo.com"/>
+      <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
+      <column name="password_attempts" value="0"/>
+      <column name="password_expiry" value="2050-12-31 00:00:00"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="security" tableName="users">
+      <column name="id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
+      <column name="username" valueComputed="LOWER('jill')"/>
+      <column name="status" value="1"/>
+      <column name="name" value="Jill Hill"/>
+      <column name="preferred_name" value="Jill"/>
+      <column name="phone_number" value=""/>
+      <column name="mobile_number" value=""/>
+      <column name="email" value="jill@demo.com"/>
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
@@ -978,16 +993,16 @@
       <column name="id" value="54166574-6564-468a-b845-8a5c127a4345"/>
       <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="type" value="person"/>
-      <column name="name" value="Joe Bloggs"/>
+      <column name="name" value="Jack Hill"/>
       <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="persons">
       <column name="id" value="54166574-6564-468a-b845-8a5c127a4345"/>
       <column name="title" value="mr"/>
       <column name="initials" value="J"/>
-      <column name="given_name" value="Joe"/>
-      <column name="surname" value="Bloggs"/>
-      <column name="preferred_name" value="Joe"/>
+      <column name="given_name" value="Jack"/>
+      <column name="surname" value="Hill"/>
+      <column name="preferred_name" value="Jack"/>
       <column name="gender" value="male"/>
       <column name="race" value="white"/>
       <column name="date_of_birth" value="1976-03-07"/>
@@ -1022,7 +1037,7 @@
       <column name="party_id" value="54166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="email_address"/>
       <column name="role" value="personal_email_address"/>
-      <column name="value" value="joe@demo.com"/>
+      <column name="value" value="jack@demo.com"/>
       <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="physical_addresses">
@@ -1041,6 +1056,73 @@
     </insert>
 
 
+
+
+    <insert schemaName="party" tableName="parties">
+      <column name="id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
+      <column name="type" value="person"/>
+      <column name="name" value="Jill Hill"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="persons">
+      <column name="id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="title" value="mrs"/>
+      <column name="initials" value="J"/>
+      <column name="given_name" value="Jill"/>
+      <column name="surname" value="Hill"/>
+      <column name="preferred_name" value="Jill"/>
+      <column name="gender" value="female"/>
+      <column name="race" value="white"/>
+      <column name="date_of_birth" value="1985-05-01"/>
+      <column name="language" value="EN"/>
+      <column name="country_of_birth" value="ZA"/>
+      <column name="country_of_residence" value="ZA"/>
+      <column name="employment_status" value="other"/>
+      <column name="employment_type" value="unemployed"/>
+      <column name="marital_status" value="married"/>
+      <column name="marriage_type" value="anc_without_accrual"/>
+      <column name="occupation" value="unemployed"/>
+      <column name="residency_status" value="citizen"/>
+      <column name="residential_type" value="cohabitant"/>
+    </insert>
+    <insert schemaName="party" tableName="identity_documents">
+      <column name="id" value="74166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="party_id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="za_id_book"/>
+      <column name="number" value="8505014800080"/>
+      <column name="date_of_issue" value="2012-06-14"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanisms">
+      <column name="party_id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="mobile_number"/>
+      <column name="role" value="personal_mobile_number"/>
+      <column name="value" value="+27835554321"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanisms">
+      <column name="party_id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="email_address"/>
+      <column name="role" value="personal_email_address"/>
+      <column name="value" value="jill@demo.com"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_addresses">
+      <column name="id" value="24166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="party_id" value="64166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="unstructured"/>
+      <column name="role" value="residential"/>
+      <column name="line1" value="145 Apple Street"/>
+      <column name="line2" value="Fairland"/>
+      <column name="city" value="Johannesburg"/>
+      <column name="region" value="GP"/>
+      <column name="country" value="ZA"/>
+      <column name="postal_code" value="2170"/>
+      <column name="purposes" value="billing,correspondence,delivery"/>
+      <column name="created" value="${now}"/>
+    </insert>
 
 
 

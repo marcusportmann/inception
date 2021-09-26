@@ -1562,13 +1562,12 @@ public interface IPartyReferenceService {
    * Check whether the code is a valid code for an association type for the party type.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyTypeCode the code for the party type
    * @param associationTypeCode the code for the association type
    * @return <b>true</b> if the code is a valid code for an association type or <b>false</b>
    *     otherwise
    * @throws ServiceUnavailableException if the association type check failed
    */
-  boolean isValidAssociationType(UUID tenantId, String partyTypeCode, String associationTypeCode)
+  boolean isValidAssociationType(UUID tenantId, String associationTypeCode)
       throws ServiceUnavailableException;
 
   /**

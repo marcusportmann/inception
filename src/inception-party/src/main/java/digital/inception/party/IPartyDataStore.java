@@ -37,10 +37,11 @@ public interface IPartyDataStore {
    * @param association the association
    * @return the association
    * @throws DuplicateAssociationException if the association already exists
+   * @throws PartyNotFoundException if one or more parties for the association could not be found
    * @throws ServiceUnavailableException if the association could not be created
    */
   Association createAssociation(UUID tenantId, Association association)
-      throws DuplicateAssociationException, ServiceUnavailableException;
+      throws DuplicateAssociationException, PartyNotFoundException, ServiceUnavailableException;
 
   /**
    * Create the new organization.
@@ -121,6 +122,28 @@ public interface IPartyDataStore {
    */
   Association getAssociation(UUID tenantId, UUID associationId)
       throws AssociationNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the associations for the party.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param sortBy the optional method used to sort the associations e.g. by type
+   * @param sortDirection the optional sort direction to apply to the associations
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the associations
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the associations could not be retrieved
+   */
+  Associations getAssociationsForParty(
+      UUID tenantId,
+      UUID partyId,
+      AssociationSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws PartyNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the organization.
@@ -254,6 +277,19 @@ public interface IPartyDataStore {
    *     the party is associated with could not be retrieved
    */
   Optional<UUID> getTenantIdForParty(UUID partyId) throws ServiceUnavailableException;
+
+  /**
+   * Update the association.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param association the association
+   * @return the association
+   * @throws AssociationNotFoundException if the association could not be found
+   * @throws PartyNotFoundException if one or more parties for the association could not be found
+   * @throws ServiceUnavailableException if the association could not be updated
+   */
+  Association updateAssociation(UUID tenantId, Association association)
+      throws AssociationNotFoundException, PartyNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the organization.
