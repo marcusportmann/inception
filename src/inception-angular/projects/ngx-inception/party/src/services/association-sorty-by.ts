@@ -14,30 +14,16 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-
 /**
- * The ExpansionPanelsComponent class implements the expansion panels component.
+ * The AssociationSortBy enumeration defines the possible methods used to sort a list of
+ * associations.
  *
  * @author Marcus Portmann
  */
-@Component({
-  templateUrl: 'expansion-panels.component.html'
-})
-export class ExpansionPanelsComponent {
-  panelOpenState = false;
+export enum AssociationSortBy {
 
-  step = 0;
-
-  nextStep() {
-    this.step++;
-  }
-
-  prevStep() {
-    this.step--;
-  }
-
-  setStep(index: number) {
-    this.step = index;
-  }
+  /**
+   * Sort by type.
+   */
+  Type = 'type'
 }

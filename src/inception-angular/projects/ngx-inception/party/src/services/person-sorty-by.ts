@@ -14,30 +14,20 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-
 /**
- * The ExpansionPanelsComponent class implements the expansion panels component.
+ * The PersonSortBy enumeration defines the possible methods used to sort a list of persons.
  *
  * @author Marcus Portmann
  */
-@Component({
-  templateUrl: 'expansion-panels.component.html'
-})
-export class ExpansionPanelsComponent {
-  panelOpenState = false;
+export enum PersonSortBy {
 
-  step = 0;
+  /**
+   * Sort by name.
+   */
+  Name = 'name',
 
-  nextStep() {
-    this.step++;
-  }
-
-  prevStep() {
-    this.step--;
-  }
-
-  setStep(index: number) {
-    this.step = index;
-  }
+  /**
+   * Sort by preferred name.
+   */
+  PreferredName = 'preferred_name'
 }

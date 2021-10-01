@@ -33,7 +33,7 @@ import {PasswordChangeReason} from './password-change-reason';
 import {Role} from './role';
 import {
   AuthenticationFailedError, DuplicateGroupError, DuplicateTenantError, DuplicateUserDirectoryError,
-  DuplicateUserError, ExistingGroupMembersError, ExistingPasswordError,  GroupMemberNotFoundError,
+  DuplicateUserError, ExistingGroupMembersError, ExistingPasswordError, GroupMemberNotFoundError,
   GroupNotFoundError, GroupRoleNotFoundError, InvalidSecurityCodeError, RoleNotFoundError,
   TenantNotFoundError, TenantUserDirectoryNotFoundError, UserDirectoryNotFoundError,
   UserLockedError, UserNotFoundError

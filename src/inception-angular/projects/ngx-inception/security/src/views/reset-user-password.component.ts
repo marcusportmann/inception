@@ -51,9 +51,13 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
   resetPasswordHistoryFormControl: FormControl;
 
   resetUserPasswordForm: FormGroup;
+
   userDirectoryCapabilities?: UserDirectoryCapabilities;
+
   userDirectoryId: string;
+
   username: string;
+
   usernameFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,

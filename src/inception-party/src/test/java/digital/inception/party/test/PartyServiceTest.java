@@ -50,6 +50,7 @@ import digital.inception.party.OrganizationSortBy;
 import digital.inception.party.Organizations;
 import digital.inception.party.Parties;
 import digital.inception.party.Party;
+import digital.inception.party.PartySortBy;
 import digital.inception.party.PartyType;
 import digital.inception.party.Person;
 import digital.inception.party.PersonSortBy;
@@ -2107,7 +2108,7 @@ public class PartyServiceTest {
 
     Parties filteredParties =
         partyService.getParties(
-            IPartyService.DEFAULT_TENANT_ID, "", SortDirection.ASCENDING, 0, 100);
+            IPartyService.DEFAULT_TENANT_ID, "", PartySortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         1,
@@ -2135,7 +2136,7 @@ public class PartyServiceTest {
 
     Parties filteredParties =
         partyService.getParties(
-            IPartyService.DEFAULT_TENANT_ID, "", SortDirection.ASCENDING, 0, 100);
+            IPartyService.DEFAULT_TENANT_ID, "", PartySortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         2,
@@ -2337,7 +2338,7 @@ public class PartyServiceTest {
 
     Parties filteredParties =
         partyService.getParties(
-            IPartyService.DEFAULT_TENANT_ID, "", SortDirection.ASCENDING, 0, 100);
+            IPartyService.DEFAULT_TENANT_ID, "", PartySortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         1,

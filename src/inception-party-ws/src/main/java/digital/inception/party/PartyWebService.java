@@ -269,6 +269,7 @@ public class PartyWebService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the parties
+   * @param sortBy the optional method used to sort the parties e.g. by name
    * @param sortDirection the optional sort direction to apply to the parties
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -280,11 +281,12 @@ public class PartyWebService {
   public Parties getParties(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "Filter") @XmlElement String filter,
+      @WebParam(name = "SortBy") @XmlElement PartySortBy sortBy,
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return partyService.getParties(tenantId, filter, sortDirection, pageIndex, pageSize);
+    return partyService.getParties(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**

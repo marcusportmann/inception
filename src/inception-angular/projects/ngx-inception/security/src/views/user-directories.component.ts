@@ -40,11 +40,17 @@ import {UserDirectorySummaryDatasource} from '../services/user-directory-summary
 export class UserDirectoriesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   dataSource: UserDirectorySummaryDatasource;
+
   displayedColumns = ['name', 'actions'];
+
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
+
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
+
   @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,

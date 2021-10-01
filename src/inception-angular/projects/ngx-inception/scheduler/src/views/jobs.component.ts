@@ -41,10 +41,15 @@ import {SchedulerService} from '../services/scheduler.service';
 export class JobsComponent extends AdminContainerView implements AfterViewInit {
 
   JobStatus = JobStatus;
+
   dataSource: MatTableDataSource<Job> = new MatTableDataSource<Job>();
+
   displayedColumns = ['name', 'status', 'executionAttempts', 'nextExecution', 'actions'];
+
   getJobStatusDescription = SchedulerService.getJobStatusDescription;
+
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
+
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   @ViewChild(MatSort, {static: true}) sort!: MatSort;

@@ -40,8 +40,11 @@ import {CodesService} from '../services/codes.service';
 export class CodeCategoriesComponent extends AdminContainerView implements AfterViewInit {
 
   dataSource: MatTableDataSource<CodeCategorySummary> = new MatTableDataSource<CodeCategorySummary>();
+
   displayedColumns = ['id', 'name', 'actions'];
+
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
+
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   @ViewChild(MatSort, {static: true}) sort!: MatSort;

@@ -31,9 +31,13 @@ import {Users} from './users';
 export class UserDatasource implements DataSource<User> {
 
   private dataSubject$: Subject<User[]> = new ReplaySubject<User[]>();
+
   private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>();
+
   loading$ = this.loadingSubject$.asObservable();
+
   private totalSubject$: Subject<number> = new ReplaySubject<number>();
+
   total$ = this.totalSubject$.asObservable();
 
   constructor(private securityService: SecurityService) {

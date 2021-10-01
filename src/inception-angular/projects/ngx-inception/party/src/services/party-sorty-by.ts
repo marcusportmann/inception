@@ -14,30 +14,15 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-
 /**
- * The ExpansionPanelsComponent class implements the expansion panels component.
+ * The PartySortBy enumeration defines the possible methods used to sort a list of parties.
  *
  * @author Marcus Portmann
  */
-@Component({
-  templateUrl: 'expansion-panels.component.html'
-})
-export class ExpansionPanelsComponent {
-  panelOpenState = false;
+export enum PartySortBy {
 
-  step = 0;
-
-  nextStep() {
-    this.step++;
-  }
-
-  prevStep() {
-    this.step--;
-  }
-
-  setStep(index: number) {
-    this.step = index;
-  }
+  /**
+   * Sort by name.
+   */
+  Name = 'name'
 }

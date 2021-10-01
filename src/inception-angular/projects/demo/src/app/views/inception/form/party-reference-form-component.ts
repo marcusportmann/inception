@@ -37,23 +37,41 @@ import {debounceTime, first, map, startWith} from 'rxjs/operators';
 export class PartyReferenceFormComponent implements OnInit, OnDestroy {
 
   filteredContactMechanismRoles$: Subject<ContactMechanismRole[]> = new ReplaySubject<ContactMechanismRole[]>();
+
   filteredContactMechanismTypes$: Subject<ContactMechanismType[]> = new ReplaySubject<ContactMechanismType[]>();
+
   filteredEmploymentStatuses$: Subject<EmploymentStatus[]> = new ReplaySubject<EmploymentStatus[]>();
+
   filteredEmploymentTypes$: Subject<EmploymentType[]> = new ReplaySubject<EmploymentType[]>();
+
   filteredGenders$: Subject<Gender[]> = new ReplaySubject<Gender[]>();
+
   filteredIdentityDocumentTypes$: Subject<IdentityDocumentType[]> = new ReplaySubject<IdentityDocumentType[]>();
+
   filteredMaritalStatuses$: Subject<MaritalStatus[]> = new ReplaySubject<MaritalStatus[]>();
+
   filteredMarriageTypes$: Subject<MarriageType[]> = new ReplaySubject<MarriageType[]>();
+
   filteredNextOfKinTypes$: Subject<NextOfKinType[]> = new ReplaySubject<NextOfKinType[]>();
+
   filteredOccupations$: Subject<Occupation[]> = new ReplaySubject<Occupation[]>();
+
   filteredRaces$: Subject<Race[]> = new ReplaySubject<Race[]>();
+
   filteredResidencePermitTypes$: Subject<ResidencePermitType[]> = new ReplaySubject<ResidencePermitType[]>();
+
   filteredResidencyStatuses$: Subject<ResidencyStatus[]> = new ReplaySubject<ResidencyStatus[]>();
+
   filteredResidentialTypes$: Subject<ResidentialType[]> = new ReplaySubject<ResidentialType[]>();
+
   filteredSourceOfFundsTypes$: Subject<SourceOfFundsType[]> = new ReplaySubject<SourceOfFundsType[]>();
+
   filteredTaxNumberTypes$: Subject<TaxNumberType[]> = new ReplaySubject<TaxNumberType[]>();
+
   filteredTitles$: Subject<Title[]> = new ReplaySubject<Title[]>();
+
   partyReferenceForm: FormGroup;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,

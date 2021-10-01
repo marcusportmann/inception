@@ -202,6 +202,7 @@ public interface IPartyService {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the parties
+   * @param sortBy the optional method used to sort the parties e.g. by name
    * @param sortDirection the optional sort direction to apply to the parties
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -212,6 +213,7 @@ public interface IPartyService {
   Parties getParties(
       UUID tenantId,
       String filter,
+      PartySortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)

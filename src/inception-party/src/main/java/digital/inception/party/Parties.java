@@ -43,6 +43,7 @@ import javax.xml.bind.annotation.XmlType;
   "parties",
   "total",
   "filter",
+  "sortBy",
   "sortDirection",
   "pageIndex",
   "pageSize"
@@ -56,6 +57,7 @@ import javax.xml.bind.annotation.XmlType;
       "parties",
       "total",
       "filter",
+      "sortBy",
       "sortDirection",
       "pageIndex",
       "pageSize"
@@ -91,6 +93,12 @@ public class Parties implements Serializable {
   @XmlElement(name = "Party", required = true)
   private List<Party> parties;
 
+  /** The optional method used to sort the parties e.g. by name. */
+  @Schema(description = "The optional method used to sort the parties e.g. by name")
+  @JsonProperty
+  @XmlElement(name = "SortBy")
+  private PartySortBy sortBy;
+
   /** The optional sort direction that was applied to the parties. */
   @Schema(description = "The optional sort direction that was applied to the parties")
   @JsonProperty
@@ -123,6 +131,7 @@ public class Parties implements Serializable {
    * @param parties the parties
    * @param total the total number of parties
    * @param filter the optional filter that was applied to the parties
+   * @param sortBy the optional method used to sort the parties e.g. by name
    * @param sortDirection the optional sort direction that was applied to the parties
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -132,6 +141,7 @@ public class Parties implements Serializable {
       List<Party> parties,
       long total,
       String filter,
+      PartySortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
@@ -139,6 +149,7 @@ public class Parties implements Serializable {
     this.parties = parties;
     this.total = total;
     this.filter = filter;
+    this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
@@ -178,6 +189,15 @@ public class Parties implements Serializable {
    */
   public List<Party> getParties() {
     return parties;
+  }
+
+  /**
+   * Returns the optional method used to sort the parties e.g. by name.
+   *
+   * @return the optional method used to sort the parties
+   */
+  public PartySortBy getSortBy() {
+    return sortBy;
   }
 
   /**

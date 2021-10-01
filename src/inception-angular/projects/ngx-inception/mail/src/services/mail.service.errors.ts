@@ -18,8 +18,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
 
 /**
- * The DuplicateMailTemplateError class holds the information for a duplicate mail template
- * error.
+ * The DuplicateMailTemplateError class holds the information for a duplicate mail template error.
  *
  * @author Marcus Portmann
  */
@@ -38,8 +37,7 @@ export class DuplicateMailTemplateError extends Error {
 }
 
 /**
- * The MailTemplateNotFoundError class holds the information for a mail template not found
- * error.
+ * The MailTemplateNotFoundError class holds the information for a mail template not found error.
  *
  * @author Marcus Portmann
  */

@@ -416,6 +416,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
   public Parties getParties(
       UUID tenantId,
       String filter,
+      PartySortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
@@ -436,6 +437,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
           partyPage.toList(),
           partyPage.getTotalElements(),
           filter,
+          sortBy,
           sortDirection,
           pageIndex,
           pageSize);

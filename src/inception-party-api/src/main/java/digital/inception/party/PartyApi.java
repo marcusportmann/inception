@@ -880,6 +880,7 @@ public class PartyApi extends SecureApi {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param filter the optional filter to apply to the parties
+   * @param sortBy the optional method used to sort the parties e.g. by name
    * @param sortDirection the optional sort direction to apply to the parties
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -932,6 +933,11 @@ public class PartyApi extends SecureApi {
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
+          name = "sortBy",
+          description = "The optional method used to sort the parties e.g. by name")
+      @RequestParam(value = "sortBy", required = false)
+          PartySortBy sortBy,
+      @Parameter(
               name = "sortDirection",
               description = "The optional sort direction to apply to the parties")
           @RequestParam(value = "sortDirection", required = false)
@@ -956,7 +962,7 @@ public class PartyApi extends SecureApi {
       pageSize = 10;
     }
 
-    return partyService.getParties(tenantId, filter, sortDirection, pageIndex, pageSize);
+    return partyService.getParties(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**

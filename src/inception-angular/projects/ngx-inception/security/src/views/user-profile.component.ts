@@ -38,12 +38,19 @@ import {User} from '../services/user';
 export class UserProfileComponent extends AdminContainerView implements AfterViewInit {
 
   emailFormControl: FormControl;
+
   mobileNumberFormControl: FormControl;
+
   nameFormControl: FormControl;
+
   phoneNumberFormControl: FormControl;
+
   preferredNameFormControl: FormControl;
+
   user?: User;
+
   userProfileForm: FormGroup;
+
   usernameFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private location: Location,
