@@ -24,7 +24,6 @@ export * from './src/forms/directives/autocomplete-selection-required.directive'
 export * from './src/forms/directives/autofocus.directive';
 export * from './src/forms/directives/validated-form.directive';
 
-
 export * from './src/errors/access-denied-error';
 export * from './src/errors/problem-details';
 export * from './src/errors/communication-error';
@@ -44,15 +43,14 @@ export * from './src/inception-app.module';
 export * from './src/inception-config';
 export * from './src/inception-injector';
 
-
 export * from './src/routing/can-activate-function-guard';
 export * from './src/routing/disabled-function-guard';
 
 export * from './src/session/directives/has-authority.directive';
 export * from './src/session/services/session';
+export * from './src/session/services/session.interceptor';
 export * from './src/session/services/session.service';
 export * from './src/session/services/session.service.errors';
-
 
 export * from './src/dialogs/services/dialog-data';
 export * from './src/dialogs/services/dialog.service';
@@ -60,7 +58,6 @@ export * from './src/dialogs/components/confirmation-dialog.component';
 export * from './src/dialogs/components/error-dialog.component';
 export * from './src/dialogs/components/information-dialog.component';
 export * from './src/dialogs/components/warning-dialog.component';
-
 
 export * from './src/layout/components/admin-container.component';
 export * from './src/layout/components/admin-container-view';
