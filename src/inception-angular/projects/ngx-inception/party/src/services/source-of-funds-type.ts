@@ -15,36 +15,41 @@
  */
 
 /**
- * The SourceOfFunds class holds the information for a source of funds.
+ * The SourceOfFunds class holds the information for a type of source of funds.
  *
  * @author Marcus Portmann
  */
 export class SourceOfFundsType {
 
   /**
-   * The code for the source of funds.
+   * The code for the source of funds type.
    */
   code: string;
 
   /**
-   * The description for the source of funds.
+   * The description for the source of funds type.
    */
   description: string;
 
   /**
-   * The Unicode locale identifier for the source of funds.
+   * The Unicode locale identifier for the source of funds type.
    */
   localeId: string;
 
   /**
-   * The name of the source of funds.
+   * The name of the source of funds type.
    */
   name: string;
 
   /**
-   * The sort index for the source of funds.
+   * The sort index for the source of funds type.
    */
   sortIndex: number;
+
+  /**
+   * The Universally Unique Identifier (UUID) for the tenant the source of funds type is specific to.
+   */
+  tenantId?: string;
 
   /**
    * Constructs a new SourceOfFunds.
@@ -54,12 +59,16 @@ export class SourceOfFundsType {
    * @param sortIndex   The sort index for the source of funds.
    * @param name        The name of the source of funds.
    * @param description The description for the source of funds.
+   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the source of funds
+   *                    type is specific to.
    */
-  constructor(code: string, localeId: string, sortIndex: number, name: string, description: string) {
+  constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
+              tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
+    this.tenantId = tenantId;
   }
 }

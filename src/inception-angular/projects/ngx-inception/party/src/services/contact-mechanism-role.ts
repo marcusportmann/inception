@@ -47,11 +47,6 @@ export class ContactMechanismRole {
   name: string;
 
   /**
-   * The numeric code for the contact mechanism role.
-   */
-  numericCode: number;
-
-  /**
    * The codes for the party types the contact mechanism role is associated with.
    */
   partyTypes: string[];
@@ -62,28 +57,35 @@ export class ContactMechanismRole {
   sortIndex: number;
 
   /**
+   * The Universally Unique Identifier (UUID) for the tenant the contact mechanism role is specific
+   * to.
+   */
+  tenantId?: string;
+
+  /**
    * Constructs a new ContactMechanismRole.
    *
    * @param contactMechanismType The code for the contact mechanism type the contact mechanism role
    *                             is associated with.
    * @param code                 The code for the contact mechanism role.
    * @param localeId             The Unicode locale identifier for the contact mechanism role.
-   * @param numericCode          The numeric code for the contact mechanism role.
-   * @param partyTypes           The codes for the party types the contact mechanism role is
-   *                             associated with.
    * @param sortIndex            The sort index for the contact mechanism role.
    * @param name                 The name of the contact mechanism role.
    * @param description          The description for the contact mechanism role.
+   * @param partyTypes           The codes for the party types the contact mechanism role is
+   *                             associated with.
+   * @param tenantId             The Universally Unique Identifier (UUID) for the tenant the contact
+   *                             mechanism role is specific to.
    */
-  constructor(contactMechanismType: string, code: string, localeId: string, numericCode: number,
-              partyTypes: string[], sortIndex: number, name: string, description: string) {
+  constructor(contactMechanismType: string, code: string, localeId: string, sortIndex: number,
+              name: string, description: string, partyTypes: string[], tenantId?: string) {
     this.contactMechanismType = contactMechanismType;
     this.code = code;
     this.localeId = localeId;
-    this.numericCode = numericCode;
-    this.partyTypes = partyTypes;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
+    this.partyTypes = partyTypes;
+    this.tenantId = tenantId;
   }
 }

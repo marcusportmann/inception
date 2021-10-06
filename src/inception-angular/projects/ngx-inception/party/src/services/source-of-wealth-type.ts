@@ -15,52 +15,52 @@
  */
 
 /**
- * The ResidencyStatus class holds the information for a residency status.
+ * The SourceOfWealthType class holds the information for a type of source of wealth.
  *
  * @author Marcus Portmann
  */
-export class ResidencyStatus {
+export class SourceOfFundsType {
 
   /**
-   * The code for the residency status.
+   * The code for the source of wealth type.
    */
   code: string;
 
   /**
-   * The description for the residency status.
+   * The description for the source of wealth type.
    */
   description: string;
 
   /**
-   * The Unicode locale identifier for the residency status.
+   * The Unicode locale identifier for the source of wealth type.
    */
   localeId: string;
 
   /**
-   * The name of the residency status.
+   * The name of the source of wealth type.
    */
   name: string;
 
   /**
-   * The sort index for the residency status.
+   * The sort index for the source of wealth type.
    */
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the residency status is specific to.
+   * The Universally Unique Identifier (UUID) for the tenant the source of wealth type is specific to.
    */
   tenantId?: string;
 
   /**
-   * Constructs a new ResidencyStatus.
+   * Constructs a new SourceOfFunds.
    *
-   * @param code        The code for the residency status.
-   * @param localeId    The Unicode locale identifier for the residency status.
-   * @param sortIndex   The sort index for the residency status.
-   * @param name        The name of the residency status.
-   * @param description The description for the residency status.
-   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the residency status
-   *                    is specific to.
+   * @param code        The code for the source of funds.
+   * @param localeId    The Unicode locale identifier for the source of funds.
+   * @param sortIndex   The sort index for the source of funds.
+   * @param name        The name of the source of funds.
+   * @param description The description for the source of funds.
+   * @param tenantId    The The Universally Unique Identifier (UUID) for the tenant the source of
+   *                    wealth type is specific.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               tenantId?: string) {

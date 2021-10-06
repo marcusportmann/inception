@@ -42,11 +42,6 @@ export class ContactMechanismType {
   name: string;
 
   /**
-   * The numeric code for the contact mechanism sub type.
-   */
-  numericCode: number;
-
-  /**
    * The plural for the contact mechanism type.
    */
   plural: string;
@@ -57,24 +52,31 @@ export class ContactMechanismType {
   sortIndex: number;
 
   /**
+   * The Universally Unique Identifier (UUID) for the tenant the contact mechanism type is specific
+   * to.
+   */
+  tenantId?: string;
+
+  /**
    * Constructs a new ContactMechanismType.
    *
    * @param code        The code for the contact mechanism type.
    * @param localeId    The Unicode locale identifier for the contact mechanism type.
-   * @param numericCode The numeric code for the contact mechanism type.
    * @param sortIndex   The sort index for the contact mechanism type.
    * @param name        The name of the contact mechanism type.
-   * @param plural      The plural for the contact mechanism type.
    * @param description The description for the contact mechanism type.
+   * @param plural      The plural for the contact mechanism type.
+   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the contact
+   *                    mechanism type is specific to.
    */
-  constructor(code: string, localeId: string, numericCode: number, sortIndex: number,
-              name: string, plural: string, description: string) {
+  constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
+              plural: string, tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
-    this.numericCode = numericCode;
     this.sortIndex = sortIndex;
     this.name = name;
     this.plural = plural;
     this.description = description;
+    this.tenantId = tenantId;
   }
 }

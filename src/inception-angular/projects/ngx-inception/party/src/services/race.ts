@@ -47,6 +47,11 @@ export class Race {
   sortIndex: number;
 
   /**
+   * The Universally Unique Identifier (UUID) for the tenant the race is specific to.
+   */
+  tenantId?: string;
+
+  /**
    * Constructs a new Race.
    *
    * @param code        The code for the race.
@@ -54,12 +59,16 @@ export class Race {
    * @param sortIndex   The sort index for the race.
    * @param name        The name of the race.
    * @param description The description for the race.
+   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the race is specific
+   *                    to.
    */
-  constructor(code: string, localeId: string, sortIndex: number, name: string, description: string) {
+  constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
+              tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
+    this.tenantId = tenantId;
   }
 }

@@ -15,52 +15,52 @@
  */
 
 /**
- * The ResidencyStatus class holds the information for a residency status.
+ * The PhysicalAddressType class holds the information for a physical address type.
  *
  * @author Marcus Portmann
  */
-export class ResidencyStatus {
+export class PhysicalAddressType {
 
   /**
-   * The code for the residency status.
+   * The code for the physical address type.
    */
   code: string;
 
   /**
-   * The description for the residency status.
+   * The description for the physical address type.
    */
   description: string;
 
   /**
-   * The Unicode locale identifier for the residency status.
+   * The Unicode locale identifier for the physical address type.
    */
   localeId: string;
 
   /**
-   * The name of the residency status.
+   * The name of the physical address type.
    */
   name: string;
 
   /**
-   * The sort index for the residency status.
+   * The sort index for the physical address type.
    */
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the residency status is specific to.
+   * The Universally Unique Identifier (UUID) for the tenant the physical address type is specific to.
    */
   tenantId?: string;
 
+
   /**
-   * Constructs a new ResidencyStatus.
+   * Constructs a new PhysicalAddressType.
    *
-   * @param code        The code for the residency status.
-   * @param localeId    The Unicode locale identifier for the residency status.
-   * @param sortIndex   The sort index for the residency status.
-   * @param name        The name of the residency status.
-   * @param description The description for the residency status.
-   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the residency status
-   *                    is specific to.
+   * @param code        The code for the physical address type.
+   * @param localeId    The Unicode locale identifier for the physical address type.
+   * @param sortIndex   The sort index for the physical address type.
+   * @param name        The name of the physical address type.
+   * @param description The description for the physical address type.
+   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the physical address type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               tenantId?: string) {
@@ -72,3 +72,7 @@ export class ResidencyStatus {
     this.tenantId = tenantId;
   }
 }
+
+
+
+

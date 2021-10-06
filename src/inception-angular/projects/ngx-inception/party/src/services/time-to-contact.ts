@@ -15,52 +15,52 @@
  */
 
 /**
- * The ResidencyStatus class holds the information for a residency status.
+ * The TimeToContact class holds the information for a time to contact.
  *
  * @author Marcus Portmann
  */
-export class ResidencyStatus {
+export class TimeToContact {
 
   /**
-   * The code for the residency status.
+   * The code for the time to contact.
    */
   code: string;
 
   /**
-   * The description for the residency status.
+   * The description for the time to contact.
    */
   description: string;
 
   /**
-   * The Unicode locale identifier for the residency status.
+   * The Unicode locale identifier for the time to contact.
    */
   localeId: string;
 
   /**
-   * The name of the residency status.
+   * The name of the time to contact.
    */
   name: string;
 
   /**
-   * The sort index for the residency status.
+   * The sort index for the time to contact.
    */
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the residency status is specific to.
+   * The Universally Unique Identifier (UUID) for the tenant the time to contact is specific to.
    */
   tenantId?: string;
 
   /**
-   * Constructs a new ResidencyStatus.
+   * Constructs a new TimeToContact.
    *
-   * @param code        The code for the residency status.
-   * @param localeId    The Unicode locale identifier for the residency status.
-   * @param sortIndex   The sort index for the residency status.
-   * @param name        The name of the residency status.
-   * @param description The description for the residency status.
-   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the residency status
-   *                    is specific to.
+   * @param code           The code for the time to contact.
+   * @param localeId       The Unicode locale identifier for the time to contact.
+   * @param sortIndex      The sort index for the time to contact.
+   * @param name           The name of the time to contact.
+   * @param description    The description for the time to contact.
+   * @param tenantId       The Universally Unique Identifier (UUID) for the tenant the time to
+   *                       contact is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               tenantId?: string) {

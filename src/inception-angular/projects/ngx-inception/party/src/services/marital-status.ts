@@ -47,6 +47,11 @@ export class MaritalStatus {
   sortIndex: number;
 
   /**
+   * The Universally Unique Identifier (UUID) for the tenant the marital status is specific to.
+   */
+  tenantId?: string;
+
+  /**
    * Constructs a new MaritalStatus.
    *
    * @param code        The code for the marital status.
@@ -54,12 +59,16 @@ export class MaritalStatus {
    * @param sortIndex   The sort index for the marital status.
    * @param name        The name of the marital status.
    * @param description The description for the marital status.
+   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the marital status
+   *                    is specific to.
    */
-  constructor(code: string, localeId: string, sortIndex: number, name: string, description: string) {
+  constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
+              tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
+    this.tenantId = tenantId;
   }
 }
