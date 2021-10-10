@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * Provides the service classes.
+ *
+ * @author Marcus Portmann
+ */
 @javax.xml.bind.annotation.XmlSchema(
     namespace = "http://inception.digital/core",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,

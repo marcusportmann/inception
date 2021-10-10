@@ -509,6 +509,11 @@ public class Element implements Serializable, Content {
     }
   }
 
+  /**
+   * Set the name for the element.
+   *
+   * @param name the name for the element
+   */
   protected void setName(String name) {
     this.name = name;
   }
