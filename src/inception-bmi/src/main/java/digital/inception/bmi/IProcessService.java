@@ -45,7 +45,7 @@ public interface IProcessService {
           ServiceUnavailableException;
 
   /**
-   * Delete the existing process definition.
+   * Delete the process definition.
    *
    * @param processDefinitionId the ID for the process definition
    * @throws InvalidArgumentException if an argument is invalid

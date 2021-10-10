@@ -32,10 +32,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "VehicleType", namespace = "http://demo")
 public enum VehicleType {
+  /** Car. */
   @XmlEnumValue("Car")
   CAR("car", "Car"),
+
+  /** Motorbike. */
   @XmlEnumValue("Motorbike")
   MOTORBIKE("motorbike", "Motorbike"),
+
+  /** Unknown */
   @XmlEnumValue("Unknown")
   UNKNOWN("unknown", "Unknown");
 

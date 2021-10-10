@@ -614,6 +614,9 @@
         <configuration>
           <failOnWarnings>false</failOnWarnings>
           <quiet>true</quiet>
+          <sourceFileExcludes>
+            <sourceFileExclude>**/Version.java</sourceFileExclude>
+          </sourceFileExcludes>
         </configuration>
         <executions>
           <execution>

@@ -32,10 +32,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "PasswordResetStatus", namespace = "http://inception.digital/security")
 public enum PasswordResetStatus {
+  /** Requested. */
   @XmlEnumValue("Requested")
   REQUESTED("requested", "Requested"),
+
+  /** Completed. */
   @XmlEnumValue("Completed")
   COMPLETED("completed", "Completed"),
+
+  /** Expired. */
   @XmlEnumValue("Expired")
   EXPIRED("expired", "Expired");
 

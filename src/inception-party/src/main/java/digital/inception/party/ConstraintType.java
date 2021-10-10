@@ -33,16 +33,27 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "ConstraintType", namespace = "http://inception.digital/party")
 public enum ConstraintType {
+  /** Maximum size. */
   @XmlEnumValue("MaxSize")
   MAX_SIZE("max_size", "Maximum Size"),
+
+  /** Minimum size. */
   @XmlEnumValue("MinSize")
   MIN_SIZE("min_size", "Minimum Size"),
+
+  /** Pattern. */
   @XmlEnumValue("Pattern")
   PATTERN("pattern", "Pattern"),
+
+  /** Reference. */
   @XmlEnumValue("Reference")
   REFERENCE("reference", "Reference"),
+
+  /** Required. */
   @XmlEnumValue("Required")
   REQUIRED("required", "Required"),
+
+  /** Size. */
   @XmlEnumValue("Size")
   SIZE("size", "Size");
 

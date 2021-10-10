@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * Provides the classes for the SMS module.
+ *
+ * @author Marcus Portmann
+ */
 @javax.xml.bind.annotation.XmlSchema(
     namespace = "http://inception.digital/sms",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,

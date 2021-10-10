@@ -27,11 +27,19 @@ public class Attribute implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
+  /**
+   * The name of the attribute.
+   */
   private String name;
 
+  /**
+   * The value for the attribute.
+   */
   private String value;
 
-  /** Constructs a new <b>Attribute</b>. */
+  /**
+   * Constructs a new <b>Attribute</b>.
+   */
   public Attribute() {
     name = "";
     value = "";
@@ -40,7 +48,7 @@ public class Attribute implements Serializable {
   /**
    * Constructs a new <b>Attribute</b> with the specified name and value.
    *
-   * @param name the name of the attribute
+   * @param name  the name of the attribute
    * @param value the value for the attribute
    */
   public Attribute(String name, String value) {

@@ -34,21 +34,52 @@ import org.springframework.data.repository.query.Param;
  */
 public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> {
 
+  /**
+   * Retrieve the number of message parts queued for assembly for the message.
+   *
+   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @return the number of message parts queued for assembly for the message
+   */
   @Query(
       "select count(mp.id) from MessagePart mp where mp.status = 4 and "
           + "mp.messageId = :messageId")
   int countMessagePartsQueuedForAssemblyByMessageId(@Param("messageId") UUID messageId);
 
+  /**
+   * Delete the message part.
+   *
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   */
   @Modifying
   @Query("delete from MessagePart mp where mp.id = :messagePartId")
   void deleteById(@Param("messagePartId") UUID messagePartId);
 
+  /**
+   * Delete the message parts for the message.
+   *
+   * @param messageId the Universally Unique Identifier (UUID) for the message
+   */
   @Modifying
   @Query("delete from MessagePart mp where mp.messageId = :messageId")
   void deleteMessagePartsByMessageId(@Param("messageId") UUID messageId);
 
+  /**
+   * Check whether the message part with the specified ID and status exists.
+   *
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param status the message part status
+   * @return <b>true</b> if the message part with the specified ID and status exists or <b>false</b>
+   *     otherwise
+   */
   boolean existsByIdAndStatus(UUID messagePartId, MessagePartStatus status);
 
+  /**
+   * Retrieve and lock the message parts with the specified status for the message.
+   *
+   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param status the message part status
+   * @return the locked message parts with the specified status for the message
+   */
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query(
       "select mp from MessagePart mp where mp.messageId = :messageId and mp.status = :status "
@@ -56,6 +87,15 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   List<MessagePart> findMessagePartsByMessageIdAndStatusForWrite(
       @Param("messageId") UUID messageId, @Param("status") MessagePartStatus status);
 
+  /**
+   * Retrieve and lock the message parts with the specified status for the user and device.
+   *
+   * @param username the username for the user
+   * @param deviceId the Universally Unique Identifier (UUID) for the device
+   * @param status the message part status
+   * @param pageable the pagination information
+   * @return the locked message parts with the specified status for the user and device
+   */
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query(
       "select mp from MessagePart mp where mp.messageUsername = :username and "
@@ -67,6 +107,12 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
       @Param("status") MessagePartStatus status,
       Pageable pageable);
 
+  /**
+   * Lock the message part for assembly.
+   *
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param lockName the lock name
+   */
   @Modifying
   @Query(
       "update MessagePart mp set mp.lockName = :lockName, mp.status = 5 "
@@ -74,6 +120,12 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   void lockMessagePartForAssembly(
       @Param("messagePartId") UUID messagePartId, @Param("lockName") String lockName);
 
+  /**
+   * Lock the message part for download.
+   *
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param lockName the lock name
+   */
   @Modifying
   @Query(
       "update MessagePart mp set mp.lockName = :lockName, mp.status = 7, "
@@ -81,6 +133,13 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   void lockMessagePartForDownload(
       @Param("messagePartId") UUID messagePartId, @Param("lockName") String lockName);
 
+  /**
+   * Reset the status and locks for the message parts with the specified status and lock name.
+   *
+   * @param status the message part status
+   * @param newStatus the new message part status
+   * @param lockName the lock name
+   */
   @Modifying
   @Query(
       "update MessagePart mp set mp.status = :newStatus, mp.lockName = null "
@@ -90,11 +149,23 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
       @Param("newStatus") MessagePartStatus newStatus,
       @Param("lockName") String lockName);
 
+  /**
+   * Set the status for the message part.
+   *
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param status the message part status
+   */
   @Modifying
   @Query("update MessagePart mp set mp.status = :status where mp.id = :messagePartId")
   void setStatusById(
       @Param("messagePartId") UUID messagePartId, @Param("status") MessagePartStatus status);
 
+  /**
+   * Unlock the message part and set its status.
+   *
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param status the new status for the message part
+   */
   @Modifying
   @Query(
       "update MessagePart mp set mp.status = :status, mp.lockName = null "

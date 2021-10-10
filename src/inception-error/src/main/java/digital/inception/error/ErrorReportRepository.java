@@ -30,6 +30,11 @@ import org.springframework.data.repository.query.Param;
  */
 public interface ErrorReportRepository extends JpaRepository<ErrorReport, UUID> {
 
+  /**
+   * Delete the error report.
+   *
+   * @param errorReportId the Universally Unique Identifier (UUID) for the error report
+   */
   @Modifying
   @Query("delete from ErrorReport er where er.id = :errorReportId")
   void deleteById(@Param("errorReportId") UUID errorReportId);

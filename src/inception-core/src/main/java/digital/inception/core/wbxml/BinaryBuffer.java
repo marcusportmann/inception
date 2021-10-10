@@ -30,12 +30,12 @@ public class BinaryBuffer implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  private ByteArrayOutputStream stream = null;
+  /** The ByteArrayOutputStream instance that holds the data for the BinaryBuffer. */
+  private ByteArrayOutputStream stream = new ByteArrayOutputStream();
+  ;
 
   /** Constructs a new empty <b>BinaryBuffer</b>. */
-  public BinaryBuffer() {
-    stream = new ByteArrayOutputStream();
-  }
+  public BinaryBuffer() {}
 
   /**
    * Constructs a new <b>BinaryBuffer</b> containing the specified binary data.

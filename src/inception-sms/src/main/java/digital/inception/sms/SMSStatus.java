@@ -32,16 +32,27 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "SMSStatus", namespace = "http://inception.digital/sms")
 public enum SMSStatus {
+  /** Unknown. */
   @XmlEnumValue("Unknown")
   UNKNOWN("unknown", "Unknown"),
+
+  /** Queued for sending. */
   @XmlEnumValue("QueuedForSending")
   QUEUED_FOR_SENDING("queued_for_sending", "QueuedForSending"),
+
+  /** Sending. */
   @XmlEnumValue("Sending")
   SENDING("sending", "Sending"),
+
+  /** Sent. */
   @XmlEnumValue("Sent")
   SENT("sent", "Sent"),
+
+  /** Failed. */
   @XmlEnumValue("Failed")
   FAILED("failed", "Failed"),
+
+  /** Any. */
   @XmlEnumValue("Any")
   ANY("any", "Any");
 

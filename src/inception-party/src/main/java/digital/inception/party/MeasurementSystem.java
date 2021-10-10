@@ -38,10 +38,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "MeasurementSystem", namespace = "http://inception.digital/party")
 public enum MeasurementSystem {
+  /** Customary. */
   @XmlEnumValue("Customary")
   CUSTOMARY("customary", "United States Customary"),
+
+  /** Imperial. */
   @XmlEnumValue("Imperial")
   IMPERIAL("imperial", "British Imperial"),
+
+  /** Metric. */
   @XmlEnumValue("Metric")
   METRIC("metric", "Metric");
 

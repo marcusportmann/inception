@@ -31,9 +31,11 @@ public class Document implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
+  /** The public ID for the document. */
   private int publicId = PUBLIC_ID_UNKNOWN;
 
-  private Element rootElement = null;
+  /** The root element for the document. */
+  private Element rootElement;
 
   /**
    * Constructs a new <b>Document</b> with the specified root element.

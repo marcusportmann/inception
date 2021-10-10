@@ -54,7 +54,7 @@ public class MessagingServlet extends HttpServlet {
   /** Is the messaging servlet initialized? */
   private boolean isInitialized;
 
-  /* Messaging Service */
+  /** The Messaging Service. */
   @Autowired private IMessagingService messagingService;
 
   /** Constructs a new <b>MessagingServlet</b>. */

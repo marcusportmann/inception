@@ -32,8 +32,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "TenantStatus", namespace = "http://inception.digital/security")
 public enum TenantStatus {
+  /** Inactive. */
   @XmlEnumValue("Inactive")
   INACTIVE("inactive", "Inactive"),
+
+  /** Active. */
   @XmlEnumValue("Active")
   ACTIVE("active", "Active");
 

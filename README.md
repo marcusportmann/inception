@@ -21,8 +21,7 @@ Complete the following steps to setup a development environment on MacOS.
    ```
 3. Install OpenJDK 17 by executing the following commands in a Terminal window.
    ```
-   brew tap AdoptOpenJDK/openjdk
-   brew cask install adoptopenjdk17
+   brew install --cask temurin
    ```
 4. Install Apache Maven by executing the following command in a Terminal window.
    ```
@@ -41,8 +40,8 @@ Complete the following steps to setup a development environment on MacOS.
 7. Set OpenJDK 17 as the default java verison by executing the following commands in a
    Terminal window.
    ```
-   jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-17.jdk/Contents/Home
-   jenv global 17.0
+   jenv add /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
+   jenv global 17
    ```
 8. Install the maven plugin for jenv by executing the following command in a Terminal
    window.
@@ -61,7 +60,7 @@ Complete the following steps to setup a development environment on MacOS.
     ```
     brew install npm
     ```
-12. Install the Angular CLI 11 globally by executing the following command in a Terminal
+12. Install the Angular CLI 12 globally by executing the following command in a Terminal
     window.
     ```
     npm install -g @angular/cli@12
@@ -155,7 +154,7 @@ Complete the following steps to checkout and build the Inception Framework on Ma
 4. Download the Node.js and npm package from *https://nodejs.org/en/download/* and install it.
 
    **NOTE:** Set the proxy for NPM if required.
-5. Install the Angular CLI 11 globally by executing the following command in a Git Bash
+5. Install the Angular CLI 12 globally by executing the following command in a Git Bash
    window.
    ```
    npm install -g @angular/cli@12

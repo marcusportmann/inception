@@ -41,7 +41,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
 /**
- * The <code>GenerateLiquibaseChangelog</code> class.
+ * The <b>GenerateLiquibaseChangelog</b> class.
  *
  * @author Marcus Portmann
  */

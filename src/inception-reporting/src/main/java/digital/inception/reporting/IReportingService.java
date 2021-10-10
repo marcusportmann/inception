@@ -95,7 +95,7 @@ public interface IReportingService {
           ServiceUnavailableException;
 
   /**
-   * Delete the existing report definition.
+   * Delete the report definition.
    *
    * @param reportDefinitionId the ID for the report definition
    * @throws InvalidArgumentException if an argument is invalid

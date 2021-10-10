@@ -32,8 +32,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "GroupMemberType", namespace = "http://inception.digital/security")
 public enum GroupMemberType {
+  /** User. */
   @XmlEnumValue("User")
   USER("user", "User"),
+
+  /** Group. */
   @XmlEnumValue("Group")
   GROUP("group", "Group");
 

@@ -33,16 +33,27 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "RequiredMandataries", namespace = "http://inception.digital/party")
 public enum RequiredMandataries {
+  /** All. */
   @XmlEnumValue("All")
   ALL("all", "All Mandataries"),
+
+  /** Any. */
   @XmlEnumValue("Any")
   ANY("any", "Any Mandatary"),
+
+  /** Any two. */
   @XmlEnumValue("AnyTwo")
   ANY_TWO("any_two", "Any Two Mandataries"),
+
+  /** Any three. */
   @XmlEnumValue("AnyThree")
   ANY_THREE("any_three", "Any Three Mandataries"),
+
+  /** Any four. */
   @XmlEnumValue("AnyFour")
   ANY_FOUR("any_four", "Any Four Mandataries"),
+
+  /** Any five. */
   @XmlEnumValue("AnyFive")
   ANY_FIVE("any_five", "Any Five Mandataries");
 
@@ -84,9 +95,7 @@ public enum RequiredMandataries {
 
       default:
         throw new RuntimeException(
-            "Failed to determine the required mandataries with the invalid code ("
-                + code
-                + ")");
+            "Failed to determine the required mandataries with the invalid code (" + code + ")");
     }
   }
 
