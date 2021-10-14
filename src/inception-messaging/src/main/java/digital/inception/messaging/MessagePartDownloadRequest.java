@@ -30,10 +30,7 @@ import java.util.UUID;
 @SuppressWarnings({"WeakerAccess"})
 public class MessagePartDownloadRequest {
 
-  /**
-   * The Universally Unique Identifier (UUID) for the device the message part download request
-   * originated from.
-   */
+  /** The ID for the device the message part download request originated from. */
   private UUID deviceId;
 
   /** The username for the user whose message parts should be downloaded. */
@@ -58,8 +55,7 @@ public class MessagePartDownloadRequest {
   /**
    * Constructs a new <b>MessagePartDownloadRequest</b>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message part
-   *     download request originated from
+   * @param deviceId the ID for the device the message part download request originated from
    * @param username the username for the user whose message parts should be downloaded
    */
   public MessagePartDownloadRequest(UUID deviceId, String username) {
@@ -85,11 +81,9 @@ public class MessagePartDownloadRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device the message part download
-   * request originated from.
+   * Returns the ID for the device the message part download request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the message part download
-   *     request originated from
+   * @return the ID for the device the message part download request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -105,11 +99,9 @@ public class MessagePartDownloadRequest {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the device the message part download request
-   * originated from.
+   * Set the ID for the device the message part download request originated from.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message part
-   *     download request originated from
+   * @param deviceId the ID for the device the message part download request originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;

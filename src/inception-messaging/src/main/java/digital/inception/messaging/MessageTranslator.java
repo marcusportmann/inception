@@ -45,7 +45,7 @@ public class MessageTranslator {
             }
           });
 
-  /** The Universally Unique Identifier (UUID) for the device associated with the message. */
+  /** The ID for the device associated with the message. */
   private final UUID deviceId;
 
   /** The encryption key used to encrypt or decrypt the message data. */
@@ -58,8 +58,7 @@ public class MessageTranslator {
    * Constructs a new <b>MessageTranslator</b>.
    *
    * @param username the username for the username responsible for the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
-   *     message
+   * @param deviceId the ID for the device associated with the message
    */
   public MessageTranslator(String username, UUID deviceId) {
     this.username = username;
@@ -71,8 +70,7 @@ public class MessageTranslator {
    * Constructs a new <b>MessageTranslator</b>.
    *
    * @param username the username for the user responsible for the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
-   *     message
+   * @param deviceId the ID for the device associated with the message
    * @param encryptionKey the key used to encrypt or decrypt the message data
    */
   public MessageTranslator(String username, UUID deviceId, byte[] encryptionKey) {
@@ -144,7 +142,8 @@ public class MessageTranslator {
    * @param messageData the WBXML-based message data object to populate
    * @param <T> the message data type for the WBXML-based message data
    * @return the WBXML-based message data
-   * @throws MessagingException if the WBXML-based message data could not be retrieved from the message
+   * @throws MessagingException if the WBXML-based message data could not be retrieved from the
+   *     message
    */
   public <T extends WbxmlMessageData> T fromMessage(Message message, T messageData)
       throws MessagingException {
@@ -197,9 +196,10 @@ public class MessageTranslator {
    * Returns the message containing the WBXML-based message data.
    *
    * @param messageData the WBXML-based message data
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   * @param correlationId the ID used to correlate the message
    * @return the message that can be sent via the messaging infrastructure
-   * @throws MessagingException if the message containing the WBXML-based message data could not be created
+   * @throws MessagingException if the message containing the WBXML-based message data could not be
+   *     created
    */
   public Message toMessage(WbxmlMessageData messageData, UUID correlationId)
       throws MessagingException {
@@ -253,7 +253,8 @@ public class MessageTranslator {
    *
    * @param messageData the WBXML-based message data
    * @return the message that can be sent via the messaging infrastructure
-   * @throws MessagingException if the message containing the WBXML-based message data could not be created
+   * @throws MessagingException if the message containing the WBXML-based message data could not be
+   *     created
    */
   public Message toMessage(WbxmlMessageData messageData) throws MessagingException {
     return toMessage(messageData, null);

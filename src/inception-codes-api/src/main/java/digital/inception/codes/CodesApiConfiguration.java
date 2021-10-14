@@ -22,7 +22,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>CodesApiConfiguration</b> class provides the Spring configuration for the Codes API module.
+ * The <b>CodesApiConfiguration</b> class provides the Spring configuration for the Codes API
+ * module.
  *
  * @author Marcus Portmann
  */
@@ -40,8 +41,7 @@ public class CodesApiConfiguration {
         .group("codes")
         .packagesToScan(new String[] {"digital.inception.codes"})
         .addOpenApiCustomiser(
-            openApi ->
-                openApi.info(new Info().title("Codes API").version(Version.PROJECT_VERSION)))
+            openApi -> openApi.info(new Info().title("Codes API").version(Version.PROJECT_VERSION)))
         .build();
   }
 }

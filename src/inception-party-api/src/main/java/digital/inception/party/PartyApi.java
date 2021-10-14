@@ -75,7 +75,7 @@ public class PartyApi extends SecureApi {
   /**
    * Create the new association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param association the association
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateAssociationException if the association already exists
@@ -102,13 +102,13 @@ public class PartyApi extends SecureApi {
                 @Content(
                     mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "One or more parties for the association could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "One or more parties for the association could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "409",
             description = "An association with the specified ID already exists",
@@ -135,7 +135,7 @@ public class PartyApi extends SecureApi {
   public void createAssociation(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -147,7 +147,8 @@ public class PartyApi extends SecureApi {
               required = true)
           @RequestBody
           Association association)
-      throws InvalidArgumentException, DuplicateAssociationException, PartyNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException, DuplicateAssociationException, PartyNotFoundException,
+          ServiceUnavailableException {
     tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(association.getTenantId())) {
@@ -161,7 +162,7 @@ public class PartyApi extends SecureApi {
   /**
    * Create the new organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param organization the organization
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateOrganizationException if the organization already exists
@@ -213,7 +214,7 @@ public class PartyApi extends SecureApi {
   public void createOrganization(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -239,7 +240,7 @@ public class PartyApi extends SecureApi {
   /**
    * Create the new person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param person the person
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicatePersonException if the person already exists
@@ -286,7 +287,7 @@ public class PartyApi extends SecureApi {
   public void createPerson(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -311,8 +312,8 @@ public class PartyApi extends SecureApi {
   /**
    * Delete the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @param tenantId the ID for the tenant
+   * @param associationId the ID for the association
    * @throws InvalidArgumentException if an argument is invalid
    * @throws AssociationNotFoundException if the association could not be found
    * @throws ServiceUnavailableException if the association could not be deleted
@@ -363,7 +364,7 @@ public class PartyApi extends SecureApi {
   public void deleteAssociation(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -372,7 +373,7 @@ public class PartyApi extends SecureApi {
           UUID tenantId,
       @Parameter(
               name = "associationId",
-              description = "The Universally Unique Identifier (UUID) for the association",
+              description = "The ID for the association",
               required = true)
           @PathVariable
           UUID associationId)
@@ -383,8 +384,8 @@ public class PartyApi extends SecureApi {
   /**
    * Delete the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   * @param tenantId the ID for the tenant
+   * @param organizationId the ID for the organization
    * @throws InvalidArgumentException if an argument is invalid
    * @throws OrganizationNotFoundException if the organization could not be found
    * @throws ServiceUnavailableException if the organization could not be deleted
@@ -435,7 +436,7 @@ public class PartyApi extends SecureApi {
   public void deleteOrganization(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -444,7 +445,7 @@ public class PartyApi extends SecureApi {
           UUID tenantId,
       @Parameter(
               name = "organizationId",
-              description = "The Universally Unique Identifier (UUID) for the organization",
+              description = "The ID for the organization",
               required = true)
           @PathVariable
           UUID organizationId)
@@ -455,8 +456,8 @@ public class PartyApi extends SecureApi {
   /**
    * Delete the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
+   * @param tenantId the ID for the tenant
+   * @param personId the ID for the person
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PersonNotFoundException if the person could not be found
    * @throws ServiceUnavailableException if the person could not be deleted
@@ -505,17 +506,14 @@ public class PartyApi extends SecureApi {
   public void deletePerson(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
-      @Parameter(
-              name = "personId",
-              description = "The Universally Unique Identifier (UUID) for the person",
-              required = true)
+      @Parameter(name = "personId", description = "The ID for the person", required = true)
           @PathVariable
           UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
@@ -525,8 +523,8 @@ public class PartyApi extends SecureApi {
   /**
    * Retrieve the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @param tenantId the ID for the tenant
+   * @param associationId the ID for the association
    * @return the association
    * @throws InvalidArgumentException if an argument is invalid
    * @throws AssociationNotFoundException if the association could not be found
@@ -576,7 +574,7 @@ public class PartyApi extends SecureApi {
   public Association getAssociation(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -585,7 +583,7 @@ public class PartyApi extends SecureApi {
           UUID tenantId,
       @Parameter(
               name = "associationId",
-              description = "The Universally Unique Identifier (UUID) for the association",
+              description = "The ID for the association",
               required = true)
           @PathVariable
           UUID associationId)
@@ -602,8 +600,8 @@ public class PartyApi extends SecureApi {
   /**
    * Retrieve the associations for the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    * @param sortBy the optional method used to sort the associations e.g. by type
    * @param sortDirection the optional sort direction to apply to the associations
    * @param pageIndex the optional page index
@@ -659,17 +657,14 @@ public class PartyApi extends SecureApi {
   public Associations getAssociationsForParty(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
-      @Parameter(
-              name = "partyId",
-              description = "The Universally Unique Identifier (UUID) for the party",
-              required = true)
+      @Parameter(name = "partyId", description = "The ID for the party", required = true)
           @PathVariable
           UUID partyId,
       @Parameter(
@@ -707,8 +702,8 @@ public class PartyApi extends SecureApi {
   /**
    * Retrieve the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   * @param tenantId the ID for the tenant
+   * @param organizationId the ID for the organization
    * @return the organization
    * @throws InvalidArgumentException if an argument is invalid
    * @throws OrganizationNotFoundException if the organization could not be found
@@ -758,7 +753,7 @@ public class PartyApi extends SecureApi {
   public Organization getOrganization(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -767,7 +762,7 @@ public class PartyApi extends SecureApi {
           UUID tenantId,
       @Parameter(
               name = "organizationId",
-              description = "The Universally Unique Identifier (UUID) for the organization",
+              description = "The ID for the organization",
               required = true)
           @PathVariable
           UUID organizationId)
@@ -784,7 +779,7 @@ public class PartyApi extends SecureApi {
   /**
    * Retrieve the organizations.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the organizations
    * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
@@ -831,7 +826,7 @@ public class PartyApi extends SecureApi {
   public Organizations getOrganizations(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -878,7 +873,7 @@ public class PartyApi extends SecureApi {
   /**
    * Retrieve the parties.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the parties
    * @param sortBy the optional method used to sort the parties e.g. by name
    * @param sortDirection the optional sort direction to apply to the parties
@@ -922,7 +917,7 @@ public class PartyApi extends SecureApi {
   public Parties getParties(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -933,9 +928,9 @@ public class PartyApi extends SecureApi {
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
-          name = "sortBy",
-          description = "The optional method used to sort the parties e.g. by name")
-      @RequestParam(value = "sortBy", required = false)
+              name = "sortBy",
+              description = "The optional method used to sort the parties e.g. by name")
+          @RequestParam(value = "sortBy", required = false)
           PartySortBy sortBy,
       @Parameter(
               name = "sortDirection",
@@ -968,8 +963,8 @@ public class PartyApi extends SecureApi {
   /**
    * Retrieve the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    * @return the party
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PartyNotFoundException if the party could not be found
@@ -1019,17 +1014,14 @@ public class PartyApi extends SecureApi {
   public Party getParty(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
-      @Parameter(
-              name = "partyId",
-              description = "The Universally Unique Identifier (UUID) for the party",
-              required = true)
+      @Parameter(name = "partyId", description = "The ID for the party", required = true)
           @PathVariable
           UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
@@ -1045,8 +1037,8 @@ public class PartyApi extends SecureApi {
   /**
    * Retrieve the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
+   * @param tenantId the ID for the tenant
+   * @param personId the ID for the person
    * @return the person
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PersonNotFoundException if the person could not be found
@@ -1096,17 +1088,14 @@ public class PartyApi extends SecureApi {
   public Person getPerson(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
-      @Parameter(
-              name = "personId",
-              description = "The Universally Unique Identifier (UUID) for the person",
-              required = true)
+      @Parameter(name = "personId", description = "The ID for the person", required = true)
           @PathVariable
           UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
@@ -1122,7 +1111,7 @@ public class PartyApi extends SecureApi {
   /**
    * Retrieve the persons.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the persons
    * @param sortBy the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
@@ -1166,7 +1155,7 @@ public class PartyApi extends SecureApi {
   public Persons getPersons(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1212,9 +1201,9 @@ public class PartyApi extends SecureApi {
   /**
    * Retrieve the snapshots for an entity.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param entityType the type of entity
-   * @param entityId the Universally Unique Identifier (UUID) for the entity
+   * @param entityId the ID for the entity
    * @param from the optional date to retrieve the snapshots from
    * @param to the optional date to retrieve the snapshots to
    * @param sortDirection the optional sort direction to apply to the snapshots
@@ -1258,7 +1247,7 @@ public class PartyApi extends SecureApi {
   public Snapshots getSnapshots(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1309,8 +1298,8 @@ public class PartyApi extends SecureApi {
   /**
    * Update the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @param tenantId the ID for the tenant
+   * @param associationId the ID for the association
    * @param association the association
    * @throws InvalidArgumentException if an argument is invalid
    * @throws AssociationNotFoundException if the association could not be found
@@ -1339,7 +1328,8 @@ public class PartyApi extends SecureApi {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The association could not be found or one or more parties for the association could not be found",
+            description =
+                "The association could not be found or one or more parties for the association could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -1363,7 +1353,7 @@ public class PartyApi extends SecureApi {
   public void updateAssociation(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1372,7 +1362,7 @@ public class PartyApi extends SecureApi {
           UUID tenantId,
       @Parameter(
               name = "associationId",
-              description = "The Universally Unique Identifier (UUID) for the association",
+              description = "The ID for the association",
               required = true)
           @PathVariable
           UUID associationId,
@@ -1381,7 +1371,8 @@ public class PartyApi extends SecureApi {
               required = true)
           @RequestBody
           Association association)
-      throws InvalidArgumentException, AssociationNotFoundException, PartyNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException, AssociationNotFoundException, PartyNotFoundException,
+          ServiceUnavailableException {
     tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
 
     if (!hasAccessToTenant(tenantId)) {
@@ -1406,8 +1397,8 @@ public class PartyApi extends SecureApi {
   /**
    * Update the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   * @param tenantId the ID for the tenant
+   * @param organizationId the ID for the organization
    * @param organization the organization
    * @throws InvalidArgumentException if an argument is invalid
    * @throws OrganizationNotFoundException if the organization could not be found
@@ -1459,7 +1450,7 @@ public class PartyApi extends SecureApi {
   public void updateOrganization(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1468,7 +1459,7 @@ public class PartyApi extends SecureApi {
           UUID tenantId,
       @Parameter(
               name = "organizationId",
-              description = "The Universally Unique Identifier (UUID) for the organization",
+              description = "The ID for the organization",
               required = true)
           @PathVariable
           UUID organizationId,
@@ -1502,8 +1493,8 @@ public class PartyApi extends SecureApi {
   /**
    * Update the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
+   * @param tenantId the ID for the tenant
+   * @param personId the ID for the person
    * @param person the person
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PersonNotFoundException if the person could not be found
@@ -1553,17 +1544,14 @@ public class PartyApi extends SecureApi {
   public void updatePerson(
       @Parameter(
               name = "Tenant-ID",
-              description = "The Universally Unique Identifier (UUID) for the tenant",
+              description = "The ID for the tenant",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
               defaultValue = "00000000-0000-0000-0000-000000000000",
               required = false)
           UUID tenantId,
-      @Parameter(
-              name = "personId",
-              description = "The Universally Unique Identifier (UUID) for the person",
-              required = true)
+      @Parameter(name = "personId", description = "The ID for the person", required = true)
           @PathVariable
           UUID personId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(

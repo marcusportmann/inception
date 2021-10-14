@@ -47,7 +47,7 @@ public class SMSNotFoundException extends ServiceException {
   /**
    * Constructs a new <b>SMSNotFoundException</b>.
    *
-   * @param smsId the Universally Unique Identifier (UUID) for the SMS
+   * @param smsId the ID for the SMS
    */
   public SMSNotFoundException(UUID smsId) {
     super("The SMS with ID (" + smsId + ") could not be found");

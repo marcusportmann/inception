@@ -29,10 +29,24 @@ import org.springframework.data.jpa.repository.Query;
 public interface IdentityDocumentTypeRepository
     extends JpaRepository<IdentityDocumentType, IdentityDocumentTypeId> {
 
+  /**
+   * Retrieve all the identity document types sorted by locale ID, sort index, and name.
+   *
+   * @return all the identity document types sorted by locale ID, sort index, and name.
+   */
   @Query(
       "select idt from IdentityDocumentType idt order by idt.localeId, -idt.sortIndex DESC, idt.name")
   List<IdentityDocumentType> findAll();
 
+  /**
+   * Retrieve the identity document types for the specified locale sorted by locale ID, sort index,
+   * and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
+   *     types for
+   * @return the identity document types for the specified locale sorted by locale ID, sort index,
+   *     and name
+   */
   @Query(
       "select idt from IdentityDocumentType idt where upper(idt.localeId) = upper(:localeId) order by idt.localeId, -idt.sortIndex DESC, idt.name")
   List<IdentityDocumentType> findByLocaleIdIgnoreCase(String localeId);

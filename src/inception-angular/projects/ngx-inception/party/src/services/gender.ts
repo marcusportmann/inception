@@ -47,7 +47,7 @@ export class Gender {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the gender is specific to.
+   * The ID for the tenant the gender is specific to.
    */
   tenantId?: string;
 
@@ -59,7 +59,7 @@ export class Gender {
    * @param sortIndex   The sort index for the gender.
    * @param name        The name of the gender.
    * @param description The description for the gender.
-   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the gender is
+   * @param tenantId    The ID for the tenant the gender is
    *                    specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,

@@ -47,7 +47,7 @@ export class PhysicalAddressType {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the physical address type is specific to.
+   * The ID for the tenant the physical address type is specific to.
    */
   tenantId?: string;
 
@@ -60,7 +60,7 @@ export class PhysicalAddressType {
    * @param sortIndex   The sort index for the physical address type.
    * @param name        The name of the physical address type.
    * @param description The description for the physical address type.
-   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the physical address type is specific to.
+   * @param tenantId    The ID for the tenant the physical address type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               tenantId?: string) {

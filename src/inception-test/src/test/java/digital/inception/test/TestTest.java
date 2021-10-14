@@ -16,8 +16,6 @@
 
 package digital.inception.test;
 
-import digital.inception.test.InceptionExtension;
-import digital.inception.test.TestConfiguration;
 import javax.transaction.TransactionManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +28,6 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 /**
  * The <b>MailServiceTest</b> class contains the implementation of the JUnit tests for the
@@ -45,22 +42,19 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
     initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 public class TestTest {
 
-  @Autowired
-  private TransactionManager transactionManager;
+  @Autowired private PlatformTransactionManager platformTransactionManager;
 
-  @Autowired
-  private PlatformTransactionManager platformTransactionManager;
+  @Autowired private TransactionManager transactionManager;
 
   @Test
   void testTest() {
     System.out.println("transactionManager = " + transactionManager);
     System.out.println("platformTransactionManager = " + platformTransactionManager);
   }
-
 }

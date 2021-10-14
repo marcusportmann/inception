@@ -29,10 +29,24 @@ import org.springframework.data.jpa.repository.Query;
 public interface PhysicalAddressPurposeRepository
     extends JpaRepository<PhysicalAddressPurpose, PhysicalAddressPurposeId> {
 
+  /**
+   * Retrieve all the physical address purposes sorted by locale ID, sort index, and name.
+   *
+   * @return all the physical address purposes sorted by locale ID, sort index, and name.
+   */
   @Query(
       "select pap from PhysicalAddressPurpose pap order by pap.localeId, -pap.sortIndex DESC, pap.name")
   List<PhysicalAddressPurpose> findAll();
 
+  /**
+   * Retrieve the physical address purposes for the specified locale sorted by locale ID, sort
+   * index, and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
+   *     purposes for
+   * @return the physical address purposes for the specified locale sorted by locale ID, sort index,
+   *     and name
+   */
   @Query(
       "select pap from PhysicalAddressPurpose pap where upper(pap.localeId) = upper(:localeId) order by pap.localeId, -pap.sortIndex DESC, pap.name")
   List<PhysicalAddressPurpose> findByLocaleIdIgnoreCase(String localeId);

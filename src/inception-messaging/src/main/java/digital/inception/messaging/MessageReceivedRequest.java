@@ -30,13 +30,10 @@ import java.util.UUID;
 @SuppressWarnings({"WeakerAccess"})
 public class MessageReceivedRequest {
 
-  /**
-   * The Universally Unique Identifier (UUID) for the device the message received request originated
-   * from.
-   */
+  /** The ID for the device the message received request originated from. */
   private UUID deviceId;
 
-  /** The Universally Unique Identifier (UUID) for the message that was successfully downloaded. */
+  /** The ID for the message that was successfully downloaded. */
   private UUID messageId;
 
   /**
@@ -66,10 +63,8 @@ public class MessageReceivedRequest {
   /**
    * Constructs a new <b>MessageReceivedRequest</b>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message received
-   *     request originated from
-   * @param messageId the Universally Unique Identifier (UUID) for the message that was successfully
-   *     downloaded
+   * @param deviceId the ID for the device the message received request originated from
+   * @param messageId the ID for the message that was successfully downloaded
    */
   public MessageReceivedRequest(UUID deviceId, UUID messageId) {
     this.deviceId = deviceId;
@@ -94,22 +89,18 @@ public class MessageReceivedRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device the message received request
-   * originated from.
+   * Returns the ID for the device the message received request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the message received request
-   *     originated from
+   * @return the ID for the device the message received request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the message that was successfully
-   * downloaded.
+   * Returns the ID for the message that was successfully downloaded.
    *
-   * @return the Universally Unique Identifier (UUID) for the message that was successfully
-   *     downloaded
+   * @return the ID for the message that was successfully downloaded
    */
   public UUID getMessageId() {
     return messageId;

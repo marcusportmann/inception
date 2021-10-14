@@ -29,9 +29,23 @@ import org.springframework.data.jpa.repository.Query;
 public interface ResidencyStatusRepository
     extends JpaRepository<ResidencyStatus, ResidencyStatusId> {
 
+  /**
+   * Retrieve all the residency statuses sorted by locale ID, sort index, and name.
+   *
+   * @return all the residency statuses sorted by locale ID, sort index, and name.
+   */
   @Query("select rs from ResidencyStatus rs order by rs.localeId, -rs.sortIndex DESC, rs.name")
   List<ResidencyStatus> findAll();
 
+  /**
+   * Retrieve the residency statuses for the specified locale sorted by locale ID, sort index, and
+   * name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residency statuses
+   *     for
+   * @return the residency statuses for the specified locale sorted by locale ID, sort index, and
+   *     name
+   */
   @Query(
       "select rs from ResidencyStatus rs where upper(rs.localeId) = upper(:localeId) order by rs.localeId, -rs.sortIndex DESC, rs.name")
   List<ResidencyStatus> findByLocaleIdIgnoreCase(String localeId);

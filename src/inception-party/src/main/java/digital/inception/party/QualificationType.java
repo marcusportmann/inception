@@ -39,8 +39,6 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * The <b>QualificationType</b> class holds the information for a qualification type.
  *
- * <p>
- *
  * @see <a
  *     href="https://www.mastersportal.com/articles/1953/should-i-study-a-postgraduate-certificate-or-a-graduate-diploma-abroad.html">Should
  *     I Study a Postgraduate Certificate or a Graduate Diploma Abroad?</a>
@@ -140,12 +138,8 @@ public class QualificationType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the tenant the qualification type is specific to.
-   */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the tenant the qualification type is specific to")
+  /** The ID for the tenant the qualification type is specific to. */
+  @Schema(description = "The ID for the tenant the qualification type is specific to")
   @JsonProperty
   @XmlElement(name = "TenantId")
   @Column(name = "tenant_id")
@@ -234,11 +228,9 @@ public class QualificationType implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the qualification type is
-   * specific to.
+   * Returns the ID for the tenant the qualification type is specific to.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the qualification type is
-   *     specific to
+   * @return the ID for the tenant the qualification type is specific to
    */
   public UUID getTenantId() {
     return tenantId;
@@ -309,11 +301,9 @@ public class QualificationType implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the qualification type is specific
-   * to.
+   * Set the ID for the tenant the qualification type is specific to.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the qualification type
-   *     is specific to
+   * @param tenantId the ID for the tenant the qualification type is specific to
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;

@@ -47,7 +47,7 @@ public class DuplicateAssociationException extends ServiceException {
   /**
    * Constructs a new <b>DuplicateAssociationException</b>.
    *
-   * @param id the Universally Unique Identifier (UUID) for the association
+   * @param id the ID for the association
    */
   public DuplicateAssociationException(UUID id) {
     super("The association with the ID (" + id + ") already exists");

@@ -30,7 +30,7 @@ public class ConsentId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The Universally Unique Identifier (UUID) for the person the consent is associated with. */
+  /** The ID for the person the consent is associated with. */
   private UUID person;
 
   /** The code for the consent type. */

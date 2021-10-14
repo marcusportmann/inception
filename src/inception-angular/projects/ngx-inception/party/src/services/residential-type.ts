@@ -47,7 +47,7 @@ export class ResidentialType {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the residential type is specific to.
+   * The ID for the tenant the residential type is specific to.
    */
   tenantId?: string;
 
@@ -59,7 +59,7 @@ export class ResidentialType {
    * @param sortIndex   The sort index for the residential type.
    * @param name        The name of the residential type.
    * @param description The description for the residential type.
-   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the residential type
+   * @param tenantId    The ID for the tenant the residential type
    *                    is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,

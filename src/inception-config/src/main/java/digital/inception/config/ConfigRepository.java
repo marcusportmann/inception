@@ -37,10 +37,10 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
   void deleteByKeyIgnoreCase(String key);
 
   /**
-   * Check whether the config with the specified key exists.
+   * Check whether the config exists.
    *
    * @param key the key for the config
-   * @return <b>true</b> if the config with the specified key exists or <b>false</b> otherwise
+   * @return <b>true</b> if the config exists or <b>false</b> otherwise
    */
   boolean existsByKeyIgnoreCase(String key);
 

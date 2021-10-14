@@ -33,10 +33,7 @@ import java.util.UUID;
 @SuppressWarnings("WeakerAccess")
 public class MessageDownloadRequest {
 
-  /**
-   * The Universally Unique Identifier (UUID) for the device the message download request originated
-   * from.
-   */
+  /** The ID for the device the message download request originated from. */
   private UUID deviceId;
 
   /** The username for the user whose messages should be downloaded. */
@@ -61,8 +58,7 @@ public class MessageDownloadRequest {
   /**
    * Constructs a new <b>MessageDownloadRequest</b>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message download
-   *     request originated from
+   * @param deviceId the ID for the device the message download request originated from
    * @param username the username for the user whose messages should be downloaded
    */
   public MessageDownloadRequest(UUID deviceId, String username) {
@@ -88,11 +84,9 @@ public class MessageDownloadRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device the message download request
-   * originated from.
+   * Returns the ID for the device the message download request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the message download request
-   *     originated from
+   * @return the ID for the device the message download request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -108,11 +102,9 @@ public class MessageDownloadRequest {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the device the message download request
-   * originated from.
+   * Set the ID for the device the message download request originated from.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message download
-   *     request originated from
+   * @param deviceId the ID for the device the message download request originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;

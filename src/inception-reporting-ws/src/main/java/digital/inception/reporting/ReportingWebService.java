@@ -16,8 +16,8 @@
 
 package digital.inception.reporting;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;

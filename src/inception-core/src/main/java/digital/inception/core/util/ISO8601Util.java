@@ -117,11 +117,8 @@ public final class ISO8601Util {
    * @param localDateTime the <b>LocalDateTime</b> instance to transform into an ISO 8601 string
    * @return the ISO 8601 string for the <b>LocalDateTime</b> instance
    */
-  public static String fromLocalDateTimeAsUTC(LocalDateTime localDateTime) {
-    return localDateTime
-        .atZone(ZoneId.systemDefault())
-        .withZoneSameInstant(ZoneOffset.UTC)
-        .format(localDateTimeFormatter.get());
+  public static String fromLocalDateTime(LocalDateTime localDateTime) {
+    return localDateTime.format(localDateTimeFormatter.get());
   }
 
   /**
@@ -130,8 +127,11 @@ public final class ISO8601Util {
    * @param localDateTime the <b>LocalDateTime</b> instance to transform into an ISO 8601 string
    * @return the ISO 8601 string for the <b>LocalDateTime</b> instance
    */
-  public static String fromLocalDateTime(LocalDateTime localDateTime) {
-    return localDateTime.format(localDateTimeFormatter.get());
+  public static String fromLocalDateTimeAsUTC(LocalDateTime localDateTime) {
+    return localDateTime
+        .atZone(ZoneId.systemDefault())
+        .withZoneSameInstant(ZoneOffset.UTC)
+        .format(localDateTimeFormatter.get());
   }
 
   /**

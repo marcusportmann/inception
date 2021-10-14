@@ -55,7 +55,7 @@
 //   sortDirection?: SortDirection;
 //
 //   /**
-//    * The Universally Unique Identifier (UUID) for the tenant the parties are associated with.
+//    * The ID for the tenant the parties are associated with.
 //    */
 //   tenantId: string;
 //
@@ -67,7 +67,7 @@
 //   /**
 //    * Constructs a new Parties.
 //    *
-//    * @param tenantId      The Universally Unique Identifier (UUID) for the tenant the parties are
+//    * @param tenantId      The ID for the tenant the parties are
 //    *                      associated with.
 //    * @param parties       The parties.
 //    * @param total         The total number of parties.

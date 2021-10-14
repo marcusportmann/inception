@@ -132,21 +132,16 @@ public class Association implements Serializable {
   @Column(name = "effective_to")
   private LocalDate effectiveTo;
 
-  /** The Universally Unique Identifier (UUID) for the first party in the association. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the first party in the association",
-      required = true)
+  /** The ID for the first party in the association. */
+  @Schema(description = "The ID for the first party in the association", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "FirstPartyId", required = true)
   @NotNull
   @Column(name = "first_party_id", nullable = false)
   private UUID firstPartyId;
 
-  /** The Universally Unique Identifier (UUID) for the association. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the association",
-      required = true)
+  /** The ID for the association. */
+  @Schema(description = "The ID for the association", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -154,22 +149,16 @@ public class Association implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The Universally Unique Identifier (UUID) for the second party in the association. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the second party in the association",
-      required = true)
+  /** The ID for the second party in the association. */
+  @Schema(description = "The ID for the second party in the association", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SecondPartyId", required = true)
   @NotNull
   @Column(name = "second_party_id", nullable = false)
   private UUID secondPartyId;
 
-  /** The Universally Unique Identifier (UUID) for the tenant the association is associated with. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the tenant the association is associated with",
-      required = true)
+  /** The ID for the tenant the association is associated with. */
+  @Schema(description = "The ID for the tenant the association is associated with", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
   @NotNull
@@ -197,13 +186,10 @@ public class Association implements Serializable {
   /**
    * Constructs a new <b>Association</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association is
-   *     associated with
+   * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
-   * @param firstPartyId the Universally Unique Identifier (UUID) for the first party in the
-   *     association
-   * @param secondPartyId the Universally Unique Identifier (UUID) for the second party in the
-   *     association
+   * @param firstPartyId the ID for the first party in the association
+   * @param secondPartyId the ID for the second party in the association
    */
   public Association(UUID tenantId, String type, UUID firstPartyId, UUID secondPartyId) {
     this.id = UuidCreator.getShortPrefixComb();
@@ -216,13 +202,10 @@ public class Association implements Serializable {
   /**
    * Constructs a new <b>Association</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association is
-   *     associated with
+   * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
-   * @param firstPartyId the Universally Unique Identifier (UUID) for the first party in the
-   *     association
-   * @param secondPartyId the Universally Unique Identifier (UUID) for the second party in the
-   *     association
+   * @param firstPartyId the ID for the first party in the association
+   * @param secondPartyId the ID for the second party in the association
    * @param effectiveFrom the date that the association is effective from
    */
   public Association(
@@ -238,13 +221,10 @@ public class Association implements Serializable {
   /**
    * Constructs a new <b>Association</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association is
-   *     associated with
+   * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
-   * @param firstPartyId the Universally Unique Identifier (UUID) for the first party in the
-   *     association
-   * @param secondPartyId the Universally Unique Identifier (UUID) for the second party in the
-   *     association
+   * @param firstPartyId the ID for the first party in the association
+   * @param secondPartyId the ID for the second party in the association
    * @param effectiveFrom the date that the association is effective from
    * @param effectiveTo the date that the association is effective to
    */
@@ -331,18 +311,18 @@ public class Association implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the first party in the association.
+   * Returns the ID for the first party in the association.
    *
-   * @return the Universally Unique Identifier (UUID) for the first party in the association
+   * @return the ID for the first party in the association
    */
   public UUID getFirstPartyId() {
     return firstPartyId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the association.
+   * Returns the ID for the association.
    *
-   * @return the Universally Unique Identifier (UUID) for the association
+   * @return the ID for the association
    */
   public UUID getId() {
     return id;
@@ -371,20 +351,18 @@ public class Association implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the second party in the association.
+   * Returns the ID for the second party in the association.
    *
-   * @return the Universally Unique Identifier (UUID) for the second party in the association
+   * @return the ID for the second party in the association
    */
   public UUID getSecondPartyId() {
     return secondPartyId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the association is associated
-   * with.
+   * Returns the ID for the tenant the association is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the association is associated
-   *     with
+   * @return the ID for the tenant the association is associated with
    */
   public UUID getTenantId() {
     return tenantId;
@@ -457,19 +435,18 @@ public class Association implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the first party in the association.
+   * Set the ID for the first party in the association.
    *
-   * @param firstPartyId the Universally Unique Identifier (UUID) for the first party in the
-   *     association
+   * @param firstPartyId the ID for the first party in the association
    */
   public void setFirstPartyId(UUID firstPartyId) {
     this.firstPartyId = firstPartyId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the association.
+   * Set the ID for the association.
    *
-   * @param id the Universally Unique Identifier (UUID) for the association
+   * @param id the ID for the association
    */
   public void setId(UUID id) {
     this.id = id;
@@ -487,20 +464,18 @@ public class Association implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the second party in the association.
+   * Set the ID for the second party in the association.
    *
-   * @param secondPartyId the Universally Unique Identifier (UUID) for the second party in the
-   *     association
+   * @param secondPartyId the ID for the second party in the association
    */
   public void setSecondPartyId(UUID secondPartyId) {
     this.secondPartyId = secondPartyId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the association is associated with.
+   * Set the ID for the tenant the association is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association is
-   *     associated with
+   * @param tenantId the ID for the tenant the association is associated with
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
@@ -515,17 +490,13 @@ public class Association implements Serializable {
     this.type = type;
   }
 
-  /**
-   * The Java Persistence callback method invoked before the entity is created in the database.
-   */
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
-  /**
-   * The Java Persistence callback method invoked before the entity is updated in the database.
-   */
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

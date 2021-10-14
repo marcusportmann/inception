@@ -29,6 +29,7 @@ import org.springframework.util.StringUtils;
  */
 public class ValidCountryCodeValidator implements ConstraintValidator<ValidCountryCode, String> {
 
+  /** Constructs a new <b>ValidCountryCodeValidator</b>. */
   @Autowired
   public ValidCountryCodeValidator() {}
 

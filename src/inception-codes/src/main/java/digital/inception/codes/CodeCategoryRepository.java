@@ -45,7 +45,7 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
    *
    * @param codeCategoryId the ID for the code category
    * @return an Optional containing the data for the code category or an empty Optional if the code
-   * category could not be found
+   *     category could not be found
    */
   @Query("select cc.data from CodeCategory cc where cc.id = :codeCategoryId")
   Optional<String> getDataById(@Param("codeCategoryId") String codeCategoryId);
@@ -55,7 +55,7 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
    *
    * @param codeCategoryId the ID for the code category
    * @return an Optional containing the name for the code category or an empty Optional if the code
-   * category could not be found
+   *     category could not be found
    */
   @Query("select cc.name from CodeCategory cc where cc.id = :codeCategoryId")
   Optional<String> getNameById(@Param("codeCategoryId") String codeCategoryId);
@@ -65,7 +65,7 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
    *
    * @param codeCategoryId the ID for the code category
    * @return an Optional containing the date and time the code category was last updated or an empty
-   * Optional if the code category could not be found
+   *     Optional if the code category could not be found
    */
   @Query("select cc.updated from CodeCategory cc where cc.id = :codeCategoryId")
   Optional<LocalDateTime> getUpdatedById(@Param("codeCategoryId") String codeCategoryId);

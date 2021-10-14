@@ -47,6 +47,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -61,7 +62,7 @@ import org.springframework.util.StringUtils;
 public class SecurityService implements ISecurityService, InitializingBean {
 
   /** The maximum number of filtered tenants. */
-  private static final int MAX_FILTERED_ORGANISATIONS = 100;
+  private static final int MAX_FILTERED_TENANTS = 100;
 
   /** The maximum number of filtered user directories. */
   private static final int MAX_FILTERED_USER_DIRECTORIES = 100;
@@ -242,14 +243,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
 
-      if (tenantRepository.countTenantUserDirectory(tenantId, userDirectoryId) > 0) {
+      if (tenantRepository.userDirectoryToTenantMappingExists(tenantId, userDirectoryId)) {
         return;
       }
 
       tenantRepository.addUserDirectoryToTenant(tenantId, userDirectoryId);
-    } catch (TenantNotFoundException
-        | UserDirectoryNotFoundException
-         e) {
+    } catch (TenantNotFoundException | UserDirectoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -1148,29 +1147,23 @@ public class SecurityService implements ISecurityService, InitializingBean {
     }
 
     if (pageSize == null) {
-      pageSize = MAX_FILTERED_ORGANISATIONS;
+      pageSize = MAX_FILTERED_TENANTS;
     }
-
-    PageRequest pageRequest =
-        PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_ORGANISATIONS));
 
     try {
       Page<Tenant> tenantPage;
 
+      PageRequest pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, MAX_FILTERED_TENANTS),
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
+              "name");
+
       if (StringUtils.hasText(filter)) {
-        if (sortDirection == SortDirection.ASCENDING) {
-          tenantPage =
-              tenantRepository.findByNameContainingIgnoreCaseOrderByNameAsc(filter, pageRequest);
-        } else {
-          tenantPage =
-              tenantRepository.findByNameContainingIgnoreCaseOrderByNameDesc(filter, pageRequest);
-        }
+        tenantPage = tenantRepository.findFiltered("%" + filter + "%", pageRequest);
       } else {
-        if (sortDirection == SortDirection.ASCENDING) {
-          tenantPage = tenantRepository.findAllByOrderByNameAsc(pageRequest);
-        } else {
-          tenantPage = tenantRepository.findAllByOrderByNameDesc(pageRequest);
-        }
+        tenantPage = tenantRepository.findAll(pageRequest);
       }
 
       return new Tenants(
@@ -1273,28 +1266,20 @@ public class SecurityService implements ISecurityService, InitializingBean {
       pageSize = MAX_FILTERED_USER_DIRECTORIES;
     }
 
-    PageRequest pageRequest =
-        PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_USER_DIRECTORIES));
-
     try {
       Page<UserDirectory> userDirectoryPage;
 
+      PageRequest pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, MAX_FILTERED_USER_DIRECTORIES),
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
+              "name");
+
       if (StringUtils.hasText(filter)) {
-        if (sortDirection == SortDirection.ASCENDING) {
-          userDirectoryPage =
-              userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
-                  filter, pageRequest);
-        } else {
-          userDirectoryPage =
-              userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
-                  filter, pageRequest);
-        }
+        userDirectoryPage = userDirectoryRepository.findFiltered("%" + filter + "%", pageRequest);
       } else {
-        if (sortDirection == SortDirection.ASCENDING) {
-          userDirectoryPage = userDirectoryRepository.findAllByOrderByNameAsc(pageRequest);
-        } else {
-          userDirectoryPage = userDirectoryRepository.findAllByOrderByNameDesc(pageRequest);
-        }
+        userDirectoryPage = userDirectoryRepository.findAll(pageRequest);
       }
 
       return new UserDirectories(
@@ -1521,30 +1506,21 @@ public class SecurityService implements ISecurityService, InitializingBean {
       pageSize = MAX_FILTERED_USER_DIRECTORIES;
     }
 
-    PageRequest pageRequest =
-        PageRequest.of(pageIndex, Math.min(pageSize, MAX_FILTERED_USER_DIRECTORIES));
-
     try {
       Page<UserDirectorySummary> userDirectorySummaryPage;
 
+      PageRequest pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, MAX_FILTERED_USER_DIRECTORIES),
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
+              "name");
+
       if (StringUtils.hasText(filter)) {
-        if (sortDirection == SortDirection.ASCENDING) {
-          userDirectorySummaryPage =
-              userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
-                  filter, pageRequest);
-        } else {
-          userDirectorySummaryPage =
-              userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
-                  filter, pageRequest);
-        }
+        userDirectorySummaryPage =
+            userDirectorySummaryRepository.findFiltered("%" + filter + "%", pageRequest);
       } else {
-        if (sortDirection == SortDirection.ASCENDING) {
-          userDirectorySummaryPage =
-              userDirectorySummaryRepository.findAllByOrderByNameAsc(pageRequest);
-        } else {
-          userDirectorySummaryPage =
-              userDirectorySummaryRepository.findAllByOrderByNameDesc(pageRequest);
-        }
+        userDirectorySummaryPage = userDirectorySummaryRepository.findAll(pageRequest);
       }
 
       return new UserDirectorySummaries(
@@ -1973,7 +1949,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
         throw new TenantNotFoundException(tenantId);
       }
 
-      if (tenantRepository.countTenantUserDirectory(tenantId, userDirectoryId) == 0) {
+      if (!tenantRepository.userDirectoryToTenantMappingExists(tenantId, userDirectoryId)) {
         throw new TenantUserDirectoryNotFoundException(tenantId, userDirectoryId);
       }
 
@@ -2168,14 +2144,15 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the internal user directory the internal
-   * user with the specified username is associated with.
+   * Returns the ID for the internal user directory the internal user with the specified username is
+   * associated with.
    *
    * @param username the username for the internal user
-   * @return an Optional containing the Universally Unique Identifier (UUID) for the internal user
-   *     directory the internal user with the specified username is associated with or an empty
-   *     Optional if an internal user with the specified username could not be found
-   * @throws ServiceUnavailableException if the internal user directory ID could not be retrieved for the user
+   * @return an Optional containing the ID for the internal user directory the internal user with
+   *     the specified username is associated with or an empty Optional if an internal user with the
+   *     specified username could not be found
+   * @throws ServiceUnavailableException if the internal user directory ID could not be retrieved
+   *     for the user
    */
   private Optional<UUID> getInternalUserDirectoryIdForUser(String username)
       throws ServiceUnavailableException {

@@ -29,9 +29,8 @@ public class XAExceptionUtil {
    * Constructs a new <b>XAException</b> object.
    *
    * @param errorCode the error code
-   * @param message   the message
-   * @param cause     the cause
-   *
+   * @param message the message
+   * @param cause the cause
    * @return the XAException object
    */
   public static XAException xaException(int errorCode, String message, Throwable cause) {
@@ -44,8 +43,7 @@ public class XAExceptionUtil {
    * Constructs a new <b>XAException</b> object.
    *
    * @param errorCode the error code
-   * @param message   the message
-   *
+   * @param message the message
    * @return the XAException object
    */
   public static XAException xaException(int errorCode, String message) {
@@ -53,5 +51,4 @@ public class XAExceptionUtil {
     xaException.errorCode = errorCode;
     return xaException;
   }
-
 }

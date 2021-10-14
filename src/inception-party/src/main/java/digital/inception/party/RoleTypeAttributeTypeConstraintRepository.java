@@ -29,5 +29,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RoleTypeAttributeTypeConstraintRepository
     extends JpaRepository<RoleTypeAttributeTypeConstraint, RoleTypeAttributeTypeConstraintId> {
 
+  /**
+   * Retrieve the role type attribute type constraints for the role type.
+   *
+   * @param roleType the code for the role type
+   * @param sort the sorting information
+   * @return the role type attribute type constraints for the role type
+   */
   List<RoleTypeAttributeTypeConstraint> findByRoleTypeIgnoreCase(String roleType, Sort sort);
 }

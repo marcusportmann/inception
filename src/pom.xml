@@ -612,7 +612,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.3.1</version>
         <configuration>
-          <failOnWarnings>false</failOnWarnings>
+          <failOnWarnings>true</failOnWarnings>
           <quiet>true</quiet>
           <sourceFileExcludes>
             <sourceFileExclude>**/Version.java</sourceFileExclude>

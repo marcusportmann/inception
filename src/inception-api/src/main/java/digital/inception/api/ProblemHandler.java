@@ -153,7 +153,8 @@ public class ProblemHandler {
    *
    * @param request the HTTP request
    * @param cause the exception
-   * @return the problem details response entity containing the /NarayanaTransactionIntegrationexception information
+   * @return the problem details response entity containing the
+   *     /NarayanaTransactionIntegrationexception information
    */
   @ExceptionHandler
   @ResponseBody

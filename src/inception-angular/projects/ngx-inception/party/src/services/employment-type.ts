@@ -52,7 +52,7 @@ export class EmploymentType {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the employment type is specific to.
+   * The ID for the tenant the employment type is specific to.
    */
   tenantId?: string;
 
@@ -66,7 +66,7 @@ export class EmploymentType {
    * @param sortIndex        The sort index for the employment type.
    * @param name             The name of the employment type.
    * @param description      The description for the employment type.
-   * @param tenantId         The Universally Unique Identifier (UUID) for the tenant the employment
+   * @param tenantId         The ID for the tenant the employment
    *                         type is specific to.
    */
   constructor(employmentStatus: string, code: string, localeId: string, sortIndex: number,

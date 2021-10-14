@@ -67,7 +67,7 @@ public class PartyBase implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The Universally Unique Identifier (UUID) for the party. */
+  /** The ID for the party. */
   @NotNull
   @Id
   @Column(name = "id", nullable = false)
@@ -82,7 +82,7 @@ public class PartyBase implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** The Universally Unique Identifier (UUID) for the tenant the party is associated with. */
+  /** The ID for the tenant the party is associated with. */
   @NotNull
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
@@ -111,9 +111,8 @@ public class PartyBase implements Serializable {
   /**
    * Constructs a new <b>PartyBase</b>.
    *
-   * @param id the Universally Unique Identifier (UUID) for the party
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
-   *     with
+   * @param id the ID for the party
+   * @param tenantId the ID for the tenant the party is associated with
    * @param type the party type
    */
   protected PartyBase(UUID id, UUID tenantId, PartyType type) {
@@ -125,9 +124,8 @@ public class PartyBase implements Serializable {
   /**
    * Constructs a new <b>PartyBase</b>.
    *
-   * @param id the Universally Unique Identifier (UUID) for the party
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
-   *     with
+   * @param id the ID for the party
+   * @param tenantId the ID for the tenant the party is associated with
    * @param type the type for the party
    * @param name the name of the party
    */
@@ -174,9 +172,9 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the party.
+   * Returns the ID for the party.
    *
-   * @return the Universally Unique Identifier (UUID) for the party
+   * @return the ID for the party
    */
   @XmlTransient
   public UUID getId() {
@@ -194,9 +192,9 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the party is associated with.
+   * Returns the ID for the tenant the party is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the party is associated with
+   * @return the ID for the tenant the party is associated with
    */
   @XmlTransient
   public UUID getTenantId() {
@@ -234,9 +232,9 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the party.
+   * Set the ID for the party.
    *
-   * @param id the Universally Unique Identifier (UUID) for the party
+   * @param id the ID for the party
    */
   public void setId(UUID id) {
     this.id = id;
@@ -252,10 +250,9 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the party is associated with.
+   * Set the ID for the tenant the party is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
-   *     with
+   * @param tenantId the ID for the tenant the party is associated with
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
@@ -270,17 +267,13 @@ public class PartyBase implements Serializable {
     this.type = partyType;
   }
 
-  /**
-   * The Java Persistence callback method invoked before the entity is created in the database.
-   */
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
-  /**
-   * The Java Persistence callback method invoked before the entity is updated in the database.
-   */
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

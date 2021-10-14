@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * Provides the model classes for the Demo application.
+ *
+ * @author Marcus Portmann
+ */
 @javax.xml.bind.annotation.XmlSchema(
     namespace = "http://demo",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,

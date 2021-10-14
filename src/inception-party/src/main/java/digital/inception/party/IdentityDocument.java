@@ -142,10 +142,8 @@ public class IdentityDocument implements Serializable {
   @Column(name = "date_provided")
   private LocalDate dateProvided;
 
-  /** The Universally Unique Identifier (UUID) for the identity document. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the identity document",
-      required = true)
+  /** The ID for the identity document. */
+  @Schema(description = "The ID for the identity document", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -301,9 +299,9 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the identity document.
+   * Returns the ID for the identity document.
    *
-   * @return the Universally Unique Identifier (UUID) for the identity document
+   * @return the ID for the identity document
    */
   public UUID getId() {
     return id;
@@ -394,9 +392,9 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the identity document.
+   * Set the ID for the identity document.
    *
-   * @param id the Universally Unique Identifier (UUID) for the identity document
+   * @param id the ID for the identity document
    */
   public void setId(UUID id) {
     this.id = id;
@@ -430,17 +428,13 @@ public class IdentityDocument implements Serializable {
     this.type = type;
   }
 
-  /**
-   * The Java Persistence callback method invoked before the entity is created in the database.
-   */
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
-  /**
-   * The Java Persistence callback method invoked before the entity is updated in the database.
-   */
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

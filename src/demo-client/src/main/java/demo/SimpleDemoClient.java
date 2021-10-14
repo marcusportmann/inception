@@ -76,53 +76,6 @@ public class SimpleDemoClient {
     invokeTestApi();
   }
 
-  private static void invokeTestApi() {
-    try {
-      ObjectMapper objectMapper = new ObjectMapper();
-      objectMapper.registerModule(new JavaTimeModule());
-
-      TestApi testApi =
-          JAXRSClientFactory.create(
-              "http://localhost:8080",
-              TestApi.class,
-              Collections.singletonList(new JacksonJsonProvider(objectMapper)));
-
-      OffsetDateTime offsetDateTime =
-          testApi.testLocalDateTime(
-              LocalDateTime.now().atZone(ZoneId.systemDefault()).toOffsetDateTime());
-
-      System.out.println(
-          "Found time = "
-              + offsetDateTime.atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime());
-    } catch (Throwable e) {
-      System.err.println("[ERROR] " + e.getMessage());
-      e.printStackTrace(System.err);
-    }
-  }
-
-  private static void invokeReferenceApi() {
-    try {
-      ObjectMapper objectMapper = new ObjectMapper();
-      objectMapper.registerModule(new JavaTimeModule());
-
-      ReferenceApi referenceApi =
-          JAXRSClientFactory.create(
-              "http://localhost:8080",
-              ReferenceApi.class,
-              Collections.singletonList(new JacksonJsonProvider(objectMapper)));
-
-      List<Language> languages = referenceApi.getLanguages("en-US");
-
-      for (Language language : languages) {
-        System.out.println("Found language: " + language.getName());
-      }
-
-    } catch (Throwable e) {
-      System.err.println("[ERROR] " + e.getMessage());
-      e.printStackTrace(System.err);
-    }
-  }
-
   private static void invokeCodesService() {
     try {
       KeyStore keyStore =
@@ -159,6 +112,53 @@ public class SimpleDemoClient {
       for (CodeCategory codeCategory : codeCategories) {
         System.out.println("Found code category: " + codeCategory.getName());
       }
+    } catch (Throwable e) {
+      System.err.println("[ERROR] " + e.getMessage());
+      e.printStackTrace(System.err);
+    }
+  }
+
+  private static void invokeReferenceApi() {
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+
+      ReferenceApi referenceApi =
+          JAXRSClientFactory.create(
+              "http://localhost:8080",
+              ReferenceApi.class,
+              Collections.singletonList(new JacksonJsonProvider(objectMapper)));
+
+      List<Language> languages = referenceApi.getLanguages("en-US");
+
+      for (Language language : languages) {
+        System.out.println("Found language: " + language.getName());
+      }
+
+    } catch (Throwable e) {
+      System.err.println("[ERROR] " + e.getMessage());
+      e.printStackTrace(System.err);
+    }
+  }
+
+  private static void invokeTestApi() {
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+
+      TestApi testApi =
+          JAXRSClientFactory.create(
+              "http://localhost:8080",
+              TestApi.class,
+              Collections.singletonList(new JacksonJsonProvider(objectMapper)));
+
+      OffsetDateTime offsetDateTime =
+          testApi.testLocalDateTime(
+              LocalDateTime.now().atZone(ZoneId.systemDefault()).toOffsetDateTime());
+
+      System.out.println(
+          "Found time = "
+              + offsetDateTime.atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime());
     } catch (Throwable e) {
       System.err.println("[ERROR] " + e.getMessage());
       e.printStackTrace(System.err);

@@ -36,9 +36,24 @@ import javax.validation.Payload;
 @Documented
 public @interface ValidCountryCode {
 
+  /**
+   * The target groups.
+   *
+   * @return the target groups
+   */
   Class<?>[] groups() default {};
 
+  /**
+   * The error message key.
+   *
+   * @return the error message key
+   */
   String message() default "{digital.inception.party.constraints.ValidCountryCode.message}";
 
+  /**
+   * The payload type.
+   *
+   * @return the payload type
+   */
   Class<? extends Payload>[] payload() default {};
 }

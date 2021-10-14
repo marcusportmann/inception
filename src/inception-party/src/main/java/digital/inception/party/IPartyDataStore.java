@@ -33,7 +33,7 @@ public interface IPartyDataStore {
   /**
    * Create the new association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param association the association
    * @return the association
    * @throws DuplicateAssociationException if the association already exists
@@ -46,7 +46,7 @@ public interface IPartyDataStore {
   /**
    * Create the new organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param organization the organization
    * @return the organization
    * @throws DuplicateOrganizationException if the organization already exists
@@ -58,7 +58,7 @@ public interface IPartyDataStore {
   /**
    * Create the new person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param person the person
    * @return the person
    * @throws DuplicatePersonException if the person already exists
@@ -70,8 +70,8 @@ public interface IPartyDataStore {
   /**
    * Delete the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @param tenantId the ID for the tenant
+   * @param associationId the ID for the association
    * @throws AssociationNotFoundException if the association could not be found
    * @throws ServiceUnavailableException if the association could not be deleted
    */
@@ -81,8 +81,8 @@ public interface IPartyDataStore {
   /**
    * Delete the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   * @param tenantId the ID for the tenant
+   * @param organizationId the ID for the organization
    * @throws OrganizationNotFoundException if the organization could not be found
    * @throws ServiceUnavailableException if the organization could not be deleted
    */
@@ -92,8 +92,8 @@ public interface IPartyDataStore {
   /**
    * Delete the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    * @throws PartyNotFoundException if the party could not be found
    * @throws ServiceUnavailableException if the party could not be deleted
    */
@@ -103,8 +103,8 @@ public interface IPartyDataStore {
   /**
    * Delete the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
+   * @param tenantId the ID for the tenant
+   * @param personId the ID for the person
    * @throws PersonNotFoundException if the person could not be found
    * @throws ServiceUnavailableException if the person could not be deleted
    */
@@ -114,8 +114,8 @@ public interface IPartyDataStore {
   /**
    * Retrieve the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @param tenantId the ID for the tenant
+   * @param associationId the ID for the association
    * @return the association
    * @throws AssociationNotFoundException if the association could not be found
    * @throws ServiceUnavailableException if the association could not be retrieved
@@ -126,8 +126,8 @@ public interface IPartyDataStore {
   /**
    * Retrieve the associations for the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    * @param sortBy the optional method used to sort the associations e.g. by type
    * @param sortDirection the optional sort direction to apply to the associations
    * @param pageIndex the optional page index
@@ -148,8 +148,8 @@ public interface IPartyDataStore {
   /**
    * Retrieve the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   * @param tenantId the ID for the tenant
+   * @param organizationId the ID for the organization
    * @return the organization
    * @throws OrganizationNotFoundException if the organization could not be found
    * @throws ServiceUnavailableException if the organization could not be retrieved
@@ -160,7 +160,7 @@ public interface IPartyDataStore {
   /**
    * Retrieve the organizations.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the organizations
    * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
@@ -181,7 +181,7 @@ public interface IPartyDataStore {
   /**
    * Retrieve the parties.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the parties
    * @param sortBy the optional method used to sort the parties e.g. by name
    * @param sortDirection the optional sort direction to apply to the parties
@@ -202,8 +202,8 @@ public interface IPartyDataStore {
   /**
    * Retrieve the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    * @return the party
    * @throws PartyNotFoundException if the party could not be found
    * @throws ServiceUnavailableException if the party could not be retrieved
@@ -214,8 +214,8 @@ public interface IPartyDataStore {
   /**
    * Retrieve the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
+   * @param tenantId the ID for the tenant
+   * @param personId the ID for the person
    * @return the person
    * @throws PersonNotFoundException if the person could not be found
    * @throws ServiceUnavailableException if the person could not be retrieved
@@ -226,7 +226,7 @@ public interface IPartyDataStore {
   /**
    * Retrieve the persons.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the persons
    * @param sortBy the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
@@ -247,9 +247,9 @@ public interface IPartyDataStore {
   /**
    * Retrieve the snapshots for an entity.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param entityType the type of entity
-   * @param entityId the Universally Unique Identifier (UUID) for the entity
+   * @param entityId the ID for the entity
    * @param from the optional date to retrieve the snapshots from
    * @param to the optional date to retrieve the snapshots to
    * @param sortDirection the optional sort direction to apply to the snapshots
@@ -270,20 +270,20 @@ public interface IPartyDataStore {
       throws ServiceUnavailableException;
 
   /**
-   * Retrieve the Universally Unique Identifier (UUID) for the tenant the party is associated with.
+   * Retrieve the ID for the tenant the party is associated with.
    *
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @return an Optional containing the Universally Unique Identifier (UUID) for the tenant the
-   *     party is associated with or an empty Optional if the party could not be found
-   * @throws ServiceUnavailableException if the Universally Unique Identifier (UUID) for the tenant
-   *     the party is associated with could not be retrieved
+   * @param partyId the ID for the party
+   * @return an Optional containing the ID for the tenant the party is associated with or an empty
+   *     Optional if the party could not be found
+   * @throws ServiceUnavailableException if the ID for the tenant the party is associated with could
+   *     not be retrieved
    */
   Optional<UUID> getTenantIdForParty(UUID partyId) throws ServiceUnavailableException;
 
   /**
    * Update the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param association the association
    * @return the association
    * @throws AssociationNotFoundException if the association could not be found
@@ -296,7 +296,7 @@ public interface IPartyDataStore {
   /**
    * Update the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param organization the organization
    * @return the organization
    * @throws OrganizationNotFoundException if the organization could not be found
@@ -308,7 +308,7 @@ public interface IPartyDataStore {
   /**
    * Update the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param person the person
    * @return the person
    * @throws PersonNotFoundException if the person could not be found

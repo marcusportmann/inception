@@ -1558,12 +1558,13 @@ public class SecurityServiceTest {
 
     String retrievedUserName = securityService.getUserName(userDirectoryId, user.getUsername());
 
-    assertEquals(user.getName(), retrievedUserName, "The correct name was not retrieved for the user");
+    assertEquals(
+        user.getName(), retrievedUserName, "The correct name was not retrieved for the user");
 
     try {
       securityService.getUserName(userDirectoryId, "INVALID_USERNAME");
       fail("Incorrectly retrieved name for invalid user");
-    } catch (UserNotFoundException ignored)  {
+    } catch (UserNotFoundException ignored) {
     }
 
     List<User> retrievedUsers = securityService.getUsers(userDirectory.getId());

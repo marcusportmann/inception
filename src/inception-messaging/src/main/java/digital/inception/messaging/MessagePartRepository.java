@@ -37,7 +37,7 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   /**
    * Retrieve the number of message parts queued for assembly for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @return the number of message parts queued for assembly for the message
    */
   @Query(
@@ -48,7 +48,7 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   /**
    * Delete the message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param messagePartId the ID for the message part
    */
   @Modifying
   @Query("delete from MessagePart mp where mp.id = :messagePartId")
@@ -57,16 +57,16 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   /**
    * Delete the message parts for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    */
   @Modifying
   @Query("delete from MessagePart mp where mp.messageId = :messageId")
   void deleteMessagePartsByMessageId(@Param("messageId") UUID messageId);
 
   /**
-   * Check whether the message part with the specified ID and status exists.
+   * Check whether the message part exists.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param messagePartId the ID for the message part
    * @param status the message part status
    * @return <b>true</b> if the message part with the specified ID and status exists or <b>false</b>
    *     otherwise
@@ -76,7 +76,7 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   /**
    * Retrieve and lock the message parts with the specified status for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @param status the message part status
    * @return the locked message parts with the specified status for the message
    */
@@ -91,7 +91,7 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
    * Retrieve and lock the message parts with the specified status for the user and device.
    *
    * @param username the username for the user
-   * @param deviceId the Universally Unique Identifier (UUID) for the device
+   * @param deviceId the ID for the device
    * @param status the message part status
    * @param pageable the pagination information
    * @return the locked message parts with the specified status for the user and device
@@ -110,7 +110,7 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   /**
    * Lock the message part for assembly.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param messagePartId the ID for the message part
    * @param lockName the lock name
    */
   @Modifying
@@ -123,7 +123,7 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   /**
    * Lock the message part for download.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param messagePartId the ID for the message part
    * @param lockName the lock name
    */
   @Modifying
@@ -152,7 +152,7 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   /**
    * Set the status for the message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param messagePartId the ID for the message part
    * @param status the message part status
    */
   @Modifying
@@ -163,7 +163,7 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   /**
    * Unlock the message part and set its status.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param messagePartId the ID for the message part
    * @param status the new status for the message part
    */
   @Modifying

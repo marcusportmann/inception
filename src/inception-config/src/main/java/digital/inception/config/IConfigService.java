@@ -143,7 +143,7 @@ public interface IConfigService {
    * Retrieve the filtered config summaries.
    *
    * @param filter the filter to apply to the keys for the config summaries
-   * @return the config summaries
+   * @return the filtered config summaries
    * @throws ServiceUnavailableException if the filtered config summaries could not be retrieved
    */
   List<ConfigSummary> getFilteredConfigSummaries(String filter) throws ServiceUnavailableException;
@@ -152,7 +152,7 @@ public interface IConfigService {
    * Retrieve the filtered configs.
    *
    * @param filter the filter to apply to the keys for the config
-   * @return the configs
+   * @return the filtered configs
    * @throws ServiceUnavailableException if the filtered configs could not be retrieved
    */
   List<Config> getFilteredConfigs(String filter) throws ServiceUnavailableException;

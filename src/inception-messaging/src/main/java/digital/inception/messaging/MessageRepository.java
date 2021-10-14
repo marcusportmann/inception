@@ -38,7 +38,7 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
   /**
    * Delete the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    */
   @Modifying
   @Query("delete from Message m where m.id = :messageId")
@@ -47,7 +47,7 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
   /**
    * Retrieve and lock the messages queued for processing.
    *
-   * @param processedBefore the date and time used to select messages for reprocessing
+   * @param processedBefore the date and time used to select failed messages for reprocessing
    * @param pageable the pagination information
    * @return the locked messages queued for processing
    */
@@ -63,7 +63,7 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
    *
    * @param status the message status
    * @param username the username for the user
-   * @param deviceId the Universally Unique Identifier (UUID) for the device
+   * @param deviceId the ID for the device
    * @param pageable the pagination information
    * @return the locked messages with the specified status for the user and device
    */
@@ -80,7 +80,7 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
   /**
    * Lock the message for download.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @param lockName the lock name
    */
   @Modifying
@@ -93,7 +93,7 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
   /**
    * Lock the message for processing.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @param lockName the lock name
    * @param when the date and time the message is locked for processing
    */
@@ -126,7 +126,7 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
   /**
    * Set the status for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @param status the message status
    */
   @Modifying
@@ -136,7 +136,7 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
   /**
    * Unlock the message and set its status.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @param status the new status for the message
    */
   @Modifying

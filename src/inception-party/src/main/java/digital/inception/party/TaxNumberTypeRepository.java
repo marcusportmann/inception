@@ -28,9 +28,22 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface TaxNumberTypeRepository extends JpaRepository<TaxNumberType, TaxNumberTypeId> {
 
+  /**
+   * Retrieve all the tax number types sorted by locale ID, sort index, and name.
+   *
+   * @return all the tax number types sorted by locale ID, sort index, and name.
+   */
   @Query("select tnt from TaxNumberType tnt order by tnt.localeId, -tnt.sortIndex DESC, tnt.name")
   List<TaxNumberType> findAll();
 
+  /**
+   * Retrieve the tax number types for the specified locale sorted by locale ID, sort index, and
+   * name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the tax number types
+   *     for
+   * @return the tax number types for the specified locale sorted by locale ID, sort index, and name
+   */
   @Query(
       "select tnt from TaxNumberType tnt where upper(tnt.localeId) = upper(:localeId) order by tnt.localeId, -tnt.sortIndex DESC, tnt.name")
   List<TaxNumberType> findByLocaleIdIgnoreCase(String localeId);

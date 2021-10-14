@@ -30,15 +30,10 @@ import java.util.UUID;
 @SuppressWarnings({"WeakerAccess"})
 public class MessagePartReceivedRequest {
 
-  /**
-   * The Universally Unique Identifier (UUID) for the device the message part received request
-   * originated from.
-   */
+  /** The ID for the device the message part received request originated from. */
   private UUID deviceId;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the message part that was successfully downloaded.
-   */
+  /** The ID for the message part that was successfully downloaded. */
   private UUID messagePartId;
 
   /**
@@ -62,10 +57,8 @@ public class MessagePartReceivedRequest {
   /**
    * Constructs a new <b>MessagePartReceivedRequest</b>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the message part
-   *     received request originated from
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part that was
-   *     successfully downloaded
+   * @param deviceId the ID for the device the message part received request originated from
+   * @param messagePartId the ID for the message part that was successfully downloaded
    */
   public MessagePartReceivedRequest(UUID deviceId, UUID messagePartId) {
     this.deviceId = deviceId;
@@ -90,22 +83,18 @@ public class MessagePartReceivedRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device the message part received
-   * request originated from.
+   * Returns the ID for the device the message part received request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the message part received
-   *     request originated from
+   * @return the ID for the device the message part received request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the message part that was successfully
-   * downloaded.
+   * Returns the ID for the message part that was successfully downloaded.
    *
-   * @return the Universally Unique Identifier (UUID) for the message part that was successfully
-   *     downloaded
+   * @return the ID for the message part that was successfully downloaded
    */
   public UUID getMessagePartId() {
     return messagePartId;

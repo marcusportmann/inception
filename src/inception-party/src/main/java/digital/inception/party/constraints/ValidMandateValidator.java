@@ -16,21 +16,20 @@
 
 package digital.inception.party.constraints;
 
-import digital.inception.party.Mandate;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IPartyService;
+import digital.inception.party.Mandate;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * The <b>ValidMandateValidator</b> class implements the custom constraint validator for
- * validating a mandate.
+ * The <b>ValidMandateValidator</b> class implements the custom constraint validator for validating
+ * a mandate.
  *
  * @author Marcus Portmann
  */
-public class ValidMandateValidator
-    implements ConstraintValidator<ValidMandate, Mandate> {
+public class ValidMandateValidator implements ConstraintValidator<ValidMandate, Mandate> {
 
   /** The Party Reference Service. */
   private final IPartyReferenceService partyReferenceService;

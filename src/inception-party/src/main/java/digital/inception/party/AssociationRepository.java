@@ -31,14 +31,42 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface AssociationRepository extends JpaRepository<Association, UUID> {
 
+  /**
+   * Delete the association.
+   *
+   * @param tenantId the ID for the tenant
+   * @param id the ID for the association
+   */
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
+  /**
+   * Check whether the association exists.
+   *
+   * @param tenantId the ID for the tenant
+   * @param id the ID for the association
+   * @return <b>true</b> if the association exists or <b>false</b> otherwise
+   */
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
-  Page<Association> findByTenantId(UUID tenantId, Pageable pageable);
-
-  @Query("select a from Association a where a.tenantId = :tenantId and ((a.firstPartyId = :partyId) or (a.secondPartyId = :partyId))")
-  Page<Association> findByTenantIdAndPartyId(UUID tenantId, UUID partyId, Pageable pageable);
-
+  /**
+   * Retrieve the association.
+   *
+   * @param tenantId the ID for the tenant
+   * @param id the ID for the association
+   * @return an Optional containing the association or an empty Optional if the association could
+   *     not be found
+   */
   Optional<Association> findByTenantIdAndId(UUID tenantId, UUID id);
+
+  /**
+   * Retrieve the associations for the party.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
+   * @param pageable the pagination information
+   * @return the associations for the party
+   */
+  @Query(
+      "select a from Association a where a.tenantId = :tenantId and ((a.firstPartyId = :partyId) or (a.secondPartyId = :partyId))")
+  Page<Association> findByTenantIdAndPartyId(UUID tenantId, UUID partyId, Pageable pageable);
 }

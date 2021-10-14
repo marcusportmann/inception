@@ -16,8 +16,8 @@
 
 package digital.inception.codes;
 
-import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.service.InvalidArgumentException;
+import digital.inception.core.service.ServiceUnavailableException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +64,7 @@ public interface ICodesService {
    */
   void createCode(Code code)
       throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
-      ServiceUnavailableException;
+          ServiceUnavailableException;
 
   /**
    * Create the new code category.

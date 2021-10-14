@@ -29,6 +29,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface SnapshotRepository extends JpaRepository<Snapshot, UUID> {
 
-  Page<Snapshot> findByEntityTypeAndEntityId(
-      EntityType entityType, UUID entityId, Pageable pageable);
+  /**
+   * Retrieve the snapshots for the entity.
+   *
+   * @param tenantId the ID for the tenant
+   * @param entityType the type of entity
+   * @param entityId the ID for the entity
+   * @param pageable the pagination information
+   * @return the snapshots for the entity
+   */
+  Page<Snapshot> findByTenantIdAndEntityTypeAndEntityId(
+      UUID tenantId, EntityType entityType, UUID entityId, Pageable pageable);
 }

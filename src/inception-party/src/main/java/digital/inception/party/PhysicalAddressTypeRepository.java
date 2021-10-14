@@ -29,10 +29,24 @@ import org.springframework.data.jpa.repository.Query;
 public interface PhysicalAddressTypeRepository
     extends JpaRepository<PhysicalAddressType, PhysicalAddressTypeId> {
 
+  /**
+   * Retrieve all the physical address types sorted by locale ID, sort index, and name.
+   *
+   * @return all the physical address types sorted by locale ID, sort index, and name.
+   */
   @Query(
       "select pat from PhysicalAddressType pat order by pat.localeId, -pat.sortIndex DESC, pat.name")
   List<PhysicalAddressType> findAll();
 
+  /**
+   * Retrieve the physical address types for the specified locale sorted by locale ID, sort index,
+   * and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
+   *     types for
+   * @return the physical address types for the specified locale sorted by locale ID, sort index,
+   *     and name
+   */
   @Query(
       "select pat from PhysicalAddressType pat where upper(pat.localeId) = upper(:localeId) order by pat.localeId, -pat.sortIndex DESC, pat.name")
   List<PhysicalAddressType> findByLocaleIdIgnoreCase(String localeId);

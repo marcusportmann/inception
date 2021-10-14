@@ -85,10 +85,8 @@ public class ArchivedMessage {
   @Column(name = "archived", nullable = false)
   private LocalDateTime archived;
 
-  /** The optional Universally Unique Identifier (UUID) used to correlate the message. */
-  @Schema(
-      description =
-          "The optional Universally Unique Identifier (UUID) used to correlate the message")
+  /** The optional ID used to correlate the message. */
+  @Schema(description = "The optional ID used to correlate the message")
   @JsonProperty
   @XmlElement(name = "CorrelationId")
   @Column(name = "correlation_id")
@@ -112,19 +110,16 @@ public class ArchivedMessage {
   @Column(name = "data", nullable = false)
   private byte[] data;
 
-  /** The Universally Unique Identifier (UUID) for the device associated with the message. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the device associated with the message",
-      required = true)
+  /** The ID for the device associated with the message. */
+  @Schema(description = "The ID for the device associated with the message", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "DeviceId", required = true)
   @NotNull
   @Column(name = "device_id", nullable = false)
   private UUID deviceId;
 
-  /** The Universally Unique Identifier (UUID) for the message. */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the message", required = true)
+  /** The ID for the message. */
+  @Schema(description = "The ID for the message", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -172,13 +167,11 @@ public class ArchivedMessage {
   /**
    * Constructs a new <b>ArchivedMessage</b>.
    *
-   * @param id the Universally Unique Identifier (UUID) for the message
+   * @param id the ID for the message
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
-   *     message
-   * @param correlationId the optional Universally Unique Identifier (UUID) used to correlate the
-   *     message
+   * @param deviceId the ID for the device associated with the message
+   * @param correlationId the optional ID used to correlate the message
    * @param created the date and time the message was created
    * @param archived the date and time the message was archived
    * @param data the data for the message which is NOT encrypted
@@ -237,9 +230,9 @@ public class ArchivedMessage {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to correlate the message.
+   * Returns the ID used to correlate the message.
    *
-   * @return the Universally Unique Identifier (UUID) used to correlate the message
+   * @return the ID used to correlate the message
    */
   public UUID getCorrelationId() {
     return correlationId;
@@ -264,18 +257,18 @@ public class ArchivedMessage {
   }
 
   /**
-   * The Universally Unique Identifier (UUID) for the device associated with the message.
+   * The ID for the device associated with the message.
    *
-   * @return the Universally Unique Identifier (UUID) for the device associated with the message
+   * @return the ID for the device associated with the message
    */
   public UUID getDeviceId() {
     return deviceId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the message.
+   * Returns the ID for the message.
    *
-   * @return the Universally Unique Identifier (UUID) for the message
+   * @return the ID for the message
    */
   public UUID getId() {
     return id;
@@ -319,9 +312,9 @@ public class ArchivedMessage {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to correlate the message.
+   * Set the ID used to correlate the message.
    *
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   * @param correlationId the ID used to correlate the message
    */
   public void setCorrelationId(UUID correlationId) {
     this.correlationId = correlationId;
@@ -346,19 +339,18 @@ public class ArchivedMessage {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the device associated with the message.
+   * Set the ID for the device associated with the message.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
-   *     message
+   * @param deviceId the ID for the device associated with the message
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the message.
+   * Set the ID for the message.
    *
-   * @param id the Universally Unique Identifier (UUID) for the message
+   * @param id the ID for the message
    */
   public void setId(UUID id) {
     this.id = id;

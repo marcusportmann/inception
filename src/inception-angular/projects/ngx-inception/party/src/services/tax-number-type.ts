@@ -57,7 +57,7 @@ export class TaxNumberType {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the tax number type is specific to.
+   * The ID for the tenant the tax number type is specific to.
    */
   tenantId?: string;
 
@@ -72,7 +72,7 @@ export class TaxNumberType {
    * @param countryOfIssue The ISO 3166-1 alpha-2 code for the country of issue for the tax number
    *                       type.
    * @param partyTypes     The codes for the party types the tax number type is associated with.
-   * @param tenantId       The Universally Unique Identifier (UUID) for the tenant the tax number
+   * @param tenantId       The ID for the tenant the tax number
    *                       type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,

@@ -398,8 +398,7 @@ public abstract class PartyValidator {
   /**
    * Validate the physical address.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
-   *     with
+   * @param tenantId the ID for the tenant the party is associated with
    * @param partyType the code for the party type
    * @param physicalAddress the physical address
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
@@ -1024,8 +1023,7 @@ public abstract class PartyValidator {
   /**
    * Validate the reference attribute constraint.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
-   *     with
+   * @param tenantId the ID for the tenant the party is associated with
    * @param referenceType the type of reference
    * @param attribute the attribute
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
@@ -1117,8 +1115,7 @@ public abstract class PartyValidator {
   /**
    * Validate the reference preference constraint.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
-   *     with
+   * @param tenantId the ID for the tenant the party is associated with
    * @param referenceType the type of reference
    * @param preference the preference
    * @param hibernateConstraintValidatorContext the Hibernate constraint validator context

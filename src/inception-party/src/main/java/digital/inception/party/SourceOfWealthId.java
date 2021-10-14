@@ -30,10 +30,7 @@ public class SourceOfWealthId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the person the source of wealth is associated
-   * with.
-   */
+  /** The ID for the person the source of wealth is associated with. */
   private UUID person;
 
   /** The code for the source of wealth type. */

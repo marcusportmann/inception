@@ -52,7 +52,7 @@ export class PhysicalAddressPurpose {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the physical address purpose is
+   * The ID for the tenant the physical address purpose is
    * specific to.
    */
   tenantId?: string;
@@ -67,7 +67,7 @@ export class PhysicalAddressPurpose {
    * @param description The description for the physical address purpose.
    * @param partyTypes  The codes for the party types the physical address purpose is associated
    *                    with.
-   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the physical address
+   * @param tenantId    The ID for the tenant the physical address
    *                    purpose is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,

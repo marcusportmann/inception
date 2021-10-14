@@ -31,10 +31,7 @@ public class AssociationPropertyId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the association the association property is
-   * associated with.
-   */
+  /** The ID for the association the association property is associated with. */
   private UUID association;
 
   /** The code for the association property type. */

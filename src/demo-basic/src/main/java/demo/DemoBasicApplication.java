@@ -43,8 +43,7 @@ public class DemoBasicApplication extends Application implements InitializingBea
    *
    * @param applicationContext the Spring application context
    */
-  public DemoBasicApplication(
-      ApplicationContext applicationContext) {
+  public DemoBasicApplication(ApplicationContext applicationContext) {
     super(applicationContext);
   }
 
@@ -59,6 +58,5 @@ public class DemoBasicApplication extends Application implements InitializingBea
 
   /** Initialize the demo application. */
   @Override
-  public void afterPropertiesSet() {
-  }
+  public void afterPropertiesSet() {}
 }

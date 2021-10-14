@@ -47,7 +47,7 @@ export class NextOfKinType {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the next of kin type is specific to.
+   * The ID for the tenant the next of kin type is specific to.
    */
   tenantId?: string;
 
@@ -59,7 +59,7 @@ export class NextOfKinType {
    * @param sortIndex   The sort index for the next of kin type.
    * @param name        The name of the next of kin type.
    * @param description The description for the next of kin type.
-   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the next of kin type
+   * @param tenantId    The ID for the tenant the next of kin type
    *                    is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,

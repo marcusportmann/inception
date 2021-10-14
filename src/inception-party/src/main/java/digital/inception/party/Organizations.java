@@ -106,12 +106,9 @@ public class Organizations implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the tenant the organizations are associated with.
-   */
+  /** The ID for the tenant the organizations are associated with. */
   @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the tenant the organizations are associated with",
+      description = "The ID for the tenant the organizations are associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
@@ -129,8 +126,7 @@ public class Organizations implements Serializable {
   /**
    * Constructs a new <b>Organizations</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organizations are
-   *     associated with
+   * @param tenantId the ID for the tenant the organizations are associated with
    * @param organizations the organizations
    * @param total the total number of organizations
    * @param filter the optional filter that was applied to the organizations
@@ -213,11 +209,9 @@ public class Organizations implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the organizations are
-   * associated with.
+   * Returns the ID for the tenant the organizations are associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the organizations are
-   *     associated with
+   * @return the ID for the tenant the organizations are associated with
    */
   public UUID getTenantId() {
     return tenantId;

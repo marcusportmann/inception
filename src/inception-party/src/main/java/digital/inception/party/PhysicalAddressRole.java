@@ -159,13 +159,8 @@ public class PhysicalAddressRole implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the tenant the physical address role is specific
-   * to.
-   */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the tenant the physical address role is specific to")
+  /** The ID for the tenant the physical address role is specific to. */
+  @Schema(description = "The ID for the tenant the physical address role is specific to")
   @JsonProperty
   @XmlElement(name = "TenantId")
   @Column(name = "tenant_id")
@@ -259,11 +254,9 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the physical address role is
-   * specific to.
+   * Returns the ID for the tenant the physical address role is specific to.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the physical address role is
-   *     specific to
+   * @return the ID for the tenant the physical address role is specific to
    */
   public UUID getTenantId() {
     return tenantId;
@@ -356,11 +349,9 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the physical address role is
-   * specific to.
+   * Set the ID for the tenant the physical address role is specific to.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
-   *     role is specific to
+   * @param tenantId the ID for the tenant the physical address role is specific to
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;

@@ -57,7 +57,7 @@ export class AssociationType {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the association type is specific to.
+   * The ID for the tenant the association type is specific to.
    */
   tenantId?: string;
 
@@ -71,7 +71,7 @@ export class AssociationType {
    * @param description     The description for the association type.
    * @param firstPartyRole  The code for the role type for the first party in the association.
    * @param secondPartyRole The code for the role type for the second party in the association.
-   * @param tenantId        The Universally Unique Identifier (UUID) for the tenant the association
+   * @param tenantId        The ID for the tenant the association
    *                        type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,

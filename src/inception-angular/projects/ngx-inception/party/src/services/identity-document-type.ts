@@ -52,7 +52,7 @@ export class IdentityDocumentType {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the identity document type is specific
+   * The ID for the tenant the identity document type is specific
    * to.
    */
   tenantId?: string;
@@ -67,7 +67,7 @@ export class IdentityDocumentType {
    * @param description    The description for the identity document type.
    * @param countryOfIssue The optional ISO 3166-1 alpha-2 code for the country of issue for the
    *                       identity document type.
-   * @param tenantId       The Universally Unique Identifier (UUID) for the tenant the identity
+   * @param tenantId       The ID for the tenant the identity
    *                       document type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,

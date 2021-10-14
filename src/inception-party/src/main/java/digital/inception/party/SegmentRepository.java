@@ -28,9 +28,20 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface SegmentRepository extends JpaRepository<Segment, SegmentId> {
 
+  /**
+   * Retrieve all the segments sorted by locale ID, sort index, and name.
+   *
+   * @return all the segments sorted by locale ID, sort index, and name.
+   */
   @Query("select s from Segment s order by s.localeId, -s.sortIndex DESC, s.name")
   List<Segment> findAll();
 
+  /**
+   * Retrieve the segments for the specified locale sorted by locale ID, sort index, and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segments for
+   * @return the segments for the specified locale sorted by locale ID, sort index, and name
+   */
   @Query(
       "select s from Segment s where upper(s.localeId) = upper(:localeId) order by s.localeId, -s.sortIndex DESC, s.name")
   List<Segment> findByLocaleIdIgnoreCase(String localeId);

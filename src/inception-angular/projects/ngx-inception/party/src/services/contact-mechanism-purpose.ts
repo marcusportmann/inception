@@ -57,7 +57,7 @@ export class ContactMechanismPurpose {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the contact mechanism purpose is
+   * The ID for the tenant the contact mechanism purpose is
    * specific to.
    */
   tenantId?: string;
@@ -74,7 +74,7 @@ export class ContactMechanismPurpose {
    *                              purpose is associated with.
    * @param partyTypes            The codes for the party types the contact mechanism purpose is
    *                              associated with.
-   * @param tenantId              The Universally Unique Identifier (UUID) for the tenant the
+   * @param tenantId              The ID for the tenant the
    *                              contact mechanism purpose is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,

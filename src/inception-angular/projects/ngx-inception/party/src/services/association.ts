@@ -34,12 +34,12 @@ export class Association {
   effectiveTo?: Date;
 
   /**
-   * The Universally Unique Identifier (UUID) for the first party in the association.
+   * The ID for the first party in the association.
    */
   firstPartyId: string;
 
   /**
-   * The Universally Unique Identifier (UUID) for the association.
+   * The ID for the association.
    */
   id: string;
 
@@ -49,12 +49,12 @@ export class Association {
   properties: AssociationProperty[];
 
   /**
-   * The Universally Unique Identifier (UUID) for the second party in the association.
+   * The ID for the second party in the association.
    */
   secondPartyId: string;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the association is associated with.
+   * The ID for the tenant the association is associated with.
    */
   tenantId: string;
 
@@ -66,13 +66,13 @@ export class Association {
   /**
    * Constructs a new Association.
    *
-   * @param id            The Universally Unique Identifier (UUID) for the association.
-   * @param tenantId      The Universally Unique Identifier (UUID) for the tenant the association is
+   * @param id            The ID for the association.
+   * @param tenantId      The ID for the tenant the association is
    *                      associated with.
    * @param type          The code for the association type.
-   * @param firstPartyId  The Universally Unique Identifier (UUID) for the first party in the
+   * @param firstPartyId  The ID for the first party in the
    *                      association.
-   * @param secondPartyId The Universally Unique Identifier (UUID) for the second party in the
+   * @param secondPartyId The ID for the second party in the
    *                      association.
    * @param properties    The properties for the association.
    * @param effectiveFrom The date the association is effective from.

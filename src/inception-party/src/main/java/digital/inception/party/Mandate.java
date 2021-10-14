@@ -99,8 +99,8 @@ public class Mandate implements Serializable {
   @Column(name = "effective_to")
   private LocalDate effectiveTo;
 
-  /** The Universally Unique Identifier (UUID) for the mandate. */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the mandate", required = true)
+  /** The ID for the mandate. */
+  @Schema(description = "The ID for the mandate", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -112,11 +112,8 @@ public class Mandate implements Serializable {
   @Column(name = "required_mandataries", length = 30)
   private RequiredMandataries requiredMandataries;
 
-  /** The Universally Unique Identifier (UUID) for the tenant the mandate is associated with. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the tenant the mandate is associated with",
-      required = true)
+  /** The ID for the tenant the mandate is associated with. */
+  @Schema(description = "The ID for the tenant the mandate is associated with", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
   @NotNull
@@ -144,8 +141,7 @@ public class Mandate implements Serializable {
   /**
    * Constructs a new <b>Mandate</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the mandate is
-   *     associated with
+   * @param tenantId the ID for the tenant the mandate is associated with
    * @param type the code for the mandate type
    * @param requiredMandataries the number of mandataries required to execute the mandate
    */
@@ -159,8 +155,7 @@ public class Mandate implements Serializable {
   /**
    * Constructs a new <b>Mandate</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association is
-   *     associated with
+   * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
    * @param requiredMandataries the number of mandataries required to execute the mandate
    * @param effectiveFrom the date that the association is effective from
@@ -180,8 +175,7 @@ public class Mandate implements Serializable {
   /**
    * Constructs a new <b>Mandate</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association is
-   *     associated with
+   * @param tenantId the ID for the tenant the association is associated with
    * @param type the code for the association type
    * @param requiredMandataries the number of mandataries required to execute the mandate
    * @param effectiveFrom the date that the association is effective from
@@ -254,9 +248,9 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the association.
+   * Returns the ID for the association.
    *
-   * @return the Universally Unique Identifier (UUID) for the association
+   * @return the ID for the association
    */
   public UUID getId() {
     return id;
@@ -272,11 +266,9 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the association is associated
-   * with.
+   * Returns the ID for the tenant the association is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the association is associated
-   *     with
+   * @return the ID for the tenant the association is associated with
    */
   public UUID getTenantId() {
     return tenantId;
@@ -329,9 +321,9 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the association.
+   * Set the ID for the association.
    *
-   * @param id the Universally Unique Identifier (UUID) for the association
+   * @param id the ID for the association
    */
   public void setId(UUID id) {
     this.id = id;
@@ -347,10 +339,9 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the association is associated with.
+   * Set the ID for the tenant the association is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association is
-   *     associated with
+   * @param tenantId the ID for the tenant the association is associated with
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
@@ -365,17 +356,13 @@ public class Mandate implements Serializable {
     this.type = type;
   }
 
-  /**
-   * The Java Persistence callback method invoked before the entity is created in the database.
-   */
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
-  /**
-   * The Java Persistence callback method invoked before the entity is updated in the database.
-   */
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

@@ -47,7 +47,7 @@ export class SourceOfFundsType {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the source of funds type is specific to.
+   * The ID for the tenant the source of funds type is specific to.
    */
   tenantId?: string;
 
@@ -59,7 +59,7 @@ export class SourceOfFundsType {
    * @param sortIndex   The sort index for the source of funds.
    * @param name        The name of the source of funds.
    * @param description The description for the source of funds.
-   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the source of funds
+   * @param tenantId    The ID for the tenant the source of funds
    *                    type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,

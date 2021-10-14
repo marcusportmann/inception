@@ -34,13 +34,13 @@ import javax.validation.ConstraintViolation;
 @SuppressWarnings("unused")
 public interface IPartyService {
 
-  /** The Universally Unique Identifier (UUID) for the default tenant. */
+  /** The ID for the default tenant. */
   UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
   /**
    * Create the new association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param association the association
    * @return the association
    * @throws InvalidArgumentException if an argument is invalid
@@ -55,7 +55,7 @@ public interface IPartyService {
   /**
    * Create the new organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param organization the organization
    * @return the organization
    * @throws InvalidArgumentException if an argument is invalid
@@ -68,7 +68,7 @@ public interface IPartyService {
   /**
    * Create the new person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param person the person
    * @return the person
    * @throws InvalidArgumentException if an argument is invalid
@@ -81,8 +81,8 @@ public interface IPartyService {
   /**
    * Delete the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @param tenantId the ID for the tenant
+   * @param associationId the ID for the association
    * @throws InvalidArgumentException if an argument is invalid
    * @throws AssociationNotFoundException if the association could not be found
    * @throws ServiceUnavailableException if the association could not be deleted
@@ -93,8 +93,8 @@ public interface IPartyService {
   /**
    * Delete the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   * @param tenantId the ID for the tenant
+   * @param organizationId the ID for the organization
    * @throws InvalidArgumentException if an argument is invalid
    * @throws OrganizationNotFoundException if the organization could not be found
    * @throws ServiceUnavailableException if the organization could not be deleted
@@ -105,8 +105,8 @@ public interface IPartyService {
   /**
    * Delete the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PartyNotFoundException if the party could not be found
    * @throws ServiceUnavailableException if the party could not be deleted
@@ -117,8 +117,8 @@ public interface IPartyService {
   /**
    * Delete the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
+   * @param tenantId the ID for the tenant
+   * @param personId the ID for the person
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PersonNotFoundException if the person could not be found
    * @throws ServiceUnavailableException if the person could not be deleted
@@ -129,8 +129,8 @@ public interface IPartyService {
   /**
    * Retrieve the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @param tenantId the ID for the tenant
+   * @param associationId the ID for the association
    * @return the association
    * @throws InvalidArgumentException if an argument is invalid
    * @throws AssociationNotFoundException if the association could not be found
@@ -142,8 +142,8 @@ public interface IPartyService {
   /**
    * Retrieve the associations for the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    * @param sortBy the optional method used to sort the associations e.g. by type
    * @param sortDirection the optional sort direction to apply to the associations
    * @param pageIndex the optional page index
@@ -165,8 +165,8 @@ public interface IPartyService {
   /**
    * Retrieve the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   * @param tenantId the ID for the tenant
+   * @param organizationId the ID for the organization
    * @return the organization
    * @throws InvalidArgumentException if an argument is invalid
    * @throws OrganizationNotFoundException if the organization could not be found
@@ -178,7 +178,7 @@ public interface IPartyService {
   /**
    * Retrieve the organizations.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the organizations
    * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
@@ -200,7 +200,7 @@ public interface IPartyService {
   /**
    * Retrieve the parties.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the parties
    * @param sortBy the optional method used to sort the parties e.g. by name
    * @param sortDirection the optional sort direction to apply to the parties
@@ -222,8 +222,8 @@ public interface IPartyService {
   /**
    * Retrieve the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    * @return the party
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PartyNotFoundException if the party could not be found
@@ -235,8 +235,8 @@ public interface IPartyService {
   /**
    * Retrieve the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
+   * @param tenantId the ID for the tenant
+   * @param personId the ID for the person
    * @return the person
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PersonNotFoundException if the person could not be found
@@ -248,7 +248,7 @@ public interface IPartyService {
   /**
    * Retrieve the persons.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the persons
    * @param sortBy the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
@@ -270,9 +270,9 @@ public interface IPartyService {
   /**
    * Retrieve the snapshots for an entity.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param entityType the type of entity
-   * @param entityId the Universally Unique Identifier (UUID) for the entity
+   * @param entityId the ID for the entity
    * @param from the optional date to retrieve the snapshots from
    * @param to the optional date to retrieve the snapshots to
    * @param sortDirection the optional sort direction to apply to the snapshots
@@ -294,14 +294,14 @@ public interface IPartyService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the Universally Unique Identifier (UUID) for the tenant the party is associated with.
+   * Retrieve the ID for the tenant the party is associated with.
    *
-   * @param partyId the Universally Unique Identifier (UUID) for the party
-   * @return an Optional containing the Universally Unique Identifier (UUID) for the tenant the
-   *     party is associated with or an empty Optional if the party could not be found
+   * @param partyId the ID for the party
+   * @return an Optional containing the ID for the tenant the party is associated with or an empty
+   *     Optional if the party could not be found
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the Universally Unique Identifier (UUID) for the tenant
-   *     the party is associated with could not be retrieved
+   * @throws ServiceUnavailableException if the ID for the tenant the party is associated with could
+   *     not be retrieved
    */
   Optional<UUID> getTenantIdForParty(UUID partyId)
       throws InvalidArgumentException, ServiceUnavailableException;
@@ -309,7 +309,7 @@ public interface IPartyService {
   /**
    * Update the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param association the association
    * @return the association
    * @throws InvalidArgumentException if an argument is invalid
@@ -324,7 +324,7 @@ public interface IPartyService {
   /**
    * Update the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param organization the organization
    * @return the organization
    * @throws InvalidArgumentException if an argument is invalid
@@ -337,7 +337,7 @@ public interface IPartyService {
   /**
    * Update the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param person the person
    * @return the person
    * @throws InvalidArgumentException if an argument is invalid
@@ -350,7 +350,7 @@ public interface IPartyService {
   /**
    * Validate the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param association the association
    * @return the constraint violations for the association
    * @throws ServiceUnavailableException if the association could not be validated
@@ -361,7 +361,7 @@ public interface IPartyService {
   /**
    * Validate the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param organization the organization
    * @return the constraint violations for the organization
    * @throws ServiceUnavailableException if the organization could not be validated
@@ -372,7 +372,7 @@ public interface IPartyService {
   /**
    * Validate the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param party the party
    * @return the constraint violations for the party
    * @throws ServiceUnavailableException if the party could not be validated
@@ -383,7 +383,7 @@ public interface IPartyService {
   /**
    * Validate the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param person the person
    * @return the constraint violations for the person
    * @throws ServiceUnavailableException if the person could not be validated

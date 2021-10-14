@@ -23,8 +23,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 
 /**
- * The <b>ConfigNotFoundException</b> exception is thrown to indicate that the required
- * config could not be found when working with the Config Service.
+ * The <b>ConfigNotFoundException</b> exception is thrown to indicate that the required config could
+ * not be found when working with the Config Service.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

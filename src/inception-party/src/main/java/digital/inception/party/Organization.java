@@ -243,8 +243,7 @@ public class Organization extends PartyBase implements Serializable {
   /**
    * Constructs a new <b>Organization</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organization is
-   *     associated with
+   * @param tenantId the ID for the tenant the organization is associated with
    * @param name the name of the organization
    */
   public Organization(UUID tenantId, String name) {
@@ -581,13 +580,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the organization.
+   * Returns the ID for the organization.
    *
-   * @return the Universally Unique Identifier (UUID) for the organization
+   * @return the ID for the organization
    */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the organization",
-      required = true)
+  @Schema(description = "The ID for the organization", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @Override
@@ -838,15 +835,12 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the organization is associated
-   * with.
+   * Returns the ID for the tenant the organization is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the organization is associated
-   *     with
+   * @return the ID for the tenant the organization is associated with
    */
   @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the tenant the organization is associated with",
+      description = "The ID for the tenant the organization is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
@@ -1185,9 +1179,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the organization.
+   * Set the ID for the organization.
    *
-   * @param id the Universally Unique Identifier (UUID) for the organization
+   * @param id the ID for the organization
    */
   @Override
   public void setId(UUID id) {
@@ -1293,11 +1287,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the organization is associated
-   * with.
+   * Set the ID for the tenant the organization is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organization is
-   *     associated with
+   * @param tenantId the ID for the tenant the organization is associated with
    */
   public void setTenantId(UUID tenantId) {
     super.setTenantId(tenantId);

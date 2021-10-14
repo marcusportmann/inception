@@ -29,10 +29,24 @@ import org.springframework.data.jpa.repository.Query;
 public interface StatusTypeCategoryRepository
     extends JpaRepository<StatusTypeCategory, StatusTypeCategoryId> {
 
+  /**
+   * Retrieve all the status type categories sorted by locale ID, sort index, and name.
+   *
+   * @return all the status type categories sorted by locale ID, sort index, and name.
+   */
   @Query(
       "select stc from StatusTypeCategory stc order by stc.localeId, -stc.sortIndex DESC, stc.name")
   List<StatusTypeCategory> findAll();
 
+  /**
+   * Retrieve the status type categories for the specified locale sorted by locale ID, sort index,
+   * and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the status type
+   *     categories for
+   * @return the status type categories for the specified locale sorted by locale ID, sort index,
+   *     and name
+   */
   @Query(
       "select stc from StatusTypeCategory stc where upper(stc.localeId) = upper(:localeId) order by stc.localeId, -stc.sortIndex DESC, stc.name")
   List<StatusTypeCategory> findByLocaleIdIgnoreCase(String localeId);

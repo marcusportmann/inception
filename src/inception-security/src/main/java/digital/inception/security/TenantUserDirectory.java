@@ -32,8 +32,8 @@ import javax.xml.bind.annotation.XmlType;
 @SuppressWarnings({"unused"})
 public class TenantUserDirectory implements Serializable {
 
-  /** The Universally Unique Identifier (UUID) for the tenant. */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the tenant", required = true)
+  /** The ID for the tenant. */
+  @Schema(description = "The ID for the tenant", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
   @NotNull
@@ -41,10 +41,8 @@ public class TenantUserDirectory implements Serializable {
   @Column(name = "tenantId", nullable = false)
   private UUID tenantId;
 
-  /** The Universally Unique Identifier (UUID) for the user directory. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the user directory",
-      required = true)
+  /** The ID for the user directory. */
+  @Schema(description = "The ID for the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
   @NotNull
@@ -58,8 +56,8 @@ public class TenantUserDirectory implements Serializable {
   /**
    * Constructs a new <b>TenantUserDirectory</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param tenantId the ID for the tenant
+   * @param userDirectoryId the ID for the user directory
    */
   public TenantUserDirectory(UUID tenantId, UUID userDirectoryId) {
     this.tenantId = tenantId;
@@ -67,36 +65,36 @@ public class TenantUserDirectory implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant.
+   * Returns the ID for the tenant.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant
+   * @return the ID for the tenant
    */
   public UUID getTenantId() {
     return tenantId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the user directory.
+   * Returns the ID for the user directory.
    *
-   * @return the Universally Unique Identifier (UUID) for the user directory
+   * @return the ID for the user directory
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant.
+   * Set the ID for the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the user directory.
+   * Set the ID for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;

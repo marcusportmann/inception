@@ -21,7 +21,6 @@ import demo.model.DuplicateCarException;
 import demo.model.IVehicleService;
 import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
-import digital.inception.mail.DuplicateMailTemplateException;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;

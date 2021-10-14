@@ -40,7 +40,7 @@ export class Associations {
   pageSize?: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the party the associations are associated with.
+   * The ID for the party the associations are associated with.
    */
   partyId: string;
 
@@ -55,7 +55,7 @@ export class Associations {
   sortDirection?: SortDirection;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the associations are associated with.
+   * The ID for the tenant the associations are associated with.
    */
   tenantId: string;
 
@@ -67,9 +67,9 @@ export class Associations {
   /**
    * Constructs a new Associations.
    *
-   * @param tenantId      The Universally Unique Identifier (UUID) for the tenant the associations
+   * @param tenantId      The ID for the tenant the associations
    *                      are associated with.
-   * @param partyId       The Universally Unique Identifier (UUID) for the party the associations
+   * @param partyId       The ID for the party the associations
    *                      are associated with
    * @param associations  The associations.
    * @param total         The total number of associations.

@@ -206,20 +206,6 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   }
 
   @Override
-  public List<Job> getFilteredJobs(String filter) throws ServiceUnavailableException {
-    try {
-      if (StringUtils.hasText(filter)) {
-        return jobRepository.findFiltered("%" + filter + "%");
-      } else {
-        return jobRepository.findAll();
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the jobs matching the filter (" + filter + ")", e);
-    }
-  }
-
-  @Override
   public Job getJob(String jobId)
       throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
@@ -261,6 +247,20 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the name of the job (" + jobId + ")", e);
+    }
+  }
+
+  @Override
+  public List<Job> getJobs(String filter) throws ServiceUnavailableException {
+    try {
+      if (StringUtils.hasText(filter)) {
+        return jobRepository.findFiltered("%" + filter + "%");
+      } else {
+        return jobRepository.findAll();
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the jobs matching the filter (" + filter + ")", e);
     }
   }
 

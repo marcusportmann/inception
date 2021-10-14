@@ -62,15 +62,6 @@ public interface ISchedulerService {
   void executeJob(Job job) throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the filtered jobs.
-   *
-   * @param filter the filter to apply to the jobs
-   * @return the jobs
-   * @throws ServiceUnavailableException if the filtered jobs could not be retrieved
-   */
-  List<Job> getFilteredJobs(String filter) throws ServiceUnavailableException;
-
-  /**
    * Retrieve the job.
    *
    * @param jobId the ID for the job
@@ -93,6 +84,15 @@ public interface ISchedulerService {
    */
   String getJobName(String jobId)
       throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the filtered jobs.
+   *
+   * @param filter the filter to apply to the jobs
+   * @return the filtered jobs
+   * @throws ServiceUnavailableException if the filtered jobs could not be retrieved
+   */
+  List<Job> getJobs(String filter) throws ServiceUnavailableException;
 
   /**
    * Retrieve the jobs.

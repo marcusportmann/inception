@@ -51,4 +51,3 @@ public @interface Problem {
    */
   String type() default "about:blank";
 }
-

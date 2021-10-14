@@ -106,7 +106,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
       associationRepository.saveAndFlush(association);
 
       snapshotRepository.saveAndFlush(
-          new Snapshot(EntityType.ASSOCIATION, association.getId(), associationJson));
+          new Snapshot(tenantId, EntityType.ASSOCIATION, association.getId(), associationJson));
 
       return association;
     } catch (DuplicateAssociationException | PartyNotFoundException e) {
@@ -136,7 +136,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
       organizationRepository.saveAndFlush(organization);
 
       snapshotRepository.saveAndFlush(
-          new Snapshot(EntityType.ORGANIZATION, organization.getId(), organizationJson));
+          new Snapshot(tenantId, EntityType.ORGANIZATION, organization.getId(), organizationJson));
 
       return organization;
     } catch (DuplicateOrganizationException e) {
@@ -165,7 +165,8 @@ public class InternalPartyDataStore implements IPartyDataStore {
 
       personRepository.saveAndFlush(person);
 
-      snapshotRepository.saveAndFlush(new Snapshot(EntityType.PERSON, person.getId(), personJson));
+      snapshotRepository.saveAndFlush(
+          new Snapshot(tenantId, EntityType.PERSON, person.getId(), personJson));
 
       return person;
     } catch (DuplicatePersonException e) {
@@ -392,7 +393,8 @@ public class InternalPartyDataStore implements IPartyDataStore {
 
       Page<Organization> organizationPage;
       if (StringUtils.hasText(filter)) {
-        organizationPage = organizationRepository.findFiltered("%" + filter + "%", pageRequest);
+        organizationPage =
+            organizationRepository.findFiltered(tenantId, "%" + filter + "%", pageRequest);
       } else {
         organizationPage = organizationRepository.findByTenantId(tenantId, pageRequest);
       }
@@ -427,7 +429,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
 
       Page<Party> partyPage;
       if (StringUtils.hasText(filter)) {
-        partyPage = partyRepository.findFiltered("%" + filter + "%", pageRequest);
+        partyPage = partyRepository.findFiltered(tenantId, "%" + filter + "%", pageRequest);
       } else {
         partyPage = partyRepository.findByTenantId(tenantId, pageRequest);
       }
@@ -515,7 +517,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
 
       Page<Person> personPage;
       if (StringUtils.hasText(filter)) {
-        personPage = personRepository.findFiltered("%" + filter + "%", pageRequest);
+        personPage = personRepository.findFiltered(tenantId, "%" + filter + "%", pageRequest);
       } else {
         personPage = personRepository.findByTenantId(tenantId, pageRequest);
       }
@@ -560,19 +562,24 @@ public class InternalPartyDataStore implements IPartyDataStore {
 
       if ((from != null) && (to != null)) {
         snapshotPage =
-            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
+            snapshotRepository.findByTenantIdAndEntityTypeAndEntityId(
+                tenantId, entityType, entityId, pageRequest);
       } else if (from != null) {
         snapshotPage =
-            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
+            snapshotRepository.findByTenantIdAndEntityTypeAndEntityId(
+                tenantId, entityType, entityId, pageRequest);
       } else if (to != null) {
         snapshotPage =
-            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
+            snapshotRepository.findByTenantIdAndEntityTypeAndEntityId(
+                tenantId, entityType, entityId, pageRequest);
       } else {
         snapshotPage =
-            snapshotRepository.findByEntityTypeAndEntityId(entityType, entityId, pageRequest);
+            snapshotRepository.findByTenantIdAndEntityTypeAndEntityId(
+                tenantId, entityType, entityId, pageRequest);
       }
 
       return new Snapshots(
+          tenantId,
           snapshotPage.toList(),
           snapshotPage.getTotalElements(),
           entityType,
@@ -619,7 +626,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
       associationRepository.saveAndFlush(association);
 
       snapshotRepository.saveAndFlush(
-          new Snapshot(EntityType.ASSOCIATION, association.getId(), associationJson));
+          new Snapshot(tenantId, EntityType.ASSOCIATION, association.getId(), associationJson));
 
       return association;
     } catch (AssociationNotFoundException e) {
@@ -649,7 +656,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
       organizationRepository.saveAndFlush(organization);
 
       snapshotRepository.saveAndFlush(
-          new Snapshot(EntityType.ORGANIZATION, organization.getId(), organizationJson));
+          new Snapshot(tenantId, EntityType.ORGANIZATION, organization.getId(), organizationJson));
 
       return organization;
     } catch (OrganizationNotFoundException e) {
@@ -678,7 +685,8 @@ public class InternalPartyDataStore implements IPartyDataStore {
 
       personRepository.saveAndFlush(person);
 
-      snapshotRepository.saveAndFlush(new Snapshot(EntityType.PERSON, person.getId(), personJson));
+      snapshotRepository.saveAndFlush(
+          new Snapshot(tenantId, EntityType.PERSON, person.getId(), personJson));
 
       return person;
     } catch (PersonNotFoundException e) {

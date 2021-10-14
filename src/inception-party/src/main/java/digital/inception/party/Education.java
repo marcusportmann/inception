@@ -112,10 +112,8 @@ public class Education implements Serializable {
   @Column(name = "first_year_attended")
   private Integer firstYearAttended;
 
-  /** The Universally Unique Identifier (UUID) for the education. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the education",
-      required = true)
+  /** The ID for the education. */
+  @Schema(description = "The ID for the education", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -342,9 +340,9 @@ public class Education implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the education.
+   * Returns the ID for the education.
    *
-   * @return the Universally Unique Identifier (UUID) for the education
+   * @return the ID for the education
    */
   public UUID getId() {
     return id;
@@ -452,9 +450,9 @@ public class Education implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the education.
+   * Set the ID for the education.
    *
-   * @param id the Universally Unique Identifier (UUID) for the education
+   * @param id the ID for the education
    */
   public void setId(UUID id) {
     this.id = id;
@@ -525,17 +523,13 @@ public class Education implements Serializable {
     this.qualificationYear = qualificationYear;
   }
 
-  /**
-   * The Java Persistence callback method invoked before the entity is created in the database.
-   */
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
-  /**
-   * The Java Persistence callback method invoked before the entity is updated in the database.
-   */
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

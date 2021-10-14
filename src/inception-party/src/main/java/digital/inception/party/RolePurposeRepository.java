@@ -28,9 +28,20 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface RolePurposeRepository extends JpaRepository<RolePurpose, RolePurposeId> {
 
+  /**
+   * Retrieve all the role purposes sorted by locale ID, sort index, and name.
+   *
+   * @return all the role purposes sorted by locale ID, sort index, and name.
+   */
   @Query("select rp from RolePurpose rp order by rp.localeId, -rp.sortIndex DESC, rp.name")
   List<RolePurpose> findAll();
 
+  /**
+   * Retrieve the role purposes for the specified locale sorted by locale ID, sort index, and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the role purposes for
+   * @return the role purposes for the specified locale sorted by locale ID, sort index, and name
+   */
   @Query(
       "select rp from RolePurpose rp where upper(rp.localeId) = upper(:localeId) order by rp.localeId, -rp.sortIndex DESC, rp.name")
   List<RolePurpose> findByLocaleIdIgnoreCase(String localeId);

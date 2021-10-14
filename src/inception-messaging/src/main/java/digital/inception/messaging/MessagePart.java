@@ -118,10 +118,8 @@ public class MessagePart {
   @Column(name = "download_attempts")
   private Integer downloadAttempts;
 
-  /** The Universally Unique Identifier (UUID) for the message part. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the message part",
-      required = true)
+  /** The ID for the message part. */
+  @Schema(description = "The ID for the message part", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -146,10 +144,8 @@ public class MessagePart {
   @Column(name = "message_checksum", length = 100, nullable = false)
   private String messageChecksum;
 
-  /** The optional Universally Unique Identifier (UUID) used to correlate the original message. */
-  @Schema(
-      description =
-          "The optional Universally Unique Identifier (UUID) used to correlate the original message")
+  /** The optional ID used to correlate the original message. */
+  @Schema(description = "The optional ID used to correlate the original message")
   @JsonProperty
   @XmlElement(name = "MessageCorrelationId")
   @Column(name = "message_correlation_id")
@@ -175,12 +171,9 @@ public class MessagePart {
   @Column(name = "message_data_hash", length = 100)
   private String messageDataHash;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the device associated with the original message.
-   */
+  /** The ID for the device associated with the original message. */
   @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the device associated with the original message",
+      description = "The ID for the device associated with the original message",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MessageDeviceId", required = true)
@@ -201,10 +194,8 @@ public class MessagePart {
   @Column(name = "message_encryption_iv", length = 100)
   private String messageEncryptionIV;
 
-  /** The Universally Unique Identifier (UUID) for the original message. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the original message",
-      required = true)
+  /** The ID for the original message. */
+  @Schema(description = "The ID for the original message", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MessageId", required = true)
   @NotNull
@@ -374,13 +365,11 @@ public class MessagePart {
    *     message
    * @param totalParts the total number of parts in the set of message parts for the original
    *     message
-   * @param messageId the Universally Unique Identifier (UUID) for the original message
+   * @param messageId the ID for the original message
    * @param messageType the code for the message type for the original message
    * @param messageUsername the username for the user associated with the original message
-   * @param messageDeviceId the Universally Unique Identifier (UUID) for the device associated with
-   *     the original message
-   * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
-   *     original message
+   * @param messageDeviceId the ID for the device associated with the original message
+   * @param messageCorrelationId the ID used to correlate the original message
    * @param messagePriority the priority for the original message
    * @param messageCreated the date and time the original message was created
    * @param messageDataHash the hash of the unencrypted data for the original message
@@ -423,20 +412,18 @@ public class MessagePart {
   /**
    * Constructs a new <b>MessagePart</b>.
    *
-   * @param id the Universally Unique Identifier (UUID) for the message part
+   * @param id the ID for the message part
    * @param partNo the number of the message part in the set of message parts for the original
    *     message
    * @param totalParts total number of parts in the set of message parts for the original message
    * @param sendAttempts the number of times that the sending of the message part was attempted
    * @param downloadAttempts the number of times that downloading of the message part was attempted
    * @param status the message part status e.g. Initialized, Sending, etc
-   * @param messageId the Universally Unique Identifier (UUID) for the original message
+   * @param messageId the ID for the original message
    * @param messageType the code for the message type for the original message
    * @param messageUsername the username for the user associated with the original message
-   * @param messageDeviceId the Universally Unique Identifier (UUID) for the device associated with
-   *     the original message
-   * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
-   *     original message
+   * @param messageDeviceId the ID for the device associated with the original message
+   * @param messageCorrelationId the ID used to correlate the original message
    * @param messagePriority the priority for the original message
    * @param messageCreated the date and time the original message was created
    * @param messageDataHash the hash of the unencrypted data for the original message
@@ -553,9 +540,9 @@ public class MessagePart {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the message part.
+   * Returns the ID for the message part.
    *
-   * @return the Universally Unique Identifier (UUID) for the message part
+   * @return the ID for the message part
    */
   public UUID getId() {
     return id;
@@ -580,9 +567,9 @@ public class MessagePart {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to correlate the original message.
+   * Returns the ID used to correlate the original message.
    *
-   * @return the Universally Unique Identifier (UUID) used to correlate the original message
+   * @return the ID used to correlate the original message
    */
   public UUID getMessageCorrelationId() {
     return messageCorrelationId;
@@ -607,11 +594,9 @@ public class MessagePart {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device associated with the original
-   * message.
+   * Returns the ID for the device associated with the original message.
    *
-   * @return the Universally Unique Identifier (UUID) for the device associated with the original
-   *     message
+   * @return the ID for the device associated with the original message
    */
   public UUID getMessageDeviceId() {
     return messageDeviceId;
@@ -629,9 +614,9 @@ public class MessagePart {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the original message.
+   * Returns the ID for the original message.
    *
-   * @return the Universally Unique Identifier (UUID) for the original message
+   * @return the ID for the original message
    */
   public UUID getMessageId() {
     return messageId;
@@ -748,9 +733,9 @@ public class MessagePart {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the message part.
+   * Set the ID for the message part.
    *
-   * @param id the Universally Unique Identifier (UUID) for the message part
+   * @param id the ID for the message part
    */
   public void setId(UUID id) {
     this.id = id;
@@ -775,10 +760,9 @@ public class MessagePart {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to correlate the original message.
+   * Set the ID used to correlate the original message.
    *
-   * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
-   *     original message
+   * @param messageCorrelationId the ID used to correlate the original message
    */
   public void setMessageCorrelationId(UUID messageCorrelationId) {
     this.messageCorrelationId = messageCorrelationId;
@@ -804,11 +788,9 @@ public class MessagePart {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the device associated with the original
-   * message.
+   * Set the ID for the device associated with the original message.
    *
-   * @param messageDeviceId the Universally Unique Identifier (UUID) for the device associated with
-   *     the original message
+   * @param messageDeviceId the ID for the device associated with the original message
    */
   public void setMessageDeviceId(UUID messageDeviceId) {
     this.messageDeviceId = messageDeviceId;
@@ -826,9 +808,9 @@ public class MessagePart {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the original message.
+   * Set the ID for the original message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the original message
+   * @param messageId the ID for the original message
    */
   public void setMessageId(UUID messageId) {
     this.messageId = messageId;

@@ -52,7 +52,7 @@ export class MarriageType {
   sortIndex: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the marriage type is specific to.
+   * The ID for the tenant the marriage type is specific to.
    */
   tenantId?: string;
 
@@ -65,7 +65,7 @@ export class MarriageType {
    * @param sortIndex     The sort index for the marriage type.
    * @param name          The name of the marriage type.
    * @param description   The description for the marriage type.
-   * @param tenantId      The Universally Unique Identifier (UUID) for the tenant the marriage type
+   * @param tenantId      The ID for the tenant the marriage type
    *                      is specific to.
    */
   constructor(maritalStatus: string, code: string, localeId: string, sortIndex: number,

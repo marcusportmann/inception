@@ -87,12 +87,9 @@ public class Associations implements Serializable {
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the party the associations are associated with.
-   */
+  /** The ID for the party the associations are associated with. */
   @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the party the associations are associated with",
+      description = "The ID for the party the associations are associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "PartyId", required = true)
@@ -110,12 +107,9 @@ public class Associations implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the tenant the associations are associated with.
-   */
+  /** The ID for the tenant the associations are associated with. */
   @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the tenant the associations are associated with",
+      description = "The ID for the tenant the associations are associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
@@ -133,10 +127,8 @@ public class Associations implements Serializable {
   /**
    * Constructs a new <b>Associations</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the associations are
-   *     associated with
-   * @param partyId the Universally Unique Identifier (UUID) for the party the associations are
-   *     associated with
+   * @param tenantId the ID for the tenant the associations are associated with
+   * @param partyId the ID for the party the associations are associated with
    * @param associations the associations
    * @param total the total number of associations
    * @param sortBy the optional method used to sort the associations e.g. by name
@@ -191,11 +183,9 @@ public class Associations implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the party the associations are associated
-   * with.
+   * Returns the ID for the party the associations are associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the party the associations are associated
-   *     with
+   * @return the ID for the party the associations are associated with
    */
   public UUID getPartyId() {
     return partyId;
@@ -220,11 +210,9 @@ public class Associations implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the associations are associated
-   * with.
+   * Returns the ID for the tenant the associations are associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the associations are associated
-   *     with
+   * @return the ID for the tenant the associations are associated with
    */
   public UUID getTenantId() {
     return tenantId;

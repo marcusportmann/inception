@@ -40,8 +40,7 @@ public class MailApiConfiguration {
         .group("mail")
         .packagesToScan(new String[] {"digital.inception.mail"})
         .addOpenApiCustomiser(
-            openApi ->
-                openApi.info(new Info().title("Mail API").version(Version.PROJECT_VERSION)))
+            openApi -> openApi.info(new Info().title("Mail API").version(Version.PROJECT_VERSION)))
         .build();
   }
 }

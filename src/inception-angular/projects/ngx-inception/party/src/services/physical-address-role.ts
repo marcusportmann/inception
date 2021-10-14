@@ -50,9 +50,9 @@ export class PhysicalAddressRole {
    * The sort index for the physical address role.
    */
   sortIndex: number;
-  
+
   /**
-   * The Universally Unique Identifier (UUID) for the tenant the physical address role is specific to.
+   * The ID for the tenant the physical address role is specific to.
    */
   tenantId?: string;
 
@@ -65,7 +65,7 @@ export class PhysicalAddressRole {
    * @param name        The name of the physical address role.
    * @param description The description for the physical address role.
    * @param partyTypes  The codes for the party types the physical address role is associated with.
-   * @param tenantId    The Universally Unique Identifier (UUID) for the tenant the physical address role is specific to.
+   * @param tenantId    The ID for the tenant the physical address role is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               partyTypes: string[], tenantId?: string) {

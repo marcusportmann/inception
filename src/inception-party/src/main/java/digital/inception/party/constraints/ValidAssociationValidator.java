@@ -78,8 +78,8 @@ public class ValidAssociationValidator
       try {
         // Validate association type
         if (StringUtils.hasText(association.getType())
-            && (!partyReferenceService
-            .isValidAssociationType(association.getTenantId(), association.getType()))) {
+            && (!partyReferenceService.isValidAssociationType(
+                association.getTenantId(), association.getType()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", association.getType())
               .buildConstraintViolationWithTemplate(

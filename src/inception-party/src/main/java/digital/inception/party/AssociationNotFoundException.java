@@ -47,8 +47,8 @@ public class AssociationNotFoundException extends ServiceException {
   /**
    * Constructs a new <b>AssociationNotFoundException</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @param tenantId the ID for the tenant
+   * @param associationId the ID for the association
    */
   public AssociationNotFoundException(UUID tenantId, UUID associationId) {
     super(

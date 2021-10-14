@@ -33,9 +33,7 @@ public class Opaque implements Serializable, Content {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The binary data.
-   */
+  /** The binary data. */
   private BinaryBuffer buffer;
 
   /** Constructs a new empty <b>Opaque</b>. */

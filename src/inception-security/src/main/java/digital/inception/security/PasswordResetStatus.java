@@ -75,28 +75,6 @@ public enum PasswordResetStatus {
   }
 
   /**
-   * Returns the numeric code for the password reset status.
-   *
-   * @param passwordResetStatus the password reset status
-   * @return the numeric code for the password reset status
-   */
-  public static int toNumericCode(PasswordResetStatus passwordResetStatus) {
-    switch (passwordResetStatus) {
-      case REQUESTED:
-        return 1;
-      case COMPLETED:
-        return 2;
-      case EXPIRED:
-        return 3;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the numeric code for the password reset status ("
-                + passwordResetStatus.code()
-                + ")");
-    }
-  }
-
-  /**
    * Returns the password reset status for the specified numeric code.
    *
    * @param numericCode the numeric code for the password reset status
@@ -114,6 +92,28 @@ public enum PasswordResetStatus {
         throw new RuntimeException(
             "Failed to determine the password reset status for the numeric code ("
                 + numericCode
+                + ")");
+    }
+  }
+
+  /**
+   * Returns the numeric code for the password reset status.
+   *
+   * @param passwordResetStatus the password reset status
+   * @return the numeric code for the password reset status
+   */
+  public static int toNumericCode(PasswordResetStatus passwordResetStatus) {
+    switch (passwordResetStatus) {
+      case REQUESTED:
+        return 1;
+      case COMPLETED:
+        return 2;
+      case EXPIRED:
+        return 3;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the numeric code for the password reset status ("
+                + passwordResetStatus.code()
                 + ")");
     }
   }
