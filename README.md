@@ -21,7 +21,7 @@ Complete the following steps to setup a development environment on MacOS.
    ```
 3. Install OpenJDK 17 by executing the following commands in a Terminal window.
    ```
-   brew install --cask temurin
+   brew install openjdk
    ```
 4. Install Apache Maven by executing the following command in a Terminal window.
    ```
@@ -40,7 +40,7 @@ Complete the following steps to setup a development environment on MacOS.
 7. Set OpenJDK 17 as the default java verison by executing the following commands in a
    Terminal window.
    ```
-   jenv add /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
+   jenv add /opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home
    jenv global 17
    ```
 8. Install the maven plugin for jenv by executing the following command in a Terminal
