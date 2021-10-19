@@ -59,8 +59,7 @@ export class MaritalStatus {
    * @param sortIndex   The sort index for the marital status.
    * @param name        The name of the marital status.
    * @param description The description for the marital status.
-   * @param tenantId    The ID for the tenant the marital status
-   *                    is specific to.
+   * @param tenantId    The ID for the tenant the marital status is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               tenantId?: string) {

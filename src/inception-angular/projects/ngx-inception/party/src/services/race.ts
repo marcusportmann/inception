@@ -59,8 +59,7 @@ export class Race {
    * @param sortIndex   The sort index for the race.
    * @param name        The name of the race.
    * @param description The description for the race.
-   * @param tenantId    The ID for the tenant the race is specific
-   *                    to.
+   * @param tenantId    The ID for the tenant the race is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               tenantId?: string) {

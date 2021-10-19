@@ -19,7 +19,7 @@
  *
  * @author Marcus Portmann
  */
-export class SourceOfFundsType {
+export class SourceOfWealthType {
 
   /**
    * The code for the source of wealth type.
@@ -52,15 +52,14 @@ export class SourceOfFundsType {
   tenantId?: string;
 
   /**
-   * Constructs a new SourceOfFunds.
+   * Constructs a new SourceOfWealthType.
    *
-   * @param code        The code for the source of funds.
-   * @param localeId    The Unicode locale identifier for the source of funds.
-   * @param sortIndex   The sort index for the source of funds.
-   * @param name        The name of the source of funds.
-   * @param description The description for the source of funds.
-   * @param tenantId    The The ID for the tenant the source of
-   *                    wealth type is specific.
+   * @param code        The code for the source of wealth type.
+   * @param localeId    The Unicode locale identifier for the source of wealth type.
+   * @param sortIndex   The sort index for the source of wealth type.
+   * @param name        The name of the source of wealth type.
+   * @param description The description for the source of wealth type.
+   * @param tenantId    The The ID for the tenant the source of wealth type is specific.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               tenantId?: string) {

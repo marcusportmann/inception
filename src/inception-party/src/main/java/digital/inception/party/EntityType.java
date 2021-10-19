@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 public enum EntityType {
   /** Association. */
   @XmlEnumValue("Association")
-  ASSOCIATION("association", "A association"),
+  ASSOCIATION("association", "An association"),
 
   /** Mandate. */
   @XmlEnumValue("Mandate")

@@ -72,8 +72,7 @@ export class TaxNumberType {
    * @param countryOfIssue The ISO 3166-1 alpha-2 code for the country of issue for the tax number
    *                       type.
    * @param partyTypes     The codes for the party types the tax number type is associated with.
-   * @param tenantId       The ID for the tenant the tax number
-   *                       type is specific to.
+   * @param tenantId       The ID for the tenant the tax number type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               countryOfIssue: string, partyTypes: string[], tenantId?: string) {

@@ -65,8 +65,7 @@ export class Title {
    * @param name         The name of the title.
    * @param abbreviation The abbreviation for the title.
    * @param description  The description for the title.
-   * @param tenantId     The ID for the tenant the title is
-   *                     specific to.
+   * @param tenantId     The ID for the tenant the title is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, abbreviation: string,
               description: string, tenantId?: string) {

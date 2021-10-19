@@ -67,13 +67,10 @@ export class Association {
    * Constructs a new Association.
    *
    * @param id            The ID for the association.
-   * @param tenantId      The ID for the tenant the association is
-   *                      associated with.
+   * @param tenantId      The ID for the tenant the association is associated with.
    * @param type          The code for the association type.
-   * @param firstPartyId  The ID for the first party in the
-   *                      association.
-   * @param secondPartyId The ID for the second party in the
-   *                      association.
+   * @param firstPartyId  The ID for the first party in the association.
+   * @param secondPartyId The ID for the second party in the association.
    * @param properties    The properties for the association.
    * @param effectiveFrom The date the association is effective from.
    * @param effectiveTo   The date the association is effective to.

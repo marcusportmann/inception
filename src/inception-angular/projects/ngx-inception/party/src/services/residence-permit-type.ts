@@ -66,8 +66,7 @@ export class ResidencePermitType {
    * @param description    The description for the residence permit type.
    * @param countryOfIssue The ISO 3166-1 alpha-2 code for the country of issue for the residence
    *                       permit type.
-   * @param tenantId       The ID for the tenant the residence
-   *                       permit type is specific to.
+   * @param tenantId       The ID for the tenant the residence permit type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               countryOfIssue: string, tenantId?: string) {

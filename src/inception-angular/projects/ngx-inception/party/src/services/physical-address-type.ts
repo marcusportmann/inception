@@ -51,7 +51,6 @@ export class PhysicalAddressType {
    */
   tenantId?: string;
 
-
   /**
    * Constructs a new PhysicalAddressType.
    *

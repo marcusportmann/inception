@@ -57,8 +57,7 @@ export class ContactMechanismRole {
   sortIndex: number;
 
   /**
-   * The ID for the tenant the contact mechanism role is specific
-   * to.
+   * The ID for the tenant the contact mechanism role is specific to.
    */
   tenantId?: string;
 
@@ -74,8 +73,7 @@ export class ContactMechanismRole {
    * @param description          The description for the contact mechanism role.
    * @param partyTypes           The codes for the party types the contact mechanism role is
    *                             associated with.
-   * @param tenantId             The ID for the tenant the contact
-   *                             mechanism role is specific to.
+   * @param tenantId             The ID for the tenant the contact mechanism role is specific to.
    */
   constructor(contactMechanismType: string, code: string, localeId: string, sortIndex: number,
               name: string, description: string, partyTypes: string[], tenantId?: string) {

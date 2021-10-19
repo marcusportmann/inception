@@ -5,6 +5,18 @@
 
   <artifactId>inception-oauth2-resource-server</artifactId>
   <name>inception-oauth2-resource-server</name>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>16</source>
+          <target>16</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <parent>
     <groupId>digital.inception</groupId>

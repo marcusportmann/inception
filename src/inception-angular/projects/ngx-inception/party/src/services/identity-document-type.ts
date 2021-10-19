@@ -47,13 +47,19 @@ export class IdentityDocumentType {
   name: string;
 
   /**
+   * The codes for the party types the identity document type is associated with.
+   */
+  partyTypes: string[];
+
+
+  /**
    * The sort index for the identity document type.
    */
   sortIndex: number;
 
+
   /**
-   * The ID for the tenant the identity document type is specific
-   * to.
+   * The ID for the tenant the identity document type is specific to.
    */
   tenantId?: string;
 
@@ -67,17 +73,19 @@ export class IdentityDocumentType {
    * @param description    The description for the identity document type.
    * @param countryOfIssue The optional ISO 3166-1 alpha-2 code for the country of issue for the
    *                       identity document type.
-   * @param tenantId       The ID for the tenant the identity
-   *                       document type is specific to.
+   * @param partyTypes     The codes for the party types the identity document type is associated
+   *                       with.
+   * @param tenantId       The ID for the tenant the identity document type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
-              countryOfIssue: string, tenantId?: string) {
+              countryOfIssue: string, partyTypes: string[], tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
     this.countryOfIssue = countryOfIssue;
+    this.partyTypes = partyTypes;
     this.tenantId = tenantId;
   }
 }

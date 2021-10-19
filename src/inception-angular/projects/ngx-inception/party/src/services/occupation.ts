@@ -47,6 +47,11 @@ export class Occupation {
   sortIndex: number;
 
   /**
+   * The ID for the tenant the occupation is specific to.
+   */
+  tenantId?: string;
+
+  /**
    * Constructs a new Occupation.
    *
    * @param code        The code for the occupation.
@@ -54,12 +59,15 @@ export class Occupation {
    * @param sortIndex   The sort index for the occupation.
    * @param name        The name of the occupation.
    * @param description The description for the occupation.
+   * @param tenantId    The ID for the tenant the occupation is specific to.
    */
-  constructor(code: string, localeId: string, sortIndex: number, name: string, description: string) {
+  constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
+              tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
+    this.tenantId = tenantId;
   }
 }

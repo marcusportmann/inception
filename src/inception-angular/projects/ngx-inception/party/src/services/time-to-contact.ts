@@ -59,8 +59,7 @@ export class TimeToContact {
    * @param sortIndex      The sort index for the time to contact.
    * @param name           The name of the time to contact.
    * @param description    The description for the time to contact.
-   * @param tenantId       The ID for the tenant the time to
-   *                       contact is specific to.
+   * @param tenantId       The ID for the tenant the time to contact is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               tenantId?: string) {

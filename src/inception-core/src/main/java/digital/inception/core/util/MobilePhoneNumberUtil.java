@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class MobilePhoneNumberUtil {
 
-  /** The regular expression used to validate an MobilePhoneNumberUtil. */
+  /** The regular expression used to validate a mobile number. */
   public static final String MSISDN_VALIDATION_REGEX =
       "(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210]"
           + "|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{1,14}$";
@@ -35,10 +35,10 @@ public final class MobilePhoneNumberUtil {
   private static final Pattern msisdnPattern = Pattern.compile(MSISDN_VALIDATION_REGEX);
 
   /**
-   * Check whether the specified MobilePhoneNumberUtil is valid.
+   * Check whether the specified mobile number is valid.
    *
-   * @param msisdn the MobilePhoneNumberUtil
-   * @return <b>true</b> if the MobilePhoneNumberUtil is valid or <b>false</b> otherwise
+   * @param msisdn the mobile number
+   * @return <b>true</b> if the mobile number is valid or <b>false</b> otherwise
    */
   public static boolean isValidMSISDN(String msisdn) {
     java.util.regex.Matcher matcher = msisdnPattern.matcher(msisdn);
@@ -122,11 +122,11 @@ public final class MobilePhoneNumberUtil {
   //  }
 
   /**
-   * Returns the MobilePhoneNumberUtil for the specified mobile phone number.
+   * Returns the MSISDN for the specified mobile phone number.
    *
    * @param mobilePhoneNumber the mobile phone number
    * @param defaultInternationalPrefix the default international prefix
-   * @return the MobilePhoneNumberUtil for the mobile phone number
+   * @return the MSISDN for the mobile phone number
    */
   public static String mobilePhoneNumberToMSISDN(
       String mobilePhoneNumber, String defaultInternationalPrefix) {

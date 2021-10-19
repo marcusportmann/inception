@@ -75,8 +75,7 @@ export class AssociationPropertyType {
    * @param name            The name of the association property type.
    * @param description     The description for the association property type.
    * @param valueType       The value type for the association property type.
-   * @param tenantId        The ID for the tenant the association
-   *                        property type is specific to.
+   * @param tenantId        The ID for the tenant the association property type is specific to.
    */
   constructor(associationType: string, code: string, localeId: string, sortIndex: number,
               name: string, description: string, valueType: ValueType, tenantId?: string) {

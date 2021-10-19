@@ -15,7 +15,8 @@
  */
 
 import {SortDirection} from 'ngx-inception/core';
-import {AssociationSortBy} from "./party-sorty-by";
+import {Association} from "./association";
+import {AssociationSortBy} from "./association-sorty-by";
 
 /**
  * The Associations class holds the results of a request to retrieve a list of associations.
@@ -67,10 +68,8 @@ export class Associations {
   /**
    * Constructs a new Associations.
    *
-   * @param tenantId      The ID for the tenant the associations
-   *                      are associated with.
-   * @param partyId       The ID for the party the associations
-   *                      are associated with
+   * @param tenantId      The ID for the tenant the associations are associated with.
+   * @param partyId       The ID for the party the associations are associated with
    * @param associations  The associations.
    * @param total         The total number of associations.
    * @param sortBy        The optional method used to sort the associations e.g. by name.
@@ -83,7 +82,7 @@ export class Associations {
               pageSize?: number) {
     this.tenantId = tenantId;
     this.partyId = partyId;
-    this.associations = parties;
+    this.associations = associations;
     this.total = total;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;

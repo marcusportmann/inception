@@ -65,8 +65,7 @@ export class MarriageType {
    * @param sortIndex     The sort index for the marriage type.
    * @param name          The name of the marriage type.
    * @param description   The description for the marriage type.
-   * @param tenantId      The ID for the tenant the marriage type
-   *                      is specific to.
+   * @param tenantId      The ID for the tenant the marriage type is specific to.
    */
   constructor(maritalStatus: string, code: string, localeId: string, sortIndex: number,
               name: string, description: string, tenantId?: string) {
