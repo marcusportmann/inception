@@ -15,7 +15,7 @@
  */
 
 /**
- * The <b>Lock</b> class holds the information for a lock applied to an organization or person.
+ * The Lock class holds the information for a lock applied to an organization or person.
  *
  * @author Marcus Portmann
  */
@@ -39,10 +39,14 @@ export class Lock {
   /**
    * Constructs a new Lock.
    *
-   * @param type The code for the lock type.
+   * @param type          The code for the lock type.
+   * @param effectiveFrom The date the lock is effective from.
+   * @param effectiveTo   The date the lock is effective to.
    */
-  constructor(type: string) {
+  constructor(type: string, effectiveFrom?: Date, effectiveTo?: Date) {
     this.type = type;
+    this.effectiveFrom = effectiveFrom;
+    this.effectiveTo = effectiveTo;
   }
 }
 

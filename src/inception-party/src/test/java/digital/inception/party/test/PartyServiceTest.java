@@ -4074,7 +4074,7 @@ public class PartyServiceTest {
     assertEquals(
         person1.getEmployments().size(),
         person2.getEmployments().size(),
-        "The number of employments for the persons do not match");
+        "The number of employment records for the persons do not match");
 
     for (Employment person1Employment : person1.getEmployments()) {
       boolean foundEmployment = false;

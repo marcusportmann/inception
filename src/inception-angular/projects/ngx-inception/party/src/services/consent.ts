@@ -15,7 +15,7 @@
  */
 
 /**
- * The <b>Consent</b> class holds the information for a consent provided by an organization or
+ * The Consent class holds the information for a consent provided by an organization or
  * person.
  *
  * @author Marcus Portmann
@@ -40,10 +40,14 @@ export class Consent {
   /**
    * Constructs a new Consent.
    *
-   * @param type The code for the consent type.
+   * @param type          The code for the consent type.
+   * @param effectiveFrom The date the consent is effective from.
+   * @param effectiveTo   The date the consent is effective to.
    */
-  constructor(type: string) {
+  constructor(type: string, effectiveFrom?: Date, effectiveTo?: Date) {
     this.type = type;
+    this.effectiveFrom = effectiveFrom;
+    this.effectiveTo = effectiveTo;
   }
 }
 

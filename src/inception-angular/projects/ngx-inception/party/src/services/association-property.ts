@@ -15,7 +15,7 @@
  */
 
 /**
- * The <b>AssociationProperty</b> class holds the information for an association property for an
+ * The AssociationProperty class holds the information for an association property for an
  * association.
  *
  * @author Marcus Portmann

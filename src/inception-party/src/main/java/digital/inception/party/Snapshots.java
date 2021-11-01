@@ -16,10 +16,12 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -30,7 +32,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <b>Snapshots</b> class holds the results of a request to retrieve a list of snapshots for a
@@ -91,7 +95,10 @@ public class Snapshots implements Serializable {
   /** The optional date to retrieve the snapshots from. */
   @Schema(description = "The optional date to retrieve the snapshots from")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "From")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
   private LocalDate from;
 
   /** The optional page index. */
@@ -128,7 +135,10 @@ public class Snapshots implements Serializable {
   /** The optional date to retrieve the snapshots to. */
   @Schema(description = "The optional date to retrieve the snapshots to")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "To")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
   private LocalDate to;
 
   /** The total number of snapshots. */

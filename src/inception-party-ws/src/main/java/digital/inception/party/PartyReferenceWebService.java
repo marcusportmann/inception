@@ -242,6 +242,25 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the external reference type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the external reference type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     type reference data for
+   * @return the external reference type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the external reference type reference data could not be
+   *     retrieved
+   */
+  @WebMethod(operationName = "GetExternalReferenceTypes")
+  public List<ExternalReferenceType> getExternalReferenceTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getExternalReferenceTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the fields of study reference data for a specific locale.
    *
    * @param tenantId the ID for the tenant the fields of study reference data is specific to
@@ -664,6 +683,25 @@ public class PartyReferenceWebService {
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
     return partyReferenceService.getRoleTypes(tenantId, localeId);
+  }
+
+  /**
+   * Retrieve the segmentation type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the segmentation type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segmentation type
+   *     reference data for
+   * @return the segmentation type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the segmentation type reference data could not be
+   *     retrieved
+   */
+  @WebMethod(operationName = "GetSegmentationTypes")
+  public List<SegmentationType> getSegmentationTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSegmentationTypes(tenantId, localeId);
   }
 
   /**

@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -117,6 +118,7 @@ public class Association implements Serializable {
   /** The date the association is effective from. */
   @Schema(description = "The date the association is effective from")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveFrom")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -126,6 +128,7 @@ public class Association implements Serializable {
   /** The date the association is effective to. */
   @Schema(description = "The date the association is effective to")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveTo")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")

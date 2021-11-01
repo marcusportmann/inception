@@ -2594,6 +2594,14 @@
     </insert>
 
 
+    <insert schemaName="party" tableName="role_purposes">
+      <column name="code" value="kyc_requirements"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="KYC Requirements"/>
+      <column name="description" value="KYC Requirements"/>
+    </insert>
+
+
     <insert schemaName="party" tableName="role_types">
       <column name="code" value="affiliate"/>
       <column name="locale_id" value="en-ZA"/>
@@ -3018,6 +3026,45 @@
       <column name="value_type" value="decimal"/>
     </insert>
 
+    <insert schemaName="party" tableName="segmentation_types">
+      <column name="code" value="income"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Income"/>
+      <column name="description" value="Income"/>
+    </insert>
+
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="low_income"/>
+      <column name="type" value="income"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Low Income"/>
+      <column name="description" value="Low Income"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="lower_middle_income"/>
+      <column name="type" value="income"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Lower Middle Income"/>
+      <column name="description" value="Lower Middle Income"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="upper_middle_income"/>
+      <column name="type" value="income"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Upper Middle Income"/>
+      <column name="description" value="Upper Middle Income"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="high_income"/>
+      <column name="type" value="income"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="High Income"/>
+      <column name="description" value="High Income"/>
+      <column name="party_types" value="person"/>
+    </insert>
 
     <insert schemaName="party" tableName="source_of_funds_types">
       <column name="code" value="salary_wages"/>
@@ -6140,6 +6187,14 @@
     </insert>
 
 
+    <insert schemaName="party" tableName="role_purposes">
+      <column name="code" value="kyc_requirements"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="KYC Requirements"/>
+      <column name="description" value="KYC Requirements"/>
+    </insert>
+
+
     <insert schemaName="party" tableName="role_types">
       <column name="code" value="affiliate"/>
       <column name="locale_id" value="en-US"/>
@@ -6564,6 +6619,45 @@
       <column name="value_type" value="decimal"/>
     </insert>
 
+    <insert schemaName="party" tableName="segmentation_types">
+      <column name="code" value="income"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Income"/>
+      <column name="description" value="Income"/>
+    </insert>
+
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="low_income"/>
+      <column name="type" value="income"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Low Income"/>
+      <column name="description" value="Low Income"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="lower_middle_income"/>
+      <column name="type" value="income"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Lower Middle Income"/>
+      <column name="description" value="Lower Middle Income"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="upper_middle_income"/>
+      <column name="type" value="income"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Upper Middle Income"/>
+      <column name="description" value="Upper Middle Income"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="high_income"/>
+      <column name="type" value="income"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="High Income"/>
+      <column name="description" value="High Income"/>
+      <column name="party_types" value="person"/>
+    </insert>
 
     <insert schemaName="party" tableName="source_of_funds_types">
       <column name="code" value="salary_wages"/>

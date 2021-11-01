@@ -17,7 +17,7 @@
 import {MeasurementUnit} from "./measurement-unit";
 
 /**
- * The <b>Attribute</b> class holds the information for an attribute for an organization or person.
+ * The Attribute class holds the information for an attribute for an organization or person.
  *
  * @author Marcus Portmann
  */

@@ -53,6 +53,7 @@ import org.springframework.util.StringUtils;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "code",
+  "type",
   "localeId",
   "tenantId",
   "sortIndex",
@@ -64,7 +65,16 @@ import org.springframework.util.StringUtils;
 @XmlType(
     name = "Segment",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description", "partyTypes"})
+    propOrder = {
+      "code",
+      "type",
+      "localeId",
+      "tenantId",
+      "sortIndex",
+      "name",
+      "description",
+      "partyTypes"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "segments")
@@ -133,6 +143,15 @@ public class Segment implements Serializable {
   @XmlElement(name = "TenantId")
   @Column(name = "tenant_id")
   private UUID tenantId;
+
+  /** The code for the segmentation type for the segment. */
+  @Schema(description = "The code for the segmentation type for the segment", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(name = "type", length = 30, nullable = false)
+  private String type;
 
   /** Constructs a new <b>Segment</b>. */
   public Segment() {}
@@ -231,6 +250,15 @@ public class Segment implements Serializable {
   }
 
   /**
+   * Returns the code for the segmentation type for the segment.
+   *
+   * @return the code for the segmentation type for the segment
+   */
+  public String getType() {
+    return type;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -322,5 +350,14 @@ public class Segment implements Serializable {
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
+  }
+
+  /**
+   * Set the code for the segmentation type for the segment.
+   *
+   * @param type the code for the segmentation type for the segment
+   */
+  public void setType(String type) {
+    this.type = type;
   }
 }

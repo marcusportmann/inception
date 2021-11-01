@@ -709,6 +709,70 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the external reference type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the external reference type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the external reference
+   *     types reference data for
+   * @return the external reference type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the external reference type reference data could not be
+   *     retrieved
+   */
+  @Operation(
+      summary = "Retrieve the external reference type reference data for a specific locale",
+      description = "Retrieve the external reference type reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/external-reference-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<ExternalReferenceType> getExternalReferenceTypes(
+      @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The ID for the tenant the external reference type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the external reference type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getExternalReferenceTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the fields of study reference data for a specific locale.
    *
    * @param tenantId the ID for the tenant the fields of study reference data is specific to
@@ -2116,6 +2180,70 @@ public class PartyReferenceApi extends SecureApi {
           String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
     return partyReferenceService.getRoleTypes(tenantId, localeId);
+  }
+
+  /**
+   * Retrieve the segmentation type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the segmentation type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segmentation type
+   *     reference data for
+   * @return the segmentation type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the segmentation type reference data could not be
+   *     retrieved
+   */
+  @Operation(
+      summary = "Retrieve the segmentation type reference data for a specific locale",
+      description = "Retrieve the segmentation type reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/segmentation-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<SegmentationType> getSegmentationTypes(
+      @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The ID for the tenant the segmentation type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the segmentation type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSegmentationTypes(tenantId, localeId);
   }
 
   /**

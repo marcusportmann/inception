@@ -1229,6 +1229,33 @@ public interface IPartyReferenceService {
   List<RoleType> getRoleTypes() throws ServiceUnavailableException;
 
   /**
+   * Retrieve the segmentation type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the ID for the tenant the segmentation type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segmentation type
+   *     reference data for
+   * @return the segmentation type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the segmentation type reference data could not be
+   *     retrieved
+   */
+  List<SegmentationType> getSegmentationTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the segmentation type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segmentation type
+   *     reference data for
+   * @return the segmentation type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the segmentation type reference data could not be
+   *     retrieved
+   */
+  List<SegmentationType> getSegmentationTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Retrieve the segment reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference

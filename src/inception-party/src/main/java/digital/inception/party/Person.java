@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -226,7 +227,7 @@ public class Person extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
 
-  /** The educations obtained by the person. */
+  /** The educations for the person. */
   @Valid
   @OneToMany(
       mappedBy = "person",
@@ -235,7 +236,7 @@ public class Person extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<Education> educations = new HashSet<>();
 
-  /** The employments obtained by the person. */
+  /** The employments for the person. */
   @Valid
   @OneToMany(
       mappedBy = "person",
@@ -573,7 +574,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Add the education obtained by the person.
+   * Add the education for the person.
    *
    * @param education the education
    */
@@ -1015,6 +1016,7 @@ public class Person extends PartyBase implements Serializable {
    */
   @Schema(description = "The date of birth for the person")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfBirth")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -1029,6 +1031,7 @@ public class Person extends PartyBase implements Serializable {
    */
   @Schema(description = "The date of death for the person")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfDeath")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -1050,9 +1053,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the educations obtained the person.
+   * Returns the educations for the person.
    *
-   * @return the educations obtained by the person
+   * @return the educations for the person
    */
   @Schema(description = "The educations obtained by the person")
   @JsonProperty
@@ -1103,7 +1106,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Returns the employments for the person.
    *
-   * @return the employments for by the person
+   * @return the employments for the person
    */
   @Schema(description = "The employments for the person")
   @JsonProperty
@@ -1336,6 +1339,7 @@ public class Person extends PartyBase implements Serializable {
    */
   @Schema(description = "The date for the marital status for the person")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "MaritalStatusDate")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -2379,9 +2383,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the educations obtained by the person.
+   * Set the educations for the person.
    *
-   * @param educations the educations obtained by the person
+   * @param educations the educations for the person
    */
   public void setEducations(Set<Education> educations) {
     educations.forEach(education -> education.setPerson(this));
