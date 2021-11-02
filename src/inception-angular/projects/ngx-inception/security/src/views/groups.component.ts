@@ -44,15 +44,25 @@ import {UserDirectorySummary} from '../services/user-directory-summary';
 export class GroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   dataSource: GroupDatasource;
+
   displayedColumns = ['name', 'actions'];
+
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
+
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
+
   @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
+
   userDirectories: UserDirectorySummary[] = [];
+
   userDirectoryCapabilities$: Subject<UserDirectoryCapabilities> = new ReplaySubject<UserDirectoryCapabilities>();
+
   userDirectoryId$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+
   @ViewChild('userDirectorySelect', {static: true}) userDirectorySelect!: MatSelect;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,

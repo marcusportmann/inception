@@ -33,6 +33,7 @@ public class CDATA implements Serializable, Content {
 
   private static final long serialVersionUID = 1000000;
 
+  /** The text content. */
   private String text;
 
   /** Constructs a new empty <b>CDATA</b>. */

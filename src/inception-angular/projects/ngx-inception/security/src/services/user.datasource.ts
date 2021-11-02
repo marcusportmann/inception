@@ -31,9 +31,13 @@ import {Users} from './users';
 export class UserDatasource implements DataSource<User> {
 
   private dataSubject$: Subject<User[]> = new ReplaySubject<User[]>();
+
   private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>();
+
   loading$ = this.loadingSubject$.asObservable();
+
   private totalSubject$: Subject<number> = new ReplaySubject<number>();
+
   total$ = this.totalSubject$.asObservable();
 
   constructor(private securityService: SecurityService) {
@@ -59,7 +63,7 @@ export class UserDatasource implements DataSource<User> {
   /**
    * Load the users.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory the
+   * @param userDirectoryId The ID for the user directory the
    *                        users are associated with.
    * @param filter          The optional filter to apply to the users.
    * @param sortBy          The optional method used to sort the users e.g. by name.

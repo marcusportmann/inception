@@ -71,7 +71,7 @@ public class SecurityWebService {
   /**
    * Add the group member to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the name of the group member
@@ -95,7 +95,7 @@ public class SecurityWebService {
   /**
    * Add the role to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
    * @param roleCode the code for the role
    * @throws InvalidArgumentException if an argument is invalid
@@ -117,8 +117,8 @@ public class SecurityWebService {
   /**
    * Add the user directory to the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param tenantId the ID for the tenant
+   * @param userDirectoryId the ID for the user directory
    * @throws InvalidArgumentException if an argument is invalid
    * @throws TenantNotFoundException if the tenant could not be found
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -136,7 +136,7 @@ public class SecurityWebService {
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param username the username for the user
    * @param passwordChange the password change
    * @throws InvalidArgumentException if an argument is invalid
@@ -325,7 +325,7 @@ public class SecurityWebService {
   /**
    * Delete the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -345,7 +345,7 @@ public class SecurityWebService {
   /**
    * Delete the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @throws InvalidArgumentException if an argument is invalid
    * @throws TenantNotFoundException if the tenant could not be found
    * @throws ServiceUnavailableException if the tenant could not be deleted
@@ -359,7 +359,7 @@ public class SecurityWebService {
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param username the username for the user
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -378,7 +378,7 @@ public class SecurityWebService {
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
    * @throws ServiceUnavailableException if the user directory could not be deleted
@@ -393,7 +393,7 @@ public class SecurityWebService {
   /**
    * Retrieve the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
    * @return the group
    * @throws InvalidArgumentException if an argument is invalid
@@ -414,7 +414,7 @@ public class SecurityWebService {
   /**
    * Retrieve all the group names.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @return the group names
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -431,7 +431,7 @@ public class SecurityWebService {
   /**
    * Retrieve the names of the groups the user is a member of.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param username the username for the user
    * @return the names of the groups the user is a member of
    * @throws InvalidArgumentException if an argument is invalid
@@ -453,7 +453,7 @@ public class SecurityWebService {
   /**
    * Retrieve the groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param filter the optional filter to apply to the groups
    * @param sortDirection the optional sort direction to apply to the groups
    * @param pageIndex the optional page index
@@ -478,7 +478,7 @@ public class SecurityWebService {
   /**
    * Retrieve the group members for the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
    * @param filter the optional filter to apply to the group members
    * @param sortDirection the optional sort direction to apply to the group members
@@ -508,7 +508,7 @@ public class SecurityWebService {
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
    * @return the codes for the roles that have been assigned to the group
    * @throws InvalidArgumentException if an argument is invalid
@@ -542,7 +542,7 @@ public class SecurityWebService {
   /**
    * Retrieve the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
    * @return the roles that have been assigned to the group
    * @throws InvalidArgumentException if an argument is invalid
@@ -572,7 +572,7 @@ public class SecurityWebService {
   /**
    * Retrieve the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @return the tenant
    * @throws InvalidArgumentException if an argument is invalid
    * @throws TenantNotFoundException if the tenant could not be found
@@ -588,7 +588,7 @@ public class SecurityWebService {
   /**
    * Retrieve the name of the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @return the name of the tenant
    * @throws InvalidArgumentException if an argument is invalid
    * @throws TenantNotFoundException if the tenant could not be found
@@ -627,7 +627,7 @@ public class SecurityWebService {
   /**
    * Retrieve the tenants the user directory is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @return the tenants the user directory is associated with
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -645,7 +645,7 @@ public class SecurityWebService {
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param username the username for the user
    * @return the user
    * @throws InvalidArgumentException if an argument is invalid
@@ -695,7 +695,7 @@ public class SecurityWebService {
   /**
    * Retrieve the user directories the tenant is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @return the user directories the tenant is associated with
    * @throws InvalidArgumentException if an argument is invalid
    * @throws TenantNotFoundException if the tenant could not be found
@@ -713,7 +713,7 @@ public class SecurityWebService {
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @return the user directory
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -730,7 +730,7 @@ public class SecurityWebService {
   /**
    * Retrieve the capabilities the user directory supports.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @return the capabilities the user directory supports
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -747,7 +747,7 @@ public class SecurityWebService {
   /**
    * Retrieve the name of the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @return the name of user directory
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -786,7 +786,7 @@ public class SecurityWebService {
   /**
    * Retrieve the summaries for the user directories the tenant is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @return the summaries for the user directories the tenant is associated with
    * @throws InvalidArgumentException if an argument is invalid
    * @throws TenantNotFoundException if the tenant could not be found
@@ -804,7 +804,7 @@ public class SecurityWebService {
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @return the user directory type for the user directory
    * @throws InvalidArgumentException if an argument is invalid
    * @throws UserDirectoryNotFoundException if the user directory could not be found
@@ -836,7 +836,7 @@ public class SecurityWebService {
   /**
    * Retrieve the name of the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param username the username for the user
    * @return the name of the user
    * @throws InvalidArgumentException if an argument is invalid
@@ -857,7 +857,7 @@ public class SecurityWebService {
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param filter the optional filter to apply to the users
    * @param sortBy The optional method used to sort the users e.g. by name.
    * @param sortDirection the optional sort direction to apply to the users
@@ -885,7 +885,7 @@ public class SecurityWebService {
   /**
    * Remove the group member from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the name of the group member
@@ -909,7 +909,7 @@ public class SecurityWebService {
   /**
    * Remove the role from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param userDirectoryId the ID for the user directory
    * @param groupName the name of the group
    * @param roleCode the code for the role
    * @throws InvalidArgumentException if an argument is invalid
@@ -931,8 +931,8 @@ public class SecurityWebService {
   /**
    * Remove the user directory from the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param tenantId the ID for the tenant
+   * @param userDirectoryId the ID for the user directory
    * @throws InvalidArgumentException if an argument is invalid
    * @throws TenantNotFoundException if the tenant could not be found
    * @throws TenantUserDirectoryNotFoundException if the tenant user directory could not be found

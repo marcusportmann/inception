@@ -60,13 +60,13 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   /** The error detail. */
   private String detail;
 
-  /** The Universally Unique Identifier (UUID) for the device the error report originated from. */
+  /** The ID for the device the error report originated from. */
   private UUID deviceId;
 
   /** The feedback provided by the user for the error. */
   private String feedback;
 
-  /** The Universally Unique Identifier (UUID) for the error report. */
+  /** The ID for the error report. */
   private UUID id;
 
   /** The username for the user associated with the error report. */
@@ -80,7 +80,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <b>SubmitErrorReportRequestData</b>.
    *
-   * @param id the Universally Unique Identifier (UUID) for the error report
+   * @param id the ID for the error report
    * @param applicationId the ID for the application that generated the error report
    * @param applicationVersion the version of the application that generated the error report
    * @param description the description of the error
@@ -88,8 +88,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
    * @param feedback the feedback provided by the user for the error
    * @param created the date and time the error report was created
    * @param who the username for the user associated with the error report
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the error report
-   *     originated from
+   * @param deviceId the ID for the device the error report originated from
    * @param data the optional Base-64 encoded data associated with the error report
    */
   public SubmitErrorReportRequestData(
@@ -252,11 +251,9 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device the error report originated
-   * from.
+   * Returns the ID for the device the error report originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the error report originated
-   *     from
+   * @return the ID for the device the error report originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -272,9 +269,9 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the error report.
+   * Returns the ID for the error report.
    *
-   * @return the Universally Unique Identifier (UUID) for the error report
+   * @return the ID for the error report
    */
   public UUID getId() {
     return id;

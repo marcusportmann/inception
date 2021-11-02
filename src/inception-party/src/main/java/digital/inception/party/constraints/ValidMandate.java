@@ -25,8 +25,8 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * The <b>ValidMandate</b> annotation implements the custom constraint annotation used to apply
- * the mandate validation.
+ * The <b>ValidMandate</b> annotation implements the custom constraint annotation used to apply the
+ * mandate validation.
  *
  * @author Marcus Portmann
  */
@@ -36,9 +36,24 @@ import javax.validation.Payload;
 @Documented
 public @interface ValidMandate {
 
+  /**
+   * The target groups.
+   *
+   * @return the target groups
+   */
   Class<?>[] groups() default {};
 
+  /**
+   * The error message key.
+   *
+   * @return the error message key
+   */
   String message() default "{digital.inception.party.constraints.ValidMandate.message}";
 
+  /**
+   * The payload type.
+   *
+   * @return the payload type
+   */
   Class<? extends Payload>[] payload() default {};
 }

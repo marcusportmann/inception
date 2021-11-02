@@ -32,8 +32,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "TenantStatus", namespace = "http://inception.digital/security")
 public enum TenantStatus {
+  /** Inactive. */
   @XmlEnumValue("Inactive")
   INACTIVE("inactive", "Inactive"),
+
+  /** Active. */
   @XmlEnumValue("Active")
   ACTIVE("active", "Active");
 
@@ -68,6 +71,24 @@ public enum TenantStatus {
   }
 
   /**
+   * Returns the tenant status for the specified numeric code.
+   *
+   * @param numericCode the numeric code for the tenant status
+   * @return the tenant status given by the specified numeric code value
+   */
+  public static TenantStatus fromNumericCode(int numericCode) {
+    switch (numericCode) {
+      case 1:
+        return TenantStatus.ACTIVE;
+      case 2:
+        return TenantStatus.INACTIVE;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the tenant status for the numeric code (" + numericCode + ")");
+    }
+  }
+
+  /**
    * Returns the numeric code for the tenant status.
    *
    * @param tenantStatus the tenant status
@@ -84,24 +105,6 @@ public enum TenantStatus {
             "Failed to determine the numeric code for the tenant status ("
                 + tenantStatus.code()
                 + ")");
-    }
-  }
-
-  /**
-   * Returns the tenant status for the specified numeric code.
-   *
-   * @param numericCode the numeric code for the tenant status
-   * @return the tenant status given by the specified numeric code value
-   */
-  public static TenantStatus fromNumericCode(int numericCode) {
-    switch (numericCode) {
-      case 1:
-        return TenantStatus.ACTIVE;
-      case 2:
-        return TenantStatus.INACTIVE;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the tenant status for the numeric code (" + numericCode + ")");
     }
   }
 

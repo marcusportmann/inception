@@ -52,6 +52,11 @@ export class Title {
   sortIndex: number;
 
   /**
+   * The ID for the tenant the title is specific to.
+   */
+  tenantId?: string;
+
+  /**
    * Constructs a new Title.
    *
    * @param code         The code for the title.
@@ -60,14 +65,16 @@ export class Title {
    * @param name         The name of the title.
    * @param abbreviation The abbreviation for the title.
    * @param description  The description for the title.
+   * @param tenantId     The ID for the tenant the title is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, abbreviation: string,
-              description: string) {
+              description: string, tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.abbreviation = abbreviation;
     this.description = description;
+    this.tenantId = tenantId;
   }
 }

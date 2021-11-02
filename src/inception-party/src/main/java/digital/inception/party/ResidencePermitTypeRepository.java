@@ -29,10 +29,24 @@ import org.springframework.data.jpa.repository.Query;
 public interface ResidencePermitTypeRepository
     extends JpaRepository<ResidencePermitType, ResidencePermitTypeId> {
 
+  /**
+   * Retrieve all the residence permit types sorted by locale ID, sort index, and name.
+   *
+   * @return all the residence permit types sorted by locale ID, sort index, and name.
+   */
   @Query(
       "select rpt from ResidencePermitType rpt order by rpt.localeId, -rpt.sortIndex DESC, rpt.name")
   List<ResidencePermitType> findAll();
 
+  /**
+   * Retrieve the residence permit types for the specified locale sorted by locale ID, sort index,
+   * and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
+   *     types for
+   * @return the residence permit types for the specified locale sorted by locale ID, sort index,
+   *     and name
+   */
   @Query(
       "select rpt from ResidencePermitType rpt where upper(rpt.localeId) = upper(:localeId) order by rpt.localeId, -rpt.sortIndex DESC, rpt.name")
   List<ResidencePermitType> findByLocaleIdIgnoreCase(String localeId);

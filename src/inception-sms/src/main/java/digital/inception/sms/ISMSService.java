@@ -40,7 +40,7 @@ public interface ISMSService {
   void createSMS(SMS sms) throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Delete the existing SMS.
+   * Delete the SMS.
    *
    * @param smsId the ID for the SMS
    * @throws InvalidArgumentException if an argument is invalid

@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "ValueType", namespace = "http://inception.digital/party")
 public enum ValueType {
-
   /** Boolean. */
   @XmlEnumValue("Boolean")
   BOOLEAN("boolean", "A boolean value"),

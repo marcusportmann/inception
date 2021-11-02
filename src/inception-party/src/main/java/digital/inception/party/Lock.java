@@ -17,6 +17,7 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -78,6 +79,7 @@ public class Lock implements Serializable {
   /** The date the lock is effective from. */
   @Schema(description = "The date the lock is effective from")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveFrom")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -87,6 +89,7 @@ public class Lock implements Serializable {
   /** The date the lock is effective to. */
   @Schema(description = "The date the lock is effective to")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveTo")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -282,11 +285,13 @@ public class Lock implements Serializable {
     this.type = type;
   }
 
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

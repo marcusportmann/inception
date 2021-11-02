@@ -38,10 +38,13 @@ public class Element implements Serializable, Content {
 
   private static final long serialVersionUID = 1000000;
 
+  /** The attributes for the element. */
   private final List<Attribute> attributes = new ArrayList<>();
 
+  /** The text content for the element. */
   private final List<Content> content = new ArrayList<>();
 
+  /** The name of the element. */
   private String name = null;
 
   /** Hidden default constructor. */
@@ -509,6 +512,11 @@ public class Element implements Serializable, Content {
     }
   }
 
+  /**
+   * Set the name for the element.
+   *
+   * @param name the name for the element
+   */
   protected void setName(String name) {
     this.name = name;
   }

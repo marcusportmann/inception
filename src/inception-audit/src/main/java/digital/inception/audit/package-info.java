@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * Provides the classes for the Audit module.
+ *
+ * @author Marcus Portmann
+ */
 @javax.xml.bind.annotation.XmlSchema(
     namespace = "http://inception.digital/audit",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,

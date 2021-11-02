@@ -28,22 +28,27 @@ export class GroupMembers {
    * The optional filter that was applied to the group members.
    */
   filter?: string;
+
   /**
    * The group members.
    */
   groupMembers: GroupMember[];
+
   /**
    * The name of the group the group members are associated with.
    */
   groupName: string;
+
   /**
    * The optional page index.
    */
   pageIndex?: number;
+
   /**
    * The optional page size.
    */
   pageSize?: number;
+
   /**
    * The optional sort direction that was applied to the group members.
    */
@@ -55,7 +60,7 @@ export class GroupMembers {
   total: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the user directory the group members are
+   * The ID for the user directory the group members are
    * associated with.
    */
   userDirectoryId: string;
@@ -63,7 +68,7 @@ export class GroupMembers {
   /**
    * Constructs a new GroupMembers.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory the
+   * @param userDirectoryId The ID for the user directory the
    *                        group members are associated with.
    * @param groupName       The name of the group the group members are associated with.
    * @param groupMembers    The group members.

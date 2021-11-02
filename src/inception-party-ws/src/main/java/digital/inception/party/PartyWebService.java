@@ -57,7 +57,7 @@ public class PartyWebService {
   /**
    * Create the new association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param association the association
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateAssociationException if the association already exists
@@ -76,7 +76,7 @@ public class PartyWebService {
   /**
    * Create the new organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param organization the organization
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateOrganizationException if the organization already exists
@@ -93,7 +93,7 @@ public class PartyWebService {
   /**
    * Create the new person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param person the person
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicatePersonException if the person already exists
@@ -110,8 +110,8 @@ public class PartyWebService {
   /**
    * Delete the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @param tenantId the ID for the tenant
+   * @param associationId the ID for the association
    * @throws InvalidArgumentException if an argument is invalid
    * @throws AssociationNotFoundException if the association could not be found
    * @throws ServiceUnavailableException if the association could not be deleted
@@ -127,8 +127,8 @@ public class PartyWebService {
   /**
    * Delete the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   * @param tenantId the ID for the tenant
+   * @param organizationId the ID for the organization
    * @throws InvalidArgumentException if an argument is invalid
    * @throws OrganizationNotFoundException if the organization could not be found
    * @throws ServiceUnavailableException if the organization could not be deleted
@@ -144,8 +144,8 @@ public class PartyWebService {
   /**
    * Delete the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PartyNotFoundException if the party could not be found
    * @throws ServiceUnavailableException if the party could not be deleted
@@ -161,8 +161,8 @@ public class PartyWebService {
   /**
    * Delete the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
+   * @param tenantId the ID for the tenant
+   * @param personId the ID for the person
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PersonNotFoundException if the person could not be found
    * @throws ServiceUnavailableException if the person could not be deleted
@@ -178,8 +178,8 @@ public class PartyWebService {
   /**
    * Retrieve the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param associationId the Universally Unique Identifier (UUID) for the association
+   * @param tenantId the ID for the tenant
+   * @param associationId the ID for the association
    * @return the association
    * @throws InvalidArgumentException if an argument is invalid
    * @throws AssociationNotFoundException if the association could not be found
@@ -196,8 +196,8 @@ public class PartyWebService {
   /**
    * Retrieve the associations for the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    * @param sortBy the optional method used to sort the associations e.g. by type
    * @param sortDirection the optional sort direction to apply to the associations
    * @param pageIndex the optional page index
@@ -223,8 +223,8 @@ public class PartyWebService {
   /**
    * Retrieve the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param organizationId the Universally Unique Identifier (UUID) for the organization
+   * @param tenantId the ID for the tenant
+   * @param organizationId the ID for the organization
    * @return the organization
    * @throws InvalidArgumentException if an argument is invalid
    * @throws OrganizationNotFoundException if the organization could not be found
@@ -241,7 +241,7 @@ public class PartyWebService {
   /**
    * Retrieve the organizations.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the organizations
    * @param sortBy the optional method used to sort the organizations e.g. by name
    * @param sortDirection the optional sort direction to apply to the organizations
@@ -267,8 +267,9 @@ public class PartyWebService {
   /**
    * Retrieve the parties.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the parties
+   * @param sortBy the optional method used to sort the parties e.g. by name
    * @param sortDirection the optional sort direction to apply to the parties
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -280,18 +281,19 @@ public class PartyWebService {
   public Parties getParties(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "Filter") @XmlElement String filter,
+      @WebParam(name = "SortBy") @XmlElement PartySortBy sortBy,
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return partyService.getParties(tenantId, filter, sortDirection, pageIndex, pageSize);
+    return partyService.getParties(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**
    * Retrieve the party.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    * @return the party
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PartyNotFoundException if the party could not be found
@@ -308,8 +310,8 @@ public class PartyWebService {
   /**
    * Retrieve the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param personId the Universally Unique Identifier (UUID) for the person
+   * @param tenantId the ID for the tenant
+   * @param personId the ID for the person
    * @return the person
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PersonNotFoundException if the person could not be found
@@ -326,7 +328,7 @@ public class PartyWebService {
   /**
    * Retrieve the persons.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param filter the optional filter to apply to the persons
    * @param sortBy the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
@@ -351,9 +353,9 @@ public class PartyWebService {
   /**
    * Retrieve the snapshots for an entity.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param entityType the type of entity
-   * @param entityId the Universally Unique Identifier (UUID) for the entity
+   * @param entityId the ID for the entity
    * @param from the optional date to retrieve the snapshots from
    * @param to the optional date to retrieve the snapshots to
    * @param sortDirection the optional sort direction to apply to the snapshots
@@ -382,7 +384,7 @@ public class PartyWebService {
   /**
    * Update the association.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param association the association
    * @throws InvalidArgumentException if an argument is invalid
    * @throws AssociationNotFoundException if the association could not be found
@@ -401,7 +403,7 @@ public class PartyWebService {
   /**
    * Update the organization.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param organization the organization
    * @throws InvalidArgumentException if an argument is invalid
    * @throws OrganizationNotFoundException if the organization could not be found
@@ -418,7 +420,7 @@ public class PartyWebService {
   /**
    * Update the person.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param tenantId the ID for the tenant
    * @param person the person
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PersonNotFoundException if the person could not be found

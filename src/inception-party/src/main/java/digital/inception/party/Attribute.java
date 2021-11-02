@@ -17,6 +17,7 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -177,6 +178,7 @@ public class Attribute implements Serializable {
   /** The date value for the attribute. */
   @Schema(description = "The date value for the attribute")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateValue")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -652,11 +654,13 @@ public class Attribute implements Serializable {
     this.unit = unit;
   }
 
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

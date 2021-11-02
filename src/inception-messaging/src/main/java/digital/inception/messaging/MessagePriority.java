@@ -28,10 +28,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "MessagePriority", namespace = "http://inception.digital/messaging")
 public enum MessagePriority {
+  /** Low. */
   @XmlEnumValue("Low")
   LOW("low", "Low"),
+
+  /** Medium. */
   @XmlEnumValue("Medium")
   MEDIUM("medium", "Medium"),
+
+  /** High. */
   @XmlEnumValue("High")
   HIGH("high", "High");
 

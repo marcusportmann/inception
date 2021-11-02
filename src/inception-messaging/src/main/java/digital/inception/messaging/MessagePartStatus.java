@@ -28,22 +28,39 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "MessagePartStatus", namespace = "http://inception.digital/messaging")
 public enum MessagePartStatus {
+  /** Initialized. */
   @XmlEnumValue("Initialized")
   INITIALIZED("initialized", "Initialized"),
+
+  /** Queued for sending. */
   @XmlEnumValue("QueuedForSending")
   QUEUED_FOR_SENDING("queued_for_sending", "QueuedForSending"),
+
+  /** Sending. */
   @XmlEnumValue("Sending")
   SENDING("sending", "Sending"),
+
+  /** Queued for assembly. */
   @XmlEnumValue("QueuedForAssembly")
   QUEUED_FOR_ASSEMBLY("queued_for_assembly", "QueuedForAssembly"),
+
+  /** Assembling. */
   @XmlEnumValue("Assembling")
   ASSEMBLING("assembling", "Assembling"),
+
+  /** Queued for download. */
   @XmlEnumValue("QueuedForDownload")
   QUEUED_FOR_DOWNLOAD("queued_for_download", "QueuedForDownload"),
+
+  /** Downloading. */
   @XmlEnumValue("Downloading")
   DOWNLOADING("downloading", "Downloading"),
+
+  /** Aborted. */
   @XmlEnumValue("Aborted")
   ABORTED("aborted", "Aborted"),
+
+  /** Failed. */
   @XmlEnumValue("Failed")
   FAILED("failed", "Failed");
 

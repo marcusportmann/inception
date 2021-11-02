@@ -31,10 +31,7 @@ public class ContactMechanismId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the party the contact mechanism is associated
-   * with.
-   */
+  /** The ID for the party the contact mechanism is associated with. */
   private UUID party;
 
   /** The code for the contact mechanism role. */

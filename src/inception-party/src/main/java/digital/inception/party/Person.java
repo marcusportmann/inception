@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -226,7 +227,7 @@ public class Person extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
 
-  /** The educations obtained by the person. */
+  /** The educations for the person. */
   @Valid
   @OneToMany(
       mappedBy = "person",
@@ -235,7 +236,7 @@ public class Person extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<Education> educations = new HashSet<>();
 
-  /** The employments obtained by the person. */
+  /** The employments for the person. */
   @Valid
   @OneToMany(
       mappedBy = "person",
@@ -522,8 +523,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Constructs a new <b>Person</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the person is
-   *     associated with
+   * @param tenantId the ID for the tenant the person is associated with
    * @param name the name of the person
    */
   public Person(UUID tenantId, String name) {
@@ -574,7 +574,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Add the education obtained by the person.
+   * Add the education for the person.
    *
    * @param education the education
    */
@@ -1016,6 +1016,7 @@ public class Person extends PartyBase implements Serializable {
    */
   @Schema(description = "The date of birth for the person")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfBirth")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -1030,6 +1031,7 @@ public class Person extends PartyBase implements Serializable {
    */
   @Schema(description = "The date of death for the person")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfDeath")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -1040,7 +1042,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Retrieve the education with the specified ID for the person.
    *
-   * @param id the Universally Unique Identifier (UUID) for the education
+   * @param id the ID for the education
    * @return an Optional containing the education with the specified ID for the person or an empty
    *     if the education could not be found
    */
@@ -1051,9 +1053,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the educations obtained the person.
+   * Returns the educations for the person.
    *
-   * @return the educations obtained by the person
+   * @return the educations for the person
    */
   @Schema(description = "The educations obtained by the person")
   @JsonProperty
@@ -1091,7 +1093,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Retrieve the employment with the specified ID for the person.
    *
-   * @param id the Universally Unique Identifier (UUID) for the employment
+   * @param id the ID for the employment
    * @return an Optional containing the employment with the specified ID for the person or an empty
    *     if the employment could not be found
    */
@@ -1104,7 +1106,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Returns the employments for the person.
    *
-   * @return the employments for by the person
+   * @return the employments for the person
    */
   @Schema(description = "The employments for the person")
   @JsonProperty
@@ -1191,11 +1193,11 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the person.
+   * Returns the ID for the person.
    *
-   * @return the Universally Unique Identifier (UUID) for the person
+   * @return the ID for the person
    */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the person", required = true)
+  @Schema(description = "The ID for the person", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @Override
@@ -1337,6 +1339,7 @@ public class Person extends PartyBase implements Serializable {
    */
   @Schema(description = "The date for the marital status for the person")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "MaritalStatusDate")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -1417,7 +1420,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Retrieve the next of kin with the specified ID for the person.
    *
-   * @param id the Universally Unique Identifier (UUID) for the next of kin
+   * @param id the ID for the next of kin
    * @return an Optional containing the next of kin with the specified ID for the person or an empty
    *     Optional if the next of kin could not be found
    */
@@ -1760,14 +1763,11 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the person is associated with.
+   * Returns the ID for the tenant the person is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the person is associated with
+   * @return the ID for the tenant the person is associated with
    */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the tenant the person is associated with",
-      required = true)
+  @Schema(description = "The ID for the tenant the person is associated with", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
   public UUID getTenantId() {
@@ -2082,7 +2082,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Remove the education with the specified ID for the person.
    *
-   * @param id the Universally Unique Identifier (UUID) for the education
+   * @param id the ID for the education
    */
   public void removeEducationWithId(UUID id) {
     educations.removeIf(existingEducation -> Objects.equals(existingEducation.getId(), id));
@@ -2091,7 +2091,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Remove the employment with the specified ID for the person.
    *
-   * @param id the Universally Unique Identifier (UUID) for the employment
+   * @param id the ID for the employment
    */
   public void removeEmploymentWithId(UUID id) {
     employments.removeIf(existingEmployment -> Objects.equals(existingEmployment.getId(), id));
@@ -2110,7 +2110,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Remove the identity document with the specified ID for the person.
    *
-   * @param id the Universally Unique Identifier (UUID) for the identity document
+   * @param id the ID for the identity document
    */
   public void removeIdentityDocumentWithId(UUID id) {
     identityDocuments.removeIf(
@@ -2150,7 +2150,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Remove the next of kin with the specified ID for the person.
    *
-   * @param id the Universally Unique Identifier (UUID) for the next of kin
+   * @param id the ID for the next of kin
    */
   public void removeNextOfKinWithId(UUID id) {
     nextOfKin.removeIf(existingNextOfKin -> Objects.equals(existingNextOfKin.getId(), id));
@@ -2168,7 +2168,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Remove the physical address with the specified ID for the person.
    *
-   * @param id the Universally Unique Identifier (UUID) for the physical address
+   * @param id the ID for the physical address
    */
   public void removePhysicalAddressWithId(UUID id) {
     physicalAddresses.removeIf(
@@ -2197,7 +2197,7 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Remove the residence permit with the specified ID for the person.
    *
-   * @param id the Universally Unique Identifier (UUID) for the residence permit
+   * @param id the ID for the residence permit
    */
   public void removeResidencePermitWithId(UUID id) {
     residencePermits.removeIf(residencePermit -> Objects.equals(residencePermit.getId(), id));
@@ -2383,9 +2383,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the educations obtained by the person.
+   * Set the educations for the person.
    *
-   * @param educations the educations obtained by the person
+   * @param educations the educations for the person
    */
   public void setEducations(Set<Education> educations) {
     educations.forEach(education -> education.setPerson(this));
@@ -2463,9 +2463,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the person.
+   * Set the ID for the person.
    *
-   * @param id the Universally Unique Identifier (UUID) for the person
+   * @param id the ID for the person
    */
   public void setId(UUID id) {
     super.setId(id);
@@ -2764,10 +2764,9 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the person is associated with.
+   * Set the ID for the tenant the person is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the person is
-   *     associated with
+   * @param tenantId the ID for the tenant the person is associated with
    */
   public void setTenantId(UUID tenantId) {
     super.setTenantId(tenantId);

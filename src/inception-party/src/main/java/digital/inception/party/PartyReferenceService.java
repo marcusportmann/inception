@@ -144,6 +144,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Segment Repository. */
   private final SegmentRepository segmentRepository;
 
+  /** The Segmentation Type Repository. */
+  private final SegmentationTypeRepository segmentationTypeRepository;
+
   /** The Source of Funds Type Repository. */
   private final SourceOfFundsTypeRepository sourceOfFundsTypeRepository;
 
@@ -207,6 +210,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    *     Repository
    * @param roleTypePreferenceTypeConstraintRepository the Role Type Preference Type Constraint
    *     Repository
+   * @param segmentationTypeRepository the Segmentation Type Repository
    * @param segmentRepository the Segment Repository
    * @param sourceOfFundsTypeRepository the Source Of Funds Repository
    * @param sourceOfWealthTypeRepository the Source Of Wealth Repository
@@ -251,6 +255,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       RoleTypeRepository roleTypeRepository,
       RoleTypeAttributeTypeConstraintRepository roleTypeAttributeTypeConstraintRepository,
       RoleTypePreferenceTypeConstraintRepository roleTypePreferenceTypeConstraintRepository,
+      SegmentationTypeRepository segmentationTypeRepository,
       SegmentRepository segmentRepository,
       SourceOfFundsTypeRepository sourceOfFundsTypeRepository,
       SourceOfWealthTypeRepository sourceOfWealthTypeRepository,
@@ -293,6 +298,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.roleTypeRepository = roleTypeRepository;
     this.roleTypeAttributeTypeConstraintRepository = roleTypeAttributeTypeConstraintRepository;
     this.roleTypePreferenceTypeConstraintRepository = roleTypePreferenceTypeConstraintRepository;
+    this.segmentationTypeRepository = segmentationTypeRepository;
     this.segmentRepository = segmentRepository;
     this.sourceOfFundsTypeRepository = sourceOfFundsTypeRepository;
     this.sourceOfWealthTypeRepository = sourceOfWealthTypeRepository;
@@ -1608,6 +1614,33 @@ public class PartyReferenceService implements IPartyReferenceService {
                 (roleType.getTenantId() == null
                     || (Objects.equals(roleType.getTenantId(), tenantId))))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<SegmentationType> getSegmentationTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getSegmentationTypes(localeId).stream()
+        .filter(
+            lockType ->
+                (lockType.getTenantId() == null
+                    || (Objects.equals(lockType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'segmentationTypes.' + #localeId")
+  public List<SegmentationType> getSegmentationTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    try {
+      return segmentationTypeRepository.findByLocaleIdIgnoreCase(localeId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the segmentation type reference data", e);
+    }
   }
 
   @Override

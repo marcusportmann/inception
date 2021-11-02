@@ -29,10 +29,24 @@ import org.springframework.data.jpa.repository.Query;
 public interface PreferenceTypeCategoryRepository
     extends JpaRepository<PreferenceTypeCategory, PreferenceTypeCategoryId> {
 
+  /**
+   * Retrieve all the preference type categories sorted by locale ID, sort index, and name.
+   *
+   * @return all the preference type categories sorted by locale ID, sort index, and name.
+   */
   @Query(
       "select ptc from PreferenceTypeCategory ptc order by ptc.localeId, -ptc.sortIndex DESC, ptc.name")
   List<PreferenceTypeCategory> findAll();
 
+  /**
+   * Retrieve the preference type categories for the specified locale sorted by locale ID, sort
+   * index, and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     categories for
+   * @return the preference type categories for the specified locale sorted by locale ID, sort
+   *     index, and name
+   */
   @Query(
       "select ptc from PreferenceTypeCategory ptc where upper(ptc.localeId) = upper(:localeId) order by ptc.localeId, -ptc.sortIndex DESC, ptc.name")
   List<PreferenceTypeCategory> findByLocaleIdIgnoreCase(String localeId);

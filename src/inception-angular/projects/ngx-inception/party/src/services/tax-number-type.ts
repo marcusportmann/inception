@@ -47,9 +47,19 @@ export class TaxNumberType {
   name: string;
 
   /**
+   * The codes for the party types the tax number type is associated with.
+   */
+  partyTypes: string[];
+
+  /**
    * The sort index for the tax number type.
    */
   sortIndex: number;
+
+  /**
+   * The ID for the tenant the tax number type is specific to.
+   */
+  tenantId?: string;
 
   /**
    * Constructs a new TaxNumberType.
@@ -61,14 +71,18 @@ export class TaxNumberType {
    * @param description    The description for the tax number type.
    * @param countryOfIssue The ISO 3166-1 alpha-2 code for the country of issue for the tax number
    *                       type.
+   * @param partyTypes     The codes for the party types the tax number type is associated with.
+   * @param tenantId       The ID for the tenant the tax number type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
-              countryOfIssue: string) {
+              countryOfIssue: string, partyTypes: string[], tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
     this.countryOfIssue = countryOfIssue;
+    this.partyTypes = partyTypes;
+    this.tenantId = tenantId;
   }
 }

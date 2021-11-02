@@ -27,41 +27,49 @@ export class User {
    * The optional e-mail address for the user.
    */
   email?: string;
+
   /**
    * The optional mobile number for the user.
    */
   mobileNumber?: string;
+
   /**
    * The name of the user.
    */
   name: string;
+
   /**
    * The password or password hash for the user.
    */
   password: string;
+
   /**
    * The number of failed authentication attempts as a result of an incorrect password for the user.
    */
   passwordAttempts?: number | undefined;
+
   /**
    * The date and time the password for the user expires.
    */
   passwordExpiry?: Date | undefined;
+
   /**
    * The optional phone number for the user.
    */
   phoneNumber?: string;
+
   /**
    * The optional preferred name for the user.
    */
   preferredName?: string;
+
   /**
    * The status for the user.
    */
   status: UserStatus;
 
   /**
-   * The Universally Unique Identifier (UUID) for the user directory the user is associated with.
+   * The ID for the user directory the user is associated with.
    */
   userDirectoryId: string;
 
@@ -73,7 +81,7 @@ export class User {
   /**
    * Constructs a new User.
    *
-   * @param userDirectoryId   The Universally Unique Identifier (UUID) for the user directory the
+   * @param userDirectoryId   The ID for the user directory the
    *                          user is associated with.
    * @param username          The username for the user.
    * @param name              The name of the user.

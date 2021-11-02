@@ -32,7 +32,6 @@ public class TransactionUtil {
    * Check whether there is an existing JTA transaction.
    *
    * @param transactionManager the JTA transaction manager
-   *
    * @return true if there is an existing JTA transaction or false otherwise
    */
   public static boolean transactionExists(TransactionManager transactionManager) {
@@ -42,13 +41,15 @@ public class TransactionUtil {
         return false;
       }
       int status = transaction.getStatus();
-      return ((status != Status.STATUS_UNKNOWN) && (status != Status.STATUS_NO_TRANSACTION) && (
-          status != Status.STATUS_COMMITTED) && (status != Status.STATUS_ROLLEDBACK));
-      // other states are active transaction: ACTIVE, MARKED_ROLLBACK, PREPARING, PREPARED, COMMITTING, ROLLING_BACK
+      return ((status != Status.STATUS_UNKNOWN)
+          && (status != Status.STATUS_NO_TRANSACTION)
+          && (status != Status.STATUS_COMMITTED)
+          && (status != Status.STATUS_ROLLEDBACK));
+      // other states are active transaction: ACTIVE, MARKED_ROLLBACK, PREPARING, PREPARED,
+      // COMMITTING, ROLLING_BACK
     } catch (Exception e) {
-      throw new TransactionSystemException("Failed to check for an existing active JTA transaction",
-          e);
+      throw new TransactionSystemException(
+          "Failed to check for an existing active JTA transaction", e);
     }
   }
-
 }

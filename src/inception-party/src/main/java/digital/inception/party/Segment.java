@@ -53,6 +53,7 @@ import org.springframework.util.StringUtils;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "code",
+  "type",
   "localeId",
   "tenantId",
   "sortIndex",
@@ -64,7 +65,16 @@ import org.springframework.util.StringUtils;
 @XmlType(
     name = "Segment",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description", "partyTypes"})
+    propOrder = {
+      "code",
+      "type",
+      "localeId",
+      "tenantId",
+      "sortIndex",
+      "name",
+      "description",
+      "partyTypes"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "segments")
@@ -127,14 +137,21 @@ public class Segment implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** The Universally Unique Identifier (UUID) for the tenant the segment is specific to. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the tenant the segment is specific to")
+  /** The ID for the tenant the segment is specific to. */
+  @Schema(description = "The ID for the tenant the segment is specific to")
   @JsonProperty
   @XmlElement(name = "TenantId")
   @Column(name = "tenant_id")
   private UUID tenantId;
+
+  /** The code for the segmentation type for the segment. */
+  @Schema(description = "The code for the segmentation type for the segment", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(name = "type", length = 30, nullable = false)
+  private String type;
 
   /** Constructs a new <b>Segment</b>. */
   public Segment() {}
@@ -224,12 +241,21 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the segment is specific to.
+   * Returns the ID for the tenant the segment is specific to.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the segment is specific to
+   * @return the ID for the tenant the segment is specific to
    */
   public UUID getTenantId() {
     return tenantId;
+  }
+
+  /**
+   * Returns the code for the segmentation type for the segment.
+   *
+   * @return the code for the segmentation type for the segment
+   */
+  public String getType() {
+    return type;
   }
 
   /**
@@ -318,12 +344,20 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the segment is specific to.
+   * Set the ID for the tenant the segment is specific to.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the segment is specific
-   *     to
+   * @param tenantId the ID for the tenant the segment is specific to
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
+  }
+
+  /**
+   * Set the code for the segmentation type for the segment.
+   *
+   * @param type the code for the segmentation type for the segment
+   */
+  public void setType(String type) {
+    this.type = type;
   }
 }

@@ -33,10 +33,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "PasswordChangeReason", namespace = "http://inception.digital/security")
 public enum PasswordChangeReason {
+  /** User. */
   @XmlEnumValue("User")
   USER("user", "User"),
+
+  /** Administrative. */
   @XmlEnumValue("Administrative")
   ADMINISTRATIVE("administrative", "Administrative"),
+
+  /** Reset. */
   @XmlEnumValue("Reset")
   RESET("reset", "Reset");
 

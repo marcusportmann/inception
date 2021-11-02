@@ -27,9 +27,20 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface GenderRepository extends JpaRepository<Gender, GenderId> {
 
+  /**
+   * Retrieve all the genders sorted by locale ID, sort index, and name.
+   *
+   * @return all the genders sorted by locale ID, sort index, and name.
+   */
   @Query("select g from Gender g order by g.localeId, -g.sortIndex DESC, g.name")
   List<Gender> findAll();
 
+  /**
+   * Retrieve the genders for the specified locale sorted by locale ID, sort index, and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the genders for
+   * @return the genders for the specified locale sorted by locale ID, sort index, and name
+   */
   @Query(
       "select g from Gender g where upper(g.localeId) = upper(:localeId) order by g.localeId, -g.sortIndex DESC, g.name")
   List<Gender> findByLocaleIdIgnoreCase(String localeId);

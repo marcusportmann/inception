@@ -29,10 +29,24 @@ import org.springframework.data.jpa.repository.Query;
 public interface SourceOfWealthTypeRepository
     extends JpaRepository<SourceOfWealthType, SourceOfWealthTypeId> {
 
+  /**
+   * Retrieve all the source of wealth types sorted by locale ID, sort index, and name.
+   *
+   * @return all the source of wealth types sorted by locale ID, sort index, and name.
+   */
   @Query(
       "select sowt from SourceOfWealthType sowt order by sowt.localeId, -sowt.sortIndex DESC, sowt.name")
   List<SourceOfWealthType> findAll();
 
+  /**
+   * Retrieve the source of wealth types for the specified locale sorted by locale ID, sort index,
+   * and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
+   *     types for
+   * @return the source of wealth types for the specified locale sorted by locale ID, sort index,
+   *     and name
+   */
   @Query(
       "select sowt from SourceOfWealthType sowt where upper(sowt.localeId) = upper(:localeId) order by sowt.localeId, -sowt.sortIndex DESC, sowt.name")
   List<SourceOfWealthType> findByLocaleIdIgnoreCase(String localeId);

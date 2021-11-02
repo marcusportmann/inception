@@ -32,10 +32,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "MeasurementUnitType", namespace = "http://inception.digital/party")
 public enum MeasurementUnitType {
+  /** Length. */
   @XmlEnumValue("Length")
   LENGTH("length", "Length"),
+
+  /** Mass. */
   @XmlEnumValue("Mass")
   MASS("mass", "Mass"),
+
+  /** Volume. */
   @XmlEnumValue("Volume")
   VOLUME("volume", "Volume");
 

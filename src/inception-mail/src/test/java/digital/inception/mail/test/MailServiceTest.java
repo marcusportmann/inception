@@ -175,12 +175,13 @@ public class MailServiceTest {
   private void compareMailTemplateToMailTemplateSummary(
       MailTemplate mailTemplate, MailTemplateSummary mailTemplateSummary) {
     assertEquals(
-
         mailTemplate.getId(),
-        mailTemplateSummary.getId(), "The ID values for the mail template summaries do not match");
+        mailTemplateSummary.getId(),
+        "The ID values for the mail template summaries do not match");
     assertEquals(
         mailTemplate.getName(),
-        mailTemplateSummary.getName(), "The name values for the mail template summaries do not match");
+        mailTemplateSummary.getName(),
+        "The name values for the mail template summaries do not match");
   }
 
   private void compareMailTemplates(MailTemplate mailTemplate1, MailTemplate mailTemplate2) {

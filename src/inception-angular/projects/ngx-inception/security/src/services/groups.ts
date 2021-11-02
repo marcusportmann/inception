@@ -28,18 +28,22 @@ export class Groups {
    * The optional filter that was applied to the groups.
    */
   filter?: string;
+
   /**
    * The groups.
    */
   groups: Group[];
+
   /**
    * The optional page index.
    */
   pageIndex?: number;
+
   /**
    * The optional page size.
    */
   pageSize?: number;
+
   /**
    * The optional sort direction that was applied to the groups.
    */
@@ -51,14 +55,14 @@ export class Groups {
   total: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the user directory the groups are associated with.
+   * The ID for the user directory the groups are associated with.
    */
   userDirectoryId: string;
 
   /**
    * Constructs a new Groups.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory the
+   * @param userDirectoryId The ID for the user directory the
    *                        groups are associated with.
    * @param groups          The groups.
    * @param total           The total number of groups.

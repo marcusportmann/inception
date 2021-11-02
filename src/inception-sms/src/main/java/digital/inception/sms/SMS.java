@@ -87,8 +87,8 @@ public class SMS implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The Universally Unique Identifier (UUID) for the SMS. */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the SMS", required = true)
+  /** The ID for the SMS. */
+  @Schema(description = "The ID for the SMS", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "id", required = true)
   @NotNull
@@ -183,7 +183,7 @@ public class SMS implements Serializable {
   /**
    * Constructs a new <b>SMS</b>.
    *
-   * @param id the Universally Unique Identifier (UUID) for the SMS
+   * @param id the ID for the SMS
    * @param mobileNumber the mobile number to send the SMS to
    * @param message the message to send
    * @param status the status of the SMS
@@ -243,9 +243,9 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the SMS.
+   * Returns the ID for the SMS.
    *
-   * @return the Universally Unique Identifier (UUID) for the SMS
+   * @return the ID for the SMS
    */
   public UUID getId() {
     return id;
@@ -334,9 +334,9 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the SMS.
+   * Set the ID for the SMS.
    *
-   * @param id the Universally Unique Identifier (UUID) for the SMS
+   * @param id the ID for the SMS
    */
   public void setId(UUID id) {
     this.id = id;
@@ -396,11 +396,13 @@ public class SMS implements Serializable {
     this.status = status;
   }
 
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

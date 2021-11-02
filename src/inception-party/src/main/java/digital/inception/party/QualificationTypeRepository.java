@@ -29,9 +29,23 @@ import org.springframework.data.jpa.repository.Query;
 public interface QualificationTypeRepository
     extends JpaRepository<QualificationType, QualificationTypeId> {
 
+  /**
+   * Retrieve all the qualification types sorted by locale ID, sort index, and name.
+   *
+   * @return all the qualification types sorted by locale ID, sort index, and name.
+   */
   @Query("select qt from QualificationType qt order by qt.localeId, -qt.sortIndex DESC, qt.name")
   List<QualificationType> findAll();
 
+  /**
+   * Retrieve the qualification types for the specified locale sorted by locale ID, sort index, and
+   * name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the qualification
+   *     types for
+   * @return the qualification types for the specified locale sorted by locale ID, sort index, and
+   *     name
+   */
   @Query(
       "select qt from QualificationType qt where upper(qt.localeId) = upper(:localeId) order by qt.localeId, -qt.sortIndex DESC, qt.name")
   List<QualificationType> findByLocaleIdIgnoreCase(String localeId);

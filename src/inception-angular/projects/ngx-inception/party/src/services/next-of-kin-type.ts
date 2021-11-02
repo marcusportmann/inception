@@ -47,6 +47,11 @@ export class NextOfKinType {
   sortIndex: number;
 
   /**
+   * The ID for the tenant the next of kin type is specific to.
+   */
+  tenantId?: string;
+
+  /**
    * Constructs a new NextOfKinType.
    *
    * @param code        The code for the next of kin type.
@@ -54,12 +59,15 @@ export class NextOfKinType {
    * @param sortIndex   The sort index for the next of kin type.
    * @param name        The name of the next of kin type.
    * @param description The description for the next of kin type.
+   * @param tenantId    The ID for the tenant the next of kin type is specific to.
    */
-  constructor(code: string, localeId: string, sortIndex: number, name: string, description: string) {
+  constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
+              tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
+    this.tenantId = tenantId;
   }
 }

@@ -32,10 +32,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "EntityType", namespace = "http://inception.digital/party")
 public enum EntityType {
-
   /** Association. */
   @XmlEnumValue("Association")
-  ASSOCIATION("association", "A association"),
+  ASSOCIATION("association", "An association"),
 
   /** Mandate. */
   @XmlEnumValue("Mandate")

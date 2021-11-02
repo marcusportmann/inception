@@ -17,6 +17,7 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -227,16 +228,15 @@ public class Employment implements Serializable {
   /** The end date for the employment. */
   @Schema(description = "The end date for the employment")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EndDate")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
   @Column(name = "end_date")
   private LocalDate endDate;
 
-  /** The Universally Unique Identifier (UUID) for the employment. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the employment",
-      required = true)
+  /** The ID for the employment. */
+  @Schema(description = "The ID for the employment", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -263,6 +263,7 @@ public class Employment implements Serializable {
   /** The start date for the employment. */
   @Schema(description = "The start date for the employment", required = true)
   @JsonProperty(required = true)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "StartDate", required = true)
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -623,9 +624,9 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the employment.
+   * Returns the ID for the employment.
    *
-   * @return the Universally Unique Identifier (UUID) for the employment
+   * @return the ID for the employment
    */
   public UUID getId() {
     return id;
@@ -814,9 +815,9 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the employment.
+   * Set the ID for the employment.
    *
-   * @param id the Universally Unique Identifier (UUID) for the employment
+   * @param id the ID for the employment
    */
   public void setId(UUID id) {
     this.id = id;
@@ -859,11 +860,13 @@ public class Employment implements Serializable {
     this.type = type;
   }
 
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

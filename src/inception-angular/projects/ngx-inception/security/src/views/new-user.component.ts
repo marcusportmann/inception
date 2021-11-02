@@ -43,12 +43,19 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
   emailFormControl: FormControl;
 
   expiredPasswordFormControl: FormControl;
+
   mobileNumberFormControl: FormControl;
+
   nameFormControl: FormControl;
+
   newUserForm: FormGroup;
+
   passwordFormControl: FormControl;
+
   phoneNumberFormControl: FormControl;
+
   preferredNameFormControl: FormControl;
+
   user?: User;
 
   userDirectoryCapabilities?: UserDirectoryCapabilities;

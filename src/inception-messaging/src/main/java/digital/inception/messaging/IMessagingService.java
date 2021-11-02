@@ -34,7 +34,7 @@ public interface IMessagingService {
   /**
    * Have all the parts been queued for assembly for the message?
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @param totalParts the total number of parts for the message
    * @return <b>true</b> if all the parts for the message have been queued for assembly or
    *     <b>false</b> otherwise
@@ -57,7 +57,7 @@ public interface IMessagingService {
   /**
    * Assemble the message from the message parts that have been queued for assembly.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @param totalParts the total number of parts for the message
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the message could not be assembled
@@ -128,7 +128,7 @@ public interface IMessagingService {
   /**
    * Delete the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @throws InvalidArgumentException if an argument is invalid
    * @throws MessageNotFoundException if the message could not be found
    * @throws ServiceUnavailableException if the message could not be deleted
@@ -139,7 +139,7 @@ public interface IMessagingService {
   /**
    * Delete the message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param messagePartId the ID for the message part
    * @throws InvalidArgumentException if an argument is invalid
    * @throws MessagePartNotFoundException if the message part could not be found
    * @throws ServiceUnavailableException if the message part could not be deleted
@@ -150,7 +150,7 @@ public interface IMessagingService {
   /**
    * Delete the message parts for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the message parts could not be deleted for the message
    */
@@ -161,7 +161,7 @@ public interface IMessagingService {
    * Derive the user-device encryption key.
    *
    * @param username the username for the user e.g. test1
-   * @param deviceId the Universally Unique Identifier (UUID) for the device
+   * @param deviceId the ID for the device
    * @return the user-device encryption key
    * @throws MessagingException if the user-device encryption key could not be derived
    */
@@ -186,7 +186,7 @@ public interface IMessagingService {
   /**
    * Retrieve the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @return the message
    * @throws InvalidArgumentException if an argument is invalid
    * @throws MessageNotFoundException if the message could not be found
@@ -198,7 +198,7 @@ public interface IMessagingService {
   /**
    * Retrieve the message parts queued for assembly for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @param lockName the name of the lock that should be applied to the message parts queued for
    *     assembly when they are retrieved
    * @return the message parts queued for assembly for the message
@@ -214,7 +214,7 @@ public interface IMessagingService {
    * device.
    *
    * @param username the username for the user
-   * @param deviceId the Universally Unique Identifier (UUID) for the device
+   * @param deviceId the ID for the device
    * @return the message parts that have been queued for download by a particular remote device
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the message parts queued for download could not be
@@ -227,7 +227,7 @@ public interface IMessagingService {
    * Get the messages for a user that have been queued for download by a particular remote device.
    *
    * @param username the username for the user
-   * @param deviceId the Universally Unique Identifier (UUID) for the device
+   * @param deviceId the ID for the device
    * @return the messages for a user that have been queued for download by a particular remote
    *     device
    * @throws InvalidArgumentException if an argument is invalid
@@ -268,7 +268,7 @@ public interface IMessagingService {
   /**
    * Has the message already been archived?
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @return <b>true</b> if the message has already been archived or <b>false</b> otherwise
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the check for the archived message failed
@@ -279,7 +279,7 @@ public interface IMessagingService {
   /**
    * Has the message part already been queued for assembly?
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param messagePartId the ID for the message part
    * @return <b>true</b> if the message part has already been queued for assembly or <b> false</b>
    *     otherwise
    * @throws InvalidArgumentException if an argument is invalid
@@ -397,7 +397,7 @@ public interface IMessagingService {
   /**
    * Set the status for a message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param messagePartId the ID for the message part
    * @param status the new status
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the message part status could not be set
@@ -408,7 +408,7 @@ public interface IMessagingService {
   /**
    * Set the status for a message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) for the message
+   * @param messageId the ID for the message
    * @param status the new status
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the message status could not be set
@@ -430,7 +430,7 @@ public interface IMessagingService {
   /**
    * Unlock a locked message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param messagePartId the ID for the message part
    * @param status the new status for the unlocked message part
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the message part could not be unlocked

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * Provides the classes for the Reporting module.
+ *
+ * @author Marcus Portmann
+ */
 @javax.xml.bind.annotation.XmlSchema(
     namespace = "http://inception.digital/reporting",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,

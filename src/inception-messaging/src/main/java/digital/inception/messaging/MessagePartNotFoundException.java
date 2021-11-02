@@ -47,7 +47,7 @@ public class MessagePartNotFoundException extends ServiceException {
   /**
    * Constructs a new <b>MessagePartNotFoundException</b>.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @param messagePartId the ID for the message part
    */
   public MessagePartNotFoundException(UUID messagePartId) {
     super("The message part with ID (" + messagePartId + ") could not be found");

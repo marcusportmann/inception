@@ -47,12 +47,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A snapshot")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "entityType", "entityId", "timestamp", "data"})
+@JsonPropertyOrder({"id", "tenantId", "entityType", "entityId", "timestamp", "data"})
 @XmlRootElement(name = "Snapshot", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Snapshot",
     namespace = "http://inception.digital/party",
-    propOrder = {"id", "entityType", "entityId", "timestamp", "data"})
+    propOrder = {"id", "tenantId", "entityType", "entityId", "timestamp", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "snapshots")
@@ -68,8 +68,8 @@ public class Snapshot implements Serializable {
   @Column(name = "data", nullable = false)
   private String data;
 
-  /** The Universally Unique Identifier (UUID) for the entity. */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the entity", required = true)
+  /** The ID for the entity. */
+  @Schema(description = "The ID for the entity", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "EntityId", required = true)
   @NotNull
@@ -83,16 +83,22 @@ public class Snapshot implements Serializable {
   @Column(name = "entity_type", length = 10, nullable = false)
   private EntityType entityType;
 
-  /** The Universally Unique Identifier (UUID) for the snapshot. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the snapshot",
-      required = true)
+  /** The ID for the snapshot. */
+  @Schema(description = "The ID for the snapshot", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
+
+  /** The ID for the tenant the snapshot is associated with. */
+  @Schema(description = "The ID for the tenant the snapshot is associated with", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  @NotNull
+  @Column(name = "tenant_id", nullable = false)
+  private UUID tenantId;
 
   /** The date and time the snapshot was created. */
   @Schema(description = "The date and time the snapshot was created", required = true)
@@ -107,13 +113,14 @@ public class Snapshot implements Serializable {
   /**
    * Constructs a new <b>Snapshot</b>.
    *
+   * @param tenantId the ID for the tenant the snapshot is associated with
    * @param entityType the type of entity the snapshot is associated with
-   * @param entityId the Universally Unique Identifier (UUID) for the entity the snapshot is
-   *     associated with
+   * @param entityId the ID for the entity the snapshot is associated with
    * @param data the JSON data for the entity
    */
-  public Snapshot(EntityType entityType, UUID entityId, String data) {
+  public Snapshot(UUID tenantId, EntityType entityType, UUID entityId, String data) {
     this.id = UuidCreator.getShortPrefixComb();
+    this.tenantId = tenantId;
     this.entityType = entityType;
     this.entityId = entityId;
     this.timestamp = LocalDateTime.now();
@@ -155,9 +162,9 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the entity.
+   * Returns the ID for the entity.
    *
-   * @return the Universally Unique Identifier (UUID) for the entity
+   * @return the ID for the entity
    */
   public UUID getEntityId() {
     return entityId;
@@ -173,12 +180,21 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the snapshot.
+   * Returns the ID for the snapshot.
    *
-   * @return the Universally Unique Identifier (UUID) for the snapshot
+   * @return the ID for the snapshot
    */
   public UUID getId() {
     return id;
+  }
+
+  /**
+   * Returns the ID for the tenant the snapshot is associated with.
+   *
+   * @return the ID for the tenant the snapshot is associated with
+   */
+  public UUID getTenantId() {
+    return tenantId;
   }
 
   /**
@@ -210,9 +226,9 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the entity.
+   * Set the ID for the entity.
    *
-   * @param entityId the Universally Unique Identifier (UUID) for the entity
+   * @param entityId the ID for the entity
    */
   public void setEntityId(UUID entityId) {
     this.entityId = entityId;
@@ -228,12 +244,21 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the snapshot.
+   * Set the ID for the snapshot.
    *
-   * @param id the Universally Unique Identifier (UUID) for the snapshot
+   * @param id the ID for the snapshot
    */
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Set the ID for the tenant the snapshot is associated with.
+   *
+   * @param tenantId the ID for the tenant the snapshot is associated with
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 
   /**

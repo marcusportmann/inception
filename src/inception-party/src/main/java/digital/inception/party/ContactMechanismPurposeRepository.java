@@ -29,10 +29,24 @@ import org.springframework.data.jpa.repository.Query;
 public interface ContactMechanismPurposeRepository
     extends JpaRepository<ContactMechanismPurpose, ContactMechanismPurposeId> {
 
+  /**
+   * Retrieve all the contact mechanism purposes sorted by locale ID, sort index, and name.
+   *
+   * @return all the contact mechanism purposes sorted by locale ID, sort index, and name.
+   */
   @Query(
       "select cmp from ContactMechanismPurpose cmp order by cmp.localeId, -cmp.sortIndex DESC, cmp.name")
   List<ContactMechanismPurpose> findAll();
 
+  /**
+   * Retrieve the contact mechanism purposes for the specified locale sorted by locale ID, sort
+   * index, and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     purposes for
+   * @return the contact mechanism purposes for the specified locale sorted by locale ID, sort
+   *     index, and name
+   */
   @Query(
       "select cmp from ContactMechanismPurpose cmp where upper(cmp.localeId) = upper(:localeId) order by cmp.localeId, -cmp.sortIndex DESC, cmp.name")
   List<ContactMechanismPurpose> findByLocaleIdIgnoreCase(String localeId);

@@ -50,10 +50,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
   /** The error message describing the result of processing the submitted error report. */
   private String errorMessage;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the error report that was submitted for
-   * processing.
-   */
+  /** The ID for the error report that was submitted for processing. */
   private UUID errorReportId;
 
   /** Constructs a new <b>SubmitErrorReportResponseData</b>. */
@@ -67,8 +64,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
    * @param errorCode the error code indicating the result of processing the submitted error report
    * @param errorMessage the error message describing the result of processing the submitted error
    *     report
-   * @param errorReportId the Universally Unique Identifier (UUID) for the error report that was
-   *     submitted for processing
+   * @param errorReportId the ID for the error report that was submitted for processing
    */
   public SubmitErrorReportResponseData(int errorCode, String errorMessage, UUID errorReportId) {
     super(MESSAGE_TYPE, MessagePriority.HIGH);
@@ -137,11 +133,9 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the error report that was submitted for
-   * processing.
+   * Returns the ID for the error report that was submitted for processing.
    *
-   * @return the Universally Unique Identifier (UUID) for the error report that was submitted for
-   *     processing
+   * @return the ID for the error report that was submitted for processing
    */
   public UUID getErrorReportId() {
     return errorReportId;

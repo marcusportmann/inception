@@ -264,10 +264,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "farm_number", length = 50)
   private String farmNumber;
 
-  /** The Universally Unique Identifier (UUID) for the physical address. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the physical address",
-      required = true)
+  /** The ID for the physical address. */
+  @Schema(description = "The ID for the physical address", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -664,9 +662,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the physical address.
+   * Returns the ID for the physical address.
    *
-   * @return the Universally Unique Identifier (UUID) for the physical address
+   * @return the ID for the physical address
    */
   public UUID getId() {
     return id;
@@ -944,9 +942,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the physical address.
+   * Set the ID for the physical address.
    *
-   * @param id the Universally Unique Identifier (UUID) for the physical address
+   * @param id the ID for the physical address
    */
   public void setId(UUID id) {
     this.id = id;
@@ -1110,11 +1108,13 @@ public class PhysicalAddress implements Serializable {
     this.type = type;
   }
 
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

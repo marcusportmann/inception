@@ -17,6 +17,7 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -95,6 +96,7 @@ public class ResidencePermit implements Serializable {
   /** The date of expiry for the residence permit. */
   @Schema(description = "The date of expiry for the residence permit")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfExpiry")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -104,6 +106,7 @@ public class ResidencePermit implements Serializable {
   /** The date of issue for the residence permit. */
   @Schema(description = "The date of issue for the residence permit", required = true)
   @JsonProperty(required = true)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfIssue", required = true)
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -111,10 +114,8 @@ public class ResidencePermit implements Serializable {
   @Column(name = "date_of_issue", nullable = false)
   private LocalDate dateOfIssue;
 
-  /** The Universally Unique Identifier (UUID) for the residence permit. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the residence permit",
-      required = true)
+  /** The ID for the residence permit. */
+  @Schema(description = "The ID for the residence permit", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -260,9 +261,9 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the residence permit.
+   * Returns the ID for the residence permit.
    *
-   * @return the Universally Unique Identifier (UUID) for the residence permit
+   * @return the ID for the residence permit
    */
   public UUID getId() {
     return id;
@@ -344,9 +345,9 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the residence permit.
+   * Set the ID for the residence permit.
    *
-   * @param id the Universally Unique Identifier (UUID) for the residence permit
+   * @param id the ID for the residence permit
    */
   public void setId(UUID id) {
     this.id = id;
@@ -380,11 +381,13 @@ public class ResidencePermit implements Serializable {
     this.type = type;
   }
 
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

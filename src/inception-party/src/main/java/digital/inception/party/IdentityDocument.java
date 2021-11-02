@@ -17,6 +17,7 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -117,6 +118,7 @@ public class IdentityDocument implements Serializable {
   /** The date of expiry for the identity document. */
   @Schema(description = "The date of expiry for the identity document")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfExpiry")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -126,6 +128,7 @@ public class IdentityDocument implements Serializable {
   /** The date of issue for the identity document. */
   @Schema(description = "The date of issue for the identity document", required = true)
   @JsonProperty(required = true)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfIssue", required = true)
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
@@ -136,16 +139,15 @@ public class IdentityDocument implements Serializable {
   /** The date the identity document was provided. */
   @Schema(description = "The date the identity document was provided")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateProvided")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
   @Column(name = "date_provided")
   private LocalDate dateProvided;
 
-  /** The Universally Unique Identifier (UUID) for the identity document. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the identity document",
-      required = true)
+  /** The ID for the identity document. */
+  @Schema(description = "The ID for the identity document", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -301,9 +303,9 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the identity document.
+   * Returns the ID for the identity document.
    *
-   * @return the Universally Unique Identifier (UUID) for the identity document
+   * @return the ID for the identity document
    */
   public UUID getId() {
     return id;
@@ -394,9 +396,9 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the identity document.
+   * Set the ID for the identity document.
    *
-   * @param id the Universally Unique Identifier (UUID) for the identity document
+   * @param id the ID for the identity document
    */
   public void setId(UUID id) {
     this.id = id;
@@ -430,11 +432,13 @@ public class IdentityDocument implements Serializable {
     this.type = type;
   }
 
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

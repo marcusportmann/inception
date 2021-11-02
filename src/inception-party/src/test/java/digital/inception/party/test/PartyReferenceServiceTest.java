@@ -57,6 +57,7 @@ import digital.inception.party.RoleType;
 import digital.inception.party.RoleTypeAttributeTypeConstraint;
 import digital.inception.party.RoleTypePreferenceTypeConstraint;
 import digital.inception.party.Segment;
+import digital.inception.party.SegmentationType;
 import digital.inception.party.SourceOfFundsType;
 import digital.inception.party.SourceOfWealthType;
 import digital.inception.party.StatusType;
@@ -996,14 +997,14 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getRolePurposes(IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        1, retrievedRolePurposes.size(), "The correct number of role purposes was not retrieved");
+        2, retrievedRolePurposes.size(), "The correct number of role purposes was not retrieved");
 
     retrievedRolePurposes =
         partyReferenceService.getRolePurposes(
             IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        1, retrievedRolePurposes.size(), "The correct number of role purposes was not retrieved");
+        2, retrievedRolePurposes.size(), "The correct number of role purposes was not retrieved");
 
     retrievedRolePurposes =
         partyReferenceService.getRolePurposes(
@@ -1011,7 +1012,7 @@ public class PartyReferenceServiceTest {
             IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        0, retrievedRolePurposes.size(), "The correct number of role purposes was not retrieved");
+        1, retrievedRolePurposes.size(), "The correct number of role purposes was not retrieved");
   }
 
   /** Test the role type attribute type constraint functionality. */
@@ -1109,20 +1110,51 @@ public class PartyReferenceServiceTest {
     List<Segment> retrievedSegments =
         partyReferenceService.getSegments(IPartyReferenceService.DEFAULT_LOCALE_ID);
 
-    assertEquals(2, retrievedSegments.size(), "The correct number of segments was not retrieved");
+    assertEquals(6, retrievedSegments.size(), "The correct number of segments was not retrieved");
 
     retrievedSegments =
         partyReferenceService.getSegments(
             IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
 
-    assertEquals(2, retrievedSegments.size(), "The correct number of segments was not retrieved");
+    assertEquals(6, retrievedSegments.size(), "The correct number of segments was not retrieved");
 
     retrievedSegments =
         partyReferenceService.getSegments(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
             IPartyReferenceService.DEFAULT_LOCALE_ID);
 
-    assertEquals(0, retrievedSegments.size(), "The correct number of segments was not retrieved");
+    assertEquals(4, retrievedSegments.size(), "The correct number of segments was not retrieved");
+  }
+
+  /** Test the segmentation type reference functionality. */
+  @Test
+  public void segmentationTypeTest() throws Exception {
+    List<SegmentationType> retrievedSegmentationTypes =
+        partyReferenceService.getSegmentationTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        2,
+        retrievedSegmentationTypes.size(),
+        "The correct number of segmentation types was not retrieved");
+
+    retrievedSegmentationTypes =
+        partyReferenceService.getSegmentationTypes(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        2,
+        retrievedSegmentationTypes.size(),
+        "The correct number of segmentation types was not retrieved");
+
+    retrievedSegmentationTypes =
+        partyReferenceService.getSegmentationTypes(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        1,
+        retrievedSegmentationTypes.size(),
+        "The correct number of segmentation types was not retrieved");
   }
 
   /** Test the source of funds types reference functionality. */

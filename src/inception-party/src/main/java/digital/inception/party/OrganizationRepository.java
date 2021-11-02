@@ -32,14 +32,52 @@ import org.springframework.data.repository.query.Param;
  */
 public interface OrganizationRepository extends JpaRepository<Organization, UUID> {
 
+  /**
+   * Delete the organization.
+   *
+   * @param tenantId the ID for the tenant
+   * @param id the ID for the organization
+   */
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
+  /**
+   * Check whether the organization exists.
+   *
+   * @param tenantId the ID for the tenant
+   * @param id the ID for the organization
+   * @return <b>true</b> if the organization exists or <b>false</b> otherwise
+   */
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
+  /**
+   * Retrieve the organizations for the tenant.
+   *
+   * @param tenantId the ID for the tenant
+   * @param pageable the pagination information
+   * @return the organizations for the tenant
+   */
   Page<Organization> findByTenantId(UUID tenantId, Pageable pageable);
 
+  /**
+   * Retrieve the organization.
+   *
+   * @param tenantId the ID for the tenant
+   * @param id the ID for the organization
+   * @return an Optional containing the organization or an empty Optional if the organization could
+   *     not be found
+   */
   Optional<Organization> findByTenantIdAndId(UUID tenantId, UUID id);
 
-  @Query("select o from Organization o where (lower(o.name) like lower(:filter))")
-  Page<Organization> findFiltered(@Param("filter") String filter, Pageable pageable);
+  /**
+   * Retrieve the filtered organizations for the tenant.
+   *
+   * @param tenantId the ID for the tenant
+   * @param filter the filter to apply to the organizations
+   * @param pageable the pagination information
+   * @return the filtered organizations
+   */
+  @Query(
+      "select o from Organization o where (o.tenantId = :tenantId) and (lower(o.name) like lower(:filter))")
+  Page<Organization> findFiltered(
+      @Param("tenantId") UUID tenantId, @Param("filter") String filter, Pageable pageable);
 }

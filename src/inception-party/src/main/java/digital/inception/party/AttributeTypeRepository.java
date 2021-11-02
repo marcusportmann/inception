@@ -28,9 +28,22 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface AttributeTypeRepository extends JpaRepository<AttributeType, AttributeTypeId> {
 
+  /**
+   * Retrieve all the attribute types sorted by locale ID, sort index, and name.
+   *
+   * @return all the attribute types sorted by locale ID, sort index, and name.
+   */
   @Query("select at from AttributeType at order by at.localeId, -at.sortIndex DESC, at.name")
   List<AttributeType> findAll();
 
+  /**
+   * Retrieve the attribute types for the specified locale sorted by locale ID, sort index, and
+   * name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute types
+   *     for
+   * @return the attribute types for the specified locale sorted by locale ID, sort index, and name
+   */
   @Query(
       "select at from AttributeType at where upper(at.localeId) = upper(:localeId) order by at.localeId, -at.sortIndex DESC, at.name")
   List<AttributeType> findByLocaleIdIgnoreCase(String localeId);

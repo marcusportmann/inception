@@ -1373,8 +1373,28 @@
     </insert>
 
 
+
+    <insert schemaName="party" tableName="segmentation_types">
+      <column name="code" value="test_segmentation_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Segmentation Segment"/>
+      <column name="description" value="Test Segmentation Segment"/>
+    </insert>
+
+    <insert schemaName="party" tableName="segmentation_types">
+      <column name="code" value="test_segmentation_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Segmentation Segment"/>
+      <column name="description" value="Test Segmentation Segment"/>
+    </insert>
+
+
+
     <insert schemaName="party" tableName="segments">
       <column name="code" value="test_organization_segment"/>
+      <column name="type" value="test_segmentation_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Organization Segment"/>
@@ -1383,6 +1403,7 @@
     </insert>
     <insert schemaName="party" tableName="segments">
       <column name="code" value="test_person_segment"/>
+      <column name="type" value="test_segmentation_type"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Person Segment"/>
@@ -1392,6 +1413,7 @@
 
     <insert schemaName="party" tableName="segments">
       <column name="code" value="test_organization_segment"/>
+      <column name="type" value="test_segmentation_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Organization Segment"/>
@@ -1400,6 +1422,7 @@
     </insert>
     <insert schemaName="party" tableName="segments">
       <column name="code" value="test_person_segment"/>
+      <column name="type" value="test_segmentation_type"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Person Segment"/>

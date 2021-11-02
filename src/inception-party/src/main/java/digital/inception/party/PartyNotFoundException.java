@@ -47,8 +47,8 @@ public class PartyNotFoundException extends ServiceException {
   /**
    * Constructs a new <b>PartyNotFoundException</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param partyId the Universally Unique Identifier (UUID) for the party
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
    */
   public PartyNotFoundException(UUID tenantId, UUID partyId) {
     super("The party (" + partyId + ") could not be found for the tenant (" + tenantId + ")");

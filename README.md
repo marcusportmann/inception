@@ -1,7 +1,7 @@
 # Inception Framework
 
 ## Overview
-The Inception Framework enables the rapid development of applications with a Java 
+The Inception Framework enables the rapid development of applications with a Java
 back-end and Angular front-end.
 
 ## Quickstart for MacOS
@@ -19,10 +19,9 @@ Complete the following steps to setup a development environment on MacOS.
    ```
    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
    ```
-3. Install OpenJDK 11 by executing the following commands in a Terminal window.
+3. Install OpenJDK 17 by executing the following commands in a Terminal window.
    ```
-   brew tap AdoptOpenJDK/openjdk
-   brew cask install adoptopenjdk11
+   brew install openjdk
    ```
 4. Install Apache Maven by executing the following command in a Terminal window.
    ```
@@ -38,11 +37,11 @@ Complete the following steps to setup a development environment on MacOS.
    export PATH="$HOME/.jenv/bin:$PATH"
    eval "$(jenv init -)"
    ```
-7. Set OpenJDK 11 as the default java verison by executing the following commands in a
+7. Set OpenJDK 17 as the default java verison by executing the following commands in a
    Terminal window.
    ```
-   jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
-   jenv global 11.0
+   jenv add /opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home
+   jenv global 17
    ```
 8. Install the maven plugin for jenv by executing the following command in a Terminal
    window.
@@ -61,7 +60,7 @@ Complete the following steps to setup a development environment on MacOS.
     ```
     brew install npm
     ```
-12. Install the Angular CLI 11 globally by executing the following command in a Terminal
+12. Install the Angular CLI 12 globally by executing the following command in a Terminal
     window.
     ```
     npm install -g @angular/cli@12
@@ -146,17 +145,16 @@ Complete the following steps to checkout and build the Inception Framework on Ma
    Git Credential Manager
    Enable file system caching
    ```
-2. Download the OpenJDK 11 package from *https://adoptopenjdk.net* and install it.
+2. Download the OpenJDK 17 package from *https://adoptium.net/* and install it.
 3. Download the Maven package from *https://maven.apache.org* and install it.
 
    **NOTE:** Ensure that Maven is on the path.
 
    **NOTE:** Add the proxy settings to the *~/.m2/settings.xml* file if required.
-4. Download the Node.js and npm package from *https://www.npmjs.com/get-npm* and install
-   it.
+4. Download the Node.js and npm package from *https://nodejs.org/en/download/* and install it.
 
    **NOTE:** Set the proxy for NPM if required.
-5. Install the Angular CLI 11 globally by executing the following command in a Git Bash
+5. Install the Angular CLI 12 globally by executing the following command in a Git Bash
    window.
    ```
    npm install -g @angular/cli@12
@@ -655,7 +653,7 @@ Complete the following steps to create a new application based on the Inception 
       import {
         CoreModule, InceptionAppModule, InceptionConfig, NavigationBadge, NavigationItem, NavigationTitle
       } from 'ngx-inception/core';
-      
+
       import {environment} from "../environments/environment";
 
       ...
@@ -1295,7 +1293,7 @@ Complete the following steps to create a new application based on the Inception 
        };
 
        /*
-        * For easier debugging in development mode, we import the following file to ignore 
+        * For easier debugging in development mode, we import the following file to ignore
         * zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
         */
        import 'zone.js/plugins/zone-error';
@@ -1319,21 +1317,8 @@ Complete the following steps to create a new application based on the Inception 
          inception_securityApiUrlPrefix: '/api/security',
        };   
        ```
-       
+
 5. Execute the following command under the *src* directory to build the new application.
    ```
    mvn package
    ```
-
-
-
-
-
-
-
-
-
-
-
-
-

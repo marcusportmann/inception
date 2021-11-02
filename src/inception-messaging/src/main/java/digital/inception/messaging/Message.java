@@ -104,10 +104,8 @@ public class Message {
    */
   public static final int MAX_ASYNC_MESSAGE_SIZE = 40000;
 
-  /** The optional Universally Unique Identifier (UUID) used to correlate the message. */
-  @Schema(
-      description =
-          "The optional Universally Unique Identifier (UUID) used to correlate the message")
+  /** The optional ID used to correlate the message. */
+  @Schema(description = "The optional ID used to correlate the message")
   @JsonProperty
   @XmlElement(name = "CorrelationId")
   @Column(name = "correlation_id")
@@ -145,11 +143,8 @@ public class Message {
   @Column(name = "data_hash", length = 100)
   private String dataHash;
 
-  /** The Universally Unique Identifier (UUID) for the device associated with the message. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the device associated with the message",
-      required = true)
+  /** The ID for the device associated with the message. */
+  @Schema(description = "The ID for the device associated with the message", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "DeviceId", required = true)
   @NotNull
@@ -173,8 +168,8 @@ public class Message {
   @Column(name = "encryption_iv", length = 100)
   private String encryptionIV;
 
-  /** The Universally Unique Identifier (UUID) for the message. */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the message", required = true)
+  /** The ID for the message. */
+  @Schema(description = "The ID for the message", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -327,8 +322,7 @@ public class Message {
    *
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
-   *     message
+   * @param deviceId the ID for the device associated with the message
    * @param priority the message priority
    * @param data the data for the message which is NOT encrypted
    */
@@ -349,9 +343,8 @@ public class Message {
    *
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
-   *     message
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   * @param deviceId the ID for the device associated with the message
+   * @param correlationId the ID used to correlate the message
    * @param priority the message priority
    * @param data the data for the message which is NOT encrypted
    */
@@ -378,8 +371,7 @@ public class Message {
    *
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
-   *     message
+   * @param deviceId the ID for the device associated with the message
    * @param priority the message priority
    * @param data the data for the message which may be encrypted
    * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
@@ -416,9 +408,8 @@ public class Message {
    *
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
-   *     message
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   * @param deviceId the ID for the device associated with the message
+   * @param correlationId the ID used to correlate the message
    * @param priority the message priority
    * @param data the data for the message which may be encrypted
    * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
@@ -455,12 +446,11 @@ public class Message {
   /**
    * Constructs a new <b>Message</b>.
    *
-   * @param id the Universally Unique Identifier (UUID) for the message
+   * @param id the ID for the message
    * @param type the code for the message type
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
-   *     message
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   * @param deviceId the ID for the device associated with the message
+   * @param correlationId the ID used to correlate the message
    * @param priority the message priority
    * @param created the date and time the message was created
    * @param data the data for the message which may be encrypted
@@ -537,9 +527,9 @@ public class Message {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to correlate the message.
+   * Returns the ID used to correlate the message.
    *
-   * @return the Universally Unique Identifier (UUID) used to correlate the message
+   * @return the ID used to correlate the message
    */
   public UUID getCorrelationId() {
     return correlationId;
@@ -573,9 +563,9 @@ public class Message {
   }
 
   /**
-   * The Universally Unique Identifier (UUID) for the device associated with the message.
+   * The ID for the device associated with the message.
    *
-   * @return the Universally Unique Identifier (UUID) for the device associated with the message
+   * @return the ID for the device associated with the message
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -600,9 +590,9 @@ public class Message {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the message.
+   * Returns the ID for the message.
    *
-   * @return the Universally Unique Identifier (UUID) for the message
+   * @return the ID for the message
    */
   public UUID getId() {
     return id;
@@ -722,9 +712,9 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to correlate the message.
+   * Set the ID used to correlate the message.
    *
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   * @param correlationId the ID used to correlate the message
    */
   public void setCorrelationId(UUID correlationId) {
     this.correlationId = correlationId;
@@ -758,10 +748,9 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the device associated with the message.
+   * Set the ID for the device associated with the message.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device associated with the
-   *     message
+   * @param deviceId the ID for the device associated with the message
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
@@ -787,9 +776,9 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the message.
+   * Set the ID for the message.
    *
-   * @param id the Universally Unique Identifier (UUID) for the message
+   * @param id the ID for the message
    */
   public void setId(UUID id) {
     this.id = id;

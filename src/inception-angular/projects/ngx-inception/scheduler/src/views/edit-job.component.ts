@@ -43,16 +43,26 @@ import {
 export class EditJobComponent extends AdminContainerView implements AfterViewInit {
 
   JobStatus = JobStatus;
+
   editJobForm: FormGroup;
+
   enabledFormControl: FormControl;
+
   getJobStatusDescription = SchedulerService.getJobStatusDescription;
+
   idFormControl: FormControl;
+
   job?: Job;
+
   jobClassFormControl: FormControl;
+
   jobId: string;
+
   jobParameters: JobParameter[] = [];
+
   jobStatuses: JobStatus[] = [JobStatus.Unscheduled, JobStatus.Scheduled, JobStatus.Executing,
     JobStatus.Executed, JobStatus.Aborted, JobStatus.Failed, JobStatus.OnceOff];
+
   nameFormControl: FormControl;
 
   schedulingPatternFormControl: FormControl;

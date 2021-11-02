@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
+/**
+ * Provides the classes for the Reference module.
+ *
+ * @author Marcus Portmann
+ */
 @javax.xml.bind.annotation.XmlSchema(
     namespace = "http://inception.digital/reference",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
-        @javax.xml.bind.annotation.XmlNs(
-            prefix = "core",
-            namespaceURI = "http://inception.digital/core"),
-        @javax.xml.bind.annotation.XmlNs(
-            prefix = "reference",
-            namespaceURI = "http://inception.digital/reference"),
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "core",
+          namespaceURI = "http://inception.digital/core"),
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "reference",
+          namespaceURI = "http://inception.digital/reference"),
     })
 package digital.inception.reference;

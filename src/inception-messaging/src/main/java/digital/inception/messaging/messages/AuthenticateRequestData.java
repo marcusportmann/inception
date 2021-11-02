@@ -37,10 +37,7 @@ public class AuthenticateRequestData extends WbxmlMessageData {
   /** The message type code for the "Authenticate Request" message. */
   public static final String MESSAGE_TYPE = "AuthenticateRequest";
 
-  /**
-   * The Universally Unique Identifier (UUID) for the device the authentication request originated
-   * from.
-   */
+  /** The ID for the device the authentication request originated from. */
   private UUID deviceId;
 
   /** The password used to authenticate the user. */
@@ -59,8 +56,7 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    *
    * @param username the username for the user associated with the message
    * @param password the password used to authenticate the user
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the authentication
-   *     request originated from
+   * @param deviceId the ID for the device the authentication request originated from
    */
   public AuthenticateRequestData(String username, String password, UUID deviceId) {
     super(MESSAGE_TYPE, MessagePriority.HIGH);
@@ -105,11 +101,9 @@ public class AuthenticateRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device the authentication request
-   * originated from.
+   * Returns the ID for the device the authentication request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the authentication request
-   *     originated from
+   * @return the ID for the device the authentication request originated from
    */
   public UUID getDeviceId() {
     return deviceId;

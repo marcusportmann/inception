@@ -38,11 +38,16 @@ import {MailService} from '../services/mail.service';
 export class EditMailTemplateComponent extends AdminContainerView implements AfterViewInit {
 
   MailTemplateContentType = MailTemplateContentType;
+
   contentTypeFormControl: FormControl;
+
   contentTypes: MailTemplateContentType[] = [MailTemplateContentType.Text,
     MailTemplateContentType.HTML];
+
   editMailTemplateForm: FormGroup;
+
   getMailTemplateContentTypeDescription = MailService.getMailTemplateContentTypeDescription;
+
   idFormControl: FormControl;
 
   mailTemplate?: MailTemplate;

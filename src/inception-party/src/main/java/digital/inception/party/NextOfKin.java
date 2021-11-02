@@ -190,10 +190,8 @@ public class NextOfKin implements Serializable {
   @Column(name = "email_address", length = 100)
   private String emailAddress;
 
-  /** The Universally Unique Identifier (UUID) for the next of kin. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the next of kin",
-      required = true)
+  /** The ID for the next of kin. */
+  @Schema(description = "The ID for the next of kin", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -238,6 +236,7 @@ public class NextOfKin implements Serializable {
   @Schema(description = "The code for the next of kin type for the next of kin")
   @JsonProperty
   @XmlElement(name = "Type")
+  @NotNull
   @Size(min = 1, max = 30)
   @Column(name = "type", length = 30)
   private String type;
@@ -457,9 +456,9 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the next of kin.
+   * Returns the ID for the next of kin.
    *
-   * @return the Universally Unique Identifier (UUID) for the next of kin
+   * @return the ID for the next of kin
    */
   public UUID getId() {
     return id;
@@ -621,9 +620,9 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Get the Universally Unique Identifier (UUID) for the next of kin.
+   * Get the ID for the next of kin.
    *
-   * @param id the Universally Unique Identifier (UUID) for the next of kin
+   * @param id the ID for the next of kin
    */
   public void setId(UUID id) {
     this.id = id;
@@ -675,11 +674,13 @@ public class NextOfKin implements Serializable {
     this.type = type;
   }
 
+  /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
     created = LocalDateTime.now();
   }
 
+  /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
     updated = LocalDateTime.now();

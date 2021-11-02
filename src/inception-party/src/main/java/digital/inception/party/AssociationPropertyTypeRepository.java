@@ -29,11 +29,25 @@ import org.springframework.data.jpa.repository.Query;
 public interface AssociationPropertyTypeRepository
     extends JpaRepository<AssociationPropertyType, AssociationPropertyTypeId> {
 
+  /**
+   * Retrieve all the association property types sorted by locale ID, sort index, and name.
+   *
+   * @return all the association property types sorted by locale ID, sort index, and name.
+   */
   @Query(
-      "select rpt from AssociationPropertyType rpt order by rpt.localeId, -rpt.sortIndex DESC, rpt.name")
+      "select apt from AssociationPropertyType apt order by apt.localeId, -apt.sortIndex DESC, apt.name")
   List<AssociationPropertyType> findAll();
 
+  /**
+   * Retrieve the association property types for the specified locale sorted by locale ID, sort
+   * index, and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the association
+   *     property types for
+   * @return the association property types for the specified locale sorted by locale ID, sort
+   *     index, and name
+   */
   @Query(
-      "select rpt from AssociationPropertyType rpt where upper(rpt.localeId) = upper(:localeId) order by rpt.localeId, -rpt.sortIndex DESC, rpt.name")
+      "select apt from AssociationPropertyType apt where upper(apt.localeId) = upper(:localeId) order by apt.localeId, -apt.sortIndex DESC, apt.name")
   List<AssociationPropertyType> findByLocaleIdIgnoreCase(String localeId);
 }

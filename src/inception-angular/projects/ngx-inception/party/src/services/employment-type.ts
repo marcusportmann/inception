@@ -52,6 +52,11 @@ export class EmploymentType {
   sortIndex: number;
 
   /**
+   * The ID for the tenant the employment type is specific to.
+   */
+  tenantId?: string;
+
+  /**
    * Constructs a new EmploymentType.
    *
    * @param employmentStatus The code for the employment status the employment type is associated
@@ -61,14 +66,16 @@ export class EmploymentType {
    * @param sortIndex        The sort index for the employment type.
    * @param name             The name of the employment type.
    * @param description      The description for the employment type.
+   * @param tenantId         The ID for the tenant the employment type is specific to.
    */
   constructor(employmentStatus: string, code: string, localeId: string, sortIndex: number,
-              name: string, description: string) {
+              name: string, description: string, tenantId?: string) {
     this.employmentStatus = employmentStatus;
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
+    this.tenantId = tenantId;
   }
 }

@@ -36,9 +36,13 @@ import {finalize, first} from 'rxjs/operators';
 export class ResetPasswordComponent implements OnInit {
 
   confirmNewPasswordFormControl: FormControl;
+
   newPasswordFormControl: FormControl;
+
   resetPasswordForm: FormGroup;
+
   securityCode?: string;
+
   usernameFormControl: FormControl;
 
   /**

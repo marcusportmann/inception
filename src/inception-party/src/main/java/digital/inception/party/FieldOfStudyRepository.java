@@ -28,9 +28,22 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface FieldOfStudyRepository extends JpaRepository<FieldOfStudy, FieldOfStudyId> {
 
+  /**
+   * Retrieve all the fields of study sorted by locale ID, sort index, and name.
+   *
+   * @return all the fields of study sorted by locale ID, sort index, and name.
+   */
   @Query("select fos from FieldOfStudy fos order by fos.localeId, -fos.sortIndex DESC, fos.name")
   List<FieldOfStudy> findAll();
 
+  /**
+   * Retrieve the fields of study for the specified locale sorted by locale ID, sort index, and
+   * name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
+   *     for
+   * @return the fields of study for the specified locale sorted by locale ID, sort index, and name
+   */
   @Query(
       "select fos from FieldOfStudy fos where upper(fos.localeId) = upper(:localeId) order by fos.localeId, -fos.sortIndex DESC, fos.name")
   List<FieldOfStudy> findByLocaleIdIgnoreCase(String localeId);

@@ -30,7 +30,7 @@ public class AttributeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The Universally Unique Identifier (UUID) for the party the attribute is associated with. */
+  /** The ID for the party the attribute is associated with. */
   private UUID party;
 
   /** The code for the attribute type. */

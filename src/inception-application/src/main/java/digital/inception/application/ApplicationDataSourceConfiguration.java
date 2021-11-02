@@ -22,7 +22,6 @@ import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.util.Locale;
 import java.util.Properties;
 import javax.sql.DataSource;
 import liquibase.Contexts;

@@ -29,10 +29,24 @@ import org.springframework.data.jpa.repository.Query;
 public interface ExternalReferenceTypeRepository
     extends JpaRepository<ExternalReferenceType, ExternalReferenceTypeId> {
 
+  /**
+   * Retrieve all the external reference types sorted by locale ID, sort index, and name.
+   *
+   * @return all the external reference types sorted by locale ID, sort index, and name.
+   */
   @Query(
       "select ert from ExternalReferenceType ert order by ert.localeId, -ert.sortIndex DESC, ert.name")
   List<ExternalReferenceType> findAll();
 
+  /**
+   * Retrieve the external reference types for the specified locale sorted by locale ID, sort index,
+   * and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the external reference
+   *     types for
+   * @return the external reference types for the specified locale sorted by locale ID, sort index,
+   *     and name
+   */
   @Query(
       "select ert from ExternalReferenceType ert where upper(ert.localeId) = upper(:localeId) order by ert.localeId, -ert.sortIndex DESC, ert.name")
   List<ExternalReferenceType> findByLocaleIdIgnoreCase(String localeId);

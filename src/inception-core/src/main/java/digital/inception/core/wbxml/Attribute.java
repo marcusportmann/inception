@@ -27,8 +27,10 @@ public class Attribute implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
+  /** The name of the attribute. */
   private String name;
 
+  /** The value for the attribute. */
   private String value;
 
   /** Constructs a new <b>Attribute</b>. */

@@ -40,13 +40,21 @@ import {SecurityService} from '../services/security.service';
 export class UserGroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   allGroupNames: string[] = [];
+
   availableGroupNames$: Subject<string[]> = new ReplaySubject<string[]>();
+
   dataSource = new MatTableDataSource<string>([]);
+
   displayedColumns = ['existingGroupName', 'actions'];
+
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+
   selectedGroupName = '';
+
   userDirectoryId: string;
+
   username: string;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,

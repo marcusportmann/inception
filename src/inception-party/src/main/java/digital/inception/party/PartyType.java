@@ -32,10 +32,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "PartyType", namespace = "http://inception.digital/party")
 public enum PartyType {
+  /** Organization. */
   @XmlEnumValue("Organization")
   ORGANIZATION("organization", "Organization"),
+
+  /** Person. */
   @XmlEnumValue("Person")
   PERSON("person", "Person"),
+
+  /** Unknown. */
   @XmlEnumValue("Unknown")
   UNKNOWN("unknown", "Unknown");
 

@@ -45,7 +45,7 @@ public interface IMailService {
       throws InvalidArgumentException, DuplicateMailTemplateException, ServiceUnavailableException;
 
   /**
-   * Delete the existing mail template.
+   * Delete the mail template.
    *
    * @param mailTemplateId the ID for the mail template
    * @throws InvalidArgumentException if an argument is invalid

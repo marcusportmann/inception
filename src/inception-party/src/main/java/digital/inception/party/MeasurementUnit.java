@@ -32,33 +32,50 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "MeasurementUnit", namespace = "http://inception.digital/party")
 public enum MeasurementUnit {
+  /** Metric centimeter. */
   @XmlEnumValue("MetricCentimeter")
   METRIC_CENTIMETER(
       "metric_centimeter",
       "Metric Centimeter",
       MeasurementSystem.METRIC,
       MeasurementUnitType.LENGTH),
+
+  /** Metric meter. */
   @XmlEnumValue("MetricMeter")
   METRIC_METER(
       "metric_meter", "Metric Meter", MeasurementSystem.METRIC, MeasurementUnitType.LENGTH),
+
+  /** Metric kilogram. */
   @XmlEnumValue("MetricKilogram")
   METRIC_KILOGRAM(
       "metric_kilogram", "Metric Kilogram", MeasurementSystem.METRIC, MeasurementUnitType.MASS),
+
+  /** Imperial inch. */
   @XmlEnumValue("ImperialInch")
   IMPERIAL_INCH(
       "imperial_inch", "Imperial Inch", MeasurementSystem.IMPERIAL, MeasurementUnitType.LENGTH),
+
+  /** Imperial foot. */
   @XmlEnumValue("ImperialFoot")
   IMPERIAL_FOOT(
       "imperial_foot", "Imperial Foot", MeasurementSystem.IMPERIAL, MeasurementUnitType.LENGTH),
+
+  /** Imperial pound. */
   @XmlEnumValue("ImperialPound")
   IMPERIAL_POUND(
       "imperial_pound", "Imperial Pound", MeasurementSystem.IMPERIAL, MeasurementUnitType.MASS),
+
+  /** Customary inch. */
   @XmlEnumValue("CustomaryInch")
   CUSTOMARY_INCH(
       "customary_inch", "Customary Inch", MeasurementSystem.CUSTOMARY, MeasurementUnitType.LENGTH),
+
+  /** Customary foot. */
   @XmlEnumValue("CustomaryFoot")
   CUSTOMARY_FOOT(
       "customary_foot", "Customary Foot", MeasurementSystem.CUSTOMARY, MeasurementUnitType.LENGTH),
+
+  /** Customary pound. */
   @XmlEnumValue("CustomaryPound")
   CUSTOMARY_POUND(
       "customary_pound", "Customary Pound", MeasurementSystem.CUSTOMARY, MeasurementUnitType.MASS);

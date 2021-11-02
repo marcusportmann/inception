@@ -32,18 +32,31 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "JobStatus", namespace = "http://inception.digital/scheduler")
 public enum JobStatus {
+  /** Unscheduled. */
   @XmlEnumValue("Unscheduled")
   UNSCHEDULED("unscheduled", "Unscheduled"),
+
+  /** Scheduled. */
   @XmlEnumValue("Scheduled")
   SCHEDULED("scheduled", "Scheduled"),
+
+  /** Executing. */
   @XmlEnumValue("Executing")
   EXECUTING("executing", "Executing"),
+
+  /** Executed. */
   @XmlEnumValue("Executed")
   EXECUTED("executed", "Executed"),
+
+  /** Aborted. */
   @XmlEnumValue("Aborted")
   ABORTED("aborted", "Aborted"),
+
+  /** Failed. */
   @XmlEnumValue("Failed")
   FAILED("failed", "Failed"),
+
+  /** Once-off. */
   @XmlEnumValue("OnceOff")
   ONCE_OFF("once_off", "Once-Off");
 

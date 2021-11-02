@@ -36,9 +36,24 @@ import javax.validation.Payload;
 @Documented
 public @interface ValidAssociation {
 
+  /**
+   * The target groups.
+   *
+   * @return the target groups
+   */
   Class<?>[] groups() default {};
 
+  /**
+   * The error message key.
+   *
+   * @return the error message key
+   */
   String message() default "{digital.inception.party.constraints.ValidAssociation.message}";
 
+  /**
+   * The payload type.
+   *
+   * @return the payload type
+   */
   Class<? extends Payload>[] payload() default {};
 }

@@ -372,6 +372,7 @@ public class PartyService implements IPartyService {
   public Parties getParties(
       UUID tenantId,
       String filter,
+      PartySortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
@@ -398,7 +399,7 @@ public class PartyService implements IPartyService {
       pageSize = Math.min(pageSize, maxFilteredParties);
     }
 
-    return getDataStore().getParties(tenantId, filter, sortDirection, pageIndex, pageSize);
+    return getDataStore().getParties(tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override

@@ -35,20 +35,20 @@ import org.springframework.util.StringUtils;
  */
 public class SystemUnavailableResponse extends Response {
 
+  /** The message. */
+  private final String message;
+
+  /** The date and time the error occurred. */
+  private final LocalDateTime timestamp;
+
   /** The optional detail. */
   private String detail;
 
   /** The optional fully qualified name of the exception associated with the error. */
   private String exception;
 
-  /** The message. */
-  private final String message;
-
   /** The optional stack trace associated with the error. */
   private String stackTrace;
-
-  /** The date and time the error occurred. */
-  private final LocalDateTime timestamp;
 
   /** The URI for the HTTP request that resulted in the error. */
   @JsonProperty private String uri;

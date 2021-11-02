@@ -32,12 +32,19 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "UserStatus", namespace = "http://inception.digital/security")
 public enum UserStatus {
+  /** Inactive. */
   @XmlEnumValue("Inactive")
   INACTIVE("inactive", "Inactive"),
+
+  /** Active. */
   @XmlEnumValue("Active")
   ACTIVE("active", "Active"),
+
+  /** Locked. */
   @XmlEnumValue("Locked")
   LOCKED("locked", "Locked"),
+
+  /** Expired. */
   @XmlEnumValue("Expired")
   EXPIRED("expired", "Expired");
 
@@ -51,24 +58,29 @@ public enum UserStatus {
   }
 
   /**
-   * Returns the numeric code for the user status.
+   * Returns the user status given by the specified code value.
    *
-   * @param userStatus the user status
-   * @return the numeric code for the user status
+   * @param code the code for the user status
+   * @return the user status given by the specified code value
    */
-  public static int toNumericCode(UserStatus userStatus) {
-    switch (userStatus) {
-      case ACTIVE:
-        return 1;
-      case INACTIVE:
-        return 2;
-      case LOCKED:
-        return 3;
-      case EXPIRED:
-        return 4;
+  @JsonCreator
+  public static UserStatus fromCode(String code) {
+    switch (code) {
+      case "inactive":
+        return UserStatus.INACTIVE;
+
+      case "active":
+        return UserStatus.ACTIVE;
+
+      case "locked":
+        return UserStatus.LOCKED;
+
+      case "expired":
+        return UserStatus.EXPIRED;
+
       default:
         throw new RuntimeException(
-            "Failed to determine the numeric code for the user status (" + userStatus.code() + ")");
+            "Failed to determine the user status with the invalid code (" + code + ")");
     }
   }
 
@@ -97,29 +109,24 @@ public enum UserStatus {
   }
 
   /**
-   * Returns the user status given by the specified code value.
+   * Returns the numeric code for the user status.
    *
-   * @param code the code for the user status
-   * @return the user status given by the specified code value
+   * @param userStatus the user status
+   * @return the numeric code for the user status
    */
-  @JsonCreator
-  public static UserStatus fromCode(String code) {
-    switch (code) {
-      case "inactive":
-        return UserStatus.INACTIVE;
-
-      case "active":
-        return UserStatus.ACTIVE;
-
-      case "locked":
-        return UserStatus.LOCKED;
-
-      case "expired":
-        return UserStatus.EXPIRED;
-
+  public static int toNumericCode(UserStatus userStatus) {
+    switch (userStatus) {
+      case ACTIVE:
+        return 1;
+      case INACTIVE:
+        return 2;
+      case LOCKED:
+        return 3;
+      case EXPIRED:
+        return 4;
       default:
         throw new RuntimeException(
-            "Failed to determine the user status with the invalid code (" + code + ")");
+            "Failed to determine the numeric code for the user status (" + userStatus.code() + ")");
     }
   }
 

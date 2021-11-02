@@ -16,10 +16,12 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -30,7 +32,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <b>Snapshots</b> class holds the results of a request to retrieve a list of snapshots for a
@@ -43,6 +47,7 @@ import javax.xml.bind.annotation.XmlType;
         "The results of a request to retrieve a list of snapshots for a particular entity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+  "tenantId",
   "snapshots",
   "total",
   "entityType",
@@ -58,6 +63,7 @@ import javax.xml.bind.annotation.XmlType;
     name = "Snapshots",
     namespace = "http://inception.digital/party",
     propOrder = {
+      "tenantId",
       "snapshots",
       "total",
       "entityType",
@@ -74,8 +80,8 @@ public class Snapshots implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The Universally Unique Identifier (UUID) for the entity. */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the entity", required = true)
+  /** The ID for the entity. */
+  @Schema(description = "The ID for the entity", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "EntityId", required = true)
   private UUID entityId;
@@ -89,7 +95,10 @@ public class Snapshots implements Serializable {
   /** The optional date to retrieve the snapshots from. */
   @Schema(description = "The optional date to retrieve the snapshots from")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "From")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
   private LocalDate from;
 
   /** The optional page index. */
@@ -117,10 +126,19 @@ public class Snapshots implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
+  /** The ID for the tenant. */
+  @Schema(description = "The ID for the tenant", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  private UUID tenantId;
+
   /** The optional date to retrieve the snapshots to. */
   @Schema(description = "The optional date to retrieve the snapshots to")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "To")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
   private LocalDate to;
 
   /** The total number of snapshots. */
@@ -135,10 +153,11 @@ public class Snapshots implements Serializable {
   /**
    * Constructs a new <b>Snapshots</b>.
    *
+   * @param tenantId the ID for the tenant
    * @param snapshots the snapshots
    * @param total the total number of snapshots
    * @param entityType the type of entity
-   * @param entityId the Universally Unique Identifier (UUID) for the entity
+   * @param entityId the ID for the entity
    * @param from the optional date to retrieve the snapshots from
    * @param to the optional date to retrieve the snapshots to
    * @param sortDirection the optional sort direction that was applied to the snapshots
@@ -146,6 +165,7 @@ public class Snapshots implements Serializable {
    * @param pageSize the optional page size
    */
   public Snapshots(
+      UUID tenantId,
       List<Snapshot> snapshots,
       long total,
       EntityType entityType,
@@ -155,6 +175,7 @@ public class Snapshots implements Serializable {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
+    this.tenantId = tenantId;
     this.snapshots = snapshots;
     this.total = total;
     this.entityType = entityType;
@@ -167,9 +188,9 @@ public class Snapshots implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the entity.
+   * Returns the ID for the entity.
    *
-   * @return the Universally Unique Identifier (UUID) for the entity
+   * @return the ID for the entity
    */
   public UUID getEntityId() {
     return entityId;
@@ -227,6 +248,15 @@ public class Snapshots implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
+  }
+
+  /**
+   * Returns the ID for the tenant.
+   *
+   * @return the ID for the tenant
+   */
+  public UUID getTenantId() {
+    return tenantId;
   }
 
   /**

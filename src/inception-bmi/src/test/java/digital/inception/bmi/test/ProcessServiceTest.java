@@ -24,7 +24,6 @@ import digital.inception.bmi.ProcessDefinitionSummary;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
-import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -34,8 +33,6 @@ import java.util.Map;
 import javax.sql.DataSource;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.form.TaskFormData;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.Job;
 import org.camunda.bpm.engine.runtime.JobQuery;
@@ -213,7 +210,10 @@ public class ProcessServiceTest {
     List<ProcessDefinition> processDefinitions =
         processEngine.getRepositoryService().createProcessDefinitionQuery().latestVersion().list();
 
-    assertEquals(2, processDefinitions.size(), "The correct number of process definitions was not retrieved");
+    assertEquals(
+        2,
+        processDefinitions.size(),
+        "The correct number of process definitions was not retrieved");
 
     boolean foundProcessDefinition = false;
 
@@ -261,14 +261,18 @@ public class ProcessServiceTest {
 
     // Retrieve the tasks for the Administrators group
     TaskQuery taskQuery =
-        processEngine.getTaskService().createTaskQuery().taskCandidateGroup("Administrators").initializeFormKeys();
+        processEngine
+            .getTaskService()
+            .createTaskQuery()
+            .taskCandidateGroup("Administrators")
+            .initializeFormKeys();
     List<Task> tasks = taskQuery.list();
 
     assertEquals(1, tasks.size(), "Failed to find the task for the Administrators group");
 
     String taskId = tasks.get(0).getId();
 
-    TaskFormData taskFormData =  processEngine.getFormService().getTaskFormData(taskId);
+    TaskFormData taskFormData = processEngine.getFormService().getTaskFormData(taskId);
 
     processEngine.getTaskService().claim(taskId, "jack");
 

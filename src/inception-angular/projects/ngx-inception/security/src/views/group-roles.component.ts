@@ -41,13 +41,21 @@ import {SecurityService} from '../services/security.service';
 export class GroupRolesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   allRoles: Role[] = [];
+
   availableRoles$: Subject<Role[]> = new ReplaySubject<Role[]>();
+
   dataSource = new MatTableDataSource<GroupRole>([]);
+
   displayedColumns = ['existingRoleName', 'actions'];
+
   groupName: string;
+
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+
   selectedRole?: Role;
+
   userDirectoryId: string;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,

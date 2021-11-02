@@ -72,8 +72,8 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the association property type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association
-   *     property type reference data is specific to
+   * @param tenantId the ID for the tenant the association property type reference data is specific
+   *     to
    * @param localeId the Unicode locale identifier for the locale to retrieve the association
    *     property type reference data for
    * @return the association property type reference data
@@ -113,7 +113,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the association property type reference data is specific to",
+                  "The ID for the tenant the association property type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -137,8 +137,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the association type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the association type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the association type
    *     reference data for
    * @return the association type reference data
@@ -178,7 +177,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the association type reference data is specific to",
+                  "The ID for the tenant the association type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -202,8 +201,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the attribute type category reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
-   *     category reference data is specific to
+   * @param tenantId the ID for the tenant the attribute type category reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
    *     category reference data for
    * @return the attribute type category reference data
@@ -243,7 +241,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the attribute type category reference data is specific to",
+                  "The ID for the tenant the attribute type category reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -267,8 +265,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the attribute type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the attribute type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
    *     reference data for
    * @return the attribute type reference data
@@ -307,7 +304,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the attribute type reference data is specific to",
+                  "The ID for the tenant the attribute type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -331,8 +328,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the consent type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the consent type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the consent type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
    *     reference data for
    * @return the consent type reference data
@@ -370,8 +366,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<ConsentType> getConsentTypes(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the consent type reference data is specific to",
+              description = "The ID for the tenant the consent type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -395,8 +390,8 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the contact mechanism purpose reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
-   *     purpose reference data is specific to
+   * @param tenantId the ID for the tenant the contact mechanism purpose reference data is specific
+   *     to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     purpose reference data for
    * @return the contact mechanism purpose reference data
@@ -436,7 +431,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the contact mechanism purpose reference data is specific to",
+                  "The ID for the tenant the contact mechanism purpose reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -460,8 +455,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the contact mechanism role reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
-   *     role reference data is specific to
+   * @param tenantId the ID for the tenant the contact mechanism role reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     role reference data for
    * @return the contact mechanism role reference data
@@ -501,7 +495,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the contact mechanism role reference data is specific to",
+                  "The ID for the tenant the contact mechanism role reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -525,8 +519,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the contact mechanism type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the contact mechanism type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     type reference data for
    * @return the contact mechanism type reference data
@@ -566,7 +559,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the contact mechanism type reference data is specific to",
+                  "The ID for the tenant the contact mechanism type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -590,8 +583,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the employment status reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment status
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the employment status reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
    *     reference data for
    * @return the employment status reference data
@@ -631,7 +623,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the employment status reference data is specific to",
+                  "The ID for the tenant the employment status reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -655,8 +647,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the employment type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the employment type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
    *     reference data for
    * @return the employment type reference data
@@ -696,7 +687,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the employment type reference data is specific to",
+                  "The ID for the tenant the employment type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -718,10 +709,73 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the external reference type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the external reference type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the external reference
+   *     types reference data for
+   * @return the external reference type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the external reference type reference data could not be
+   *     retrieved
+   */
+  @Operation(
+      summary = "Retrieve the external reference type reference data for a specific locale",
+      description = "Retrieve the external reference type reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/external-reference-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<ExternalReferenceType> getExternalReferenceTypes(
+      @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The ID for the tenant the external reference type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the external reference type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getExternalReferenceTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the fields of study reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the fields of study
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the fields of study reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
    *     reference data for
    * @return the fields of study reference data
@@ -761,7 +815,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the fields of study reference data is specific to",
+                  "The ID for the tenant the fields of study reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -785,8 +839,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the gender reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the gender reference
-   *     data is specific to
+   * @param tenantId the ID for the tenant the gender reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
    *     data for
    * @return the gender reference data
@@ -821,8 +874,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<Gender> getGenders(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the gender reference data is specific to",
+              description = "The ID for the tenant the gender reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -846,8 +898,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the identity document type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the identity document
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the identity document type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
    *     type reference data for
    * @return the identity document type reference data
@@ -887,7 +938,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the identity document type reference data is specific to",
+                  "The ID for the tenant the identity document type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -911,8 +962,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the lock type category reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type category
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the lock type category reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
    *     reference data for
    * @return the lock type category reference data
@@ -952,7 +1002,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the lock type category reference data is specific to",
+                  "The ID for the tenant the lock type category reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -976,8 +1026,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the lock type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type reference
-   *     data is specific to
+   * @param tenantId the ID for the tenant the lock type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
    *     reference data for
    * @return the lock type reference data
@@ -1012,8 +1061,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<LockType> getLockTypes(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the lock type reference data is specific to",
+              description = "The ID for the tenant the lock type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1037,8 +1085,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the marital status reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marital status
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the marital status reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
    *     reference data for
    * @return the marital status reference data
@@ -1077,7 +1124,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the marital status reference data is specific to",
+                  "The ID for the tenant the marital status reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1101,8 +1148,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the marriage type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marriage type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the marriage type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
    *     reference data
    * @return the marriage type reference data
@@ -1140,8 +1186,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<MarriageType> getMarriageTypes(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the marriage type reference data is specific to",
+              description = "The ID for the tenant the marriage type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1165,8 +1210,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the next of kin type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the next of kin type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the next of kin type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
    *     reference data for
    * @return the next of kin type reference data
@@ -1206,7 +1250,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the next of kin type reference data is specific to",
+                  "The ID for the tenant the next of kin type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1230,8 +1274,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the occupation reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the occupation
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the occupation reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
    *     reference data for
    * @return the occupation reference data
@@ -1266,8 +1309,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<Occupation> getOccupations(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the occupation reference data is specific to",
+              description = "The ID for the tenant the occupation reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1291,8 +1333,8 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the physical address purpose reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
-   *     purpose reference data is specific to
+   * @param tenantId the ID for the tenant the physical address purpose reference data is specific
+   *     to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     purpose reference data for
    * @return the physical address purpose reference data
@@ -1331,8 +1373,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the XXX reference data is specific to",
+              description = "The ID for the tenant the XXX reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1356,8 +1397,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the physical address role reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
-   *     role reference data is specific to
+   * @param tenantId the ID for the tenant the physical address role reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     role reference data for
    * @return the physical address role reference data
@@ -1397,7 +1437,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the physical address role reference data is specific to",
+                  "The ID for the tenant the physical address role reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1421,8 +1461,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the physical address type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the physical address type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     type reference data for
    * @return the physical address type reference data
@@ -1462,7 +1501,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the physical address type reference data is specific to",
+                  "The ID for the tenant the physical address type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1486,8 +1525,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the preference type category reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the XXX reference data
-   *     is specific to
+   * @param tenantId the ID for the tenant the XXX reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
    *     category reference data for
    * @return the preference type category reference data
@@ -1527,7 +1565,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the preference type category reference data is specific to",
+                  "The ID for the tenant the preference type category reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1551,8 +1589,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the preference type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the preference type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
    *     reference data for
    * @return the preference type reference data
@@ -1592,7 +1629,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the preference type reference data is specific to",
+                  "The ID for the tenant the preference type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1616,8 +1653,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the qualification type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the qualification type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the qualification type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
    *     reference data for
    * @return the qualification type reference data
@@ -1657,7 +1693,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the qualification type reference data is specific to",
+                  "The ID for the tenant the qualification type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1681,8 +1717,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the race reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the race reference data
-   *     is specific to
+   * @param tenantId the ID for the tenant the race reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
    *     data for
    * @return the race reference data
@@ -1717,8 +1752,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<Race> getRaces(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the race reference data is specific to",
+              description = "The ID for the tenant the race reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1742,8 +1776,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the residence permit type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residence permit
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the residence permit type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
    *     type reference data for
    * @return the residence permit type reference data
@@ -1783,7 +1816,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the residence permit type reference data is specific to",
+                  "The ID for the tenant the residence permit type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1807,8 +1840,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the residency status reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residency status
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the residency status reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
    *     reference data for
    * @return the residency status reference data
@@ -1848,7 +1880,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the residency status reference data is specific to",
+                  "The ID for the tenant the residency status reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1872,8 +1904,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the residential type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residential type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the residential type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
    *     reference data for
    * @return the residential type reference data
@@ -1913,7 +1944,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the residential type reference data is specific to",
+                  "The ID for the tenant the residential type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1937,8 +1968,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the role purpose reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role purpose
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the role purpose reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
    *     reference data for
    * @return the role purpose reference data
@@ -1976,8 +2006,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<RolePurpose> getRolePurposes(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the role purpose reference data is specific to",
+              description = "The ID for the tenant the role purpose reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -2097,8 +2126,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the role type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role type reference
-   *     data is specific to
+   * @param tenantId the ID for the tenant the role type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the role type
    *     reference data for
    * @return the role type reference data
@@ -2133,8 +2161,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<RoleType> getRoleTypes(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the role type reference data is specific to",
+              description = "The ID for the tenant the role type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -2156,10 +2183,73 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the segmentation type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the segmentation type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segmentation type
+   *     reference data for
+   * @return the segmentation type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the segmentation type reference data could not be
+   *     retrieved
+   */
+  @Operation(
+      summary = "Retrieve the segmentation type reference data for a specific locale",
+      description = "Retrieve the segmentation type reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/segmentation-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<SegmentationType> getSegmentationTypes(
+      @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The ID for the tenant the segmentation type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the segmentation type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSegmentationTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the segment reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the segment reference
-   *     data is specific to
+   * @param tenantId the ID for the tenant the segment reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
    *     data for
    * @return the segment reference data
@@ -2194,8 +2284,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<Segment> getSegments(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the segment reference data is specific to",
+              description = "The ID for the tenant the segment reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -2219,8 +2308,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the source of funds type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of funds
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the source of funds type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
    *     type reference data
    * @return the source of funds type reference data
@@ -2260,7 +2348,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the source of funds type reference data is specific to",
+                  "The ID for the tenant the source of funds type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -2284,8 +2372,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the source of wealth type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of wealth
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the source of wealth type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
    *     type reference data for
    * @return the source of wealth type reference data
@@ -2325,7 +2412,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the source of wealth type reference data is specific to",
+                  "The ID for the tenant the source of wealth type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -2349,8 +2436,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the status type category reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
-   *     category reference data is specific to
+   * @param tenantId the ID for the tenant the status type category reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
    *     category reference data for
    * @return the status type category reference data
@@ -2390,7 +2476,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the status type category reference data is specific to",
+                  "The ID for the tenant the status type category reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -2414,8 +2500,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the status type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the status type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
    *     reference data for
    * @return the status type reference data
@@ -2453,8 +2538,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<StatusType> getStatusTypes(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the status type reference data is specific to",
+              description = "The ID for the tenant the status type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -2478,8 +2562,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the tax number type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the tax number type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the tax number type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
    *     reference data for
    * @return the tax number type reference data
@@ -2519,7 +2602,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the tax number type reference data is specific to",
+                  "The ID for the tenant the tax number type reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -2543,8 +2626,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the times to contact reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the times to contact
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the times to contact reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
    *     reference data for
    * @return the times to contact reference data
@@ -2584,7 +2666,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The Universally Unique Identifier (UUID) for the tenant the times to contact reference data is specific to",
+                  "The ID for the tenant the times to contact reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -2608,8 +2690,7 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the title reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the title reference
-   *     data is specific to
+   * @param tenantId the ID for the tenant the title reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
    *     data for
    * @return the title reference data
@@ -2644,8 +2725,7 @@ public class PartyReferenceApi extends SecureApi {
   public List<Title> getTitles(
       @Parameter(
               name = "Tenant-ID",
-              description =
-                  "The Universally Unique Identifier (UUID) for the tenant the title reference data is specific to",
+              description = "The ID for the tenant the title reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",

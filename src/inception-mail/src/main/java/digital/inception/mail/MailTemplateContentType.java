@@ -33,8 +33,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "MailTemplateContentType", namespace = "http://inception.digital/mail")
 public enum MailTemplateContentType {
+  /** Text. */
   @XmlEnumValue("Text")
   TEXT("text", "Text"),
+
+  /** HTML. */
   @XmlEnumValue("HTML")
   HTML("html", "HTML");
 

@@ -43,13 +43,21 @@ import {UserDirectorySummary} from '../services/user-directory-summary';
 export class TenantUserDirectoriesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   allUserDirectories: UserDirectorySummary[] = [];
+
   availableUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>();
+
   dataSource = new MatTableDataSource<UserDirectorySummary>([]);
+
   displayedColumns = ['existingUserDirectoryName', 'actions'];
+
   filteredUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>();
+
   newUserDirectoryFormControl: FormControl;
+
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+
   tenantId: string;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,

@@ -34,10 +34,7 @@ public class LanguageProficiencyId implements Serializable {
   /** The ISO 639-1 alpha-2 code for the language. */
   private String language;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the person the language proficiency is associated
-   * with.
-   */
+  /** The ID for the person the language proficiency is associated with. */
   private UUID person;
 
   /**

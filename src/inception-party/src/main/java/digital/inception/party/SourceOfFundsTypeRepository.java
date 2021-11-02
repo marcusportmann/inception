@@ -29,9 +29,23 @@ import org.springframework.data.jpa.repository.Query;
 public interface SourceOfFundsTypeRepository
     extends JpaRepository<SourceOfFundsType, SourceOfFundsTypeId> {
 
+  /**
+   * Retrieve all the source of funds types sorted by locale ID, sort index, and name.
+   *
+   * @return all the source of funds types sorted by locale ID, sort index, and name.
+   */
   @Query("select soft from SourceOfFundsType soft order by -soft.sortIndex DESC, soft.name")
   List<SourceOfFundsType> findAll();
 
+  /**
+   * Retrieve the source of funds types for the specified locale sorted by locale ID, sort index,
+   * and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the sources of funds
+   *     types for
+   * @return the source of funds types for the specified locale sorted by locale ID, sort index, and
+   *     name
+   */
   @Query(
       "select soft from SourceOfFundsType soft where upper(soft.localeId) = upper(:localeId) order by -soft.sortIndex DESC, soft.name")
   List<SourceOfFundsType> findByLocaleIdIgnoreCase(String localeId);

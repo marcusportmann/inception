@@ -27,9 +27,20 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface RaceRepository extends JpaRepository<Race, RaceId> {
 
+  /**
+   * Retrieve all the races sorted by locale ID, sort index, and name.
+   *
+   * @return all the races sorted by locale ID, sort index, and name.
+   */
   @Query("select r from Race r order by r.localeId, -r.sortIndex DESC, r.name")
   List<Race> findAll();
 
+  /**
+   * Retrieve the races for the specified locale sorted by locale ID, sort index, and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the races for
+   * @return the races for the specified locale sorted by locale ID, sort index, and name
+   */
   @Query(
       "select r from Race r where upper(r.localeId) = upper(:localeId) order by r.localeId, -r.sortIndex DESC, r.name")
   List<Race> findByLocaleIdIgnoreCase(String localeId);

@@ -54,8 +54,8 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the association property type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association
-   *     property type reference data is specific to
+   * @param tenantId the ID for the tenant the association property type reference data is specific
+   *     to
    * @param localeId the Unicode locale identifier for the locale to retrieve the association
    *     property type reference data for
    * @return the association property type reference data
@@ -74,8 +74,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the association type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the association type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the association type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the association type
    *     reference data for
    * @return the association type reference data
@@ -94,8 +93,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the attribute type category reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
-   *     category reference data is specific to
+   * @param tenantId the ID for the tenant the attribute type category reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
    *     category reference data for
    * @return the attribute type category reference data
@@ -114,8 +112,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the attribute type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the attribute type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the attribute type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
    *     reference data for
    * @return the attribute type reference data
@@ -133,8 +130,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the consent type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the consent type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the consent type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the consent type
    *     reference data for
    * @return the consent type reference data
@@ -152,8 +148,8 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the contact mechanism purpose reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
-   *     purpose reference data is specific to
+   * @param tenantId the ID for the tenant the contact mechanism purpose reference data is specific
+   *     to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     purpose reference data for
    * @return the contact mechanism purpose reference data
@@ -172,8 +168,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the contact mechanism role reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
-   *     role reference data is specific to
+   * @param tenantId the ID for the tenant the contact mechanism role reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     role reference data for
    * @return the contact mechanism role reference data
@@ -192,8 +187,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the contact mechanism type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the contact mechanism
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the contact mechanism type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
    *     type reference data for
    * @return the contact mechanism type reference data
@@ -212,8 +206,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the employment status reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment status
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the employment status reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment status
    *     reference data for
    * @return the employment status reference data
@@ -232,8 +225,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the employment type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the employment type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the employment type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment type
    *     reference data for
    * @return the employment type reference data
@@ -250,10 +242,28 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the external reference type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the external reference type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
+   *     type reference data for
+   * @return the external reference type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the external reference type reference data could not be
+   *     retrieved
+   */
+  @WebMethod(operationName = "GetExternalReferenceTypes")
+  public List<ExternalReferenceType> getExternalReferenceTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getExternalReferenceTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the fields of study reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the fields of study
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the fields of study reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the fields of study
    *     reference data for
    * @return the fields of study reference data
@@ -272,8 +282,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the gender reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the gender reference
-   *     data is specific to
+   * @param tenantId the ID for the tenant the gender reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the gender reference
    *     data for
    * @return the gender reference data
@@ -291,8 +300,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the identity document type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the identity document
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the identity document type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
    *     type reference data for
    * @return the identity document type reference data
@@ -311,8 +319,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the lock type category reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type category
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the lock type category reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
    *     reference data for
    * @return the lock type category reference data
@@ -331,8 +338,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the lock type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the lock type reference
-   *     data is specific to
+   * @param tenantId the ID for the tenant the lock type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
    *     reference data for
    * @return the lock type reference data
@@ -350,8 +356,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the marital status reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marital status
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the marital status reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital status
    *     reference data for
    * @return the marital status reference data
@@ -369,8 +374,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the marriage type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the marriage type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the marriage type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the marriage type
    *     reference data
    * @return the marriage type reference data
@@ -388,8 +392,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the next of kin type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the next of kin type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the next of kin type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin type
    *     reference data for
    * @return the next of kin type reference data
@@ -408,8 +411,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the occupation reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the occupation
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the occupation reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the occupation
    *     reference data for
    * @return the occupation reference data
@@ -427,8 +429,8 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the physical address purpose reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
-   *     purpose reference data is specific to
+   * @param tenantId the ID for the tenant the physical address purpose reference data is specific
+   *     to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     purpose reference data for
    * @return the physical address purpose reference data
@@ -447,8 +449,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the physical address role reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
-   *     role reference data is specific to
+   * @param tenantId the ID for the tenant the physical address role reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     role reference data for
    * @return the physical address role reference data
@@ -467,8 +468,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the physical address type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the physical address
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the physical address type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
    *     type reference data for
    * @return the physical address type reference data
@@ -487,8 +487,8 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the preference type category reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
-   *     category reference data is specific to
+   * @param tenantId the ID for the tenant the preference type category reference data is specific
+   *     to
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
    *     category reference data for
    * @return the preference type category reference data
@@ -507,8 +507,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the preference type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the preference type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the preference type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
    *     reference data for
    * @return the preference type reference data
@@ -527,8 +526,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the qualification type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the qualification type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the qualification type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the qualification type
    *     reference data for
    * @return the qualification type reference data
@@ -547,8 +545,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the race reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the race reference data
-   *     is specific to
+   * @param tenantId the ID for the tenant the race reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the race reference
    *     data for
    * @return the race reference data
@@ -566,8 +563,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the residence permit type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residence permit
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the residence permit type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
    *     type reference data for
    * @return the residence permit type reference data
@@ -586,8 +582,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the residency status reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residency status
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the residency status reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the residency status
    *     reference data for
    * @return the residency status reference data
@@ -606,8 +601,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the residential type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the residential type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the residential type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the residential type
    *     reference data for
    * @return the residential type reference data
@@ -626,8 +620,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the role purpose reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role purpose
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the role purpose reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the role purpose
    *     reference data for
    * @return the role purpose reference data
@@ -677,8 +670,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the role type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the role type reference
-   *     data is specific to
+   * @param tenantId the ID for the tenant the role type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the role type
    *     reference data for
    * @return the role type reference data
@@ -694,10 +686,28 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the segmentation type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the segmentation type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the segmentation type
+   *     reference data for
+   * @return the segmentation type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the segmentation type reference data could not be
+   *     retrieved
+   */
+  @WebMethod(operationName = "GetSegmentationTypes")
+  public List<SegmentationType> getSegmentationTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSegmentationTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the segment reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the segment reference
-   *     data is specific to
+   * @param tenantId the ID for the tenant the segment reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
    *     data for
    * @return the segment reference data
@@ -715,8 +725,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the source of funds type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of funds
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the source of funds type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds
    *     type reference data
    * @return the source of funds type reference data
@@ -735,8 +744,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the source of wealth type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the source of wealth
-   *     type reference data is specific to
+   * @param tenantId the ID for the tenant the source of wealth type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of wealth
    *     type reference data for
    * @return the source of wealth type reference data
@@ -755,8 +763,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the status type category reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
-   *     category reference data is specific to
+   * @param tenantId the ID for the tenant the status type category reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
    *     category reference data for
    * @return the status type category reference data
@@ -775,8 +782,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the status type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the status type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the status type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the status type
    *     reference data for
    * @return the status type reference data
@@ -794,8 +800,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the tax number type reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the tax number type
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the tax number type reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the tax number type
    *     reference data for
    * @return the tax number type reference data
@@ -814,8 +819,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the times to contact reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the times to contact
-   *     reference data is specific to
+   * @param tenantId the ID for the tenant the times to contact reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
    *     reference data for
    * @return the times to contact reference data
@@ -834,8 +838,7 @@ public class PartyReferenceWebService {
   /**
    * Retrieve the title reference data for a specific locale.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the title reference
-   *     data is specific to
+   * @param tenantId the ID for the tenant the title reference data is specific to
    * @param localeId the Unicode locale identifier for the locale to retrieve the title reference
    *     data for
    * @return the title reference data

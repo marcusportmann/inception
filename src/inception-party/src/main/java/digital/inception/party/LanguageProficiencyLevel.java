@@ -38,14 +38,23 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "LanguageProficiencyLevel", namespace = "http://inception.digital/party")
 public enum LanguageProficiencyLevel {
+  /** Beginner. */
   @XmlEnumValue("Beginner")
   BEGINNER("beginner", "Beginner"),
+
+  /** Elementary. */
   @XmlEnumValue("Elementary")
   ELEMENTARY("elementary", "Elementary"),
+
+  /** Intermediate. */
   @XmlEnumValue("Intermediate")
   INTERMEDIATE("intermediate", "Intermediate"),
+
+  /** Advanced. */
   @XmlEnumValue("Advanced")
   ADVANCED("advanced", "Advanced"),
+
+  /** Proficient. */
   @XmlEnumValue("Proficient")
   PROFICIENT("proficient", "Proficient");
 

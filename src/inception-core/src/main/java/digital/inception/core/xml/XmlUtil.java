@@ -153,8 +153,8 @@ public class XmlUtil {
    *
    * @param element the parent element
    * @param name the name of the child element to return
-   * @return an Optional containing the text content for the child element or an empty Optional if
-   *     a child element with the specified name could not be found
+   * @return an Optional containing the text content for the child element or an empty Optional if a
+   *     child element with the specified name could not be found
    */
   public static Optional<String> getChildElementText(Element element, String name) {
     NodeList nodeList = element.getChildNodes();

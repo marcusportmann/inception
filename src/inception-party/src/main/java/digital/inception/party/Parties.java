@@ -43,6 +43,7 @@ import javax.xml.bind.annotation.XmlType;
   "parties",
   "total",
   "filter",
+  "sortBy",
   "sortDirection",
   "pageIndex",
   "pageSize"
@@ -56,6 +57,7 @@ import javax.xml.bind.annotation.XmlType;
       "parties",
       "total",
       "filter",
+      "sortBy",
       "sortDirection",
       "pageIndex",
       "pageSize"
@@ -91,17 +93,20 @@ public class Parties implements Serializable {
   @XmlElement(name = "Party", required = true)
   private List<Party> parties;
 
+  /** The optional method used to sort the parties e.g. by name. */
+  @Schema(description = "The optional method used to sort the parties e.g. by name")
+  @JsonProperty
+  @XmlElement(name = "SortBy")
+  private PartySortBy sortBy;
+
   /** The optional sort direction that was applied to the parties. */
   @Schema(description = "The optional sort direction that was applied to the parties")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The Universally Unique Identifier (UUID) for the tenant the parties are associated with. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the tenant the parties are associated with",
-      required = true)
+  /** The ID for the tenant the parties are associated with. */
+  @Schema(description = "The ID for the tenant the parties are associated with", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
   private UUID tenantId;
@@ -118,11 +123,11 @@ public class Parties implements Serializable {
   /**
    * Constructs a new <b>Parties</b>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the parties are
-   *     associated with
+   * @param tenantId the ID for the tenant the parties are associated with
    * @param parties the parties
    * @param total the total number of parties
    * @param filter the optional filter that was applied to the parties
+   * @param sortBy the optional method used to sort the parties e.g. by name
    * @param sortDirection the optional sort direction that was applied to the parties
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -132,6 +137,7 @@ public class Parties implements Serializable {
       List<Party> parties,
       long total,
       String filter,
+      PartySortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
@@ -139,6 +145,7 @@ public class Parties implements Serializable {
     this.parties = parties;
     this.total = total;
     this.filter = filter;
+    this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
@@ -181,6 +188,15 @@ public class Parties implements Serializable {
   }
 
   /**
+   * Returns the optional method used to sort the parties e.g. by name.
+   *
+   * @return the optional method used to sort the parties
+   */
+  public PartySortBy getSortBy() {
+    return sortBy;
+  }
+
+  /**
    * Returns the optional sort direction that was applied to the parties.
    *
    * @return the optional sort direction that was applied to the parties
@@ -190,10 +206,9 @@ public class Parties implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the parties are associated
-   * with.
+   * Returns the ID for the tenant the parties are associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the parties are associated with
+   * @return the ID for the tenant the parties are associated with
    */
   public UUID getTenantId() {
     return tenantId;

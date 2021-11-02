@@ -28,9 +28,22 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface MaritalStatusRepository extends JpaRepository<MaritalStatus, MaritalStatusId> {
 
+  /**
+   * Retrieve all the marital statuses sorted by locale ID, sort index, and name.
+   *
+   * @return all the marital statuses sorted by locale ID, sort index, and name.
+   */
   @Query("select ms from MaritalStatus ms order by ms.localeId, -ms.sortIndex DESC, ms.name")
   List<MaritalStatus> findAll();
 
+  /**
+   * Retrieve the marital statuses for the specified locale sorted by locale ID, sort index, and
+   * name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
+   *     for
+   * @return the marital statuses for the specified locale sorted by locale ID, sort index, and name
+   */
   @Query(
       "select ms from MaritalStatus ms where upper(ms.localeId) = upper(:localeId) order by ms.localeId, -ms.sortIndex DESC, ms.name")
   List<MaritalStatus> findByLocaleIdIgnoreCase(String localeId);

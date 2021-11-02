@@ -22,7 +22,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>MessagingApiConfiguration</b> class provides the Spring configuration for the Messaging API module.
+ * The <b>MessagingApiConfiguration</b> class provides the Spring configuration for the Messaging
+ * API module.
  *
  * @author Marcus Portmann
  */

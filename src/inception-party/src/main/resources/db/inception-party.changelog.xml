@@ -856,7 +856,30 @@
       <column name="locale_id"/>
     </createIndex>
 
+    <createTable schemaName="party" tableName="segmentation_types" remarks="Segmentation Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the segmentation type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the segmentation type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the segmentation type is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the segmentation type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the segmentation type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the segmentation type">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex indexName="segmentation_types_locale_id_ix" schemaName="party" tableName="segmentation_types">
+      <column name="locale_id"/>
+    </createIndex>    
+
     <createTable schemaName="party" tableName="segments" remarks="Segments">
+      <column name="type" type="nvarchar(30)" remarks="The code for the segmentation type for the segment">
+        <constraints nullable="false"/>
+      </column>
       <column name="code" type="nvarchar(30)" remarks="The code for the segment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -875,6 +898,13 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+    <addForeignKeyConstraint constraintName="segments_segmentation_type_fk" baseTableSchemaName="party"
+      baseTableName="segments" baseColumnNames="type, locale_id" referencedTableSchemaName="party"
+      referencedTableName="segmentation_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
+    <createIndex indexName="segments_type_ix" schemaName="party" tableName="segments">
+      <column name="type"/>
+    </createIndex>
+
     <createIndex indexName="segments_locale_id_ix" schemaName="party" tableName="segments">
       <column name="locale_id"/>
     </createIndex>
@@ -1643,10 +1673,16 @@
       <column name="data" type="${json_type}" remarks="The JSON data for the entity">
         <constraints nullable="false"/>
       </column>
+      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the snapshot is associated with">
+        <constraints nullable="false"/>
+      </column>
       <column name="timestamp" type="timestamp" remarks="The date and time the snapshot was created">
         <constraints nullable="false"/>
       </column>
     </createTable>
+    <createIndex indexName="snapshots_tenant_id_ix" schemaName="party" tableName="snapshots">
+      <column name="tenant_id"/>
+    </createIndex>
     <createIndex indexName="snapshots_timestamp_ix" schemaName="party" tableName="snapshots">
       <column name="timestamp"/>
     </createIndex>

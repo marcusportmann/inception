@@ -31,14 +31,51 @@ import org.springframework.data.repository.query.Param;
  */
 public interface PersonRepository extends JpaRepository<Person, UUID> {
 
+  /**
+   * Delete the person.
+   *
+   * @param tenantId the ID for the tenant
+   * @param id the ID for the person
+   */
   void deleteByTenantIdAndId(UUID tenantId, UUID id);
 
+  /**
+   * Check whether the person exists.
+   *
+   * @param tenantId the ID for the tenant
+   * @param id the ID for the person
+   * @return <b>true</b> if the person exists or <b>false</b> otherwise
+   */
   boolean existsByTenantIdAndId(UUID tenantId, UUID id);
 
+  /**
+   * Retrieve the persons for the tenant.
+   *
+   * @param tenantId the ID for the tenant
+   * @param pageable the pagination information
+   * @return the persons for the tenant
+   */
   Page<Person> findByTenantId(UUID tenantId, Pageable pageable);
 
+  /**
+   * Retrieve the person.
+   *
+   * @param tenantId the ID for the tenant
+   * @param id the ID for the person
+   * @return an Optional containing the person or an empty Optional if the person could not be found
+   */
   Optional<Person> findByTenantIdAndId(UUID tenantId, UUID id);
 
-  @Query("select p from Person p where (lower(p.name) like lower(:filter))")
-  Page<Person> findFiltered(@Param("filter") String filter, Pageable pageable);
+  /**
+   * Retrieve the filtered persons for the tenant.
+   *
+   * @param tenantId the ID for the tenant
+   * @param filter the filter to apply to the persons
+   * @param pageable the pagination information
+   * @return the filtered persons for the tenant
+   */
+  @Query(
+      "select p from Person p where (p.tenantId = :tenantId) and (lower(p.name) like lower(:filter))")
+  Page<Person> findFiltered(
+      @Param("tenantId") UUID tenantId, @Param("filter") String filter, Pageable pageable);
 }
