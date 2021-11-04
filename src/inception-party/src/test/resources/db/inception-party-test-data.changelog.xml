@@ -1236,7 +1236,9 @@
       <column name="name" value="Test Association Type"/>
       <column name="description" value="Test Association Type"/>
       <column name="first_party_role" value="test_first_person_role"/>
+      <column name="first_party_types" value="organization,person"/>
       <column name="second_party_role" value="test_second_person_role"/>
+      <column name="second_party_types" value="organization,person"/>
     </insert>
 
     <insert schemaName="party" tableName="association_types">
@@ -1246,7 +1248,9 @@
       <column name="name" value="Test Association Type"/>
       <column name="description" value="Test Association Type"/>
       <column name="first_party_role" value="test_first_person_role"/>
+      <column name="first_party_types" value="organization,person"/>
       <column name="second_party_role" value="test_second_person_role"/>
+      <column name="second_party_types" value="organization,person"/>
     </insert>
 
 

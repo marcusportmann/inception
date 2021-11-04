@@ -100,12 +100,18 @@ export class ReferenceService {
   /**
    * Retrieve the regions.
    *
+   * @param country The ISO 3166-1 alpha-2 code for the country to retrieve the regions for.
+   *
    * @return The regions.
    */
-  getRegions(): Observable<Region[]> {
+  getRegions(country?: string): Observable<Region[]> {
     let params = new HttpParams();
 
     params = params.append('localeId', this.localeId);
+
+    if (!!country) {
+      params = params.append('country', country);
+    }
 
     return this.httpClient.get<Region[]>(this.config.referenceApiUrlPrefix + '/regions',
       {params, reportProgress: true})

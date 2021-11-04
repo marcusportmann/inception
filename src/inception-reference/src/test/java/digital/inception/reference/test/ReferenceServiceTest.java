@@ -192,6 +192,16 @@ public class ReferenceServiceTest {
     retrievedRegions = referenceService.getRegions();
 
     assertEquals(18, retrievedRegions.size(), "The correct number of regions was not retrieved");
+
+    retrievedRegions =
+        referenceService.getRegions(IReferenceService.DEFAULT_LOCALE_ID, "ZA");
+
+    assertEquals(9, retrievedRegions.size(), "The correct number of regions was not retrieved");
+
+    retrievedRegions =
+        referenceService.getRegions(IReferenceService.DEFAULT_LOCALE_ID, "GB");
+
+    assertEquals(0, retrievedRegions.size(), "The correct number of regions was not retrieved");
   }
 
   /** Test the time zone reference functionality. */

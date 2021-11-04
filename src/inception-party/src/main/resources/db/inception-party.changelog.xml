@@ -38,7 +38,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the attribute type category">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the attribute type category is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the attribute type category is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the attribute type category"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the attribute type category">
         <constraints nullable="false"/>
@@ -61,7 +61,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the attribute type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the attribute type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the attribute type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the attribute type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the attribute type">
         <constraints nullable="false"/>
@@ -94,7 +94,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the consent type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the consent type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the consent type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the consent type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the consent type">
         <constraints nullable="false"/>
@@ -114,7 +114,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the contact mechanism purpose">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the contact mechanism purpose is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the contact mechanism purpose is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the contact mechanism purpose"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the contact mechanism purpose">
         <constraints nullable="false"/>
@@ -140,7 +140,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the contact mechanism type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the contact mechanism type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the contact mechanism type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the contact mechanism type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the contact mechanism type">
         <constraints nullable="false"/>
@@ -166,7 +166,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the contact mechanism role">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the contact mechanism role is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the contact mechanism role is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the contact mechanism role"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the contact mechanism role">
         <constraints nullable="false"/>
@@ -199,7 +199,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the employment status">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the employment status is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the employment status is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the employment status"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the employment status">
         <constraints nullable="false"/>
@@ -222,7 +222,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the employment type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the employment type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the employment type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the employment type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the employment type">
         <constraints nullable="false"/>
@@ -248,7 +248,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the external reference type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the external reference type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the external reference type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the external reference type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the external reference type">
         <constraints nullable="false"/>
@@ -271,7 +271,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the field of study">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the field of study is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the field of study is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the field of study"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the field of study">
         <constraints nullable="false"/>
@@ -291,7 +291,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the gender">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the gender is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the gender is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the gender"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the gender">
         <constraints nullable="false"/>
@@ -311,7 +311,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the identity document type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the identity document type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the identity document type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the identity document type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the identity document type">
         <constraints nullable="false"/>
@@ -338,7 +338,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the lock type category">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the lock type category is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the lock type category is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the lock type category"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the lock type category">
         <constraints nullable="false"/>
@@ -361,7 +361,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the lock type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the lock type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the lock type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the lock type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the lock type">
         <constraints nullable="false"/>
@@ -390,7 +390,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the marital status">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the marital status is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the marital status is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the marital status"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the marital status">
         <constraints nullable="false"/>
@@ -413,7 +413,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the marriage type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the marriage type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the marriage type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the marriage type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the marriage type">
         <constraints nullable="false"/>
@@ -439,7 +439,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the minor type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the minor type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the minor type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the minor type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the minor type">
         <constraints nullable="false"/>
@@ -459,7 +459,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the next of kin type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the next of kin type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the next of kin type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the next of kin type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the next of kin type">
         <constraints nullable="false"/>
@@ -479,7 +479,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the occupation">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the occupation is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the occupation is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the occupation"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the occupation">
         <constraints nullable="false"/>
@@ -499,7 +499,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the physical address type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the physical address type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the physical address type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the physical address type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the physical address type">
         <constraints nullable="false"/>
@@ -519,7 +519,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the physical address purpose">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the physical address purpose is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the physical address purpose is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the physical address purpose"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the physical address purpose">
         <constraints nullable="false"/>
@@ -542,7 +542,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the physical address role">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the physical address role is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the physical address role is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the physical address role"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the physical address role">
         <constraints nullable="false"/>
@@ -565,7 +565,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the preference type category">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the preference type category is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the preference type category is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the preference type category"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the preference type category">
         <constraints nullable="false"/>
@@ -588,7 +588,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the preference type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the preference type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the preference type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the preference type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the preference type">
         <constraints nullable="false"/>
@@ -618,7 +618,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="field_of_study" type="nvarchar(50)" remarks="The code for the field of study for the qualification type"/>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the qualification type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the qualification type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the qualification type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the qualification type">
         <constraints nullable="false"/>
@@ -641,7 +641,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the race">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the race is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the race is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the race"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the race">
         <constraints nullable="false"/>
@@ -661,7 +661,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the residence permit type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the residence permit type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the residence permit type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the residence permit type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the residence permit type">
         <constraints nullable="false"/>
@@ -687,7 +687,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the residency status">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the residency status is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the residency status is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the residency status"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the residency status">
         <constraints nullable="false"/>
@@ -707,7 +707,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the residential type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the residential type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the residential type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the residential type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the residential type">
         <constraints nullable="false"/>
@@ -727,7 +727,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the role purpose">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the role purpose is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the role purpose is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the role purpose"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the role purpose">
         <constraints nullable="false"/>
@@ -747,7 +747,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the role type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the role type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the role type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the role type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the role type">
         <constraints nullable="false"/>
@@ -799,7 +799,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the association type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the association type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the association type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the association type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the association type">
         <constraints nullable="false"/>
@@ -810,7 +810,13 @@
       <column name="first_party_role" type="nvarchar(30)" remarks="The code for the role type for the first party in the association">
         <constraints nullable="false"/>
       </column>
+      <column name="first_party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types for the first party in the association">
+        <constraints nullable="false"/>
+      </column>
       <column name="second_party_role" type="nvarchar(30)" remarks="The code for the role type for the second party in the association">
+        <constraints nullable="false"/>
+      </column>
+      <column name="second_party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types for the second party in the association">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -834,7 +840,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the association property type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the association property type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the association property type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the association property type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the association property type">
         <constraints nullable="false"/>
@@ -863,7 +869,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the segmentation type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the segmentation type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the segmentation type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the segmentation type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the segmentation type">
         <constraints nullable="false"/>
@@ -886,7 +892,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the segment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the segment is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the segment is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the segment"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the segment">
         <constraints nullable="false"/>
@@ -916,7 +922,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the source of funds type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the source of funds type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the source of funds type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the source of funds type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the source of funds type">
         <constraints nullable="false"/>
@@ -936,7 +942,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the source of wealth type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the source of wealth type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the source of wealth type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the source of wealth type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the source of wealth type">
         <constraints nullable="false"/>
@@ -956,7 +962,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the status type category">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the status type category is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the status type category is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the status type category"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the status type category">
         <constraints nullable="false"/>
@@ -979,7 +985,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the status type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the status type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the status type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the status type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the status type">
         <constraints nullable="false"/>
@@ -1008,7 +1014,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the tax number type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the tax number type is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the tax number type is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the tax number type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the tax number type">
         <constraints nullable="false"/>
@@ -1037,7 +1043,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the time to contact">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the time to contact is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the time to contact is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the time to contact"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the time to contact">
         <constraints nullable="false"/>
@@ -1057,7 +1063,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the title">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the title is specific to"/>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the title is specific to"/>
       <column name="sort_index" type="int" remarks="The sort index for the title"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the title">
         <constraints nullable="false"/>
@@ -1077,19 +1083,19 @@
 
 
     <createTable schemaName="party" tableName="parties" remarks="Parties">
-      <column name="created" type="timestamp" remarks="The date and time the party was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party">
+      <column name="id" type="uuid" remarks="The ID for the party">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the party is associated with">
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the party is associated with">
         <constraints nullable="false"/>
       </column>
       <column name="type" type="nvarchar(30)" remarks="The code for the party type">
         <constraints nullable="false"/>
       </column>
       <column name="name" type="nvarchar(100)" remarks="The name for the party">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created" type="timestamp" remarks="The date and time the party was created">
         <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the party was last updated"/>
@@ -1100,7 +1106,7 @@
 
     <createTable schemaName="party" tableName="organizations" remarks="Organizations">
       <column name="countries_of_tax_residence" type="nvarchar(30)" remarks="The comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization"/>
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the organization">
+      <column name="id" type="uuid" remarks="The ID for the organization">
         <constraints primaryKey="true" nullable="false"/>
       </column>
     </createTable>
@@ -1120,7 +1126,7 @@
       <column name="gender" type="nvarchar(30)" remarks="The code for the gender for the person"/>
       <column name="given_name" type="nvarchar(100)" remarks="The given name for the person"/>
       <column name="highest_qualification_type" type="nvarchar(30)" remarks="The code for the highest qualification type for the person"/>
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the person">
+      <column name="id" type="uuid" remarks="The ID for the person">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="initials" type="nvarchar(20)" remarks="The initials for the person"/>
@@ -1154,24 +1160,24 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="associations" remarks="Associations">
-      <column name="created" type="timestamp" remarks="The date and time the association was created">
+      <column name="id" type="uuid" remarks="The ID for the association">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the association is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the association type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="first_party_id" type="uuid" remarks="The ID for the first party in the association">
+        <constraints nullable="false"/>
+      </column>
+      <column name="second_party_id" type="uuid" remarks="The ID for the second party in the association">
         <constraints nullable="false"/>
       </column>
       <column name="effective_from" type="date" remarks="The date that the association is effective from"/>
       <column name="effective_to" type="date" remarks="The date that the association is effective to"/>
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the association">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="first_party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the first party in the association">
-        <constraints nullable="false"/>
-      </column>
-      <column name="second_party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the second party in the association">
-        <constraints nullable="false"/>
-      </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the association is associated with">
-        <constraints nullable="false"/>
-      </column>
-      <column name="type" type="nvarchar(30)" remarks="The code for the association type">
+      <column name="created" type="timestamp" remarks="The date and time the association was created">
         <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the association was last updated"/>
@@ -1196,22 +1202,22 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="association_properties" remarks="Association Properties">
-      <column name="created" type="timestamp" remarks="The date and time the association property was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="association_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the association the association property is associated with">
+      <column name="association_id" type="uuid" remarks="The ID for the association the association property is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(30)" remarks="The code for the association property type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="updated" type="timestamp" remarks="The date and time the association property was last updated"/>
       <column name="boolean_value" type="boolean" remarks="The boolean value for the association property"/>
       <column name="date_value" type="date" remarks="The date value for the association property"/>
       <column name="decimal_value" type="decimal(18,8)" remarks="The decimal value for the association property"/>
       <column name="double_value" type="double" remarks="The double value for the association property"/>
       <column name="integer_value" type="int" remarks="The integer value for the association property"/>
       <column name="string_value" type="nvarchar(200)" remarks="The string value for the association property"/>
+      <column name="created" type="timestamp" remarks="The date and time the association property was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the association property was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="association_properties_association_fk" baseTableSchemaName="party"
       baseTableName="association_properties" baseColumnNames="association_id" referencedTableSchemaName="party"
@@ -1221,10 +1227,7 @@
     </createIndex>    
     
     <createTable schemaName="party" tableName="attributes" remarks="Attributes">
-      <column name="created" type="timestamp" remarks="The date and time the attribute was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the attribute is associated with">
+      <column name="party_id" type="uuid" remarks="The ID for the party the attribute is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(30)" remarks="The code for the attribute type">
@@ -1237,6 +1240,9 @@
       <column name="integer_value" type="int" remarks="The integer value for the attribute"/>
       <column name="string_value" type="nvarchar(200)" remarks="The string value for the attribute"/>
       <column name="unit" type="nvarchar(30)" remarks="The code for the measurement unit for the attribute"/>
+      <column name="created" type="timestamp" remarks="The date and time the attribute was created">
+        <constraints nullable="false"/>
+      </column>
       <column name="updated" type="timestamp" remarks="The date and time the attribute was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="attributes_party_fk" baseTableSchemaName="party"
@@ -1247,16 +1253,16 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="consents" remarks="Consents">
-      <column name="created" type="timestamp" remarks="The date and time the consent was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="effective_from" type="date" remarks="The date that the consent is effective from"/>
-      <column name="effective_to" type="date" remarks="The date that the consent is effective to"/>
-      <column name="person_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the person the consent is associated with">
+      <column name="person_id" type="uuid" remarks="The ID for the person the consent is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(30)" remarks="'The code for the consent type">
         <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="effective_from" type="date" remarks="The date that the consent is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the consent is effective to"/>
+      <column name="created" type="timestamp" remarks="The date and time the consent was created">
+        <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the consent was last updated"/>
     </createTable>
@@ -1268,23 +1274,23 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="contact_mechanisms" remarks="Contact Mechanisms">
-      <column name="created" type="timestamp" remarks="The date and time the contact mechanism was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the contact mechanism is associated with">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="purposes" type="nvarchar(310)" remarks="The comma-delimited codes for the contact mechanism purposes"/>
-      <column name="role" type="nvarchar(30)" remarks="The code for the contact mechanism role">
+      <column name="party_id" type="uuid" remarks="The ID for the party the contact mechanism is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(30)" remarks="The code for the contact mechanism type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="updated" type="timestamp" remarks="The date and time the contact mechanism was last updated"/>
+      <column name="role" type="nvarchar(30)" remarks="The code for the contact mechanism role">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="purposes" type="nvarchar(310)" remarks="The comma-delimited codes for the contact mechanism purposes"/>
       <column name="value" type="nvarchar(200)" remarks="The value for the contact mechanism">
         <constraints nullable="false"/>
       </column>
+      <column name="created" type="timestamp" remarks="The date and time the contact mechanism was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the contact mechanism was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="contact_mechanisms_party_fk" baseTableSchemaName="party"
       baseTableName="contact_mechanisms" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1294,27 +1300,27 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="educations" remarks="Educations">
-      <column name="created" type="timestamp" remarks="The date and time the education was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="field_of_study" type="nvarchar(50)" remarks="The code for the field of study"/>
-      <column name="first_year_attended" type="int" remarks="The first year attended"/>
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the education">
+      <column name="id" type="uuid" remarks="The ID for the education">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="institution_country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country the educational institution is located in"/>
-      <column name="institution_name" type="nvarchar(100)" remarks="The name of the educational institution">
+      <column name="person_id" type="uuid" remarks="The ID for the person the education is associated with">
         <constraints nullable="false"/>
       </column>
-      <column name="last_year_attended" type="int" remarks="The last year attended"/>
-      <column name="person_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the person the education is associated with">
-        <constraints nullable="false"/>
-      </column>
-      <column name="qualification_name" type="nvarchar(100)" remarks="The name of the qualification"/>
       <column name="qualification_type" type="nvarchar(30)" remarks="The code for the qualification type">
         <constraints nullable="false"/>
       </column>
       <column name="qualification_year" type="int" remarks="The year the qualification was obtained">
+        <constraints nullable="false"/>
+      </column>
+      <column name="qualification_name" type="nvarchar(100)" remarks="The name of the qualification"/>
+      <column name="institution_name" type="nvarchar(100)" remarks="The name of the educational institution">
+        <constraints nullable="false"/>
+      </column>
+      <column name="institution_country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country the educational institution is located in"/>
+      <column name="field_of_study" type="nvarchar(50)" remarks="The code for the field of study"/>
+      <column name="first_year_attended" type="int" remarks="The first year attended"/>
+      <column name="last_year_attended" type="int" remarks="The last year attended"/>
+      <column name="created" type="timestamp" remarks="The date and time the education was created">
         <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the education was last updated"/>
@@ -1327,36 +1333,37 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="employments" remarks="Employments">
-      <column name="created" type="timestamp" remarks="The date and time the employment was created">
+      <column name="id" type="uuid" remarks="The ID for the employment">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="person_id" type="uuid" remarks="The ID for the person the employment is associated with">
         <constraints nullable="false"/>
       </column>
-      <column name="employer_address_city" type="nvarchar(50)" remarks="The employer address city"/>
-      <column name="employer_address_country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the employer address country"/>
-      <column name="employer_address_line1" type="nvarchar(100)" remarks="The employer address line 1"/>
-      <column name="employer_address_line2" type="nvarchar(100)" remarks="The employer address line 2"/>
-      <column name="employer_address_line3" type="nvarchar(100)" remarks="The employer address line 3"/>
-      <column name="employer_address_line4" type="nvarchar(100)" remarks="The employer address line 4"/>
-      <column name="employer_address_postal_code" type="nvarchar(30)" remarks="The employer address postal code"/>
-      <column name="employer_address_region" type="nvarchar(30)" remarks="The ISO 3166-2 subdivision code for the employer address region"/>
-      <column name="employer_address_suburb" type="nvarchar(50)" remarks="The employer address suburb"/>
-      <column name="employer_contact_person" type="nvarchar(100)" remarks="The employer contact person"/>
-      <column name="employer_email_address" type="nvarchar(100)" remarks="The employer e-mail address"/>
       <column name="employer_name" type="nvarchar(100)" remarks="The employer name">
         <constraints nullable="false"/>
       </column>
       <column name="employer_phone_number" type="nvarchar(50)" remarks="The employer phone number"/>
-      <column name="end_date" type="date" remarks="The end date for the employment"/>
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the employment">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="occupation" type="nvarchar(30)" remarks="The code for the occupation for the employment"/>
-      <column name="person_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the person the employment is associated with">
-        <constraints nullable="false"/>
-      </column>
+      <column name="employer_email_address" type="nvarchar(100)" remarks="The employer e-mail address"/>
+      <column name="employer_contact_person" type="nvarchar(100)" remarks="The employer contact person"/>
+      <column name="employer_address_line1" type="nvarchar(100)" remarks="The employer address line 1"/>
+      <column name="employer_address_line2" type="nvarchar(100)" remarks="The employer address line 2"/>
+      <column name="employer_address_line3" type="nvarchar(100)" remarks="The employer address line 3"/>
+      <column name="employer_address_line4" type="nvarchar(100)" remarks="The employer address line 4"/>
+      <column name="employer_address_suburb" type="nvarchar(50)" remarks="The employer address suburb"/>
+      <column name="employer_address_city" type="nvarchar(50)" remarks="The employer address city"/>
+      <column name="employer_address_region" type="nvarchar(30)" remarks="The ISO 3166-2 subdivision code for the employer address region"/>
+      <column name="employer_address_country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for t
+      he employer address country"/>
+      <column name="employer_address_postal_code" type="nvarchar(30)" remarks="The employer address postal code"/>
       <column name="start_date" type="date" remarks="The start date for the employment">
         <constraints nullable="false"/>
       </column>
+      <column name="end_date" type="date" remarks="The end date for the employment"/>
       <column name="type" type="nvarchar(30)" remarks="The code for the employment type for the employment"/>
+      <column name="occupation" type="nvarchar(30)" remarks="The code for the occupation for the employment"/>
+      <column name="created" type="timestamp" remarks="The date and time the employment was created">
+        <constraints nullable="false"/>
+      </column>
       <column name="updated" type="timestamp" remarks="The date and time the employment was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="employments_person_fk" baseTableSchemaName="party"
@@ -1367,19 +1374,19 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="external_references" remarks="External References">
-      <column name="created" type="timestamp" remarks="The date and time the external reference was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the external reference is associated with">
+      <column name="party_id" type="uuid" remarks="The ID for the party the external reference is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(30)" remarks="The code for the external reference type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="updated" type="timestamp" remarks="The date and time the external reference was last updated"/>
       <column name="value" type="nvarchar(100)" remarks="The value for the external reference">
         <constraints nullable="false"/>
       </column>
+      <column name="created" type="timestamp" remarks="The date and time the external reference was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the external reference was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="external_references_party_fk" baseTableSchemaName="party"
       baseTableName="external_references" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1389,27 +1396,27 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="identity_documents" remarks="Identity Documents">
+      <column name="id" type="uuid" remarks="The ID for the identity document">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="party_id" type="uuid" remarks="The ID for the party the identity document is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the identity document type">
+        <constraints nullable="false"/>
+      </column>
       <column name="country_of_issue" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country of issue for the identity document">
         <constraints nullable="false"/>
       </column>
-      <column name="created" type="timestamp" remarks="The date and time the identity document was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="date_of_expiry" type="date" remarks="The date of expiry for the identity document"/>
       <column name="date_of_issue" type="date" remarks="The date of issue for the identity document">
         <constraints nullable="false"/>
-      </column>
-      <column name="date_provided" type="date" remarks="The date the identity document was provided"/>
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the identity document">
-        <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="number" type="nvarchar(30)" remarks="The number for the identity document">
         <constraints nullable="false"/>
       </column>
-      <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the identity document is associated with">
-        <constraints nullable="false"/>
-      </column>
-      <column name="type" type="nvarchar(30)" remarks="The code for the identity document type">
+      <column name="date_of_expiry" type="date" remarks="The date of expiry for the identity document"/>
+      <column name="date_provided" type="date" remarks="The date the identity document was provided"/>
+      <column name="created" type="timestamp" remarks="The date and time the identity document was created">
         <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the identity document was last updated"/>
@@ -1422,10 +1429,7 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="language_proficiencies" remarks="Language Proficiencies">
-      <column name="created" type="timestamp" remarks="The date and time the language proficiency was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="person_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the person the language proficiency is associated with">
+      <column name="person_id" type="uuid" remarks="The ID for the person the language proficiency is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="language" type="nvarchar(30)" remarks="The ISO 639-1 alpha-2 code for the language">
@@ -1434,16 +1438,19 @@
       <column name="listen_level" type="nvarchar(15)" remarks="The listen proficiency level for the language">
         <constraints nullable="false"/>
       </column>
-      <column name="read_level" type="nvarchar(15)" remarks="The read proficiency level for the language">
-        <constraints nullable="false"/>
-      </column>
       <column name="speak_level" type="nvarchar(15)" remarks="The speak proficiency level for the language">
         <constraints nullable="false"/>
       </column>
-      <column name="updated" type="timestamp" remarks="The date and time the language proficiency was last updated"/>
+      <column name="read_level" type="nvarchar(15)" remarks="The read proficiency level for the language">
+        <constraints nullable="false"/>
+      </column>
       <column name="write_level" type="nvarchar(15)" remarks="The write proficiency level for the language">
         <constraints nullable="false"/>
       </column>
+      <column name="created" type="timestamp" remarks="The date and time the language proficiency was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the language proficiency was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="language_proficiencies_person_fk" baseTableSchemaName="party"
       baseTableName="language_proficiencies" baseColumnNames="person_id" referencedTableSchemaName="party"
@@ -1453,16 +1460,16 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="locks" remarks="Locks">
-      <column name="created" type="timestamp" remarks="The date and time the lock was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="effective_from" type="date" remarks="The date that the lock is effective from"/>
-      <column name="effective_to" type="date" remarks="The date that the lock is effective to"/>
-      <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the lock is associated with">
+      <column name="party_id" type="uuid" remarks="The ID for the party the lock is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(30)" remarks="The code for the lock type">
         <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="effective_from" type="date" remarks="The date that the lock is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the lock is effective to"/>
+      <column name="created" type="timestamp" remarks="The date and time the lock was created">
+        <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the lock was last updated"/>
     </createTable>
@@ -1474,31 +1481,31 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="next_of_kin" remarks="Next Of Kin">
-      <column name="address_city" type="nvarchar(50)" remarks="The next of kin address city"/>
-      <column name="address_country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the next of kin address country"/>
+      <column name="id" type="uuid" remarks="The ID for the next of kin">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="person_id" type="uuid" remarks="The ID for the person the next of kin is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the next of kin type for the next of kin">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the next of kin">
+        <constraints nullable="false"/>
+      </column>
+      <column name="phone_number" type="nvarchar(100)" remarks="The phone number for the next of kin"/>
+      <column name="mobile_number" type="nvarchar(100)" remarks="The mobile number for the next of kin"/>
+      <column name="email_address" type="nvarchar(100)" remarks="The e-mail address for the next of kin"/>
       <column name="address_line1" type="nvarchar(100)" remarks="The next of kin address line 1"/>
       <column name="address_line2" type="nvarchar(100)" remarks="The next of kin address line 2"/>
       <column name="address_line3" type="nvarchar(100)" remarks="The next of kin address line 3"/>
       <column name="address_line4" type="nvarchar(100)" remarks="The next of kin address line 4"/>
-      <column name="address_postal_code" type="nvarchar(30)" remarks="The next of kin address postal code"/>
-      <column name="address_region" type="nvarchar(30)" remarks="The ISO 3166-2 subdivision code for the next of kin address region"/>
       <column name="address_suburb" type="nvarchar(50)" remarks="The next of kin address suburb"/>
+      <column name="address_city" type="nvarchar(50)" remarks="The next of kin address city"/>
+      <column name="address_region" type="nvarchar(30)" remarks="The ISO 3166-2 subdivision code for the next of kin address region"/>
+      <column name="address_country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the next of kin address country"/>
+      <column name="address_postal_code" type="nvarchar(30)" remarks="The next of kin address postal code"/>
       <column name="created" type="timestamp" remarks="The date and time the next of kin was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="email_address" type="nvarchar(100)" remarks="The e-mail address for the next of kin"/>
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the next of kin">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="mobile_number" type="nvarchar(100)" remarks="The mobile number for the next of kin"/>
-      <column name="name" type="nvarchar(100)" remarks="The name of the next of kin">
-        <constraints nullable="false"/>
-      </column>
-      <column name="person_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the person the next of kin is associated with">
-        <constraints nullable="false"/>
-      </column>
-      <column name="phone_number" type="nvarchar(100)" remarks="The phone number for the next of kin"/>
-      <column name="type" type="nvarchar(30)" remarks="The code for the next of kin type for the next of kin">
         <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the next of kin was last updated"/>
@@ -1511,47 +1518,47 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="physical_addresses" remarks="Physical Addresses">
-      <column name="building_floor" type="nvarchar(20)" remarks="The building floor for the physical address"/>
-      <column name="building_name" type="nvarchar(50)" remarks="The building name for the physical address that is required for a building address"/>
-      <column name="building_room" type="nvarchar(30)" remarks="The building room for the physical address"/>
-      <column name="city" type="nvarchar(50)" remarks="The town or city for the physical address that is required for a building, complex, postal, site or street address"/>
-      <column name="complex_name" type="nvarchar(50)" remarks="The complex name for the physical address that is required for a complex address"/>
-      <column name="complex_unit_number" type="nvarchar(20)" remarks="The complex unit number for the physical address that is required for a complex address"/>
-      <column name="country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country for the physical address">
-        <constraints nullable="false"/>
-      </column>
-      <column name="created" type="timestamp" remarks="The date and time the physical address was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="farm_description" type="nvarchar(50)" remarks="The farm description for the physical address"/>
-      <column name="farm_name" type="nvarchar(50)" remarks="The farm name for the physical address"/>
-      <column name="farm_number" type="nvarchar(50)" remarks="The farm number for the physical address that is required for a farm address"/>
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the address">
+      <column name="id" type="uuid" remarks="The ID for the address">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="latitude" type="nvarchar(50)" remarks="The GPS latitude for the physical address"/>
+      <column name="party_id" type="uuid" remarks="The ID for the party the physical address is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the physical address type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="role" type="nvarchar(30)" remarks="The code for the physical address role">
+        <constraints nullable="false"/>
+      </column>
+      <column name="building_name" type="nvarchar(50)" remarks="The building name for the physical address that is required for a building address"/>
+      <column name="building_floor" type="nvarchar(20)" remarks="The building floor for the physical address"/>
+      <column name="building_room" type="nvarchar(30)" remarks="The building room for the physical address"/>
+      <column name="complex_name" type="nvarchar(50)" remarks="The complex name for the physical address that is required for a complex address"/>
+      <column name="complex_unit_number" type="nvarchar(20)" remarks="The complex unit number for the physical address that is required for a complex address"/>
+      <column name="farm_number" type="nvarchar(50)" remarks="The farm number for the physical address that is required for a farm address"/>
+      <column name="farm_name" type="nvarchar(50)" remarks="The farm name for the physical address"/>
+      <column name="farm_description" type="nvarchar(50)" remarks="The farm description for the physical address"/>
+      <column name="site_block" type="nvarchar(50)" remarks="The site block for the physical address that is required for a site address"/>
+      <column name="site_number" type="nvarchar(50)" remarks="The site number for the physical address that is required for a site address"/>
+      <column name="street_name" type="nvarchar(100)" remarks="The street name for the physical address that is required for a street address"/>
+      <column name="street_number" type="nvarchar(30)" remarks="The street number for the physical address that is required for a street address"/>
       <column name="line1" type="nvarchar(100)" remarks="The address line 1 for the physical address that is required for an international, postal or unstructured address"/>
       <column name="line2" type="nvarchar(100)" remarks="The address line 2 for the physical address"/>
       <column name="line3" type="nvarchar(100)" remarks="The address line 3 for the physical address"/>
       <column name="line4" type="nvarchar(100)" remarks="The address line 4 for the physical address"/>
-      <column name="longitude" type="nvarchar(50)" remarks="The GPS longitude for the physical address"/>
-      <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the physical address is associated with">
+      <column name="suburb" type="nvarchar(50)" remarks="The suburb for the physical address"/>
+      <column name="city" type="nvarchar(50)" remarks="The town or city for the physical address that is required for a building, complex, postal, site or street address"/>
+      <column name="region" type="nvarchar(3)" remarks="The ISO 3166-2 subdivision code for the region for the physical address"/>
+      <column name="country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country for the physical address">
         <constraints nullable="false"/>
       </column>
       <column name="postal_code" type="nvarchar(30)" remarks="The postal code for the physical address">
         <constraints nullable="false"/>
       </column>
+      <column name="latitude" type="nvarchar(50)" remarks="The GPS latitude for the physical address"/>
+      <column name="longitude" type="nvarchar(50)" remarks="The GPS longitude for the physical address"/>
       <column name="purposes" type="nvarchar(310)" remarks="The comma-delimited codes for the physical address purposes"/>
-      <column name="region" type="nvarchar(3)" remarks="The ISO 3166-2 subdivision code for the region for the physical address"/>
-      <column name="role" type="nvarchar(30)" remarks="The code for the physical address role">
-        <constraints nullable="false"/>
-      </column>
-      <column name="site_block" type="nvarchar(50)" remarks="The site block for the physical address that is required for a site address"/>
-      <column name="site_number" type="nvarchar(50)" remarks="The site number for the physical address that is required for a site address"/>
-      <column name="street_name" type="nvarchar(100)" remarks="The street name for the physical address that is required for a street address"/>
-      <column name="street_number" type="nvarchar(30)" remarks="The street number for the physical address that is required for a street address"/>
-      <column name="suburb" type="nvarchar(50)" remarks="The suburb for the physical address"/>
-      <column name="type" type="nvarchar(30)" remarks="The code for the physical address type">
+      <column name="created" type="timestamp" remarks="The date and time the physical address was created">
         <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the physical address was last updated"/>
@@ -1564,19 +1571,19 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="preferences" remarks="Preferences">
-      <column name="created" type="timestamp" remarks="The date and time the preference was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the preference is associated with">
+      <column name="party_id" type="uuid" remarks="The ID for the party the preference is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(30)" remarks="The code for the preference type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="updated" type="timestamp" remarks="The date and time the preference was last updated"/>
       <column name="value" type="nvarchar(200)" remarks="The value for the preference">
         <constraints nullable="false"/>
       </column>
+      <column name="created" type="timestamp" remarks="The date and time the preference was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the preference was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="preferences_party_fk" baseTableSchemaName="party"
       baseTableName="preferences" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1586,26 +1593,26 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="residence_permits" remarks="Residence Permits">
+      <column name="id" type="uuid" remarks="The ID for the residence permit">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="person_id" type="uuid" remarks="The ID for the person the residence permit is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the residence permit type">
+        <constraints nullable="false"/>
+      </column>
       <column name="country_of_issue" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country of issue for the residence permit">
         <constraints nullable="false"/>
       </column>
-      <column name="created" type="timestamp" remarks="The date and time the residence permit was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="date_of_expiry" type="date" remarks="The date of expiry for the residence permit"/>
       <column name="date_of_issue" type="date" remarks="The date of issue for the residence permit">
         <constraints nullable="false"/>
-      </column>
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the residence permit">
-        <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="number" type="nvarchar(30)" remarks="The number for the residence permit">
         <constraints nullable="false"/>
       </column>
-      <column name="person_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the person the residence permit is associated with">
-        <constraints nullable="false"/>
-      </column>
-      <column name="type" type="nvarchar(30)" remarks="The code for the residence permit type">
+      <column name="date_of_expiry" type="date" remarks="The date of expiry for the residence permit"/>
+      <column name="created" type="timestamp" remarks="The date and time the residence permit was created">
         <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the residence permit was last updated"/>
@@ -1618,17 +1625,17 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="roles" remarks="Roles">
-      <column name="created" type="timestamp" remarks="The date and time the role was created">
-        <constraints nullable="false"/>
+      <column name="party_id" type="uuid" remarks="The ID for the party the role is associated with">
+        <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="effective_from" type="date" remarks="The date that the role is effective from"/>
-      <column name="effective_to" type="date" remarks="The date that the role is effective to"/>
-      <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the role is associated with">
+      <column name="type" type="nvarchar(30)" remarks="The code for the role type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="purpose" type="nvarchar(30)" remarks="The code for the role purpose"/>
-      <column name="type" type="nvarchar(30)" remarks="The code for the role type">
-        <constraints primaryKey="true" nullable="false"/>
+      <column name="effective_from" type="date" remarks="The date that the role is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the role is effective to"/>
+      <column name="created" type="timestamp" remarks="The date and time the role was created">
+        <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the role was last updated"/>
     </createTable>
@@ -1640,16 +1647,16 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="segment_allocations" remarks="Segment Allocations">
-      <column name="created" type="timestamp" remarks="The date and time the segment allocation was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="effective_from" type="date" remarks="The date that the segment allocation is effective from"/>
-      <column name="effective_to" type="date" remarks="The date that the segment allocation is effective to"/>
-      <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the segment allocation is associated with">
+      <column name="party_id" type="uuid" remarks="The ID for the party the segment allocation is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="segment" type="nvarchar(30)" remarks="The code for the segment">
         <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="effective_from" type="date" remarks="The date that the segment allocation is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the segment allocation is effective to"/>
+      <column name="created" type="timestamp" remarks="The date and time the segment allocation was created">
+        <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the segment allocation was last updated"/>
     </createTable>
@@ -1661,19 +1668,19 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="snapshots" remarks="Snapshots">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the snapshot">
+      <column name="id" type="uuid" remarks="The ID for the snapshot">
         <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the snapshot is associated with">
+        <constraints nullable="false"/>
       </column>
       <column name="entity_type" type="nvarchar(30)" remarks="The code for the type of entity">
         <constraints nullable="false"/>
       </column>
-      <column name="entity_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the entity">
+      <column name="entity_id" type="uuid" remarks="The ID for the entity">
         <constraints nullable="false"/>
       </column>
       <column name="data" type="${json_type}" remarks="The JSON data for the entity">
-        <constraints nullable="false"/>
-      </column>
-      <column name="tenant_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the tenant the snapshot is associated with">
         <constraints nullable="false"/>
       </column>
       <column name="timestamp" type="timestamp" remarks="The date and time the snapshot was created">
@@ -1692,18 +1699,18 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="sources_of_funds" remarks="Sources Of Funds">
-      <column name="created" type="timestamp" remarks="The date and time the source of funds was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="description" type="nvarchar(100)" remarks="The description for the source of funds"/>
-      <column name="effective_from" type="date" remarks="The date that the source of funds is effective from"/>
-      <column name="effective_to" type="date" remarks="The date that the source of funds is effective to"/>
-      <column name="person_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the person the source of funds is associated with">
+      <column name="person_id" type="uuid" remarks="The ID for the person the source of funds is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="percentage" type="int" remarks="The percentage of the total of all sources of funds attributed to the source of funds"/>
       <column name="type" type="nvarchar(30)" remarks="The code for the source of funds type">
         <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="effective_from" type="date" remarks="The date that the source of funds is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the source of funds is effective to"/>
+      <column name="percentage" type="int" remarks="The percentage of the total of all sources of funds attributed to the source of funds"/>
+      <column name="description" type="nvarchar(100)" remarks="The description for the source of funds"/>
+      <column name="created" type="timestamp" remarks="The date and time the source of funds was created">
+        <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the source of funds was last updated"/>
     </createTable>
@@ -1715,18 +1722,18 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="sources_of_wealth" remarks="Sources Of Wealth">
-      <column name="created" type="timestamp" remarks="The date and time the source of wealth was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="effective_from" type="date" remarks="The date that the source of wealth is effective from"/>
-      <column name="effective_to" type="date" remarks="The date that the source of wealth is effective to"/>
-      <column name="person_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the person the source of wealth is associated with">
+      <column name="person_id" type="uuid" remarks="The ID for the person the source of wealth is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(30)" remarks="The code for the source of wealth type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
+      <column name="effective_from" type="date" remarks="The date that the source of wealth is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the source of wealth is effective to"/>
       <column name="description" type="nvarchar(100)" remarks="The description for the source of wealth"/>
+      <column name="created" type="timestamp" remarks="The date and time the source of wealth was created">
+        <constraints nullable="false"/>
+      </column>
       <column name="updated" type="timestamp" remarks="The date and time the source of wealth was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="sources_of_wealth_person_fk" baseTableSchemaName="party"
@@ -1737,16 +1744,16 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="statuses" remarks="Statuses">
-      <column name="created" type="timestamp" remarks="The date and time the status was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="effective_from" type="date" remarks="The date that the status is effective from"/>
-      <column name="effective_to" type="date" remarks="The date that the status is effective to"/>
-      <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the status is associated with">
+      <column name="party_id" type="uuid" remarks="The ID for the party the status is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(30)" remarks="The code for the status type">
         <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="effective_from" type="date" remarks="The date that the status is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the status is effective to"/>
+      <column name="created" type="timestamp" remarks="The date and time the status was created">
+        <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the status was last updated"/>
     </createTable>
@@ -1758,20 +1765,20 @@
     </createIndex>
 
     <createTable schemaName="party" tableName="tax_numbers" remarks="Tax Numbers">
-      <column name="country_of_issue" type="nvarchar(30)" remarks="The code for the country of issue for the tax number">
-        <constraints nullable="false"/>
+      <column name="party_id" type="uuid" remarks="The ID for the party the tax number is associated with">
+        <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="created" type="timestamp" remarks="The date and time the tax number was created">
+      <column name="type" type="nvarchar(30)" remarks="The code for the tax number type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="country_of_issue" type="nvarchar(30)" remarks="The code for the country of issue for the tax number">
         <constraints nullable="false"/>
       </column>
       <column name="number" type="nvarchar(30)" remarks="The tax number">
         <constraints nullable="false"/>
       </column>
-      <column name="party_id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the party the tax number is associated with">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="type" type="nvarchar(30)" remarks="The code for the tax number type">
-        <constraints primaryKey="true" nullable="false"/>
+      <column name="created" type="timestamp" remarks="The date and time the tax number was created">
+        <constraints nullable="false"/>
       </column>
       <column name="updated" type="timestamp" remarks="The date and time the tax number was last updated"/>
     </createTable>

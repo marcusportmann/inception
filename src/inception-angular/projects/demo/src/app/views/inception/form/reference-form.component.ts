@@ -121,7 +121,7 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.referenceService.getRegions().pipe(first()).subscribe((regions: Region[]) => {
+    this.referenceService.getRegions('ZA').pipe(first()).subscribe((regions: Region[]) => {
       const regionControl = this.referenceForm.get('region');
 
       if (regionControl) {

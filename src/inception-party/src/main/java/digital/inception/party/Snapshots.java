@@ -126,8 +126,8 @@ public class Snapshots implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant. */
-  @Schema(description = "The ID for the tenant", required = true)
+  /** The ID for the tenant the snapshots are associated with. */
+  @Schema(description = "The ID for the tenant the snapshots are associated with", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
   private UUID tenantId;

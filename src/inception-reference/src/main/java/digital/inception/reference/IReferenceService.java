@@ -158,6 +158,19 @@ public interface IReferenceService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Retrieve the region reference data for a specific locale and country.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the region reference
+   *     data for
+   * @param country the ISO 3166-1 alpha-2 code for the country to retrieve the regions for
+   * @return the region reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the region reference data could not be retrieved
+   */
+  List<Region> getRegions(String localeId, String country)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Retrieve the time zone reference data for all locales.
    *
    * @return the time zones reference data

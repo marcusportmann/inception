@@ -28,7 +28,7 @@
     </sql>
 
     <createTable schemaName="sms" tableName="sms" remarks="SMSs">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) for the SMS">
+      <column name="id" type="uuid" remarks="The ID for the SMS">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="mobile_number" type="nvarchar(100)" remarks="The mobile number to send the SMS to">

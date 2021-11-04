@@ -2854,7 +2854,9 @@
       <column name="name" value="Affiliation"/>
       <column name="description" value="A relationship between affiliates"/>
       <column name="first_party_role" value="affiliate"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="affiliate"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="association_membership"/>
@@ -2862,7 +2864,9 @@
       <column name="name" value="Association Membership"/>
       <column name="description" value="A relationship identifying an organization as a member of an association"/>
       <column name="first_party_role" value="association"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="association_member"/>
+      <column name="second_party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="civil_partnership"/>
@@ -2870,7 +2874,9 @@
       <column name="name" value="Civil Partnership"/>
       <column name="description" value="A legally recognized union with rights similar to those of marriage"/>
       <column name="first_party_role" value="civil_partner"/>
+      <column name="first_party_types" value="person"/>
       <column name="second_party_role" value="civil_partner"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="company_shareholder"/>
@@ -2878,7 +2884,9 @@
       <column name="name" value="Company Shareholder"/>
       <column name="description" value="A relationship between a company and an organization or person that legally owns one or more shares of the share capital of the company"/>
       <column name="first_party_role" value="company"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="shareholder"/>
+      <column name="second_party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="company_subsidiary"/>
@@ -2886,7 +2894,9 @@
       <column name="name" value="Company Subsidiary"/>
       <column name="description" value="A relationship between a parent company or holding company and a subsidiary"/>
       <column name="first_party_role" value="company"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="subsidiary"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="competitor"/>
@@ -2894,7 +2904,9 @@
       <column name="name" value="Competitor"/>
       <column name="description" value="A relationship between two organizations that are engaged in commercial competition with each other"/>
       <column name="first_party_role" value="competitor"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="competitor"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="directorship"/>
@@ -2902,7 +2914,9 @@
       <column name="name" value="Directorship"/>
       <column name="description" value="A relationship identifying a person as a directory of a company"/>
       <column name="first_party_role" value="company"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="director"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="division_department"/>
@@ -2910,7 +2924,9 @@
       <column name="name" value="Division Department"/>
       <column name="description" value="A relationship between a division and a department that forms part of the division"/>
       <column name="first_party_role" value="division"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="department"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="employment"/>
@@ -2918,7 +2934,9 @@
       <column name="name" value="Employment"/>
       <column name="description" value="A relationship between two parties that is usually based on contract where work is paid for"/>
       <column name="first_party_role" value="employer"/>
+      <column name="first_party_types" value="organization,person"/>
       <column name="second_party_role" value="employee"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="family_membership"/>
@@ -2926,7 +2944,9 @@
       <column name="name" value="Family Membership"/>
       <column name="description" value="A relationship identifying a person as a member of a family"/>
       <column name="first_party_role" value="family"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="family_member"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="household_membership"/>
@@ -2934,7 +2954,9 @@
       <column name="name" value="Household Membership"/>
       <column name="description" value="A relationship identifying a person as a member of a household"/>
       <column name="first_party_role" value="household"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="household_member"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="joint_venture"/>
@@ -2942,23 +2964,29 @@
       <column name="name" value="Joint Venture"/>
       <column name="description" value="A relationship identifying an organization as a participant in a joint venture arrangement"/>
       <column name="first_party_role" value="joint_venture"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="organization"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="life_partnership"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Life Partnership"/>
-      <column name="description" value="A relationship between a parent and child"/>
+      <column name="description" value="A domestic partnership or a romantic relationship between to people"/>
       <column name="first_party_role" value="life_partner"/>
+      <column name="first_party_types" value="person"/>
       <column name="second_party_role" value="life_partner"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="marriage"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Marriage"/>
-      <column name="description" value="A legally recognized union of two people as partners in a personal relationship "/>
+      <column name="description" value="A legally recognized union of two people as partners in a personal relationship"/>
       <column name="first_party_role" value="spouse"/>
+      <column name="first_party_types" value="person"/>
       <column name="second_party_role" value="spouse"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_agency"/>
@@ -2966,7 +2994,9 @@
       <column name="name" value="Organization Agency"/>
       <column name="description" value="A relationship where an organization provides a particular service on behalf of another organization"/>
       <column name="first_party_role" value="organization"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="agency"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_agent"/>
@@ -2974,7 +3004,9 @@
       <column name="name" value="Organization Agent"/>
       <column name="description" value="A relationship between an organization and a person who acts on behalf of the organization"/>
       <column name="first_party_role" value="organization"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="agent"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_department"/>
@@ -2982,7 +3014,9 @@
       <column name="name" value="Organization Department"/>
       <column name="description" value="A relationship between an organization and a department that forms part of the organization"/>
       <column name="first_party_role" value="organization"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="department"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_division"/>
@@ -2990,7 +3024,9 @@
       <column name="name" value="Organization Division"/>
       <column name="description" value="A relationship between an organization and a division that forms part of the organization"/>
       <column name="first_party_role" value="organization"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="division"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="parent_child"/>
@@ -2998,7 +3034,9 @@
       <column name="name" value="Parent-Child"/>
       <column name="description" value="A relationship between a parent and a child"/>
       <column name="first_party_role" value="parent"/>
+      <column name="first_party_types" value="person"/>
       <column name="second_party_role" value="child"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="partnership"/>
@@ -3006,7 +3044,9 @@
       <column name="name" value="Partnership"/>
       <column name="description" value="A relationship between a partnership and one of its partners"/>
       <column name="first_party_role" value="partnership"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="partner"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="sibling"/>
@@ -3014,7 +3054,9 @@
       <column name="name" value="Sibling"/>
       <column name="description" value="A relationship between two children or offspring having one or both parents in common"/>
       <column name="first_party_role" value="sibling"/>
+      <column name="first_party_types" value="person"/>
       <column name="second_party_role" value="sibling"/>
+      <column name="second_party_types" value="person"/>
     </insert>
 
     <insert schemaName="party" tableName="association_property_types">
@@ -6447,7 +6489,9 @@
       <column name="name" value="Affiliation"/>
       <column name="description" value="A relationship between affiliates"/>
       <column name="first_party_role" value="affiliate"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="affiliate"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="association_membership"/>
@@ -6455,7 +6499,9 @@
       <column name="name" value="Association Membership"/>
       <column name="description" value="A relationship identifying an organization as a member of an association"/>
       <column name="first_party_role" value="association"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="association_member"/>
+      <column name="second_party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="civil_partnership"/>
@@ -6463,7 +6509,9 @@
       <column name="name" value="Civil Partnership"/>
       <column name="description" value="A legally recognized union with rights similar to those of marriage"/>
       <column name="first_party_role" value="civil_partner"/>
+      <column name="first_party_types" value="person"/>
       <column name="second_party_role" value="civil_partner"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="company_shareholder"/>
@@ -6471,7 +6519,9 @@
       <column name="name" value="Company Shareholder"/>
       <column name="description" value="A relationship between a company and an organization or person that legally owns one or more shares of the share capital of the company"/>
       <column name="first_party_role" value="company"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="shareholder"/>
+      <column name="second_party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="company_subsidiary"/>
@@ -6479,7 +6529,9 @@
       <column name="name" value="Company Subsidiary"/>
       <column name="description" value="A relationship between a parent company or holding company and a subsidiary"/>
       <column name="first_party_role" value="company"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="subsidiary"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="competitor"/>
@@ -6487,7 +6539,9 @@
       <column name="name" value="Competitor"/>
       <column name="description" value="A relationship between two organizations that are engaged in commercial competition with each other"/>
       <column name="first_party_role" value="competitor"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="competitor"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="directorship"/>
@@ -6495,7 +6549,9 @@
       <column name="name" value="Directorship"/>
       <column name="description" value="A relationship identifying a person as a directory of a company"/>
       <column name="first_party_role" value="company"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="director"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="division_department"/>
@@ -6503,7 +6559,9 @@
       <column name="name" value="Division Department"/>
       <column name="description" value="A relationship between a division and a department that forms part of the division"/>
       <column name="first_party_role" value="division"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="department"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="employment"/>
@@ -6511,7 +6569,9 @@
       <column name="name" value="Employment"/>
       <column name="description" value="A relationship between two parties that is usually based on contract where work is paid for"/>
       <column name="first_party_role" value="employer"/>
+      <column name="first_party_types" value="organization,person"/>
       <column name="second_party_role" value="employee"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="family_membership"/>
@@ -6519,7 +6579,9 @@
       <column name="name" value="Family Membership"/>
       <column name="description" value="A relationship identifying a person as a member of a family"/>
       <column name="first_party_role" value="family"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="family_member"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="household_membership"/>
@@ -6527,7 +6589,9 @@
       <column name="name" value="Household Membership"/>
       <column name="description" value="A relationship identifying a person as a member of a household"/>
       <column name="first_party_role" value="household"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="household_member"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="joint_venture"/>
@@ -6535,23 +6599,29 @@
       <column name="name" value="Joint Venture"/>
       <column name="description" value="A relationship identifying an organization as a participant in a joint venture arrangement"/>
       <column name="first_party_role" value="joint_venture"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="organization"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="life_partnership"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Life Partnership"/>
-      <column name="description" value="A relationship between a parent and child"/>
+      <column name="description" value="A domestic partnership or a romantic relationship between to people"/>
       <column name="first_party_role" value="life_partner"/>
+      <column name="first_party_types" value="person"/>
       <column name="second_party_role" value="life_partner"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="marriage"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Marriage"/>
-      <column name="description" value="A legally recognized union of two people as partners in a personal relationship "/>
+      <column name="description" value="A legally recognized union of two people as partners in a personal relationship"/>
       <column name="first_party_role" value="spouse"/>
+      <column name="first_party_types" value="person"/>
       <column name="second_party_role" value="spouse"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_agency"/>
@@ -6559,7 +6629,9 @@
       <column name="name" value="Organization Agency"/>
       <column name="description" value="A relationship where an organization provides a particular service on behalf of another organization"/>
       <column name="first_party_role" value="organization"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="agency"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_agent"/>
@@ -6567,7 +6639,9 @@
       <column name="name" value="Organization Agent"/>
       <column name="description" value="A relationship between an organization and a person who acts on behalf of the organization"/>
       <column name="first_party_role" value="organization"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="agent"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_department"/>
@@ -6575,7 +6649,9 @@
       <column name="name" value="Organization Department"/>
       <column name="description" value="A relationship between an organization and a department that forms part of the organization"/>
       <column name="first_party_role" value="organization"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="department"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="organization_division"/>
@@ -6583,7 +6659,9 @@
       <column name="name" value="Organization Division"/>
       <column name="description" value="A relationship between an organization and a division that forms part of the organization"/>
       <column name="first_party_role" value="organization"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="division"/>
+      <column name="second_party_types" value="organization"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="parent_child"/>
@@ -6591,7 +6669,9 @@
       <column name="name" value="Parent-Child"/>
       <column name="description" value="A relationship between a parent and a child"/>
       <column name="first_party_role" value="parent"/>
+      <column name="first_party_types" value="person"/>
       <column name="second_party_role" value="child"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="partnership"/>
@@ -6599,7 +6679,9 @@
       <column name="name" value="Partnership"/>
       <column name="description" value="A relationship between a partnership and one of its partners"/>
       <column name="first_party_role" value="partnership"/>
+      <column name="first_party_types" value="organization"/>
       <column name="second_party_role" value="partner"/>
+      <column name="second_party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="association_types">
       <column name="code" value="sibling"/>
@@ -6607,7 +6689,9 @@
       <column name="name" value="Sibling"/>
       <column name="description" value="A relationship between two children or offspring having one or both parents in common"/>
       <column name="first_party_role" value="sibling"/>
+      <column name="first_party_types" value="person"/>
       <column name="second_party_role" value="sibling"/>
+      <column name="second_party_types" value="person"/>
     </insert>
 
     <insert schemaName="party" tableName="association_property_types">

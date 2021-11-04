@@ -240,6 +240,25 @@ public class ReferenceService implements IReferenceService {
   }
 
   @Override
+  @Cacheable(cacheNames = "reference", key = "'regions.' + #country + '.' + #localeId")
+  public List<Region> getRegions(String localeId, String country)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    try {
+      if (StringUtils.hasText(country)) {
+        return regionRepository.findByLocaleIdIgnoreCaseAndCountryIgnoreCase(localeId, country);
+      } else {
+        return regionRepository.findByLocaleIdIgnoreCase(localeId);
+      }
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the region reference data", e);
+    }
+  }
+
+  @Override
   @Cacheable(cacheNames = "reference", key = "'timeZones.ALL'")
   public List<TimeZone> getTimeZones() throws ServiceUnavailableException {
     try {

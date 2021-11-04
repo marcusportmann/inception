@@ -15,18 +15,18 @@
  */
 
 import {SortDirection} from 'ngx-inception/core';
-import {Party} from './party';
-import {PartySortBy} from './party-sorty-by';
+import {Person} from './person';
+import {PersonSortBy} from './person-sorty-by';
 
 /**
- * The Parties class holds the results of a request to retrieve a list of parties.
+ * The Persons class holds the results of a request to retrieve a list of persons.
  *
  * @author Marcus Portmann
  */
-export class Parties {
+export class Persons {
 
   /**
-   * The optional filter that was applied to the parties.
+   * The optional filter that was applied to the persons.
    */
   filter?: string;
 
@@ -41,47 +41,47 @@ export class Parties {
   pageSize?: number;
 
   /**
-   * The parties.
+   * The persons.
    */
-  parties: Party[];
+  persons: Person[];
 
   /**
-   * The optional method used to sort the parties e.g. by name.
+   * The optional method used to sort the persons e.g. by name.
    */
-  sortBy?: PartySortBy;
+  sortBy?: PersonSortBy;
 
   /**
-   * The optional sort direction that was applied to the parties.
+   * The optional sort direction that was applied to the persons.
    */
   sortDirection?: SortDirection;
 
   /**
-   * The ID for the tenant the parties are associated with.
+   * The ID for the tenant the persons are associated with.
    */
   tenantId: string;
 
   /**
-   * The total number of parties.
+   * The total number of persons.
    */
   total: number;
 
   /**
-   * Constructs a new Parties.
+   * Constructs a new Persons.
    *
-   * @param tenantId      The ID for the tenant the parties are associated with.
-   * @param parties       The parties.
-   * @param total         The total number of parties.
-   * @param filter        The optional filter that was applied to the parties.
-   * @param sortBy        The optional method used to sort the parties e.g. by name.
-   * @param sortDirection The optional sort direction that was applied to the parties.
+   * @param tenantId      The ID for the tenant the persons are associated with.
+   * @param persons       The persons.
+   * @param total         The total number of persons.
+   * @param filter        The optional filter that was applied to the persons.
+   * @param sortBy        The optional method used to sort the persons e.g. by name.
+   * @param sortDirection The optional sort direction that was applied to the persons.
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
    */
-  constructor(tenantId: string, parties: Party[], total: number, filter?: string,
-              sortBy?: PartySortBy, sortDirection?: SortDirection, pageIndex?: number,
+  constructor(tenantId: string, persons: Person[], total: number, filter?: string,
+              sortBy?: PersonSortBy, sortDirection?: SortDirection, pageIndex?: number,
               pageSize?: number) {
     this.tenantId = tenantId;
-    this.parties = parties;
+    this.persons = persons;
     this.total = total;
     this.filter = filter;
     this.sortBy = sortBy;

@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -34,7 +35,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>AssociationType</b> class holds the information for an association type.
@@ -50,7 +53,9 @@ import javax.xml.bind.annotation.XmlType;
   "sortIndex",
   "name",
   "description",
+  "firstPartyTypes",
   "firstPartyRole",
+  "secondPartyTypes",
   "secondPartyRole"
 })
 @XmlRootElement(name = "AssociationType", namespace = "http://inception.digital/party")
@@ -64,7 +69,9 @@ import javax.xml.bind.annotation.XmlType;
       "sortIndex",
       "name",
       "description",
+      "firstPartyTypes",
       "firstPartyRole",
+      "secondPartyTypes",
       "secondPartyRole"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -105,6 +112,16 @@ public class AssociationType implements Serializable {
   @Column(name = "first_party_role", length = 30, nullable = false)
   private String firstPartyRole;
 
+  /**
+   * The comma-delimited list of codes for the party types for the first party in the association.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @NotNull
+  @Size(min = 1, max = 310)
+  @Column(name = "first_party_types", length = 310, nullable = false)
+  private String firstPartyTypes;
+
   /** The Unicode locale identifier for the association type. */
   @Schema(description = "The Unicode locale identifier for the association type", required = true)
   @JsonProperty(required = true)
@@ -134,6 +151,16 @@ public class AssociationType implements Serializable {
   @Size(min = 1, max = 30)
   @Column(name = "second_party_role", length = 30, nullable = false)
   private String secondPartyRole;
+
+  /**
+   * The comma-delimited list of codes for the party types for the second party in the association.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @NotNull
+  @Size(min = 1, max = 310)
+  @Column(name = "second_party_types", length = 310, nullable = false)
+  private String secondPartyTypes;
 
   /** The sort index for the association type. */
   @Schema(description = "The sort index for the association type", required = true)
@@ -206,6 +233,20 @@ public class AssociationType implements Serializable {
   }
 
   /**
+   * Returns the codes for the party types for the first party in the association.
+   *
+   * @return the codes for the party types for the first party in the association
+   */
+  @Schema(
+      description = "The codes for the party types for the first party in the association",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "FirstPartyTypes", required = true)
+  public String[] getFirstPartyTypes() {
+    return StringUtils.commaDelimitedListToStringArray(firstPartyTypes);
+  }
+
+  /**
    * Returns the Unicode locale identifier for the association type.
    *
    * @return the Unicode locale identifier for the association type
@@ -230,6 +271,20 @@ public class AssociationType implements Serializable {
    */
   public String getSecondPartyRole() {
     return secondPartyRole;
+  }
+
+  /**
+   * Returns the codes for the party types for the second party in the association.
+   *
+   * @return the codes for the party types for the second party in the association
+   */
+  @Schema(
+      description = "The codes for the party types for the second party in the association",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "SecondPartyTypes", required = true)
+  public String[] getSecondPartyTypes() {
+    return StringUtils.commaDelimitedListToStringArray(secondPartyTypes);
   }
 
   /**
@@ -288,6 +343,15 @@ public class AssociationType implements Serializable {
   }
 
   /**
+   * Set the codes for the party types for the first party in the association.
+   *
+   * @param firstPartyTypes the codes for the party types for the first party in the association
+   */
+  public void setFirstPartyTypes(String[] firstPartyTypes) {
+    this.firstPartyTypes = StringUtils.arrayToCommaDelimitedString(firstPartyTypes);
+  }
+
+  /**
    * Set the Unicode locale identifier for the association type.
    *
    * @param localeId the Unicode locale identifier for the association type
@@ -312,6 +376,15 @@ public class AssociationType implements Serializable {
    */
   public void setSecondPartyRole(String secondPartyRole) {
     this.secondPartyRole = secondPartyRole;
+  }
+
+  /**
+   * Set the codes for the party types for the second party in the association.
+   *
+   * @param secondPartyTypes the codes for the party types for the second party in the association
+   */
+  public void setSecondPartyTypes(String[] secondPartyTypes) {
+    this.secondPartyTypes = StringUtils.arrayToCommaDelimitedString(secondPartyTypes);
   }
 
   /**

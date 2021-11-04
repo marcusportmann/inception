@@ -1021,9 +1021,9 @@
       <column name="id" value="64166574-6564-468a-b845-8a5c127a4345"/>
       <column name="party_id" value="54166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="za_id_book"/>
-      <column name="number" value="7603079236083"/>
-      <column name="date_of_issue" value="2007-08-04"/>
       <column name="country_of_issue" value="ZA"/>
+      <column name="date_of_issue" value="2007-08-04"/>
+      <column name="number" value="7603079236083"/>
       <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
@@ -1090,9 +1090,9 @@
       <column name="id" value="74166574-6564-468a-b845-8a5c127a4345"/>
       <column name="party_id" value="64166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="za_id_book"/>
-      <column name="number" value="8505014800080"/>
-      <column name="date_of_issue" value="2012-06-14"/>
       <column name="country_of_issue" value="ZA"/>
+      <column name="date_of_issue" value="2012-06-14"/>
+      <column name="number" value="8505014800080"/>
       <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
@@ -1128,6 +1128,24 @@
 
 
 
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="consent"/>
+      <column name="attribute_type_qualifier" value="marketing_consent"/>
+      <column name="type" value="required"/>
+    </insert>
+
+    <insert schemaName="party" tableName="role_type_preference_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="preference_type" value="correspondence_language"/>
+      <column name="type" value="required"/>
+    </insert>
+
+
+
+
+
+
     <!--
         _    __  __ _____ _     ___    _       ____    _    ____      _      __  __    _ __   __
        / \  |  \/  | ____| |   |_ _|  / \     / ___|  / \  |  _ \    / \    |  \/  |  / \\ \ / /
@@ -1137,11 +1155,11 @@
 
     -->
     <insert schemaName="party" tableName="parties">
-      <column name="created" value="${now}"/>
       <column name="id" value="21166574-6564-468a-b845-8a5c127a4345"/>
-      <column name="name" value="Amelia Cara May"/>
       <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="type" value="person"/>
+      <column name="name" value="Amelia Cara May"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="persons">
       <column name="countries_of_citizenship" value="GB"/>
@@ -1173,214 +1191,243 @@
       <column name="title" value="mrs"/>
     </insert>
     <insert schemaName="party" tableName="attributes">
-      <column name="created" value="${now}"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="weight"/>
       <column name="decimal_value" value="54.1"/>
       <column name="unit" value="metric_kilogram"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="consents">
-      <column name="created" value="${now}"/>
-      <column name="effective_from" value="2014-08-23"/>
-      <column name="effective_to" value="2022-04-08"/>
       <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="marketing"/>
+      <column name="effective_from" value="2014-08-23"/>
+      <column name="effective_to" value="2022-04-08"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
-      <column name="created" value="${now}"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
-      <column name="purposes" value=""/>
-      <column name="role" value="home_phone_number"/>
       <column name="type" value="phone_number"/>
+      <column name="role" value="home_phone_number"/>
       <column name="value" value="0115551234"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
-      <column name="created" value="${now}"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
-      <column name="purposes" value="security"/>
-      <column name="role" value="personal_mobile_number"/>
       <column name="type" value="mobile_number"/>
-      <column name="value" value="0835551234"/>
+      <column name="role" value="personal_mobile_number"/>
+      <column name="value" value="+27835551234"/>
+      <column name="purposes" value="security"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
-      <column name="created" value="${now}"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
-      <column name="purposes" value="general,marketing,security"/>
-      <column name="role" value="personal_email_address"/>
       <column name="type" value="email_address"/>
+      <column name="role" value="personal_email_address"/>
       <column name="value" valueComputed="LOWER('Amelia.May@google.com')"/>
+      <column name="purposes" value="general,marketing,security"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="educations">
-      <column name="created" value="${now}"/>
-      <column name="field_of_study" value="electrical_engineering"/>
-      <column name="first_year_attended" value="1995"/>
       <column name="id" value="ded88b19-c15c-4a99-a46d-d7e609a83c11"/>
-      <column name="institution_country" value="GB"/>
-      <column name="institution_name" value="Oxford University"/>
-      <column name="last_year_attended" value="2002"/>
       <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
-      <column name="qualification_name" value="Msc Electrical Engineering"/>
       <column name="qualification_type" value="masters_degree"/>
       <column name="qualification_year" value="2002"/>
+      <column name="qualification_name" value="Msc Electrical Engineering"/>
+      <column name="institution_name" value="Oxford University"/>
+      <column name="institution_country" value="GB"/>
+      <column name="field_of_study" value="electrical_engineering"/>
+      <column name="first_year_attended" value="1995"/>
+      <column name="last_year_attended" value="2002"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="employments">
-      <column name="created" value="${now}"/>
-      <column name="employer_address_city" value="Johannesburg"/>
-      <column name="employer_address_country" value="ZA"/>
-      <column name="employer_address_line1" value="300 Janadel Avenue"/>
-      <column name="employer_address_line2" value=""/>
-      <column name="employer_address_line3" value=""/>
-      <column name="employer_address_line4" value=""/>
-      <column name="employer_address_postal_code" value="1685"/>
-      <column name="employer_address_region" value="GP"/>
-      <column name="employer_address_suburb" value="Halfway House"/>
-      <column name="employer_contact_person" value="HR Administrator"/>
-      <column name="employer_email_address" valueComputed="LOWER('contactus@siemens.co.za')"/>
+      <column name="id" value="03cf0e55-7d9d-4a8b-aa49-ffb8cc741bcb"/>
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="employer_name" value="Siemens"/>
       <column name="employer_phone_number" value="0116522000"/>
-      <column name="end_date" value="2011-05-27"/>
-      <column name="id" value="03cf0e55-7d9d-4a8b-aa49-ffb8cc741bcb"/>
-      <column name="occupation" value="professional_engineering"/>
-      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="employer_email_address" valueComputed="LOWER('contactus@siemens.co.za')"/>
+      <column name="employer_contact_person" value="HR Administrator"/>
+      <column name="employer_address_line1" value="300 Janadel Avenue"/>
+      <column name="employer_address_suburb" value="Halfway House"/>
+      <column name="employer_address_city" value="Johannesburg"/>
+      <column name="employer_address_region" value="GP"/>
+      <column name="employer_address_country" value="ZA"/>
+      <column name="employer_address_postal_code" value="1685"/>
       <column name="start_date" value="2003-05-06"/>
+      <column name="end_date" value="2011-05-27"/>
       <column name="type" value="full_time"/>
+      <column name="occupation" value="professional_engineering"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="employments">
-      <column name="created" value="${now}"/>
-      <column name="employer_address_city" value="Johannesburg"/>
-      <column name="employer_address_country" value="ZA"/>
-      <column name="employer_address_line1" value="867 Fairland Office Park"/>
-      <column name="employer_address_line2" value="200 Smit Street"/>
-      <column name="employer_address_line3" value=""/>
-      <column name="employer_address_line4" value=""/>
-      <column name="employer_address_postal_code" value="2170"/>
-      <column name="employer_address_region" value="GP"/>
-      <column name="employer_address_suburb" value="Fairland"/>
-      <column name="employer_contact_person" value="Glenn Hartman"/>
-      <column name="employer_email_address" valueComputed="LOWER('GlennSHartman@maycakes.com')"/>
+      <column name="id" value="cbca7398-1d90-4621-b32b-f5bafd6c6ef5"/>
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="employer_name" value="May Cakes"/>
       <column name="employer_phone_number" value="0115558765"/>
-      <column name="id" value="cbca7398-1d90-4621-b32b-f5bafd6c6ef5"/>
-      <column name="occupation" value="manager"/>
-      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="employer_email_address" valueComputed="LOWER('GlennSHartman@maycakes.com')"/>
+      <column name="employer_contact_person" value="Glenn Hartman"/>
+      <column name="employer_address_line1" value="867 Fairland Office Park"/>
+      <column name="employer_address_line2" value="200 Smit Street"/>
+      <column name="employer_address_suburb" value="Fairland"/>
+      <column name="employer_address_city" value="Johannesburg"/>
+      <column name="employer_address_region" value="GP"/>
+      <column name="employer_address_country" value="ZA"/>
+      <column name="employer_address_postal_code" value="2170"/>
       <column name="start_date" value="2011-07-04"/>
       <column name="type" value="full_time"/>
+      <column name="occupation" value="manager"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="external_references">
-      <column name="created" value="${now}"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="legacy_customer_code"/>
       <column name="value" value="ECM123456"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="identity_documents">
-      <column name="country_of_issue" value="ZA"/>
-      <column name="created" value="${now}"/>
-      <column name="date_of_issue" value="2009-11-02"/>
-      <column name="date_provided" value="2020-08-17"/>
       <column name="id" value="da2dad31-8dbf-432e-ae69-d3d4d13ced92"/>
-      <column name="number" value="7904014800086"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="za_id_card"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="date_of_issue" value="2009-11-02"/>
+      <column name="number" value="7904014800086"/>
+      <column name="date_provided" value="2020-08-17"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="identity_documents">
-      <column name="country_of_issue" value="GB"/>
-      <column name="created" value="${now}"/>
-      <column name="date_of_expiry" value="2025-04-02"/>
-      <column name="date_of_issue" value="2015-04-02"/>
-      <column name="date_provided" value="2020-08-17"/>
       <column name="id" value="8f5bbbf1-a29b-4a22-882c-b27bd2e3bd57"/>
-      <column name="number" value="A1234567890"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="passport"/>
+      <column name="country_of_issue" value="GB"/>
+      <column name="date_of_issue" value="2015-04-02"/>
+      <column name="number" value="A1234567890"/>
+      <column name="date_of_expiry" value="2025-04-02"/>
+      <column name="date_provided" value="2020-08-17"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="language_proficiencies">
-      <column name="created" value="${now}"/>
       <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="language" value="EN"/>
       <column name="listen_level" value="proficient"/>
-      <column name="read_level" value="proficient"/>
       <column name="speak_level" value="proficient"/>
+      <column name="read_level" value="proficient"/>
       <column name="write_level" value="proficient"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="locks">
-      <column name="created" value="${now}"/>
-      <column name="effective_from" value="2021-09-10"/>
-      <column name="effective_to" value="2022-01-01"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="kyc_unverified"/>
+      <column name="effective_from" value="2021-09-10"/>
+      <column name="effective_to" value="2022-01-01"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="next_of_kin">
-      <column name="address_city" value="Cape Town"/>
-      <column name="address_country" value="ZA"/>
-      <column name="address_line1" value="3 Lower Klipfontein Road"/>
-      <column name="address_postal_code" value="7764"/>
-      <column name="address_region" value="WC"/>
-      <column name="address_suburb" value="Athlone"/>
-      <column name="created" value="${now}"/>
-      <column name="email_address" value="fredsmith44@gmail.com"/>
       <column name="id" value="1847d54b-459c-4e72-999e-2c15233e4ac7"/>
-      <column name="mobile_number" value="0715551234"/>
-      <column name="name" value="Fred Smith"/>
       <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
-      <column name="phone_number" value="0215557890"/>
       <column name="type" value="father"/>
+      <column name="name" value="Fred Smith"/>
+      <column name="phone_number" value="0215557890"/>
+      <column name="mobile_number" value="+27715551234"/>
+      <column name="email_address" value="fredsmith44@gmail.com"/>
+      <column name="address_line1" value="3 Lower Klipfontein Road"/>
+      <column name="address_suburb" value="Athlone"/>
+      <column name="address_city" value="Cape Town"/>
+      <column name="address_region" value="WC"/>
+      <column name="address_country" value="ZA"/>
+      <column name="address_postal_code" value="7764"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="physical_addresses">
-      <column name="city" value="Johannesburg"/>
+      <column name="id" value="3e912f3b-cd64-4868-8b3b-b8c05232eb64"/>
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="complex"/>
+      <column name="role" value="home"/>
       <column name="complex_name" value="Die Wilge"/>
       <column name="complex_unit_number" value="3"/>
-      <column name="country" value="ZA"/>
-      <column name="created" value="${now}"/>
-      <column name="id" value="3e912f3b-cd64-4868-8b3b-b8c05232eb64"/>
-      <column name="latitude" value="-26.132480441365484"/>
-      <column name="longitude" value="27.944038870432856"/>
-      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
-      <column name="postal_code" value="2170"/>
-      <column name="purposes" value="billing,correspondence,delivery"/>
-      <column name="region" value="GP"/>
-      <column name="role" value="home"/>
       <column name="street_name" value="Smit St"/>
       <column name="street_number" value="168"/>
       <column name="suburb" value="Fairland"/>
-      <column name="type" value="street"/>
+      <column name="city" value="Johannesburg"/>
+      <column name="region" value="GP"/>
+      <column name="country" value="ZA"/>
+      <column name="postal_code" value="2170"/>
+      <column name="purposes" value="billing,correspondence,delivery"/>
+      <column name="latitude" value="-26.132480441365484"/>
+      <column name="longitude" value="27.944038870432856"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="preferences">
-      <column name="created" value="${now}"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="correspondence_language"/>
       <column name="value" value="EN"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="residence_permits">
-      <column name="country_of_issue" value="ZA"/>
-      <column name="created" value="${now}"/>
-      <column name="date_of_expiry" value="2030-03-22"/>
-      <column name="date_of_issue" value="2003-02-15"/>
       <column name="id" value="4cdeea16-9813-4494-854f-2a53bf5a7562"/>
-      <column name="number" value="X1234567890"/>
       <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="za_general_work_visa"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="date_of_issue" value="2003-02-15"/>
+      <column name="number" value="X1234567890"/>
+      <column name="date_of_expiry" value="2030-03-22"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="roles">
-      <column name="created" value="${now}"/>
-      <column name="effective_from" value="2020-08-17"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
-      <column name="purpose" value="kyc_requirements"/>
       <column name="type" value="individual_customer"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="purpose" value="kyc_requirements"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="segment_allocations">
-      <column name="created" value="${now}"/>
-      <column name="effective_from" value="2020-08-17"/>
-      <column name="effective_to" value="2021-03-16"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="segment" value="upper_middle_income"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="effective_to" value="2021-03-16"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="segment_allocations">
-      <column name="created" value="${now}"/>
-      <column name="effective_from" value="2021-03-16"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="segment" value="high_income"/>
+      <column name="effective_from" value="2021-03-16"/>
+      <column name="created" value="${now}"/>
     </insert>
-
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="salary_wages"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="percentage" value="100"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_funds">
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="investments_other"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="effective_to" value="2021-02-17"/>
+      <column name="description" value="Stocks and shares"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="sources_of_wealth">
+      <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="savings"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="description" value="Savings"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="statuses">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="fraud_investigation"/>
+      <column name="effective_from" value="2020-10-13"/>
+      <column name="effective_to" value="2020-10-20"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="tax_numbers">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="za_income_tax_number"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="number" value="1234567890"/>
+      <column name="created" value="${now}"/>
+    </insert>
 
 
     <!--
@@ -1392,11 +1439,11 @@
 
     -->
     <insert schemaName="party" tableName="parties">
-      <column name="created" value="${now}"/>
       <column name="id" value="2a5ebf5c-623d-4bb6-bddd-d1ee871759fd"/>
-      <column name="name" value="Erin Cara May"/>
       <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="type" value="person"/>
+      <column name="name" value="Erin Cara May"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="persons">
       <column name="date_of_birth" value="2019-03-28"/>
@@ -1421,42 +1468,42 @@
 
     -->
     <insert schemaName="party" tableName="parties">
-      <column name="created" value="${now}"/>
       <column name="id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
-      <column name="name" value="May Cakes"/>
       <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="type" value="organization"/>
+      <column name="name" value="May Cakes"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
-      <column name="created" value="${now}"/>
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
-      <column name="purposes" value=""/>
-      <column name="role" value="main_phone_number"/>
       <column name="type" value="phone_number"/>
+      <column name="role" value="main_phone_number"/>
       <column name="value" value="0115558765"/>
+      <column name="purposes" value=""/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
-      <column name="created" value="${now}"/>
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
-      <column name="purposes" value="general"/>
-      <column name="role" value="main_email_address"/>
       <column name="type" value="email_address"/>
+      <column name="role" value="main_email_address"/>
       <column name="value" value="info@maycakes.com"/>
+      <column name="purposes" value="general"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="physical_addresses">
-      <column name="city" value="Johannesburg"/>
-      <column name="country" value="ZA"/>
-      <column name="created" value="${now}"/>
       <column name="id" value="80aac230-b7b3-4a8d-a7fc-e473013fdab5"/>
-      <column name="latitude" value="-26.129229541826838"/>
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="unstructured"/>
+      <column name="role" value="main"/>
       <column name="line1" value="867 Fairland Office Park"/>
       <column name="line2" value="200 Smit Street"/>
-      <column name="longitude" value="27.946091455090585"/>
-      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
-      <column name="postal_code" value="2170"/>
+      <column name="city" value="Johannesburg"/>
       <column name="region" value="GP"/>
-      <column name="role" value="main"/>
-      <column name="type" value="unstructured"/>
+      <column name="country" value="ZA"/>
+      <column name="postal_code" value="2170"/>
+      <column name="latitude" value="-26.129229541826838"/>
+      <column name="longitude" value="27.946091455090585"/>
+      <column name="created" value="${now}"/>
     </insert>
 
 
@@ -1469,43 +1516,43 @@
 
     -->
     <insert schemaName="party" tableName="associations">
-      <column name="created" value="${now}"/>
-      <column name="effective_from" value="2019-03-28"/>
       <column name="id" value="b7475462-880d-40b8-9cdd-e98eae13dbc6"/>
-      <column name="first_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
-      <column name="second_party_id" value="2a5ebf5c-623d-4bb6-bddd-d1ee871759fd"/>
       <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="type" value="parent_child"/>
+      <column name="first_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="second_party_id" value="2a5ebf5c-623d-4bb6-bddd-d1ee871759fd"/>
+      <column name="effective_from" value="2019-03-28"/>
+      <column name="created" value="${now}"/>
     </insert>
 
 
     <insert schemaName="party" tableName="associations">
-      <column name="created" value="${now}"/>
-      <column name="effective_from" value="2011-07-22"/>
-      <column name="effective_to" value="2050-01-10"/>
       <column name="id" value="4b3fb77a-201b-48e1-b9da-00e94c15e742"/>
-      <column name="first_party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
-      <column name="second_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="type" value="company_shareholder"/>
+      <column name="first_party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="second_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="effective_from" value="2011-07-22"/>
+      <column name="effective_to" value="2050-01-10"/>
+      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="association_properties">
-      <column name="created" value="${now}"/>
       <column name="association_id" value="4b3fb77a-201b-48e1-b9da-00e94c15e742"/>
       <column name="type" value="shareholding"/>
       <column name="decimal_value" value="100.00"/>
+      <column name="created" value="${now}"/>
     </insert>
 
 
     <insert schemaName="party" tableName="associations">
-      <column name="created" value="${now}"/>
-      <column name="effective_from" value="2011-07-22"/>
-      <column name="effective_to" value="2050-01-10"/>
       <column name="id" value="9d962cf4-a8c9-47fe-a255-41eee9e29919"/>
-      <column name="first_party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
-      <column name="second_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="type" value="directorship"/>
+      <column name="first_party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="second_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="effective_from" value="2011-07-22"/>
+      <column name="effective_to" value="2050-01-10"/>
+      <column name="created" value="${now}"/>
     </insert>
 
 
@@ -1514,50 +1561,6 @@
 
 
 
-
-
-  <!--
-
-
-    <insert schemaName="" tableName="">
-      <column name="" value=""/>
-    </insert>
-
-
-
-  -->
-
-
-
-  <!--
-
-
-
-
-INSERT INTO party.parties (id, tenant_id, type, name, created)
-  VALUES ('00166574-6564-468a-b845-8a5c127a4345', '204e5b8f-48e7-4354-bd15-753e6543b64d', 'person', 'Sally Smith', NOW());
-INSERT INTO party.roles (party_id, type, effective_from, created)
-  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'test_person_role', NOW(), NOW());
-INSERT INTO party.persons (id, title, initials, given_name, surname, gender, race, date_of_birth, language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, occupation, residency_status, residential_type, countries_of_tax_residence)
-  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'ms', 'S', 'Sally', 'Smith', 'female', 'asian', '1985-05-01', 'EN', 'GB', 'ZA', 'employed', 'full_time', 'single', 'executive', 'citizen', 'owner', 'ZA');
-INSERT INTO party.identity_documents (id, party_id, type, number, date_of_issue, country_of_issue, created)
-  VALUES ('60166574-6564-468a-b845-8a5c127a4345', '00166574-6564-468a-b845-8a5c127a4345', 'za_id_card', '8505016777088', '2015-02-17', 'ZA', NOW());
-INSERT INTO party.contact_mechanisms (party_id, type, role, value, created)
-  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'email_address', 'work_email_address', 'sally@demo.com', NOW());
-INSERT INTO party.physical_addresses (id, party_id, type, role, complex_name, complex_unit_number, street_number, street_name, suburb, city, region, country, postal_code, latitude, longitude, purposes, created)
-  VALUES ('10166574-6564-468a-b845-8a5c127a4345', '00166574-6564-468a-b845-8a5c127a4345', 'complex', 'residential', 'Happy Place', '7', '15', 'Fifth Avenue', 'Linden', 'Johannesburg', 'GP', 'ZA', '2195', '-26.137005', '27.969069', 'billing,correspondence,delivery', NOW());
-INSERT INTO party.preferences(party_id, type, value, created)
-  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'correspondence_language', 'EN', NOW());
-INSERT INTO party.preferences(party_id, type, value, created)
-  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'time_to_contact', 'anytime', NOW());
-INSERT INTO party.tax_numbers (party_id, type, number, country_of_issue, created)
-  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'za_income_tax_number', '1234567890', 'ZA', NOW());
-
-
-
-
-
-  -->
 
 
 </databaseChangeLog>

@@ -328,6 +328,7 @@ public class ReferenceApi extends SecureApi {
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the region reference
    *     data for
+   * @param country the ISO 3166-1 alpha-2 code for the country to retrieve the regions for
    * @return the region reference data
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the region reference data could not be retrieved
@@ -367,9 +368,16 @@ public class ReferenceApi extends SecureApi {
               value = "localeId",
               required = false,
               defaultValue = IReferenceService.DEFAULT_LOCALE_ID)
-          String localeId)
+          String localeId,
+      @Parameter(
+              name = "country",
+              description =
+                  "The ISO 3166-1 alpha-2 code for the country to retrieve the regions for",
+              example = "ZA")
+          @RequestParam(value = "country", required = false)
+          String country)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return referenceService.getRegions(localeId);
+    return referenceService.getRegions(localeId, country);
   }
 
   /**

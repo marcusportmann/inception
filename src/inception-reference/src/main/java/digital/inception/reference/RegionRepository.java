@@ -44,4 +44,15 @@ public interface RegionRepository extends JpaRepository<Region, RegionId> {
   @Query(
       "select r from Region r where upper(r.localeId) = upper(:localeId) order by r.localeId, -r.sortIndex DESC, r.name")
   List<Region> findByLocaleIdIgnoreCase(String localeId);
+
+  /**
+   * Retrieve the regions for the specified locale sorted by locale ID, sort index, and name.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the regions for
+   * @param country the ISO 3166-1 alpha-2 code for the country to retrieve the regions for
+   * @return the regions for the specified locale sorted by locale ID, sort index, and name
+   */
+  @Query(
+      "select r from Region r where (upper(r.localeId) = upper(:localeId)) and (upper(r.country) = upper(:country)) order by r.localeId, -r.sortIndex DESC, r.name")
+  List<Region> findByLocaleIdIgnoreCaseAndCountryIgnoreCase(String localeId, String country);
 }

@@ -1537,13 +1537,14 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Cacheable(cacheNames = "reference", key = "'roleTypeAttributeTypeConstraints.' + #roleType")
   public List<RoleTypeAttributeTypeConstraint> getRoleTypeAttributeTypeConstraints(String roleType)
       throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(roleType)) {
-      throw new InvalidArgumentException("roleType");
-    }
-
     try {
-      return roleTypeAttributeTypeConstraintRepository.findByRoleTypeIgnoreCase(
-          roleType, Sort.by(Direction.ASC, "roleType", "attributeType"));
+      if (StringUtils.hasText(roleType)) {
+        return roleTypeAttributeTypeConstraintRepository.findByRoleTypeIgnoreCase(
+            roleType, Sort.by(Direction.ASC, "roleType", "attributeType"));
+      } else {
+        return roleTypeAttributeTypeConstraintRepository.findAll(
+            Sort.by(Direction.ASC, "roleType", "attributeType"));
+      }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the role type attribute type constraints", e);
@@ -1567,13 +1568,14 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Cacheable(cacheNames = "reference", key = "'roleTypePreferenceTypeConstraints.' + #roleType")
   public List<RoleTypePreferenceTypeConstraint> getRoleTypePreferenceTypeConstraints(
       String roleType) throws InvalidArgumentException, ServiceUnavailableException {
-    if (!StringUtils.hasText(roleType)) {
-      throw new InvalidArgumentException("roleType");
-    }
-
     try {
-      return roleTypePreferenceTypeConstraintRepository.findByRoleTypeIgnoreCase(
-          roleType, Sort.by(Direction.ASC, "roleType", "preferenceType"));
+      if (StringUtils.hasText(roleType)) {
+        return roleTypePreferenceTypeConstraintRepository.findByRoleTypeIgnoreCase(
+            roleType, Sort.by(Direction.ASC, "roleType", "preferenceType"));
+      } else {
+        return roleTypePreferenceTypeConstraintRepository.findAll(
+            Sort.by(Direction.ASC, "roleType", "preferenceType"));
+      }
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the role type preference type constraints", e);
