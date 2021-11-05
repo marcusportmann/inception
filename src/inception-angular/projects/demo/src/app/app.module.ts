@@ -106,6 +106,7 @@ export class AppModule extends InceptionAppModule {
       new NavigationItem('fa fa-file-alt', 'Form', '/inception/form', [],
         [new NavigationItem('fa fa-file-alt', 'Example Form', '/inception/form/example-form'),
           new NavigationItem('fa fa-file-alt', 'Party Reference Form', '/inception/form/party-reference-form'),
+          new NavigationItem('fa fa-file-alt', 'Person Form', '/inception/form/person-form'),
           new NavigationItem('fa fa-file-alt', 'Reference Form', '/inception/form/reference-form')
         ]),
 

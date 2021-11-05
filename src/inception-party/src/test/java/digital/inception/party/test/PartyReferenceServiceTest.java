@@ -171,7 +171,7 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getAttributeTypeCategories(IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        2,
+        3,
         retrievedAttributeTypeCategories.size(),
         "The correct number of attribute type categories was not retrieved");
 
@@ -180,7 +180,7 @@ public class PartyReferenceServiceTest {
             IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        2,
+        3,
         retrievedAttributeTypeCategories.size(),
         "The correct number of attribute type categories was not retrieved");
 
@@ -190,7 +190,7 @@ public class PartyReferenceServiceTest {
             IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        1,
+        2,
         retrievedAttributeTypeCategories.size(),
         "The correct number of attribute type categories was not retrieved");
   }
@@ -202,7 +202,7 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getAttributeTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        4,
+        5,
         retrievedAttributeTypes.size(),
         "The correct number of attribute types was not retrieved");
 
@@ -211,7 +211,7 @@ public class PartyReferenceServiceTest {
             IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        4,
+        5,
         retrievedAttributeTypes.size(),
         "The correct number of attribute types was not retrieved");
 
@@ -221,7 +221,7 @@ public class PartyReferenceServiceTest {
             IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        3,
+        4,
         retrievedAttributeTypes.size(),
         "The correct number of attribute types was not retrieved");
   }

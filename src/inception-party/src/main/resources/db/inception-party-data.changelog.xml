@@ -15,6 +15,12 @@
       <column name="name" value="Anthropometric Measurements"/>
       <column name="description" value="Anthropometric Measurements"/>
     </insert>
+    <insert schemaName="party" tableName="attribute_type_categories">
+      <column name="code" value="business_operations"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Business Operations"/>
+      <column name="description" value="Business Operations"/>
+    </insert>
 
     <insert schemaName="party" tableName="attribute_types">
       <column name="category" value="anthropometric_measurements"/>
@@ -44,6 +50,15 @@
       <column name="party_types" value="person"/>
       <column name="unit_type" value="mass"/>
       <column name="value_type" value="decimal"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="business_operations"/>
+      <column name="code" value="operating_hours"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Operating Hours"/>
+      <column name="description" value="Operating Hours"/>
+      <column name="party_types" value="organization"/>
+      <column name="value_type" value="string"/>
     </insert>
 
     <insert schemaName="party" tableName="consent_types">
@@ -3643,12 +3658,17 @@
       <column name="description" value="Unknown"/>
     </insert>
 
-
     <insert schemaName="party" tableName="attribute_type_categories">
       <column name="code" value="anthropometric_measurements"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Anthropometric Measurements"/>
       <column name="description" value="Anthropometric Measurements"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_type_categories">
+      <column name="code" value="business_operations"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Business Operations"/>
+      <column name="description" value="Business Operations"/>
     </insert>
 
     <insert schemaName="party" tableName="attribute_types">
@@ -3679,6 +3699,15 @@
       <column name="party_types" value="person"/>
       <column name="unit_type" value="mass"/>
       <column name="value_type" value="decimal"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="business_operations"/>
+      <column name="code" value="operating_hours"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Operating Hours"/>
+      <column name="description" value="Operating Hours"/>
+      <column name="party_types" value="organization"/>
+      <column name="value_type" value="string"/>
     </insert>
 
     <insert schemaName="party" tableName="consent_types">
