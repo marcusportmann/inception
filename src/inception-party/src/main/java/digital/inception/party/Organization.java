@@ -38,6 +38,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
@@ -133,6 +134,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<Attribute> attributes = new HashSet<>();
 
   /** The contact mechanisms for the organization. */
@@ -142,6 +144,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
 
   /** The external references for the organization. */
@@ -151,6 +154,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<ExternalReference> externalReferences = new HashSet<>();
 
   /** The identity documents for the organization. */
@@ -160,6 +164,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<IdentityDocument> identityDocuments = new HashSet<>();
 
   /** The locks applied to the organization. */
@@ -169,6 +174,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<Lock> locks = new HashSet<>();
 
   /** The physical addresses for the organization. */
@@ -187,6 +193,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<Preference> preferences = new HashSet<>();
 
   /** The roles assigned directly to the organization. */
@@ -196,6 +203,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<Role> roles = new HashSet<>();
 
   /** The segment allocations for the organization. */
@@ -205,6 +213,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("segment")
   private final Set<SegmentAllocation> segmentAllocations = new HashSet<>();
 
   /** The statuses assigned to the organization. */
@@ -214,6 +223,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<Status> statuses = new HashSet<>();
 
   /** The tax numbers for the organization. */
@@ -223,6 +233,7 @@ public class Organization extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
   /**

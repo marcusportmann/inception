@@ -22,6 +22,7 @@ import {CoreModule} from 'ngx-inception/core';
 import {ExampleFormComponent} from './example-form.component';
 import {PartyReferenceFormComponent} from './party-reference-form-component';
 import {PersonFormComponent} from "./person-form.component";
+import {PersonComponent} from "./person.component";
 import {ReferenceFormComponent} from './reference-form.component';
 
 const routes: Routes = [{
@@ -62,8 +63,8 @@ const routes: Routes = [{
     // Inception modules
     CoreModule
   ],
-  declarations: [ExampleFormComponent, PartyReferenceFormComponent, PersonFormComponent,
-    ReferenceFormComponent],
+  declarations: [ExampleFormComponent, PartyReferenceFormComponent, PersonComponent,
+    PersonFormComponent, ReferenceFormComponent],
   providers: []
 })
 export class FormModule {

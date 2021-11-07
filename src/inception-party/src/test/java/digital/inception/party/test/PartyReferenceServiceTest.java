@@ -1110,20 +1110,20 @@ public class PartyReferenceServiceTest {
     List<Segment> retrievedSegments =
         partyReferenceService.getSegments(IPartyReferenceService.DEFAULT_LOCALE_ID);
 
-    assertEquals(6, retrievedSegments.size(), "The correct number of segments was not retrieved");
+    assertEquals(10, retrievedSegments.size(), "The correct number of segments was not retrieved");
 
     retrievedSegments =
         partyReferenceService.getSegments(
             IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
 
-    assertEquals(6, retrievedSegments.size(), "The correct number of segments was not retrieved");
+    assertEquals(10, retrievedSegments.size(), "The correct number of segments was not retrieved");
 
     retrievedSegments =
         partyReferenceService.getSegments(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
             IPartyReferenceService.DEFAULT_LOCALE_ID);
 
-    assertEquals(4, retrievedSegments.size(), "The correct number of segments was not retrieved");
+    assertEquals(8, retrievedSegments.size(), "The correct number of segments was not retrieved");
   }
 
   /** Test the segmentation type reference functionality. */
@@ -1133,7 +1133,7 @@ public class PartyReferenceServiceTest {
         partyReferenceService.getSegmentationTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        2,
+        3,
         retrievedSegmentationTypes.size(),
         "The correct number of segmentation types was not retrieved");
 
@@ -1142,7 +1142,7 @@ public class PartyReferenceServiceTest {
             IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        2,
+        3,
         retrievedSegmentationTypes.size(),
         "The correct number of segmentation types was not retrieved");
 
@@ -1152,7 +1152,7 @@ public class PartyReferenceServiceTest {
             IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        1,
+        2,
         retrievedSegmentationTypes.size(),
         "The correct number of segmentation types was not retrieved");
   }

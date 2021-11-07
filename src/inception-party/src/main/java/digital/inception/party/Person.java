@@ -41,6 +41,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
@@ -207,6 +208,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<Attribute> attributes = new HashSet<>();
 
   /** The consents provided by the person. */
@@ -216,6 +218,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<Consent> consents = new HashSet<>();
 
   /** The contact mechanisms for the person. */
@@ -225,6 +228,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
 
   /** The educations for the person. */
@@ -234,6 +238,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("qualificationYear")
   private final Set<Education> educations = new HashSet<>();
 
   /** The employments for the person. */
@@ -243,6 +248,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("startDate")
   private final Set<Employment> employments = new HashSet<>();
 
   /** The external references for the person. */
@@ -252,6 +258,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<ExternalReference> externalReferences = new HashSet<>();
 
   /** The identity documents for the person. */
@@ -261,6 +268,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<IdentityDocument> identityDocuments = new HashSet<>();
 
   /** The language proficiencies for the person. */
@@ -270,6 +278,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("language")
   private final Set<LanguageProficiency> languageProficiencies = new HashSet<>();
 
   /** The locks applied to the person. */
@@ -279,6 +288,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<Lock> locks = new HashSet<>();
 
   /** The next of kin for the person. */
@@ -288,6 +298,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<NextOfKin> nextOfKin = new HashSet<>();
 
   /** The physical addresses for the person. */
@@ -306,6 +317,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<Preference> preferences = new HashSet<>();
 
   /** The residence permits for the person. */
@@ -315,6 +327,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<ResidencePermit> residencePermits = new HashSet<>();
 
   /** The roles assigned directly to the person. */
@@ -324,6 +337,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<Role> roles = new HashSet<>();
 
   /** The segment allocations for the person. */
@@ -333,6 +347,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("segment")
   private final Set<SegmentAllocation> segmentAllocations = new HashSet<>();
 
   /** The sources of funds for the person. */
@@ -342,6 +357,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<SourceOfFunds> sourcesOfFunds = new HashSet<>();
 
   /** The sources of wealth for the person. */
@@ -351,6 +367,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<SourceOfWealth> sourcesOfWealth = new HashSet<>();
 
   /** The statuses assigned to the person. */
@@ -360,6 +377,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<Status> statuses = new HashSet<>();
 
   /** The tax numbers for the person. */
@@ -369,6 +387,7 @@ public class Person extends PartyBase implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @OrderBy("type")
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
   /**

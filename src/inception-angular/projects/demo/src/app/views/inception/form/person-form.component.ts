@@ -15,30 +15,13 @@
  */
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  Association,
-  AssociationPropertyType, AssociationType, AttributeType, AttributeTypeCategory, ConsentType,
-  ContactMechanismPurpose,
-  ContactMechanismRole, ContactMechanismType, EmploymentStatus, EmploymentType,
-  ExternalReferenceType, FieldOfStudy, Gender,
-  IdentityDocumentType, LockType, LockTypeCategory, MaritalStatus, MarriageType, NextOfKinType,
-  Occupation, Organization,
-  PartyReferenceService, PartyService, Person, PhysicalAddressPurpose, PhysicalAddressRole,
-  PhysicalAddressType,
-  PreferenceType,
-  PreferenceTypeCategory, QualificationType, Race,
-  ResidencePermitType,
-  ResidencyStatus,
-  ResidentialType, RolePurpose, RoleType, RoleTypeAttributeTypeConstraint,
-  RoleTypePreferenceTypeConstraint,
-  Segment, SegmentationType,
-  SourceOfFundsType, SourceOfWealthType, StatusType, StatusTypeCategory, TaxNumberType,
-  TimeToContact, Title
+  Association, Organization, PartyReferenceService, PartyService, Person
 } from 'ngx-inception/party';
-import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
+import {first} from 'rxjs/operators';
 
 /**
  * The PersonFormComponent class implements the person form component.

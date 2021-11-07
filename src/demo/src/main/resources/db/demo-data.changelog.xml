@@ -1317,8 +1317,8 @@
     <insert schemaName="party" tableName="locks">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="kyc_unverified"/>
-      <column name="effective_from" value="2021-09-10"/>
-      <column name="effective_to" value="2022-01-01"/>
+      <column name="effective_from" value="2020-09-10"/>
+      <column name="effective_to" value="2021-01-01"/>
       <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="next_of_kin">
@@ -1421,6 +1421,13 @@
       <column name="effective_to" value="2020-10-20"/>
       <column name="created" value="${now}"/>
     </insert>
+    <insert schemaName="party" tableName="statuses">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="kyc_verified"/>
+      <column name="effective_from" value="2021-01-01"/>
+      <column name="effective_to" value="2022-01-01"/>
+      <column name="created" value="${now}"/>
+    </insert>
     <insert schemaName="party" tableName="tax_numbers">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="za_income_tax_number"/>
@@ -1519,8 +1526,8 @@
     <insert schemaName="party" tableName="locks">
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
       <column name="type" value="kyc_unverified"/>
-      <column name="effective_from" value="2021-10-10"/>
-      <column name="effective_to" value="2022-02-01"/>
+      <column name="effective_from" value="2020-10-10"/>
+      <column name="effective_to" value="2021-02-01"/>
       <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="physical_addresses">
@@ -1538,6 +1545,41 @@
       <column name="longitude" value="27.946091455090585"/>
       <column name="created" value="${now}"/>
     </insert>
+    <insert schemaName="party" tableName="roles">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="business_customer"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="purpose" value="kyc_requirements"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="segment_allocations">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="segment" value="small_sme"/>
+      <column name="effective_from" value="2020-08-17"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="statuses">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="kyc_verified"/>
+      <column name="effective_from" value="2021-01-01"/>
+      <column name="effective_to" value="2022-01-01"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="tax_numbers">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="za_income_tax_number"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="number" value="987654321"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="tax_numbers">
+      <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
+      <column name="type" value="za_vat_tax_number"/>
+      <column name="country_of_issue" value="ZA"/>
+      <column name="number" value="ZA123456"/>
+      <column name="created" value="${now}"/>
+    </insert>
+
 
 
     <!--

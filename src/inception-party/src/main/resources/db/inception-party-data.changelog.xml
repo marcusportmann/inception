@@ -3089,6 +3089,12 @@
       <column name="name" value="Income"/>
       <column name="description" value="Income"/>
     </insert>
+    <insert schemaName="party" tableName="segmentation_types">
+      <column name="code" value="small_medium_enterprise"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Small Medium Enterprise"/>
+      <column name="description" value="Small Medium Enterprise"/>
+    </insert>
 
     <insert schemaName="party" tableName="segments">
       <column name="code" value="low_income"/>
@@ -3122,7 +3128,39 @@
       <column name="description" value="High Income"/>
       <column name="party_types" value="person"/>
     </insert>
-
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="medium_sme"/>
+      <column name="type" value="small_medium_enterprise"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Medium SME"/>
+      <column name="description" value="Medium SME"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="small_sme"/>
+      <column name="type" value="small_medium_enterprise"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Small SME"/>
+      <column name="description" value="Small SME"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="very_small_sme"/>
+      <column name="type" value="small_medium_enterprise"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Very Small SME"/>
+      <column name="description" value="Very Small SME"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="micro_sme"/>
+      <column name="type" value="small_medium_enterprise"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Micro SME"/>
+      <column name="description" value="Micro SME"/>
+      <column name="party_types" value="organization"/>
+    </insert>    
+    
     <insert schemaName="party" tableName="source_of_funds_types">
       <column name="code" value="salary_wages"/>
       <column name="locale_id" value="en-ZA"/>
@@ -6738,6 +6776,12 @@
       <column name="name" value="Income"/>
       <column name="description" value="Income"/>
     </insert>
+    <insert schemaName="party" tableName="segmentation_types">
+      <column name="code" value="small_medium_enterprise"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Small Medium Enterprise"/>
+      <column name="description" value="Small Medium Enterprise"/>
+    </insert>
 
     <insert schemaName="party" tableName="segments">
       <column name="code" value="low_income"/>
@@ -6770,6 +6814,38 @@
       <column name="name" value="High Income"/>
       <column name="description" value="High Income"/>
       <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="medium_sme"/>
+      <column name="type" value="small_medium_enterprise"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Medium SME"/>
+      <column name="description" value="Medium SME"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="small_sme"/>
+      <column name="type" value="small_medium_enterprise"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Small SME"/>
+      <column name="description" value="Small SME"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="very_small_sme"/>
+      <column name="type" value="small_medium_enterprise"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Very Small SME"/>
+      <column name="description" value="Very Small SME"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="segments">
+      <column name="code" value="micro_sme"/>
+      <column name="type" value="small_medium_enterprise"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Micro SME"/>
+      <column name="description" value="Micro SME"/>
+      <column name="party_types" value="organization"/>
     </insert>
 
     <insert schemaName="party" tableName="source_of_funds_types">
