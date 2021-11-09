@@ -14,22 +14,31 @@
  * limitations under the License.
  */
 
-import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  ProblemDetails, ServiceUnavailableError
+  ProblemDetails, ServiceUnavailableError, SortDirection
 } from 'ngx-inception/core';
 import {Observable, throwError} from "rxjs";
 import {catchError, map} from "rxjs/operators";
 import {Association} from "./association";
+import {AssociationSortBy} from "./association-sorty-by";
+import {Associations} from "./associations";
 import {Organization} from "./organization";
+import {OrganizationSortBy} from "./organization-sort-by";
+import {Organizations} from "./organizations";
+import {Parties} from "./parties";
+import {Party} from "./party";
+import {PartySortBy} from "./party-sorty-by";
 import {
   AssociationNotFoundError,
   DuplicateAssociationError, DuplicateOrganizationError, DuplicatePersonError,
   OrganizationNotFoundError, PartyNotFoundError, PersonNotFoundError
 } from "./party.service.errors";
 import {Person} from "./person";
+import {PersonSortBy} from "./person-sorty-by";
+import {Persons} from "./persons";
 
 /**
  * The Party Service implementation.
@@ -218,9 +227,6 @@ export class PartyService {
     }));
   }
 
-
-
-
   /**
    * Retrieve the association.
    *
@@ -249,6 +255,62 @@ export class PartyService {
   }
 
   /**
+   * Retrieve the associations for the party.
+   *
+   * @param partyId         The ID for the party.
+   * @param sortBy          The optional method used to sort the associations e.g. by type.
+   * @param sortDirection   The optional sort direction to apply to the associations.
+   * @param pageIndex       The optional page index.
+   * @param pageSize        The optional page size.
+   *
+   * @return The associations.
+   */
+  getAssociationsForParty(partyId: string, sortBy?: AssociationSortBy, sortDirection?: SortDirection,
+             pageIndex?: number, pageSize?: number): Observable<Associations> {
+
+    let params = new HttpParams();
+
+    if (sortBy != null) {
+      params = params.append('sortBy', String(sortBy));
+    }
+
+    if (sortDirection != null) {
+      params = params.append('sortDirection', sortDirection);
+    }
+
+    if (pageIndex != null) {
+      params = params.append('pageIndex', String(pageIndex));
+    }
+
+    if (pageSize != null) {
+      params = params.append('pageSize', String(pageSize));
+    }
+
+    return this.httpClient.get<Associations>(
+      this.config.partyApiUrlPrefix + '/parties/' + partyId + '/associations', {
+        params,
+        reportProgress: true,
+      }).pipe(map((associations: Associations) => {
+      return associations;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
+        return throwError(new PartyNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the associations for the party.', httpErrorResponse));
+    }));
+  }
+
+
+
+  /**
    * Retrieve the organization.
    *
    * @param organizationId The ID for the organization.
@@ -272,6 +334,143 @@ export class PartyService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to retrieve the organization.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the organizations.
+   *
+   * @param filter          The optional filter to apply to the organizations.
+   * @param sortBy          The optional method used to sort the organizations e.g. by name.
+   * @param sortDirection   The optional sort direction to apply to the organizations.
+   * @param pageIndex       The optional page index.
+   * @param pageSize        The optional page size.
+   *
+   * @return The users.
+   */
+  getOrganizations(filter?: string, sortBy?: OrganizationSortBy, sortDirection?: SortDirection,
+           pageIndex?: number, pageSize?: number): Observable<Organizations> {
+
+    let params = new HttpParams();
+
+    if (filter != null) {
+      params = params.append('filter', filter);
+    }
+
+    if (sortBy != null) {
+      params = params.append('sortBy', String(sortBy));
+    }
+
+    if (sortDirection != null) {
+      params = params.append('sortDirection', sortDirection);
+    }
+
+    if (pageIndex != null) {
+      params = params.append('pageIndex', String(pageIndex));
+    }
+
+    if (pageSize != null) {
+      params = params.append('pageSize', String(pageSize));
+    }
+
+    return this.httpClient.get<Organizations>(
+      this.config.partyApiUrlPrefix + '/organizations', {
+        params,
+        reportProgress: true,
+      }).pipe(map((organizations: Organizations) => {
+      return organizations;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the organizations.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the parties.
+   *
+   * @param filter          The optional filter to apply to the parties.
+   * @param sortBy          The optional method used to sort the parties e.g. by name.
+   * @param sortDirection   The optional sort direction to apply to the parties.
+   * @param pageIndex       The optional page index.
+   * @param pageSize        The optional page size.
+   *
+   * @return The parties.
+   */
+  getParties(filter?: string, sortBy?: PartySortBy, sortDirection?: SortDirection,
+             pageIndex?: number, pageSize?: number): Observable<Parties> {
+
+    let params = new HttpParams();
+
+    if (filter != null) {
+      params = params.append('filter', filter);
+    }
+
+    if (sortBy != null) {
+      params = params.append('sortBy', String(sortBy));
+    }
+
+    if (sortDirection != null) {
+      params = params.append('sortDirection', sortDirection);
+    }
+
+    if (pageIndex != null) {
+      params = params.append('pageIndex', String(pageIndex));
+    }
+
+    if (pageSize != null) {
+      params = params.append('pageSize', String(pageSize));
+    }
+
+    return this.httpClient.get<Parties>(
+      this.config.partyApiUrlPrefix + '/parties', {
+        params,
+        reportProgress: true,
+      }).pipe(map((parties: Parties) => {
+      return parties;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the parties.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the party.
+   *
+   * @param partyId The ID for the party.
+   *
+   * @return The party.
+   */
+  getParty(partyId: string): Observable<Party> {
+    return this.httpClient.get<Party>(this.config.partyApiUrlPrefix + '/parties/' + partyId,
+      {reportProgress: true})
+    .pipe(map((party: Party) => {
+      return party;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
+        return throwError(new PartyNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the party.', httpErrorResponse));
     }));
   }
 
@@ -302,9 +501,60 @@ export class PartyService {
     }));
   }
 
+  /**
+   * Retrieve the persons.
+   *
+   * @param filter          The optional filter to apply to the persons.
+   * @param sortBy          The optional method used to sort the persons e.g. by name.
+   * @param sortDirection   The optional sort direction to apply to the persons.
+   * @param pageIndex       The optional page index.
+   * @param pageSize        The optional page size.
+   *
+   * @return The persons.
+   */
+  getPersons(filter?: string, sortBy?: PersonSortBy, sortDirection?: SortDirection,
+                   pageIndex?: number, pageSize?: number): Observable<Persons> {
 
+    let params = new HttpParams();
 
+    if (filter != null) {
+      params = params.append('filter', filter);
+    }
 
+    if (sortBy != null) {
+      params = params.append('sortBy', String(sortBy));
+    }
+
+    if (sortDirection != null) {
+      params = params.append('sortDirection', sortDirection);
+    }
+
+    if (pageIndex != null) {
+      params = params.append('pageIndex', String(pageIndex));
+    }
+
+    if (pageSize != null) {
+      params = params.append('pageSize', String(pageSize));
+    }
+
+    return this.httpClient.get<Persons>(
+      this.config.partyApiUrlPrefix + '/persons', {
+        params,
+        reportProgress: true,
+      }).pipe(map((persons: Persons) => {
+      return persons;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the persons.', httpErrorResponse));
+    }));
+  }
 
   /**
    * Update the association.

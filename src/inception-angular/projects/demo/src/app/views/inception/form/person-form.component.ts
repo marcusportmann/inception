@@ -18,10 +18,13 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  Association, Organization, PartyReferenceService, PartyService, Person
+  Association, Associations, Organization, PartyReferenceService, PartyService, Person, Persons
 } from 'ngx-inception/party';
 import {Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
+import {Organizations} from "../../../../../../ngx-inception/party/src/services/organizations";
+import {Parties} from "../../../../../../ngx-inception/party/src/services/parties";
+import {Party} from "../../../../../../ngx-inception/party/src/services/party";
 
 /**
  * The PersonFormComponent class implements the person form component.
@@ -57,16 +60,37 @@ export class PersonFormComponent implements OnInit, OnDestroy {
 
   ok(): void {
     this.partyService.getAssociation('4b3fb77a-201b-48e1-b9da-00e94c15e742').pipe(first()).subscribe((association: Association) => {
-      console.log(association);
+      console.log('association = ', association);
     });
 
     this.partyService.getOrganization('0ca47707-1e7e-49d5-87e2-665a047a0980').pipe(first()).subscribe((organization: Organization) => {
-      console.log(organization);
+      console.log('organization = ', organization);
     });
 
     this.partyService.getPerson('21166574-6564-468a-b845-8a5c127a4345').pipe(first()).subscribe((person: Person) => {
-      console.log(person);
+      console.log('person = ', person);
     });
+
+    this.partyService.getOrganizations().pipe(first()).subscribe((organizations: Organizations) => {
+      console.log('organizations = ', organizations);
+    });
+
+    this.partyService.getPersons().pipe(first()).subscribe((persons: Persons) => {
+      console.log('persons = ', persons);
+    });
+
+    this.partyService.getParty('21166574-6564-468a-b845-8a5c127a4345').pipe(first()).subscribe((party: Party) => {
+      console.log('party = ', party);
+    });
+
+    this.partyService.getParties().pipe(first()).subscribe((parties: Parties) => {
+      console.log('parties = ', parties);
+    });
+
+    this.partyService.getAssociationsForParty('21166574-6564-468a-b845-8a5c127a4345').pipe(first()).subscribe((associations: Associations) => {
+      console.log('associations = ', associations);
+    });
+
 
   }
 }
