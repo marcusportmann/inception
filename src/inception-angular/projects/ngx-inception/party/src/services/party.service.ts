@@ -25,6 +25,7 @@ import {catchError, map} from "rxjs/operators";
 import {Association} from "./association";
 import {AssociationSortBy} from "./association-sorty-by";
 import {Associations} from "./associations";
+import {EntityType} from "./entity-type";
 import {Organization} from "./organization";
 import {OrganizationSortBy} from "./organization-sort-by";
 import {Organizations} from "./organizations";
@@ -39,6 +40,7 @@ import {
 import {Person} from "./person";
 import {PersonSortBy} from "./person-sorty-by";
 import {Persons} from "./persons";
+import {Snapshots} from "./snapshots";
 
 /**
  * The Party Service implementation.
@@ -257,11 +259,11 @@ export class PartyService {
   /**
    * Retrieve the associations for the party.
    *
-   * @param partyId         The ID for the party.
-   * @param sortBy          The optional method used to sort the associations e.g. by type.
-   * @param sortDirection   The optional sort direction to apply to the associations.
-   * @param pageIndex       The optional page index.
-   * @param pageSize        The optional page size.
+   * @param partyId       The ID for the party.
+   * @param sortBy        The optional method used to sort the associations e.g. by type.
+   * @param sortDirection The optional sort direction to apply to the associations.
+   * @param pageIndex     The optional page index.
+   * @param pageSize      The optional page size.
    *
    * @return The associations.
    */
@@ -308,8 +310,6 @@ export class PartyService {
     }));
   }
 
-
-
   /**
    * Retrieve the organization.
    *
@@ -340,11 +340,11 @@ export class PartyService {
   /**
    * Retrieve the organizations.
    *
-   * @param filter          The optional filter to apply to the organizations.
-   * @param sortBy          The optional method used to sort the organizations e.g. by name.
-   * @param sortDirection   The optional sort direction to apply to the organizations.
-   * @param pageIndex       The optional page index.
-   * @param pageSize        The optional page size.
+   * @param filter        The optional filter to apply to the organizations.
+   * @param sortBy        The optional method used to sort the organizations e.g. by name.
+   * @param sortDirection The optional sort direction to apply to the organizations.
+   * @param pageIndex     The optional page index.
+   * @param pageSize      The optional page size.
    *
    * @return The users.
    */
@@ -395,11 +395,11 @@ export class PartyService {
   /**
    * Retrieve the parties.
    *
-   * @param filter          The optional filter to apply to the parties.
-   * @param sortBy          The optional method used to sort the parties e.g. by name.
-   * @param sortDirection   The optional sort direction to apply to the parties.
-   * @param pageIndex       The optional page index.
-   * @param pageSize        The optional page size.
+   * @param filter        The optional filter to apply to the parties.
+   * @param sortBy        The optional method used to sort the parties e.g. by name.
+   * @param sortDirection The optional sort direction to apply to the parties.
+   * @param pageIndex     The optional page index.
+   * @param pageSize      The optional page size.
    *
    * @return The parties.
    */
@@ -504,11 +504,11 @@ export class PartyService {
   /**
    * Retrieve the persons.
    *
-   * @param filter          The optional filter to apply to the persons.
-   * @param sortBy          The optional method used to sort the persons e.g. by name.
-   * @param sortDirection   The optional sort direction to apply to the persons.
-   * @param pageIndex       The optional page index.
-   * @param pageSize        The optional page size.
+   * @param filter        The optional filter to apply to the persons.
+   * @param sortBy        The optional method used to sort the persons e.g. by name.
+   * @param sortDirection The optional sort direction to apply to the persons.
+   * @param pageIndex     The optional page index.
+   * @param pageSize      The optional page size.
    *
    * @return The persons.
    */
@@ -553,6 +553,59 @@ export class PartyService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to retrieve the persons.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the snapshots for an entity.
+   *
+   * @param entityType    The type of entity
+   * @param entityId      The ID for the entity
+   * @param from          The optional date to retrieve the snapshots from
+   * @param to            The optional date to retrieve the snapshots to
+   * @param sortDirection The optional sort direction to apply to the snapshots.
+   * @param pageIndex     The optional page index.
+   * @param pageSize      The optional page size.
+   *
+   * @return The snapshots.
+   */
+  getSnapshots(entityType: EntityType, entityId: string, from?: Date, to?: Date,
+               sortDirection?: SortDirection, pageIndex?: number,
+               pageSize?: number): Observable<Snapshots> {
+
+    let params = new HttpParams();
+
+    params = params.append('entityType', entityType);
+    params = params.append('entityId', entityId);
+
+    if (sortDirection != null) {
+      params = params.append('sortDirection', sortDirection);
+    }
+
+    if (pageIndex != null) {
+      params = params.append('pageIndex', String(pageIndex));
+    }
+
+    if (pageSize != null) {
+      params = params.append('pageSize', String(pageSize));
+    }
+
+    return this.httpClient.get<Snapshots>(
+      this.config.partyApiUrlPrefix + '/snapshots', {
+        params,
+        reportProgress: true,
+      }).pipe(map((snapshots: Snapshots) => {
+      return snapshots;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the snapshots.', httpErrorResponse));
     }));
   }
 

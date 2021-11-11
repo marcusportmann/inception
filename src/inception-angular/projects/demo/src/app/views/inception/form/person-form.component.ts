@@ -18,13 +18,10 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  Association, Associations, Organization, PartyReferenceService, PartyService, Person, Persons
+  EntityType, PartyReferenceService, PartyService, Person, Snapshots
 } from 'ngx-inception/party';
-import {Subscription} from 'rxjs';
+import {forkJoin, Subscription} from "rxjs";
 import {first} from 'rxjs/operators';
-import {Organizations} from "../../../../../../ngx-inception/party/src/services/organizations";
-import {Parties} from "../../../../../../ngx-inception/party/src/services/parties";
-import {Party} from "../../../../../../ngx-inception/party/src/services/party";
 
 /**
  * The PersonFormComponent class implements the person form component.
@@ -37,6 +34,8 @@ import {Party} from "../../../../../../ngx-inception/party/src/services/party";
 export class PersonFormComponent implements OnInit, OnDestroy {
 
   personForm: FormGroup;
+
+  person: Person | null = null;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -56,39 +55,83 @@ export class PersonFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.partyService.getPerson('21166574-6564-468a-b845-8a5c127a4345').pipe(first()).subscribe((person: Person) => {
+      this.person = person;
+
+      console.log('person = ', person);
+    });
   }
 
   ok(): void {
-    this.partyService.getAssociation('4b3fb77a-201b-48e1-b9da-00e94c15e742').pipe(first()).subscribe((association: Association) => {
-      console.log('association = ', association);
-    });
+    /*
 
-    this.partyService.getOrganization('0ca47707-1e7e-49d5-87e2-665a047a0980').pipe(first()).subscribe((organization: Organization) => {
+    .pipe(first()).subscribe((organization: Organization) => {
       console.log('organization = ', organization);
     });
 
-    this.partyService.getPerson('21166574-6564-468a-b845-8a5c127a4345').pipe(first()).subscribe((person: Person) => {
-      console.log('person = ', person);
-    });
 
-    this.partyService.getOrganizations().pipe(first()).subscribe((organizations: Organizations) => {
+    .pipe(first()).subscribe((organizations: Organizations) => {
       console.log('organizations = ', organizations);
     });
 
-    this.partyService.getPersons().pipe(first()).subscribe((persons: Persons) => {
+    .pipe(first()).subscribe((persons: Persons) => {
       console.log('persons = ', persons);
     });
 
-    this.partyService.getParty('21166574-6564-468a-b845-8a5c127a4345').pipe(first()).subscribe((party: Party) => {
+    .pipe(first()).subscribe((party: Party) => {
       console.log('party = ', party);
     });
 
-    this.partyService.getParties().pipe(first()).subscribe((parties: Parties) => {
+    .pipe(first()).subscribe((parties: Parties) => {
       console.log('parties = ', parties);
     });
 
-    this.partyService.getAssociationsForParty('21166574-6564-468a-b845-8a5c127a4345').pipe(first()).subscribe((associations: Associations) => {
+    .pipe(first()).subscribe((associations: Associations) => {
       console.log('associations = ', associations);
+    });
+
+    */
+
+
+
+
+
+    forkJoin({
+      party: this.partyService.getParty('21166574-6564-468a-b845-8a5c127a4345'),
+      parties: this.partyService.getParties(),
+
+      organization: this.partyService.getOrganization('0ca47707-1e7e-49d5-87e2-665a047a0980'),
+      organizations: this.partyService.getOrganizations(),
+
+      person: this.partyService.getPerson('21166574-6564-468a-b845-8a5c127a4345'),
+      persons: this.partyService.getPersons(),
+
+      association: this.partyService.getAssociation('4b3fb77a-201b-48e1-b9da-00e94c15e742'),
+      associations: this.partyService.getAssociationsForParty('21166574-6564-468a-b845-8a5c127a4345')
+
+
+
+    }).pipe(first()).subscribe((value => {
+      console.log(value);
+    }));
+
+
+
+    this.partyService.getPerson('21166574-6564-468a-b845-8a5c127a4345').pipe(first()).subscribe((person: Person) => {
+
+      person.surname = person.surname + ' Updated';
+
+      this.partyService.updatePerson(person).pipe(first()).subscribe((result: boolean) => {
+        if (result) {
+          this.partyService.getPerson('21166574-6564-468a-b845-8a5c127a4345').pipe(first()).subscribe((updatedPerson: Person) => {
+            console.log('Updated person: ', updatedPerson);
+          });
+
+          this.partyService.getSnapshots(EntityType.Person, '21166574-6564-468a-b845-8a5c127a4345', new Date('2016-07-17'), new Date('2025-09-23')).pipe(first()).subscribe((snapshots: Snapshots) => {
+            console.log('Snapshots: ', snapshots);
+          });
+        }
+      });
     });
 
 

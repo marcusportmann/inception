@@ -1131,7 +1131,7 @@
     <insert schemaName="party" tableName="role_type_attribute_type_constraints">
       <column name="role_type" value="individual_customer"/>
       <column name="attribute_type" value="consent"/>
-      <column name="attribute_type_qualifier" value="marketing_consent"/>
+      <column name="attribute_type_qualifier" value="marketing"/>
       <column name="type" value="required"/>
     </insert>
 

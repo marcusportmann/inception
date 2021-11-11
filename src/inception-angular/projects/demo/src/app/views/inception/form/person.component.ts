@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {PartyReferenceService, Person} from 'ngx-inception/party';
+import {ReferenceService} from 'ngx-inception/reference';
+import {Subscription} from 'rxjs';
 
 /**
  * The PersonComponent class implements the person component.
@@ -25,8 +29,34 @@ import {Component} from '@angular/core';
   // tslint:disable-next-line:component-selector
   selector: 'person',
   templateUrl: 'person.component.html',
-  styleUrls: ['person.component.css'],
+  styleUrls: ['person.component.scss'],
 })
-export class PersonComponent {
+export class PersonComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  personForm: FormGroup;
+
+  /**
+   * The person.
+   */
+  @Input() person: Person | null = null;
+
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(private partyReferenceService: PartyReferenceService,
+              private referenceService: ReferenceService) {
+    // Initialise the form
+    this.personForm = new FormGroup({});
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  ngOnInit(): void {
+    console.log('[ngOnInit] person = ', this.person);
+  }
+
+  ngAfterViewInit(): void {
+    console.log('[ngAfterViewInit] person = ', this.person);
+  }
 }

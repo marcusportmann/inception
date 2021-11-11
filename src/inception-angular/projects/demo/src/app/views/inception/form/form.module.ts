@@ -19,6 +19,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {CoreModule} from 'ngx-inception/core';
+import {CountriesChipListComponent} from './countries-chip-list.component';
 import {ExampleFormComponent} from './example-form.component';
 import {PartyReferenceFormComponent} from './party-reference-form-component';
 import {PersonFormComponent} from "./person-form.component";
@@ -63,8 +64,8 @@ const routes: Routes = [{
     // Inception modules
     CoreModule
   ],
-  declarations: [ExampleFormComponent, PartyReferenceFormComponent, PersonComponent,
-    PersonFormComponent, ReferenceFormComponent],
+  declarations: [CountriesChipListComponent, ExampleFormComponent, PartyReferenceFormComponent,
+    PersonComponent, PersonFormComponent, ReferenceFormComponent],
   providers: []
 })
 export class FormModule {

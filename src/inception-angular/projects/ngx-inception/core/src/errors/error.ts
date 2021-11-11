@@ -28,7 +28,7 @@ export class Error {
   /**
    * The optional cause of the error.
    */
-  cause?: ProblemDetails | HttpErrorResponse | HttpError;
+  cause: ProblemDetails | HttpErrorResponse | HttpError | null = null;
 
   /**
    * The error message.
@@ -46,12 +46,12 @@ export class Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError) {
+  constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError | null) {
 
     this.message = message;
     this.timestamp = new Date();
 
-    if (cause) {
+    if (!!cause) {
       if (cause instanceof HttpErrorResponse) {
         if (ProblemDetails.isProblemDetails(cause)) {
           const problemDetails: ProblemDetails = new ProblemDetails(cause);
@@ -74,36 +74,6 @@ export class Error {
       }
     }
   }
-
-
-  // /**
-  //  * Constructs a new Error.
-  //  *
-  //  * @param message The error message.
-  //  * @param cause   The optional cause of the error.
-  //  */
-  // constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-  //
-  //   this.message = message;
-  //   this.timestamp = new Date();
-  //
-  //   if (cause) {
-  //     if (cause instanceof ProblemDetails) {
-  //       this.timestamp = cause.timestamp;
-  //       this.cause = cause;
-  //     } else if (cause instanceof HttpErrorResponse) {
-  //       if (cause.error) {
-  //         this.cause = new HttpError(cause.error.error ? cause.error.error : '',
-  //           cause.error.error_description ? cause.error.error_description : '', cause.message, cause.status,
-  //           cause.statusText, cause.url ? cause.url : '');
-  //       } else {
-  //         this.cause = new HttpError('', '', cause.message, cause.status, cause.statusText, cause.url ? cause.url : '');
-  //       }
-  //     } else {
-  //       this.cause = cause;
-  //     }
-  //   }
-  // }
 }
 
 

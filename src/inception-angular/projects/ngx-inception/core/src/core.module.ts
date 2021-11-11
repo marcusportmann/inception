@@ -26,6 +26,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatChipsModule} from '@angular/material/chips';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -125,13 +126,11 @@ export const INCEPTION_DATE_FORMATS = {
     ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
     WarningDialogComponent,
 
-
     // Forms Components
     FileUploadComponent, GroupFormFieldComponent, TableFilterComponent,
 
     // Forms  Directives
     AutocompleteSelectionRequiredDirective, AutofocusDirective, ValidatedFormDirective,
-
 
     // Layout Components
     AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
@@ -161,10 +160,10 @@ export const INCEPTION_DATE_FORMATS = {
 
     // Material modules
     MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-    MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatGridListModule,
-    MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule,
-    MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule,
-    MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule
+    MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
+    MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
+    MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
+    MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule
   ],
   exports: [
     // Angular modules
@@ -176,10 +175,10 @@ export const INCEPTION_DATE_FORMATS = {
 
     // Material modules
     MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-    MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatGridListModule,
-    MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule,
-    MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule,
-    MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
+    MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
+    MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
+    MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
+    MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
 
 
     // Forms Components

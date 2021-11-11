@@ -1,0 +1,21 @@
+<mat-chip-list #countriesChipList>
+  <mat-chip
+    *ngFor="let country of countries; let index = index;"
+    [selectable]="false"
+    [removable]="true"
+    (removed)="removeCountry(country, index)">
+    {{ country.shortName }}
+    <i matChipRemove class="far fa-times-circle"></i>
+  </mat-chip>
+  <input
+    placeholder="Add Country ..."
+    #addCountryInput
+    [matAutocomplete]="addCountryAutocomplete"
+    [matChipInputFor]="countriesChipList"
+    (matChipInputTokenEnd)="addCountry($event)">
+</mat-chip-list>
+<mat-autocomplete #addCountryAutocomplete="matAutocomplete" [displayWith]="displayCountry" (optionSelected)="selectCountry($event)">
+  <mat-option *ngFor="let filteredCountry of filteredCountries$ | async" [value]="filteredCountry">
+    {{filteredCountry.shortName}}
+  </mat-option>
+</mat-autocomplete>
