@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, Validators} from '@angular/forms';
 import {PartyReferenceService, Person} from 'ngx-inception/party';
-import {ReferenceService} from 'ngx-inception/reference';
-import {Subscription} from 'rxjs';
+import {Language, ReferenceService} from 'ngx-inception/reference';
+import {ReplaySubject, Subject, Subscription} from 'rxjs';
+import {debounceTime, first, map, startWith} from 'rxjs/operators';
 
 /**
  * The PersonComponent class implements the person component.
@@ -31,21 +32,39 @@ import {Subscription} from 'rxjs';
   templateUrl: 'person.component.html',
   styleUrls: ['person.component.scss'],
 })
-export class PersonComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PersonComponent implements OnInit, OnDestroy {
 
-  personForm: FormGroup;
+  countriesOfCitizenshipControl: FormControl = new FormControl([], Validators.required);
+
+  filteredLanguages$: Subject<Language[]> = new ReplaySubject<Language[]>();
+
+  givenNameControl: FormControl = new FormControl('', Validators.required);
+
+  languageControl: FormControl = new FormControl('', Validators.required);
 
   /**
    * The person.
    */
   @Input() person: Person | null = null;
 
+  surnameControl: FormControl = new FormControl('', Validators.required);
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private partyReferenceService: PartyReferenceService,
               private referenceService: ReferenceService) {
-    // Initialise the form
-    this.personForm = new FormGroup({});
+  }
+
+  clickMe(): void {
+    this.countriesOfCitizenshipControl.setValue(['ZA']);
+  }
+
+  displayLanguage(language: Language): string {
+    if (!!language) {
+      return language.name;
+    } else {
+      return '';
+    }
   }
 
   ngOnDestroy(): void {
@@ -53,10 +72,29 @@ export class PersonComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    console.log('[ngOnInit] person = ', this.person);
-  }
+    this.referenceService.getLanguages().pipe(first()).subscribe((languages: Map<string, Language>) => {
+      if (this.languageControl) {
+        this.subscriptions.add(this.languageControl.valueChanges.pipe(
+          startWith(''),
+          debounceTime(500),
+          map((value: string | Language) => {
+            if (typeof (value) === 'string') {
+              value = value.toLowerCase();
+            } else {
+              value = value.shortName.toLowerCase();
+            }
 
-  ngAfterViewInit(): void {
-    console.log('[ngAfterViewInit] person = ', this.person);
+            let filteredLanguages: Language[] = [];
+
+            for (const language of languages.values()) {
+              if (language.shortName.toLowerCase().indexOf(value) === 0) {
+                filteredLanguages.push(language);
+              }
+            }
+
+            this.filteredLanguages$.next(filteredLanguages);
+          })).subscribe());
+      }
+    });
   }
 }

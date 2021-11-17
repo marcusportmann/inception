@@ -19,7 +19,7 @@ import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, ServiceUnavailableError
 } from 'ngx-inception/core';
-import {Observable, throwError} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {Country} from './country';
 import {Language} from './language';
@@ -34,6 +34,12 @@ import {Region} from './region';
   providedIn: 'root'
 })
 export class ReferenceService {
+
+  private static cachedCountries: Map<string, Country> | null = null;
+
+  private static cachedLanguages: Map<string, Language> | null = null;
+
+  private static cachedRegions: Map<string, Map<string, Region>> = new Map<string, Map<string, Region>>();
 
   /**
    * Constructs a new ReferenceService.
@@ -52,24 +58,36 @@ export class ReferenceService {
    *
    * @return The countries.
    */
-  getCountries(): Observable<Country[]> {
-    let params = new HttpParams();
+  getCountries(): Observable<Map<string, Country>> {
+    if (!!ReferenceService.cachedCountries) {
+      return of(ReferenceService.cachedCountries);
+    } else {
+      let params = new HttpParams();
 
-    params = params.append('localeId', this.localeId);
+      params = params.append('localeId', this.localeId);
 
-    return this.httpClient.get<Country[]>(this.config.referenceApiUrlPrefix + '/countries',
-      {params, reportProgress: true})
-    .pipe(map((countries: Country[]) => {
-      return countries;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      return this.httpClient.get<Country[]>(this.config.referenceApiUrlPrefix + '/countries',
+        {params, reportProgress: true})
+      .pipe(map((countries: Country[]) => {
+        let cachedCountries = new Map<string, Country>();
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the countries.', httpErrorResponse));
-    }));
+        for (const country of countries) {
+          cachedCountries.set(country.code, country);
+        }
+
+        ReferenceService.cachedCountries = cachedCountries;
+
+        return ReferenceService.cachedCountries;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(new ServiceUnavailableError('Failed to retrieve the countries.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -77,24 +95,36 @@ export class ReferenceService {
    *
    * @return The languages.
    */
-  getLanguages(): Observable<Language[]> {
-    let params = new HttpParams();
+  getLanguages(): Observable<Map<string, Language>> {
+    if (!!ReferenceService.cachedLanguages) {
+      return of(ReferenceService.cachedLanguages);
+    } else {
+      let params = new HttpParams();
 
-    params = params.append('localeId', this.localeId);
+      params = params.append('localeId', this.localeId);
 
-    return this.httpClient.get<Language[]>(this.config.referenceApiUrlPrefix + '/languages',
-      {params, reportProgress: true})
-    .pipe(map((languages: Language[]) => {
-      return languages;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      return this.httpClient.get<Language[]>(this.config.referenceApiUrlPrefix + '/languages',
+        {params, reportProgress: true})
+      .pipe(map((languages: Language[]) => {
+        let cachedLanguages = new Map<string, Language>();
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the languages.', httpErrorResponse));
-    }));
+        for (const language of languages) {
+          cachedLanguages.set(language.code, language);
+        }
+
+        ReferenceService.cachedLanguages = cachedLanguages;
+
+        return ReferenceService.cachedLanguages;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(new ServiceUnavailableError('Failed to retrieve the languages.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -104,27 +134,38 @@ export class ReferenceService {
    *
    * @return The regions.
    */
-  getRegions(country?: string): Observable<Region[]> {
-    let params = new HttpParams();
+  getRegions(country: string): Observable<Map<string, Region>> {
+    let cachedRegionsForCountry: Map<string, Region> | undefined = ReferenceService.cachedRegions.get(country);
 
-    params = params.append('localeId', this.localeId);
+    if (!!cachedRegionsForCountry) {
+      return of(cachedRegionsForCountry);
+    } else {
+      let params = new HttpParams();
 
-    if (!!country) {
+      params = params.append('localeId', this.localeId);
       params = params.append('country', country);
+
+      return this.httpClient.get<Region[]>(this.config.referenceApiUrlPrefix + '/regions',
+        {params, reportProgress: true})
+      .pipe(map((regions: Region[]) => {
+        let cachedRegionsForCountry = new Map<string, Region>();
+
+        for (const region of regions) {
+          cachedRegionsForCountry.set(region.code, region);
+        }
+
+        ReferenceService.cachedRegions.set(country, cachedRegionsForCountry);
+
+        return cachedRegionsForCountry;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(new ServiceUnavailableError('Failed to retrieve the regions.', httpErrorResponse));
+      }));
     }
-
-    return this.httpClient.get<Region[]>(this.config.referenceApiUrlPrefix + '/regions',
-      {params, reportProgress: true})
-    .pipe(map((regions: Region[]) => {
-      return regions;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
-
-      return throwError(new ServiceUnavailableError('Failed to retrieve the regions.', httpErrorResponse));
-    }));
   }
 }

@@ -93,7 +93,7 @@ export class ExampleFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.referenceService.getCountries().pipe(first()).subscribe((countries: Country[]) => {
+    this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
       const favoriteCountryControl = this.exampleForm.get('favoriteCountry');
 
       if (favoriteCountryControl) {
@@ -102,12 +102,20 @@ export class ExampleFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | Country) => {
             if (typeof (value) === 'string') {
-              this.filteredCountries$.next(countries.filter(
-                country => country.shortName.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredCountries$.next(countries.filter(
-                country => country.shortName.toLowerCase().indexOf(value.shortName.toLowerCase()) === 0));
+              value = value.shortName.toLowerCase();
             }
+
+            let filteredCountries: Country[] = [];
+
+            for (const country of countries.values()) {
+              if (country.shortName.toLowerCase().indexOf(value) === 0) {
+                filteredCountries.push(country);
+              }
+            }
+
+            this.filteredCountries$.next(filteredCountries);
           })).subscribe());
       }
     });

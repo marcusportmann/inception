@@ -83,7 +83,7 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.referenceService.getCountries().pipe(first()).subscribe((countries: Country[]) => {
+    this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
       const countryControl = this.referenceForm.get('country');
 
       if (countryControl) {
@@ -92,17 +92,25 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | Country) => {
             if (typeof (value) === 'string') {
-              this.filteredCountries$.next(countries.filter(
-                country => country.shortName.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredCountries$.next(countries.filter(
-                country => country.shortName.toLowerCase().indexOf(value.shortName.toLowerCase()) === 0));
+              value = value.shortName.toLowerCase();
             }
+
+            let filteredCountries: Country[] = [];
+
+            for (const country of countries.values()) {
+              if (country.shortName.toLowerCase().indexOf(value) === 0) {
+                filteredCountries.push(country);
+              }
+            }
+
+            this.filteredCountries$.next(filteredCountries);
           })).subscribe());
       }
     });
 
-    this.referenceService.getLanguages().pipe(first()).subscribe((languages: Language[]) => {
+    this.referenceService.getLanguages().pipe(first()).subscribe((languages: Map<string, Language>) => {
       const languageControl = this.referenceForm.get('language');
 
       if (languageControl) {
@@ -111,17 +119,25 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | Language) => {
             if (typeof (value) === 'string') {
-              this.filteredLanguages$.next(languages.filter(
-                language => language.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredLanguages$.next(languages.filter(
-                language => language.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.shortName.toLowerCase();
             }
+
+            let filteredLanguages: Language[] = [];
+
+            for (const language of languages.values()) {
+              if (language.shortName.toLowerCase().indexOf(value) === 0) {
+                filteredLanguages.push(language);
+              }
+            }
+
+            this.filteredLanguages$.next(filteredLanguages);
           })).subscribe());
       }
     });
 
-    this.referenceService.getRegions('ZA').pipe(first()).subscribe((regions: Region[]) => {
+    this.referenceService.getRegions('ZA').pipe(first()).subscribe((regions: Map<string, Region>) => {
       const regionControl = this.referenceForm.get('region');
 
       if (regionControl) {
@@ -130,12 +146,20 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | Region) => {
             if (typeof (value) === 'string') {
-              this.filteredRegions$.next(regions.filter(
-                region => region.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredRegions$.next(regions.filter(
-                region => region.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredRegions: Region[] = [];
+
+            for (const region of regions.values()) {
+              if (region.name.toLowerCase().indexOf(value) === 0) {
+                filteredRegions.push(region);
+              }
+            }
+
+            this.filteredRegions$.next(filteredRegions);
           })).subscribe());
       }
     });

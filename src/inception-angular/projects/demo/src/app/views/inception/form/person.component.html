@@ -6,9 +6,64 @@
 
   <mat-tab label="General">
 
-    <countries-chip-list [value]="person?.countriesOfCitizenship ?? []"></countries-chip-list>
+    <div class="row">
+      <div class="col-sm">
+        <mat-form-field>
+          <mat-label>Given Name</mat-label>
+          <input type="text" matInput [formControl]="givenNameControl" required>
+          <mat-error *ngIf="givenNameControl.errors && !givenNameControl.untouched">
+            <span *ngIf="givenNameControl.errors?.required">A given name is required.</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm">
+        <mat-form-field>
+          <mat-label>Preferred name</mat-label>
+          <input type="text" matInput [formControl]="surnameControl" required>
+          <mat-error *ngIf="surnameControl.errors && !surnameControl.untouched">
+            <span *ngIf="surnameControl.errors?.required">A surname is required.</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field>
+          <mat-label>Countries of Citizenship</mat-label>
+          <countries-chip-list
+            [formControl]="countriesOfCitizenshipControl"
+            [value]="person?.countriesOfCitizenship ?? []"
+            placeholder="Add Country ..." required>
+          </countries-chip-list>
+          <mat-error *ngIf="countriesOfCitizenshipControl.errors && !countriesOfCitizenshipControl.untouched">
+            <span *ngIf="countriesOfCitizenshipControl.errors?.required">A country of citizenship is required.</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+
+      </div>
+      <div class="col-sm">
+        <mat-form-field>
+          <mat-label>Language</mat-label>
+          <input type="text" matInput [formControl]="languageControl" autocompleteSelectionRequired required [matAutocomplete]="languageAutocomplete">
+          <mat-autocomplete autoActiveFirstOption #languageAutocomplete="matAutocomplete" [displayWith]="displayLanguage">
+            <mat-option *ngFor="let language of filteredLanguages$ | async" [value]="language">
+              {{language.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="languageControl.errors && !languageControl.untouched">
+            <span *ngIf="languageControl.errors?.required">A language is required.</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
 
 
+
+    <input type="button" value="Click Me!" (click)="clickMe()">
 
 
 
