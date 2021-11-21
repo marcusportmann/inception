@@ -143,7 +143,6 @@ export const INCEPTION_DATE_FORMATS = {
     SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
     SidebarTogglerDirective,
 
-
     // Session Directives
     HasAuthorityDirective
   ],

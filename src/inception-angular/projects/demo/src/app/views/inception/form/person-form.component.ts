@@ -57,45 +57,10 @@ export class PersonFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.partyService.getPerson('21166574-6564-468a-b845-8a5c127a4345').pipe(first()).subscribe((person: Person) => {
       this.person = person;
-
-      console.log('person = ', person);
     });
   }
 
   ok(): void {
-    /*
-
-    .pipe(first()).subscribe((organization: Organization) => {
-      console.log('organization = ', organization);
-    });
-
-
-    .pipe(first()).subscribe((organizations: Organizations) => {
-      console.log('organizations = ', organizations);
-    });
-
-    .pipe(first()).subscribe((persons: Persons) => {
-      console.log('persons = ', persons);
-    });
-
-    .pipe(first()).subscribe((party: Party) => {
-      console.log('party = ', party);
-    });
-
-    .pipe(first()).subscribe((parties: Parties) => {
-      console.log('parties = ', parties);
-    });
-
-    .pipe(first()).subscribe((associations: Associations) => {
-      console.log('associations = ', associations);
-    });
-
-    */
-
-
-
-
-
     forkJoin({
       party: this.partyService.getParty('21166574-6564-468a-b845-8a5c127a4345'),
       parties: this.partyService.getParties(),
@@ -108,9 +73,6 @@ export class PersonFormComponent implements OnInit, OnDestroy {
 
       association: this.partyService.getAssociation('4b3fb77a-201b-48e1-b9da-00e94c15e742'),
       associations: this.partyService.getAssociationsForParty('21166574-6564-468a-b845-8a5c127a4345')
-
-
-
     }).pipe(first()).subscribe((value => {
       console.log(value);
     }));

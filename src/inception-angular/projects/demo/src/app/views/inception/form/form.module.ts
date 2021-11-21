@@ -19,7 +19,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {CoreModule} from 'ngx-inception/core';
-import {CountriesChipListComponent} from './countries-chip-list.component';
+import {ReferenceComponentsModule} from 'ngx-inception/reference';
 import {ExampleFormComponent} from './example-form.component';
 import {PartyReferenceFormComponent} from './party-reference-form-component';
 import {PersonFormComponent} from "./person-form.component";
@@ -62,10 +62,10 @@ const routes: Routes = [{
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
 
     // Inception modules
-    CoreModule
+    CoreModule, ReferenceComponentsModule
   ],
-  declarations: [CountriesChipListComponent, ExampleFormComponent, PartyReferenceFormComponent,
-    PersonComponent, PersonFormComponent, ReferenceFormComponent],
+  declarations: [ExampleFormComponent, PartyReferenceFormComponent, PersonComponent,
+    PersonFormComponent, ReferenceFormComponent],
   providers: []
 })
 export class FormModule {

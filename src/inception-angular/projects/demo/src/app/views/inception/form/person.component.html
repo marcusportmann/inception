@@ -32,7 +32,6 @@
           <mat-label>Countries of Citizenship</mat-label>
           <countries-chip-list
             [formControl]="countriesOfCitizenshipControl"
-            [value]="person?.countriesOfCitizenship ?? []"
             placeholder="Add Country ..." required>
           </countries-chip-list>
           <mat-error *ngIf="countriesOfCitizenshipControl.errors && !countriesOfCitizenshipControl.untouched">
@@ -48,12 +47,7 @@
       <div class="col-sm">
         <mat-form-field>
           <mat-label>Language</mat-label>
-          <input type="text" matInput [formControl]="languageControl" autocompleteSelectionRequired required [matAutocomplete]="languageAutocomplete">
-          <mat-autocomplete autoActiveFirstOption #languageAutocomplete="matAutocomplete" [displayWith]="displayLanguage">
-            <mat-option *ngFor="let language of filteredLanguages$ | async" [value]="language">
-              {{language.name}}
-            </mat-option>
-          </mat-autocomplete>
+          <language-input [formControl]="languageControl" required></language-input>
           <mat-error *ngIf="languageControl.errors && !languageControl.untouched">
             <span *ngIf="languageControl.errors?.required">A language is required.</span>
           </mat-error>

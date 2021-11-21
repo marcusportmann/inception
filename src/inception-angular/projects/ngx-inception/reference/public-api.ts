@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+export * from './src/components/countries-chip-list.component';
+export * from './src/components/language-input.component';
+export * from './src/components/reference-components.module';
+
 export * from './src/services/reference-services.module';
 export * from './src/services/reference.service';
 //export * from './src/services/reference.service.errors';

@@ -523,6 +523,10 @@
           <type>TREAT_LAMBDA_INITIALIZED_FIELDS_AS_METHODS</type>
           <order>KEEP</order>
         </group>
+        <group>
+          <type>GROUP_PROPERTY_FIELD_WITH_GETTER_SETTER</type>
+          <order>KEEP</order>
+        </group>
       </groups>
       <rules>
         <section>

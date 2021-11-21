@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {PartyReferenceService, Person} from 'ngx-inception/party';
 import {Language, ReferenceService} from 'ngx-inception/reference';
@@ -27,7 +27,7 @@ import {debounceTime, first, map, startWith} from 'rxjs/operators';
  * @author Marcus Portmann
  */
 @Component({
-  // tslint:disable-next-line:component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'person',
   templateUrl: 'person.component.html',
   styleUrls: ['person.component.scss'],
@@ -36,8 +36,6 @@ export class PersonComponent implements OnInit, OnDestroy {
 
   countriesOfCitizenshipControl: FormControl = new FormControl([], Validators.required);
 
-  filteredLanguages$: Subject<Language[]> = new ReplaySubject<Language[]>();
-
   givenNameControl: FormControl = new FormControl('', Validators.required);
 
   languageControl: FormControl = new FormControl('', Validators.required);
@@ -45,7 +43,22 @@ export class PersonComponent implements OnInit, OnDestroy {
   /**
    * The person.
    */
-  @Input() person: Person | null = null;
+  @Input() get person(): Person | null {
+    return this._person;
+  }
+
+  set person(person: Person | null) {
+    console.log('[PersonComponent][person] person = ', person);
+
+    this._person = person;
+
+    if (person != null) {
+      this.countriesOfCitizenshipControl.setValue(this._person?.countriesOfCitizenship);
+      this.languageControl.setValue(this._person?.language);
+    }
+  }
+
+  private _person: Person | null = null;
 
   surnameControl: FormControl = new FormControl('', Validators.required);
 
@@ -56,15 +69,8 @@ export class PersonComponent implements OnInit, OnDestroy {
   }
 
   clickMe(): void {
-    this.countriesOfCitizenshipControl.setValue(['ZA']);
-  }
-
-  displayLanguage(language: Language): string {
-    if (!!language) {
-      return language.name;
-    } else {
-      return '';
-    }
+    console.log('[PersonComponent][clickMe] this.countriesOfCitizenshipControl.value = ', this.countriesOfCitizenshipControl.value);
+    console.log('[PersonComponent][clickMe] this.languageControl.value = ', this.languageControl.value);
   }
 
   ngOnDestroy(): void {
@@ -72,29 +78,6 @@ export class PersonComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.referenceService.getLanguages().pipe(first()).subscribe((languages: Map<string, Language>) => {
-      if (this.languageControl) {
-        this.subscriptions.add(this.languageControl.valueChanges.pipe(
-          startWith(''),
-          debounceTime(500),
-          map((value: string | Language) => {
-            if (typeof (value) === 'string') {
-              value = value.toLowerCase();
-            } else {
-              value = value.shortName.toLowerCase();
-            }
-
-            let filteredLanguages: Language[] = [];
-
-            for (const language of languages.values()) {
-              if (language.shortName.toLowerCase().indexOf(value) === 0) {
-                filteredLanguages.push(language);
-              }
-            }
-
-            this.filteredLanguages$.next(filteredLanguages);
-          })).subscribe());
-      }
-    });
+    console.log('[PersonComponent][ngOnInit] this.person = ', this.person);
   }
 }
