@@ -15,11 +15,12 @@
  */
 
 import {NgModule} from '@angular/core';
+import {NgxInceptionComponent} from './ngx-inception.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [NgxInceptionComponent],
   imports: [],
-  exports: []
+  exports: [NgxInceptionComponent]
 })
 export class InceptionModule {
   constructor() {

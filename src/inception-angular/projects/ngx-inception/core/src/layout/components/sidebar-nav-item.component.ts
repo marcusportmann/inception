@@ -24,7 +24,7 @@ import {NavigationItem} from '../services/navigation-item';
  * @author Marcus Portmann
  */
 @Component({
-  // tslint:disable-next-line
+  // eslint-disable-next-line
   selector: 'sidebar-nav-item',
   template: `
     <ng-container *ngIf="this.navItem">

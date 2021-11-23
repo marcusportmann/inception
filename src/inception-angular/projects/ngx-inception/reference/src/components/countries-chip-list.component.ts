@@ -35,7 +35,7 @@ import {ReferenceService} from '../services/reference.service';
  * @author Marcus Portmann
  */
 @Component({
-  // tslint:disable-next-line:component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'countries-chip-list',
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
@@ -100,28 +100,9 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
   controlType = 'countries-chip-list';
 
   /**
-   * The selected countries.
-   * @private
-   */
-  private _countries: Country[] = [];
-
-  /**
-   * The selected countries.
-   */
-  get countries(): Country[] {
-    return this._countries;
-  }
-
-
-  /**
    * The countries chip list.
    */
   @ViewChild('countriesChipList', {static: true}) countriesChipList!: MatChipList;
-
-  /**
-   * The ISO 3166-1 alpha-2 codes for the selected countries.
-   */
-  private _value: string[] = [];
 
   /**
    * The filtered countries for the autocomplete for the add country input.
@@ -148,8 +129,6 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
    */
   touched: boolean = false;
 
-  @Input('aria-describedby') userAriaDescribedBy?: string;
-
   private _subscriptions: Subscription = new Subscription();
 
   /**
@@ -167,6 +146,21 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
        */
       this.ngControl.valueAccessor = this;
     }
+  }
+
+  //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The selected countries.
+   * @private
+   */
+  private _countries: Country[] = [];
+
+  /**
+   * The selected countries.
+   */
+  get countries(): Country[] {
+    return this._countries;
   }
 
   /**
@@ -223,18 +217,10 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
     this.stateChanges.next();
   }
 
-  get empty(): boolean {
-    return this._value.length === 0;
-  }
-
-  get errorState(): boolean {
-    return this.required && (this.countries.length == 0) && this.touched;
-  }
-
-  @HostBinding('class.floating')
-  get shouldLabelFloat() {
-    return this.focused || !this.empty || this.countriesChipList.focused || this.addCountryInput.focused;
-  }
+  /**
+   * The ISO 3166-1 alpha-2 codes for the selected countries.
+   */
+  private _value: string[] = [];
 
   /**
    * Returns the ISO 3166-1 alpha-2 codes for the selected countries.
@@ -277,6 +263,19 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
       this._value = [];
       this._valueChanged(this._value);
     }
+  }
+
+  get empty(): boolean {
+    return this._value.length === 0;
+  }
+
+  get errorState(): boolean {
+    return this.required && (this.countries.length == 0) && this.touched;
+  }
+
+  @HostBinding('class.floating')
+  get shouldLabelFloat() {
+    return this.focused || !this.empty || this.countriesChipList.focused || this.addCountryInput.focused;
   }
 
   addCountryInputChanged(event: Event) {
@@ -338,12 +337,12 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
   onTouched: any = () => {
   };
 
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
@@ -373,7 +372,7 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
     // controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeValue(value: any): void {
     if (typeof value === 'string') {
       if (value === '') {

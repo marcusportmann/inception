@@ -37,7 +37,7 @@ export interface ErrorDialogData {
  * @author Marcus Portmann
  */
 @Component({
-  // tslint:disable-next-line
+  // eslint-disable-next-line
   selector: 'error-dialog',
   template: `
     <div class="header">

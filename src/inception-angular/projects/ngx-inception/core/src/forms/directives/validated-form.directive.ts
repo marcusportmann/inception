@@ -23,14 +23,14 @@ import {FormGroupDirective} from '@angular/forms';
  * @author Marcus Portmann
  */
 @Directive({
-  // tslint:disable-next-line
-  selector: 'form[validatedForm]', // tslint:disable-next-line
+  // eslint-disable-next-line
+  selector: 'form[validatedForm]', // eslint-disable-next-line
   host: {
     '(submit)': 'onSubmit()',
     '(reset)': 'onReset()'
   }
 })
-export class ValidatedFormDirective implements AfterViewInit {
+export class ValidatedFormDirective {
 
   /**
    * Constructs a new ValidatedFormDirective.
@@ -40,9 +40,6 @@ export class ValidatedFormDirective implements AfterViewInit {
    */
   constructor(private viewContainerRef: ViewContainerRef,
               @Host() @Self() @Optional() private formGroupDirective: FormGroupDirective) {
-  }
-
-  ngAfterViewInit(): void {
   }
 
   onReset(): void {
@@ -78,7 +75,7 @@ export class ValidatedFormDirective implements AfterViewInit {
     }
   }
 
-  // tslint:disable-next-line
+  // eslint-disable-next-line
   private checkForInvalidFormControlAndSetFocus(nativeElement: any): boolean {
     if (nativeElement.children && (nativeElement.children.length > 0)) {
       for (const nativeChildElement of nativeElement.children) {

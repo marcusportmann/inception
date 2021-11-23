@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
+
 import {Injectable} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {ReplaySubject, Subject} from 'rxjs';
 import {filter} from 'rxjs/operators';
-import * as format_ from 'string-template';
+//import * as format_ from 'string-template';
 import {Breadcrumb} from './breadcrumb';
+//import format = require('string-template');
 
-const format = format_;
+//import {format} from 'string-template';
+
+//const format = format_;
 
 /**
  * The Breadcrumbs Service implementation.
@@ -53,7 +57,7 @@ export class BreadcrumbsService {
       do {
         const childrenRoutes = currentRoute.children;
         currentRoute = null;
-        // tslint:disable-next-line:no-shadowed-variable
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         childrenRoutes.forEach(route => {
           if (route.outlet === 'primary') {
             const routeSnapshot = route.snapshot;
@@ -62,7 +66,14 @@ export class BreadcrumbsService {
               url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
 
               if (routeSnapshot.data.title) {
-                breadcrumbs.push(new Breadcrumb(format(routeSnapshot.data.title, routeSnapshot.params), url));
+                if (!!routeSnapshot.params) {
+                  console.log('FIX ME [BreadcrumbsService] routeSnapshot.params = ', routeSnapshot.params);
+                  // REPLACE string-format library
+                  breadcrumbs.push(new Breadcrumb(routeSnapshot.data.title, url));
+                  //breadcrumbs.push(new Breadcrumb(Format(routeSnapshot.data.title, routeSnapshot.params), url));
+                } else {
+                  breadcrumbs.push(new Breadcrumb(routeSnapshot.data.title, url));
+                }
               }
             }
             currentRoute = route;

@@ -34,7 +34,7 @@ import {ReferenceService} from '../services/reference.service';
  * @author Marcus Portmann
  */
 @Component({
-  // tslint:disable-next-line:component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'language-input',
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
@@ -116,7 +116,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
    */
   touched: boolean = false;
 
-  @Input('aria-describedby') userAriaDescribedBy?: string;
+  //@Input('aria-describedby') userAriaDescribedBy?: string;
 
   /**
    * Whether the control is disabled.
@@ -306,12 +306,12 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
@@ -332,7 +332,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
     // controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeValue(value: any): void {
     console.log('[LanguageInputComponent][writeValue] value = ', value);
 

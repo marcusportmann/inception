@@ -36,7 +36,7 @@ export interface ConfirmationDialogData {
  * @author Marcus Portmann
  */
 @Component({
-  // tslint:disable-next-line
+  // eslint-disable-next-line
   selector: 'confirmation-dialog',
   template: `
     <div class="header">

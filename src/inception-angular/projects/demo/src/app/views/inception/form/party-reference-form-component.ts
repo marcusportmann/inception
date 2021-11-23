@@ -144,7 +144,7 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     this.partyReferenceForm = this.formBuilder.group({
       // hideRequired: false,
       // floatLabel: 'auto',
-      // tslint:disable-next-line
+      // eslint-disable-next-line
       associationPropertyType: ['', Validators.required],
       associationType: ['', Validators.required],
       attributeTypeCategory: ['', Validators.required],

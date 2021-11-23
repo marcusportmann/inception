@@ -22,7 +22,7 @@ import {Directive, ElementRef} from '@angular/core';
  * @author Marcus Portmann
  */
 @Directive({
-  // tslint:disable-next-line
+  // eslint-disable-next-line
   selector: '[sidebarNavDropdown]'
 })
 export class SidebarNavDropdownDirective {

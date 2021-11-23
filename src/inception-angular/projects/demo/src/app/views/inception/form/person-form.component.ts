@@ -46,7 +46,7 @@ export class PersonFormComponent implements OnInit, OnDestroy {
     this.personForm = this.formBuilder.group({
       // hideRequired: false,
       // floatLabel: 'auto',
-      // tslint:disable-next-line
+      // eslint-disable-next-line
     });
   }
 

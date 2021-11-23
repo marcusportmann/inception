@@ -27,7 +27,7 @@ import {BackNavigation} from './back-navigation';
  * @author Marcus Portmann
  */
 @Component({
-  // tslint:disable-next-line
+  // eslint-disable-next-line
   selector: 'title-bar',
   template: `
     <div *ngIf="title | async as title; else noTitle" class="title-bar">

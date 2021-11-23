@@ -23,7 +23,7 @@ import {Replace} from '../../util/replace';
  * @author Marcus Portmann
  */
 @Component({
-  // tslint:disable-next-line
+  // eslint-disable-next-line
   selector: 'sidebar-header',
   template: `
     <div class="sidebar-header">

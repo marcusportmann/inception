@@ -172,5 +172,11 @@
       <button type="button" mat-flat-button color="link">Cancel</button>
       <button type="button" mat-flat-button color="primary" [disabled]="!exampleForm.valid">OK</button>
     </mat-card-actions>
+
+    exampleForm.valid = {{ exampleForm.valid }} <br/>
+
+    exampleForm.controls['favoriteColor'].untouched = {{ exampleForm.controls['favoriteColor'].untouched }} <br/>
+
+    exampleForm.controls['favoriteColor'].errors  = {{ exampleForm.controls['favoriteColor'].errors | json }} <br/>
   </mat-card>
 </form>
