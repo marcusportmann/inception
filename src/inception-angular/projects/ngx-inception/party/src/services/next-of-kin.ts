@@ -72,6 +72,16 @@ export class NextOfKin {
   emailAddress?: string;
 
   /**
+   * The given name, firstname, forename, or Christian name for the next of kin.
+   */
+  givenName?: string;
+
+  /**
+   * The home phone number for the next of kin.
+   */
+  homeNumber?: string;
+
+  /**
    * The ID for the next of kin.
    */
   id: string;
@@ -87,9 +97,9 @@ export class NextOfKin {
   name: string;
 
   /**
-   * The phone number for the next of kin.
+   * The surname, last name, or family name for the next of kin.
    */
-  phoneNumber?: string;
+  surname?: string;
 
   /**
    * The code for the next of kin type for the next of kin.
@@ -97,12 +107,21 @@ export class NextOfKin {
   type: string;
 
   /**
+   * The work phone number for the next of kin.
+   */
+  workNumber?: string;
+
+  /**
    * Constructs a new NextOfKin.
    *
    * @param id                The ID for the next of kin.
    * @param type              The code for the next of kin type for the next of kin.
    * @param name              The name of the next of kin.
-   * @param phoneNumber       The phone number for the next of kin.
+   * @param givenName         The given name, firstname, forename, or Christian name for the next of
+   *                          kin.
+   * @param surname           The surname, last name, or family name for the next of kin.
+   * @param homeNumber        The home phone number for the next of kin.
+   * @param workNumber        The work phone number for the next of kin.
    * @param mobileNumber      The mobile number for the next of kin.
    * @param emailAddress      The e-mail address for the next of kin.
    * @param addressLine1      The next of kin address line 1.
@@ -115,7 +134,8 @@ export class NextOfKin {
    * @param addressCountry    The next of kin address country.
    * @param addressPostalCode The next of kin address postal code.
    */
-  constructor(id: string, type: string, name: string, phoneNumber?: string, mobileNumber?: string,
+  constructor(id: string, type: string, name: string, givenName?: string, surname?: string,
+              homeNumber?: string, workNumber?: string, mobileNumber?: string,
               emailAddress?: string, addressLine1?: string, addressLine2?: string,
               addressLine3?: string, addressLine4?: string, addressSuburb?: string,
               addressCity?: string, addressRegion?: string, addressCountry?: string,
@@ -123,7 +143,10 @@ export class NextOfKin {
     this.id = id;
     this.type = type;
     this.name = name;
-    this.phoneNumber = phoneNumber;
+    this.givenName = givenName;
+    this.surname = surname;
+    this.homeNumber = homeNumber;
+    this.workNumber = workNumber;
     this.mobileNumber = mobileNumber;
     this.emailAddress = emailAddress;
     this.addressLine1 = addressLine1;

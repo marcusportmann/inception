@@ -224,6 +224,6 @@ public class ReferenceServiceTest {
     assertTrue(referenceService.isValidMeasurementUnit("metric_centimeter"));
     assertTrue(referenceService.isValidMeasurementUnitType("length"));
     assertTrue(referenceService.isValidTimeZone("Africa/Johannesburg"));
-    assertTrue(referenceService.isValidRegion("EC"));
+    assertTrue(referenceService.isValidRegion("ZA-EC"));
   }
 }

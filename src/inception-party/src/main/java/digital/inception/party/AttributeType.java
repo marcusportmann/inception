@@ -58,7 +58,8 @@ import org.springframework.util.StringUtils;
   "description",
   "partyTypes",
   "unitType",
-  "valueType"
+  "valueType",
+  "pattern"
 })
 @XmlRootElement(name = "AttributeType", namespace = "http://inception.digital/party")
 @XmlType(
@@ -74,7 +75,8 @@ import org.springframework.util.StringUtils;
       "description",
       "partyTypes",
       "unitType",
-      "valueType"
+      "valueType",
+      "pattern"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -141,6 +143,16 @@ public class AttributeType implements Serializable {
   @Size(min = 1, max = 310)
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
+
+  /** The regular expression pattern used to validate a string value for the attribute type. */
+  @Schema(
+      description =
+          "The regular expression pattern used to validate a string value for the attribute type")
+  @JsonProperty
+  @XmlElement(name = "Pattern")
+  @Size(min = 1, max = 1000)
+  @Column(name = "pattern", length = 1000)
+  private String pattern;
 
   /** The sort index for the attribute type. */
   @Schema(description = "The sort index for the attribute type", required = true)
@@ -256,6 +268,15 @@ public class AttributeType implements Serializable {
   @XmlElement(name = "PartyTypes", required = true)
   public String[] getPartyTypes() {
     return StringUtils.commaDelimitedListToStringArray(partyTypes);
+  }
+
+  /**
+   * Returns the regular expression pattern used to validate a string value for the attribute type.
+   *
+   * @return the regular expression pattern used to validate a string value for the attribute type
+   */
+  public String getPattern() {
+    return pattern;
   }
 
   /**
@@ -377,6 +398,16 @@ public class AttributeType implements Serializable {
   @JsonIgnore
   public void setPartyTypes(Collection<String> partyTypes) {
     this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
+  }
+
+  /**
+   * Set the regular expression pattern used to validate a string value for the attribute type.
+   *
+   * @param pattern the regular expression pattern used to validate a string value for the attribute
+   *     type
+   */
+  public void setPattern(String pattern) {
+    this.pattern = pattern;
   }
 
   /**

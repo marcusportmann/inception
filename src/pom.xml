@@ -123,6 +123,9 @@
     <swagger.version>2.1.10</swagger.version>
     <uuid-creator.version>3.7.3</uuid-creator.version>
     <wss4j-ws-security-common.version>2.2.6</wss4j-ws-security-common.version>
+
+    <!-- Dependency override for Log4J vulnerability CVE-2021-44228 -->
+    <log4j2.version>2.17.0</log4j2.version>
   </properties>
 
   <dependencyManagement>

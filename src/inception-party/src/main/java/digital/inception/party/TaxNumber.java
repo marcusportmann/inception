@@ -36,6 +36,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -78,6 +79,10 @@ public class TaxNumber implements Serializable {
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
   @Size(min = 2, max = 2)
+  @Pattern(
+      message = "{digital.inception.party.TaxNumber.CountryOfIssue.Pattern.message}",
+      regexp =
+          "^A[^ABCHJKNPVY]|B[^CKPUX]|C[^BEJPQST]|D[EJKMOZ]|E[CEGHRST]|F[IJKMOR]|G[^CJKOVXZ]|H[KMNRTU]|I[DEL-OQ-T]|J[EMOP]|K[EGHIMNPRWYZ]|L[ABCIKR-VY]|M[^BIJ]|N[ACEFGILOPRUZ]|OM|P[AE-HK-NRSTWY]|QA|R[EOSUW]|S[^FPQUW]|T[^ABEIPQSUXY]|U[AGMSYZ]|V[ACEGINU]|WF|WS|YE|YT|Z[AMW]$")
   @Column(name = "country_of_issue", length = 2, nullable = false)
   private String countryOfIssue;
 
@@ -88,12 +93,11 @@ public class TaxNumber implements Serializable {
   private LocalDateTime created;
 
   /** The tax number. */
-  @Schema(description = "The tax number", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Number", required = true)
-  @NotNull
+  @Schema(description = "The tax number")
+  @JsonProperty
+  @XmlElement(name = "Number")
   @Size(min = 1, max = 30)
-  @Column(name = "number", length = 30, nullable = false)
+  @Column(name = "number", length = 30)
   private String number;
 
   /** The party the tax number is associated with. */
@@ -128,13 +132,24 @@ public class TaxNumber implements Serializable {
    * Constructs a new <b>TaxNumber</b>.
    *
    * @param type the code for the tax number type
+   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
    * @param number the tax number
+   */
+  public TaxNumber(String type, String countryOfIssue, String number) {
+    this.type = type;
+    this.number = number;
+    this.countryOfIssue = countryOfIssue;
+  }
+
+  /**
+   * Constructs a new <b>TaxNumber</b>.
+   *
+   * @param type the code for the tax number type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
    */
-  public TaxNumber(String type, String number, String countryOfIssue) {
+  public TaxNumber(String type, String countryOfIssue) {
     this.type = type;
     this.countryOfIssue = countryOfIssue;
-    this.number = number;
   }
 
   /**

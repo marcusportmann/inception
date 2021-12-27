@@ -40,6 +40,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -106,6 +107,10 @@ public class IdentityDocument implements Serializable {
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
   @Size(min = 2, max = 2)
+  @Pattern(
+      message = "{digital.inception.party.IdentityDocument.CountryOfIssue.Pattern.message}",
+      regexp =
+          "^A[^ABCHJKNPVY]|B[^CKPUX]|C[^BEJPQST]|D[EJKMOZ]|E[CEGHRST]|F[IJKMOR]|G[^CJKOVXZ]|H[KMNRTU]|I[DEL-OQ-T]|J[EMOP]|K[EGHIMNPRWYZ]|L[ABCIKR-VY]|M[^BIJ]|N[ACEFGILOPRUZ]|OM|P[AE-HK-NRSTWY]|QA|R[EOSUW]|S[^FPQUW]|T[^ABEIPQSUXY]|U[AGMSYZ]|V[ACEGINU]|WF|WS|YE|YT|Z[AMW]$")
   @Column(name = "country_of_issue", length = 2, nullable = false)
   private String countryOfIssue;
 

@@ -34,7 +34,7 @@ export class TaxNumber {
   /**
    * The tax number.
    */
-  number: string;
+  number?: string;
 
   /**
    * The code for the tax number type.
@@ -45,10 +45,10 @@ export class TaxNumber {
    * Constructs a new TaxNumber.
    *
    * @param type           The code for the tax number type.
-   * @param number         The tax number.
    * @param countryOfIssue The ISO 3166-1 alpha-2 code for the country of issue for the tax number.
+   * @param number         The tax number.
    */
-  constructor(type: string, number: string, countryOfIssue: string) {
+  constructor(type: string, countryOfIssue: string, number?: string) {
     this.type = type;
     this.number = number;
     this.countryOfIssue = countryOfIssue;

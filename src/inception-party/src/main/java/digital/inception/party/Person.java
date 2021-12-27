@@ -44,6 +44,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -443,6 +444,9 @@ public class Person extends PartyBase implements Serializable {
 
   /** The given name, firstname, forename, or Christian name for the person. */
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.Person.GivenName.Pattern.message}",
+      regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
   @Column(table = "persons", name = "given_name", length = 100)
   private String givenName;
 
@@ -521,6 +525,9 @@ public class Person extends PartyBase implements Serializable {
 
   /** The surname, last name, or family name for the person. */
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.Person.Surname.Pattern.message}",
+      regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
   @Column(table = "persons", name = "surname", length = 100)
   private String surname;
 

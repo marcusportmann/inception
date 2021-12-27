@@ -1250,7 +1250,7 @@
       <column name="employer_address_line1" value="300 Janadel Avenue"/>
       <column name="employer_address_suburb" value="Halfway House"/>
       <column name="employer_address_city" value="Johannesburg"/>
-      <column name="employer_address_region" value="GP"/>
+      <column name="employer_address_region" value="ZA-GP"/>
       <column name="employer_address_country" value="ZA"/>
       <column name="employer_address_postal_code" value="1685"/>
       <column name="start_date" value="2003-05-06"/>
@@ -1270,7 +1270,7 @@
       <column name="employer_address_line2" value="200 Smit Street"/>
       <column name="employer_address_suburb" value="Fairland"/>
       <column name="employer_address_city" value="Johannesburg"/>
-      <column name="employer_address_region" value="GP"/>
+      <column name="employer_address_region" value="ZA-GP"/>
       <column name="employer_address_country" value="ZA"/>
       <column name="employer_address_postal_code" value="2170"/>
       <column name="start_date" value="2011-07-04"/>
@@ -1281,7 +1281,7 @@
     <insert schemaName="party" tableName="external_references">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="legacy_customer_code"/>
-      <column name="value" value="ECM123456"/>
+      <column name="value" value="ACM123456"/>
       <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="identity_documents">
@@ -1326,13 +1326,14 @@
       <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="father"/>
       <column name="name" value="Fred Smith"/>
-      <column name="phone_number" value="0215557890"/>
+      <column name="home_number" value="0215557890"/>
+      <column name="work_number" value="0215550987"/>
       <column name="mobile_number" value="+27715551234"/>
       <column name="email_address" value="fredsmith44@gmail.com"/>
       <column name="address_line1" value="3 Lower Klipfontein Road"/>
       <column name="address_suburb" value="Athlone"/>
       <column name="address_city" value="Cape Town"/>
-      <column name="address_region" value="WC"/>
+      <column name="address_region" value="ZA-WC"/>
       <column name="address_country" value="ZA"/>
       <column name="address_postal_code" value="7764"/>
       <column name="created" value="${now}"/>
@@ -1348,12 +1349,26 @@
       <column name="street_number" value="168"/>
       <column name="suburb" value="Fairland"/>
       <column name="city" value="Johannesburg"/>
-      <column name="region" value="GP"/>
+      <column name="region" value="ZA-GP"/>
       <column name="country" value="ZA"/>
       <column name="postal_code" value="2170"/>
       <column name="purposes" value="billing,correspondence,delivery"/>
       <column name="latitude" value="-26.132480441365484"/>
       <column name="longitude" value="27.944038870432856"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_addresses">
+      <column name="id" value="04927868-c5d1-4444-9104-2e0f9da97f72"/>
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="postal"/>
+      <column name="role" value="postal"/>
+      <column name="line1" value="P.O. Box 123456"/>
+      <column name="suburb" value="Fairland"/>
+      <column name="city" value="Johannesburg"/>
+      <column name="region" value="ZA-GP"/>
+      <column name="country" value="ZA"/>
+      <column name="postal_code" value="2030"/>
+      <column name="purposes" value="billing,correspondence"/>
       <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="preferences">
@@ -1433,6 +1448,12 @@
       <column name="type" value="za_income_tax_number"/>
       <column name="country_of_issue" value="ZA"/>
       <column name="number" value="1234567890"/>
+      <column name="created" value="${now}"/>
+    </insert>
+    <insert schemaName="party" tableName="tax_numbers">
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="uk_tax_number"/>
+      <column name="country_of_issue" value="GB"/>
       <column name="created" value="${now}"/>
     </insert>
 

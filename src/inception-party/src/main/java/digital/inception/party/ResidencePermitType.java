@@ -53,7 +53,8 @@ import javax.xml.bind.annotation.XmlType;
   "sortIndex",
   "name",
   "description",
-  "countryOfIssue"
+  "countryOfIssue",
+  "pattern"
 })
 @XmlRootElement(name = "ResidencePermitType", namespace = "http://inception.digital/party")
 @XmlType(
@@ -66,7 +67,8 @@ import javax.xml.bind.annotation.XmlType;
       "sortIndex",
       "name",
       "description",
-      "countryOfIssue"
+      "countryOfIssue",
+      "pattern"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -127,6 +129,16 @@ public class ResidencePermitType implements Serializable {
   @Size(min = 1, max = 50)
   @Column(name = "name", length = 50, nullable = false)
   private String name;
+
+  /** The regular expression pattern used to validate a number for the residence permit type. */
+  @Schema(
+      description =
+          "The regular expression pattern used to validate a number for the residence permit type")
+  @JsonProperty
+  @XmlElement(name = "Pattern")
+  @Size(min = 1, max = 1000)
+  @Column(name = "pattern", length = 1000)
+  private String pattern;
 
   /** The sort index for the residence permit type. */
   @Schema(description = "The sort index for the residence permit type", required = true)
@@ -217,6 +229,15 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
+   * Returns the regular expression pattern used to validate a number for the residence permit type.
+   *
+   * @return the regular expression pattern used to validate a number for the residence permit type
+   */
+  public String getPattern() {
+    return pattern;
+  }
+
+  /**
    * Returns the sort index for the residence permit type.
    *
    * @return the sort index for the residence permit type
@@ -288,6 +309,16 @@ public class ResidencePermitType implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the regular expression pattern used to validate a number for the residence permit type.
+   *
+   * @param pattern the regular expression pattern used to validate a number for the residence
+   *     permit type
+   */
+  public void setPattern(String pattern) {
+    this.pattern = pattern;
   }
 
   /**

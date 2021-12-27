@@ -19,7 +19,6 @@ import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, ServiceUnavailableError
 } from 'ngx-inception/core';
-import {QualificationType} from "./qualification-type";
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {AssociationPropertyType} from "./association-property-type";
@@ -38,6 +37,7 @@ import {Gender} from './gender';
 import {IdentityDocumentType} from './identity-document-type';
 import {LockType} from "./lock-type";
 import {LockTypeCategory} from "./lock-type-category";
+import {MandatePropertyType} from "./mandate-property-type";
 import {MaritalStatus} from './marital-status';
 import {MarriageType} from './marriage-type';
 import {NextOfKinType} from './next-of-kin-type';
@@ -47,6 +47,7 @@ import {PhysicalAddressRole} from "./physical-address-role";
 import {PhysicalAddressType} from "./physical-address-type";
 import {PreferenceType} from "./preference-type";
 import {PreferenceTypeCategory} from "./preference-type-category";
+import {QualificationType} from "./qualification-type";
 import {Race} from './race';
 import {ResidencePermitType} from './residence-permit-type';
 import {ResidencyStatus} from './residency-status';
@@ -237,8 +238,6 @@ export class PartyReferenceService {
     }));
   }
 
-
-
   /**
    * Retrieve the contact mechanism roles.
    *
@@ -338,7 +337,6 @@ export class PartyReferenceService {
       return throwError(new ServiceUnavailableError('Failed to retrieve the employment types.', httpErrorResponse));
     }));
   }
-
 
   /**
    * Retrieve the external reference types.
@@ -487,6 +485,31 @@ export class PartyReferenceService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to retrieve the lock types.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the mandate property types.
+   *
+   * @return The mandate property types.
+   */
+  getMandatePropertyTypes(): Observable<MandatePropertyType[]> {
+    let params = new HttpParams();
+
+    params = params.append('localeId', this.localeId);
+
+    return this.httpClient.get<MandatePropertyType[]>(this.config.partyReferenceApiUrlPrefix + '/mandate-property-types',
+      {params, reportProgress: true})
+    .pipe(map((mandatePropertyTypes: MandatePropertyType[]) => {
+      return mandatePropertyTypes;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the mandate property types.', httpErrorResponse));
     }));
   }
 

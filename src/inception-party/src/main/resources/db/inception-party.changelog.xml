@@ -31,6 +31,10 @@
       CREATE SCHEMA party
     </sql>
 
+
+
+
+
     <createTable schemaName="party" tableName="attribute_type_categories" remarks="Attribute Type Categories">
       <column name="code" type="nvarchar(30)" remarks="The code for the attribute type category">
         <constraints primaryKey="true" nullable="false"/>
@@ -76,6 +80,7 @@
       <column name="value_type" type="nvarchar(10)" remarks="The code for the value type for the attribute type">
         <constraints nullable="false"/>
       </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a string value for the attribute type"/>
     </createTable>
     <addForeignKeyConstraint constraintName="attribute_types_attribute_type_category_fk" baseTableSchemaName="party"
       baseTableName="attribute_types" baseColumnNames="category, locale_id" referencedTableSchemaName="party"
@@ -151,6 +156,7 @@
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the contact mechanism type">
         <constraints nullable="false"/>
       </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a value for the contact mechanism type"/>
     </createTable>
     <createIndex indexName="contact_mechanism_types_locale_id_ix" schemaName="party" tableName="contact_mechanism_types">
       <column name="locale_id"/>
@@ -259,6 +265,7 @@
       <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the external reference type is associated with">
         <constraints nullable="false"/>
       </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a value for the external reference type"/>
     </createTable>
     <createIndex indexName="external_reference_types_locale_id_ix" schemaName="party" tableName="external_reference_types">
       <column name="locale_id"/>
@@ -323,6 +330,7 @@
       <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the identity document type is associated with">
         <constraints nullable="false"/>
       </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a number for the identity document type"/>
     </createTable>
     <createIndex indexName="identity_document_types_locale_id_ix" schemaName="party" tableName="identity_document_types">
       <column name="locale_id"/>
@@ -672,6 +680,7 @@
       <column name="country_of_issue" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country of issue for the residence permit type">
         <constraints nullable="false"/>
       </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a number for the residence permit type"/>
     </createTable>
     <createIndex indexName="residence_permit_types_locale_id_ix" schemaName="party" tableName="residence_permit_types">
       <column name="locale_id"/>
@@ -791,76 +800,6 @@
       </column>
       <column name="value" type="nvarchar(1000)" remarks="The value to apply when validating the preference value"/>
     </createTable>
-
-    <createTable schemaName="party" tableName="association_types" remarks="Association Types">
-      <column name="code" type="nvarchar(30)" remarks="The code for the association type">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the association type">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the association type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the association type"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the association type">
-        <constraints nullable="false"/>
-      </column>
-      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the association type">
-        <constraints nullable="false"/>
-      </column>
-      <column name="first_party_role" type="nvarchar(30)" remarks="The code for the role type for the first party in the association">
-        <constraints nullable="false"/>
-      </column>
-      <column name="first_party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types for the first party in the association">
-        <constraints nullable="false"/>
-      </column>
-      <column name="second_party_role" type="nvarchar(30)" remarks="The code for the role type for the second party in the association">
-        <constraints nullable="false"/>
-      </column>
-      <column name="second_party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types for the second party in the association">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-    <addForeignKeyConstraint constraintName="association_types_first_party_role_fk" baseTableSchemaName="party"
-      baseTableName="association_types" baseColumnNames="first_party_role,locale_id" referencedTableSchemaName="party"
-      referencedTableName="role_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="association_types_second_party_role_fk" baseTableSchemaName="party"
-      baseTableName="association_types" baseColumnNames="second_party_role,locale_id" referencedTableSchemaName="party"
-      referencedTableName="role_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
-    <createIndex indexName="association_types_locale_id_ix" schemaName="party" tableName="association_types">
-      <column name="locale_id"/>
-    </createIndex>
-
-    <createTable schemaName="party" tableName="association_property_types" remarks="Association Property Types">
-      <column name="association_type" type="nvarchar(30)" remarks="The code for the association type the association property type is associated with">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="code" type="nvarchar(30)" remarks="The code for the association property type">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the association property type">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the association property type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the association property type"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the association property type">
-        <constraints nullable="false"/>
-      </column>
-      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the association property type">
-        <constraints nullable="false"/>
-      </column>
-      <column name="value_type" type="nvarchar(10)" remarks="The code for the value type for the association property type">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-    <addForeignKeyConstraint constraintName="association_property_types_association_type_fk" baseTableSchemaName="party"
-      baseTableName="association_property_types" baseColumnNames="association_type,locale_id" referencedTableSchemaName="party"
-      referencedTableName="association_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
-    <createIndex indexName="association_property_types_association_type_ix" schemaName="party" tableName="association_property_types">
-      <column name="association_type"/>
-    </createIndex>
-    <createIndex indexName="association_property_types_locale_id_ix" schemaName="party" tableName="association_property_types">
-      <column name="locale_id"/>
-    </createIndex>
 
     <createTable schemaName="party" tableName="segmentation_types" remarks="Segmentation Types">
       <column name="code" type="nvarchar(30)" remarks="The code for the segmentation type">
@@ -1028,6 +967,7 @@
       <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the tax number type is associated with">
         <constraints nullable="false"/>
       </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a number for the tax number type"/>
     </createTable>
     <createIndex indexName="tax_number_types_locale_id_ix" schemaName="party" tableName="tax_number_types">
       <column name="locale_id"/>
@@ -1072,6 +1012,9 @@
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the title">
+        <constraints nullable="false"/>
+      </column>
+      <column name="genders" type="nvarchar(310)" remarks="The comma-delimited list of codes for the genders the title is applicable to">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -1158,73 +1101,6 @@
     <createIndex indexName="persons_surname_ix" schemaName="party" tableName="persons">
       <column name="surname"/>
     </createIndex>
-
-    <createTable schemaName="party" tableName="associations" remarks="Associations">
-      <column name="id" type="uuid" remarks="The ID for the association">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the association is associated with">
-        <constraints nullable="false"/>
-      </column>
-      <column name="type" type="nvarchar(30)" remarks="The code for the association type">
-        <constraints nullable="false"/>
-      </column>
-      <column name="first_party_id" type="uuid" remarks="The ID for the first party in the association">
-        <constraints nullable="false"/>
-      </column>
-      <column name="second_party_id" type="uuid" remarks="The ID for the second party in the association">
-        <constraints nullable="false"/>
-      </column>
-      <column name="effective_from" type="date" remarks="The date that the association is effective from"/>
-      <column name="effective_to" type="date" remarks="The date that the association is effective to"/>
-      <column name="created" type="timestamp" remarks="The date and time the association was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the association was last updated"/>
-    </createTable>
-    <addForeignKeyConstraint constraintName="associations_first_party_fk" baseTableSchemaName="party"
-      baseTableName="associations" baseColumnNames="first_party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
-    <addForeignKeyConstraint constraintName="associations_second_party_fk" baseTableSchemaName="party"
-      baseTableName="associations" baseColumnNames="second_party_id" referencedTableSchemaName="party"
-      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
-    <createIndex indexName="associations_first_party_id_ix" schemaName="party" tableName="associations">
-      <column name="first_party_id"/>
-    </createIndex>
-    <createIndex indexName="associations_second_party_id_ix" schemaName="party" tableName="associations">
-      <column name="second_party_id"/>
-    </createIndex>
-    <createIndex indexName="associations_tenant_id_ix" schemaName="party" tableName="associations">
-      <column name="tenant_id"/>
-    </createIndex>
-    <createIndex indexName="associations_type_ix" schemaName="party" tableName="associations">
-      <column name="type"/>
-    </createIndex>
-
-    <createTable schemaName="party" tableName="association_properties" remarks="Association Properties">
-      <column name="association_id" type="uuid" remarks="The ID for the association the association property is associated with">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="type" type="nvarchar(30)" remarks="The code for the association property type">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="boolean_value" type="boolean" remarks="The boolean value for the association property"/>
-      <column name="date_value" type="date" remarks="The date value for the association property"/>
-      <column name="decimal_value" type="decimal(18,8)" remarks="The decimal value for the association property"/>
-      <column name="double_value" type="double" remarks="The double value for the association property"/>
-      <column name="integer_value" type="int" remarks="The integer value for the association property"/>
-      <column name="string_value" type="nvarchar(200)" remarks="The string value for the association property"/>
-      <column name="created" type="timestamp" remarks="The date and time the association property was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the association property was last updated"/>
-    </createTable>
-    <addForeignKeyConstraint constraintName="association_properties_association_fk" baseTableSchemaName="party"
-      baseTableName="association_properties" baseColumnNames="association_id" referencedTableSchemaName="party"
-      referencedTableName="associations" referencedColumnNames="id" onDelete="CASCADE"/>
-    <createIndex indexName="association_properties_association_id_ix" schemaName="party" tableName="association_properties">
-      <column name="association_id"/>
-    </createIndex>    
     
     <createTable schemaName="party" tableName="attributes" remarks="Attributes">
       <column name="party_id" type="uuid" remarks="The ID for the party the attribute is associated with">
@@ -1351,9 +1227,8 @@
       <column name="employer_address_line4" type="nvarchar(100)" remarks="The employer address line 4"/>
       <column name="employer_address_suburb" type="nvarchar(50)" remarks="The employer address suburb"/>
       <column name="employer_address_city" type="nvarchar(50)" remarks="The employer address city"/>
-      <column name="employer_address_region" type="nvarchar(30)" remarks="The ISO 3166-2 subdivision code for the employer address region"/>
-      <column name="employer_address_country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for t
-      he employer address country"/>
+      <column name="employer_address_region" type="nvarchar(6)" remarks="The ISO 3166-2 subdivision code for the employer address region"/>
+      <column name="employer_address_country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the employer address country"/>
       <column name="employer_address_postal_code" type="nvarchar(30)" remarks="The employer address postal code"/>
       <column name="start_date" type="date" remarks="The start date for the employment">
         <constraints nullable="false"/>
@@ -1493,8 +1368,11 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the next of kin">
         <constraints nullable="false"/>
       </column>
-      <column name="phone_number" type="nvarchar(100)" remarks="The phone number for the next of kin"/>
-      <column name="mobile_number" type="nvarchar(100)" remarks="The mobile number for the next of kin"/>
+      <column name="given_name" type="nvarchar(100)" remarks="The given name, firstname, forename, or Christian name for the next of kin"/>
+      <column name="surname" type="nvarchar(100)" remarks="The surname, last name, or family name for the next of kin"/>
+      <column name="home_number" type="nvarchar(50)" remarks="The home phone number for the next of kin"/>
+      <column name="work_number" type="nvarchar(50)" remarks="The work phone number for the next of kin"/>
+      <column name="mobile_number" type="nvarchar(50)" remarks="The mobile number for the next of kin"/>
       <column name="email_address" type="nvarchar(100)" remarks="The e-mail address for the next of kin"/>
       <column name="address_line1" type="nvarchar(100)" remarks="The next of kin address line 1"/>
       <column name="address_line2" type="nvarchar(100)" remarks="The next of kin address line 2"/>
@@ -1502,7 +1380,7 @@
       <column name="address_line4" type="nvarchar(100)" remarks="The next of kin address line 4"/>
       <column name="address_suburb" type="nvarchar(50)" remarks="The next of kin address suburb"/>
       <column name="address_city" type="nvarchar(50)" remarks="The next of kin address city"/>
-      <column name="address_region" type="nvarchar(30)" remarks="The ISO 3166-2 subdivision code for the next of kin address region"/>
+      <column name="address_region" type="nvarchar(6)" remarks="The ISO 3166-2 subdivision code for the next of kin address region"/>
       <column name="address_country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the next of kin address country"/>
       <column name="address_postal_code" type="nvarchar(30)" remarks="The next of kin address postal code"/>
       <column name="created" type="timestamp" remarks="The date and time the next of kin was created">
@@ -1536,8 +1414,8 @@
       <column name="complex_name" type="nvarchar(50)" remarks="The complex name for the physical address that is required for a complex address"/>
       <column name="complex_unit_number" type="nvarchar(20)" remarks="The complex unit number for the physical address that is required for a complex address"/>
       <column name="farm_number" type="nvarchar(50)" remarks="The farm number for the physical address that is required for a farm address"/>
-      <column name="farm_name" type="nvarchar(50)" remarks="The farm name for the physical address"/>
-      <column name="farm_description" type="nvarchar(50)" remarks="The farm description for the physical address"/>
+      <column name="farm_name" type="nvarchar(100)" remarks="The farm name for the physical address"/>
+      <column name="farm_description" type="nvarchar(100)" remarks="The farm description for the physical address"/>
       <column name="site_block" type="nvarchar(50)" remarks="The site block for the physical address that is required for a site address"/>
       <column name="site_number" type="nvarchar(50)" remarks="The site number for the physical address that is required for a site address"/>
       <column name="street_name" type="nvarchar(100)" remarks="The street name for the physical address that is required for a street address"/>
@@ -1548,7 +1426,7 @@
       <column name="line4" type="nvarchar(100)" remarks="The address line 4 for the physical address"/>
       <column name="suburb" type="nvarchar(50)" remarks="The suburb for the physical address"/>
       <column name="city" type="nvarchar(50)" remarks="The town or city for the physical address that is required for a building, complex, postal, site or street address"/>
-      <column name="region" type="nvarchar(3)" remarks="The ISO 3166-2 subdivision code for the region for the physical address"/>
+      <column name="region" type="nvarchar(6)" remarks="The ISO 3166-2 subdivision code for the region for the physical address"/>
       <column name="country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country for the physical address">
         <constraints nullable="false"/>
       </column>
@@ -1605,9 +1483,7 @@
       <column name="country_of_issue" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country of issue for the residence permit">
         <constraints nullable="false"/>
       </column>
-      <column name="date_of_issue" type="date" remarks="The date of issue for the residence permit">
-        <constraints nullable="false"/>
-      </column>
+      <column name="date_of_issue" type="date" remarks="The date of issue for the residence permit"/>
       <column name="number" type="nvarchar(30)" remarks="The number for the residence permit">
         <constraints nullable="false"/>
       </column>
@@ -1774,9 +1650,7 @@
       <column name="country_of_issue" type="nvarchar(30)" remarks="The code for the country of issue for the tax number">
         <constraints nullable="false"/>
       </column>
-      <column name="number" type="nvarchar(30)" remarks="The tax number">
-        <constraints nullable="false"/>
-      </column>
+      <column name="number" type="nvarchar(30)" remarks="The tax number"/>
       <column name="created" type="timestamp" remarks="The date and time the tax number was created">
         <constraints nullable="false"/>
       </column>
@@ -1788,8 +1662,253 @@
     <createIndex indexName="tax_numbers_party_id_ix" schemaName="party" tableName="tax_numbers">
       <column name="party_id"/>
     </createIndex>
-  </changeSet>
 
+    <createTable schemaName="party" tableName="association_types" remarks="Association Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the association type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the association type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the association type is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the association type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the association type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the association type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="first_party_role" type="nvarchar(30)" remarks="The code for the role type for the first party in the association">
+        <constraints nullable="false"/>
+      </column>
+      <column name="first_party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types for the first party in the association">
+        <constraints nullable="false"/>
+      </column>
+      <column name="second_party_role" type="nvarchar(30)" remarks="The code for the role type for the second party in the association">
+        <constraints nullable="false"/>
+      </column>
+      <column name="second_party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types for the second party in the association">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="association_types_first_party_role_fk" baseTableSchemaName="party"
+      baseTableName="association_types" baseColumnNames="first_party_role,locale_id" referencedTableSchemaName="party"
+      referencedTableName="role_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
+    <addForeignKeyConstraint constraintName="association_types_second_party_role_fk" baseTableSchemaName="party"
+      baseTableName="association_types" baseColumnNames="second_party_role,locale_id" referencedTableSchemaName="party"
+      referencedTableName="role_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
+    <createIndex indexName="association_types_locale_id_ix" schemaName="party" tableName="association_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="association_property_types" remarks="Association Property Types">
+      <column name="association_type" type="nvarchar(30)" remarks="The code for the association type the association property type is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="code" type="nvarchar(30)" remarks="The code for the association property type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the association property type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the association property type is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the association property type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the association property type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the association property type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="value_type" type="nvarchar(10)" remarks="The code for the value type for the association property type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a string value for the association property type"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="association_property_types_association_type_fk" baseTableSchemaName="party"
+      baseTableName="association_property_types" baseColumnNames="association_type,locale_id" referencedTableSchemaName="party"
+      referencedTableName="association_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
+    <createIndex indexName="association_property_types_association_type_ix" schemaName="party" tableName="association_property_types">
+      <column name="association_type"/>
+    </createIndex>
+    <createIndex indexName="association_property_types_locale_id_ix" schemaName="party" tableName="association_property_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="associations" remarks="Associations">
+      <column name="id" type="uuid" remarks="The ID for the association">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the association is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the association type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="first_party_id" type="uuid" remarks="The ID for the first party in the association">
+        <constraints nullable="false"/>
+      </column>
+      <column name="second_party_id" type="uuid" remarks="The ID for the second party in the association">
+        <constraints nullable="false"/>
+      </column>
+      <column name="effective_from" type="date" remarks="The date that the association is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the association is effective to"/>
+      <column name="created" type="timestamp" remarks="The date and time the association was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the association was last updated"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="associations_first_party_fk" baseTableSchemaName="party"
+      baseTableName="associations" baseColumnNames="first_party_id" referencedTableSchemaName="party"
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
+    <addForeignKeyConstraint constraintName="associations_second_party_fk" baseTableSchemaName="party"
+      baseTableName="associations" baseColumnNames="second_party_id" referencedTableSchemaName="party"
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="associations_first_party_id_ix" schemaName="party" tableName="associations">
+      <column name="first_party_id"/>
+    </createIndex>
+    <createIndex indexName="associations_second_party_id_ix" schemaName="party" tableName="associations">
+      <column name="second_party_id"/>
+    </createIndex>
+    <createIndex indexName="associations_tenant_id_ix" schemaName="party" tableName="associations">
+      <column name="tenant_id"/>
+    </createIndex>
+    <createIndex indexName="associations_type_ix" schemaName="party" tableName="associations">
+      <column name="type"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="association_properties" remarks="Association Properties">
+      <column name="association_id" type="uuid" remarks="The ID for the association the association property is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the association property type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="boolean_value" type="boolean" remarks="The boolean value for the association property"/>
+      <column name="date_value" type="date" remarks="The date value for the association property"/>
+      <column name="decimal_value" type="decimal(18,8)" remarks="The decimal value for the association property"/>
+      <column name="double_value" type="double" remarks="The double value for the association property"/>
+      <column name="integer_value" type="int" remarks="The integer value for the association property"/>
+      <column name="string_value" type="nvarchar(200)" remarks="The string value for the association property"/>
+      <column name="created" type="timestamp" remarks="The date and time the association property was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the association property was last updated"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="association_properties_association_fk" baseTableSchemaName="party"
+      baseTableName="association_properties" baseColumnNames="association_id" referencedTableSchemaName="party"
+      referencedTableName="associations" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="association_properties_association_id_ix" schemaName="party" tableName="association_properties">
+      <column name="association_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="mandate_types" remarks="Mandate Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the mandate type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the mandate type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the mandate type is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the mandate type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the mandate type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the mandate type">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex indexName="mandate_types_locale_id_ix" schemaName="party" tableName="mandate_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="mandate_property_types" remarks="Mandate Property Types">
+      <column name="mandate_type" type="nvarchar(30)" remarks="The code for the mandate type the mandate property type is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="code" type="nvarchar(30)" remarks="The code for the mandate property type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the mandate property type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the mandate property type is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the mandate property type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the mandate property type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the mandate property type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="value_type" type="nvarchar(10)" remarks="The code for the value type for the mandate property type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a string value for the mandate property type"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="mandate_property_types_mandate_type_fk" baseTableSchemaName="party"
+      baseTableName="mandate_property_types" baseColumnNames="mandate_type,locale_id" referencedTableSchemaName="party"
+      referencedTableName="mandate_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
+    <createIndex indexName="mandate_property_types_mandate_type_ix" schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type"/>
+    </createIndex>
+    <createIndex indexName="mandate_property_types_locale_id_ix" schemaName="party" tableName="mandate_property_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="mandates" remarks="Mandates">
+      <column name="id" type="uuid" remarks="The ID for the mandate">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the mandate is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the mandate type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="effective_from" type="date" remarks="The date that the mandate is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the mandate is effective to"/>
+      <column name="required_mandataries" type="nvarchar(30)" remarks="The number of mandataries required to execute the mandate">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created" type="timestamp" remarks="The date and time the mandate was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the mandate was last updated"/>
+    </createTable>
+    <createIndex indexName="mandates_tenant_id_ix" schemaName="party" tableName="mandates">
+      <column name="tenant_id"/>
+    </createIndex>
+    <createIndex indexName="mandates_type_ix" schemaName="party" tableName="mandates">
+      <column name="type"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="mandate_properties" remarks="Mandate Properties">
+      <column name="mandate_id" type="uuid" remarks="The ID for the mandate the mandate property is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the mandate property type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="boolean_value" type="boolean" remarks="The boolean value for the mandate property"/>
+      <column name="date_value" type="date" remarks="The date value for the mandate property"/>
+      <column name="decimal_value" type="decimal(18,8)" remarks="The decimal value for the mandate property"/>
+      <column name="double_value" type="double" remarks="The double value for the mandate property"/>
+      <column name="integer_value" type="int" remarks="The integer value for the mandate property"/>
+      <column name="string_value" type="nvarchar(200)" remarks="The string value for the mandate property"/>
+      <column name="created" type="timestamp" remarks="The date and time the mandate property was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp" remarks="The date and time the mandate property was last updated"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="mandate_properties_mandate_fk" baseTableSchemaName="party"
+      baseTableName="mandate_properties" baseColumnNames="mandate_id" referencedTableSchemaName="party"
+      referencedTableName="mandates" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="mandate_properties_mandate_id_ix" schemaName="party" tableName="mandate_properties">
+      <column name="mandate_id"/>
+    </createIndex>
+
+
+
+  </changeSet>
 </databaseChangeLog>
 
 

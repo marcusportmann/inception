@@ -36,15 +36,19 @@ public interface IPartyReferenceService {
   UUID DEFAULT_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
   /**
-   * Retrieve the value type for the first association property type with the specified code for any
-   * tenant or locale.
+   * Retrieve the association property type with the specified code for the association type with
+   * the specified code for the tenant with the specified ID for the first matching locale.
    *
+   * @param tenantId the ID for the tenant the association property type reference data is specific
+   *     to
    * @param associationPropertyTypeCode the code for the association property type
-   * @return the value type for the association property type
-   * @throws ServiceUnavailableException if the value type for the first association property type
-   *     with the specified code for any tenant or locale could not be retrieved
+   * @return an Optional containing the association property type with the specified code for the
+   *     association type with the specified code for the tenant with the specified ID for the first
+   *     matching locale or an empty Optional if the association property type could not be found
+   * @throws ServiceUnavailableException if the association property type could not be retrieved
    */
-  Optional<ValueType> getAssociationPropertyTypeValueType(String associationPropertyTypeCode)
+  Optional<AssociationPropertyType> getAssociationPropertyType(
+      UUID tenantId, String associationTypeCode, String associationPropertyTypeCode)
       throws ServiceUnavailableException;
 
   /**
@@ -624,6 +628,90 @@ public interface IPartyReferenceService {
    * @throws ServiceUnavailableException if the lock type reference data could not be retrieved
    */
   List<LockType> getLockTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandate property type with the specified code for the mandate type with the
+   * specified code for the tenant with the specified ID for the first matching locale.
+   *
+   * @param tenantId the ID for the tenant the mandate property type reference data is specific to
+   * @param mandatePropertyTypeCode the code for the mandate property type
+   * @return an Optional containing the mandate property type with the specified code for the
+   *     mandate type with the specified code for the tenant with the specified ID for the first
+   *     matching locale or an empty Optional if the mandate property type could not be found
+   * @throws ServiceUnavailableException if the mandate property type could not be retrieved
+   */
+  Optional<MandatePropertyType> getMandatePropertyType(
+      UUID tenantId, String mandateTypeCode, String mandatePropertyTypeCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandate property type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandate property
+   *     type reference data for
+   * @return the mandate property type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the mandate property type reference data could not be
+   *     retrieved
+   */
+  List<MandatePropertyType> getMandatePropertyTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandate property type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the ID for the tenant the mandate property type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandate property
+   *     type reference data for
+   * @return the mandate property type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the mandate property type reference data could not be
+   *     retrieved
+   */
+  List<MandatePropertyType> getMandatePropertyTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandate property type reference data for all locales.
+   *
+   * @return the mandate property type reference data
+   * @throws ServiceUnavailableException if the mandate property type reference data could not be
+   *     retrieved
+   */
+  List<MandatePropertyType> getMandatePropertyTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandate type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandate type
+   *     reference data for
+   * @return the mandate type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the mandate type reference data could not be retrieved
+   */
+  List<MandateType> getMandateTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandate type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the ID for the tenant the mandate type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandate type
+   *     reference data for
+   * @return the mandate type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the mandate type reference data could not be retrieved
+   */
+  List<MandateType> getMandateTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandate type reference data for all locales.
+   *
+   * @return the mandate type reference data
+   * @throws ServiceUnavailableException if the mandate type reference data could not be retrieved
+   */
+  List<MandateType> getMandateTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the marital status reference data for a specific locale.
@@ -1680,6 +1768,20 @@ public interface IPartyReferenceService {
    * @throws ServiceUnavailableException if the employment type check failed
    */
   boolean isValidEmploymentType(UUID tenantId, String employmentTypeCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Check whether the external reference is valid.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyTypeCode the code for the party type
+   * @param externalReferenceTypeCode the code for the external reference type
+   * @param value the value for the external reference
+   * @return <b>true</b> if the external reference is valid or <b>false</b> otherwise
+   * @throws ServiceUnavailableException if the external reference check failed
+   */
+  boolean isValidExternalReference(
+      UUID tenantId, String partyTypeCode, String externalReferenceTypeCode, String value)
       throws ServiceUnavailableException;
 
   /**

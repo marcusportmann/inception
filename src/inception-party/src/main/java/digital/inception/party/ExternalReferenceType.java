@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -55,13 +56,23 @@ import org.springframework.util.StringUtils;
   "sortIndex",
   "name",
   "description",
-  "partyTypes"
+  "partyTypes",
+  "pattern"
 })
 @XmlRootElement(name = "ExternalReferenceType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "ExternalReferenceType",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description", "partyTypes"})
+    propOrder = {
+      "code",
+      "localeId",
+      "tenantId",
+      "sortIndex",
+      "name",
+      "description",
+      "partyTypes",
+      "pattern"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "external_reference_types")
@@ -79,6 +90,9 @@ public class ExternalReferenceType implements Serializable {
   @Id
   @Column(name = "code", length = 30, nullable = false)
   private String code;
+
+  /** The compiled pattern. */
+  @JsonIgnore private transient Pattern compiledPattern;
 
   /** The description for the external reference type. */
   @Schema(description = "The description for the external reference type", required = true)
@@ -119,6 +133,16 @@ public class ExternalReferenceType implements Serializable {
   @Size(min = 1, max = 310)
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
+
+  /** The regular expression pattern used to validate a value for the external reference type. */
+  @Schema(
+      description =
+          "The regular expression pattern used to validate a value for the external reference type")
+  @JsonProperty
+  @XmlElement(name = "Pattern")
+  @Size(min = 1, max = 1000)
+  @Column(name = "pattern", length = 1000)
+  private String pattern;
 
   /** The sort index for the external reference type. */
   @Schema(description = "The sort index for the external reference type", required = true)
@@ -173,6 +197,20 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
+   * Returns the compiled pattern.
+   *
+   * @return the compiled pattern
+   */
+  @JsonIgnore
+  public Pattern getCompiledPattern() {
+    if (compiledPattern == null) {
+      compiledPattern = Pattern.compile(pattern);
+    }
+
+    return compiledPattern;
+  }
+
+  /**
    * Returns the description for the external reference type.
    *
    * @return the description for the external reference type
@@ -211,6 +249,16 @@ public class ExternalReferenceType implements Serializable {
   @XmlElement(name = "PartyTypes", required = true)
   public String[] getPartyTypes() {
     return StringUtils.commaDelimitedListToStringArray(partyTypes);
+  }
+
+  /**
+   * Returns the regular expression pattern used to validate a value for the external reference
+   * type.
+   *
+   * @return the regular expression pattern used to validate a value for the external reference type
+   */
+  public String getPattern() {
+    return pattern;
   }
 
   /**
@@ -306,6 +354,16 @@ public class ExternalReferenceType implements Serializable {
   @JsonIgnore
   public void setPartyTypes(Collection<String> partyTypes) {
     this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
+  }
+
+  /**
+   * Set the regular expression pattern used to validate a value for the external reference type.
+   *
+   * @param pattern the regular expression pattern used to validate a value for the external
+   *     reference type
+   */
+  public void setPattern(String pattern) {
+    this.pattern = pattern;
   }
 
   /**

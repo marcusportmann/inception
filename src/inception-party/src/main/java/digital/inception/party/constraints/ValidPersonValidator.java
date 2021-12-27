@@ -440,12 +440,16 @@ public class ValidPersonValidator extends PartyValidator
         // Validate external references
         for (ExternalReference externalReference : person.getExternalReferences()) {
           if (!getPartyReferenceService()
-              .isValidExternalReferenceType(
-                  person.getTenantId(), person.getType().code(), externalReference.getType())) {
+              .isValidExternalReference(
+                  person.getTenantId(),
+                  person.getType().code(),
+                  externalReference.getType(),
+                  externalReference.getValue())) {
             hibernateConstraintValidatorContext
                 .addMessageParameter("externalReferenceType", externalReference.getType())
+                .addMessageParameter("externalReferenceValue", externalReference.getValue())
                 .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidPerson.invalidExternalReferenceType.message}")
+                    "{digital.inception.party.constraints.ValidPerson.invalidExternalReference.message}")
                 .addPropertyNode("externalReferences")
                 .addConstraintViolation();
 

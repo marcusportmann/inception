@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -85,6 +87,12 @@ public class PartyReferenceService implements IPartyReferenceService {
 
   /** The Lock Type Repository */
   private final LockTypeRepository lockTypeRepository;
+
+  /** The Mandate Property Type Repository. */
+  private final MandatePropertyTypeRepository mandatePropertyTypeRepository;
+
+  /** The Mandate Type Repository. */
+  private final MandateTypeRepository mandateTypeRepository;
 
   /** The Marital Status Repository. */
   private final MaritalStatusRepository maritalStatusRepository;
@@ -190,6 +198,8 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param identityDocumentTypeRepository the Identity Document Type Repository
    * @param lockTypeCategoryRepository the Lock Type Category Repository
    * @param lockTypeRepository the Lock Type Repository
+   * @param mandatePropertyTypeRepository the Mandate Property Type Repository
+   * @param mandateTypeRepository the Mandate Type Repository
    * @param maritalStatusRepository the Marital Status Repository
    * @param marriageTypeRepository the Marriage Type Repository
    * @param nextOfKinTypeRepository the Next Of Kin Repository
@@ -237,6 +247,8 @@ public class PartyReferenceService implements IPartyReferenceService {
       IdentityDocumentTypeRepository identityDocumentTypeRepository,
       LockTypeCategoryRepository lockTypeCategoryRepository,
       LockTypeRepository lockTypeRepository,
+      MandatePropertyTypeRepository mandatePropertyTypeRepository,
+      MandateTypeRepository mandateTypeRepository,
       MaritalStatusRepository maritalStatusRepository,
       MarriageTypeRepository marriageTypeRepository,
       NextOfKinTypeRepository nextOfKinTypeRepository,
@@ -280,6 +292,8 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.identityDocumentTypeRepository = identityDocumentTypeRepository;
     this.lockTypeCategoryRepository = lockTypeCategoryRepository;
     this.lockTypeRepository = lockTypeRepository;
+    this.mandatePropertyTypeRepository = mandatePropertyTypeRepository;
+    this.mandateTypeRepository = mandateTypeRepository;
     this.maritalStatusRepository = maritalStatusRepository;
     this.marriageTypeRepository = marriageTypeRepository;
     this.nextOfKinTypeRepository = nextOfKinTypeRepository;
@@ -310,25 +324,23 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   @Override
-  @Cacheable(
-      cacheNames = "associationPropertyTypesValueTypes",
-      key = "#associationPropertyTypeCode")
-  public Optional<ValueType> getAssociationPropertyTypeValueType(String associationPropertyTypeCode)
+  public Optional<AssociationPropertyType> getAssociationPropertyType(
+      UUID tenantId, String associationTypeCode, String associationPropertyTypeCode)
       throws ServiceUnavailableException {
-    try {
-      return self.getAssociationPropertyTypes().stream()
-          .filter(
-              associationPropertyType ->
-                  Objects.equals(associationPropertyType.getCode(), associationPropertyTypeCode))
-          .findFirst()
-          .map(associationPropertyType -> associationPropertyType.getValueType());
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the value type for the association property type ("
-              + associationPropertyTypeCode
-              + ")",
-          e);
+    if (!StringUtils.hasText(associationPropertyTypeCode)) {
+      return Optional.empty();
     }
+
+    return self.getAssociationPropertyTypes().stream()
+        .filter(
+            associationPropertyType ->
+                (associationPropertyType.getTenantId() == null
+                        || associationPropertyType.getTenantId().equals(tenantId))
+                    && Objects.equals(
+                        associationPropertyType.getAssociationType(), associationTypeCode)
+                    && Objects.equals(
+                        associationPropertyType.getCode(), associationPropertyTypeCode))
+        .findFirst();
   }
 
   @Override
@@ -455,7 +467,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return self.getAttributeTypes().stream()
           .filter(attributeType -> Objects.equals(attributeType.getCode(), attributeTypeCode))
           .findFirst()
-          .map(attributeType -> attributeType.getValueType());
+          .map(AttributeType::getValueType);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the value type for the attribute type (" + attributeTypeCode + ")",
@@ -951,6 +963,100 @@ public class PartyReferenceService implements IPartyReferenceService {
             lockType ->
                 (lockType.getTenantId() == null
                     || (Objects.equals(lockType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public Optional<MandatePropertyType> getMandatePropertyType(
+      UUID tenantId, String mandateTypeCode, String mandatePropertyTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(mandatePropertyTypeCode)) {
+      return Optional.empty();
+    }
+
+    return self.getMandatePropertyTypes().stream()
+        .filter(
+            mandatePropertyType ->
+                (mandatePropertyType.getTenantId() == null
+                        || mandatePropertyType.getTenantId().equals(tenantId))
+                    && Objects.equals(mandatePropertyType.getMandateType(), mandateTypeCode)
+                    && Objects.equals(mandatePropertyType.getCode(), mandatePropertyTypeCode))
+        .findFirst();
+  }
+
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'mandatePropertyTypes.' + #localeId")
+  public List<MandatePropertyType> getMandatePropertyTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    try {
+      return mandatePropertyTypeRepository.findByLocaleIdIgnoreCase(localeId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the mandate property type reference data", e);
+    }
+  }
+
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'mandatePropertyTypes.ALL'")
+  public List<MandatePropertyType> getMandatePropertyTypes() throws ServiceUnavailableException {
+    try {
+      return mandatePropertyTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the mandate property type reference data", e);
+    }
+  }
+
+  @Override
+  public List<MandatePropertyType> getMandatePropertyTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getMandatePropertyTypes(localeId).stream()
+        .filter(
+            mandatePropertyType ->
+                (mandatePropertyType.getTenantId() == null
+                    || (Objects.equals(mandatePropertyType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'mandateTypes.' + #localeId")
+  public List<MandateType> getMandateTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    try {
+      return mandateTypeRepository.findByLocaleIdIgnoreCase(localeId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the mandate type reference data", e);
+    }
+  }
+
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'mandateTypes.ALL'")
+  public List<MandateType> getMandateTypes() throws ServiceUnavailableException {
+    try {
+      return mandateTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the mandate type reference data", e);
+    }
+  }
+
+  @Override
+  public List<MandateType> getMandateTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getMandateTypes(localeId).stream()
+        .filter(
+            mandateType ->
+                (mandateType.getTenantId() == null
+                    || (Objects.equals(mandateType.getTenantId(), tenantId))))
         .collect(Collectors.toList());
   }
 
@@ -2128,6 +2234,36 @@ public class PartyReferenceService implements IPartyReferenceService {
                 (employmentType.getTenantId() == null
                         || Objects.equals(employmentType.getTenantId(), tenantId))
                     && Objects.equals(employmentType.getCode(), employmentTypeCode));
+  }
+
+  @Override
+  public boolean isValidExternalReference(
+      UUID tenantId, String partyTypeCode, String externalReferenceTypeCode, String value)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(externalReferenceTypeCode)) {
+      return false;
+    }
+
+    return self.getExternalReferenceTypes().stream()
+        .anyMatch(
+            externalReferenceType -> {
+              if ((externalReferenceType.getTenantId() == null
+                      || Objects.equals(externalReferenceType.getTenantId(), tenantId))
+                  && Objects.equals(externalReferenceType.getCode(), externalReferenceTypeCode)
+                  && externalReferenceType.isValidForPartyType(partyTypeCode)) {
+                if (StringUtils.hasText(externalReferenceType.getPattern())) {
+                  Pattern pattern = externalReferenceType.getCompiledPattern();
+
+                  Matcher matcher = pattern.matcher(value);
+
+                  return matcher.matches();
+                } else {
+                  return true;
+                }
+              } else {
+                return false;
+              }
+            });
   }
 
   @Override

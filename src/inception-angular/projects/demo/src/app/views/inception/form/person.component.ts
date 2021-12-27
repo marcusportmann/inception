@@ -40,6 +40,8 @@ export class PersonComponent implements OnInit, OnDestroy {
 
   languageControl: FormControl = new FormControl('', Validators.required);
 
+  nameControl: FormControl = new FormControl({value: '', disabled: true});
+
   /**
    * The person.
    */
@@ -54,7 +56,12 @@ export class PersonComponent implements OnInit, OnDestroy {
 
     if (person != null) {
       this.countriesOfCitizenshipControl.setValue(this._person?.countriesOfCitizenship);
+      this.givenNameControl.setValue(this._person?.givenName);
       this.languageControl.setValue(this._person?.language);
+      this.nameControl.setValue(this._person?.name);
+      this.surnameControl.setValue(this._person?.surname);
+
+
     }
   }
 
@@ -70,7 +77,10 @@ export class PersonComponent implements OnInit, OnDestroy {
 
   clickMe(): void {
     console.log('[PersonComponent][clickMe] this.countriesOfCitizenshipControl.value = ', this.countriesOfCitizenshipControl.value);
+    console.log('[PersonComponent][clickMe] this.givenName.value = ', this.givenNameControl.value);
     console.log('[PersonComponent][clickMe] this.languageControl.value = ', this.languageControl.value);
+    console.log('[PersonComponent][clickMe] this.nameControl.value = ', this.nameControl.value);
+    console.log('[PersonComponent][clickMe] this.surnameControl.value = ', this.surnameControl.value);
   }
 
   ngOnDestroy(): void {

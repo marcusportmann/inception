@@ -43,12 +43,30 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A type of contact mechanism")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "plural", "description"})
+@JsonPropertyOrder({
+  "code",
+  "localeId",
+  "tenantId",
+  "sortIndex",
+  "name",
+  "plural",
+  "description",
+  "pattern"
+})
 @XmlRootElement(name = "ContactMechanismType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "ContactMechanismType",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "plural", "description"})
+    propOrder = {
+      "code",
+      "localeId",
+      "tenantId",
+      "sortIndex",
+      "name",
+      "plural",
+      "description",
+      "pattern"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "contact_mechanism_types")
@@ -111,6 +129,18 @@ public class ContactMechanismType implements Serializable {
   @Size(min = 1, max = 50)
   @Column(name = "name", length = 50, nullable = false)
   private String name;
+
+  /**
+   * The regular expression pattern used to validate a string value for the contact mechanism type.
+   */
+  @Schema(
+      description =
+          "The regular expression pattern used to validate a string value for the contact mechanism type")
+  @JsonProperty
+  @XmlElement(name = "Pattern")
+  @Size(min = 1, max = 1000)
+  @Column(name = "pattern", length = 1000)
+  private String pattern;
 
   /** The plural for the contact mechanism type. */
   @Schema(description = "The plural for the contact mechanism type", required = true)
@@ -201,6 +231,17 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
+   * Returns the regular expression pattern used to validate a string value for the contact
+   * mechanism type.
+   *
+   * @return the regular expression pattern used to validate a string value for the contact
+   *     mechanism type
+   */
+  public String getPattern() {
+    return pattern;
+  }
+
+  /**
    * Returns the plural for the contact mechanism type.
    *
    * @return the plural for the contact mechanism type
@@ -271,6 +312,17 @@ public class ContactMechanismType implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the regular expression pattern used to validate a string value for the contact mechanism
+   * type.
+   *
+   * @param pattern the regular expression pattern used to validate a string value for the contact
+   *     mechanism type
+   */
+  public void setPattern(String pattern) {
+    this.pattern = pattern;
   }
 
   /**

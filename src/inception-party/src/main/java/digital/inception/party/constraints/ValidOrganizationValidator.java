@@ -238,14 +238,16 @@ public class ValidOrganizationValidator extends PartyValidator
         // Validate external references
         for (ExternalReference externalReference : organization.getExternalReferences()) {
           if (!getPartyReferenceService()
-              .isValidExternalReferenceType(
+              .isValidExternalReference(
                   organization.getTenantId(),
                   organization.getType().code(),
-                  externalReference.getType())) {
+                  externalReference.getType(),
+                  externalReference.getValue())) {
             hibernateConstraintValidatorContext
                 .addMessageParameter("externalReferenceType", externalReference.getType())
+                .addMessageParameter("externalReferenceValue", externalReference.getValue())
                 .buildConstraintViolationWithTemplate(
-                    "{digital.inception.party.constraints.ValidOrganization.invalidExternalReferenceType.message}")
+                    "{digital.inception.party.constraints.ValidOrganization.invalidExternalReference.message}")
                 .addPropertyNode("externalReferences")
                 .addConstraintViolation();
 

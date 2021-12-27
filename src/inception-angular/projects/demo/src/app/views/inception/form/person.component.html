@@ -8,9 +8,18 @@
 
     <div class="row">
       <div class="col-sm">
+        <mat-form-field class="static">
+          <mat-label>Name</mat-label>
+          <input type="text" matInput [formControl]="nameControl">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm">
         <mat-form-field>
           <mat-label>Given Name</mat-label>
-          <input type="text" matInput [formControl]="givenNameControl" required>
+          <input type="text" matInput [formControl]="givenNameControl">
           <mat-error *ngIf="givenNameControl.errors && !givenNameControl.untouched">
             <span *ngIf="givenNameControl.errors?.required">A given name is required.</span>
           </mat-error>
@@ -18,8 +27,8 @@
       </div>
       <div class="col-sm">
         <mat-form-field>
-          <mat-label>Preferred name</mat-label>
-          <input type="text" matInput [formControl]="surnameControl" required>
+          <mat-label>Surname</mat-label>
+          <input type="text" matInput [formControl]="surnameControl">
           <mat-error *ngIf="surnameControl.errors && !surnameControl.untouched">
             <span *ngIf="surnameControl.errors?.required">A surname is required.</span>
           </mat-error>

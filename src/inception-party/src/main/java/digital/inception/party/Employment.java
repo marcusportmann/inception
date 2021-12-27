@@ -40,6 +40,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -125,11 +126,14 @@ public class Employment implements Serializable {
   @JsonProperty
   @XmlElement(name = "EmployerAddressCity")
   @Size(min = 1, max = 50)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerAddressCity.Pattern.message}",
+      regexp = "^(?!\\s+)[(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "employer_address_city", length = 50)
   private String employerAddressCity;
 
-  /** The employer address country. */
-  @Schema(description = "The employer address country")
+  /** The ISO 3166-1 alpha-2 code for the employer address country. */
+  @Schema(description = "The ISO 3166-1 alpha-2 code for the employer address country")
   @JsonProperty
   @XmlElement(name = "EmployerAddressCountry")
   @Size(min = 2, max = 2)
@@ -141,6 +145,9 @@ public class Employment implements Serializable {
   @JsonProperty
   @XmlElement(name = "EmployerAddressLine1")
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerAddressLine1.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "employer_address_line1", length = 100)
   private String employerAddressLine1;
 
@@ -149,6 +156,9 @@ public class Employment implements Serializable {
   @JsonProperty
   @XmlElement(name = "EmployerAddressLine2")
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerAddressLine2.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "employer_address_line2", length = 100)
   private String employerAddressLine2;
 
@@ -157,6 +167,9 @@ public class Employment implements Serializable {
   @JsonProperty
   @XmlElement(name = "EmployerAddressLine3")
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerAddressLine3.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "employer_address_line3", length = 100)
   private String employerAddressLine3;
 
@@ -165,6 +178,9 @@ public class Employment implements Serializable {
   @JsonProperty
   @XmlElement(name = "EmployerAddressLine4")
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerAddressLine4.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "employer_address_line4", length = 100)
   private String employerAddressLine4;
 
@@ -173,15 +189,21 @@ public class Employment implements Serializable {
   @JsonProperty
   @XmlElement(name = "EmployerAddressPostalCode")
   @Size(min = 1, max = 30)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerAddressPostalCode.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,# ]*(?!\\s+)$")
   @Column(name = "employer_address_postal_code", length = 30)
   private String employerAddressPostalCode;
 
-  /** The employer address region. */
-  @Schema(description = "The employer address region")
+  /** The ISO 3166-2 subdivision code for the employer address region. */
+  @Schema(description = "The ISO 3166-2 subdivision code for the employer address region")
   @JsonProperty
   @XmlElement(name = "EmployerAddressRegion")
-  @Size(min = 1, max = 30)
-  @Column(name = "employer_address_region", length = 30)
+  @Size(min = 4, max = 6)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerAddressRegion.Pattern.message}",
+      regexp = "[A-Z]{2}-[A-Z0-9]{1,3}")
+  @Column(name = "employer_address_region", length = 6)
   private String employerAddressRegion;
 
   /** The employer address suburb. */
@@ -189,6 +211,9 @@ public class Employment implements Serializable {
   @JsonProperty
   @XmlElement(name = "EmployerAddressSuburb")
   @Size(min = 1, max = 50)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerAddressSuburb.Pattern.message}",
+      regexp = "^(?!\\s+)[(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "employer_address_suburb", length = 50)
   private String employerAddressSuburb;
 
@@ -197,6 +222,9 @@ public class Employment implements Serializable {
   @JsonProperty
   @XmlElement(name = "EmployerContactPerson")
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerContactPerson.Pattern.message}",
+      regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
   @Column(name = "employer_contact_person", length = 100)
   private String employerContactPerson;
 
@@ -205,6 +233,10 @@ public class Employment implements Serializable {
   @JsonProperty
   @XmlElement(name = "EmployerEmailAddress")
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerEmailAddress.Pattern.message}",
+      regexp =
+          "^$|(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
   @Column(name = "employer_email_address", length = 100)
   private String employerEmailAddress;
 
@@ -214,6 +246,9 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerName", required = true)
   @NotNull
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerName.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "employer_name", length = 100, nullable = false)
   private String employerName;
 
@@ -222,6 +257,9 @@ public class Employment implements Serializable {
   @JsonProperty
   @XmlElement(name = "EmployerPhoneNumber")
   @Size(min = 1, max = 50)
+  @Pattern(
+      message = "{digital.inception.party.Employment.EmployerPhoneNumber.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9|+-., ()]*(?!\\s+)$")
   @Column(name = "employer_phone_number", length = 50)
   private String employerPhoneNumber;
 
@@ -300,8 +338,8 @@ public class Employment implements Serializable {
    * @param employerAddressLine4 the employer address line 4
    * @param employerAddressSuburb the employer address suburb
    * @param employerAddressCity the employer address city
-   * @param employerAddressRegion the employer address region
-   * @param employerAddressCountry the employer address country
+   * @param employerAddressRegion the ISO 3166-2 subdivision code for the employer address region
+   * @param employerAddressCountry the ISO 3166-1 alpha-2 code for the employer address country
    * @param employerAddressPostalCode the employer address postal code
    * @param startDate the start date for the employment
    * @param endDate the end date for the employment
@@ -359,8 +397,8 @@ public class Employment implements Serializable {
    * @param employerAddressLine4 the employer address line 4
    * @param employerAddressSuburb the employer address suburb
    * @param employerAddressCity the employer address city
-   * @param employerAddressRegion the employer address region
-   * @param employerAddressCountry the employer address country
+   * @param employerAddressRegion the ISO 3166-2 subdivision code for the employer address region
+   * @param employerAddressCountry the ISO 3166-1 alpha-2 code for the employer address country
    * @param employerAddressPostalCode the employer address postal code
    * @param startDate the start date for the employment
    * @param type the code for the employment type for the employment
@@ -507,9 +545,9 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Returns the employer address country.
+   * Returns the ISO 3166-1 alpha-2 code for the employer address country.
    *
-   * @return the employer address country
+   * @return the ISO 3166-1 alpha-2 code for the employer address country
    */
   public String getEmployerAddressCountry() {
     return employerAddressCountry;
@@ -561,9 +599,9 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Returns the employer address region.
+   * Returns the ISO 3166-2 subdivision code for the employer address region.
    *
-   * @return the employer address region
+   * @return the ISO 3166-2 subdivision code for the employer address region
    */
   public String getEmployerAddressRegion() {
     return employerAddressRegion;
@@ -698,9 +736,9 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer address country.
+   * Set the ISO 3166-1 alpha-2 code for the employer address country.
    *
-   * @param employerAddressCountry the employer address country
+   * @param employerAddressCountry the ISO 3166-1 alpha-2 code for the employer address country
    */
   public void setEmployerAddressCountry(String employerAddressCountry) {
     this.employerAddressCountry = employerAddressCountry;
@@ -752,9 +790,9 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer address region.
+   * Set the ISO 3166-2 subdivision code for the employer address region.
    *
-   * @param employerAddressRegion the employer address region
+   * @param employerAddressRegion the ISO 3166-2 subdivision code for the employer address region
    */
   public void setEmployerAddressRegion(String employerAddressRegion) {
     this.employerAddressRegion = employerAddressRegion;

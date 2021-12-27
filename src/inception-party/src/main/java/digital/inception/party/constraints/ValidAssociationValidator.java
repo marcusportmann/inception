@@ -17,8 +17,13 @@
 package digital.inception.party.constraints;
 
 import digital.inception.party.Association;
+import digital.inception.party.AssociationProperty;
+import digital.inception.party.AssociationPropertyType;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IPartyService;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.ValidationException;
@@ -81,13 +86,141 @@ public class ValidAssociationValidator
             && (!partyReferenceService.isValidAssociationType(
                 association.getTenantId(), association.getType()))) {
           hibernateConstraintValidatorContext
-              .addMessageParameter("type", association.getType())
+              .addMessageParameter("associationType", association.getType())
               .buildConstraintViolationWithTemplate(
                   "{digital.inception.party.constraints.ValidAssociation.invalidType.message}")
               .addPropertyNode("type")
               .addConstraintViolation();
 
           isValid = false;
+        }
+
+        // Validate association properties
+        for (AssociationProperty associationProperty : association.getProperties()) {
+          Optional<AssociationPropertyType> associationPropertyTypeOptional =
+              partyReferenceService.getAssociationPropertyType(
+                  association.getTenantId(), association.getType(), associationProperty.getType());
+
+          if (associationPropertyTypeOptional.isPresent()) {
+            AssociationPropertyType associationPropertyType = associationPropertyTypeOptional.get();
+
+            switch (associationPropertyTypeOptional.get().getValueType()) {
+              case BOOLEAN:
+                if (associationProperty.getBooleanValue() == null) {
+                  hibernateConstraintValidatorContext
+                      .addMessageParameter("associationPropertyType", associationProperty.getType())
+                      .addMessageParameter("associationType", association.getType())
+                      .buildConstraintViolationWithTemplate(
+                          "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullBooleanValue.message}")
+                      .addPropertyNode("properties")
+                      .addConstraintViolation();
+
+                  isValid = false;
+                }
+
+                break;
+              case DATE:
+                if (associationProperty.getDateValue() == null) {
+                  hibernateConstraintValidatorContext
+                      .addMessageParameter("associationPropertyType", associationProperty.getType())
+                      .addMessageParameter("associationType", association.getType())
+                      .buildConstraintViolationWithTemplate(
+                          "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullDateValue.message}")
+                      .addPropertyNode("properties")
+                      .addConstraintViolation();
+
+                  isValid = false;
+                }
+
+                break;
+              case DECIMAL:
+                if (associationProperty.getDecimalValue() == null) {
+                  hibernateConstraintValidatorContext
+                      .addMessageParameter("associationPropertyType", associationProperty.getType())
+                      .addMessageParameter("associationType", association.getType())
+                      .buildConstraintViolationWithTemplate(
+                          "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullDecimalValue.message}")
+                      .addPropertyNode("properties")
+                      .addConstraintViolation();
+
+                  isValid = false;
+                }
+
+                break;
+              case DOUBLE:
+                if (associationProperty.getDoubleValue() == null) {
+                  hibernateConstraintValidatorContext
+                      .addMessageParameter("associationPropertyType", associationProperty.getType())
+                      .addMessageParameter("associationType", association.getType())
+                      .buildConstraintViolationWithTemplate(
+                          "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullDoubleValue.message}")
+                      .addPropertyNode("properties")
+                      .addConstraintViolation();
+
+                  isValid = false;
+                }
+
+                break;
+              case INTEGER:
+                if (associationProperty.getIntegerValue() == null) {
+                  hibernateConstraintValidatorContext
+                      .addMessageParameter("associationPropertyType", associationProperty.getType())
+                      .addMessageParameter("associationType", association.getType())
+                      .buildConstraintViolationWithTemplate(
+                          "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullIntegerValue.message}")
+                      .addPropertyNode("properties")
+                      .addConstraintViolation();
+
+                  isValid = false;
+                }
+
+                break;
+              case STRING:
+                if (associationProperty.getStringValue() == null) {
+                  hibernateConstraintValidatorContext
+                      .addMessageParameter("associationPropertyType", associationProperty.getType())
+                      .addMessageParameter("associationType", association.getType())
+                      .buildConstraintViolationWithTemplate(
+                          "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullStringValue.message}")
+                      .addPropertyNode("properties")
+                      .addConstraintViolation();
+
+                  isValid = false;
+                } else {
+                  if (StringUtils.hasText(associationPropertyType.getPattern())) {
+                    Pattern pattern = associationPropertyType.getCompiledPattern();
+
+                    Matcher matcher = pattern.matcher(associationProperty.getStringValue());
+
+                    if (!matcher.matches()) {
+                      hibernateConstraintValidatorContext
+                          .addMessageParameter(
+                              "associationPropertyType", associationProperty.getType())
+                          .addMessageParameter("stringValue", associationProperty.getStringValue())
+                          .addMessageParameter("associationType", association.getType())
+                          .buildConstraintViolationWithTemplate(
+                              "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithStringValue.message}")
+                          .addPropertyNode("properties")
+                          .addConstraintViolation();
+
+                      isValid = false;
+                    }
+                  }
+                }
+
+                break;
+            }
+          } else {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("associationPropertyType", associationProperty.getType())
+                .addMessageParameter("associationType", association.getType())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyType.message}")
+                .addPropertyNode("properties")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
         }
       } catch (Throwable e) {
         throw new ValidationException("Failed to validate the association", e);

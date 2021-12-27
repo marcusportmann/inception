@@ -32,6 +32,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -56,7 +57,8 @@ import org.springframework.util.StringUtils;
   "name",
   "description",
   "countryOfIssue",
-  "partyTypes"
+  "partyTypes",
+  "pattern"
 })
 @XmlRootElement(name = "IdentityDocumentType", namespace = "http://inception.digital/party")
 @XmlType(
@@ -70,7 +72,8 @@ import org.springframework.util.StringUtils;
       "name",
       "description",
       "countryOfIssue",
-      "partyTypes"
+      "partyTypes",
+      "pattern"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -140,6 +143,16 @@ public class IdentityDocumentType implements Serializable {
   @Size(min = 1, max = 310)
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
+
+  /** The regular expression pattern used to validate a number for the identity document type. */
+  @Schema(
+      description =
+          "The regular expression pattern used to validate a number for the identity document type")
+  @JsonProperty
+  @XmlElement(name = "Pattern")
+  @Size(min = 1, max = 1000)
+  @Column(name = "pattern", length = 1000)
+  private String pattern;
 
   /** The sort index for the identity document type. */
   @Schema(description = "The sort index for the identity document type", required = true)
@@ -244,6 +257,16 @@ public class IdentityDocumentType implements Serializable {
   }
 
   /**
+   * Returns the regular expression pattern used to validate a number for the identity document
+   * type.
+   *
+   * @return the regular expression pattern used to validate a number for the identity document type
+   */
+  public String getPattern() {
+    return pattern;
+  }
+
+  /**
    * Returns the sort index for the identity document type.
    *
    * @return the sort index for the identity document type
@@ -345,6 +368,16 @@ public class IdentityDocumentType implements Serializable {
   @JsonIgnore
   public void setPartyTypes(Collection<String> partyTypes) {
     this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
+  }
+
+  /**
+   * Set the regular expression pattern used to validate a number for the identity document type.
+   *
+   * @param pattern the regular expression pattern used to validate a number for the identity
+   *     document type
+   */
+  public void setPattern(String pattern) {
+    this.pattern = pattern;
   }
 
   /**

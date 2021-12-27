@@ -51,12 +51,15 @@ export class IdentityDocumentType {
    */
   partyTypes: string[];
 
+  /**
+   * The regular expression pattern used to validate a number for the identity document type.
+   */
+  pattern?: string;
 
   /**
    * The sort index for the identity document type.
    */
   sortIndex: number;
-
 
   /**
    * The ID for the tenant the identity document type is specific to.
@@ -75,10 +78,12 @@ export class IdentityDocumentType {
    *                       identity document type.
    * @param partyTypes     The codes for the party types the identity document type is associated
    *                       with.
+   * @param pattern        The regular expression pattern used to validate a number for the identity
+   *                       document type.
    * @param tenantId       The ID for the tenant the identity document type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
-              countryOfIssue: string, partyTypes: string[], tenantId?: string) {
+              countryOfIssue: string, partyTypes: string[], pattern?: string, tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
@@ -86,6 +91,7 @@ export class IdentityDocumentType {
     this.description = description;
     this.countryOfIssue = countryOfIssue;
     this.partyTypes = partyTypes;
+    this.pattern = pattern;
     this.tenantId = tenantId;
   }
 }

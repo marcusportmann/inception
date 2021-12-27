@@ -42,6 +42,11 @@ export class ContactMechanismType {
   name: string;
 
   /**
+   * The regular expression pattern used to validate a value for the contact mechanism type.
+   */
+  pattern?: string;
+
+  /**
    * The plural for the contact mechanism type.
    */
   plural: string;
@@ -65,16 +70,19 @@ export class ContactMechanismType {
    * @param name        The name of the contact mechanism type.
    * @param description The description for the contact mechanism type.
    * @param plural      The plural for the contact mechanism type.
+   * @param pattern     The regular expression pattern used to validate a value for the contact
+   *                    mechanism type.
    * @param tenantId    The ID for the tenant the contact mechanism type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
-              plural: string, tenantId?: string) {
+              plural: string, pattern?: string, tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.plural = plural;
     this.description = description;
+    this.pattern = pattern;
     this.tenantId = tenantId;
   }
 }

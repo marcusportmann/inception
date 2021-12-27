@@ -52,6 +52,11 @@ export class AttributeType {
   partyTypes: string[];
 
   /**
+   * The regular expression pattern used to validate a string value for the attribute type.
+   */
+  pattern?: string;
+
+  /**
    * The sort index for the attribute type.
    */
   sortIndex: number;
@@ -72,10 +77,13 @@ export class AttributeType {
    * @param name        The name of the attribute type.
    * @param description The description for the attribute type.
    * @param partyTypes  The codes for the party types the attribute type is associated with.
+   * @param pattern     The regular expression pattern used to validate a string value for the
+   *                    attribute type.
    * @param tenantId    The ID for the tenant the attribute type is specific to.
    */
   constructor(category: string, code: string, localeId: string, sortIndex: number,
-              name: string, description: string, partyTypes: string[], tenantId?: string) {
+              name: string, description: string, partyTypes: string[], pattern?: string,
+              tenantId?: string) {
     this.category = category;
     this.code = code;
     this.localeId = localeId;
@@ -83,6 +91,7 @@ export class AttributeType {
     this.name = name;
     this.description = description;
     this.partyTypes = partyTypes;
+    this.pattern = pattern;
     this.tenantId = tenantId;
   }
 }

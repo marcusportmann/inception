@@ -354,6 +354,25 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the mandate property type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the mandate property type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandate property
+   *     type reference data for
+   * @return the mandate property type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the mandate property type reference data could not be
+   *     retrieved
+   */
+  @WebMethod(operationName = "GetMandatePropertyTypes")
+  public List<MandatePropertyType> getMandatePropertyTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getMandatePropertyTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the marital status reference data for a specific locale.
    *
    * @param tenantId the ID for the tenant the marital status reference data is specific to

@@ -104,14 +104,13 @@ public class ResidencePermit implements Serializable {
   private LocalDate dateOfExpiry;
 
   /** The date of issue for the residence permit. */
-  @Schema(description = "The date of issue for the residence permit", required = true)
-  @JsonProperty(required = true)
+  @Schema(description = "The date of issue for the residence permit")
+  @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateOfIssue", required = true)
+  @XmlElement(name = "DateOfIssue")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @NotNull
-  @Column(name = "date_of_issue", nullable = false)
+  @Column(name = "date_of_issue")
   private LocalDate dateOfIssue;
 
   /** The ID for the residence permit. */

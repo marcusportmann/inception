@@ -1226,158 +1226,7 @@
       <column name="type" value="pattern"/>
       <column name="value" value="^[0-9]*$"/>
     </insert>
-
-
-
-    <insert schemaName="party" tableName="association_types">
-      <column name="code" value="test_association_type"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="name" value="Test Association Type"/>
-      <column name="description" value="Test Association Type"/>
-      <column name="first_party_role" value="test_first_person_role"/>
-      <column name="first_party_types" value="organization,person"/>
-      <column name="second_party_role" value="test_second_person_role"/>
-      <column name="second_party_types" value="organization,person"/>
-    </insert>
-
-    <insert schemaName="party" tableName="association_types">
-      <column name="code" value="test_association_type"/>
-      <column name="locale_id" value="en-ZA"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="name" value="Test Association Type"/>
-      <column name="description" value="Test Association Type"/>
-      <column name="first_party_role" value="test_first_person_role"/>
-      <column name="first_party_types" value="organization,person"/>
-      <column name="second_party_role" value="test_second_person_role"/>
-      <column name="second_party_types" value="organization,person"/>
-    </insert>
-
-
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_boolean_property"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association Boolean Property"/>
-      <column name="description" value="Test Association Boolean Property"/>
-      <column name="value_type" value="boolean"/>
-    </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_date_property"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association Date Property"/>
-      <column name="description" value="Test Association Date Property"/>
-      <column name="value_type" value="date"/>
-    </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_decimal_property"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association Decimal Property"/>
-      <column name="description" value="Test Association Decimal Property"/>
-      <column name="value_type" value="decimal"/>
-    </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_double_property"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association Double Property"/>
-      <column name="description" value="Test Association Double Property"/>
-      <column name="value_type" value="double"/>
-    </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_integer_property"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association Integer Property"/>
-      <column name="description" value="Test Association Integer Property"/>
-      <column name="value_type" value="integer"/>
-    </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_string_property"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association String Property"/>
-      <column name="description" value="Test Association String Property"/>
-      <column name="value_type" value="string"/>
-    </insert>
-
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_boolean_property"/>
-      <column name="locale_id" value="en-ZA"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association Boolean Property"/>
-      <column name="description" value="Test Association Boolean Property"/>
-      <column name="value_type" value="boolean"/>
-    </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_date_property"/>
-      <column name="locale_id" value="en-ZA"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association Date Property"/>
-      <column name="description" value="Test Association Date Property"/>
-      <column name="value_type" value="date"/>
-    </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_decimal_property"/>
-      <column name="locale_id" value="en-ZA"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association Decimal Property"/>
-      <column name="description" value="Test Association Decimal Property"/>
-      <column name="value_type" value="decimal"/>
-    </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_double_property"/>
-      <column name="locale_id" value="en-ZA"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association Double Property"/>
-      <column name="description" value="Test Association Double Property"/>
-      <column name="value_type" value="double"/>
-    </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_integer_property"/>
-      <column name="locale_id" value="en-ZA"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association Integer Property"/>
-      <column name="description" value="Test Association Integer Property"/>
-      <column name="value_type" value="integer"/>
-    </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="test_association_type"/>
-      <column name="code" value="test_string_property"/>
-      <column name="locale_id" value="en-ZA"/>
-      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Association String Property"/>
-      <column name="description" value="Test Association String Property"/>
-      <column name="value_type" value="string"/>
-    </insert>
-
-
-
+    
     <insert schemaName="party" tableName="segmentation_types">
       <column name="code" value="test_segmentation_type"/>
       <column name="locale_id" value="en-US"/>
@@ -1568,6 +1417,7 @@
       <column name="name" value="Test Title"/>
       <column name="abbreviation" value="Tst."/>
       <column name="description" value="Test Title"/>
+      <column name="genders" value="male,female,transgender,non_binary,unknown"/>
     </insert>
 
     <insert schemaName="party" tableName="titles">
@@ -1578,7 +1428,303 @@
       <column name="name" value="Test Title"/>
       <column name="abbreviation" value="Tst."/>
       <column name="description" value="Test Title"/>
+      <column name="genders" value="male,female,transgender,non_binary,unknown"/>
     </insert>
+
+    <insert schemaName="party" tableName="association_types">
+      <column name="code" value="test_association_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Association Type"/>
+      <column name="description" value="Test Association Type"/>
+      <column name="first_party_role" value="test_first_person_role"/>
+      <column name="first_party_types" value="organization,person"/>
+      <column name="second_party_role" value="test_second_person_role"/>
+      <column name="second_party_types" value="organization,person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="association_types">
+      <column name="code" value="test_association_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Association Type"/>
+      <column name="description" value="Test Association Type"/>
+      <column name="first_party_role" value="test_first_person_role"/>
+      <column name="first_party_types" value="organization,person"/>
+      <column name="second_party_role" value="test_second_person_role"/>
+      <column name="second_party_types" value="organization,person"/>
+    </insert>
+
+
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_boolean_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Boolean Property"/>
+      <column name="description" value="Test Association Boolean Property"/>
+      <column name="value_type" value="boolean"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_date_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Date Property"/>
+      <column name="description" value="Test Association Date Property"/>
+      <column name="value_type" value="date"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_decimal_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Decimal Property"/>
+      <column name="description" value="Test Association Decimal Property"/>
+      <column name="value_type" value="decimal"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_double_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Double Property"/>
+      <column name="description" value="Test Association Double Property"/>
+      <column name="value_type" value="double"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_integer_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Integer Property"/>
+      <column name="description" value="Test Association Integer Property"/>
+      <column name="value_type" value="integer"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_string_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association String Property"/>
+      <column name="description" value="Test Association String Property"/>
+      <column name="value_type" value="string"/>
+      <column name="pattern" value="^(?!\s+)[0-9(?U)\p{L} ]*(?!\s+)$"/>
+    </insert>
+
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_boolean_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Boolean Property"/>
+      <column name="description" value="Test Association Boolean Property"/>
+      <column name="value_type" value="boolean"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_date_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Date Property"/>
+      <column name="description" value="Test Association Date Property"/>
+      <column name="value_type" value="date"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_decimal_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Decimal Property"/>
+      <column name="description" value="Test Association Decimal Property"/>
+      <column name="value_type" value="decimal"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_double_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Double Property"/>
+      <column name="description" value="Test Association Double Property"/>
+      <column name="value_type" value="double"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_integer_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association Integer Property"/>
+      <column name="description" value="Test Association Integer Property"/>
+      <column name="value_type" value="integer"/>
+    </insert>
+    <insert schemaName="party" tableName="association_property_types">
+      <column name="association_type" value="test_association_type"/>
+      <column name="code" value="test_string_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Association String Property"/>
+      <column name="description" value="Test Association String Property"/>
+      <column name="value_type" value="string"/>
+      <column name="pattern" value="^(?!\s+)[0-9(?U)\p{L} ]*(?!\s+)$"/>
+    </insert>
+
+
+    <insert schemaName="party" tableName="mandate_types">
+      <column name="code" value="test_mandate_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Mandate Type"/>
+      <column name="description" value="Test Mandate Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="mandate_types">
+      <column name="code" value="test_mandate_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Mandate Type"/>
+      <column name="description" value="Test Mandate Type"/>
+    </insert>
+
+
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_boolean_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate Boolean Property"/>
+      <column name="description" value="Test Mandate Boolean Property"/>
+      <column name="value_type" value="boolean"/>
+    </insert>
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_date_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate Date Property"/>
+      <column name="description" value="Test Mandate Date Property"/>
+      <column name="value_type" value="date"/>
+    </insert>
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_decimal_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate Decimal Property"/>
+      <column name="description" value="Test Mandate Decimal Property"/>
+      <column name="value_type" value="decimal"/>
+    </insert>
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_double_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate Double Property"/>
+      <column name="description" value="Test Mandate Double Property"/>
+      <column name="value_type" value="double"/>
+    </insert>
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_integer_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate Integer Property"/>
+      <column name="description" value="Test Mandate Integer Property"/>
+      <column name="value_type" value="integer"/>
+    </insert>
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_string_property"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate String Property"/>
+      <column name="description" value="Test Mandate String Property"/>
+      <column name="value_type" value="string"/>
+      <column name="pattern" value="^(?!\s+)[0-9(?U)\p{L} ]*(?!\s+)$"/>
+    </insert>
+
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_boolean_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate Boolean Property"/>
+      <column name="description" value="Test Mandate Boolean Property"/>
+      <column name="value_type" value="boolean"/>
+    </insert>
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_date_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate Date Property"/>
+      <column name="description" value="Test Mandate Date Property"/>
+      <column name="value_type" value="date"/>
+    </insert>
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_decimal_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate Decimal Property"/>
+      <column name="description" value="Test Mandate Decimal Property"/>
+      <column name="value_type" value="decimal"/>
+    </insert>
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_double_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate Double Property"/>
+      <column name="description" value="Test Mandate Double Property"/>
+      <column name="value_type" value="double"/>
+    </insert>
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_integer_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate Integer Property"/>
+      <column name="description" value="Test Mandate Integer Property"/>
+      <column name="value_type" value="integer"/>
+    </insert>
+    <insert schemaName="party" tableName="mandate_property_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_string_property"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandate String Property"/>
+      <column name="description" value="Test Mandate String Property"/>
+      <column name="value_type" value="string"/>
+      <column name="pattern" value="^(?!\s+)[0-9(?U)\p{L} ]*(?!\s+)$"/>
+    </insert>    
+    
+    
+    
+    
 
   </changeSet>
 

@@ -52,6 +52,11 @@ export class TaxNumberType {
   partyTypes: string[];
 
   /**
+   * The regular expression pattern used to validate a number for the tax number type.
+   */
+  pattern?: string;
+
+  /**
    * The sort index for the tax number type.
    */
   sortIndex: number;
@@ -72,10 +77,12 @@ export class TaxNumberType {
    * @param countryOfIssue The ISO 3166-1 alpha-2 code for the country of issue for the tax number
    *                       type.
    * @param partyTypes     The codes for the party types the tax number type is associated with.
+   * @param pattern        The regular expression pattern used to validate a number for the tax
+   *                       number type.
    * @param tenantId       The ID for the tenant the tax number type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
-              countryOfIssue: string, partyTypes: string[], tenantId?: string) {
+              countryOfIssue: string, partyTypes: string[], pattern?: string, tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
@@ -83,6 +90,7 @@ export class TaxNumberType {
     this.description = description;
     this.countryOfIssue = countryOfIssue;
     this.partyTypes = partyTypes;
+    this.pattern = pattern;
     this.tenantId = tenantId;
   }
 }

@@ -37,6 +37,8 @@ import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocumentType;
 import digital.inception.party.LockType;
 import digital.inception.party.LockTypeCategory;
+import digital.inception.party.MandatePropertyType;
+import digital.inception.party.MandateType;
 import digital.inception.party.MaritalStatus;
 import digital.inception.party.MarriageType;
 import digital.inception.party.NextOfKinType;
@@ -575,6 +577,62 @@ public class PartyReferenceServiceTest {
 
     assertEquals(
         2, retrievedLockTypes.size(), "The correct number of lock types was not retrieved");
+  }
+
+  /** Test the mandate property type reference functionality. */
+  @Test
+  public void mandatePropertyTypeTest() throws Exception {
+    List<MandatePropertyType> retrievedMandatePropertyTypes =
+        partyReferenceService.getMandatePropertyTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        6,
+        retrievedMandatePropertyTypes.size(),
+        "The correct number of mandate property types was not retrieved");
+
+    retrievedMandatePropertyTypes =
+        partyReferenceService.getMandatePropertyTypes(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        6,
+        retrievedMandatePropertyTypes.size(),
+        "The correct number of mandate property types was not retrieved");
+
+    retrievedMandatePropertyTypes =
+        partyReferenceService.getMandatePropertyTypes(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        0,
+        retrievedMandatePropertyTypes.size(),
+        "The correct number of mandate property types was not retrieved");
+  }
+
+  /** Test the mandate type reference functionality. */
+  @Test
+  public void mandateTypeTest() throws Exception {
+    List<MandateType> retrievedMandateTypes =
+        partyReferenceService.getMandateTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        14, retrievedMandateTypes.size(), "The correct number of mandate types was not retrieved");
+
+    retrievedMandateTypes =
+        partyReferenceService.getMandateTypes(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        14, retrievedMandateTypes.size(), "The correct number of mandate types was not retrieved");
+
+    retrievedMandateTypes =
+        partyReferenceService.getMandateTypes(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        13, retrievedMandateTypes.size(), "The correct number of mandate types was not retrieved");
   }
 
   /** Test the marital status reference functionality. */

@@ -49,6 +49,12 @@ export class AssociationPropertyType {
   name: string;
 
   /**
+   *  The regular expression pattern used to validate a string value for the association property
+   *  type.
+   */
+  pattern?: string;
+
+  /**
    * The sort index for the association property type.
    */
   sortIndex: number;
@@ -75,10 +81,13 @@ export class AssociationPropertyType {
    * @param name            The name of the association property type.
    * @param description     The description for the association property type.
    * @param valueType       The value type for the association property type.
+   * @param pattern         The regular expression pattern used to validate a string value for the
+   *                        association property type.
    * @param tenantId        The ID for the tenant the association property type is specific to.
    */
   constructor(associationType: string, code: string, localeId: string, sortIndex: number,
-              name: string, description: string, valueType: ValueType, tenantId?: string) {
+              name: string, description: string, valueType: ValueType, pattern?: string,
+              tenantId?: string) {
     this.associationType = associationType;
     this.code = code;
     this.localeId = localeId;
@@ -86,6 +95,7 @@ export class AssociationPropertyType {
     this.name = name;
     this.description = description;
     this.valueType = valueType;
+    this.pattern = pattern;
     this.tenantId = tenantId;
   }
 }

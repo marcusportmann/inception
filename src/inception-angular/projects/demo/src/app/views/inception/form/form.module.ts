@@ -17,6 +17,7 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
 import {RouterModule, Routes} from '@angular/router';
 import {CoreModule} from 'ngx-inception/core';
 import {ReferenceComponentsModule} from 'ngx-inception/reference';
@@ -62,7 +63,7 @@ const routes: Routes = [{
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
 
     // Inception modules
-    CoreModule, ReferenceComponentsModule
+    CoreModule, ReferenceComponentsModule,
   ],
   declarations: [ExampleFormComponent, PartyReferenceFormComponent, PersonComponent,
     PersonFormComponent, ReferenceFormComponent],

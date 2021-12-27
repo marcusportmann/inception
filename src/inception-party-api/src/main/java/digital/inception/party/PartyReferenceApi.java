@@ -1083,6 +1083,70 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the mandate property type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the mandate property type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandate property
+   *     type reference data for
+   * @return the mandate property type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the mandate property type reference data could not be
+   *     retrieved
+   */
+  @Operation(
+      summary = "Retrieve the mandate property type reference data for a specific locale",
+      description = "Retrieve the mandate property type reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/mandate-property-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<MandatePropertyType> getMandatePropertyTypes(
+      @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The ID for the tenant the mandate property type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the mandate property type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getMandatePropertyTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the marital status reference data for a specific locale.
    *
    * @param tenantId the ID for the tenant the marital status reference data is specific to
@@ -1373,7 +1437,8 @@ public class PartyReferenceApi extends SecureApi {
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(
       @Parameter(
               name = "Tenant-ID",
-              description = "The ID for the tenant the XXX reference data is specific to",
+              description =
+                  "The ID for the tenant the physical address purpose reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1525,7 +1590,8 @@ public class PartyReferenceApi extends SecureApi {
   /**
    * Retrieve the preference type category reference data for a specific locale.
    *
-   * @param tenantId the ID for the tenant the XXX reference data is specific to
+   * @param tenantId the ID for the tenant the physical address purpose reference data is specific
+   *     to
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
    *     category reference data for
    * @return the preference type category reference data

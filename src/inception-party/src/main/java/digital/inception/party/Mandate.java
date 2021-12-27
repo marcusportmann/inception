@@ -19,6 +19,7 @@ package digital.inception.party;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
@@ -28,19 +29,27 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
@@ -61,13 +70,22 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
   "type",
   "requiredMandataries",
   "effectiveFrom",
-  "effectiveTo"
+  "effectiveTo",
+  "properties"
 })
 @XmlRootElement(name = "Mandate", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Mandate",
     namespace = "http://inception.digital/party",
-    propOrder = {"id", "tenantId", "type", "requiredMandataries", "effectiveFrom", "effectiveTo"})
+    propOrder = {
+      "id",
+      "tenantId",
+      "type",
+      "requiredMandataries",
+      "effectiveFrom",
+      "effectiveTo",
+      "properties"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidMandate
 @Entity
@@ -75,6 +93,20 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Mandate implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The properties for the mandate. */
+  @Schema(description = "The properties for the mandate")
+  @JsonProperty
+  @JsonManagedReference
+  @XmlElementWrapper(name = "Properties")
+  @XmlElement(name = "Property")
+  @Valid
+  @OneToMany(
+      mappedBy = "mandate",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<MandateProperty> properties = new HashSet<>();
 
   /** The date and time the mandate was created. */
   @JsonIgnore
@@ -112,7 +144,11 @@ public class Mandate implements Serializable {
   private UUID id;
 
   /** The number of mandataries required to execute the mandate. */
-  @Column(name = "required_mandataries", length = 30)
+  @Schema(description = "The number of mandataries required to execute the mandate")
+  @JsonProperty(required = true)
+  @XmlElement(name = "RequiredMandataries", required = true)
+  @NotNull
+  @Column(name = "required_mandataries", length = 30, nullable = false)
   private RequiredMandataries requiredMandataries;
 
   /** The ID for the tenant the mandate is associated with. */
@@ -199,6 +235,20 @@ public class Mandate implements Serializable {
   }
 
   /**
+   * Add the property for the mandate.
+   *
+   * @param property the property
+   */
+  public void addProperty(MandateProperty property) {
+    properties.removeIf(
+        existingProperty -> Objects.equals(existingProperty.getType(), property.getType()));
+
+    property.setMandate(this);
+
+    properties.add(property);
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -260,6 +310,28 @@ public class Mandate implements Serializable {
   }
 
   /**
+   * Returns the properties for the mandate.
+   *
+   * @return the properties for the mandate
+   */
+  public Set<MandateProperty> getProperties() {
+    return properties;
+  }
+
+  /**
+   * Retrieve the property with the specified type for the mandate.
+   *
+   * @param type the code for the mandate property type
+   * @return an Optional containing the property with the specified type for the mandate or an empty
+   *     Optional if the property could not be found
+   */
+  public Optional<MandateProperty> getPropertyWithType(String type) {
+    return properties.stream()
+        .filter(attribute -> Objects.equals(attribute.getType(), type))
+        .findFirst();
+  }
+
+  /**
    * Returns the number of mandataries required to execute the mandate.
    *
    * @return the number of mandataries required to execute the mandate
@@ -296,6 +368,17 @@ public class Mandate implements Serializable {
   }
 
   /**
+   * Returns whether the mandate has a property with the specified type.
+   *
+   * @param type the code for the mandate property type
+   * @return <b>true</b> if the mandate has a property with the specified type or <b>false</b>
+   *     otherwise
+   */
+  public boolean hasPropertyWithType(String type) {
+    return properties.stream().anyMatch(property -> Objects.equals(property.getType(), type));
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -303,6 +386,15 @@ public class Mandate implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
+   * Remove the property with the specified type for the mandate.
+   *
+   * @param type the code for the mandate property type
+   */
+  public void removePropertyWithType(String type) {
+    properties.removeIf(existingProperty -> Objects.equals(existingProperty.getType(), type));
   }
 
   /**
@@ -330,6 +422,17 @@ public class Mandate implements Serializable {
    */
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Set the properties for the mandate.
+   *
+   * @param properties the properties for the mandate
+   */
+  public void setProperties(Set<MandateProperty> properties) {
+    properties.forEach(property -> property.setMandate(this));
+    this.properties.clear();
+    this.properties.addAll(properties);
   }
 
   /**

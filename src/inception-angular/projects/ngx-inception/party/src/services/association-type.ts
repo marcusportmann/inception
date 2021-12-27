@@ -37,6 +37,11 @@ export class AssociationType {
   firstPartyRole: string;
 
   /**
+   * The codes for the party types for the first party in the association.
+   */
+  firstPartyTypes: string[];
+
+  /**
    * The Unicode locale identifier for the association type.
    */
   localeId: string;
@@ -52,6 +57,11 @@ export class AssociationType {
   secondPartyRole: string;
 
   /**
+   * The codes for the party types for the second party in the association.
+   */
+  secondPartyTypes: string[];
+
+  /**
    * The sort index for the association type.
    */
   sortIndex: number;
@@ -64,23 +74,28 @@ export class AssociationType {
   /**
    * Constructs a new AssociationType.
    *
-   * @param code            The code for the association type.
-   * @param localeId        The Unicode locale identifier for the association type.
-   * @param sortIndex       The sort index for the association type.
-   * @param name            The name of the association type.
-   * @param description     The description for the association type.
-   * @param firstPartyRole  The code for the role type for the first party in the association.
-   * @param secondPartyRole The code for the role type for the second party in the association.
-   * @param tenantId        The ID for the tenant the association type is specific to.
+   * @param code             The code for the association type.
+   * @param localeId         The Unicode locale identifier for the association type.
+   * @param sortIndex        The sort index for the association type.
+   * @param name             The name of the association type.
+   * @param description      The description for the association type.
+   * @param firstPartyTypes  The codes for the party types for the first party in the association.
+   * @param firstPartyRole   The code for the role type for the first party in the association.
+   * @param secondPartyTypes The codes for the party types for the second party in the association.
+   * @param secondPartyRole  The code for the role type for the second party in the association.
+   * @param tenantId         The ID for the tenant the association type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
-              firstPartyRole: string, secondPartyRole: string, tenantId?: string,) {
+              firstPartyTypes: string[], firstPartyRole: string, secondPartyTypes: string[],
+              secondPartyRole: string, tenantId?: string,) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
+    this.firstPartyTypes = firstPartyTypes;
     this.firstPartyRole = firstPartyRole;
+    this.secondPartyTypes = secondPartyTypes;
     this.secondPartyRole = secondPartyRole;
     this.tenantId = tenantId;
   }

@@ -35,17 +35,17 @@ export class SegmentAllocation {
   /**
    * The code for the segment.
    */
-  type: string;
+  segment: string;
 
   /**
    * Constructs a new SegmentAllocation.
    *
-   * @param type          The code for the segment.
+   * @param segment       The code for the segment.
    * @param effectiveFrom The date the segment allocation is effective from.
    * @param effectiveTo   The date the segment allocation is effective to.
    */
-  constructor(type: string, effectiveFrom?: Date, effectiveTo?: Date) {
-    this.type = type;
+  constructor(segment: string, effectiveFrom?: Date, effectiveTo?: Date) {
+    this.segment = segment;
     this.effectiveFrom = effectiveFrom;
     this.effectiveTo = effectiveTo;
   }

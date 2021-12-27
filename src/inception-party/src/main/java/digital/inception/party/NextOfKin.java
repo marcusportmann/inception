@@ -37,6 +37,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -63,7 +64,10 @@ import javax.xml.bind.annotation.XmlType;
   "id",
   "type",
   "name",
-  "phoneNumber",
+  "givenName",
+  "surname",
+  "homeNumber",
+  "workNumber",
   "mobileNumber",
   "emailAddress",
   "addressLine1",
@@ -84,7 +88,10 @@ import javax.xml.bind.annotation.XmlType;
       "id",
       "type",
       "name",
-      "phoneNumber",
+      "givenName",
+      "surname",
+      "homeNumber",
+      "workNumber",
       "mobileNumber",
       "emailAddress",
       "addressLine1",
@@ -109,11 +116,14 @@ public class NextOfKin implements Serializable {
   @JsonProperty
   @XmlElement(name = "AddressCity")
   @Size(min = 1, max = 50)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.AddressCity.Pattern.message}",
+      regexp = "^(?!\\s+)[(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "address_city", length = 50)
   private String addressCity;
 
-  /** The next of kin address country. */
-  @Schema(description = "The next of kin address country")
+  /** The ISO 3166-1 alpha-2 code for the next of kin address country. */
+  @Schema(description = "The ISO 3166-1 alpha-2 code for the next of kin address country")
   @JsonProperty
   @XmlElement(name = "AddressCountry")
   @Size(min = 2, max = 2)
@@ -125,6 +135,9 @@ public class NextOfKin implements Serializable {
   @JsonProperty
   @XmlElement(name = "AddressLine1")
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.AddressLine1.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "address_line1", length = 100)
   private String addressLine1;
 
@@ -133,6 +146,9 @@ public class NextOfKin implements Serializable {
   @JsonProperty
   @XmlElement(name = "AddressLine2")
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.AddressLine2.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "address_line2", length = 100)
   private String addressLine2;
 
@@ -141,6 +157,9 @@ public class NextOfKin implements Serializable {
   @JsonProperty
   @XmlElement(name = "AddressLine3")
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.AddressLine3.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "address_line3", length = 100)
   private String addressLine3;
 
@@ -149,6 +168,9 @@ public class NextOfKin implements Serializable {
   @JsonProperty
   @XmlElement(name = "AddressLine4")
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.AddressLine4.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "address_line4", length = 100)
   private String addressLine4;
 
@@ -157,15 +179,21 @@ public class NextOfKin implements Serializable {
   @JsonProperty
   @XmlElement(name = "AddressPostalCode")
   @Size(min = 1, max = 30)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.AddressPostalCode.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,# ]*(?!\\s+)$")
   @Column(name = "address_postal_code", length = 30)
   private String addressPostalCode;
 
-  /** The next of kin address region. */
-  @Schema(description = "The next of kin address region")
+  /** The ISO 3166-2 subdivision code for the next of kin address region. */
+  @Schema(description = "The ISO 3166-2 subdivision code for the next of kin address region")
   @JsonProperty
   @XmlElement(name = "AddressRegion")
-  @Size(min = 1, max = 30)
-  @Column(name = "address_region", length = 30)
+  @Size(min = 4, max = 6)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.AddressRegion.Pattern.message}",
+      regexp = "[A-Z]{2}-[A-Z0-9]{1,3}")
+  @Column(name = "address_region", length = 6)
   private String addressRegion;
 
   /** The next of kin address suburb. */
@@ -173,6 +201,9 @@ public class NextOfKin implements Serializable {
   @JsonProperty
   @XmlElement(name = "AddressSuburb")
   @Size(min = 1, max = 50)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.AddressSuburb.Pattern.message}",
+      regexp = "^(?!\\s+)[(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "address_suburb", length = 50)
   private String addressSuburb;
 
@@ -187,8 +218,35 @@ public class NextOfKin implements Serializable {
   @JsonProperty
   @XmlElement(name = "EmailAddress")
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.EmailAddress.Pattern.message}",
+      regexp =
+          "^$|(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
   @Column(name = "email_address", length = 100)
   private String emailAddress;
+
+  /** The given name, firstname, forename, or Christian name for the next of kin. */
+  @Schema(
+      description = "The given name, firstname, forename, or Christian name for the next of kin")
+  @JsonProperty
+  @XmlElement(name = "GivenName")
+  @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.GivenName.Pattern.message}",
+      regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
+  @Column(name = "given_name", length = 100)
+  private String givenName;
+
+  /** The home phone number for the next of kin. */
+  @Schema(description = "The home phone number for the next of kin")
+  @JsonProperty
+  @XmlElement(name = "HomeNumber")
+  @Size(min = 1, max = 50)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.HomeNumber.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9|+-., ()]*(?!\\s+)$")
+  @Column(name = "home_number", length = 50)
+  private String homeNumber;
 
   /** The ID for the next of kin. */
   @Schema(description = "The ID for the next of kin", required = true)
@@ -204,6 +262,9 @@ public class NextOfKin implements Serializable {
   @JsonProperty
   @XmlElement(name = "MobileNumber")
   @Size(min = 1, max = 50)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.MobileNumber.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9|+-., ()]*(?!\\s+)$")
   @Column(name = "mobile_number", length = 50)
   private String mobileNumber;
 
@@ -213,6 +274,9 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.Name.Pattern.message}",
+      regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
@@ -224,13 +288,16 @@ public class NextOfKin implements Serializable {
   @JoinColumn(name = "person_id")
   private Person person;
 
-  /** The phone number for the next of kin. */
-  @Schema(description = "The phone number for the next of kin")
+  /** The surname, last name, or family name for the next of kin. */
+  @Schema(description = "The surname, last name, or family name for the next of kin")
   @JsonProperty
-  @XmlElement(name = "PhoneNumber")
-  @Size(min = 1, max = 50)
-  @Column(name = "phone_number", length = 50)
-  private String phoneNumber;
+  @XmlElement(name = "Surname")
+  @Size(min = 1, max = 100)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.Surname.Pattern.message}",
+      regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
+  @Column(name = "surname", length = 100)
+  private String surname;
 
   /** The code for the next of kin type for the next of kin. */
   @Schema(description = "The code for the next of kin type for the next of kin")
@@ -247,6 +314,17 @@ public class NextOfKin implements Serializable {
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
+  /** The work phone number for the next of kin. */
+  @Schema(description = "The work phone number for the next of kin")
+  @JsonProperty
+  @XmlElement(name = "WorkNumber")
+  @Size(min = 1, max = 50)
+  @Pattern(
+      message = "{digital.inception.party.NextOfKin.WorkNumber.Pattern.message}",
+      regexp = "^(?!\\s+)[0-9|+-., ()]*(?!\\s+)$")
+  @Column(name = "work_number", length = 50)
+  private String workNumber;
+
   /** Constructs a new <b>NextOfKin</b>. */
   public NextOfKin() {}
 
@@ -255,7 +333,10 @@ public class NextOfKin implements Serializable {
    *
    * @param type the code for the next of kin type for the next of kin
    * @param name the name of the next of kin
-   * @param phoneNumber the phone number for the next of kin
+   * @param givenName the given name, firstname, forename, or Christian name for the next of kin
+   * @param surname the surname, last name, or family name for the next of kin
+   * @param homeNumber the home phone number for the next of kin
+   * @param workNumber the work phone number for the next of kin
    * @param mobileNumber the mobile number for the next of kin
    * @param emailAddress the e-mail address for the next of kin
    * @param addressLine1 the next of kin address line 1
@@ -271,7 +352,10 @@ public class NextOfKin implements Serializable {
   public NextOfKin(
       String type,
       String name,
-      String phoneNumber,
+      String givenName,
+      String surname,
+      String homeNumber,
+      String workNumber,
       String mobileNumber,
       String emailAddress,
       String addressLine1,
@@ -286,7 +370,10 @@ public class NextOfKin implements Serializable {
     this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
     this.name = name;
-    this.phoneNumber = phoneNumber;
+    this.givenName = givenName;
+    this.surname = surname;
+    this.homeNumber = homeNumber;
+    this.workNumber = workNumber;
     this.mobileNumber = mobileNumber;
     this.emailAddress = emailAddress;
     this.addressLine1 = addressLine1;
@@ -305,16 +392,16 @@ public class NextOfKin implements Serializable {
    *
    * @param type the code for the next of kin type for the next of kin
    * @param name the name of the next of kin
-   * @param phoneNumber the phone number for the next of kin
+   * @param homeNumber the home phone number for the next of kin
    * @param mobileNumber the mobile number for the next of kin
    * @param emailAddress the e-mail address for the next of kin
    */
   public NextOfKin(
-      String type, String name, String phoneNumber, String mobileNumber, String emailAddress) {
+      String type, String name, String homeNumber, String mobileNumber, String emailAddress) {
     this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
     this.name = name;
-    this.phoneNumber = phoneNumber;
+    this.homeNumber = homeNumber;
     this.mobileNumber = mobileNumber;
     this.emailAddress = emailAddress;
   }
@@ -366,9 +453,9 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Returns the next of kin address country.
+   * Returns the ISO 3166-1 alpha-2 code for the next of kin address country.
    *
-   * @return the next of kin address country
+   * @return the ISO 3166-1 alpha-2 code for the next of kin address country
    */
   public String getAddressCountry() {
     return addressCountry;
@@ -420,9 +507,9 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Returns the next of kin address region.
+   * Returns the ISO 3166-2 subdivision code for the next of kin address region.
    *
-   * @return the next of kin address region
+   * @return the ISO 3166-2 subdivision code for the next of kin address region
    */
   public String getAddressRegion() {
     return addressRegion;
@@ -453,6 +540,24 @@ public class NextOfKin implements Serializable {
    */
   public String getEmailAddress() {
     return emailAddress;
+  }
+
+  /**
+   * Returns the given name, firstname, forename, or Christian name for the next of kin.
+   *
+   * @return the given name, firstname, forename, or Christian name for the next of kin
+   */
+  public String getGivenName() {
+    return givenName;
+  }
+
+  /**
+   * Returns the home phone number for the next of kin.
+   *
+   * @return the home phone number for the next of kin
+   */
+  public String getHomeNumber() {
+    return homeNumber;
   }
 
   /**
@@ -493,12 +598,12 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Returns the phone number for the next of kin.
+   * Returns the surname, last name, or family name for the next of kin.
    *
-   * @return the phone number for the next of kin
+   * @return the surname, last name, or family name for the next of kin
    */
-  public String getPhoneNumber() {
-    return phoneNumber;
+  public String getSurname() {
+    return surname;
   }
 
   /**
@@ -517,6 +622,15 @@ public class NextOfKin implements Serializable {
    */
   public LocalDateTime getUpdated() {
     return updated;
+  }
+
+  /**
+   * Returns the work phone number for the next of kin.
+   *
+   * @return the work phone number for the next of kin
+   */
+  public String getWorkNumber() {
+    return workNumber;
   }
 
   /**
@@ -539,9 +653,9 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the next of kin address country.
+   * Set the ISO 3166-1 alpha-2 code for the next of kin address country.
    *
-   * @param addressCountry the next of kin address country
+   * @param addressCountry the ISO 3166-1 alpha-2 code for the next of kin address country
    */
   public void setAddressCountry(String addressCountry) {
     this.addressCountry = addressCountry;
@@ -593,9 +707,9 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the next of kin address region.
+   * Set the ISO 3166-2 subdivision code for the next of kin address region.
    *
-   * @param addressRegion the next of kin address region
+   * @param addressRegion the ISO 3166-2 subdivision code for the next of kin address region
    */
   public void setAddressRegion(String addressRegion) {
     this.addressRegion = addressRegion;
@@ -617,6 +731,24 @@ public class NextOfKin implements Serializable {
    */
   public void setEmailAddress(String emailAddress) {
     this.emailAddress = emailAddress;
+  }
+
+  /**
+   * Set the given name, firstname, forename, or Christian name for the next of kin.
+   *
+   * @param givenName the given name, firstname, forename, or Christian name for the next of kin
+   */
+  public void setGivenName(String givenName) {
+    this.givenName = givenName;
+  }
+
+  /**
+   * Set the home number for the next of kin.
+   *
+   * @param homeNumber the home number for the next of kin
+   */
+  public void setHomeNumber(String homeNumber) {
+    this.homeNumber = homeNumber;
   }
 
   /**
@@ -657,12 +789,12 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the phone number for the next of kin.
+   * Set the surname, last name, or family name for the next of kin.
    *
-   * @param phoneNumber the phone number for the next of kin
+   * @param surname the surname, last name, or family name for the next of kin
    */
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
+  public void setSurname(String surname) {
+    this.surname = surname;
   }
 
   /**
@@ -672,6 +804,15 @@ public class NextOfKin implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * Set the work number for the next of kin.
+   *
+   * @param workNumber the work number for the next of kin
+   */
+  public void setWorkNumber(String workNumber) {
+    this.workNumber = workNumber;
   }
 
   /** The Java Persistence callback method invoked before the entity is created in the database. */

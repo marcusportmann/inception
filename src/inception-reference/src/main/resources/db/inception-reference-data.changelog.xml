@@ -3330,63 +3330,63 @@
 
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="EC"/>
+      <column name="code" value="ZA-EC"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Eastern Cape"/>
       <column name="description" value="Eastern Cape"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="FS"/>
+      <column name="code" value="ZA-FS"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Free State"/>
       <column name="description" value="Free State"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="GP"/>
+      <column name="code" value="ZA-GP"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Gauteng"/>
       <column name="description" value="Gauteng"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="ZN"/>
+      <column name="code" value="ZA-ZN"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="KwaZulu-Natal"/>
       <column name="description" value="KwaZulu-Natal"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="LP"/>
+      <column name="code" value="ZA-LP"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Limpopo"/>
       <column name="description" value="Limpopo"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="MP"/>
+      <column name="code" value="ZA-MP"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Mpumalanga"/>
       <column name="description" value="Mpumalanga"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="NC"/>
+      <column name="code" value="ZA-NC"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Northern Cape"/>
       <column name="description" value="Northern Cape"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="NW"/>
+      <column name="code" value="ZA-NW"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Northwest"/>
       <column name="description" value="Northwest"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="WC"/>
+      <column name="code" value="ZA-WC"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Western Cape"/>
       <column name="description" value="Western Cape"/>
@@ -6714,63 +6714,63 @@
 
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="EC"/>
+      <column name="code" value="ZA-EC"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Eastern Cape"/>
       <column name="description" value="Eastern Cape"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="FS"/>
+      <column name="code" value="ZA-FS"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Free State"/>
       <column name="description" value="Free State"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="GP"/>
+      <column name="code" value="ZA-GP"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Gauteng"/>
       <column name="description" value="Gauteng"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="ZN"/>
+      <column name="code" value="ZA-ZN"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="KwaZulu-Natal"/>
       <column name="description" value="KwaZulu-Natal"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="LP"/>
+      <column name="code" value="ZA-LP"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Limpopo"/>
       <column name="description" value="Limpopo"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="MP"/>
+      <column name="code" value="ZA-MP"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Mpumalanga"/>
       <column name="description" value="Mpumalanga"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="NC"/>
+      <column name="code" value="ZA-NC"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Northern Cape"/>
       <column name="description" value="Northern Cape"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="NW"/>
+      <column name="code" value="ZA-NW"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Northwest"/>
       <column name="description" value="Northwest"/>
     </insert>
     <insert schemaName="reference" tableName="regions">
       <column name="country" value="ZA"/>
-      <column name="code" value="WC"/>
+      <column name="code" value="ZA-WC"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Western Cape"/>
       <column name="description" value="Western Cape"/>

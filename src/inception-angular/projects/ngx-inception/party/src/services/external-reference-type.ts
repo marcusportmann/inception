@@ -47,6 +47,11 @@ export class ExternalReferenceType {
   partyTypes: string[];
 
   /**
+   * The regular expression pattern used to validate a value for the external reference type.
+   */
+  pattern?: string;
+
+  /**
    * The sort index for the external reference type.
    */
   sortIndex: number;
@@ -65,16 +70,19 @@ export class ExternalReferenceType {
    * @param name        The name of the external reference type.
    * @param description The description for the external reference type.
    * @param partyTypes  The codes for the party types the external reference type is associated with.
+   * @param pattern     The regular expression pattern used to validate a value for the external
+   *                    reference type.
    * @param tenantId    The ID for the tenant the external reference type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
-              partyTypes: string[], tenantId?: string) {
+              partyTypes: string[], pattern?: string, tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
     this.partyTypes = partyTypes;
+    this.pattern = pattern;
     this.tenantId = tenantId;
   }
 }

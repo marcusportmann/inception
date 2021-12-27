@@ -135,11 +135,13 @@ public class PartyServiceTest {
   private static synchronized Person getTestCompletePersonDetails(boolean isMarried) {
     personCount++;
 
+    Character personCharacter = Character.valueOf((char) ('A' + (personCount - 1)));
+
     Person person =
         new Person(
             IPartyService.DEFAULT_TENANT_ID,
             String.format(
-                "GivenName%d MiddleName%d Surname%d", personCount, personCount, personCount));
+                "GivenName%c MiddleName%c Surname%c", personCharacter, personCharacter, personCharacter));
 
     person.setCountryOfBirth("US");
     person.setCountryOfResidence("ZA");
@@ -147,11 +149,11 @@ public class PartyServiceTest {
     person.setEmploymentStatus("employed");
     person.setEmploymentType("self_employed");
     person.setGender("female");
-    person.setGivenName("GivenName" + personCount);
+    person.setGivenName("GivenName" + personCharacter);
     person.setId(UuidCreator.getShortPrefixComb());
     person.setInitials("G M");
     person.setLanguage("EN");
-    person.setMaidenName("MaidenName" + personCount);
+    person.setMaidenName("MaidenName" + personCharacter);
 
     if (isMarried) {
       person.setMaritalStatus("married");
@@ -162,13 +164,13 @@ public class PartyServiceTest {
     }
 
     person.setMeasurementSystem(MeasurementSystem.METRIC);
-    person.setMiddleNames("MiddleName" + personCount);
+    person.setMiddleNames("MiddleName" + personCharacter);
     person.setOccupation("professional_legal");
-    person.setPreferredName("PreferredName" + personCount);
+    person.setPreferredName("PreferredName" + personCharacter);
     person.setRace("white");
     person.setResidencyStatus("permanent_resident");
     person.setResidentialType("renter");
-    person.setSurname("Surname" + personCount);
+    person.setSurname("Surname" + personCharacter);
     person.setTimeZone("Africa/Johannesburg");
     person.setTitle("mrs");
 
@@ -182,7 +184,7 @@ public class PartyServiceTest {
         "Failed to confirm that the person has an attribute with type (weight)");
 
     person.setCountryOfTaxResidence("ZA");
-    person.addTaxNumber(new TaxNumber("za_income_tax_number", "123456789", "ZA"));
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     person.addContactMechanism(
         new ContactMechanism(
@@ -242,7 +244,7 @@ public class PartyServiceTest {
     residentialAddress.setStreetName("Kraalbessie Avenue");
     residentialAddress.setSuburb("Weltevreden Park");
     residentialAddress.setCity("Johannesburg");
-    residentialAddress.setRegion("GP");
+    residentialAddress.setRegion("ZA-GP");
     residentialAddress.setCountry("ZA");
     residentialAddress.setPostalCode("1709");
 
@@ -276,7 +278,7 @@ public class PartyServiceTest {
     correspondenceAddress.setLine1("1 Discovery Place");
     correspondenceAddress.setLine2("Sandhurst");
     correspondenceAddress.setCity("Sandton");
-    correspondenceAddress.setRegion("GP");
+    correspondenceAddress.setRegion("ZA-GP");
     correspondenceAddress.setCountry("ZA");
     correspondenceAddress.setPostalCode("2194");
 
@@ -290,11 +292,13 @@ public class PartyServiceTest {
   private static synchronized Person getTestForeignPersonDetails() {
     personCount++;
 
+    Character personCharacter = Character.valueOf((char) ('A' + (personCount - 1)));
+
     Person person =
         new Person(
             IPartyService.DEFAULT_TENANT_ID,
             String.format(
-                "GivenName%d MiddleName%d Surname%d", personCount, personCount, personCount));
+                "GivenName%c MiddleName%c Surname%c", personCharacter, personCharacter, personCharacter));
 
     person.setCountryOfBirth("ZW");
     person.setCountryOfResidence("ZA");
@@ -302,17 +306,17 @@ public class PartyServiceTest {
     person.setEmploymentStatus("employed");
     person.setEmploymentType("contractor");
     person.setGender("male");
-    person.setGivenName("GivenName" + personCount);
+    person.setGivenName("GivenName" + personCharacter);
     person.setId(UuidCreator.getShortPrefixComb());
     person.setInitials("G M");
     person.setLanguage("EN");
     person.setMaritalStatus("single");
     person.setOccupation("driver");
-    person.setPreferredName("PreferredName" + personCount);
+    person.setPreferredName("PreferredName" + personCharacter);
     person.setRace("black");
     person.setResidencyStatus("foreign_national");
     person.setResidentialType("renter");
-    person.setSurname("Surname" + personCount);
+    person.setSurname("Surname" + personCharacter);
     person.setTitle("mr");
 
     person.addContactMechanism(
@@ -340,7 +344,7 @@ public class PartyServiceTest {
     residentialAddress.setStreetName("Princess Avenue");
     residentialAddress.setSuburb("Windsor East");
     residentialAddress.setCity("Johannesburg");
-    residentialAddress.setRegion("GP");
+    residentialAddress.setRegion("ZA-GP");
     residentialAddress.setCountry("ZA");
     residentialAddress.setPostalCode("2194");
 
@@ -548,7 +552,7 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("correspondence_language", "EN"));
 
-    person.addTaxNumber(new TaxNumber("za_income_tax_number", "123456789", "ZA"));
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
   }
@@ -809,7 +813,7 @@ public class PartyServiceTest {
     employment.setEmployerAddressLine4("Line 4");
     employment.setEmployerAddressSuburb("Sandhurst");
     employment.setEmployerAddressCity("Sandton");
-    employment.setEmployerAddressRegion("GP");
+    employment.setEmployerAddressRegion("ZA-GP");
     employment.setEmployerAddressCountry("ZA");
     employment.setEmployerAddressPostalCode("2196");
     employment.setStartDate(LocalDate.of(2017, 2, 1));
@@ -857,8 +861,7 @@ public class PartyServiceTest {
     // Person identity documents
     Person person = getTestBasicPersonDetails();
 
-    person.addExternalReference(
-        new ExternalReference("legacy_customer_code", "Test Legacy Customer Code"));
+    person.addExternalReference(new ExternalReference("legacy_customer_code", "TEST001"));
     person.addExternalReference(
         new ExternalReference("test_external_reference_type", "Test External Reference"));
 
@@ -902,8 +905,7 @@ public class PartyServiceTest {
     // Organization identity documents
     Organization organization = getTestBasicOrganizationDetails();
 
-    organization.addExternalReference(
-        new ExternalReference("legacy_customer_code", "Test Legacy Customer Code"));
+    organization.addExternalReference(new ExternalReference("legacy_customer_code", "TEST002"));
     organization.addExternalReference(
         new ExternalReference("test_external_reference_type", "Test External Reference"));
 
@@ -1072,6 +1074,55 @@ public class PartyServiceTest {
     partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
+  /** Test the invalid association property functionality. */
+  @Test
+  public void invalidAssociationPropertyTest() throws Exception {
+    Person firstPerson = getTestCompletePersonDetails(true);
+
+    Person secondPerson = getTestCompletePersonDetails(true);
+
+    Association association =
+        new Association(
+            IPartyService.DEFAULT_TENANT_ID,
+            "test_association_type",
+            firstPerson.getId(),
+            secondPerson.getId(),
+            LocalDate.now());
+
+    // Test null properties
+    association.addProperty(new AssociationProperty("test_boolean_property"));
+    association.addProperty(new AssociationProperty("test_date_property"));
+    association.addProperty(new AssociationProperty("test_decimal_property"));
+    association.addProperty(new AssociationProperty("test_double_property"));
+    association.addProperty(new AssociationProperty("test_integer_property"));
+    association.addProperty(new AssociationProperty("test_string_property"));
+
+    Set<ConstraintViolation<Association>> constraintViolations =
+        partyService.validateAssociation(IPartyService.DEFAULT_TENANT_ID, association);
+
+    assertEquals(
+        6,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the association");
+
+    // Test invalid properties
+    association.getProperties().clear();
+
+    association.addProperty(
+        new AssociationProperty("invalid_property_name", "Invalid Property Value"));
+
+    association.addProperty(
+        new AssociationProperty("test_string_property", "Invalid String Value!"));
+
+    constraintViolations =
+        partyService.validateAssociation(IPartyService.DEFAULT_TENANT_ID, association);
+
+    assertEquals(
+        2,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the association");
+  }
+
   /** Test the invalid building address verification functionality. */
   @Test
   public void invalidBuildingAddressTest() throws Exception {
@@ -1122,7 +1173,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        14,
+        15,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid building address");
   }
@@ -1180,7 +1231,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        15,
+        16,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid complex address");
   }
@@ -1190,11 +1241,11 @@ public class PartyServiceTest {
   public void invalidEducationTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
-    person.setHighestQualificationType("invalid_qualification_type");
+    person.setHighestQualificationType("invalid_highest_qualification");
 
     person.addEducation(
         new Education(
-            "XX", null, "invalid_qualification_type", "", null, "invalid_field_of_study"));
+            "XX", "Invalid Institution Name$", "invalid_qualification_type", "Invalid Qualification Name$", null, "invalid_field_of_study"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
         partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
@@ -1213,18 +1264,18 @@ public class PartyServiceTest {
     person.addEmployment(
         new Employment(
             null,
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
+            "Invalid Employer Phone Number$",
+            "Invalid Employer E-mail Address$",
+            "Invalid Employer Contact Person$",
+            "Invalid Employer Address Line 1$",
+            "Invalid Employer Address Line 2$",
+            "Invalid Employer Address Line 3$",
+            "Invalid Employer Address Line 4$",
+            "Invalid Employer Address Suburb$",
+            "Invalid Employer Address Suburb$",
+            "Invalid Employer Address Region$",
             "XX",
-            "",
+            "Invalid Employer Address Postal Code$",
             null,
             null,
             "invalid_employment_type",
@@ -1234,9 +1285,26 @@ public class PartyServiceTest {
         partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        15,
+        17,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the person with an invalid employment");
+  }
+
+  /** Test the invalid external reference functionality. */
+  @Test
+  public void invalidExternalReferenceTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addExternalReference(
+        new ExternalReference("legacy_customer_code", "Invalid Legacy Customer Code"));
+
+    Set<ConstraintViolation<Person>> constraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        1,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the person with an invalid external reference");
   }
 
   /** Test the invalid farm address verification functionality. */
@@ -1290,7 +1358,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        14,
+        15,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid farm address");
   }
@@ -1347,7 +1415,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        16,
+        17,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid international address");
   }
@@ -1378,13 +1446,29 @@ public class PartyServiceTest {
 
     person.addNextOfKin(
         new NextOfKin(
-            "invalid_next_of_kin_type", null, "", "", "", "", "", "", "", "", "", "", "XX", ""));
+            "invalid_next_of_kin_type",
+            null,
+            "Invalid Given Name$",
+            "Invalid Surname$",
+            "Invalid Home Number",
+            "Invalid Work Number",
+            "Invalid Mobile Number",
+            "Invalid E-mail Address",
+            "Invalid Address Line 1$",
+            "Invalid Address Line 2$",
+            "Invalid Address Line 3$",
+            "Invalid Address Line 4$",
+            "Invalid Address Suburb$",
+            "Invalid Address City$",
+            "Invalid Address Region$",
+            "XX",
+            "Invalid Address Postal Code$"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
         partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        14,
+        18,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the person with an invalid next of kin");
   }
@@ -1655,7 +1739,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        15,
+        16,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid site address");
   }
@@ -1712,7 +1796,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        17,
+        18,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid street address");
   }
@@ -1769,7 +1853,7 @@ public class PartyServiceTest {
     constraintViolations = partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
     assertEquals(
-        16,
+        17,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid unstructured address");
   }
@@ -1917,7 +2001,8 @@ public class PartyServiceTest {
     nextOfKin.setId(UuidCreator.getShortPrefixComb());
     nextOfKin.setType("father");
     nextOfKin.setName("Joe Bloggs");
-    nextOfKin.setPhoneNumber("+27 11 555 1234");
+    nextOfKin.setHomeNumber("+27 11 555 1234");
+    nextOfKin.setWorkNumber("+27 11 555 5678");
     nextOfKin.setMobileNumber("+27832763107");
     nextOfKin.setEmailAddress("joe@zyx.com");
     nextOfKin.setAddressLine1("3 Happy Place");
@@ -1926,7 +2011,7 @@ public class PartyServiceTest {
     nextOfKin.setAddressLine4("Line 4");
     nextOfKin.setAddressSuburb("Fairland");
     nextOfKin.setAddressCity("Johannesburg");
-    nextOfKin.setAddressRegion("GP");
+    nextOfKin.setAddressRegion("ZA-GP");
     nextOfKin.setAddressCountry("ZA");
     nextOfKin.setAddressPostalCode("2170");
 
@@ -1974,7 +2059,7 @@ public class PartyServiceTest {
     assertTrue(organization.hasIdentityDocumentWithType("za_company_registration"));
 
     organization.setCountryOfTaxResidence("ZA");
-    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "123456789", "ZA"));
+    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -2054,7 +2139,7 @@ public class PartyServiceTest {
     mainAddress.setStreetName("Discovery Place");
     mainAddress.setSuburb("Sandhurst");
     mainAddress.setCity("Sandton");
-    mainAddress.setRegion("GP");
+    mainAddress.setRegion("ZA-GP");
     mainAddress.setCountry("ZA");
     mainAddress.setPostalCode("2194");
 
@@ -2291,7 +2376,7 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("time_to_contact", "anytime"));
 
-    person.addTaxNumber(new TaxNumber("uk_tax_number", "987654321", "GB"));
+    person.addTaxNumber(new TaxNumber("uk_tax_number", "GB"));
 
     person.removeTaxNumberWithType("za_income_tax_number");
 
@@ -2368,7 +2453,7 @@ public class PartyServiceTest {
     residentialAddress.setStreetName("Kraalbessie Avenue");
     residentialAddress.setSuburb("Weltevreden Park");
     residentialAddress.setCity("Johannesburg");
-    residentialAddress.setRegion("GP");
+    residentialAddress.setRegion("ZA-GP");
     residentialAddress.setCountry("ZA");
     residentialAddress.setPostalCode("1709");
 
@@ -2421,7 +2506,7 @@ public class PartyServiceTest {
     mainAddress.setStreetName("Discovery Place");
     mainAddress.setSuburb("Sandhurst");
     mainAddress.setCity("Sandton");
-    mainAddress.setRegion("GP");
+    mainAddress.setRegion("ZA-GP");
     mainAddress.setCountry("ZA");
     mainAddress.setPostalCode("2194");
 
@@ -2499,7 +2584,7 @@ public class PartyServiceTest {
     farmAddress.setFarmName("My Geluk");
     farmAddress.setFarmDescription("My Geluk");
     farmAddress.setCity("Koffiefontein");
-    farmAddress.setRegion("FS");
+    farmAddress.setRegion("ZA-FS");
     farmAddress.setCountry("ZA");
     farmAddress.setPostalCode("9986");
     person.addPhysicalAddress(farmAddress);
@@ -2529,7 +2614,7 @@ public class PartyServiceTest {
     siteAddress.setSiteBlock("CC");
     siteAddress.setSiteNumber("25436");
     siteAddress.setCity("Soshanguve");
-    siteAddress.setRegion("GP");
+    siteAddress.setRegion("ZA-GP");
     siteAddress.setCountry("ZA");
     siteAddress.setPostalCode("0152");
     person.addPhysicalAddress(siteAddress);
@@ -2540,7 +2625,7 @@ public class PartyServiceTest {
     streetAddress.setStreetName("Discovery Place");
     streetAddress.setSuburb("Sandhurst");
     streetAddress.setCity("Sandton");
-    streetAddress.setRegion("GP");
+    streetAddress.setRegion("ZA-GP");
     streetAddress.setCountry("ZA");
     streetAddress.setPostalCode("2194");
     person.addPhysicalAddress(streetAddress);
@@ -3025,7 +3110,7 @@ public class PartyServiceTest {
     // Person tax numbers
     Person person = getTestBasicPersonDetails();
 
-    person.addTaxNumber(new TaxNumber("za_income_tax_number", "123456789", "ZA"));
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3050,7 +3135,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "987654321", "ZA")));
+    person.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "987654321")));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3063,7 +3148,7 @@ public class PartyServiceTest {
     // Organization tax numbers
     Organization organization = getTestBasicOrganizationDetails();
 
-    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "123456789", "ZA"));
+    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -3087,7 +3172,7 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, retrievedOrganization);
 
-    organization.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "987654321", "ZA")));
+    organization.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "987654321")));
 
     partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -3532,9 +3617,21 @@ public class PartyServiceTest {
         nextOfKin2.getName(),
         "The name values for the next of kin do not match");
     assertEquals(
-        nextOfKin1.getPhoneNumber(),
-        nextOfKin2.getPhoneNumber(),
-        "The phone number values for the next of kin do not match");
+        nextOfKin1.getGivenName(),
+        nextOfKin2.getGivenName(),
+        "The given name values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getSurname(),
+        nextOfKin2.getSurname(),
+        "The surname values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getHomeNumber(),
+        nextOfKin2.getHomeNumber(),
+        "The home phone number values for the next of kin do not match");
+    assertEquals(
+        nextOfKin1.getWorkNumber(),
+        nextOfKin2.getWorkNumber(),
+        "The work phone number values for the next of kin do not match");
     assertEquals(
         nextOfKin1.getMobileNumber(),
         nextOfKin2.getMobileNumber(),

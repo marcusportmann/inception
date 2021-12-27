@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.reference;
+package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -36,52 +37,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Region</b> class holds the information for a region.
+ * The <b>MandateType</b> class holds the information for a mandate type.
  *
  * @author Marcus Portmann
  */
-@Schema(
-    description =
-        "An area, especially part of a country or the world having definable characteristics but not always fixed boundaries")
+@Schema(description = "A type of mandate")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"country", "code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "Region", namespace = "http://inception.digital/reference")
+@JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+@XmlRootElement(name = "MandateType", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "Region",
-    namespace = "http://inception.digital/reference",
-    propOrder = {"country", "code", "localeId", "sortIndex", "name", "description"})
+    name = "MandateType",
+    namespace = "http://inception.digital/party",
+    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "reference", name = "regions")
-@IdClass(RegionId.class)
-public class Region implements Serializable {
+@Table(schema = "party", name = "mandate_types")
+@IdClass(MandateTypeId.class)
+public class MandateType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ISO 3166-2 subdivision code for the region. */
-  @Schema(description = "The ISO 3166-2 subdivision code for the region", required = true)
+  /** The code for the mandate type. */
+  @Schema(description = "The code for the mandate type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
-  @Size(min = 4, max = 6)
+  @Size(min = 1, max = 30)
   @Id
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The ISO 3166-1 alpha-2 code for the country the region is associated with. */
-  @Schema(
-      description = "The ISO 3166-1 alpha-2 code for the country the region is associated with",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Country", required = true)
-  @NotNull
-  @Size(min = 2, max = 2)
-  @Id
-  @Column(name = "country", length = 2, nullable = false)
-  private String country;
-
-  /** The description for the region. */
-  @Schema(description = "The description for the region", required = true)
+  /** The description for the mandate type. */
+  @Schema(description = "The description for the mandate type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -89,8 +76,8 @@ public class Region implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the region. */
-  @Schema(description = "The Unicode locale identifier for the region", required = true)
+  /** The Unicode locale identifier for the mandate type. */
+  @Schema(description = "The Unicode locale identifier for the mandate type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -99,8 +86,8 @@ public class Region implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the region. */
-  @Schema(description = "The name of the region", required = true)
+  /** The name of the mandate type. */
+  @Schema(description = "The name of the mandate type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -108,15 +95,23 @@ public class Region implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the region. */
-  @Schema(description = "The sort index for the region")
-  @JsonProperty
-  @XmlElement(name = "SortIndex")
-  @Column(name = "sort_index")
+  /** The sort index for the mandate type. */
+  @Schema(description = "The sort index for the mandate type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "SortIndex", required = true)
+  @NotNull
+  @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>Region</b>. */
-  public Region() {}
+  /** The ID for the tenant the mandate type is specific to. */
+  @Schema(description = "The ID for the tenant the mandate type is specific to")
+  @JsonProperty
+  @XmlElement(name = "TenantId")
+  @Column(name = "tenant_id")
+  private UUID tenantId;
+
+  /** Constructs a new <b>MandateType</b>. */
+  public MandateType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -138,65 +133,63 @@ public class Region implements Serializable {
       return false;
     }
 
-    Region other = (Region) object;
+    MandateType other = (MandateType) object;
 
-    return Objects.equals(country, other.country)
-        && Objects.equals(code, other.code)
-        && Objects.equals(localeId, other.localeId);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the ISO 3166-2 subdivision code for the region.
+   * Returns the code for the mandate type.
    *
-   * @return the ISO 3166-2 subdivision code for the region
+   * @return the code for the mandate type
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the ISO 3166-1 alpha-2 code for the country the region is associated with.
+   * Returns the description for the mandate type.
    *
-   * @return the ISO 3166-1 alpha-2 code for the country the region is associated with
-   */
-  public String getCountry() {
-    return country;
-  }
-
-  /**
-   * Returns the description for the region.
-   *
-   * @return the description for the region
+   * @return the description for the mandate type
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the region.
+   * Returns the Unicode locale identifier for the mandate type.
    *
-   * @return the Unicode locale identifier for the region
+   * @return the Unicode locale identifier for the mandate type
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the region.
+   * Returns the name of the mandate type.
    *
-   * @return the name of the region
+   * @return the name of the mandate type
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the region.
+   * Returns the sort index for the mandate type.
    *
-   * @return the sort index for the region
+   * @return the sort index for the mandate type
    */
   public Integer getSortIndex() {
     return sortIndex;
+  }
+
+  /**
+   * Returns the ID for the tenant the mandate type is specific to.
+   *
+   * @return the ID for the tenant the mandate type is specific to
+   */
+  public UUID getTenantId() {
+    return tenantId;
   }
 
   /**
@@ -206,62 +199,60 @@ public class Region implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((country == null) ? 0 : country.hashCode())
-        + ((code == null) ? 0 : code.hashCode())
-        + ((localeId == null) ? 0 : localeId.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
-   * Set the ISO 3166-2 subdivision code for the region.
+   * Set the code for the mandate type.
    *
-   * @param code the ISO 3166-2 subdivision code for the region
+   * @param code the code for the mandate type
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country the region is associated with.
+   * Set the description for the mandate type.
    *
-   * @param country the ISO 3166-1 alpha-2 code for the country the region is associated with
-   */
-  public void setCountry(String country) {
-    this.country = country;
-  }
-
-  /**
-   * Set the description for the region.
-   *
-   * @param description the description for the region
+   * @param description the description for the mandate type
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the region.
+   * Set the Unicode locale identifier for the mandate type.
    *
-   * @param localeId the Unicode locale identifier for the region
+   * @param localeId the Unicode locale identifier for the mandate type
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the region.
+   * Set the name of the mandate type.
    *
-   * @param name the name of the region
+   * @param name the name of the mandate type
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the region.
+   * Set the sort index for the mandate type.
    *
-   * @param sortIndex the sort index for the region
+   * @param sortIndex the sort index for the mandate type
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the ID for the tenant the mandate type is specific to.
+   *
+   * @param tenantId the ID for the tenant the mandate type is specific to
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 }

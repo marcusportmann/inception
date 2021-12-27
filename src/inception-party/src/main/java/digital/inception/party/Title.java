@@ -16,11 +16,13 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -34,7 +36,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>Title</b> class holds the information for a title.
@@ -50,7 +54,8 @@ import javax.xml.bind.annotation.XmlType;
   "sortIndex",
   "name",
   "abbreviation",
-  "description"
+  "description",
+  "genders"
 })
 @XmlRootElement(name = "Title", namespace = "http://inception.digital/party")
 @XmlType(
@@ -63,7 +68,8 @@ import javax.xml.bind.annotation.XmlType;
       "sortIndex",
       "name",
       "abbreviation",
-      "description"
+      "description",
+      "genders"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -100,6 +106,14 @@ public class Title implements Serializable {
   @Size(max = 200)
   @Column(name = "description", length = 200, nullable = false)
   private String description;
+
+  /** The comma-delimited codes for the genders the title is applicable to. */
+  @JsonIgnore
+  @XmlTransient
+  @NotNull
+  @Size(min = 1, max = 310)
+  @Column(name = "genders", length = 310, nullable = false)
+  private String genders;
 
   /** The Unicode locale identifier for the title. */
   @Schema(description = "The Unicode locale identifier for the title", required = true)
@@ -190,6 +204,18 @@ public class Title implements Serializable {
   }
 
   /**
+   * Returns the codes for the genders the title is applicable to.
+   *
+   * @return the codes for the genders the title is applicable to
+   */
+  @Schema(description = "The codes for the genders the title is applicable to", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Genders", required = true)
+  public String[] getGenders() {
+    return StringUtils.commaDelimitedListToStringArray(genders);
+  }
+
+  /**
    * Returns the Unicode locale identifier for the title.
    *
    * @return the Unicode locale identifier for the title
@@ -260,6 +286,25 @@ public class Title implements Serializable {
    */
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Set the codes for the genders the title is applicable to.
+   *
+   * @param genders the codes for the genders the title is applicable to
+   */
+  public void setGenders(String[] genders) {
+    this.genders = StringUtils.arrayToCommaDelimitedString(genders);
+  }
+
+  /**
+   * Set the codes for the genders the title is applicable to.
+   *
+   * @param genders the codes for the genders the title is applicable to
+   */
+  @JsonIgnore
+  public void setGenders(Collection<String> genders) {
+    this.genders = StringUtils.collectionToDelimitedString(genders, ",");
   }
 
   /**
