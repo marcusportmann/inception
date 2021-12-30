@@ -75,7 +75,6 @@ import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -121,15 +120,17 @@ public class PartyServiceTest {
   @Autowired private IPartyService partyService;
 
   private static synchronized Organization getTestBasicOrganizationDetails() {
-    Fairy fairy = Fairy.create(Locale.forLanguageTag("en-ZA"));
+    Fairy fairy = Fairy.create();
 
-    Company generatedCompany = fairy.company();
+    com.devskiller.jfairy.producer.person.Person generatedPerson = fairy.person();
+
+    Company generatedCompany = generatedPerson.getCompany();
 
     return new Organization(IPartyService.DEFAULT_TENANT_ID, generatedCompany.getName());
   }
 
   private static synchronized Person getTestBasicPersonDetails() {
-    Fairy fairy = Fairy.create(Locale.forLanguageTag("en-ZA"));
+    Fairy fairy = Fairy.create();
 
     com.devskiller.jfairy.producer.person.Person generatedPerson =
         fairy.person(PersonProperties.male(), PersonProperties.minAge(21));
@@ -140,7 +141,7 @@ public class PartyServiceTest {
   }
 
   private static synchronized Person getTestCompletePersonDetails(boolean isMarried) {
-    Fairy fairy = Fairy.create(Locale.forLanguageTag("en-ZA"));
+    Fairy fairy = Fairy.create();
 
     com.devskiller.jfairy.producer.person.Person generatedPerson =
         fairy.person(PersonProperties.female(), PersonProperties.minAge(21));
@@ -323,7 +324,7 @@ public class PartyServiceTest {
   }
 
   private static synchronized Person getTestForeignPersonDetails() {
-    Fairy fairy = Fairy.create(Locale.forLanguageTag("en-ZA"));
+    Fairy fairy = Fairy.create();
 
     com.devskiller.jfairy.producer.person.Person generatedPerson =
         fairy.person(PersonProperties.male(), PersonProperties.minAge(21));
@@ -409,9 +410,11 @@ public class PartyServiceTest {
   }
 
   private static synchronized Organization getTestOrganizationDetails() {
-    Fairy fairy = Fairy.create(Locale.forLanguageTag("en-ZA"));
+    Fairy fairy = Fairy.create();
 
-    Company generatedCompany = fairy.company();
+    com.devskiller.jfairy.producer.person.Person generatedPerson = fairy.person();
+
+    Company generatedCompany = generatedPerson.getCompany();
 
     Organization organization =
         new Organization(IPartyService.DEFAULT_TENANT_ID, generatedCompany.getName());
