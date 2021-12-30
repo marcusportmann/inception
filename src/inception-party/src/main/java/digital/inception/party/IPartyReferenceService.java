@@ -41,6 +41,7 @@ public interface IPartyReferenceService {
    *
    * @param tenantId the ID for the tenant the association property type reference data is specific
    *     to
+   * @param associationTypeCode the code for the association type
    * @param associationPropertyTypeCode the code for the association property type
    * @return an Optional containing the association property type with the specified code for the
    *     association type with the specified code for the tenant with the specified ID for the first
@@ -123,6 +124,23 @@ public interface IPartyReferenceService {
    *     retrieved
    */
   List<AssociationType> getAssociationTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the attribute type with the specified code for the party type with the specified code
+   * for the tenant with the specified ID for the first matching locale.
+   *
+   * @param tenantId the ID for the tenant the association property type reference data is specific
+   *     to
+   * @param partyTypeCode the code for the party type
+   * @param attributeTypeCode the code for the attribute type
+   * @return an Optional containing the attribute type with the specified code for the party type
+   *     with the specified code for the tenant with the specified ID for the first matching locale
+   *     or an empty Optional if the attribute type could not be found
+   * @throws ServiceUnavailableException if the attribute type could not be retrieved
+   */
+  Optional<AttributeType> getAttributeType(
+      UUID tenantId, String partyTypeCode, String attributeTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Retrieve the attribute type category reference data for a specific locale.

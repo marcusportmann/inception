@@ -17,6 +17,7 @@
 package digital.inception.party.constraints;
 
 import digital.inception.party.Attribute;
+import digital.inception.party.AttributeType;
 import digital.inception.party.ConstraintType;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.ExternalReference;
@@ -35,6 +36,8 @@ import digital.inception.party.TaxNumber;
 import digital.inception.party.ValueType;
 import digital.inception.reference.IReferenceService;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.ValidationException;
@@ -105,12 +108,140 @@ public class ValidOrganizationValidator extends PartyValidator
               break;
             }
           }
+
           if (!isReservedAttribute) {
-            if (!getPartyReferenceService()
-                .isValidAttributeType(
-                    organization.getTenantId(),
-                    organization.getType().code(),
-                    attribute.getType())) {
+            Optional<AttributeType> attributeTypeOptional =
+                getPartyReferenceService()
+                    .getAttributeType(
+                        organization.getTenantId(), organization.getType().code(), attribute.getType());
+
+            if (attributeTypeOptional.isPresent()) {
+              AttributeType attributeType = attributeTypeOptional.get();
+
+              if (attributeType.getUnitType() != null) {
+                if ((attribute.getUnit() == null)
+                    || (attribute.getUnit().getType() != attributeType.getUnitType())) {
+                  hibernateConstraintValidatorContext
+                      .addMessageParameter(
+                          "unit", (attribute.getUnit() != null) ? attribute.getUnit().code() : "")
+                      .addMessageParameter("attributeType", attribute.getType())
+                      .buildConstraintViolationWithTemplate(
+                          "{digital.inception.party.constraints.ValidOrganization.invalidUnitForAttributeType.message}")
+                      .addPropertyNode("attributes")
+                      .addPropertyNode("unit")
+                      .inIterable()
+                      .addConstraintViolation();
+
+                  isValid = false;
+                }
+              }
+
+              switch (attributeType.getValueType()) {
+                case BOOLEAN:
+                  if (attribute.getBooleanValue() == null) {
+                    hibernateConstraintValidatorContext
+                        .addMessageParameter("attributeType", attribute.getType())
+                        .buildConstraintViolationWithTemplate(
+                            "{digital.inception.party.constraints.ValidOrganization.invalidAttributeWithNullBooleanValue.message}")
+                        .addPropertyNode("attributes")
+                        .addPropertyNode("booleanValue")
+                        .addConstraintViolation();
+
+                    isValid = false;
+                  }
+
+                  break;
+                case DATE:
+                  if (attribute.getDateValue() == null) {
+                    hibernateConstraintValidatorContext
+                        .addMessageParameter("attributeType", attribute.getType())
+                        .buildConstraintViolationWithTemplate(
+                            "{digital.inception.party.constraints.ValidOrganization.invalidAttributeWithNullDateValue.message}")
+                        .addPropertyNode("attributes")
+                        .addPropertyNode("dateValue")
+                        .addConstraintViolation();
+
+                    isValid = false;
+                  }
+
+                  break;
+                case DECIMAL:
+                  if (attribute.getDecimalValue() == null) {
+                    hibernateConstraintValidatorContext
+                        .addMessageParameter("attributeType", attribute.getType())
+                        .buildConstraintViolationWithTemplate(
+                            "{digital.inception.party.constraints.ValidOrganization.invalidAttributeWithNullDecimalValue.message}")
+                        .addPropertyNode("attributes")
+                        .addPropertyNode("decimalValue")
+                        .addConstraintViolation();
+
+                    isValid = false;
+                  }
+
+                  break;
+                case DOUBLE:
+                  if (attribute.getDoubleValue() == null) {
+                    hibernateConstraintValidatorContext
+                        .addMessageParameter("attributeType", attribute.getType())
+                        .buildConstraintViolationWithTemplate(
+                            "{digital.inception.party.constraints.ValidOrganization.invalidAttributeWithNullDoubleValue.message}")
+                        .addPropertyNode("attributes")
+                        .addPropertyNode("doubleValue")
+                        .addConstraintViolation();
+
+                    isValid = false;
+                  }
+
+                  break;
+                case INTEGER:
+                  if (attribute.getIntegerValue() == null) {
+                    hibernateConstraintValidatorContext
+                        .addMessageParameter("attributeType", attribute.getType())
+                        .buildConstraintViolationWithTemplate(
+                            "{digital.inception.party.constraints.ValidOrganization.invalidAttributeWithNullIntegerValue.message}")
+                        .addPropertyNode("attributes")
+                        .addPropertyNode("integerValue")
+                        .addConstraintViolation();
+
+                    isValid = false;
+                  }
+
+                  break;
+                case STRING:
+                  if (attribute.getStringValue() == null) {
+                    hibernateConstraintValidatorContext
+                        .addMessageParameter("attributeType", attribute.getType())
+                        .buildConstraintViolationWithTemplate(
+                            "{digital.inception.party.constraints.ValidOrganization.invalidAttributeWithNullStringValue.message}")
+                        .addPropertyNode("attributes")
+                        .addPropertyNode("stringValue")
+                        .addConstraintViolation();
+
+                    isValid = false;
+                  } else {
+                    if (StringUtils.hasText(attributeType.getPattern())) {
+                      Pattern pattern = attributeType.getCompiledPattern();
+
+                      Matcher matcher = pattern.matcher(attribute.getStringValue());
+
+                      if (!matcher.matches()) {
+                        hibernateConstraintValidatorContext
+                            .addMessageParameter("attributeType", attribute.getType())
+                            .addMessageParameter("stringValue", attribute.getStringValue())
+                            .buildConstraintViolationWithTemplate(
+                                "{digital.inception.party.constraints.ValidOrganization.invalidAttributeWithStringValue.message}")
+                            .addPropertyNode("attributes")
+                            .addPropertyNode("stringValue")
+                            .addConstraintViolation();
+
+                        isValid = false;
+                      }
+                    }
+                  }
+
+                  break;
+              }
+            } else {
               hibernateConstraintValidatorContext
                   .addMessageParameter("attributeType", attribute.getType())
                   .buildConstraintViolationWithTemplate(
@@ -121,41 +252,6 @@ public class ValidOrganizationValidator extends PartyValidator
                   .addConstraintViolation();
 
               isValid = false;
-            } else {
-              if (!getPartyReferenceService()
-                  .isValidMeasurementUnitForAttributeType(
-                      organization.getTenantId(), attribute.getType(), attribute.getUnit())) {
-                hibernateConstraintValidatorContext
-                    .addMessageParameter(
-                        "unit", (attribute.getUnit() != null) ? attribute.getUnit().code() : "")
-                    .addMessageParameter("attributeType", attribute.getType())
-                    .buildConstraintViolationWithTemplate(
-                        "{digital.inception.party.constraints.ValidOrganization.invalidUnitForAttributeType.message}")
-                    .addPropertyNode("attributes")
-                    .addPropertyNode("unit")
-                    .inIterable()
-                    .addConstraintViolation();
-
-                isValid = false;
-              }
-
-              Optional<ValueType> valueTypeOptional =
-                  getPartyReferenceService().getAttributeTypeValueType(attribute.getType());
-
-              if (valueTypeOptional.isPresent() && (!attribute.hasValue(valueTypeOptional.get()))) {
-                hibernateConstraintValidatorContext
-                    .addMessageParameter("valueType", valueTypeOptional.get().code())
-                    .addMessageParameter("attributeType", attribute.getType())
-                    .buildConstraintViolationWithTemplate(
-                        "{digital.inception.party.constraints.ValidOrganization.invalidValueForAttributeType.message}")
-                    .addPropertyNode("attributes")
-                    .addPropertyNode(
-                        Attribute.getAttributeNameForValueType(valueTypeOptional.get()))
-                    .inIterable()
-                    .addConstraintViolation();
-
-                isValid = false;
-              }
             }
           }
         }

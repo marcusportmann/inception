@@ -21,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.devskiller.jfairy.Fairy;
+import com.devskiller.jfairy.producer.company.Company;
+import com.devskiller.jfairy.producer.person.PersonProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
@@ -72,6 +75,7 @@ import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -86,6 +90,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>PartyServiceTest</b> class contains the implementation of the JUnit tests for the
@@ -107,11 +112,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
     })
 public class PartyServiceTest {
 
-  private static int organizationCount;
-
   private static int partyCount;
-
-  private static int personCount;
 
   /** The Jackson2 object mapper. */
   @Autowired private ObjectMapper objectMapper;
@@ -120,28 +121,49 @@ public class PartyServiceTest {
   @Autowired private IPartyService partyService;
 
   private static synchronized Organization getTestBasicOrganizationDetails() {
-    organizationCount++;
+    Fairy fairy = Fairy.create(Locale.forLanguageTag("en-ZA"));
 
-    return new Organization(
-        IPartyService.DEFAULT_TENANT_ID, "Organization Name " + organizationCount);
+    Company generatedCompany = fairy.company();
+
+    return new Organization(IPartyService.DEFAULT_TENANT_ID, generatedCompany.getName());
   }
 
   private static synchronized Person getTestBasicPersonDetails() {
-    personCount++;
+    Fairy fairy = Fairy.create(Locale.forLanguageTag("en-ZA"));
 
-    return new Person(IPartyService.DEFAULT_TENANT_ID, "Full Name " + personCount);
+    com.devskiller.jfairy.producer.person.Person generatedPerson =
+        fairy.person(PersonProperties.male(), PersonProperties.minAge(21));
+
+    return new Person(
+        IPartyService.DEFAULT_TENANT_ID,
+        generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
   }
 
   private static synchronized Person getTestCompletePersonDetails(boolean isMarried) {
-    personCount++;
+    Fairy fairy = Fairy.create(Locale.forLanguageTag("en-ZA"));
 
-    Character personCharacter = Character.valueOf((char) ('A' + (personCount - 1)));
+    com.devskiller.jfairy.producer.person.Person generatedPerson =
+        fairy.person(PersonProperties.female(), PersonProperties.minAge(21));
 
-    Person person =
-        new Person(
-            IPartyService.DEFAULT_TENANT_ID,
-            String.format(
-                "GivenName%c MiddleName%c Surname%c", personCharacter, personCharacter, personCharacter));
+    boolean hasMiddleName = StringUtils.hasText(generatedPerson.getMiddleName());
+
+    Person person;
+
+    if (hasMiddleName) {
+      person =
+          new Person(
+              IPartyService.DEFAULT_TENANT_ID,
+              generatedPerson.getFirstName()
+                  + " "
+                  + generatedPerson.getMiddleName()
+                  + " "
+                  + generatedPerson.getLastName());
+    } else {
+      person =
+          new Person(
+              IPartyService.DEFAULT_TENANT_ID,
+              generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
+    }
 
     person.setCountryOfBirth("US");
     person.setCountryOfResidence("ZA");
@@ -149,11 +171,20 @@ public class PartyServiceTest {
     person.setEmploymentStatus("employed");
     person.setEmploymentType("self_employed");
     person.setGender("female");
-    person.setGivenName("GivenName" + personCharacter);
+    person.setGivenName(generatedPerson.getFirstName());
     person.setId(UuidCreator.getShortPrefixComb());
-    person.setInitials("G M");
+
+    if (hasMiddleName) {
+      person.setInitials(
+          generatedPerson.getFirstName().charAt(0)
+              + " "
+              + generatedPerson.getMiddleName().charAt(0));
+    } else {
+      person.setInitials("" + generatedPerson.getFirstName().charAt(0));
+    }
     person.setLanguage("EN");
-    person.setMaidenName("MaidenName" + personCharacter);
+    person.setMaidenName(
+        fairy.person(PersonProperties.female(), PersonProperties.minAge(21)).getLastName());
 
     if (isMarried) {
       person.setMaritalStatus("married");
@@ -164,18 +195,20 @@ public class PartyServiceTest {
     }
 
     person.setMeasurementSystem(MeasurementSystem.METRIC);
-    person.setMiddleNames("MiddleName" + personCharacter);
+    if (hasMiddleName) {
+      person.setMiddleNames(generatedPerson.getMiddleName());
+    }
     person.setOccupation("professional_legal");
-    person.setPreferredName("PreferredName" + personCharacter);
+    person.setPreferredName(generatedPerson.getFirstName());
     person.setRace("white");
     person.setResidencyStatus("permanent_resident");
     person.setResidentialType("renter");
-    person.setSurname("Surname" + personCharacter);
+    person.setSurname(generatedPerson.getLastName());
     person.setTimeZone("Africa/Johannesburg");
-    person.setTitle("mrs");
+    person.setTitle("ms");
 
     person.addAttribute(
-        new Attribute("weight", new BigDecimal("82.6"), MeasurementUnit.METRIC_KILOGRAM));
+        new Attribute("weight", new BigDecimal("52.7"), MeasurementUnit.METRIC_KILOGRAM));
 
     assertTrue(person.hasAttributeWithType("weight"));
 
@@ -290,15 +323,30 @@ public class PartyServiceTest {
   }
 
   private static synchronized Person getTestForeignPersonDetails() {
-    personCount++;
+    Fairy fairy = Fairy.create(Locale.forLanguageTag("en-ZA"));
 
-    Character personCharacter = Character.valueOf((char) ('A' + (personCount - 1)));
+    com.devskiller.jfairy.producer.person.Person generatedPerson =
+        fairy.person(PersonProperties.male(), PersonProperties.minAge(21));
 
-    Person person =
-        new Person(
-            IPartyService.DEFAULT_TENANT_ID,
-            String.format(
-                "GivenName%c MiddleName%c Surname%c", personCharacter, personCharacter, personCharacter));
+    boolean hasMiddleName = StringUtils.hasText(generatedPerson.getMiddleName());
+
+    Person person;
+
+    if (hasMiddleName) {
+      person =
+          new Person(
+              IPartyService.DEFAULT_TENANT_ID,
+              generatedPerson.getFirstName()
+                  + " "
+                  + generatedPerson.getMiddleName()
+                  + " "
+                  + generatedPerson.getLastName());
+    } else {
+      person =
+          new Person(
+              IPartyService.DEFAULT_TENANT_ID,
+              generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
+    }
 
     person.setCountryOfBirth("ZW");
     person.setCountryOfResidence("ZA");
@@ -306,17 +354,24 @@ public class PartyServiceTest {
     person.setEmploymentStatus("employed");
     person.setEmploymentType("contractor");
     person.setGender("male");
-    person.setGivenName("GivenName" + personCharacter);
+    person.setGivenName(generatedPerson.getFirstName());
     person.setId(UuidCreator.getShortPrefixComb());
-    person.setInitials("G M");
+    if (hasMiddleName) {
+      person.setInitials(
+          generatedPerson.getFirstName().charAt(0)
+              + " "
+              + generatedPerson.getMiddleName().charAt(0));
+    } else {
+      person.setInitials("" + generatedPerson.getFirstName().charAt(0));
+    }
     person.setLanguage("EN");
     person.setMaritalStatus("single");
     person.setOccupation("driver");
-    person.setPreferredName("PreferredName" + personCharacter);
+    person.setPreferredName(generatedPerson.getFirstName());
     person.setRace("black");
     person.setResidencyStatus("foreign_national");
     person.setResidentialType("renter");
-    person.setSurname("Surname" + personCharacter);
+    person.setSurname(generatedPerson.getLastName());
     person.setTitle("mr");
 
     person.addContactMechanism(
@@ -354,10 +409,12 @@ public class PartyServiceTest {
   }
 
   private static synchronized Organization getTestOrganizationDetails() {
-    organizationCount++;
+    Fairy fairy = Fairy.create(Locale.forLanguageTag("en-ZA"));
+
+    Company generatedCompany = fairy.company();
 
     Organization organization =
-        new Organization(IPartyService.DEFAULT_TENANT_ID, "Organization Name " + organizationCount);
+        new Organization(IPartyService.DEFAULT_TENANT_ID, generatedCompany.getName());
 
     organization.addIdentityDocument(
         new IdentityDocument(
@@ -406,7 +463,7 @@ public class PartyServiceTest {
     assertEquals(
         "String Value",
         association.getPropertyWithType("test_string_property").get().getStringValue());
-    assertEquals(true, association.hasPropertyWithType("test_string_property"));
+    assertTrue(association.hasPropertyWithType("test_string_property"));
 
     partyService.createAssociation(IPartyService.DEFAULT_TENANT_ID, association);
 
@@ -1123,6 +1180,16 @@ public class PartyServiceTest {
         "The correct number of constraint violations was not found for the association");
   }
 
+  /** Test the invalid attribute functionality. */
+  @Test
+  public void invalidAttributeTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    // person.addAttribute(new Attribute("given_name"));
+
+    // person.getAttributes().clear();
+  }
+
   /** Test the invalid building address verification functionality. */
   @Test
   public void invalidBuildingAddressTest() throws Exception {
@@ -1245,7 +1312,12 @@ public class PartyServiceTest {
 
     person.addEducation(
         new Education(
-            "XX", "Invalid Institution Name$", "invalid_qualification_type", "Invalid Qualification Name$", null, "invalid_field_of_study"));
+            "XX",
+            "Invalid Institution Name$",
+            "invalid_qualification_type",
+            "Invalid Qualification Name$",
+            null,
+            "invalid_field_of_study"));
 
     Set<ConstraintViolation<Person>> constraintViolations =
         partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
@@ -3234,9 +3306,9 @@ public class PartyServiceTest {
         associationProperty2.getDateValue(),
         "The date value values for the association properties do not match");
     if (associationProperty1.getDecimalValue() != null) {
-      assertTrue(
-          associationProperty1.getDecimalValue().compareTo(associationProperty2.getDecimalValue())
-              == 0,
+      assertEquals(
+          0,
+          associationProperty1.getDecimalValue().compareTo(associationProperty2.getDecimalValue()),
           "The decimal value values for the association properties do not match");
     } else {
       assertEquals(
@@ -3329,8 +3401,9 @@ public class PartyServiceTest {
         attribute2.getDateValue(),
         "The date value values for the attributes do not match");
     if (attribute1.getDecimalValue() != null) {
-      assertTrue(
-          attribute1.getDecimalValue().compareTo(attribute2.getDecimalValue()) == 0,
+      assertEquals(
+          0,
+          attribute1.getDecimalValue().compareTo(attribute2.getDecimalValue()),
           "The decimal value values for the attributes do not match");
     } else {
       assertEquals(

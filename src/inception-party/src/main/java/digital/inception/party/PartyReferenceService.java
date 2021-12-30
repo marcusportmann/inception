@@ -421,6 +421,20 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   @Override
+  public Optional<AttributeType> getAttributeType(
+      UUID tenantId, String partyTypeCode, String attributeTypeCode)
+      throws ServiceUnavailableException {
+    return self.getAttributeTypes().stream()
+        .filter(
+            attributeType ->
+                (attributeType.getTenantId() == null
+                        || attributeType.getTenantId().equals(tenantId))
+                    && Objects.equals(attributeType.getCode(), attributeTypeCode)
+                    && attributeType.isValidForPartyType(partyTypeCode))
+        .findFirst();
+  }
+
+  @Override
   @Cacheable(cacheNames = "reference", key = "'attributeTypeCategories.' + #localeId")
   public List<AttributeTypeCategory> getAttributeTypeCategories(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {

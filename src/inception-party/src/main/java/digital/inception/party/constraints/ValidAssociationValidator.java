@@ -104,7 +104,7 @@ public class ValidAssociationValidator
           if (associationPropertyTypeOptional.isPresent()) {
             AssociationPropertyType associationPropertyType = associationPropertyTypeOptional.get();
 
-            switch (associationPropertyTypeOptional.get().getValueType()) {
+            switch (associationPropertyType.getValueType()) {
               case BOOLEAN:
                 if (associationProperty.getBooleanValue() == null) {
                   hibernateConstraintValidatorContext
@@ -113,6 +113,7 @@ public class ValidAssociationValidator
                       .buildConstraintViolationWithTemplate(
                           "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullBooleanValue.message}")
                       .addPropertyNode("properties")
+                      .addPropertyNode("booleanValue")
                       .addConstraintViolation();
 
                   isValid = false;
@@ -127,6 +128,7 @@ public class ValidAssociationValidator
                       .buildConstraintViolationWithTemplate(
                           "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullDateValue.message}")
                       .addPropertyNode("properties")
+                      .addPropertyNode("dateValue")
                       .addConstraintViolation();
 
                   isValid = false;
@@ -141,6 +143,7 @@ public class ValidAssociationValidator
                       .buildConstraintViolationWithTemplate(
                           "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullDecimalValue.message}")
                       .addPropertyNode("properties")
+                      .addPropertyNode("decimalValue")
                       .addConstraintViolation();
 
                   isValid = false;
@@ -155,6 +158,7 @@ public class ValidAssociationValidator
                       .buildConstraintViolationWithTemplate(
                           "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullDoubleValue.message}")
                       .addPropertyNode("properties")
+                      .addPropertyNode("doubleValue")
                       .addConstraintViolation();
 
                   isValid = false;
@@ -169,6 +173,7 @@ public class ValidAssociationValidator
                       .buildConstraintViolationWithTemplate(
                           "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullIntegerValue.message}")
                       .addPropertyNode("properties")
+                      .addPropertyNode("integerValue")
                       .addConstraintViolation();
 
                   isValid = false;
@@ -183,6 +188,7 @@ public class ValidAssociationValidator
                       .buildConstraintViolationWithTemplate(
                           "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithNullStringValue.message}")
                       .addPropertyNode("properties")
+                      .addPropertyNode("stringValue")
                       .addConstraintViolation();
 
                   isValid = false;
@@ -201,6 +207,7 @@ public class ValidAssociationValidator
                           .buildConstraintViolationWithTemplate(
                               "{digital.inception.party.constraints.ValidAssociation.invalidAssociationPropertyWithStringValue.message}")
                           .addPropertyNode("properties")
+                          .addPropertyNode("stringValue")
                           .addConstraintViolation();
 
                       isValid = false;

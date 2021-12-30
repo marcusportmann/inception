@@ -51,6 +51,50 @@
       <artifactId>inception-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <!--
+    <dependency>
+      <groupId>com.github.javafaker</groupId>
+      <artifactId>javafaker</artifactId>
+      <version>1.0.2</version>
+      <scope>test</scope>
+    </dependency>
+    -->
+
+    <!-- JFairy Dependencies -->
+    <dependency>
+      <groupId>com.devskiller</groupId>
+      <artifactId>jfairy</artifactId>
+      <version>0.6.4</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>com.google.inject</artifactId>
+          <groupId>guice</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>com.google.inject.extensions</artifactId>
+          <groupId>guice-assistedinject</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>5.0.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject.extensions</groupId>
+      <artifactId>guice-assistedinject</artifactId>
+      <version>5.0.1</version>
+      <scope>test</scope>
+    </dependency>
+
+
+
+
+
+
   </dependencies>
 </project>
 

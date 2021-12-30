@@ -49,6 +49,7 @@
       <column name="description" value="Test Attribute Type"/>
       <column name="party_types" value="organization,person"/>
       <column name="value_type" value="string"/>
+      <column name="pattern" value="test_attribute_value"/>
     </insert>
 
     <insert schemaName="party" tableName="attribute_types">
@@ -60,6 +61,7 @@
       <column name="description" value="Test Attribute Type"/>
       <column name="party_types" value="organization,person"/>
       <column name="value_type" value="string"/>
+      <column name="pattern" value="test_attribute_value"/>
     </insert>
 
 

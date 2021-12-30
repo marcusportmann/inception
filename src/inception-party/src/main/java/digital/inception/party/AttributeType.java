@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -107,6 +108,9 @@ public class AttributeType implements Serializable {
   @Id
   @Column(name = "code", length = 30, nullable = false)
   private String code;
+
+  /** The compiled pattern. */
+  @JsonIgnore private transient Pattern compiledPattern;
 
   /** The description for the attribute type. */
   @Schema(description = "The description for the attribute type", required = true)
@@ -227,6 +231,20 @@ public class AttributeType implements Serializable {
    */
   public String getCode() {
     return code;
+  }
+
+  /**
+   * Returns the compiled pattern.
+   *
+   * @return the compiled pattern
+   */
+  @JsonIgnore
+  public Pattern getCompiledPattern() {
+    if (compiledPattern == null) {
+      compiledPattern = Pattern.compile(pattern);
+    }
+
+    return compiledPattern;
   }
 
   /**
