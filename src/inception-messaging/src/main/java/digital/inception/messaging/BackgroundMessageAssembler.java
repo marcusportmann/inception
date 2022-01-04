@@ -17,9 +17,9 @@
 package digital.inception.messaging;
 
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings("unused")
-public class BackgroundMessageAssembler implements InitializingBean {
+public class BackgroundMessageAssembler {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundMessageAssembler.class);
@@ -46,32 +46,6 @@ public class BackgroundMessageAssembler implements InitializingBean {
    */
   public BackgroundMessageAssembler(IMessagingService messagingService) {
     this.messagingService = messagingService;
-  }
-
-  /** Initialize the Background Message Assembler. */
-  @Override
-  public void afterPropertiesSet() {
-    logger.info("Initializing the Background Message Assembler");
-
-    if (messagingService != null) {
-      /*
-       * Reset any locks for messages parts that were previously being assembled by the Background
-       * Message Assembler.
-       */
-      try {
-        logger.info("Resetting the message part locks for the message parts being assembled");
-
-        messagingService.resetMessagePartLocks(
-            MessagePartStatus.ASSEMBLING, MessagePartStatus.QUEUED_FOR_ASSEMBLY);
-      } catch (Throwable e) {
-        logger.error(
-            "Failed to reset the message part locks for the message parts being assembled", e);
-      }
-    } else {
-      logger.error(
-          "Failed to initialize the Background Message Assembler: "
-              + "The Messaging Service was NOT injected");
-    }
   }
 
   /**
@@ -103,5 +77,31 @@ public class BackgroundMessageAssembler implements InitializingBean {
     // TODO: Retrieve the total number of message parts for each message
 
     // TODO: Attempt to assemble each message
+  }
+
+  /** Initialize the Background Message Assembler. */
+  @PostConstruct
+  public void init() {
+    logger.info("Initializing the Background Message Assembler");
+
+    if (messagingService != null) {
+      /*
+       * Reset any locks for messages parts that were previously being assembled by the Background
+       * Message Assembler.
+       */
+      try {
+        logger.info("Resetting the message part locks for the message parts being assembled");
+
+        messagingService.resetMessagePartLocks(
+            MessagePartStatus.ASSEMBLING, MessagePartStatus.QUEUED_FOR_ASSEMBLY);
+      } catch (Throwable e) {
+        logger.error(
+            "Failed to reset the message part locks for the message parts being assembled", e);
+      }
+    } else {
+      logger.error(
+          "Failed to initialize the Background Message Assembler: "
+              + "The Messaging Service was NOT injected");
+    }
   }
 }

@@ -16,6 +16,8 @@
 
 package digital.inception.messaging.handler;
 
+import digital.inception.messaging.IMessagingService;
+
 /**
  * The <b>MessageHandler</b> class provides the base class that all message handlers should be
  * derived from.
@@ -32,14 +34,31 @@ public abstract class MessageHandler implements IMessageHandler {
   private final String name;
 
   /**
+   * Returns the Messaging Service.
+   *
+   * @return the Messaging Service
+   */
+  public IMessagingService getMessagingService() {
+    return messagingService;
+  }
+
+  /**
+   * The Messaging Service.
+   */
+  private final IMessagingService messagingService;
+
+  /**
    * Constructs a new <b>MessageHandler</b>.
    *
    * @param name the name of the message handler
    * @param messageHandlerConfig the configuration information for the message handler
+   * @param messagingService the Messaging Service
    */
-  public MessageHandler(String name, MessageHandlerConfig messageHandlerConfig) {
+  public MessageHandler(
+      String name, MessageHandlerConfig messageHandlerConfig, IMessagingService messagingService) {
     this.name = name;
     this.messageHandlerConfig = messageHandlerConfig;
+    this.messagingService = messagingService;
   }
 
   /**

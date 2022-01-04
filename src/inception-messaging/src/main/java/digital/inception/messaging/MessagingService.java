@@ -42,6 +42,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -54,8 +55,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
@@ -75,7 +74,7 @@ import org.xml.sax.InputSource;
  */
 @Service
 @SuppressWarnings("unused")
-public class MessagingService implements IMessagingService, InitializingBean {
+public class MessagingService implements IMessagingService {
 
   /** The AES encryption IV used when generating user-device AES encryption keys. */
   private static final byte[] AES_USER_DEVICE_ENCRYPTION_KEY_GENERATION_ENCRYPTION_IV =
@@ -139,12 +138,12 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   private List<MessageHandlerConfig> messageHandlersConfig;
 
+  /** The internal reference to the Messaging Service for transaction management. */
+  private IMessagingService messagingService;
+
   /** The delay in milliseconds to wait before re-attempting to process a message. */
   @Value("${inception.messaging.processing-retry-delay:60000}")
   private int processingRetryDelay;
-
-  /** The internal reference to the Messaging Service for transaction management. */
-  @Autowired private IMessagingService self;
 
   /**
    * Constructs a new <b>MessagingService</b>.
@@ -166,26 +165,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     this.messageRepository = messageRepository;
     this.messagePartRepository = messagePartRepository;
     this.archivedMessageRepository = archivedMessageRepository;
-  }
-
-  @Override
-  public void afterPropertiesSet() {
-    logger.info("Initializing the Messaging Service (" + instanceName + ")");
-
-    messageHandlers = new HashMap<>();
-
-    try {
-      // Initialize the configuration for the Messaging Service
-      initConfiguration();
-
-      // Read the messaging configuration
-      readMessagingConfig();
-
-      // Initialize the message handlers
-      initMessageHandlers();
-    } catch (Throwable e) {
-      throw new RuntimeException("Failed to initialize the Messaging Service", e);
-    }
   }
 
   @Override
@@ -830,6 +809,26 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
+  @PostConstruct
+  public void init() {
+    logger.info("Initializing the Messaging Service (" + instanceName + ")");
+
+    messageHandlers = new HashMap<>();
+
+    try {
+      // Initialize the configuration for the Messaging Service
+      initConfiguration();
+
+      // Read the messaging configuration
+      readMessagingConfig();
+
+      // Initialize the message handlers
+      initMessageHandlers();
+    } catch (Throwable e) {
+      throw new RuntimeException("Failed to initialize the Messaging Service", e);
+    }
+  }
+
   @Override
   public boolean isArchivableMessage(Message message) {
     return isArchivableMessage(message.getType());
@@ -1058,7 +1057,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
      * Queue the message for processing in a new transaction so it is available to the
      * Background Message Processor, which will be triggered asynchronously in a different thread.
      */
-    self.queueMessageForProcessing(message);
+    getMessagingService().queueMessageForProcessing(message);
 
     // Trigger the Background Message Processor to process the message that was queued
     try {
@@ -1112,7 +1111,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
      * Queue the message part for assembly in a new transaction so it is available to the
      * Background Message Assembler, which will be triggered asynchronously in a different thread.
      */
-    self.queueMessagePartForAssembly(messagePart);
+    getMessagingService().queueMessagePartForAssembly(messagePart);
 
     /*
      * If all the message parts for the message have been queued for assembly then trigger the
@@ -1266,6 +1265,14 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
+  private IMessagingService getMessagingService() {
+    if (messagingService == null) {
+      messagingService = applicationContext.getBean(IMessagingService.class);
+    }
+
+    return messagingService;
+  }
+
   private void initConfiguration() throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(encryptionKeyBase64)) {
@@ -1299,7 +1306,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
         Constructor<?> constructor;
 
         try {
-          constructor = clazz.getConstructor(MessageHandlerConfig.class);
+          constructor = clazz.getConstructor(MessageHandlerConfig.class, IMessagingService.class);
         } catch (NoSuchMethodException e) {
           constructor = null;
         }
@@ -1307,7 +1314,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
         if (constructor != null) {
           // Create an instance of the message handler
           IMessageHandler messageHandler =
-              (IMessageHandler) constructor.newInstance(messageHandlerConfig);
+              (IMessageHandler) constructor.newInstance(messageHandlerConfig, this);
 
           // Perform dependency injection on the message handler
           applicationContext.getAutowireCapableBeanFactory().autowireBean(messageHandler);
@@ -1417,9 +1424,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
 
         if (logger.isDebugEnabled()) {
           logger.debug(
-              "Reading the messaging configuration file ("
-                  + configurationFile.toURI().toString()
-                  + ")");
+              "Reading the messaging configuration file (" + configurationFile.toURI() + ")");
         }
 
         // Retrieve a document builder instance using the factory

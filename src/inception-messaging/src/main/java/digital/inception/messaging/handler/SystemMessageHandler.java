@@ -70,9 +70,6 @@ public class SystemMessageHandler extends MessageHandler {
   /* Error Service */
   @Autowired private IErrorService errorService;
 
-  /* Messaging Service */
-  @Autowired private IMessagingService messagingService;
-
   /* Security Service */
   @Autowired private ISecurityService securityService;
 
@@ -80,10 +77,12 @@ public class SystemMessageHandler extends MessageHandler {
    * Constructs a new <b>SystemMessageHandler</b>.
    *
    * @param messageHandlerConfig the configuration information for this message handler
+   * @param messagingService the Messaging Service
    */
   @SuppressWarnings("unused")
-  public SystemMessageHandler(MessageHandlerConfig messageHandlerConfig) {
-    super("System Message Handler", messageHandlerConfig);
+  public SystemMessageHandler(
+      MessageHandlerConfig messageHandlerConfig, IMessagingService messagingService) {
+    super("System Message Handler", messageHandlerConfig, messagingService);
   }
 
   /**
@@ -176,8 +175,9 @@ public class SystemMessageHandler extends MessageHandler {
         List<Tenant> tenants = securityService.getTenantsForUserDirectory(userDirectoryId);
 
         byte[] userEncryptionKey =
-            messagingService.deriveUserDeviceEncryptionKey(
-                requestData.getUsername(), requestData.getDeviceId());
+            getMessagingService()
+                .deriveUserDeviceEncryptionKey(
+                    requestData.getUsername(), requestData.getDeviceId());
 
         if (logger.isDebugEnabled()) {
           logger.debug(

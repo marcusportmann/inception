@@ -17,6 +17,7 @@
 package digital.inception.sms;
 
 import java.util.Optional;
+import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -31,7 +32,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings("unused")
-public class BackgroundSMSSender implements InitializingBean {
+public class BackgroundSMSSender {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundSMSSender.class);
@@ -49,8 +50,8 @@ public class BackgroundSMSSender implements InitializingBean {
   }
 
   /** Initialize the Background SMS Sender. */
-  @Override
-  public void afterPropertiesSet() {
+  @PostConstruct
+  public void init() {
     logger.info("Initializing the Background SMS Sender");
 
     if (smsService != null) {

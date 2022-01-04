@@ -20,9 +20,9 @@ import digital.inception.application.Application;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.reporting.IReportingService;
 import digital.inception.reporting.ReportDefinition;
+import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -36,7 +36,7 @@ import org.springframework.context.ApplicationContext;
  */
 @SpringBootApplication
 @EnableCaching
-public class DemoApplication extends Application implements InitializingBean {
+public class DemoApplication extends Application {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
@@ -67,8 +67,8 @@ public class DemoApplication extends Application implements InitializingBean {
   }
 
   /** Initialize the demo application. */
-  @Override
-  public void afterPropertiesSet() {
+  @PostConstruct
+  public void init() {
     try {
       byte[] demoReportDefinitionData = ResourceUtil.getClasspathResource("demo/DemoReport.jasper");
 

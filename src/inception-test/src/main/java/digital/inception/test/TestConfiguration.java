@@ -34,8 +34,6 @@ import javax.sql.DataSource;
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.Liquibase;
-import liquibase.configuration.HubConfiguration;
-import liquibase.configuration.LiquibaseConfiguration;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
@@ -165,10 +163,6 @@ public class TestConfiguration {
               new DataSourceProxy(AgroalDataSource.from(agroalDataSourceConfigurationSupplier));
 
           // Initialize the in-memory database using Liquibase changeSets
-          LiquibaseConfiguration.getInstance()
-              .getConfiguration(HubConfiguration.class)
-              .setLiquibaseHubMode("OFF");
-
           try (Connection connection = dataSource.getConnection()) {
             liquibase.database.Database database =
                 DatabaseFactory.getInstance()

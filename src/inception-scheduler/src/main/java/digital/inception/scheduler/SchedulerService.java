@@ -27,13 +27,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
@@ -48,7 +48,7 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Service
-public class SchedulerService implements ISchedulerService, InitializingBean {
+public class SchedulerService implements ISchedulerService {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
@@ -93,11 +93,6 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
     this.validator = validator;
     this.applicationContext = applicationContext;
     this.jobRepository = jobRepository;
-  }
-
-  @Override
-  public void afterPropertiesSet() {
-    logger.info("Initializing the Scheduler Service (" + instanceName + ")");
   }
 
   @Override
@@ -323,6 +318,11 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the unscheduled jobs", e);
     }
+  }
+
+  @PostConstruct
+  public void init() {
+    logger.info("Initializing the Scheduler Service (" + instanceName + ")");
   }
 
   @Override

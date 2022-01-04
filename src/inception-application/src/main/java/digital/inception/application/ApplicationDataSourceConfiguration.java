@@ -27,8 +27,6 @@ import javax.sql.DataSource;
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.Liquibase;
-import liquibase.configuration.HubConfiguration;
-import liquibase.configuration.LiquibaseConfiguration;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
@@ -224,10 +222,6 @@ public class ApplicationDataSourceConfiguration {
         if (isInMemoryH2Database) {
           logger.info("Initializing the in-memory H2 database using Liquibase");
         }
-
-        LiquibaseConfiguration.getInstance()
-            .getConfiguration(HubConfiguration.class)
-            .setLiquibaseHubMode("OFF");
 
         try (Connection connection = dataSource.getConnection()) {
           liquibase.database.Database database =

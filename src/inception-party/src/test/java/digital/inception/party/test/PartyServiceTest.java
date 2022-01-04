@@ -120,6 +120,8 @@ public class PartyServiceTest {
   @Autowired private IPartyService partyService;
 
   private static synchronized Organization getTestBasicOrganizationDetails() {
+    com.devskiller.jfairy.producer.person.DefaultPersonProvider xxx;
+
     Fairy fairy = Fairy.create();
 
     com.devskiller.jfairy.producer.person.Person generatedPerson = fairy.person();

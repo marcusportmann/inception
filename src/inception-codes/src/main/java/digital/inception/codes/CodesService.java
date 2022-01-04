@@ -31,13 +31,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import javax.annotation.PostConstruct;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +53,7 @@ import org.xml.sax.InputSource;
  */
 @Service
 @SuppressWarnings("unused")
-public class CodesService implements ICodesService, InitializingBean {
+public class CodesService implements ICodesService {
 
   /**
    * The path to the code provider configuration files (META-INF/code-providers.xml) on the
@@ -108,23 +108,6 @@ public class CodesService implements ICodesService, InitializingBean {
     this.codeCategoryRepository = codeCategoryRepository;
     this.codeCategorySummaryRepository = codeCategorySummaryRepository;
     this.codeRepository = codeRepository;
-  }
-
-  @Override
-  public void afterPropertiesSet() {
-    logger.info("Initializing the Codes Service");
-
-    codeProviders = new ArrayList<>();
-
-    try {
-      // Read the codes configuration
-      readCodeProviderConfigurations();
-
-      // Initialize the code providers
-      initCodeProviders();
-    } catch (Throwable e) {
-      throw new RuntimeException("Failed to initialize the Codes Service", e);
-    }
   }
 
   @Override
@@ -606,6 +589,23 @@ public class CodesService implements ICodesService, InitializingBean {
     }
   }
 
+  @PostConstruct
+  public void init() {
+    logger.info("Initializing the Codes Service");
+
+    codeProviders = new ArrayList<>();
+
+    try {
+      // Read the codes configuration
+      readCodeProviderConfigurations();
+
+      // Initialize the code providers
+      initCodeProviders();
+    } catch (Throwable e) {
+      throw new RuntimeException("Failed to initialize the Codes Service", e);
+    }
+  }
+
   /**
    * Update the existing code.
    *
@@ -754,7 +754,7 @@ public class CodesService implements ICodesService, InitializingBean {
         if (logger.isDebugEnabled()) {
           logger.debug(
               "Reading the code provider configuration file ("
-                  + codeProviderConfigurationFile.toURI().toString()
+                  + codeProviderConfigurationFile.toURI()
                   + ")");
         }
 

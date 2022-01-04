@@ -39,11 +39,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.PostConstruct;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -59,7 +59,7 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @SuppressWarnings({"unused", "WeakerAccess", "DuplicatedCode"})
-public class SecurityService implements ISecurityService, InitializingBean {
+public class SecurityService implements ISecurityService {
 
   /** The maximum number of filtered tenants. */
   private static final int MAX_FILTERED_TENANTS = 100;
@@ -319,31 +319,6 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
     userDirectory.adminChangePassword(
         username, newPassword, expirePassword, lockUser, resetPasswordHistory, reason);
-  }
-
-  @Override
-  public void afterPropertiesSet() {
-    try {
-      // Load the default password reset mail template
-      if (!mailService.mailTemplateExists(PASSWORD_RESET_MAIL_TEMPLATE_ID)) {
-        byte[] passwordResetMailTemplate =
-            ResourceUtil.getClasspathResource("digital/inception/security/PasswordReset.ftl");
-
-        MailTemplate mailTemplate =
-            new MailTemplate(
-                PASSWORD_RESET_MAIL_TEMPLATE_ID,
-                "Password Reset",
-                MailTemplateContentType.HTML,
-                passwordResetMailTemplate);
-
-        mailService.createMailTemplate(mailTemplate);
-      }
-
-      // Load the user directories
-      reloadUserDirectories();
-    } catch (Throwable e) {
-      throw new RuntimeException("Failed to initialize the Security Service", e);
-    }
   }
 
   @Override
@@ -1678,6 +1653,31 @@ public class SecurityService implements ISecurityService, InitializingBean {
     }
 
     return userDirectory.getUsers(filter, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  @PostConstruct
+  public void init() {
+    try {
+      // Load the default password reset mail template
+      if (!mailService.mailTemplateExists(PASSWORD_RESET_MAIL_TEMPLATE_ID)) {
+        byte[] passwordResetMailTemplate =
+            ResourceUtil.getClasspathResource("digital/inception/security/PasswordReset.ftl");
+
+        MailTemplate mailTemplate =
+            new MailTemplate(
+                PASSWORD_RESET_MAIL_TEMPLATE_ID,
+                "Password Reset",
+                MailTemplateContentType.HTML,
+                passwordResetMailTemplate);
+
+        mailService.createMailTemplate(mailTemplate);
+      }
+
+      // Load the user directories
+      reloadUserDirectories();
+    } catch (Throwable e) {
+      throw new RuntimeException("Failed to initialize the Security Service", e);
+    }
   }
 
   @Override

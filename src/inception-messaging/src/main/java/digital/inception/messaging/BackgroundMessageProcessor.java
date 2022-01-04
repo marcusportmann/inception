@@ -17,9 +17,9 @@
 package digital.inception.messaging;
 
 import java.util.Optional;
+import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings("unused")
-public class BackgroundMessageProcessor implements InitializingBean {
+public class BackgroundMessageProcessor {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundMessageProcessor.class);
@@ -49,8 +49,8 @@ public class BackgroundMessageProcessor implements InitializingBean {
   }
 
   /** Initialize the Background Message Processor. */
-  @Override
-  public void afterPropertiesSet() {
+  @PostConstruct
+  public void init() {
     logger.info("Initializing the Background Message Processor");
 
     if (messagingService != null) {
@@ -105,9 +105,7 @@ public class BackgroundMessageProcessor implements InitializingBean {
           logger.debug(
               String.format(
                   "Processing the queued message (%s)%s  %s",
-                  requestMessage.getId(),
-                  System.getProperty("line.separator"),
-                  requestMessage.toString()));
+                  requestMessage.getId(), System.getProperty("line.separator"), requestMessage));
         }
 
         // Decrypt the message data if required

@@ -17,9 +17,9 @@
 package demo;
 
 import digital.inception.application.Application;
+import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -33,7 +33,7 @@ import org.springframework.context.ApplicationContext;
  */
 @SpringBootApplication
 @EnableCaching
-public class DemoBasicApplication extends Application implements InitializingBean {
+public class DemoBasicApplication extends Application {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(DemoBasicApplication.class);
@@ -57,6 +57,6 @@ public class DemoBasicApplication extends Application implements InitializingBea
   }
 
   /** Initialize the demo application. */
-  @Override
-  public void afterPropertiesSet() {}
+  @PostConstruct
+  public void init() {}
 }
