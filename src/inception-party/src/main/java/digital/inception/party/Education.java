@@ -17,14 +17,12 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -33,8 +31,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -91,12 +87,6 @@ import javax.xml.bind.annotation.XmlType;
 public class Education implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date and time the education was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The code for the field of study. */
   @Schema(description = "The code for the field of study")
@@ -186,12 +176,6 @@ public class Education implements Serializable {
   @NotNull
   @Column(name = "qualification_year", nullable = false)
   private Integer qualificationYear;
-
-  /** The date and time the education was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>Education</b>. */
   public Education() {}
@@ -320,15 +304,6 @@ public class Education implements Serializable {
   }
 
   /**
-   * Returns the date and time the education was created.
-   *
-   * @return the date and time the education was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the code for the field of study.
    *
    * @return the code for the field of study
@@ -417,15 +392,6 @@ public class Education implements Serializable {
    */
   public Integer getQualificationYear() {
     return qualificationYear;
-  }
-
-  /**
-   * Returns the date and time the education was last updated.
-   *
-   * @return the date and time the education was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -528,17 +494,5 @@ public class Education implements Serializable {
    */
   public void setQualificationYear(Integer qualificationYear) {
     this.qualificationYear = qualificationYear;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

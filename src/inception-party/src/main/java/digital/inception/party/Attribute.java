@@ -27,7 +27,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,8 +35,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -169,12 +166,6 @@ public class Attribute implements Serializable {
   @Column(name = "boolean_value")
   private Boolean booleanValue;
 
-  /** The date and time the attribute was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
-
   /** The date value for the attribute. */
   @Schema(description = "The date value for the attribute")
   @JsonProperty
@@ -239,12 +230,6 @@ public class Attribute implements Serializable {
   @XmlElement(name = "Unit")
   @Column(name = "unit", length = 30)
   private MeasurementUnit unit;
-
-  /** The date and time the attribute was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>Attribute</b>. */
   public Attribute() {}
@@ -423,15 +408,6 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Returns the date and time the attribute was created.
-   *
-   * @return the date and time the attribute was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the date value for the attribute.
    *
    * @return the date value for the attribute
@@ -502,15 +478,6 @@ public class Attribute implements Serializable {
    */
   public MeasurementUnit getUnit() {
     return unit;
-  }
-
-  /**
-   * Returns the date and time the attribute was last updated.
-   *
-   * @return the date and time the attribute was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -652,17 +619,5 @@ public class Attribute implements Serializable {
    */
   public void setUnit(MeasurementUnit unit) {
     this.unit = unit;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

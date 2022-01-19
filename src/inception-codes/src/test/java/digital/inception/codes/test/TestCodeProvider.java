@@ -168,11 +168,11 @@ public class TestCodeProvider implements ICodeProvider {
   }
 
   @Override
-  public LocalDateTime getCodeCategoryLastUpdated(String codeCategoryId)
+  public LocalDateTime getCodeCategoryLastModified(String codeCategoryId)
       throws CodeCategoryNotFoundException, CodeProviderException {
     try {
       if (codeCategory.getId().equals(codeCategoryId)) {
-        return codeCategory.getUpdated();
+        return codeCategory.getLastModified();
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
@@ -181,7 +181,7 @@ public class TestCodeProvider implements ICodeProvider {
     } catch (Throwable e) {
       throw new CodeProviderException(
           String.format(
-              "Failed to retrieve the date and time the code category (%s) was last updated",
+              "Failed to retrieve the date and time the code category (%s) was last modified",
               codeCategoryId),
           e);
     }

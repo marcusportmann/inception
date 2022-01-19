@@ -39,8 +39,7 @@ export class Group {
   /**
    * Constructs a new Group.
    *
-   * @param userDirectoryId The ID for the user directory the
-   *                        group is associated with.
+   * @param userDirectoryId The ID for the user directory the group is associated with.
    * @param name            The name of the group.
    * @param description     The description for the group.
    */

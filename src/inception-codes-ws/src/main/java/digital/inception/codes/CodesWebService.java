@@ -185,6 +185,28 @@ public class CodesWebService {
   }
 
   /**
+   * Returns the date and time the code category was last modified.
+   *
+   * @param codeCategoryId the ID for the code category
+   * @return the date and time the code category was last modified
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws CodeCategoryNotFoundException if the code category could not be found
+   * @throws ServiceUnavailableException if the date and time the code category was last modified
+   *     could not be retrieved
+   */
+  @WebMethod(operationName = "GetCodeCategoryLastModified")
+  @WebResult(name = "CodeCategoryLastModified")
+  public Date getCodeCategoryLastModified(
+      @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
+    return Date.from(
+        codesService
+            .getCodeCategoryLastModified(codeCategoryId)
+            .atZone(ZoneId.systemDefault())
+            .toInstant());
+  }
+
+  /**
    * Retrieve the name of the code category
    *
    * @param codeCategoryId the ID for the code category
@@ -211,28 +233,6 @@ public class CodesWebService {
   @WebResult(name = "CodeCategorySummary")
   public List<CodeCategorySummary> getCodeCategorySummaries() throws ServiceUnavailableException {
     return codesService.getCodeCategorySummaries();
-  }
-
-  /**
-   * Returns the date and time the code category was last updated.
-   *
-   * @param codeCategoryId the ID for the code category
-   * @return the date and time the code category was last updated
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws CodeCategoryNotFoundException if the code category could not be found
-   * @throws ServiceUnavailableException if the date and time the code category was last updated
-   *     could not be retrieved
-   */
-  @WebMethod(operationName = "GetCodeCategoryUpdated")
-  @WebResult(name = "CodeCategoryUpdated")
-  public Date getCodeCategoryUpdated(
-      @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
-    return Date.from(
-        codesService
-            .getCodeCategoryUpdated(codeCategoryId)
-            .atZone(ZoneId.systemDefault())
-            .toInstant());
   }
 
   /**

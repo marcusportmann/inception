@@ -37,9 +37,7 @@
       <column name="name" value="Test Attribute Type Category"/>
       <column name="description" value="Test Attribute Type Category"/>
     </insert>
-
-
-
+    
     <insert schemaName="party" tableName="attribute_types">
       <column name="category" value="test_attribute_type_category"/>
       <column name="code" value="test_attribute_type"/>
@@ -47,6 +45,67 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Attribute Type"/>
       <column name="description" value="Test Attribute Type"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="string"/>
+      <column name="pattern" value="test_attribute_value"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_boolean_attribute"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Boolean Attribute"/>
+      <column name="description" value="Test Boolean Attribute"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="boolean"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_date_attribute"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Date Attribute"/>
+      <column name="description" value="Test Date Attribute"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="date"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_decimal_attribute"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Decimal Attribute"/>
+      <column name="description" value="Test Decimal Attribute"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="decimal"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_double_attribute"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Double Attribute"/>
+      <column name="description" value="Test Double Attribute"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="double"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_integer_attribute"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Integer Attribute"/>
+      <column name="description" value="Test Integer Attribute"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="integer"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_string_attribute"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test String Attribute"/>
+      <column name="description" value="Test String Attribute"/>
       <column name="party_types" value="organization,person"/>
       <column name="value_type" value="string"/>
       <column name="pattern" value="test_attribute_value"/>
@@ -59,6 +118,67 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Attribute Type"/>
       <column name="description" value="Test Attribute Type"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="string"/>
+      <column name="pattern" value="test_attribute_value"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_boolean_attribute"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Boolean Attribute"/>
+      <column name="description" value="Test Boolean Attribute"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="boolean"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_date_attribute"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Date Attribute"/>
+      <column name="description" value="Test Date Attribute"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="date"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_decimal_attribute"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Decimal Attribute"/>
+      <column name="description" value="Test Decimal Attribute"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="decimal"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_double_attribute"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Double Attribute"/>
+      <column name="description" value="Test Double Attribute"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="double"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_integer_attribute"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Integer Attribute"/>
+      <column name="description" value="Test Integer Attribute"/>
+      <column name="party_types" value="organization,person"/>
+      <column name="value_type" value="integer"/>
+    </insert>
+    <insert schemaName="party" tableName="attribute_types">
+      <column name="category" value="test_attribute_type_category"/>
+      <column name="code" value="test_string_attribute"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test String Attribute"/>
+      <column name="description" value="Test String Attribute"/>
       <column name="party_types" value="organization,person"/>
       <column name="value_type" value="string"/>
       <column name="pattern" value="test_attribute_value"/>
@@ -1722,11 +1842,29 @@
       <column name="description" value="Test Mandate String Property"/>
       <column name="value_type" value="string"/>
       <column name="pattern" value="^(?!\s+)[0-9(?U)\p{L} ]*(?!\s+)$"/>
-    </insert>    
-    
-    
-    
-    
+    </insert>
+
+
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_mandatary_type"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandatary Type"/>
+      <column name="description" value="Test Mandatary Type"/>
+    </insert>
+
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="test_mandate_type"/>
+      <column name="code" value="test_mandatary_type"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Test Mandatary Type"/>
+      <column name="description" value="Test Mandatary Type"/>
+    </insert>
+
 
   </changeSet>
 

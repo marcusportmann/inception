@@ -18,7 +18,6 @@ package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -26,7 +25,6 @@ import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,8 +33,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -70,12 +66,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Consent implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date and time the consent was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The date the consent is effective from. */
   @Schema(description = "The date the consent is effective from")
@@ -116,19 +106,13 @@ public class Consent implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** The date and time the consent was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
-
   /** Constructs a new <b>Consent</b>. */
   public Consent() {}
 
   /**
    * Constructs a new <b>Consent</b>.
    *
-   * @param type the consent type
+   * @param type the code for the consent type
    */
   public Consent(String type) {
     this.type = type;
@@ -137,7 +121,7 @@ public class Consent implements Serializable {
   /**
    * Constructs a new <b>Consent</b>.
    *
-   * @param type the consent type
+   * @param type the code for the consent type
    * @param effectiveFrom the date the consent is effective from
    */
   public Consent(String type, LocalDate effectiveFrom) {
@@ -148,7 +132,7 @@ public class Consent implements Serializable {
   /**
    * Constructs a new <b>Consent</b>.
    *
-   * @param type the consent type
+   * @param type the code for the consent type
    * @param effectiveFrom the date the consent is effective from
    * @param effectiveTo the date the consent is effective to
    */
@@ -181,15 +165,6 @@ public class Consent implements Serializable {
     Consent other = (Consent) object;
 
     return Objects.equals(person, other.person) && Objects.equals(type, other.type);
-  }
-
-  /**
-   * Returns the date and time the consent was created.
-   *
-   * @return the date and time the consent was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
   }
 
   /**
@@ -227,15 +202,6 @@ public class Consent implements Serializable {
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the consent was last updated.
-   *
-   * @return the date and time the consent was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -284,17 +250,5 @@ public class Consent implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

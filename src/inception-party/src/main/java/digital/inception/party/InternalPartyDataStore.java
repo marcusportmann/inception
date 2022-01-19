@@ -43,10 +43,13 @@ public class InternalPartyDataStore implements IPartyDataStore {
   /** The Association Repository. */
   private final AssociationRepository associationRepository;
 
+  /** The Mandate Repository. */
+  private final MandateRepository mandateRepository;
+
   /** The Jackson 2 object mapper */
   private final ObjectMapper objectMapper;
 
-  /** /** The Organization Repository. */
+  /** The Organization Repository. */
   private final OrganizationRepository organizationRepository;
 
   /** The Party Repository. */
@@ -62,6 +65,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
    * Constructs a new <b>InternalPartyDataStore</b>.
    *
    * @param objectMapper the Jackson2 object mapper
+   * @param mandateRepository the Mandate Repository
    * @param organizationRepository the Organization Repository
    * @param partyRepository the Party Repository
    * @param personRepository the Person Repository
@@ -70,6 +74,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
    */
   public InternalPartyDataStore(
       ObjectMapper objectMapper,
+      MandateRepository mandateRepository,
       OrganizationRepository organizationRepository,
       PartyRepository partyRepository,
       PersonRepository personRepository,
@@ -77,6 +82,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
       SnapshotRepository snapshotRepository) {
 
     this.objectMapper = objectMapper;
+    this.mandateRepository = mandateRepository;
     this.organizationRepository = organizationRepository;
     this.partyRepository = partyRepository;
     this.personRepository = personRepository;
@@ -115,6 +121,42 @@ public class InternalPartyDataStore implements IPartyDataStore {
       throw new ServiceUnavailableException(
           "Failed to create the association ("
               + association.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public Mandate createMandate(UUID tenantId, Mandate mandate)
+      throws DuplicateMandateException, PartyNotFoundException, ServiceUnavailableException {
+    try {
+      if (mandateRepository.existsById(mandate.getId())) {
+        throw new DuplicateMandateException(mandate.getId());
+      }
+
+      for (Mandatary mandatary : mandate.getMandataries()) {
+        if (!partyRepository.existsByTenantIdAndId(tenantId, mandatary.getPartyId())) {
+          throw new PartyNotFoundException(tenantId, mandatary.getPartyId());
+        }
+      }
+
+      // Serialize the mandate object as JSON
+      String mandateJson = objectMapper.writeValueAsString(mandate);
+
+      mandateRepository.saveAndFlush(mandate);
+
+      snapshotRepository.saveAndFlush(
+          new Snapshot(tenantId, EntityType.MANDATE, mandate.getId(), mandateJson));
+
+      return mandate;
+    } catch (DuplicateMandateException | PartyNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the mandate ("
+              + mandate.getId()
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -201,6 +243,23 @@ public class InternalPartyDataStore implements IPartyDataStore {
   }
 
   @Override
+  public void deleteMandate(UUID tenantId, UUID mandateId)
+      throws MandateNotFoundException, ServiceUnavailableException {
+    try {
+      if (!mandateRepository.existsByTenantIdAndId(tenantId, mandateId)) {
+        throw new MandateNotFoundException(tenantId, mandateId);
+      }
+
+      mandateRepository.deleteByTenantIdAndId(tenantId, mandateId);
+    } catch (MandateNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the mandate (" + mandateId + ") for the tenant (" + tenantId + ")", e);
+    }
+  }
+
+  @Override
   public void deleteOrganization(UUID tenantId, UUID organizationId)
       throws OrganizationNotFoundException, ServiceUnavailableException {
     try {
@@ -282,7 +341,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
   }
 
   @Override
-  public Associations getAssociationsForParty(
+  public AssociationsForParty getAssociationsForParty(
       UUID tenantId,
       UUID partyId,
       AssociationSortBy sortBy,
@@ -316,7 +375,7 @@ public class InternalPartyDataStore implements IPartyDataStore {
       Page<Association> associationPage =
           associationRepository.findByTenantIdAndPartyId(tenantId, partyId, pageRequest);
 
-      return new Associations(
+      return new AssociationsForParty(
           tenantId,
           partyId,
           associationPage.toList(),
@@ -330,6 +389,84 @@ public class InternalPartyDataStore implements IPartyDataStore {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the associations for the party ("
+              + partyId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public Mandate getMandate(UUID tenantId, UUID mandateId)
+      throws MandateNotFoundException, ServiceUnavailableException {
+    try {
+      Optional<Mandate> mandateOptional =
+          mandateRepository.findByTenantIdAndId(tenantId, mandateId);
+
+      if (mandateOptional.isPresent()) {
+        return mandateOptional.get();
+      } else {
+        throw new MandateNotFoundException(tenantId, mandateId);
+      }
+    } catch (MandateNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the mandate (" + mandateId + ") for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public MandatesForParty getMandatesForParty(
+      UUID tenantId,
+      UUID partyId,
+      MandateSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws PartyNotFoundException, ServiceUnavailableException {
+    try {
+      if (!partyRepository.existsByTenantIdAndId(tenantId, partyId)) {
+        throw new PartyNotFoundException(tenantId, partyId);
+      }
+
+      PageRequest pageRequest;
+
+      if (sortBy == MandateSortBy.TYPE) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                pageSize,
+                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
+                "type");
+      } else {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                pageSize,
+                (sortDirection == SortDirection.ASCENDING) ? Direction.ASC : Direction.DESC,
+                "type");
+      }
+
+      Page<Mandate> mandatePage =
+          mandateRepository.findByTenantIdAndPartyId(tenantId, partyId, pageRequest);
+
+      return new MandatesForParty(
+          tenantId,
+          partyId,
+          mandatePage.toList(),
+          mandatePage.getTotalElements(),
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize);
+    } catch (PartyNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the mandates for the party ("
               + partyId
               + ") for the tenant ("
               + tenantId
@@ -635,6 +772,42 @@ public class InternalPartyDataStore implements IPartyDataStore {
       throw new ServiceUnavailableException(
           "Failed to update the association ("
               + association.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public Mandate updateMandate(UUID tenantId, Mandate mandate)
+      throws MandateNotFoundException, PartyNotFoundException, ServiceUnavailableException {
+    try {
+      if (!mandateRepository.existsByTenantIdAndId(tenantId, mandate.getId())) {
+        throw new MandateNotFoundException(tenantId, mandate.getId());
+      }
+
+      for (Mandatary mandatary : mandate.getMandataries()) {
+        if (!partyRepository.existsByTenantIdAndId(tenantId, mandatary.getPartyId())) {
+          throw new PartyNotFoundException(tenantId, mandatary.getPartyId());
+        }
+      }
+
+      // Serialize the mandate object as JSON
+      String mandateJson = objectMapper.writeValueAsString(mandate);
+
+      mandateRepository.saveAndFlush(mandate);
+
+      snapshotRepository.saveAndFlush(
+          new Snapshot(tenantId, EntityType.MANDATE, mandate.getId(), mandateJson));
+
+      return mandate;
+    } catch (MandateNotFoundException | PartyNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the mandate ("
+              + mandate.getId()
               + ") for the tenant ("
               + tenantId
               + ")",

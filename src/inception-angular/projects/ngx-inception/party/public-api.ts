@@ -25,7 +25,7 @@ export * from './src/services/association-property';
 export * from './src/services/association-sorty-by';
 export * from './src/services/association-type';
 export * from './src/services/association';
-export * from './src/services/associations';
+export * from './src/services/associations-for-party';
 export * from './src/services/attribute-type-category';
 export * from './src/services/attribute-type';
 export * from './src/services/attribute';

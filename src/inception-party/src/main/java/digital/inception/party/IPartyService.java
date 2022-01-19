@@ -53,6 +53,21 @@ public interface IPartyService {
           ServiceUnavailableException;
 
   /**
+   * Create the new mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandate the mandate
+   * @return the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateMandateException if the mandate already exists
+   * @throws PartyNotFoundException if one or more parties for the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be created
+   */
+  Mandate createMandate(UUID tenantId, Mandate mandate)
+      throws InvalidArgumentException, DuplicateMandateException, PartyNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Create the new organization.
    *
    * @param tenantId the ID for the tenant
@@ -89,6 +104,18 @@ public interface IPartyService {
    */
   void deleteAssociation(UUID tenantId, UUID associationId)
       throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delete the mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandateId the ID for the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MandateNotFoundException if the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be deleted
+   */
+  void deleteMandate(UUID tenantId, UUID mandateId)
+      throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException;
 
   /**
    * Delete the organization.
@@ -153,10 +180,46 @@ public interface IPartyService {
    * @throws PartyNotFoundException if the party could not be found
    * @throws ServiceUnavailableException if the associations could not be retrieved
    */
-  Associations getAssociationsForParty(
+  AssociationsForParty getAssociationsForParty(
       UUID tenantId,
       UUID partyId,
       AssociationSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandateId the ID for the mandate
+   * @return the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MandateNotFoundException if the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be retrieved
+   */
+  Mandate getMandate(UUID tenantId, UUID mandateId)
+      throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandates for the party.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
+   * @param sortBy the optional method used to sort the mandates e.g. by type
+   * @param sortDirection the optional sort direction to apply to the mandates
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the mandates
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the mandates could not be retrieved
+   */
+  MandatesForParty getMandatesForParty(
+      UUID tenantId,
+      UUID partyId,
+      MandateSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
@@ -322,6 +385,21 @@ public interface IPartyService {
           ServiceUnavailableException;
 
   /**
+   * Update the mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandate the mandate
+   * @return the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MandateNotFoundException if the mandate could not be found
+   * @throws PartyNotFoundException if one or more parties for the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be updated
+   */
+  Mandate updateMandate(UUID tenantId, Mandate mandate)
+      throws InvalidArgumentException, MandateNotFoundException, PartyNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Update the organization.
    *
    * @param tenantId the ID for the tenant
@@ -356,6 +434,17 @@ public interface IPartyService {
    * @throws ServiceUnavailableException if the association could not be validated
    */
   Set<ConstraintViolation<Association>> validateAssociation(UUID tenantId, Association association)
+      throws ServiceUnavailableException;
+
+  /**
+   * Validate the mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandate the mandate
+   * @return the constraint violations for the mandate
+   * @throws ServiceUnavailableException if the mandate could not be validated
+   */
+  Set<ConstraintViolation<Mandate>> validateMandate(UUID tenantId, Mandate mandate)
       throws ServiceUnavailableException;
 
   /**

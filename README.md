@@ -40,8 +40,15 @@ Complete the following steps to setup a development environment on MacOS.
 7. Set OpenJDK 17 as the default java verison by executing the following commands in a
    Terminal window.
    ```
+   Intel Mac:
+   jenv add /usr/local/opt/openjdk/libexec/openjdk.jdk/Contents/Home
+   jenv global 17
+   sudo ln -s /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk
+   
+   M1 Mac:
    jenv add /opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home
    jenv global 17
+   sudo ln -s /opt/homebrew/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk
    ```
 8. Install the maven plugin for jenv by executing the following command in a Terminal
    window.

@@ -16,21 +16,17 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -38,7 +34,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -71,12 +66,6 @@ import javax.xml.bind.annotation.XmlType;
 public class Party implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date and time the party was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The ID for the party. */
   @Schema(description = "The ID for the party", required = true)
@@ -114,12 +103,6 @@ public class Party implements Serializable {
   @NotNull
   @Column(name = "type", length = 30, nullable = false)
   private PartyType type;
-
-  /** The date and time the party was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>Party</b>. */
   public Party() {}
@@ -173,15 +156,6 @@ public class Party implements Serializable {
   }
 
   /**
-   * Returns the date and time the party was created.
-   *
-   * @return the date and time the party was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the ID for the party.
    *
    * @return the ID for the party
@@ -215,15 +189,6 @@ public class Party implements Serializable {
    */
   public PartyType getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the party was last updated.
-   *
-   * @return the date and time the party was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -270,17 +235,5 @@ public class Party implements Serializable {
    */
   public void setType(PartyType type) {
     this.type = type;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

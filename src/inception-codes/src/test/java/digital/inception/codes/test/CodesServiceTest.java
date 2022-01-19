@@ -129,9 +129,9 @@ public class CodesServiceTest {
 
     compareCodeCategories(codeCategory, updatedCodeCategory);
 
-    LocalDateTime lastUpdated = codesService.getCodeCategoryUpdated(codeCategory.getId());
+    LocalDateTime lastUpdated = codesService.getCodeCategoryLastModified(codeCategory.getId());
 
-    if (!lastUpdated.isEqual(updatedCodeCategory.getUpdated())) {
+    if (!lastUpdated.isEqual(updatedCodeCategory.getLastModified())) {
       fail("The date and time the code category was last updated was not correct");
     }
 

@@ -19,6 +19,8 @@ package digital.inception.party.constraints;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IPartyService;
 import digital.inception.party.Mandate;
+import digital.inception.party.MandateProperty;
+import digital.inception.party.MandatePropertyType;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,8 +68,7 @@ public class ValidMandateValidator implements ConstraintValidator<ValidMandate, 
   public void initialize(ValidMandate constraintAnnotation) {}
 
   @Override
-  public boolean isValid(
-      Mandate mandate, ConstraintValidatorContext constraintValidatorContext) {
+  public boolean isValid(Mandate mandate, ConstraintValidatorContext constraintValidatorContext) {
     if ((partyService != null) && (partyReferenceService != null)) {
       boolean isValid = true;
 
@@ -76,12 +77,12 @@ public class ValidMandateValidator implements ConstraintValidator<ValidMandate, 
 
       HibernateConstraintValidatorContext hibernateConstraintValidatorContext =
           constraintValidatorContext.unwrap(HibernateConstraintValidatorContext.class);
-      /*
+
       try {
         // Validate mandate type
         if (StringUtils.hasText(mandate.getType())
             && (!partyReferenceService.isValidMandateType(
-            mandate.getTenantId(), mandate.getType()))) {
+                mandate.getTenantId(), mandate.getType()))) {
           hibernateConstraintValidatorContext
               .addMessageParameter("mandateType", mandate.getType())
               .buildConstraintViolationWithTemplate(
@@ -191,8 +192,7 @@ public class ValidMandateValidator implements ConstraintValidator<ValidMandate, 
 
                     if (!matcher.matches()) {
                       hibernateConstraintValidatorContext
-                          .addMessageParameter(
-                              "mandatePropertyType", mandateProperty.getType())
+                          .addMessageParameter("mandatePropertyType", mandateProperty.getType())
                           .addMessageParameter("stringValue", mandateProperty.getStringValue())
                           .addMessageParameter("mandateType", mandate.getType())
                           .buildConstraintViolationWithTemplate(
@@ -222,8 +222,6 @@ public class ValidMandateValidator implements ConstraintValidator<ValidMandate, 
       } catch (Throwable e) {
         throw new ValidationException("Failed to validate the mandate", e);
       }
-
-      */
 
       return isValid;
     } else {

@@ -94,7 +94,7 @@ public class FreeMarkerTemplateLoader implements TemplateLoader {
       if (templateSource instanceof String) {
         MailTemplate mailTemplate = mailService.getMailTemplate((String) templateSource);
 
-        return mailTemplate.getUpdated().toInstant(ZoneOffset.UTC).toEpochMilli();
+        return mailTemplate.getLastModified().toInstant(ZoneOffset.UTC).toEpochMilli();
       }
     } catch (Throwable ignored) {
     }

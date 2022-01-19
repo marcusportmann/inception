@@ -19,11 +19,12 @@ import {Association} from "./association";
 import {AssociationSortBy} from "./association-sorty-by";
 
 /**
- * The Associations class holds the results of a request to retrieve a list of associations.
+ * The AssociationsForParty class holds the results of a request to retrieve a list of associations
+ * for a party.
  *
  * @author Marcus Portmann
  */
-export class Associations {
+export class AssociationsForParty {
 
   /**
    * The associations.
@@ -66,7 +67,7 @@ export class Associations {
   total: number;
 
   /**
-   * Constructs a new Associations.
+   * Constructs a new AssociationsForParty.
    *
    * @param tenantId      The ID for the tenant the associations are associated with.
    * @param partyId       The ID for the party the associations are associated with

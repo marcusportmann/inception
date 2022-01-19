@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import {Mandatary} from './mandatary';
 import {MandateProperty} from './mandate-property';
 import {RequiredMandataries} from "./required-mandataries";
 
@@ -41,6 +42,11 @@ export class Mandate {
   id: string;
 
   /**
+   * The mandataries for the mandate.
+   */
+  mandataries: Mandatary[];
+
+  /**
    * The properties for the mandate.
    */
   properties: MandateProperty[];
@@ -66,16 +72,19 @@ export class Mandate {
    * @param id                  The ID for the mandate.
    * @param tenantId            The ID for the tenant the mandate is associated with.
    * @param type                The code for the mandate type.
+   * @param mandataries         The mandataries for the mandate.
    * @param properties          The properties for the mandate.
    * @param requiredMandataries The number of mandataries required to execute the mandate.
    * @param effectiveFrom       The date the mandate is effective from.
    * @param effectiveTo         The date the mandate is effective to.
    */
-  constructor(id: string, tenantId: string, type: string, properties: MandateProperty[],
-              requiredMandataries?: RequiredMandataries, effectiveFrom?: Date, effectiveTo?: Date) {
+  constructor(id: string, tenantId: string, type: string, mandataries: Mandatary[],
+              properties: MandateProperty[], requiredMandataries?: RequiredMandataries,
+              effectiveFrom?: Date, effectiveTo?: Date) {
     this.id = id;
     this.tenantId = tenantId;
     this.type = type;
+    this.mandataries = mandataries;
     this.properties = properties;
     this.requiredMandataries = requiredMandataries;
     this.effectiveFrom = effectiveFrom;

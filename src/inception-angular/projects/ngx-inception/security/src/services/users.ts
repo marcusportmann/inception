@@ -68,8 +68,7 @@ export class Users {
   /**
    * Constructs a new Users.
    *
-   * @param userDirectoryId The ID for the user directory the
-   *                        users are associated with.
+   * @param userDirectoryId The ID for the user directory the users are associated with.
    * @param users           The users.
    * @param total           The total number of users.
    * @param filter          The optional filter that was applied to the users.

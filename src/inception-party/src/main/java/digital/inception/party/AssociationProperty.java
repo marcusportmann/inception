@@ -27,7 +27,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,8 +35,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -105,12 +102,6 @@ public class AssociationProperty implements Serializable {
   @Column(name = "boolean_value")
   private Boolean booleanValue;
 
-  /** The date and time the association property was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
-
   /** The date value for the association property. */
   @Schema(description = "The date value for the association property")
   @JsonProperty
@@ -160,19 +151,13 @@ public class AssociationProperty implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** The date and time the association property was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
-
   /** Constructs a new <b>AssociationProperty</b>. */
   public AssociationProperty() {}
 
   /**
    * Constructs a new <b>AssociationProperty</b>.
    *
-   * @param type the association property type
+   * @param type the code for the association property type
    */
   public AssociationProperty(String type) {
     this.type = type;
@@ -181,7 +166,7 @@ public class AssociationProperty implements Serializable {
   /**
    * Constructs a new <b>AssociationProperty</b>.
    *
-   * @param type the association property type
+   * @param type the code for the association property type
    * @param stringValue the string value for the association property
    */
   public AssociationProperty(String type, String stringValue) {
@@ -192,7 +177,7 @@ public class AssociationProperty implements Serializable {
   /**
    * Constructs a new <b>AssociationProperty</b>.
    *
-   * @param type the association property type
+   * @param type the code for the association property type
    * @param booleanValue the boolean value for the association property
    */
   public AssociationProperty(String type, boolean booleanValue) {
@@ -203,7 +188,7 @@ public class AssociationProperty implements Serializable {
   /**
    * Constructs a new <b>AssociationProperty</b>.
    *
-   * @param type the association property type
+   * @param type the code for the association property type
    * @param doubleValue the double value for the association property
    */
   public AssociationProperty(String type, double doubleValue) {
@@ -214,7 +199,7 @@ public class AssociationProperty implements Serializable {
   /**
    * Constructs a new <b>AssociationProperty</b>.
    *
-   * @param type the association property type
+   * @param type the code for the association property type
    * @param dateValue the date value for the association property
    */
   public AssociationProperty(String type, LocalDate dateValue) {
@@ -225,7 +210,7 @@ public class AssociationProperty implements Serializable {
   /**
    * Constructs a new <b>AssociationProperty</b>.
    *
-   * @param type the association property type
+   * @param type the code for the association property type
    * @param decimalValue the decimal value for the association property
    */
   public AssociationProperty(String type, BigDecimal decimalValue) {
@@ -236,7 +221,7 @@ public class AssociationProperty implements Serializable {
   /**
    * Constructs a new <b>AssociationProperty</b>.
    *
-   * @param type the association property type
+   * @param type the code for the association property type
    * @param integerValue the integer value for the association property
    */
   public AssociationProperty(String type, Integer integerValue) {
@@ -286,15 +271,6 @@ public class AssociationProperty implements Serializable {
    */
   public Boolean getBooleanValue() {
     return booleanValue;
-  }
-
-  /**
-   * Returns the date and time the association property was created.
-   *
-   * @return the date and time the association property was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
   }
 
   /**
@@ -349,15 +325,6 @@ public class AssociationProperty implements Serializable {
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the association property was last updated.
-   *
-   * @return the date and time the association property was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -492,17 +459,5 @@ public class AssociationProperty implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

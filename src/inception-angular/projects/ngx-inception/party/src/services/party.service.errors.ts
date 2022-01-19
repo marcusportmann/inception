@@ -56,6 +56,25 @@ export class DuplicateAssociationError extends Error {
 }
 
 /**
+ * The DuplicateMandateError class holds the information for a duplicate mandate error.
+ *
+ * @author Marcus Portmann
+ */
+export class DuplicateMandateError extends Error {
+
+  static readonly TYPE = 'http://inception.digital/problems/party/duplicate-mandate';
+
+  /**
+   * Constructs a new DuplicateMandateError.
+   *
+   * @param cause The optional cause of the error.
+   */
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
+    super($localize`:@@party_duplicate_mandate_error:The mandate already exists.`, cause);
+  }
+}
+
+/**
  * The DuplicateOrganizationError class holds the information for a duplicate organization error.
  *
  * @author Marcus Portmann
@@ -109,6 +128,25 @@ export class DuplicatePersonError extends Error {
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super($localize`:@@party_duplicate_person_error:The person already exists.`, cause);
+  }
+}
+
+/**
+ * The MandateNotFoundError class holds the information for a mandate not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class MandateNotFoundError extends Error {
+
+  static readonly TYPE = 'http://inception.digital/problems/party/mandate-not-found';
+
+  /**
+   * Constructs a new MandateNotFoundError.
+   *
+   * @param cause The optional cause of the error.
+   */
+  constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
+    super($localize`:@@party_mandate_not_found_error:The mandate could not be found.`, cause);
   }
 }
 

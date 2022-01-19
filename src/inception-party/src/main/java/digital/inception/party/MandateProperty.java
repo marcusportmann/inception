@@ -27,7 +27,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,8 +35,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -52,34 +49,33 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>MandateProperty</b> class holds the information for a mandate property for an
- * mandate.
+ * The <b>MandateProperty</b> class holds the information for a mandate property for a mandate.
  *
  * @author Marcus Portmann
  */
 @Schema(name = "MandateProperty", description = "A mandate property for a mandate")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "type",
-    "booleanValue",
-    "dateValue",
-    "decimalValue",
-    "doubleValue",
-    "integerValue",
-    "stringValue"
+  "type",
+  "booleanValue",
+  "dateValue",
+  "decimalValue",
+  "doubleValue",
+  "integerValue",
+  "stringValue"
 })
 @XmlRootElement(name = "MandateProperty", namespace = "http://inception.digital/party")
 @XmlType(
     name = "MandateProperty",
     namespace = "http://inception.digital/party",
     propOrder = {
-        "type",
-        "booleanValue",
-        "dateValue",
-        "decimalValue",
-        "doubleValue",
-        "integerValue",
-        "stringValue"
+      "type",
+      "booleanValue",
+      "dateValue",
+      "decimalValue",
+      "doubleValue",
+      "integerValue",
+      "stringValue"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -89,27 +85,12 @@ public class MandateProperty implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The mandate the mandate property is associated with. */
-  @Schema(hidden = true)
-  @JsonBackReference
-  @XmlTransient
-  @Id
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "mandate_id")
-  private Mandate mandate;
-
   /** The boolean value for the mandate property. */
   @Schema(description = "The boolean value for the mandate property")
   @JsonProperty
   @XmlElement(name = "BooleanValue")
   @Column(name = "boolean_value")
   private Boolean booleanValue;
-
-  /** The date and time the mandate property was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The date value for the mandate property. */
   @Schema(description = "The date value for the mandate property")
@@ -142,6 +123,15 @@ public class MandateProperty implements Serializable {
   @Column(name = "integer_value")
   private Integer integerValue;
 
+  /** The mandate the mandate property is associated with. */
+  @Schema(hidden = true)
+  @JsonBackReference
+  @XmlTransient
+  @Id
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "mandate_id")
+  private Mandate mandate;
+
   /** The string value for the mandate property. */
   @Schema(description = "The string value for the mandate property")
   @JsonProperty
@@ -160,19 +150,13 @@ public class MandateProperty implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** The date and time the mandate property was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
-
   /** Constructs a new <b>MandateProperty</b>. */
   public MandateProperty() {}
 
   /**
    * Constructs a new <b>MandateProperty</b>.
    *
-   * @param type the mandate property type
+   * @param type the code for the mandate property type
    */
   public MandateProperty(String type) {
     this.type = type;
@@ -181,7 +165,7 @@ public class MandateProperty implements Serializable {
   /**
    * Constructs a new <b>MandateProperty</b>.
    *
-   * @param type the mandate property type
+   * @param type the code for the mandate property type
    * @param stringValue the string value for the mandate property
    */
   public MandateProperty(String type, String stringValue) {
@@ -192,7 +176,7 @@ public class MandateProperty implements Serializable {
   /**
    * Constructs a new <b>MandateProperty</b>.
    *
-   * @param type the mandate property type
+   * @param type the code for the mandate property type
    * @param booleanValue the boolean value for the mandate property
    */
   public MandateProperty(String type, boolean booleanValue) {
@@ -203,7 +187,7 @@ public class MandateProperty implements Serializable {
   /**
    * Constructs a new <b>MandateProperty</b>.
    *
-   * @param type the mandate property type
+   * @param type the code for the mandate property type
    * @param doubleValue the double value for the mandate property
    */
   public MandateProperty(String type, double doubleValue) {
@@ -214,7 +198,7 @@ public class MandateProperty implements Serializable {
   /**
    * Constructs a new <b>MandateProperty</b>.
    *
-   * @param type the mandate property type
+   * @param type the code for the mandate property type
    * @param dateValue the date value for the mandate property
    */
   public MandateProperty(String type, LocalDate dateValue) {
@@ -225,7 +209,7 @@ public class MandateProperty implements Serializable {
   /**
    * Constructs a new <b>MandateProperty</b>.
    *
-   * @param type the mandate property type
+   * @param type the code for the mandate property type
    * @param decimalValue the decimal value for the mandate property
    */
   public MandateProperty(String type, BigDecimal decimalValue) {
@@ -236,7 +220,7 @@ public class MandateProperty implements Serializable {
   /**
    * Constructs a new <b>MandateProperty</b>.
    *
-   * @param type the mandate property type
+   * @param type the code for the mandate property type
    * @param integerValue the integer value for the mandate property
    */
   public MandateProperty(String type, Integer integerValue) {
@@ -270,31 +254,12 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Returns the mandate the mandate property is associated with.
-   *
-   * @return the mandate the mandate property is associated with
-   */
-  @Schema(hidden = true)
-  public Mandate getMandate() {
-    return mandate;
-  }
-
-  /**
    * Returns the boolean value for the mandate property.
    *
    * @return the boolean value for the mandate property
    */
   public Boolean getBooleanValue() {
     return booleanValue;
-  }
-
-  /**
-   * Returns the date and time the mandate property was created.
-   *
-   * @return the date and time the mandate property was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
   }
 
   /**
@@ -334,6 +299,16 @@ public class MandateProperty implements Serializable {
   }
 
   /**
+   * Returns the mandate the mandate property is associated with.
+   *
+   * @return the mandate the mandate property is associated with
+   */
+  @Schema(hidden = true)
+  public Mandate getMandate() {
+    return mandate;
+  }
+
+  /**
    * Returns the string value for the mandate property.
    *
    * @return the string value for the mandate property
@@ -349,15 +324,6 @@ public class MandateProperty implements Serializable {
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the mandate property was last updated.
-   *
-   * @return the date and time the mandate property was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -382,20 +348,8 @@ public class MandateProperty implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((mandate == null) || (mandate.getId() == null))
-        ? 0
-        : mandate.getId().hashCode())
+    return (((mandate == null) || (mandate.getId() == null)) ? 0 : mandate.getId().hashCode())
         + ((type == null) ? 0 : type.hashCode());
-  }
-
-  /**
-   * Set the mandate the mandate property is associated with.
-   *
-   * @param mandate the mandate the mandate property is associated with
-   */
-  @Schema(hidden = true)
-  public void setMandate(Mandate mandate) {
-    this.mandate = mandate;
   }
 
   /**
@@ -477,6 +431,16 @@ public class MandateProperty implements Serializable {
   }
 
   /**
+   * Set the mandate the mandate property is associated with.
+   *
+   * @param mandate the mandate the mandate property is associated with
+   */
+  @Schema(hidden = true)
+  public void setMandate(Mandate mandate) {
+    this.mandate = mandate;
+  }
+
+  /**
    * Set the string value for the mandate property.
    *
    * @param stringValue the string value for the mandate property
@@ -492,17 +456,5 @@ public class MandateProperty implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

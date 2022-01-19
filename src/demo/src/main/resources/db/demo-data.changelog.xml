@@ -27,7 +27,6 @@
       <column name="id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="name" value="Demo"/>
       <column name="status" value="1"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="security" tableName="user_directories">
@@ -37,7 +36,6 @@
       <column name="configuration">
         <![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
 <!--    <insert schemaName="security" tableName="user_directories">-->
 <!--      <column name="id" value="595d13ac-22d6-4ce2-b898-3add4658a748"/>-->
@@ -48,7 +46,6 @@
 <!--          <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>Host</name><value>localhost</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>cn=root,o=demo</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=demo,ou=applications,o=demo</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=demo,ou=applications,o=demo</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=demo,ou=applications,o=demo</value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserNameAttribute</name><value>cn</value></parameter><parameter><name>UserPreferredNameAttribute</name><value>nickName</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>-->
 <!--        ]]>-->
 <!--      </column>-->
-<!--      <column name="created" value="${now}"/>-->
 <!--    </insert>-->
 
     <insert schemaName="security" tableName="user_directory_to_tenant_map">
@@ -74,7 +71,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="64166574-6564-468a-b845-8a5c127a4345"/>
@@ -89,7 +85,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="00166574-6564-468a-b845-8a5c127a4345"/>
@@ -104,7 +99,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="01166574-6564-468a-b845-8a5c127a4345"/>
@@ -119,7 +113,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="02166574-6564-468a-b845-8a5c127a4345"/>
@@ -134,7 +127,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="03166574-6564-468a-b845-8a5c127a4345"/>
@@ -149,7 +141,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="04166574-6564-468a-b845-8a5c127a4345"/>
@@ -164,7 +155,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="05166574-6564-468a-b845-8a5c127a4345"/>
@@ -179,7 +169,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="06166574-6564-468a-b845-8a5c127a4345"/>
@@ -194,7 +183,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="07166574-6564-468a-b845-8a5c127a4345"/>
@@ -209,7 +197,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="08166574-6564-468a-b845-8a5c127a4345"/>
@@ -224,7 +211,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="09166574-6564-468a-b845-8a5c127a4345"/>
@@ -239,7 +225,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="10166574-6564-468a-b845-8a5c127a4345"/>
@@ -254,7 +239,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="11166574-6564-468a-b845-8a5c127a4345"/>
@@ -269,7 +253,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="12166574-6564-468a-b845-8a5c127a4345"/>
@@ -284,7 +267,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="13166574-6564-468a-b845-8a5c127a4345"/>
@@ -299,7 +281,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="14166574-6564-468a-b845-8a5c127a4345"/>
@@ -314,7 +295,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="15166574-6564-468a-b845-8a5c127a4345"/>
@@ -329,7 +309,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="16166574-6564-468a-b845-8a5c127a4345"/>
@@ -344,7 +323,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="17166574-6564-468a-b845-8a5c127a4345"/>
@@ -359,7 +337,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="18166574-6564-468a-b845-8a5c127a4345"/>
@@ -374,7 +351,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="19166574-6564-468a-b845-8a5c127a4345"/>
@@ -389,7 +365,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="20166574-6564-468a-b845-8a5c127a4345"/>
@@ -404,7 +379,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="21166574-6564-468a-b845-8a5c127a4345"/>
@@ -419,7 +393,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="22166574-6564-468a-b845-8a5c127a4345"/>
@@ -434,7 +407,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="security" tableName="groups">
@@ -442,14 +414,12 @@
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="name" value="Tenant Administrators"/>
       <column name="description" value="Tenant Administrators"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="groups">
       <column name="id" value="146c5550-cd3d-42de-8660-7749e1b4df52"/>
       <column name="user_directory_id" value="34ccdbc9-4a01-46f5-a284-ba13e095675c"/>
       <column name="name" value="Password Resetters"/>
       <column name="description" value="Password Resetters"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="security" tableName="user_to_group_map">
@@ -477,7 +447,6 @@
       <column name="configuration">
         <![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="security" tableName="user_directory_to_tenant_map">
@@ -498,7 +467,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="963c604a-bcaf-4262-9e94-a2f2c55c029d"/>
@@ -513,7 +481,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="users">
       <column name="id" value="606112a5-5a01-45d6-a29b-cea8d22e592d"/>
@@ -528,7 +495,6 @@
       <column name="password" value="$2a$10$Dig2ZjUaDC/yUpAEjQR3w.wzcnomyBlS6oRXB.5.n.07XnVlAARL."/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="security" tableName="groups">
@@ -536,14 +502,12 @@
       <column name="user_directory_id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="name" value="Tenant Administrators"/>
       <column name="description" value="Tenant Administrators"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="security" tableName="groups">
       <column name="id" value="dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d"/>
       <column name="user_directory_id" value="2a935e0d-ac7e-44c4-aa44-e986aeb8c00e"/>
       <column name="name" value="Password Resetters"/>
       <column name="description" value="Password Resetters"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="security" tableName="user_to_group_map">
@@ -577,7 +541,6 @@
       <column name="job_class" value="demo.job.DemoJob"/>
       <column name="enabled" value="true"/>
       <column name="status" value="1"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <!--    ____  _____ __  __  ___    ____    _  _____  _         -->
@@ -634,28 +597,24 @@
       <column name="data">
         <![CDATA[<codes><code name="name1" value="value1"/></codes>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode011"/>
       <column name="code_category_id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Name 1.1"/>
       <column name="value" value="Test Code Value 1.1"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode012"/>
       <column name="code_category_id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Name 1.2"/>
       <column name="value" value="Test Code Value 1.2"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode013"/>
       <column name="code_category_id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Name 1.3"/>
       <column name="value" value="Test Code Value 1.3"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="codes" tableName="code_categories">
@@ -664,28 +623,24 @@
       <column name="data">
         <![CDATA[<codes><code name="name1" value="value1"/></codes>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode021"/>
       <column name="code_category_id" value="TestCodeCategory02"/>
       <column name="name" value="Test Code Name 2.1"/>
       <column name="value" value="Test Code Value 2.1"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode022"/>
       <column name="code_category_id" value="TestCodeCategory02"/>
       <column name="name" value="Test Code Name 2.2"/>
       <column name="value" value="Test Code Value 2.2"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode023"/>
       <column name="code_category_id" value="TestCodeCategory02"/>
       <column name="name" value="Test Code Name 2.3"/>
       <column name="value" value="Test Code Value 2.3"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="codes" tableName="code_categories">
@@ -694,28 +649,24 @@
       <column name="data">
         <![CDATA[<codes><code name="name1" value="value1"/></codes>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode031"/>
       <column name="code_category_id" value="TestCodeCategory03"/>
       <column name="name" value="Test Code Name 3.1"/>
       <column name="value" value="Test Code Value 3.1"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode032"/>
       <column name="code_category_id" value="TestCodeCategory03"/>
       <column name="name" value="Test Code Name 3.2"/>
       <column name="value" value="Test Code Value 3.2"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode033"/>
       <column name="code_category_id" value="TestCodeCategory03"/>
       <column name="name" value="Test Code Name 3.3"/>
       <column name="value" value="Test Code Value 3.3"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="codes" tableName="code_categories">
@@ -724,28 +675,24 @@
       <column name="data">
         <![CDATA[<codes><code name="name1" value="value1"/></codes>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode041"/>
       <column name="code_category_id" value="TestCodeCategory04"/>
       <column name="name" value="Test Code Name 4.1"/>
       <column name="value" value="Test Code Value 4.1"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode042"/>
       <column name="code_category_id" value="TestCodeCategory04"/>
       <column name="name" value="Test Code Name 4.2"/>
       <column name="value" value="Test Code Value 4.2"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode043"/>
       <column name="code_category_id" value="TestCodeCategory04"/>
       <column name="name" value="Test Code Name 4.3"/>
       <column name="value" value="Test Code Value 4.3"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="codes" tableName="code_categories">
@@ -754,28 +701,24 @@
       <column name="data">
         <![CDATA[<codes><code name="name1" value="value1"/></codes>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode051"/>
       <column name="code_category_id" value="TestCodeCategory05"/>
       <column name="name" value="Test Code Name 5.1"/>
       <column name="value" value="Test Code Value 5.1"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode052"/>
       <column name="code_category_id" value="TestCodeCategory05"/>
       <column name="name" value="Test Code Name 5.2"/>
       <column name="value" value="Test Code Value 5.2"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode053"/>
       <column name="code_category_id" value="TestCodeCategory05"/>
       <column name="name" value="Test Code Name 5.3"/>
       <column name="value" value="Test Code Value 5.3"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="codes" tableName="code_categories">
@@ -784,28 +727,24 @@
       <column name="data">
         <![CDATA[<codes><code name="name1" value="value1"/></codes>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode061"/>
       <column name="code_category_id" value="TestCodeCategory06"/>
       <column name="name" value="Test Code Name 6.1"/>
       <column name="value" value="Test Code Value 6.1"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode062"/>
       <column name="code_category_id" value="TestCodeCategory06"/>
       <column name="name" value="Test Code Name 6.2"/>
       <column name="value" value="Test Code Value 6.2"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode063"/>
       <column name="code_category_id" value="TestCodeCategory06"/>
       <column name="name" value="Test Code Name 6.3"/>
       <column name="value" value="Test Code Value 6.3"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="codes" tableName="code_categories">
@@ -814,28 +753,24 @@
       <column name="data">
         <![CDATA[<codes><code name="name1" value="value1"/></codes>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode071"/>
       <column name="code_category_id" value="TestCodeCategory07"/>
       <column name="name" value="Test Code Name 7.1"/>
       <column name="value" value="Test Code Value 7.1"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode072"/>
       <column name="code_category_id" value="TestCodeCategory07"/>
       <column name="name" value="Test Code Name 7.2"/>
       <column name="value" value="Test Code Value 7.2"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode073"/>
       <column name="code_category_id" value="TestCodeCategory07"/>
       <column name="name" value="Test Code Name 7.3"/>
       <column name="value" value="Test Code Value 7.3"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="codes" tableName="code_categories">
@@ -844,28 +779,24 @@
       <column name="data">
         <![CDATA[<codes><code name="name1" value="value1"/></codes>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode081"/>
       <column name="code_category_id" value="TestCodeCategory08"/>
       <column name="name" value="Test Code Name 8.1"/>
       <column name="value" value="Test Code Value 8.1"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode082"/>
       <column name="code_category_id" value="TestCodeCategory08"/>
       <column name="name" value="Test Code Name 8.2"/>
       <column name="value" value="Test Code Value 8.2"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode083"/>
       <column name="code_category_id" value="TestCodeCategory08"/>
       <column name="name" value="Test Code Name 8.3"/>
       <column name="value" value="Test Code Value 8.3"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="codes" tableName="code_categories">
@@ -874,28 +805,24 @@
       <column name="data">
         <![CDATA[<codes><code name="name1" value="value1"/></codes>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode091"/>
       <column name="code_category_id" value="TestCodeCategory09"/>
       <column name="name" value="Test Code Name 9.1"/>
       <column name="value" value="Test Code Value 9.1"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode092"/>
       <column name="code_category_id" value="TestCodeCategory09"/>
       <column name="name" value="Test Code Name 9.2"/>
       <column name="value" value="Test Code Value 9.2"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode093"/>
       <column name="code_category_id" value="TestCodeCategory09"/>
       <column name="name" value="Test Code Name 9.3"/>
       <column name="value" value="Test Code Value 9.3"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="codes" tableName="code_categories">
@@ -904,28 +831,24 @@
       <column name="data">
         <![CDATA[<codes><code name="name1" value="value1"/></codes>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode101"/>
       <column name="code_category_id" value="TestCodeCategory10"/>
       <column name="name" value="Test Code Name 10.1"/>
       <column name="value" value="Test Code Value 10.1"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode102"/>
       <column name="code_category_id" value="TestCodeCategory10"/>
       <column name="name" value="Test Code Name 10.2"/>
       <column name="value" value="Test Code Value 10.2"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode103"/>
       <column name="code_category_id" value="TestCodeCategory10"/>
       <column name="name" value="Test Code Name 10.3"/>
       <column name="value" value="Test Code Value 10.3"/>
-      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="codes" tableName="code_categories">
@@ -934,28 +857,24 @@
       <column name="data">
         <![CDATA[<codes><code name="name1" value="value1"/></codes>]]>
       </column>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode111"/>
       <column name="code_category_id" value="TestCodeCategory11"/>
       <column name="name" value="Test Code Name 11.1"/>
       <column name="value" value="Test Code Value 11.1"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode112"/>
       <column name="code_category_id" value="TestCodeCategory11"/>
       <column name="name" value="Test Code Name 11.2"/>
       <column name="value" value="Test Code Value 11.2"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="codes" tableName="codes">
       <column name="id" value="TestCode113"/>
       <column name="code_category_id" value="TestCodeCategory11"/>
       <column name="name" value="Test Code Name 11.3"/>
       <column name="value" value="Test Code Value 11.3"/>
-      <column name="created" value="${now}"/>
     </insert>
 
 
@@ -968,7 +887,6 @@
       <column name="key" value="TestKey"/>
       <column name="value" value="TestValue"/>
       <column name="description" value="TestDescription"/>
-      <column name="created" value="${now}"/>
     </insert>
 
 
@@ -994,7 +912,6 @@
       <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="type" value="person"/>
       <column name="name" value="Jack Hill"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="persons">
       <column name="id" value="54166574-6564-468a-b845-8a5c127a4345"/>
@@ -1024,21 +941,18 @@
       <column name="country_of_issue" value="ZA"/>
       <column name="date_of_issue" value="2007-08-04"/>
       <column name="number" value="7603079236083"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
       <column name="party_id" value="54166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="mobile_number"/>
       <column name="role" value="personal_mobile_number"/>
       <column name="value" value="+27835551234"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
       <column name="party_id" value="54166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="email_address"/>
       <column name="role" value="personal_email_address"/>
       <column name="value" value="jack@demo.com"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="physical_addresses">
       <column name="id" value="14166574-6564-468a-b845-8a5c127a4345"/>
@@ -1052,7 +966,6 @@
       <column name="country" value="ZA"/>
       <column name="postal_code" value="2170"/>
       <column name="purposes" value="billing,correspondence,delivery"/>
-      <column name="created" value="${now}"/>
     </insert>
 
 
@@ -1063,7 +976,6 @@
       <column name="tenant_id" value="204e5b8f-48e7-4354-bd15-753e6543b64d"/>
       <column name="type" value="person"/>
       <column name="name" value="Jill Hill"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="persons">
       <column name="id" value="64166574-6564-468a-b845-8a5c127a4345"/>
@@ -1093,21 +1005,18 @@
       <column name="country_of_issue" value="ZA"/>
       <column name="date_of_issue" value="2012-06-14"/>
       <column name="number" value="8505014800080"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
       <column name="party_id" value="64166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="mobile_number"/>
       <column name="role" value="personal_mobile_number"/>
       <column name="value" value="+27835554321"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
       <column name="party_id" value="64166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="email_address"/>
       <column name="role" value="personal_email_address"/>
       <column name="value" value="jill@demo.com"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="physical_addresses">
       <column name="id" value="24166574-6564-468a-b845-8a5c127a4345"/>
@@ -1121,7 +1030,6 @@
       <column name="country" value="ZA"/>
       <column name="postal_code" value="2170"/>
       <column name="purposes" value="billing,correspondence,delivery"/>
-      <column name="created" value="${now}"/>
     </insert>
 
 
@@ -1159,7 +1067,6 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="type" value="person"/>
       <column name="name" value="Amelia Cara May"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="persons">
       <column name="countries_of_citizenship" value="GB"/>
@@ -1195,21 +1102,18 @@
       <column name="type" value="weight"/>
       <column name="decimal_value" value="54.1"/>
       <column name="unit" value="metric_kilogram"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="consents">
       <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="marketing"/>
       <column name="effective_from" value="2014-08-23"/>
       <column name="effective_to" value="2022-04-08"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="phone_number"/>
       <column name="role" value="home_phone_number"/>
       <column name="value" value="0115551234"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
@@ -1217,7 +1121,6 @@
       <column name="role" value="personal_mobile_number"/>
       <column name="value" value="+27835551234"/>
       <column name="purposes" value="security"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
@@ -1225,7 +1128,6 @@
       <column name="role" value="personal_email_address"/>
       <column name="value" valueComputed="LOWER('Amelia.May@google.com')"/>
       <column name="purposes" value="general,marketing,security"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="educations">
       <column name="id" value="ded88b19-c15c-4a99-a46d-d7e609a83c11"/>
@@ -1238,7 +1140,6 @@
       <column name="field_of_study" value="electrical_engineering"/>
       <column name="first_year_attended" value="1995"/>
       <column name="last_year_attended" value="2002"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="employments">
       <column name="id" value="03cf0e55-7d9d-4a8b-aa49-ffb8cc741bcb"/>
@@ -1257,7 +1158,6 @@
       <column name="end_date" value="2011-05-27"/>
       <column name="type" value="full_time"/>
       <column name="occupation" value="professional_engineering"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="employments">
       <column name="id" value="cbca7398-1d90-4621-b32b-f5bafd6c6ef5"/>
@@ -1276,13 +1176,11 @@
       <column name="start_date" value="2011-07-04"/>
       <column name="type" value="full_time"/>
       <column name="occupation" value="manager"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="external_references">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="legacy_customer_code"/>
       <column name="value" value="ACM123456"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="identity_documents">
       <column name="id" value="da2dad31-8dbf-432e-ae69-d3d4d13ced92"/>
@@ -1292,7 +1190,6 @@
       <column name="date_of_issue" value="2009-11-02"/>
       <column name="number" value="7904014800086"/>
       <column name="date_provided" value="2020-08-17"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="identity_documents">
       <column name="id" value="8f5bbbf1-a29b-4a22-882c-b27bd2e3bd57"/>
@@ -1303,7 +1200,6 @@
       <column name="number" value="A1234567890"/>
       <column name="date_of_expiry" value="2025-04-02"/>
       <column name="date_provided" value="2020-08-17"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="language_proficiencies">
       <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
@@ -1312,14 +1208,12 @@
       <column name="speak_level" value="proficient"/>
       <column name="read_level" value="proficient"/>
       <column name="write_level" value="proficient"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="locks">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="kyc_unverified"/>
       <column name="effective_from" value="2020-09-10"/>
       <column name="effective_to" value="2021-01-01"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="next_of_kin">
       <column name="id" value="1847d54b-459c-4e72-999e-2c15233e4ac7"/>
@@ -1336,7 +1230,6 @@
       <column name="address_region" value="ZA-WC"/>
       <column name="address_country" value="ZA"/>
       <column name="address_postal_code" value="7764"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="physical_addresses">
       <column name="id" value="3e912f3b-cd64-4868-8b3b-b8c05232eb64"/>
@@ -1355,7 +1248,6 @@
       <column name="purposes" value="billing,correspondence,delivery"/>
       <column name="latitude" value="-26.132480441365484"/>
       <column name="longitude" value="27.944038870432856"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="physical_addresses">
       <column name="id" value="04927868-c5d1-4444-9104-2e0f9da97f72"/>
@@ -1369,13 +1261,11 @@
       <column name="country" value="ZA"/>
       <column name="postal_code" value="2030"/>
       <column name="purposes" value="billing,correspondence"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="preferences">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="correspondence_language"/>
       <column name="value" value="EN"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="residence_permits">
       <column name="id" value="4cdeea16-9813-4494-854f-2a53bf5a7562"/>
@@ -1385,34 +1275,29 @@
       <column name="date_of_issue" value="2003-02-15"/>
       <column name="number" value="X1234567890"/>
       <column name="date_of_expiry" value="2030-03-22"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="roles">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="individual_customer"/>
       <column name="effective_from" value="2020-08-17"/>
       <column name="purpose" value="kyc_requirements"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="segment_allocations">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="segment" value="upper_middle_income"/>
       <column name="effective_from" value="2020-08-17"/>
       <column name="effective_to" value="2021-03-16"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="segment_allocations">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="segment" value="high_income"/>
       <column name="effective_from" value="2021-03-16"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="sources_of_funds">
       <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="salary_wages"/>
       <column name="effective_from" value="2020-08-17"/>
       <column name="percentage" value="100"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="sources_of_funds">
       <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
@@ -1420,41 +1305,35 @@
       <column name="effective_from" value="2020-08-17"/>
       <column name="effective_to" value="2021-02-17"/>
       <column name="description" value="Stocks and shares"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="sources_of_wealth">
       <column name="person_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="savings"/>
       <column name="effective_from" value="2020-08-17"/>
       <column name="description" value="Savings"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="statuses">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="fraud_investigation"/>
       <column name="effective_from" value="2020-10-13"/>
       <column name="effective_to" value="2020-10-20"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="statuses">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="kyc_verified"/>
       <column name="effective_from" value="2021-01-01"/>
       <column name="effective_to" value="2022-01-01"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="tax_numbers">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="za_income_tax_number"/>
       <column name="country_of_issue" value="ZA"/>
       <column name="number" value="1234567890"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="tax_numbers">
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="type" value="uk_tax_number"/>
       <column name="country_of_issue" value="GB"/>
-      <column name="created" value="${now}"/>
     </insert>
 
 
@@ -1471,7 +1350,6 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="type" value="person"/>
       <column name="name" value="Erin Cara May"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="persons">
       <column name="date_of_birth" value="2019-03-28"/>
@@ -1484,7 +1362,6 @@
       <column name="surname" value="May"/>
       <column name="title" value="miss"/>
     </insert>
-
 
 
     <!--
@@ -1500,7 +1377,6 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="type" value="organization"/>
       <column name="name" value="May Cakes"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="organizations">
       <column name="id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
@@ -1510,7 +1386,6 @@
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
       <column name="type" value="operating_hours"/>
       <column name="string_value" value="09:00 - 17:00"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
@@ -1518,7 +1393,6 @@
       <column name="role" value="main_phone_number"/>
       <column name="value" value="0115558765"/>
       <column name="purposes" value=""/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanisms">
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
@@ -1526,13 +1400,11 @@
       <column name="role" value="main_email_address"/>
       <column name="value" value="info@maycakes.com"/>
       <column name="purposes" value="general"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="external_references">
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
       <column name="type" value="legacy_customer_code"/>
       <column name="value" value="MC123456"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="identity_documents">
       <column name="id" value="decadbc2-0712-40cf-8dc1-288b1ec70331"/>
@@ -1542,14 +1414,12 @@
       <column name="date_of_issue" value="2011-07-04"/>
       <column name="number" value="ZA123456XX"/>
       <column name="date_provided" value="2020-08-17"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="locks">
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
       <column name="type" value="kyc_unverified"/>
       <column name="effective_from" value="2020-10-10"/>
       <column name="effective_to" value="2021-02-01"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="physical_addresses">
       <column name="id" value="80aac230-b7b3-4a8d-a7fc-e473013fdab5"/>
@@ -1564,43 +1434,36 @@
       <column name="postal_code" value="2170"/>
       <column name="latitude" value="-26.129229541826838"/>
       <column name="longitude" value="27.946091455090585"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="roles">
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
       <column name="type" value="business_customer"/>
       <column name="effective_from" value="2020-08-17"/>
       <column name="purpose" value="kyc_requirements"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="segment_allocations">
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
       <column name="segment" value="small_sme"/>
       <column name="effective_from" value="2020-08-17"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="statuses">
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
       <column name="type" value="kyc_verified"/>
       <column name="effective_from" value="2021-01-01"/>
       <column name="effective_to" value="2022-01-01"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="tax_numbers">
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
       <column name="type" value="za_income_tax_number"/>
       <column name="country_of_issue" value="ZA"/>
       <column name="number" value="987654321"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="tax_numbers">
       <column name="party_id" value="0ca47707-1e7e-49d5-87e2-665a047a0980"/>
       <column name="type" value="za_vat_tax_number"/>
       <column name="country_of_issue" value="ZA"/>
       <column name="number" value="ZA123456"/>
-      <column name="created" value="${now}"/>
     </insert>
-
 
 
     <!--
@@ -1618,9 +1481,7 @@
       <column name="first_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="second_party_id" value="2a5ebf5c-623d-4bb6-bddd-d1ee871759fd"/>
       <column name="effective_from" value="2019-03-28"/>
-      <column name="created" value="${now}"/>
     </insert>
-
 
     <insert schemaName="party" tableName="associations">
       <column name="id" value="4b3fb77a-201b-48e1-b9da-00e94c15e742"/>
@@ -1630,15 +1491,12 @@
       <column name="second_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="effective_from" value="2011-07-22"/>
       <column name="effective_to" value="2050-01-10"/>
-      <column name="created" value="${now}"/>
     </insert>
     <insert schemaName="party" tableName="association_properties">
       <column name="association_id" value="4b3fb77a-201b-48e1-b9da-00e94c15e742"/>
       <column name="type" value="shareholding"/>
       <column name="decimal_value" value="100.00"/>
-      <column name="created" value="${now}"/>
     </insert>
-
 
     <insert schemaName="party" tableName="associations">
       <column name="id" value="9d962cf4-a8c9-47fe-a255-41eee9e29919"/>
@@ -1648,8 +1506,36 @@
       <column name="second_party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
       <column name="effective_from" value="2011-07-22"/>
       <column name="effective_to" value="2050-01-10"/>
-      <column name="created" value="${now}"/>
     </insert>
+
+
+    <!--
+    __  __    _    _   _ ____    _  _____ _____ ____
+    |  \/  |  / \  | \ | |  _ \  / \|_   _| ____/ ___|
+    | |\/| | / _ \ |  \| | | | |/ _ \ | | |  _| \___ \
+    | |  | |/ ___ \| |\  | |_| / ___ \| | | |___ ___) |
+    |_|  |_/_/   \_\_| \_|____/_/   \_\_| |_____|____/
+
+    -->
+    <insert schemaName="party" tableName="mandates">
+      <column name="id" value="3d8396c3-88cd-42f6-ba52-7390d1f535fa"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="type" value="general_power_of_attorney"/>
+      <column name="required_mandataries" value="any"/>
+      <column name="effective_from" value="2011-07-22"/>
+      <column name="effective_to" value="2050-01-10"/>
+    </insert>
+
+    <insert schemaName="party" tableName="mandataries">
+      <column name="mandate_id" value="3d8396c3-88cd-42f6-ba52-7390d1f535fa"/>
+      <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
+      <column name="type" value="mandatary"/>
+    </insert>
+
+
+
+
+
 
 
   </changeSet>

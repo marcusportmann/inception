@@ -18,7 +18,6 @@ package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -27,7 +26,6 @@ import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -36,8 +34,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -86,12 +82,6 @@ public class ResidencePermit implements Serializable {
   @Size(min = 2, max = 2)
   @Column(name = "country_of_issue", length = 2, nullable = false)
   private String countryOfIssue;
-
-  /** The date and time the residence permit was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The date of expiry for the residence permit. */
   @Schema(description = "The date of expiry for the residence permit")
@@ -147,12 +137,6 @@ public class ResidencePermit implements Serializable {
   @Size(min = 1, max = 30)
   @Column(name = "type", length = 30, nullable = false)
   private String type;
-
-  /** The date and time the residence permit was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>ResidencePermit</b>. */
   public ResidencePermit() {}
@@ -233,15 +217,6 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Returns the date and time the residence permit was created.
-   *
-   * @return the date and time the residence permit was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the date of expiry for the residence permit.
    *
    * @return the date of expiry for the residence permit
@@ -294,15 +269,6 @@ public class ResidencePermit implements Serializable {
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the residence permit was last updated.
-   *
-   * @return the date and time the residence permit was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -378,17 +344,5 @@ public class ResidencePermit implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

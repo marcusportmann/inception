@@ -29,7 +29,6 @@ import digital.inception.party.constraints.ValidPerson;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -1025,17 +1024,6 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the date and time the person was created.
-   *
-   * @return the date and time the person was created
-   */
-  @JsonIgnore
-  @XmlTransient
-  public LocalDateTime getCreated() {
-    return super.getCreated();
-  }
-
-  /**
    * Returns the date of birth for the person.
    *
    * @return the date of birth for the person
@@ -1834,17 +1822,6 @@ public class Person extends PartyBase implements Serializable {
   @Override
   public PartyType getType() {
     return super.getType();
-  }
-
-  /**
-   * Returns the date and time the person was last updated.
-   *
-   * @return the date and time the person was last updated
-   */
-  @JsonIgnore
-  @XmlTransient
-  public LocalDateTime getUpdated() {
-    return super.getUpdated();
   }
 
   /**

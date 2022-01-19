@@ -17,13 +17,11 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,11 +30,8 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -66,12 +61,6 @@ import javax.xml.bind.annotation.XmlType;
 public class LanguageProficiency implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date and time the language proficiency was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The ISO 639-1 alpha-2 code for the language. */
   @Schema(description = "The ISO 639-1 alpha-2 code for the language", required = true)
@@ -124,12 +113,6 @@ public class LanguageProficiency implements Serializable {
   @NotNull
   @Column(name = "speak_level", length = 15, nullable = false)
   private LanguageProficiencyLevel speakLevel;
-
-  /** The date and time the language proficiency was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** The write proficiency level for the language. */
   @Schema(
@@ -193,15 +176,6 @@ public class LanguageProficiency implements Serializable {
   }
 
   /**
-   * Returns the date and time the language proficiency was created.
-   *
-   * @return the date and time the language proficiency was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the ISO 639-1 alpha-2 code for the language.
    *
    * @return the ISO 639-1 alpha-2 code for the language
@@ -245,15 +219,6 @@ public class LanguageProficiency implements Serializable {
    */
   public LanguageProficiencyLevel getSpeakLevel() {
     return speakLevel;
-  }
-
-  /**
-   * Returns the date and time the language proficiency was last updated.
-   *
-   * @return the date and time the language proficiency was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -329,17 +294,5 @@ public class LanguageProficiency implements Serializable {
    */
   public void setWriteLevel(LanguageProficiencyLevel writeLevel) {
     this.writeLevel = writeLevel;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

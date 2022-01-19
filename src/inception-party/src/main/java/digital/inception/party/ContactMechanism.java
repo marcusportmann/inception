@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -34,8 +33,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -81,12 +78,6 @@ public class ContactMechanism implements Serializable {
       Set.of("mobile_number", "phone_number", "fax_number", "email_address", "social_media");
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date and time the contact mechanism was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The party the contact mechanism is associated with. */
   @Schema(hidden = true)
@@ -159,12 +150,6 @@ public class ContactMechanism implements Serializable {
   @Id
   @Column(name = "type", length = 30, nullable = false)
   private String type;
-
-  /** The date and time the contact mechanism was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** The value for the contact mechanism. */
   @Schema(description = "The value for the contact mechanism", required = true)
@@ -252,15 +237,6 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Returns the date and time the contact mechanism was created.
-   *
-   * @return the date and time the contact mechanism was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the party the contact mechanism is associated with.
    *
    * @return the party the contact mechanism is associated with
@@ -303,15 +279,6 @@ public class ContactMechanism implements Serializable {
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the contact mechanism was last updated.
-   *
-   * @return the date and time the contact mechanism was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -395,17 +362,5 @@ public class ContactMechanism implements Serializable {
    */
   public void setValue(String value) {
     this.value = value;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

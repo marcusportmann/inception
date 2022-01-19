@@ -186,16 +186,16 @@ public interface ICodesService {
   List<CodeCategorySummary> getCodeCategorySummaries() throws ServiceUnavailableException;
 
   /**
-   * Returns the date and time the code category was last updated.
+   * Returns the date and time the code category was last modified.
    *
    * @param codeCategoryId the ID for the code category
-   * @return the date and time the code category was last updated
+   * @return the date and time the code category was last modified
    * @throws InvalidArgumentException if an argument is invalid
    * @throws CodeCategoryNotFoundException if the code category could not be found
-   * @throws ServiceUnavailableException if the date and time the code category was last updated
+   * @throws ServiceUnavailableException if the date and time the code category was last modified
    *     could not be retrieved
    */
-  LocalDateTime getCodeCategoryUpdated(String codeCategoryId)
+  LocalDateTime getCodeCategoryLastModified(String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**

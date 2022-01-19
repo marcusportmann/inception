@@ -62,8 +62,7 @@ export class Groups {
   /**
    * Constructs a new Groups.
    *
-   * @param userDirectoryId The ID for the user directory the
-   *                        groups are associated with.
+   * @param userDirectoryId The ID for the user directory the groups are associated with.
    * @param groups          The groups.
    * @param total           The total number of groups.
    * @param filter          The optional filter that was applied to the groups.

@@ -579,6 +579,39 @@ public interface IPartyReferenceService {
   List<IdentityDocumentType> getIdentityDocumentTypes() throws ServiceUnavailableException;
 
   /**
+   * Retrieve the link type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the link type
+   *     reference data for
+   * @return the link type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the link type reference data could not be retrieved
+   */
+  List<LinkType> getLinkTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the link type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the ID for the tenant the link type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the link type
+   *     reference data for
+   * @return the link type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the link type reference data could not be retrieved
+   */
+  List<LinkType> getLinkTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the link type reference data for all locales.
+   *
+   * @return the link type reference data
+   * @throws ServiceUnavailableException if the link type reference data could not be retrieved
+   */
+  List<LinkType> getLinkTypes() throws ServiceUnavailableException;
+
+  /**
    * Retrieve the lock type category reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the lock type category
@@ -646,6 +679,39 @@ public interface IPartyReferenceService {
    * @throws ServiceUnavailableException if the lock type reference data could not be retrieved
    */
   List<LockType> getLockTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandatary type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary type
+   *     reference data for
+   * @return the mandatary type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the mandatary type reference data could not be retrieved
+   */
+  List<MandataryType> getMandataryTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandatary type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the ID for the tenant the mandatary type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary type
+   *     reference data for
+   * @return the mandatary type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the mandatary type reference data could not be retrieved
+   */
+  List<MandataryType> getMandataryTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the mandatary type reference data for all locales.
+   *
+   * @return the mandatary type reference data
+   * @throws ServiceUnavailableException if the mandatary type reference data could not be retrieved
+   */
+  List<MandataryType> getMandataryTypes() throws ServiceUnavailableException;
 
   /**
    * Retrieve the mandate property type with the specified code for the mandate type with the
@@ -1656,7 +1722,7 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
-   * Check whether the code is a valid code for an association type for the party type.
+   * Check whether the code is a valid code for an association type.
    *
    * @param tenantId the ID for the tenant
    * @param associationTypeCode the code for the association type
@@ -1873,6 +1939,17 @@ public interface IPartyReferenceService {
    * @throws ServiceUnavailableException if the lock type category check failed
    */
   boolean isValidLockTypeCategory(UUID tenantId, String lockTypeCategoryCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a mandate type.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandateTypeCode the code for the mandate type
+   * @return <b>true</b> if the code is a valid code for a mandate type or <b>false</b> otherwise
+   * @throws ServiceUnavailableException if the mandate type check failed
+   */
+  boolean isValidMandateType(UUID tenantId, String mandateTypeCode)
       throws ServiceUnavailableException;
 
   /**

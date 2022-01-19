@@ -16,19 +16,15 @@
 
 package digital.inception.reporting;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,7 +32,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -59,12 +54,6 @@ import javax.xml.bind.annotation.XmlType;
 public class ReportDefinition implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date and time the report definition was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The ID for the report definition. */
   @Schema(description = "The ID for the report definition", required = true)
@@ -93,12 +82,6 @@ public class ReportDefinition implements Serializable {
   @Size(min = 1, max = 10485760)
   @Column(name = "template", nullable = false)
   private byte[] template;
-
-  /** The date and time the report definition was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>ReportDefinition</b>. */
   public ReportDefinition() {}
@@ -142,15 +125,6 @@ public class ReportDefinition implements Serializable {
   }
 
   /**
-   * Returns the date and time the report definition was created.
-   *
-   * @return the date and time the report definition was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the ID for the report definition.
    *
    * @return the ID for the report definition
@@ -175,15 +149,6 @@ public class ReportDefinition implements Serializable {
    */
   public byte[] getTemplate() {
     return template;
-  }
-
-  /**
-   * Returns the date and time the report definition was last updated.
-   *
-   * @return the date and time the report definition was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -231,17 +196,5 @@ public class ReportDefinition implements Serializable {
   @Override
   public String toString() {
     return "ReportDefinition {id=\"" + getId() + "\", name=\"" + getName() + "\"}";
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

@@ -48,8 +48,8 @@ public class CodeCategoryData implements Serializable {
   /** The ID for the code category. */
   private String id;
 
-  /** The date and time the code category was last updated. */
-  private LocalDateTime lastUpdated;
+  /** The date and time the code category was last modified. */
+  private LocalDateTime lastModified;
 
   /** The name of the code category. */
   private String name;
@@ -65,23 +65,23 @@ public class CodeCategoryData implements Serializable {
     element.getChildText("Name").ifPresent(name -> this.name = name);
 
     element
-        .getChildText("LastUpdated")
+        .getChildText("LastModified")
         .ifPresent(
-            lastUpdatedValue -> {
-              if (lastUpdatedValue.contains("T")) {
+            lastModifiedValue -> {
+              if (lastModifiedValue.contains("T")) {
                 try {
-                  this.lastUpdated = ISO8601Util.toLocalDateTime(lastUpdatedValue);
+                  this.lastModified = ISO8601Util.toLocalDateTime(lastModifiedValue);
                 } catch (Throwable e) {
                   throw new RuntimeException(
-                      "Failed to parse the LastUpdated ISO8601 timestamp ("
-                          + lastUpdatedValue
+                      "Failed to parse the LastModified ISO8601 timestamp ("
+                          + lastModifiedValue
                           + ") for the code category data",
                       e);
                 }
               } else {
-                this.lastUpdated =
+                this.lastModified =
                     LocalDateTime.ofInstant(
-                        Instant.ofEpochSecond(Long.parseLong(lastUpdatedValue)),
+                        Instant.ofEpochSecond(Long.parseLong(lastModifiedValue)),
                         ZoneId.systemDefault());
               }
             });
@@ -110,7 +110,7 @@ public class CodeCategoryData implements Serializable {
   public CodeCategoryData(CodeCategory codeCategory, String codeData, List<Code> codes) {
     this.id = codeCategory.getId();
     this.name = codeCategory.getName();
-    this.lastUpdated = codeCategory.getUpdated();
+    this.lastModified = codeCategory.getLastModified();
     this.codeData = StringUtils.hasText(codeData) ? codeData : "";
     this.codes = new ArrayList<>();
 
@@ -147,12 +147,12 @@ public class CodeCategoryData implements Serializable {
   }
 
   /**
-   * Returns the date and time the code category was last updated.
+   * Returns the date and time the code category was last modified.
    *
-   * @return the date and time the code category was last updated
+   * @return the date and time the code category was last modified
    */
-  public LocalDateTime getLastUpdated() {
-    return lastUpdated;
+  public LocalDateTime getLastModified() {
+    return lastModified;
   }
 
   /**
@@ -177,8 +177,8 @@ public class CodeCategoryData implements Serializable {
     buffer.append("id=\"").append(getId()).append("\", ");
     buffer.append("name=\"").append(getName()).append("\", ");
     buffer
-        .append("lastUpdated=\"")
-        .append(ISO8601Util.fromLocalDateTime(getLastUpdated()))
+        .append("lastModified=\"")
+        .append(ISO8601Util.fromLocalDateTime(getLastModified()))
         .append("\", ");
     buffer
         .append("codeData=\"")
@@ -227,10 +227,10 @@ public class CodeCategoryData implements Serializable {
     codeCategoryElement.addContent(new Element("Name", StringUtils.hasText(name) ? name : ""));
     codeCategoryElement.addContent(
         new Element(
-            "LastUpdated",
-            (lastUpdated == null)
+            "LastModified",
+            (lastModified == null)
                 ? ISO8601Util.now()
-                : ISO8601Util.fromLocalDateTime(lastUpdated)));
+                : ISO8601Util.fromLocalDateTime(lastModified)));
 
     if (codeData != null) {
       codeCategoryElement.addContent(new Element("CodeData", codeData));

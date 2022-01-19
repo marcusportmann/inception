@@ -30,11 +30,7 @@
     <sql dbms="mssql" endDelimiter=";">
       CREATE SCHEMA party
     </sql>
-
-
-
-
-
+    
     <createTable schemaName="party" tableName="attribute_type_categories" remarks="Attribute Type Categories">
       <column name="code" type="nvarchar(30)" remarks="The code for the attribute type category">
         <constraints primaryKey="true" nullable="false"/>
@@ -1038,10 +1034,6 @@
       <column name="name" type="nvarchar(100)" remarks="The name for the party">
         <constraints nullable="false"/>
       </column>
-      <column name="created" type="timestamp" remarks="The date and time the party was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the party was last updated"/>
     </createTable>
     <createIndex indexName="parties_tenant_id_ix" schemaName="party" tableName="parties">
       <column name="tenant_id"/>
@@ -1116,10 +1108,6 @@
       <column name="integer_value" type="int" remarks="The integer value for the attribute"/>
       <column name="string_value" type="nvarchar(200)" remarks="The string value for the attribute"/>
       <column name="unit" type="nvarchar(30)" remarks="The code for the measurement unit for the attribute"/>
-      <column name="created" type="timestamp" remarks="The date and time the attribute was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the attribute was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="attributes_party_fk" baseTableSchemaName="party"
       baseTableName="attributes" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1137,10 +1125,6 @@
       </column>
       <column name="effective_from" type="date" remarks="The date that the consent is effective from"/>
       <column name="effective_to" type="date" remarks="The date that the consent is effective to"/>
-      <column name="created" type="timestamp" remarks="The date and time the consent was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the consent was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="consents_person_fk" baseTableSchemaName="party"
       baseTableName="consents" baseColumnNames="person_id" referencedTableSchemaName="party"
@@ -1163,10 +1147,6 @@
       <column name="value" type="nvarchar(200)" remarks="The value for the contact mechanism">
         <constraints nullable="false"/>
       </column>
-      <column name="created" type="timestamp" remarks="The date and time the contact mechanism was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the contact mechanism was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="contact_mechanisms_party_fk" baseTableSchemaName="party"
       baseTableName="contact_mechanisms" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1196,10 +1176,6 @@
       <column name="field_of_study" type="nvarchar(50)" remarks="The code for the field of study"/>
       <column name="first_year_attended" type="int" remarks="The first year attended"/>
       <column name="last_year_attended" type="int" remarks="The last year attended"/>
-      <column name="created" type="timestamp" remarks="The date and time the education was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the education was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="educations_person_fk" baseTableSchemaName="party"
       baseTableName="educations" baseColumnNames="person_id" referencedTableSchemaName="party"
@@ -1236,10 +1212,6 @@
       <column name="end_date" type="date" remarks="The end date for the employment"/>
       <column name="type" type="nvarchar(30)" remarks="The code for the employment type for the employment"/>
       <column name="occupation" type="nvarchar(30)" remarks="The code for the occupation for the employment"/>
-      <column name="created" type="timestamp" remarks="The date and time the employment was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the employment was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="employments_person_fk" baseTableSchemaName="party"
       baseTableName="employments" baseColumnNames="person_id" referencedTableSchemaName="party"
@@ -1258,10 +1230,6 @@
       <column name="value" type="nvarchar(100)" remarks="The value for the external reference">
         <constraints nullable="false"/>
       </column>
-      <column name="created" type="timestamp" remarks="The date and time the external reference was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the external reference was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="external_references_party_fk" baseTableSchemaName="party"
       baseTableName="external_references" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1291,10 +1259,6 @@
       </column>
       <column name="date_of_expiry" type="date" remarks="The date of expiry for the identity document"/>
       <column name="date_provided" type="date" remarks="The date the identity document was provided"/>
-      <column name="created" type="timestamp" remarks="The date and time the identity document was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the identity document was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="identity_documents_party_fk" baseTableSchemaName="party"
       baseTableName="identity_documents" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1322,16 +1286,32 @@
       <column name="write_level" type="nvarchar(15)" remarks="The write proficiency level for the language">
         <constraints nullable="false"/>
       </column>
-      <column name="created" type="timestamp" remarks="The date and time the language proficiency was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the language proficiency was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="language_proficiencies_person_fk" baseTableSchemaName="party"
       baseTableName="language_proficiencies" baseColumnNames="person_id" referencedTableSchemaName="party"
       referencedTableName="persons" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="language_proficiencies_person_id_ix" schemaName="party" tableName="language_proficiencies">
       <column name="person_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="link_types" remarks="Link Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the link type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the link type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the link type is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the link type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the link type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the link type">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex indexName="link_types_locale_id_ix" schemaName="party" tableName="link_types">
+      <column name="locale_id"/>
     </createIndex>
 
     <createTable schemaName="party" tableName="locks" remarks="Locks">
@@ -1343,10 +1323,6 @@
       </column>
       <column name="effective_from" type="date" remarks="The date that the lock is effective from"/>
       <column name="effective_to" type="date" remarks="The date that the lock is effective to"/>
-      <column name="created" type="timestamp" remarks="The date and time the lock was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the lock was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="locks_party_fk" baseTableSchemaName="party"
       baseTableName="locks" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1383,10 +1359,6 @@
       <column name="address_region" type="nvarchar(6)" remarks="The ISO 3166-2 subdivision code for the next of kin address region"/>
       <column name="address_country" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the next of kin address country"/>
       <column name="address_postal_code" type="nvarchar(30)" remarks="The next of kin address postal code"/>
-      <column name="created" type="timestamp" remarks="The date and time the next of kin was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the next of kin was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="next_of_kin_person_fk" baseTableSchemaName="party"
       baseTableName="next_of_kin" baseColumnNames="person_id" referencedTableSchemaName="party"
@@ -1436,10 +1408,6 @@
       <column name="latitude" type="nvarchar(50)" remarks="The GPS latitude for the physical address"/>
       <column name="longitude" type="nvarchar(50)" remarks="The GPS longitude for the physical address"/>
       <column name="purposes" type="nvarchar(310)" remarks="The comma-delimited codes for the physical address purposes"/>
-      <column name="created" type="timestamp" remarks="The date and time the physical address was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the physical address was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="physical_addresses_party_fk" baseTableSchemaName="party"
       baseTableName="physical_addresses" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1458,10 +1426,6 @@
       <column name="value" type="nvarchar(200)" remarks="The value for the preference">
         <constraints nullable="false"/>
       </column>
-      <column name="created" type="timestamp" remarks="The date and time the preference was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the preference was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="preferences_party_fk" baseTableSchemaName="party"
       baseTableName="preferences" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1488,10 +1452,6 @@
         <constraints nullable="false"/>
       </column>
       <column name="date_of_expiry" type="date" remarks="The date of expiry for the residence permit"/>
-      <column name="created" type="timestamp" remarks="The date and time the residence permit was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the residence permit was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="residence_permits_person_fk" baseTableSchemaName="party"
       baseTableName="residence_permits" baseColumnNames="person_id" referencedTableSchemaName="party"
@@ -1510,10 +1470,6 @@
       <column name="purpose" type="nvarchar(30)" remarks="The code for the role purpose"/>
       <column name="effective_from" type="date" remarks="The date that the role is effective from"/>
       <column name="effective_to" type="date" remarks="The date that the role is effective to"/>
-      <column name="created" type="timestamp" remarks="The date and time the role was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the role was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="roles_party_fk" baseTableSchemaName="party"
       baseTableName="roles" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1531,10 +1487,6 @@
       </column>
       <column name="effective_from" type="date" remarks="The date that the segment allocation is effective from"/>
       <column name="effective_to" type="date" remarks="The date that the segment allocation is effective to"/>
-      <column name="created" type="timestamp" remarks="The date and time the segment allocation was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the segment allocation was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="segment_allocations_party_fk" baseTableSchemaName="party"
       baseTableName="segment_allocations" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1585,10 +1537,6 @@
       <column name="effective_to" type="date" remarks="The date that the source of funds is effective to"/>
       <column name="percentage" type="int" remarks="The percentage of the total of all sources of funds attributed to the source of funds"/>
       <column name="description" type="nvarchar(100)" remarks="The description for the source of funds"/>
-      <column name="created" type="timestamp" remarks="The date and time the source of funds was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the source of funds was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="sources_of_funds_person_fk" baseTableSchemaName="party"
       baseTableName="sources_of_funds" baseColumnNames="person_id" referencedTableSchemaName="party"
@@ -1607,10 +1555,6 @@
       <column name="effective_from" type="date" remarks="The date that the source of wealth is effective from"/>
       <column name="effective_to" type="date" remarks="The date that the source of wealth is effective to"/>
       <column name="description" type="nvarchar(100)" remarks="The description for the source of wealth"/>
-      <column name="created" type="timestamp" remarks="The date and time the source of wealth was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the source of wealth was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="sources_of_wealth_person_fk" baseTableSchemaName="party"
       baseTableName="sources_of_wealth" baseColumnNames="person_id" referencedTableSchemaName="party"
@@ -1628,10 +1572,6 @@
       </column>
       <column name="effective_from" type="date" remarks="The date that the status is effective from"/>
       <column name="effective_to" type="date" remarks="The date that the status is effective to"/>
-      <column name="created" type="timestamp" remarks="The date and time the status was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the status was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="statuses_party_fk" baseTableSchemaName="party"
       baseTableName="statuses" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1651,10 +1591,6 @@
         <constraints nullable="false"/>
       </column>
       <column name="number" type="nvarchar(30)" remarks="The tax number"/>
-      <column name="created" type="timestamp" remarks="The date and time the tax number was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the tax number was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="tax_numbers_party_fk" baseTableSchemaName="party"
       baseTableName="tax_numbers" baseColumnNames="party_id" referencedTableSchemaName="party"
@@ -1752,10 +1688,6 @@
       </column>
       <column name="effective_from" type="date" remarks="The date that the association is effective from"/>
       <column name="effective_to" type="date" remarks="The date that the association is effective to"/>
-      <column name="created" type="timestamp" remarks="The date and time the association was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the association was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="associations_first_party_fk" baseTableSchemaName="party"
       baseTableName="associations" baseColumnNames="first_party_id" referencedTableSchemaName="party"
@@ -1789,10 +1721,6 @@
       <column name="double_value" type="double" remarks="The double value for the association property"/>
       <column name="integer_value" type="int" remarks="The integer value for the association property"/>
       <column name="string_value" type="nvarchar(200)" remarks="The string value for the association property"/>
-      <column name="created" type="timestamp" remarks="The date and time the association property was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the association property was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="association_properties_association_fk" baseTableSchemaName="party"
       baseTableName="association_properties" baseColumnNames="association_id" referencedTableSchemaName="party"
@@ -1854,6 +1782,35 @@
       <column name="locale_id"/>
     </createIndex>
 
+    <createTable schemaName="party" tableName="mandatary_types" remarks="Mandatary Types">
+      <column name="mandate_type" type="nvarchar(30)" remarks="The code for the mandate type the mandatary type is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="code" type="nvarchar(30)" remarks="The code for the mandatary type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the mandatary type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the mandatary type is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the mandatary type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the mandatary type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the mandatary type">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="mandatary_types_mandate_type_fk" baseTableSchemaName="party"
+      baseTableName="mandatary_types" baseColumnNames="mandate_type,locale_id" referencedTableSchemaName="party"
+      referencedTableName="mandate_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
+    <createIndex indexName="mandatary_types_mandate_type_ix" schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type"/>
+    </createIndex>
+    <createIndex indexName="mandatary_types_locale_id_ix" schemaName="party" tableName="mandatary_types">
+      <column name="locale_id"/>
+    </createIndex>
+
     <createTable schemaName="party" tableName="mandates" remarks="Mandates">
       <column name="id" type="uuid" remarks="The ID for the mandate">
         <constraints primaryKey="true" nullable="false"/>
@@ -1869,10 +1826,6 @@
       <column name="required_mandataries" type="nvarchar(30)" remarks="The number of mandataries required to execute the mandate">
         <constraints nullable="false"/>
       </column>
-      <column name="created" type="timestamp" remarks="The date and time the mandate was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the mandate was last updated"/>
     </createTable>
     <createIndex indexName="mandates_tenant_id_ix" schemaName="party" tableName="mandates">
       <column name="tenant_id"/>
@@ -1894,10 +1847,6 @@
       <column name="double_value" type="double" remarks="The double value for the mandate property"/>
       <column name="integer_value" type="int" remarks="The integer value for the mandate property"/>
       <column name="string_value" type="nvarchar(200)" remarks="The string value for the mandate property"/>
-      <column name="created" type="timestamp" remarks="The date and time the mandate property was created">
-        <constraints nullable="false"/>
-      </column>
-      <column name="updated" type="timestamp" remarks="The date and time the mandate property was last updated"/>
     </createTable>
     <addForeignKeyConstraint constraintName="mandate_properties_mandate_fk" baseTableSchemaName="party"
       baseTableName="mandate_properties" baseColumnNames="mandate_id" referencedTableSchemaName="party"
@@ -1906,7 +1855,44 @@
       <column name="mandate_id"/>
     </createIndex>
 
+    <createTable schemaName="party" tableName="mandataries" remarks="Mandataries">
+      <column name="mandate_id" type="uuid" remarks="The ID for the mandate the mandatary is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="party_id" type="uuid" remarks="The ID for the party who is the recipient of the mandate">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the mandatary type">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="mandataries_mandate_fk" baseTableSchemaName="party"
+      baseTableName="mandataries" baseColumnNames="mandate_id" referencedTableSchemaName="party"
+      referencedTableName="mandates" referencedColumnNames="id" onDelete="CASCADE"/>
+    <addForeignKeyConstraint constraintName="mandataries_party_fk" baseTableSchemaName="party"
+      baseTableName="mandataries" baseColumnNames="party_id" referencedTableSchemaName="party"
+      referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="mandataries_mandate_id_ix" schemaName="party" tableName="mandataries">
+      <column name="mandate_id"/>
+    </createIndex>
 
+    <createTable schemaName="party" tableName="mandate_links" remarks="Mandate Links">
+      <column name="mandate_id" type="uuid" remarks="The ID for the mandate the mandate link is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the link type">
+        <constraints primaryKey="true"  nullable="false"/>
+      </column>
+      <column name="target" type="nvarchar(200)" remarks="The ID for the target for the mandate link">
+        <constraints primaryKey="true"  nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="mandate_links_mandate_fk" baseTableSchemaName="party"
+      baseTableName="mandate_links" baseColumnNames="mandate_id" referencedTableSchemaName="party"
+      referencedTableName="mandates" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="mandate_links_mandate_id_ix" schemaName="party" tableName="mandate_links">
+      <column name="mandate_id"/>
+    </createIndex>
 
   </changeSet>
 </databaseChangeLog>

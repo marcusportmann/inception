@@ -25,7 +25,6 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.party.constraints.ValidCountryCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -36,8 +35,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -223,12 +220,6 @@ public class PhysicalAddress implements Serializable {
   @ValidCountryCode
   @Column(name = "country", length = 2)
   private String country;
-
-  /** The date and time the physical address was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The farm description for the physical address. */
   @Schema(description = "The farm description for the physical address")
@@ -486,12 +477,6 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** The date and time the physical address was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
-
   /** Constructs a new <b>PhysicalAddress</b>. */
   public PhysicalAddress() {}
 
@@ -624,15 +609,6 @@ public class PhysicalAddress implements Serializable {
    */
   public String getCountry() {
     return country;
-  }
-
-  /**
-   * Returns the date and time the physical address was created.
-   *
-   * @return the date and time the physical address was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
   }
 
   /**
@@ -831,15 +807,6 @@ public class PhysicalAddress implements Serializable {
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the physical address was last updated.
-   *
-   * @return the date and time the physical address was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -1107,17 +1074,5 @@ public class PhysicalAddress implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

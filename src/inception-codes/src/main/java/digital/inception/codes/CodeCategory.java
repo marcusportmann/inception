@@ -59,12 +59,6 @@ public class CodeCategory implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the code category was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
-
   /** The optional code data for the code category. */
   @Schema(description = "The optional code data for the code category")
   @JsonProperty
@@ -91,11 +85,11 @@ public class CodeCategory implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** The date and time the code category was last updated. */
+  /** The date and time the code category was last modified. */
   @JsonIgnore
   @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
+  @Column(name = "last_modified", insertable = false)
+  private LocalDateTime lastModified;
 
   /** Constructs a new <b>CodeCategory</b>. */
   public CodeCategory() {}
@@ -150,12 +144,12 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Returns the date and time the code category was created.
+   * Returns the date and time the code category was last modified.
    *
-   * @return the date and time the code category was created
+   * @return the date and time the code category was last modified
    */
-  public LocalDateTime getCreated() {
-    return created;
+  public LocalDateTime getLastModified() {
+    return lastModified;
   }
 
   /**
@@ -183,15 +177,6 @@ public class CodeCategory implements Serializable {
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Returns the date and time the code category was last updated.
-   *
-   * @return the date and time the code category was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -234,12 +219,12 @@ public class CodeCategory implements Serializable {
   /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
-    created = LocalDateTime.now();
+    lastModified = LocalDateTime.now();
   }
 
   /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
-    updated = LocalDateTime.now();
+    lastModified = LocalDateTime.now();
   }
 }

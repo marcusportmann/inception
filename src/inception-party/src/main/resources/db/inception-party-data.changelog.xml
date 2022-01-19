@@ -1714,6 +1714,13 @@
       <column name="party_types" value="person"/>
     </insert>
 
+    <insert schemaName="party" tableName="link_types">
+      <column name="code" value="party_link"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Party Link"/>
+      <column name="description" value="Party Link"/>
+    </insert>
+
     <insert schemaName="party" tableName="lock_type_categories">
       <column name="code" value="fraud"/>
       <column name="locale_id" value="en-US"/>
@@ -2618,14 +2625,12 @@
       <column name="description" value="Unknown"/>
     </insert>
 
-
     <insert schemaName="party" tableName="role_purposes">
       <column name="code" value="kyc_requirements"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="KYC Requirements"/>
       <column name="description" value="KYC Requirements"/>
     </insert>
-
 
     <insert schemaName="party" tableName="role_types">
       <column name="code" value="affiliate"/>
@@ -3799,7 +3804,92 @@
       <column name="description" value="Employer-Employee"/>
     </insert>
 
-
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="general_power_of_attorney"/>
+      <column name="code" value="mandatary"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Mandatary"/>
+      <column name="description" value="Mandatary"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="special_power_of_attorney"/>
+      <column name="code" value="mandatary"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Mandatary"/>
+      <column name="description" value="Mandatary"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="signature_authorization"/>
+      <column name="code" value="authorized_signatory"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Authorized Signatory"/>
+      <column name="description" value="Authorized Signatory"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="trading_authorization"/>
+      <column name="code" value="authorized_trading_agent"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Authorized Trading Agent"/>
+      <column name="description" value="Authorized Trading Agent"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="court_authority_executor"/>
+      <column name="code" value="executor"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Executor"/>
+      <column name="description" value="Executor"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="court_authority_curator"/>
+      <column name="code" value="curator"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Curator"/>
+      <column name="description" value="Curator"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="court_authority_trustee"/>
+      <column name="code" value="trustee"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Trustee"/>
+      <column name="description" value="Trustee"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="court_authority_liquidator"/>
+      <column name="code" value="liquidator"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Liquidator"/>
+      <column name="description" value="Liquidator"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="court_authority_judicial"/>
+      <column name="code" value="judicial_manager"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Judicial Manager"/>
+      <column name="description" value="Judicial Manager"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="financial_advisor"/>
+      <column name="code" value="financial_advisor"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Financial Advisor"/>
+      <column name="description" value="Financial Advisor"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="doctor_patient"/>
+      <column name="code" value="doctor"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Doctor"/>
+      <column name="description" value="Doctor"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="employer_employee"/>
+      <column name="code" value="employer"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="name" value="Employer"/>
+      <column name="description" value="Employer"/>
+    </insert>
+    
+    
     
     <!--                   _____   _      -->
     <!--    ___ _ __      |__  /  / \     -->
@@ -5506,6 +5596,13 @@
       <column name="party_types" value="person"/>
     </insert>
 
+    <insert schemaName="party" tableName="link_types">
+      <column name="code" value="party_link"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Party Link"/>
+      <column name="description" value="Party Link"/>
+    </insert>
+
     <insert schemaName="party" tableName="lock_type_categories">
       <column name="code" value="fraud"/>
       <column name="locale_id" value="en-ZA"/>
@@ -7589,34 +7686,90 @@
       <column name="description" value="Employer-Employee"/>
     </insert>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="general_power_of_attorney"/>
+      <column name="code" value="mandatary"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Mandatary"/>
+      <column name="description" value="Mandatary"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="special_power_of_attorney"/>
+      <column name="code" value="mandatary"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Mandatary"/>
+      <column name="description" value="Mandatary"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="signature_authorization"/>
+      <column name="code" value="authorized_signatory"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Authorized Signatory"/>
+      <column name="description" value="Authorized Signatory"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="trading_authorization"/>
+      <column name="code" value="authorized_trading_agent"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Authorized Trading Agent"/>
+      <column name="description" value="Authorized Trading Agent"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="court_authority_executor"/>
+      <column name="code" value="executor"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Executor"/>
+      <column name="description" value="Executor"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="court_authority_curator"/>
+      <column name="code" value="curator"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Curator"/>
+      <column name="description" value="Curator"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="court_authority_trustee"/>
+      <column name="code" value="trustee"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Trustee"/>
+      <column name="description" value="Trustee"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="court_authority_liquidator"/>
+      <column name="code" value="liquidator"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Liquidator"/>
+      <column name="description" value="Liquidator"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="court_authority_judicial"/>
+      <column name="code" value="judicial_manager"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Judicial Manager"/>
+      <column name="description" value="Judicial Manager"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="financial_advisor"/>
+      <column name="code" value="financial_advisor"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Financial Advisor"/>
+      <column name="description" value="Financial Advisor"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="doctor_patient"/>
+      <column name="code" value="doctor"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Doctor"/>
+      <column name="description" value="Doctor"/>
+    </insert>
+    <insert schemaName="party" tableName="mandatary_types">
+      <column name="mandate_type" value="employer_employee"/>
+      <column name="code" value="employer"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="name" value="Employer"/>
+      <column name="description" value="Employer"/>
+    </insert>
 
 
 

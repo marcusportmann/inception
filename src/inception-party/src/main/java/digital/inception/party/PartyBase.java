@@ -17,7 +17,6 @@
 package digital.inception.party;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -25,8 +24,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -63,10 +60,6 @@ public class PartyBase implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the party was created. */
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
-
   /** The ID for the party. */
   @NotNull
   @Id
@@ -91,10 +84,6 @@ public class PartyBase implements Serializable {
   @NotNull
   @Column(name = "type", length = 30, nullable = false)
   private PartyType type;
-
-  /** The date and time the party was last updated. */
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>PartyBase</b>. */
   protected PartyBase() {}
@@ -162,16 +151,6 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Returns the date and time the party was created.
-   *
-   * @return the date and time the party was created
-   */
-  @XmlTransient
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the ID for the party.
    *
    * @return the ID for the party
@@ -209,16 +188,6 @@ public class PartyBase implements Serializable {
   @XmlTransient
   public PartyType getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the party was last updated.
-   *
-   * @return the date and time the party was last updated
-   */
-  @XmlTransient
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -265,17 +234,5 @@ public class PartyBase implements Serializable {
    */
   public void setType(PartyType partyType) {
     this.type = partyType;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

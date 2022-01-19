@@ -439,7 +439,7 @@ public class CodesService implements ICodesService {
   }
 
   @Override
-  public LocalDateTime getCodeCategoryUpdated(String codeCategoryId)
+  public LocalDateTime getCodeCategoryLastModified(String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
@@ -447,7 +447,7 @@ public class CodesService implements ICodesService {
 
     try {
       Optional<LocalDateTime> updatedOptional =
-          codeCategoryRepository.getUpdatedById(codeCategoryId);
+          codeCategoryRepository.getLastModifiedById(codeCategoryId);
 
       if (updatedOptional.isPresent()) {
         return updatedOptional.get();
@@ -456,7 +456,7 @@ public class CodesService implements ICodesService {
       // Check if one of the registered code providers supports the code category
       for (ICodeProvider codeProvider : codeProviders) {
         if (codeProvider.codeCategoryExists(codeCategoryId)) {
-          return codeProvider.getCodeCategoryLastUpdated(codeCategoryId);
+          return codeProvider.getCodeCategoryLastModified(codeCategoryId);
         }
       }
 
@@ -673,7 +673,7 @@ public class CodesService implements ICodesService {
         throw new CodeCategoryNotFoundException(codeCategoryId);
       }
 
-      codeCategoryRepository.setDataAndUpdatedById(codeCategoryId, data, LocalDateTime.now());
+      codeCategoryRepository.setDataAndLastModifiedById(codeCategoryId, data, LocalDateTime.now());
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {

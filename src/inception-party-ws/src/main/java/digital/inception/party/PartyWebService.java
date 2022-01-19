@@ -74,6 +74,25 @@ public class PartyWebService {
   }
 
   /**
+   * Create the new mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandate the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateMandateException if the mandate already exists
+   * @throws PartyNotFoundException if one or more parties for the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be created
+   */
+  @WebMethod(operationName = "CreateMandate")
+  public void createMandate(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "Mandate") @XmlElement(required = true) Mandate mandate)
+      throws InvalidArgumentException, DuplicateMandateException, PartyNotFoundException,
+          ServiceUnavailableException {
+    partyService.createMandate(tenantId, mandate);
+  }
+
+  /**
    * Create the new organization.
    *
    * @param tenantId the ID for the tenant
@@ -122,6 +141,23 @@ public class PartyWebService {
       @WebParam(name = "AssociationId") @XmlElement(required = true) UUID associationId)
       throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
     partyService.deleteAssociation(tenantId, associationId);
+  }
+
+  /**
+   * Delete the mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandateId the ID for the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MandateNotFoundException if the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be deleted
+   */
+  @WebMethod(operationName = "DeleteMandate")
+  public void deleteMandate(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "MandateId") @XmlElement(required = true) UUID mandateId)
+      throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException {
+    partyService.deleteMandate(tenantId, mandateId);
   }
 
   /**
@@ -202,13 +238,13 @@ public class PartyWebService {
    * @param sortDirection the optional sort direction to apply to the associations
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
-   * @return the associations
+   * @return the associations for the party
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PartyNotFoundException if the party could not be found
    * @throws ServiceUnavailableException if the associations could not be retrieved
    */
   @WebMethod(operationName = "GetAssociationsForParty")
-  public Associations getAssociationsForParty(
+  public AssociationsForParty getAssociationsForParty(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "PartyId") @XmlElement(required = true) UUID partyId,
       @WebParam(name = "SortBy") @XmlElement AssociationSortBy sortBy,
@@ -217,6 +253,51 @@ public class PartyWebService {
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
     return partyService.getAssociationsForParty(
+        tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
+   * Retrieve the mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandateId the ID for the mandate
+   * @return the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MandateNotFoundException if the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be retrieved
+   */
+  @WebMethod(operationName = "GetMandate")
+  public Mandate getMandate(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "MandateId") @XmlElement(required = true) UUID mandateId)
+      throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException {
+    return partyService.getMandate(tenantId, mandateId);
+  }
+
+  /**
+   * Retrieve the mandates for the party.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
+   * @param sortBy the optional method used to sort the mandates e.g. by type
+   * @param sortDirection the optional sort direction to apply to the mandates
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the mandates for the party
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the mandates could not be retrieved
+   */
+  @WebMethod(operationName = "GetMandatesForParty")
+  public MandatesForParty getMandatesForParty(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "PartyId") @XmlElement(required = true) UUID partyId,
+      @WebParam(name = "SortBy") @XmlElement MandateSortBy sortBy,
+      @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    return partyService.getMandatesForParty(
         tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
   }
 
@@ -398,6 +479,25 @@ public class PartyWebService {
       throws InvalidArgumentException, AssociationNotFoundException, PartyNotFoundException,
           ServiceUnavailableException {
     partyService.updateAssociation(tenantId, association);
+  }
+
+  /**
+   * Update the mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandate the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MandateNotFoundException if the mandate could not be found
+   * @throws PartyNotFoundException if one or more parties for the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be updated
+   */
+  @WebMethod(operationName = "UpdateMandate")
+  public void updateMandate(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "Mandate") @XmlElement(required = true) Mandate mandate)
+      throws InvalidArgumentException, MandateNotFoundException, PartyNotFoundException,
+          ServiceUnavailableException {
+    partyService.updateMandate(tenantId, mandate);
   }
 
   /**

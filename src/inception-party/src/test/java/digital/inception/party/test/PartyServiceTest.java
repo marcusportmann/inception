@@ -30,7 +30,7 @@ import digital.inception.core.sorting.SortDirection;
 import digital.inception.party.Association;
 import digital.inception.party.AssociationProperty;
 import digital.inception.party.AssociationSortBy;
-import digital.inception.party.Associations;
+import digital.inception.party.AssociationsForParty;
 import digital.inception.party.Attribute;
 import digital.inception.party.Consent;
 import digital.inception.party.ContactMechanism;
@@ -45,6 +45,11 @@ import digital.inception.party.IdentityDocument;
 import digital.inception.party.LanguageProficiency;
 import digital.inception.party.LanguageProficiencyLevel;
 import digital.inception.party.Lock;
+import digital.inception.party.Mandatary;
+import digital.inception.party.Mandate;
+import digital.inception.party.MandateProperty;
+import digital.inception.party.MandateSortBy;
+import digital.inception.party.MandatesForParty;
 import digital.inception.party.MeasurementSystem;
 import digital.inception.party.MeasurementUnit;
 import digital.inception.party.NextOfKin;
@@ -63,6 +68,7 @@ import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressRole;
 import digital.inception.party.PhysicalAddressType;
 import digital.inception.party.Preference;
+import digital.inception.party.RequiredMandataries;
 import digital.inception.party.ResidencePermit;
 import digital.inception.party.Role;
 import digital.inception.party.SegmentAllocation;
@@ -186,10 +192,11 @@ public class PartyServiceTest {
       person.setInitials("" + generatedPerson.getFirstName().charAt(0));
     }
     person.setLanguage("EN");
-    person.setMaidenName(
-        fairy.person(PersonProperties.female(), PersonProperties.minAge(21)).getLastName());
 
     if (isMarried) {
+      person.setMaidenName(
+          fairy.person(PersonProperties.female(), PersonProperties.minAge(21)).getLastName());
+
       person.setMaritalStatus("married");
       person.setMarriageType("anc_with_accrual");
       person.setMaritalStatusDate(LocalDate.of(2015, 10, 10));
@@ -472,7 +479,7 @@ public class PartyServiceTest {
 
     partyService.createAssociation(IPartyService.DEFAULT_TENANT_ID, association);
 
-    Associations associations =
+    AssociationsForParty associationsForParty =
         partyService.getAssociationsForParty(
             IPartyService.DEFAULT_TENANT_ID,
             firstPerson.getId(),
@@ -483,10 +490,10 @@ public class PartyServiceTest {
 
     assertEquals(
         1,
-        associations.getAssociations().size(),
+        associationsForParty.getAssociations().size(),
         "The incorrect number of associations was retrieved");
 
-    compareAssociations(association, associations.getAssociations().get(0));
+    compareAssociations(association, associationsForParty.getAssociations().get(0));
 
     Association retrievedAssociation =
         partyService.getAssociation(IPartyService.DEFAULT_TENANT_ID, association.getId());
@@ -1148,8 +1155,7 @@ public class PartyServiceTest {
             IPartyService.DEFAULT_TENANT_ID,
             "test_association_type",
             firstPerson.getId(),
-            secondPerson.getId(),
-            LocalDate.now());
+            secondPerson.getId());
 
     // Test null properties
     association.addProperty(new AssociationProperty("test_boolean_property"));
@@ -1190,9 +1196,69 @@ public class PartyServiceTest {
   public void invalidAttributeTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
-    // person.addAttribute(new Attribute("given_name"));
+    // Test null attributes
+    person.addAttribute(new Attribute("test_boolean_attribute"));
+    person.addAttribute(new Attribute("test_date_attribute"));
+    person.addAttribute(new Attribute("test_decimal_attribute"));
+    person.addAttribute(new Attribute("test_double_attribute"));
+    person.addAttribute(new Attribute("test_integer_attribute"));
+    person.addAttribute(new Attribute("test_string_attribute"));
 
-    // person.getAttributes().clear();
+    Set<ConstraintViolation<Person>> personConstraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        6,
+        personConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the person");
+
+    // Test invalid attributes
+    person.getAttributes().clear();
+
+    person.addAttribute(new Attribute("invalid_attribute_name", "Invalid Attribute Value"));
+
+    person.addAttribute(new Attribute("test_string_attribute", "Invalid String Value!"));
+
+    personConstraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        2,
+        personConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the person");
+
+    Organization organization = getTestBasicOrganizationDetails();
+
+    // Test null attributes
+    organization.addAttribute(new Attribute("test_boolean_attribute"));
+    organization.addAttribute(new Attribute("test_date_attribute"));
+    organization.addAttribute(new Attribute("test_decimal_attribute"));
+    organization.addAttribute(new Attribute("test_double_attribute"));
+    organization.addAttribute(new Attribute("test_integer_attribute"));
+    organization.addAttribute(new Attribute("test_string_attribute"));
+
+    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
+        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    assertEquals(
+        6,
+        organizationConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the organization");
+
+    // Test invalid attributes
+    organization.getAttributes().clear();
+
+    organization.addAttribute(new Attribute("invalid_attribute_name", "Invalid Attribute Value"));
+
+    organization.addAttribute(new Attribute("test_string_attribute", "Invalid String Value!"));
+
+    organizationConstraintViolations =
+        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    assertEquals(
+        2,
+        organizationConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the organization");
   }
 
   /** Test the invalid building address verification functionality. */
@@ -1514,6 +1580,43 @@ public class PartyServiceTest {
         5,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the person with an invalid language proficiency");
+  }
+
+  /** Test the invalid mandate property functionality. */
+  @Test
+  public void invalidMandatePropertyTest() throws Exception {
+    Mandate mandate =
+        new Mandate(IPartyService.DEFAULT_TENANT_ID, "test_mandate_type", RequiredMandataries.ALL);
+
+    // Test null properties
+    mandate.addProperty(new MandateProperty("test_boolean_property"));
+    mandate.addProperty(new MandateProperty("test_date_property"));
+    mandate.addProperty(new MandateProperty("test_decimal_property"));
+    mandate.addProperty(new MandateProperty("test_double_property"));
+    mandate.addProperty(new MandateProperty("test_integer_property"));
+    mandate.addProperty(new MandateProperty("test_string_property"));
+
+    Set<ConstraintViolation<Mandate>> constraintViolations =
+        partyService.validateMandate(IPartyService.DEFAULT_TENANT_ID, mandate);
+
+    assertEquals(
+        6,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the mandate");
+
+    // Test invalid properties
+    mandate.getProperties().clear();
+
+    mandate.addProperty(new MandateProperty("invalid_property_name", "Invalid Property Value"));
+
+    mandate.addProperty(new MandateProperty("test_string_property", "Invalid String Value!"));
+
+    constraintViolations = partyService.validateMandate(IPartyService.DEFAULT_TENANT_ID, mandate);
+
+    assertEquals(
+        2,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the mandate");
   }
 
   /** Test the invalid next of kin verification functionality. */
@@ -2067,6 +2170,87 @@ public class PartyServiceTest {
     compareOrganizations(organization, retrievedOrganization);
 
     partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, organization.getId());
+  }
+
+  /** Test the mandate functionality. */
+  @Test
+  public void mandateTest() throws Exception {
+    Person firstPerson = getTestCompletePersonDetails(true);
+
+    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, firstPerson);
+
+    Person secondPerson = getTestCompletePersonDetails(true);
+
+    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, secondPerson);
+
+    Mandate mandate =
+        new Mandate(
+            IPartyService.DEFAULT_TENANT_ID,
+            "test_mandate_type",
+            RequiredMandataries.ALL,
+            LocalDate.of(2016, 7, 16),
+            LocalDate.now());
+
+    mandate.addMandatary(new Mandatary(firstPerson.getId(), "test_mandatary_type"));
+    mandate.addMandatary(new Mandatary(secondPerson.getId(), "test_mandatary_type"));
+
+    mandate.addProperty(new MandateProperty("test_boolean_property", true));
+    mandate.addProperty(new MandateProperty("test_date_property", LocalDate.now()));
+    mandate.addProperty(new MandateProperty("test_decimal_property", new BigDecimal("82.6")));
+    mandate.addProperty(new MandateProperty("test_double_property", 12345.6789));
+    mandate.addProperty(new MandateProperty("test_integer_property", Integer.valueOf(123456789)));
+    mandate.addProperty(new MandateProperty("test_string_property", "String Value"));
+
+    assertEquals(
+        "String Value", mandate.getPropertyWithType("test_string_property").get().getStringValue());
+    assertTrue(mandate.hasPropertyWithType("test_string_property"));
+
+    partyService.createMandate(IPartyService.DEFAULT_TENANT_ID, mandate);
+
+    MandatesForParty mandatesForParty =
+        partyService.getMandatesForParty(
+            IPartyService.DEFAULT_TENANT_ID,
+            firstPerson.getId(),
+            MandateSortBy.TYPE,
+            SortDirection.ASCENDING,
+            0,
+            100);
+
+    assertEquals(
+        1, mandatesForParty.getMandates().size(), "The incorrect number of mandates was retrieved");
+
+    compareMandates(mandate, mandatesForParty.getMandates().get(0));
+
+    Mandate retrievedMandate =
+        partyService.getMandate(IPartyService.DEFAULT_TENANT_ID, mandate.getId());
+
+    assertEquals(
+        6,
+        retrievedMandate.getProperties().size(),
+        "The incorrect number of mandate properties was retrieved");
+
+    compareMandates(mandate, retrievedMandate);
+
+    mandate.removePropertyWithType("test_string_property");
+    assertFalse(mandate.hasPropertyWithType("test_string_property"));
+
+    mandate.removePropertyWithType("test_date_property");
+    assertFalse(mandate.hasPropertyWithType("test_date_property"));
+
+    partyService.updateMandate(IPartyService.DEFAULT_TENANT_ID, mandate);
+
+    retrievedMandate = partyService.getMandate(IPartyService.DEFAULT_TENANT_ID, mandate.getId());
+
+    assertEquals(
+        4,
+        retrievedMandate.getProperties().size(),
+        "The incorrect number of mandate properties was retrieved");
+
+    partyService.deleteMandate(IPartyService.DEFAULT_TENANT_ID, mandate.getId());
+
+    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, firstPerson.getId());
+
+    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, secondPerson.getId());
   }
 
   /** Test the next of kin functionality. */
@@ -3681,6 +3865,110 @@ public class PartyServiceTest {
         "The effective to values for the locks do not match");
     assertEquals(lock1.getParty(), lock2.getParty(), "The party values for the locks do not match");
     assertEquals(lock1.getType(), lock2.getType(), "The type values for the locks do not match");
+  }
+
+  private void compareMandateProperties(
+      MandateProperty mandateProperty1, MandateProperty mandateProperty2) {
+    assertEquals(
+        mandateProperty1.getBooleanValue(),
+        mandateProperty2.getBooleanValue(),
+        "The boolean value values for the mandate properties do not match");
+    assertEquals(
+        mandateProperty1.getDateValue(),
+        mandateProperty2.getDateValue(),
+        "The date value values for the mandate properties do not match");
+    if (mandateProperty1.getDecimalValue() != null) {
+      assertEquals(
+          0,
+          mandateProperty1.getDecimalValue().compareTo(mandateProperty2.getDecimalValue()),
+          "The decimal value values for the mandate properties do not match");
+    } else {
+      assertEquals(
+          mandateProperty1.getDecimalValue(),
+          mandateProperty2.getDecimalValue(),
+          "The decimal value values for the mandate properties do not match");
+    }
+    assertEquals(
+        mandateProperty1.getDoubleValue(),
+        mandateProperty2.getDoubleValue(),
+        "The double value values for the mandate properties do not match");
+    assertEquals(
+        mandateProperty1.getIntegerValue(),
+        mandateProperty2.getIntegerValue(),
+        "The integer value values for the mandate properties do not match");
+    assertEquals(
+        mandateProperty1.getStringValue(),
+        mandateProperty2.getStringValue(),
+        "The string value values for the mandate properties do not match");
+    assertEquals(
+        mandateProperty1.getType(),
+        mandateProperty2.getType(),
+        "The type values for the mandate properties do not match");
+  }
+
+  private void compareMandates(Mandate mandate1, Mandate mandate2) {
+    assertEquals(
+        mandate1.getEffectiveFrom(),
+        mandate2.getEffectiveFrom(),
+        "The effective from values for the mandates do not match");
+    assertEquals(
+        mandate1.getEffectiveTo(),
+        mandate2.getEffectiveTo(),
+        "The effective to values for the mandates do not match");
+    assertEquals(mandate1.getId(), mandate2.getId(), "The ID values for the mandates do not match");
+    assertEquals(
+        mandate1.getRequiredMandataries(),
+        mandate2.getRequiredMandataries(),
+        "The required mandataries values for the mandates do not match");
+    assertEquals(
+        mandate1.getTenantId(),
+        mandate2.getTenantId(),
+        "The tenant ID values for the mandates do not match");
+    assertEquals(
+        mandate1.getType(), mandate2.getType(), "The type values for the mandates do not match");
+
+    assertEquals(
+        mandate1.getMandataries().size(),
+        mandate2.getMandataries().size(),
+        "The number of mandataries for the mandates do not match");
+
+    for (Mandatary mandatary1 : mandate1.getMandataries()) {
+      boolean foundMandatary = false;
+
+      for (Mandatary mandatary2 : mandate2.getMandataries()) {
+        if ((mandatary1.getPartyId().equals(mandatary2.getPartyId()))
+            && (mandatary1.getType().equals(mandatary2.getType()))) {
+
+          foundMandatary = true;
+        }
+      }
+
+      if (!foundMandatary) {
+        fail("Failed to find the mandatary (" + mandatary1.getPartyId() + ")");
+      }
+    }
+
+    assertEquals(
+        mandate1.getProperties().size(),
+        mandate2.getProperties().size(),
+        "The number of properties for the mandates do not match");
+
+    for (MandateProperty mandate1Property : mandate1.getProperties()) {
+      boolean foundMandateProperty = false;
+
+      for (MandateProperty mandate2Property : mandate2.getProperties()) {
+        if (mandate1Property.getType().equals(mandate2Property.getType())) {
+
+          compareMandateProperties(mandate1Property, mandate2Property);
+
+          foundMandateProperty = true;
+        }
+      }
+
+      if (!foundMandateProperty) {
+        fail("Failed to find the mandate property (" + mandate1Property.getType() + ")");
+      }
+    }
   }
 
   private void compareNextOfKin(NextOfKin nextOfKin1, NextOfKin nextOfKin2) {

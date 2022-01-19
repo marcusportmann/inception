@@ -317,6 +317,24 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the link type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the link type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the link type
+   *     reference data for
+   * @return the link type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the link type reference data could not be retrieved
+   */
+  @WebMethod(operationName = "GetLinkTypes")
+  public List<LinkType> getLinkTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getLinkTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the lock type category reference data for a specific locale.
    *
    * @param tenantId the ID for the tenant the lock type category reference data is specific to
@@ -354,6 +372,24 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the mandatary type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the mandatary type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary type
+   *     reference data for
+   * @return the mandatary type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the mandatary type reference data could not be retrieved
+   */
+  @WebMethod(operationName = "GetMandataryTypes")
+  public List<MandataryType> getMandataryTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getMandataryTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the mandate property type reference data for a specific locale.
    *
    * @param tenantId the ID for the tenant the mandate property type reference data is specific to
@@ -370,6 +406,24 @@ public class PartyReferenceWebService {
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
     return partyReferenceService.getMandatePropertyTypes(tenantId, localeId);
+  }
+
+  /**
+   * Retrieve the mandate type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the mandate type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandate type
+   *     reference data for
+   * @return the mandate type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the mandate type reference data could not be retrieved
+   */
+  @WebMethod(operationName = "GetMandateTypes")
+  public List<MandateType> getMandateTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getMandateTypes(tenantId, localeId);
   }
 
   /**

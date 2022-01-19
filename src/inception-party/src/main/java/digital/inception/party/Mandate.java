@@ -17,7 +17,6 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,7 +27,6 @@ import digital.inception.party.constraints.ValidMandate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,8 +38,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -52,7 +48,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -71,6 +66,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
   "requiredMandataries",
   "effectiveFrom",
   "effectiveTo",
+  "mandataries",
   "properties"
 })
 @XmlRootElement(name = "Mandate", namespace = "http://inception.digital/party")
@@ -84,6 +80,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
       "requiredMandataries",
       "effectiveFrom",
       "effectiveTo",
+      "mandataries",
       "properties"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -93,6 +90,20 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Mandate implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The mandataries for the mandate. */
+  @Schema(description = "The mandataries for the mandate")
+  @JsonProperty
+  @JsonManagedReference
+  @XmlElementWrapper(name = "Mandataries")
+  @XmlElement(name = "Mandatary")
+  @Valid
+  @OneToMany(
+      mappedBy = "mandate",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<Mandatary> mandataries = new HashSet<>();
 
   /** The properties for the mandate. */
   @Schema(description = "The properties for the mandate")
@@ -107,12 +118,6 @@ public class Mandate implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<MandateProperty> properties = new HashSet<>();
-
-  /** The date and time the mandate was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The date the mandate is effective from. */
   @Schema(description = "The date the mandate is effective from")
@@ -167,12 +172,6 @@ public class Mandate implements Serializable {
   @Size(min = 1, max = 30)
   @Column(name = "type", length = 30, nullable = false)
   private String type;
-
-  /** The date and time the mandate was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>Mandate</b>. */
   public Mandate() {}
@@ -235,6 +234,21 @@ public class Mandate implements Serializable {
   }
 
   /**
+   * Add the mandatary for the mandate.
+   *
+   * @param mandatary the mandatary
+   */
+  public void addMandatary(Mandatary mandatary) {
+    mandataries.removeIf(
+        existingMandatary ->
+            Objects.equals(existingMandatary.getPartyId(), mandatary.getPartyId()));
+
+    mandatary.setMandate(this);
+
+    mandataries.add(mandatary);
+  }
+
+  /**
    * Add the property for the mandate.
    *
    * @param property the property
@@ -274,15 +288,6 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Returns the date and time the association was created.
-   *
-   * @return the date and time the association was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the date the association is effective from.
    *
    * @return the date the association is effective from
@@ -307,6 +312,15 @@ public class Mandate implements Serializable {
    */
   public UUID getId() {
     return id;
+  }
+
+  /**
+   * Returns the mandataries for the mandate.
+   *
+   * @return the mandataries for the mandate
+   */
+  public Set<Mandatary> getMandataries() {
+    return mandataries;
   }
 
   /**
@@ -359,15 +373,6 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Returns the date and time the association was last updated.
-   *
-   * @return the date and time the association was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
-  }
-
-  /**
    * Returns whether the mandate has a property with the specified type.
    *
    * @param type the code for the mandate property type
@@ -386,6 +391,16 @@ public class Mandate implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
+   * Remove the mandatary for the party with the specified ID.
+   *
+   * @param partyId the ID for the party who is the recipient of the mandate
+   */
+  public void removeMandataryForParty(UUID partyId) {
+    mandataries.removeIf(
+        existingMandatary -> Objects.equals(existingMandatary.getPartyId(), partyId));
   }
 
   /**
@@ -425,6 +440,17 @@ public class Mandate implements Serializable {
   }
 
   /**
+   * Set the mandataries for the mandate.
+   *
+   * @param mandataries the mandataries for the mandate
+   */
+  public void setMandataries(Set<Mandatary> mandataries) {
+    mandataries.forEach(mandatary -> mandatary.setMandate(this));
+    this.mandataries.clear();
+    this.mandataries.addAll(mandataries);
+  }
+
+  /**
    * Set the properties for the mandate.
    *
    * @param properties the properties for the mandate
@@ -460,17 +486,5 @@ public class Mandate implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

@@ -82,11 +82,17 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Identity Document Type Repository. */
   private final IdentityDocumentTypeRepository identityDocumentTypeRepository;
 
+  /** The Link Type Repository */
+  private final LinkTypeRepository linkTypeRepository;
+
   /** The Lock Type Category Repository. */
   private final LockTypeCategoryRepository lockTypeCategoryRepository;
 
   /** The Lock Type Repository */
   private final LockTypeRepository lockTypeRepository;
+
+  /** The Mandatary Type Repository. */
+  private final MandataryTypeRepository mandataryTypeRepository;
 
   /** The Mandate Property Type Repository. */
   private final MandatePropertyTypeRepository mandatePropertyTypeRepository;
@@ -196,8 +202,10 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param fieldOfStudyRepository the Field Of Study Repository
    * @param genderRepository the Gender Repository
    * @param identityDocumentTypeRepository the Identity Document Type Repository
+   * @param linkTypeRepository the Link Type Repository
    * @param lockTypeCategoryRepository the Lock Type Category Repository
    * @param lockTypeRepository the Lock Type Repository
+   * @param mandataryTypeRepository the Mandatary Type Repository
    * @param mandatePropertyTypeRepository the Mandate Property Type Repository
    * @param mandateTypeRepository the Mandate Type Repository
    * @param maritalStatusRepository the Marital Status Repository
@@ -245,8 +253,10 @@ public class PartyReferenceService implements IPartyReferenceService {
       FieldOfStudyRepository fieldOfStudyRepository,
       GenderRepository genderRepository,
       IdentityDocumentTypeRepository identityDocumentTypeRepository,
+      LinkTypeRepository linkTypeRepository,
       LockTypeCategoryRepository lockTypeCategoryRepository,
       LockTypeRepository lockTypeRepository,
+      MandataryTypeRepository mandataryTypeRepository,
       MandatePropertyTypeRepository mandatePropertyTypeRepository,
       MandateTypeRepository mandateTypeRepository,
       MaritalStatusRepository maritalStatusRepository,
@@ -290,8 +300,10 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.fieldOfStudyRepository = fieldOfStudyRepository;
     this.genderRepository = genderRepository;
     this.identityDocumentTypeRepository = identityDocumentTypeRepository;
+    this.linkTypeRepository = linkTypeRepository;
     this.lockTypeCategoryRepository = lockTypeCategoryRepository;
     this.lockTypeRepository = lockTypeRepository;
+    this.mandataryTypeRepository = mandataryTypeRepository;
     this.mandatePropertyTypeRepository = mandatePropertyTypeRepository;
     this.mandateTypeRepository = mandateTypeRepository;
     this.maritalStatusRepository = maritalStatusRepository;
@@ -907,6 +919,42 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   @Override
+  @Cacheable(cacheNames = "reference", key = "'linkTypes.' + #localeId")
+  public List<LinkType> getLinkTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    try {
+      return linkTypeRepository.findByLocaleIdIgnoreCase(localeId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the link type reference data", e);
+    }
+  }
+
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'linkTypes.ALL'")
+  public List<LinkType> getLinkTypes() throws ServiceUnavailableException {
+    try {
+      return linkTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the link type reference data", e);
+    }
+  }
+
+  @Override
+  public List<LinkType> getLinkTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getLinkTypes(localeId).stream()
+        .filter(
+            linkType ->
+                (linkType.getTenantId() == null
+                    || (Objects.equals(linkType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  @Override
   @Cacheable(cacheNames = "reference", key = "'lockTypeCategories.' + #localeId")
   public List<LockTypeCategory> getLockTypeCategories(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -977,6 +1025,44 @@ public class PartyReferenceService implements IPartyReferenceService {
             lockType ->
                 (lockType.getTenantId() == null
                     || (Objects.equals(lockType.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'mandataryTypes.' + #localeId")
+  public List<MandataryType> getMandataryTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    try {
+      return mandataryTypeRepository.findByLocaleIdIgnoreCase(localeId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the mandatary type reference data", e);
+    }
+  }
+
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'mandataryTypes.ALL'")
+  public List<MandataryType> getMandataryTypes() throws ServiceUnavailableException {
+    try {
+      return mandataryTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the mandatary type reference data", e);
+    }
+  }
+
+  @Override
+  public List<MandataryType> getMandataryTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getMandataryTypes(localeId).stream()
+        .filter(
+            mandataryType ->
+                (mandataryType.getTenantId() == null
+                    || (Objects.equals(mandataryType.getTenantId(), tenantId))))
         .collect(Collectors.toList());
   }
 
@@ -2371,6 +2457,21 @@ public class PartyReferenceService implements IPartyReferenceService {
                 (lockTypeCategory.getTenantId() == null
                         || Objects.equals(lockTypeCategory.getTenantId(), tenantId))
                     && Objects.equals(lockTypeCategory.getCode(), lockTypeCategoryCode));
+  }
+
+  @Override
+  public boolean isValidMandateType(UUID tenantId, String mandateTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(mandateTypeCode)) {
+      return false;
+    }
+
+    return self.getMandateTypes().stream()
+        .anyMatch(
+            mandateType ->
+                (mandateType.getTenantId() == null
+                        || Objects.equals(mandateType.getTenantId(), tenantId))
+                    && Objects.equals(mandateType.getCode(), mandateTypeCode));
   }
 
   @Override

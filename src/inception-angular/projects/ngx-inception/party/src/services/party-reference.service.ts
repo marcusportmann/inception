@@ -37,7 +37,9 @@ import {Gender} from './gender';
 import {IdentityDocumentType} from './identity-document-type';
 import {LockType} from "./lock-type";
 import {LockTypeCategory} from "./lock-type-category";
+import {MandataryType} from './mandatary-type';
 import {MandatePropertyType} from "./mandate-property-type";
+import {MandateType} from './mandate-type';
 import {MaritalStatus} from './marital-status';
 import {MarriageType} from './marriage-type';
 import {NextOfKinType} from './next-of-kin-type';
@@ -489,6 +491,31 @@ export class PartyReferenceService {
   }
 
   /**
+   * Retrieve the mandatary types.
+   *
+   * @return The mandatary types.
+   */
+  getMandataryTypes(): Observable<MandataryType[]> {
+    let params = new HttpParams();
+
+    params = params.append('localeId', this.localeId);
+
+    return this.httpClient.get<MandataryType[]>(this.config.partyReferenceApiUrlPrefix + '/mandatary-types',
+      {params, reportProgress: true})
+    .pipe(map((mandataryTypes: MandataryType[]) => {
+      return mandataryTypes;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the mandatary types.', httpErrorResponse));
+    }));
+  }
+
+  /**
    * Retrieve the mandate property types.
    *
    * @return The mandate property types.
@@ -510,6 +537,31 @@ export class PartyReferenceService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to retrieve the mandate property types.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the mandate types.
+   *
+   * @return The mandate types.
+   */
+  getMandateTypes(): Observable<MandateType[]> {
+    let params = new HttpParams();
+
+    params = params.append('localeId', this.localeId);
+
+    return this.httpClient.get<MandateType[]>(this.config.partyReferenceApiUrlPrefix + '/mandate-types',
+      {params, reportProgress: true})
+    .pipe(map((mandateTypes: MandateType[]) => {
+      return mandateTypes;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the mandate types.', httpErrorResponse));
     }));
   }
 

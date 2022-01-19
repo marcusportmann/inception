@@ -39,8 +39,7 @@ export class GroupRole {
   /**
    * Constructs a new GroupRole.
    *
-   * @param userDirectoryId The ID for the user directory the
-   *                        group is associated with.
+   * @param userDirectoryId The ID for the user directory the group is associated with.
    * @param groupName       The name of the group.
    * @param roleCode        The code for the role.
    */

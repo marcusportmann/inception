@@ -59,8 +59,7 @@ export class MandatePropertyType {
   sortIndex: number;
 
   /**
-   * The ID for the tenant the mandate property type is
-   * specific to.
+   * The ID for the tenant the mandate property type is specific to.
    */
   tenantId?: string;
 
@@ -72,8 +71,7 @@ export class MandatePropertyType {
   /**
    * Constructs a new MandatePropertyType.
    *
-   * @param mandateType The code for the mandate type the mandate property type is
-   *                        associated with.
+   * @param mandateType The code for the mandate type the mandate property type is associated with.
    * @param code            The code for the mandate property type.
    * @param localeId        The Unicode locale identifier for the mandate property type.
    * @param sortIndex       The sort index for the mandate property type.

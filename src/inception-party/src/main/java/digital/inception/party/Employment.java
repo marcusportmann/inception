@@ -18,7 +18,6 @@ package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -27,7 +26,6 @@ import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -36,8 +34,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -114,12 +110,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Employment implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date and time the employment was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The employer address city. */
   @Schema(description = "The employer address city")
@@ -315,12 +305,6 @@ public class Employment implements Serializable {
   @Size(min = 1, max = 30)
   @Column(name = "type", length = 30)
   private String type;
-
-  /** The date and time the employment was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>Employment</b>. */
   public Employment() {}
@@ -527,15 +511,6 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Returns the date and time the employment was created.
-   *
-   * @return the date and time the employment was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the employer address city.
    *
    * @return the employer address city
@@ -705,15 +680,6 @@ public class Employment implements Serializable {
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the employment was last updated.
-   *
-   * @return the date and time the employment was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -896,17 +862,5 @@ public class Employment implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

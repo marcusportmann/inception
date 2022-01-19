@@ -18,7 +18,6 @@ package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -26,7 +25,6 @@ import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,8 +33,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -70,12 +66,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class SegmentAllocation implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date and time the segment allocation was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The date the segment allocation is effective from. */
   @Schema(description = "The date the segment allocation is effective from")
@@ -115,12 +105,6 @@ public class SegmentAllocation implements Serializable {
   @Id
   @Column(name = "segment", length = 30, nullable = false)
   private String segment;
-
-  /** The date and time the segment allocation was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>SegmentAllocation</b>. */
   public SegmentAllocation() {}
@@ -184,15 +168,6 @@ public class SegmentAllocation implements Serializable {
   }
 
   /**
-   * Returns the date and time the segment allocation was created.
-   *
-   * @return the date and time the segment allocation was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the date the segment allocation is effective from.
    *
    * @return the date the segment allocation is effective from
@@ -227,15 +202,6 @@ public class SegmentAllocation implements Serializable {
    */
   public String getSegment() {
     return segment;
-  }
-
-  /**
-   * Returns the date and time the segment allocation was last updated.
-   *
-   * @return the date and time the segment allocation was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -284,17 +250,5 @@ public class SegmentAllocation implements Serializable {
    */
   public void setSegment(String segment) {
     this.segment = segment;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

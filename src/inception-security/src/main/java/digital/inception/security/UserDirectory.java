@@ -26,7 +26,6 @@ import digital.inception.core.xml.XmlUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -40,8 +39,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.Valid;
@@ -82,12 +79,6 @@ import org.xml.sax.InputSource;
 public class UserDirectory implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date and time the user directory was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The ID for the user directory. */
   @Schema(description = "The ID for the user directory", required = true)
@@ -130,12 +121,6 @@ public class UserDirectory implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "type", length = 100, nullable = false)
   private String type;
-
-  /** The date and time the user directory was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>UserDirectory</b>. */
   public UserDirectory() {}
@@ -197,15 +182,6 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Returns the date and time the user directory was created.
-   *
-   * @return the date and time the user directory was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the ID for the user directory.
    *
    * @return the ID for the user directory
@@ -248,15 +224,6 @@ public class UserDirectory implements Serializable {
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the user directory was last updated.
-   *
-   * @return the date and time the user directory was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -359,17 +326,5 @@ public class UserDirectory implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

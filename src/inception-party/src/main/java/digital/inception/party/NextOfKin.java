@@ -17,14 +17,12 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -33,8 +31,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -207,12 +203,6 @@ public class NextOfKin implements Serializable {
   @Column(name = "address_suburb", length = 50)
   private String addressSuburb;
 
-  /** The date and time the next of kin was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
-
   /** The e-mail address for the next of kin. */
   @Schema(description = "The e-mail address for the next of kin")
   @JsonProperty
@@ -307,12 +297,6 @@ public class NextOfKin implements Serializable {
   @Size(min = 1, max = 30)
   @Column(name = "type", length = 30)
   private String type;
-
-  /** The date and time the next of kin was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** The work phone number for the next of kin. */
   @Schema(description = "The work phone number for the next of kin")
@@ -525,15 +509,6 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Returns the date and time the next of kin was created.
-   *
-   * @return the date and time the next of kin was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the e-mail address for the next of kin.
    *
    * @return the e-mail address for the next of kin
@@ -613,15 +588,6 @@ public class NextOfKin implements Serializable {
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the next of kin was last updated.
-   *
-   * @return the date and time the next of kin was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -813,17 +779,5 @@ public class NextOfKin implements Serializable {
    */
   public void setWorkNumber(String workNumber) {
     this.workNumber = workNumber;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

@@ -81,8 +81,7 @@ export class User {
   /**
    * Constructs a new User.
    *
-   * @param userDirectoryId   The ID for the user directory the
-   *                          user is associated with.
+   * @param userDirectoryId   The ID for the user directory the user is associated with.
    * @param username          The username for the user.
    * @param name              The name of the user.
    * @param preferredName     The optional preferred name for the user.

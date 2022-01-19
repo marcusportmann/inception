@@ -160,6 +160,88 @@ public class PartyApi extends SecureApi {
   }
 
   /**
+   * Create the new mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandate the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateMandateException if the mandate already exists
+   * @throws PartyNotFoundException if one or more parties for the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be created
+   */
+  @Operation(summary = "Create the mandate", description = "Create the mandate")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The mandate was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "One or more parties for the mandate could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A mandate with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(value = "/mandates", method = RequestMethod.POST, produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.MandateAdministration')")
+  public void createMandate(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The mandate to create",
+              required = true)
+          @RequestBody
+          Mandate mandate)
+      throws InvalidArgumentException, DuplicateMandateException, PartyNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(mandate.getTenantId())) {
+      throw new AccessDeniedException(
+          "Access denied to the tenant (" + mandate.getTenantId() + ")");
+    }
+
+    partyService.createMandate(tenantId, mandate);
+  }
+
+  /**
    * Create the new organization.
    *
    * @param tenantId the ID for the tenant
@@ -379,6 +461,73 @@ public class PartyApi extends SecureApi {
           UUID associationId)
       throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
     partyService.deleteAssociation(tenantId, associationId);
+  }
+
+  /**
+   * Delete the mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandateId the ID for the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MandateNotFoundException if the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be deleted
+   */
+  @Operation(summary = "Delete the mandate", description = "Delete the mandate")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The mandate was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The mandate could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/mandates/{mandateId}",
+      method = RequestMethod.DELETE,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.MandateAdministration')")
+  public void deleteMandate(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "mandateId", description = "The ID for the mandate", required = true)
+          @PathVariable
+          UUID mandateId)
+      throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException {
+    partyService.deleteMandate(tenantId, mandateId);
   }
 
   /**
@@ -606,7 +755,7 @@ public class PartyApi extends SecureApi {
    * @param sortDirection the optional sort direction to apply to the associations
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
-   * @return the associations
+   * @return the associations for the party
    * @throws InvalidArgumentException if an argument is invalid
    * @throws PartyNotFoundException if the party could not be found
    * @throws ServiceUnavailableException if the associations could not be retrieved
@@ -654,7 +803,7 @@ public class PartyApi extends SecureApi {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration') or hasAuthority('FUNCTION_Party.AssociationAdministration')")
-  public Associations getAssociationsForParty(
+  public AssociationsForParty getAssociationsForParty(
       @Parameter(
               name = "Tenant-ID",
               description = "The ID for the tenant",
@@ -696,6 +845,182 @@ public class PartyApi extends SecureApi {
     }
 
     return partyService.getAssociationsForParty(
+        tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
+   * Retrieve the mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandateId the ID for the mandate
+   * @return the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MandateNotFoundException if the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be retrieved
+   */
+  @Operation(summary = "Retrieve the mandate", description = "Retrieve the mandate")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The mandate could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/mandates/{mandateId}",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.MandateAdministration')")
+  public Mandate getMandate(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "mandateId", description = "The ID for the mandate", required = true)
+          @PathVariable
+          UUID mandateId)
+      throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return partyService.getMandate(tenantId, mandateId);
+  }
+
+  /**
+   * Retrieve the mandates for the party.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
+   * @param sortBy the optional method used to sort the mandates e.g. by type
+   * @param sortDirection the optional sort direction to apply to the mandates
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the mandates for the party
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws PartyNotFoundException if the party could not be found
+   * @throws ServiceUnavailableException if the mandates could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the mandates for the party",
+      description = "Retrieve the mandates for the party")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The party could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/parties/{partyId}/mandates",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.OrganizationAdministration') or hasAuthority('FUNCTION_Party.PersonAdministration') or hasAuthority('FUNCTION_Party.MandateAdministration')")
+  public MandatesForParty getMandatesForParty(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "partyId", description = "The ID for the party", required = true)
+          @PathVariable
+          UUID partyId,
+      @Parameter(
+              name = "sortBy",
+              description = "The optional method used to sort the mandates e.g. by type")
+          @RequestParam(value = "sortBy", required = false)
+          MandateSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the mandates")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    if (partyId == null) {
+      throw new InvalidArgumentException("partyId");
+    }
+
+    return partyService.getMandatesForParty(
         tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
   }
 
@@ -1392,6 +1717,100 @@ public class PartyApi extends SecureApi {
     }
 
     partyService.updateAssociation(tenantId, association);
+  }
+
+  /**
+   * Update the mandate.
+   *
+   * @param tenantId the ID for the tenant
+   * @param mandateId the ID for the mandate
+   * @param mandate the mandate
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws MandateNotFoundException if the mandate could not be found
+   * @throws PartyNotFoundException if one or more parties for the mandate could not be found
+   * @throws ServiceUnavailableException if the mandate could not be updated
+   */
+  @Operation(summary = "Update the mandate", description = "Update the mandate")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The mandate was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description =
+                "The mandate could not be found or one or more parties for the mandate could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/mandates/{mandateId}",
+      method = RequestMethod.PUT,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or hasAuthority('FUNCTION_Party.MandateAdministration')")
+  public void updateMandate(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "mandateId", description = "The ID for the mandate", required = true)
+          @PathVariable
+          UUID mandateId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The mandate to update",
+              required = true)
+          @RequestBody
+          Mandate mandate)
+      throws InvalidArgumentException, MandateNotFoundException, PartyNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? IPartyService.DEFAULT_TENANT_ID : tenantId;
+
+    if (!hasAccessToTenant(tenantId)) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    if (mandateId == null) {
+      throw new InvalidArgumentException("mandateId");
+    }
+
+    if (mandate == null) {
+      throw new InvalidArgumentException("mandate");
+    }
+
+    if (!mandateId.equals(mandate.getId())) {
+      throw new InvalidArgumentException("mandate");
+    }
+
+    partyService.updateMandate(tenantId, mandate);
   }
 
   /**

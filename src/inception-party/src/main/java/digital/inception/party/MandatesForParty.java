@@ -32,30 +32,31 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>Associations</b> class holds the results of a request to retrieve a list of associations.
+ * The <b>MandatesForParty</b> class holds the results of a request to retrieve a list of mandates
+ * for a party.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The results of a request to retrieve a list of associations")
+@Schema(description = "The results of a request to retrieve a list of mandates for a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "tenantId",
   "partyId",
-  "associations",
+  "mandates",
   "total",
   "sortBy",
   "sortDirection",
   "pageIndex",
   "pageSize"
 })
-@XmlRootElement(name = "Associations", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "MandatesForParty", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "Associations",
+    name = "MandatesForParty",
     namespace = "http://inception.digital/party",
     propOrder = {
       "tenantId",
       "partyId",
-      "associations",
+      "mandates",
       "total",
       "sortBy",
       "sortDirection",
@@ -64,16 +65,16 @@ import javax.xml.bind.annotation.XmlType;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
-public class Associations implements Serializable {
+public class MandatesForParty implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The associations. */
-  @Schema(description = "The associations", required = true)
+  /** The mandates. */
+  @Schema(description = "The mandates", required = true)
   @JsonProperty(required = true)
-  @XmlElementWrapper(name = "Associations", required = true)
-  @XmlElement(name = "Association", required = true)
-  private List<Association> associations;
+  @XmlElementWrapper(name = "Mandates", required = true)
+  @XmlElement(name = "Mandate", required = true)
+  private List<Mandate> mandates;
 
   /** The optional page index. */
   @Schema(description = "The optional page index")
@@ -87,67 +88,63 @@ public class Associations implements Serializable {
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /** The ID for the party the associations are associated with. */
-  @Schema(
-      description = "The ID for the party the associations are associated with",
-      required = true)
+  /** The ID for the party the mandates are associated with. */
+  @Schema(description = "The ID for the party the mandates are associated with", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "PartyId", required = true)
   private UUID partyId;
 
-  /** The optional method used to sort the associations e.g. by name. */
-  @Schema(description = "The optional method used to sort the associations e.g. by name")
+  /** The optional method used to sort the mandates e.g. by name. */
+  @Schema(description = "The optional method used to sort the mandates e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
-  private AssociationSortBy sortBy;
+  private MandateSortBy sortBy;
 
-  /** The optional sort direction that was applied to the associations. */
-  @Schema(description = "The optional sort direction that was applied to the associations")
+  /** The optional sort direction that was applied to the mandates. */
+  @Schema(description = "The optional sort direction that was applied to the mandates")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant the associations are associated with. */
-  @Schema(
-      description = "The ID for the tenant the associations are associated with",
-      required = true)
+  /** The ID for the tenant the mandates are associated with. */
+  @Schema(description = "The ID for the tenant the mandates are associated with", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
   private UUID tenantId;
 
-  /** The total number of associations. */
-  @Schema(description = "The total number of associations", required = true)
+  /** The total number of mandates. */
+  @Schema(description = "The total number of mandates", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <b>Associations</b>. */
-  public Associations() {}
+  /** Constructs a new <b>MandatesForParty</b>. */
+  public MandatesForParty() {}
 
   /**
-   * Constructs a new <b>Associations</b>.
+   * Constructs a new <b>MandatesForParty</b>.
    *
-   * @param tenantId the ID for the tenant the associations are associated with
-   * @param partyId the ID for the party the associations are associated with
-   * @param associations the associations
-   * @param total the total number of associations
-   * @param sortBy the optional method used to sort the associations e.g. by name
-   * @param sortDirection the optional sort direction that was applied to the associations
+   * @param tenantId the ID for the tenant the mandates are associated with
+   * @param partyId the ID for the party the mandates are associated with
+   * @param mandates the mandates
+   * @param total the total number of mandates
+   * @param sortBy the optional method used to sort the mandates e.g. by name
+   * @param sortDirection the optional sort direction that was applied to the mandates
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
    */
-  public Associations(
+  public MandatesForParty(
       UUID tenantId,
       UUID partyId,
-      List<Association> associations,
+      List<Mandate> mandates,
       long total,
-      AssociationSortBy sortBy,
+      MandateSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
     this.tenantId = tenantId;
     this.partyId = partyId;
-    this.associations = associations;
+    this.mandates = mandates;
     this.total = total;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
@@ -156,12 +153,12 @@ public class Associations implements Serializable {
   }
 
   /**
-   * Returns the associations.
+   * Returns the mandates.
    *
-   * @return the associations
+   * @return the mandates
    */
-  public List<Association> getAssociations() {
-    return associations;
+  public List<Mandate> getMandates() {
+    return mandates;
   }
 
   /**
@@ -183,45 +180,45 @@ public class Associations implements Serializable {
   }
 
   /**
-   * Returns the ID for the party the associations are associated with.
+   * Returns the ID for the party the mandates are associated with.
    *
-   * @return the ID for the party the associations are associated with
+   * @return the ID for the party the mandates are associated with
    */
   public UUID getPartyId() {
     return partyId;
   }
 
   /**
-   * Returns the optional method used to sort the associations e.g. by name.
+   * Returns the optional method used to sort the mandates e.g. by name.
    *
-   * @return the optional method used to sort the associations
+   * @return the optional method used to sort the mandates
    */
-  public AssociationSortBy getSortBy() {
+  public MandateSortBy getSortBy() {
     return sortBy;
   }
 
   /**
-   * Returns the optional sort direction that was applied to the associations.
+   * Returns the optional sort direction that was applied to the mandates.
    *
-   * @return the optional sort direction that was applied to the associations
+   * @return the optional sort direction that was applied to the mandates
    */
   public SortDirection getSortDirection() {
     return sortDirection;
   }
 
   /**
-   * Returns the ID for the tenant the associations are associated with.
+   * Returns the ID for the tenant the mandates are associated with.
    *
-   * @return the ID for the tenant the associations are associated with
+   * @return the ID for the tenant the mandates are associated with
    */
   public UUID getTenantId() {
     return tenantId;
   }
 
   /**
-   * Returns the total number of associations.
+   * Returns the total number of mandates.
    *
-   * @return the total number of associations
+   * @return the total number of mandates
    */
   public Long getTotal() {
     return total;

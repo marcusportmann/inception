@@ -24,8 +24,11 @@ import {Observable, throwError} from "rxjs";
 import {catchError, map} from "rxjs/operators";
 import {Association} from "./association";
 import {AssociationSortBy} from "./association-sorty-by";
-import {Associations} from "./associations";
+import {AssociationsForParty} from "./associations-for-party";
 import {EntityType} from "./entity-type";
+import {Mandate} from './mandate';
+import {MandateSortBy} from './mandate-sorty-by';
+import {MandatesForParty} from './mandates-for-party';
 import {Organization} from "./organization";
 import {OrganizationSortBy} from "./organization-sort-by";
 import {Organizations} from "./organizations";
@@ -34,7 +37,8 @@ import {Party} from "./party";
 import {PartySortBy} from "./party-sorty-by";
 import {
   AssociationNotFoundError,
-  DuplicateAssociationError, DuplicateOrganizationError, DuplicatePersonError,
+  DuplicateAssociationError, DuplicateMandateError, DuplicateOrganizationError,
+  DuplicatePersonError, MandateNotFoundError,
   OrganizationNotFoundError, PartyNotFoundError, PersonNotFoundError
 } from "./party.service.errors";
 import {Person} from "./person";
@@ -89,6 +93,36 @@ export class PartyService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to create the association.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Create the new mandate.
+   *
+   * @param mandate The mandate to create.
+   *
+   * @return True if the mandate was created successfully or false otherwise.
+   */
+  createMandate(mandate: Mandate): Observable<boolean> {
+    return this.httpClient.post<boolean>(
+      this.config.partyApiUrlPrefix + '/mandates', mandate, {
+        observe: 'response'
+      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateMandateError.TYPE)) {
+        return throwError(new DuplicateMandateError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
+        return throwError(new PartyNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to create the mandate.', httpErrorResponse));
     }));
   }
 
@@ -172,6 +206,33 @@ export class PartyService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to delete the association.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Delete the mandate.
+   *
+   * @param mandateId The ID for the mandate.
+   *
+   * @return True if the mandate was deleted or false otherwise.
+   */
+  deleteMandate(mandateId: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(
+      this.config.partyApiUrlPrefix + '/mandates/' + mandateId, {observe: 'response'})
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, MandateNotFoundError.TYPE)) {
+        return throwError(new MandateNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to delete the mandate.', httpErrorResponse));
     }));
   }
 
@@ -265,10 +326,10 @@ export class PartyService {
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
    *
-   * @return The associations.
+   * @return The associations for the party.
    */
   getAssociationsForParty(partyId: string, sortBy?: AssociationSortBy, sortDirection?: SortDirection,
-             pageIndex?: number, pageSize?: number): Observable<Associations> {
+             pageIndex?: number, pageSize?: number): Observable<AssociationsForParty> {
 
     let params = new HttpParams();
 
@@ -288,11 +349,11 @@ export class PartyService {
       params = params.append('pageSize', String(pageSize));
     }
 
-    return this.httpClient.get<Associations>(
+    return this.httpClient.get<AssociationsForParty>(
       this.config.partyApiUrlPrefix + '/parties/' + partyId + '/associations', {
         params,
         reportProgress: true,
-      }).pipe(map((associations: Associations) => {
+      }).pipe(map((associations: AssociationsForParty) => {
       return associations;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
@@ -307,6 +368,87 @@ export class PartyService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to retrieve the associations for the party.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the mandate.
+   *
+   * @param mandateId The ID for the mandate.
+   *
+   * @return The mandate.
+   */
+  getMandate(mandateId: string): Observable<Mandate> {
+    return this.httpClient.get<Mandate>(this.config.partyApiUrlPrefix + '/mandates/' + mandateId,
+      {reportProgress: true})
+    .pipe(map((mandate: Mandate) => {
+      return mandate;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, MandateNotFoundError.TYPE)) {
+        return throwError(new MandateNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the mandate.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the mandates for the party.
+   *
+   * @param partyId       The ID for the party.
+   * @param sortBy        The optional method used to sort the mandates e.g. by type.
+   * @param sortDirection The optional sort direction to apply to the mandates.
+   * @param pageIndex     The optional page index.
+   * @param pageSize      The optional page size.
+   *
+   * @return The mandates for the party.
+   */
+  getMandatesForParty(partyId: string, sortBy?: MandateSortBy, sortDirection?: SortDirection,
+                          pageIndex?: number, pageSize?: number): Observable<MandatesForParty> {
+
+    let params = new HttpParams();
+
+    if (sortBy != null) {
+      params = params.append('sortBy', String(sortBy));
+    }
+
+    if (sortDirection != null) {
+      params = params.append('sortDirection', sortDirection);
+    }
+
+    if (pageIndex != null) {
+      params = params.append('pageIndex', String(pageIndex));
+    }
+
+    if (pageSize != null) {
+      params = params.append('pageSize', String(pageSize));
+    }
+
+    return this.httpClient.get<MandatesForParty>(
+      this.config.partyApiUrlPrefix + '/parties/' + partyId + '/mandates', {
+        params,
+        reportProgress: true,
+      }).pipe(map((mandates: MandatesForParty) => {
+      return mandates;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
+        return throwError(new PartyNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the mandates for the party.', httpErrorResponse));
     }));
   }
 
@@ -635,6 +777,35 @@ export class PartyService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to update the association.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Update the mandate.
+   *
+   * @param mandate The mandate to update.
+   *
+   * @return True if the mandate was updated successfully or false otherwise.
+   */
+  updateMandate(mandate: Mandate): Observable<boolean> {
+    return this.httpClient.put<boolean>(this.config.partyApiUrlPrefix + '/mandates/' + mandate.id,
+      mandate, {observe: 'response'})
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, MandateNotFoundError.TYPE)) {
+        return throwError(new MandateNotFoundError(httpErrorResponse));
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
+        return throwError(new PartyNotFoundError(httpErrorResponse));
+      } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(new InvalidArgumentError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to update the mandate.', httpErrorResponse));
     }));
   }
 

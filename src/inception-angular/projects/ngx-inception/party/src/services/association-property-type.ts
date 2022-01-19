@@ -60,8 +60,7 @@ export class AssociationPropertyType {
   sortIndex: number;
 
   /**
-   * The ID for the tenant the association property type is
-   * specific to.
+   * The ID for the tenant the association property type is specific to.
    */
   tenantId?: string;
 

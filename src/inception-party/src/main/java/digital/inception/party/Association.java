@@ -17,7 +17,6 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,7 +27,6 @@ import digital.inception.party.constraints.ValidAssociation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,8 +38,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -52,7 +48,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -108,12 +103,6 @@ public class Association implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<AssociationProperty> properties = new HashSet<>();
-
-  /** The date and time the association was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The date the association is effective from. */
   @Schema(description = "The date the association is effective from")
@@ -176,12 +165,6 @@ public class Association implements Serializable {
   @Size(min = 1, max = 30)
   @Column(name = "type", length = 30, nullable = false)
   private String type;
-
-  /** The date and time the association was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>Association</b>. */
   public Association() {}
@@ -287,15 +270,6 @@ public class Association implements Serializable {
   }
 
   /**
-   * Returns the date and time the association was created.
-   *
-   * @return the date and time the association was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the date the association is effective from.
    *
    * @return the date the association is effective from
@@ -378,15 +352,6 @@ public class Association implements Serializable {
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the association was last updated.
-   *
-   * @return the date and time the association was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -491,17 +456,5 @@ public class Association implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

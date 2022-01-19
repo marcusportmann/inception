@@ -26,7 +26,6 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.party.constraints.ValidOrganization;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -541,17 +540,6 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the date and time the organization was created.
-   *
-   * @return the date and time the organization was created
-   */
-  @JsonIgnore
-  @XmlTransient
-  public LocalDateTime getCreated() {
-    return super.getCreated();
-  }
-
-  /**
    * Retrieve the first external reference with the specified type for the organization.
    *
    * @param type the code for the external reference type
@@ -869,17 +857,6 @@ public class Organization extends PartyBase implements Serializable {
   @Override
   public PartyType getType() {
     return super.getType();
-  }
-
-  /**
-   * Returns the date and time the organization was last updated.
-   *
-   * @return the date and time the organization was last updated
-   */
-  @JsonIgnore
-  @XmlTransient
-  public LocalDateTime getUpdated() {
-    return super.getUpdated();
   }
 
   /**

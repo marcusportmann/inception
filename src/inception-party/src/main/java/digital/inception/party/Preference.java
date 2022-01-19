@@ -17,13 +17,11 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,8 +30,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -65,12 +61,6 @@ public class Preference implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the preference was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
-
   /** The party the preference is associated with. */
   @Schema(hidden = true)
   @JsonBackReference("preferenceReference")
@@ -89,12 +79,6 @@ public class Preference implements Serializable {
   @Id
   @Column(name = "type", length = 30, nullable = false)
   private String type;
-
-  /** The date and time the preference was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** The value for the preference. */
   @Schema(description = "The value for the preference", required = true)
@@ -145,15 +129,6 @@ public class Preference implements Serializable {
   }
 
   /**
-   * Returns the date and time the preference was created.
-   *
-   * @return the date and time the preference was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the party the preference is associated with.
    *
    * @return the party the preference is associated with
@@ -170,15 +145,6 @@ public class Preference implements Serializable {
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the preference was last updated.
-   *
-   * @return the date and time the preference was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -227,17 +193,5 @@ public class Preference implements Serializable {
    */
   public void setValue(String value) {
     this.value = value;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

@@ -79,6 +79,10 @@ public class PartyService implements IPartyService {
   @Value("${inception.party.max-filtered-persons:#{100}}")
   private int maxFilteredPersons;
 
+  /** The maximum number of mandates that will be returned by the data store. */
+  @Value("${inception.party.max-mandates:#{100}}")
+  private int maxMandates;
+
   /** The maximum number of snapshots for a party that will be returned by the data store. */
   @Value("${inception.party.max-snapshots:#{100}}")
   private int maxSnapshots;
@@ -125,6 +129,34 @@ public class PartyService implements IPartyService {
     }
 
     return getDataStore().createAssociation(tenantId, association);
+  }
+
+  @Override
+  @Transactional
+  @CachePut(cacheNames = "mandates", key = "#mandate.id")
+  public Mandate createMandate(UUID tenantId, Mandate mandate)
+      throws InvalidArgumentException, DuplicateMandateException, PartyNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (mandate == null) {
+      throw new InvalidArgumentException("mandate");
+    }
+
+    if (!Objects.equals(tenantId, mandate.getTenantId())) {
+      throw new InvalidArgumentException("mandate.tenantId");
+    }
+
+    Set<ConstraintViolation<Mandate>> constraintViolations = validateMandate(tenantId, mandate);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "mandate", ValidationError.toValidationErrors(constraintViolations));
+    }
+
+    return getDataStore().createMandate(tenantId, mandate);
   }
 
   @Override
@@ -200,6 +232,22 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
+  @CacheEvict(cacheNames = "mandates", key = "#mandateId")
+  public void deleteMandate(UUID tenantId, UUID mandateId)
+      throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (mandateId == null) {
+      throw new InvalidArgumentException("mandateId");
+    }
+
+    getDataStore().deleteMandate(tenantId, mandateId);
+  }
+
+  @Override
+  @Transactional
   @CacheEvict(cacheNames = "organizations", key = "#organizationId")
   public void deleteOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
@@ -264,7 +312,7 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  public Associations getAssociationsForParty(
+  public AssociationsForParty getAssociationsForParty(
       UUID tenantId,
       UUID partyId,
       AssociationSortBy sortBy,
@@ -308,6 +356,68 @@ public class PartyService implements IPartyService {
 
     return getDataStore()
         .getAssociationsForParty(tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  @Override
+  @Cacheable(cacheNames = "mandates", key = "#mandateId")
+  public Mandate getMandate(UUID tenantId, UUID mandateId)
+      throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (mandateId == null) {
+      throw new InvalidArgumentException("mandateId");
+    }
+
+    return getDataStore().getMandate(tenantId, mandateId);
+  }
+
+  @Override
+  public MandatesForParty getMandatesForParty(
+      UUID tenantId,
+      UUID partyId,
+      MandateSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (partyId == null) {
+      throw new InvalidArgumentException("partyId");
+    }
+
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortBy == null) {
+      sortBy = MandateSortBy.TYPE;
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.ASCENDING;
+    }
+
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+
+    if (pageSize == null) {
+      pageSize = maxMandates;
+    } else {
+      pageSize = Math.min(pageSize, maxMandates);
+    }
+
+    return getDataStore()
+        .getMandatesForParty(tenantId, partyId, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override
@@ -553,6 +663,30 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
+  @CachePut(cacheNames = "mandates", key = "#mandate.id")
+  public Mandate updateMandate(UUID tenantId, Mandate mandate)
+      throws InvalidArgumentException, MandateNotFoundException, PartyNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (mandate == null) {
+      throw new InvalidArgumentException("mandate");
+    }
+
+    Set<ConstraintViolation<Mandate>> constraintViolations = validateMandate(tenantId, mandate);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "mandate", ValidationError.toValidationErrors(constraintViolations));
+    }
+
+    return getDataStore().updateMandate(tenantId, mandate);
+  }
+
+  @Override
+  @Transactional
   @CachePut(cacheNames = "organizations", key = "#organization.id")
   public Organization updateOrganization(UUID tenantId, Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
@@ -605,6 +739,16 @@ public class PartyService implements IPartyService {
       return validator.validate(association);
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to validate the association", e);
+    }
+  }
+
+  @Override
+  public Set<ConstraintViolation<Mandate>> validateMandate(UUID tenantId, Mandate mandate)
+      throws ServiceUnavailableException {
+    try {
+      return validator.validate(mandate);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to validate the mandate", e);
     }
   }
 
