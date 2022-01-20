@@ -67,6 +67,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
   "requiredMandataries",
   "effectiveFrom",
   "effectiveTo",
+  "links",
   "mandataries",
   "properties"
 })
@@ -81,6 +82,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
       "requiredMandataries",
       "effectiveFrom",
       "effectiveTo",
+      "links",
       "mandataries",
       "properties"
     })

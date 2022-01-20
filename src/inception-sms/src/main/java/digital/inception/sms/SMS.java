@@ -16,7 +16,6 @@
 
 package digital.inception.sms;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -30,8 +29,6 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -40,7 +37,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -80,12 +76,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class SMS implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The date and time the SMS was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
 
   /** The ID for the SMS. */
   @Schema(description = "The ID for the SMS", required = true)
@@ -144,12 +134,6 @@ public class SMS implements Serializable {
   @NotNull
   @Column(name = "status", nullable = false)
   private SMSStatus status;
-
-  /** The date and time the SMS was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>SMS</b>. */
   public SMS() {}
@@ -234,15 +218,6 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Returns the date and time the SMS was created.
-   *
-   * @return the date and time the SMS was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the ID for the SMS.
    *
    * @return the ID for the SMS
@@ -303,15 +278,6 @@ public class SMS implements Serializable {
    */
   public SMSStatus getStatus() {
     return status;
-  }
-
-  /**
-   * Returns the date and time the SMS was last updated.
-   *
-   * @return the date and time the SMS was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
@@ -394,17 +360,5 @@ public class SMS implements Serializable {
    */
   public void setStatus(SMSStatus status) {
     this.status = status;
-  }
-
-  /** The Java Persistence callback method invoked before the entity is created in the database. */
-  @PrePersist
-  protected void onCreate() {
-    created = LocalDateTime.now();
-  }
-
-  /** The Java Persistence callback method invoked before the entity is updated in the database. */
-  @PreUpdate
-  protected void onUpdate() {
-    updated = LocalDateTime.now();
   }
 }

@@ -16,14 +16,12 @@
 
 package demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -36,10 +34,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * The <b>Vehicle</b> class.
@@ -72,13 +67,6 @@ public class Vehicle implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the vehicle was created. */
-  @JsonIgnore
-  @XmlTransient
-  @CreationTimestamp
-  @Column(table = "vehicles", name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
-
   /** The ID for the vehicle. */
   @Schema(description = "The ID for the vehicle", required = true)
   @JsonProperty(required = true)
@@ -104,13 +92,6 @@ public class Vehicle implements Serializable {
   @NotNull
   @Column(table = "vehicles", name = "type", length = 30, nullable = false)
   private VehicleType type;
-
-  /** The date and time the vehicle was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @UpdateTimestamp
-  @Column(table = "vehicles", name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** Constructs a new <b>Vehicle</b>. */
   public Vehicle() {}
@@ -153,15 +134,6 @@ public class Vehicle implements Serializable {
   }
 
   /**
-   * Returns the date and time the vehicle was created.
-   *
-   * @return the date and time the vehicle was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the ID for the vehicle.
    *
    * @return the ID for the vehicle
@@ -186,15 +158,6 @@ public class Vehicle implements Serializable {
    */
   public VehicleType getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the vehicle was last updated.
-   *
-   * @return the date and time the vehicle was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**

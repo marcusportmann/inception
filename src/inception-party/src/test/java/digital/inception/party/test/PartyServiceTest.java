@@ -2258,6 +2258,8 @@ public class PartyServiceTest {
     partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, firstPerson.getId());
 
     partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, secondPerson.getId());
+
+    partyService.deletePerson(IPartyService.DEFAULT_TENANT_ID, thirdPerson.getId());
   }
 
   /** Test the next of kin functionality. */

@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -107,18 +106,6 @@ public class Car extends VehicleBase implements Serializable {
   }
 
   /**
-   * Returns the date and time the car was created.
-   *
-   * @return the date and time the car was created
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Override
-  public LocalDateTime getCreated() {
-    return super.getCreated();
-  }
-
-  /**
    * Returns the ID for the car.
    *
    * @return the ID for the car
@@ -166,18 +153,6 @@ public class Car extends VehicleBase implements Serializable {
   @Override
   public VehicleType getType() {
     return super.getType();
-  }
-
-  /**
-   * Returns the date and time the car was last updated.
-   *
-   * @return the date and time the car was last updated
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Override
-  public LocalDateTime getUpdated() {
-    return super.getUpdated();
   }
 
   /**

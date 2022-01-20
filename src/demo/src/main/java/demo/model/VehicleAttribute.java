@@ -17,13 +17,11 @@
 package demo.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,8 +39,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * The <b>VehicleAttribute</b> class holds the information for a vehicle attribute for a vehicle.
@@ -65,13 +61,6 @@ public class VehicleAttribute implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the vehicle attribute was created. */
-  @JsonIgnore
-  @XmlTransient
-  @CreationTimestamp
-  @Column(name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
-
   /** The code for the vehicle attribute type. */
   @Schema(description = "The code for the vehicle attribute type", required = true)
   @JsonProperty(required = true)
@@ -81,13 +70,6 @@ public class VehicleAttribute implements Serializable {
   @Id
   @Column(name = "type", length = 30, nullable = false)
   private String type;
-
-  /** The date and time the vehicle attribute was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @UpdateTimestamp
-  @Column(name = "updated", insertable = false)
-  private LocalDateTime updated;
 
   /** The value for the vehicle attribute. */
   @Schema(description = "The value for the vehicle attribute", required = true)
@@ -147,30 +129,12 @@ public class VehicleAttribute implements Serializable {
   }
 
   /**
-   * Returns the date and time the vehicle attribute was created.
-   *
-   * @return the date and time the vehicle attribute was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  /**
    * Returns the code for the vehicle attribute type.
    *
    * @return the code for the vehicle attribute type
    */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the vehicle attribute was last updated.
-   *
-   * @return the date and time the vehicle attribute was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**
