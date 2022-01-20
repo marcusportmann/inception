@@ -28,6 +28,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -90,6 +91,20 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Mandate implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The links for the mandate. */
+  @Schema(description = "The links for the mandate")
+  @JsonProperty
+  @JsonManagedReference
+  @XmlElementWrapper(name = "Links")
+  @XmlElement(name = "Link")
+  @Valid
+  @OneToMany(
+      mappedBy = "mandate",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<MandateLink> links = new HashSet<>();
 
   /** The mandataries for the mandate. */
   @Schema(description = "The mandataries for the mandate")
@@ -234,6 +249,22 @@ public class Mandate implements Serializable {
   }
 
   /**
+   * Add the link for the mandate.
+   *
+   * @param link the link
+   */
+  public void addLink(MandateLink link) {
+    links.removeIf(
+        existingLink ->
+            Objects.equals(existingLink.getType(), link.getType())
+                && Objects.equals(existingLink.getTarget(), link.getTarget()));
+
+    link.setMandate(this);
+
+    links.add(link);
+  }
+
+  /**
    * Add the mandatary for the mandate.
    *
    * @param mandatary the mandatary
@@ -312,6 +343,25 @@ public class Mandate implements Serializable {
    */
   public UUID getId() {
     return id;
+  }
+
+  /**
+   * Returns the links for the mandate.
+   *
+   * @return the links for the mandate
+   */
+  public Set<MandateLink> getLinks() {
+    return links;
+  }
+
+  /**
+   * Retrieve the links with the specified type for the mandate.
+   *
+   * @param type the code for the link type
+   * @return the links with the specified type for the mandate
+   */
+  public List<MandateLink> getLinksWithType(String type) {
+    return links.stream().filter(link -> Objects.equals(link.getType(), type)).toList();
   }
 
   /**
@@ -394,6 +444,15 @@ public class Mandate implements Serializable {
   }
 
   /**
+   * Remove the links with the specified type for the mandate.
+   *
+   * @param type the code for the link type
+   */
+  public void removeLinksWithType(String type) {
+    links.removeIf(existingLink -> Objects.equals(existingLink.getType(), type));
+  }
+
+  /**
    * Remove the mandatary for the party with the specified ID.
    *
    * @param partyId the ID for the party who is the recipient of the mandate
@@ -437,6 +496,17 @@ public class Mandate implements Serializable {
    */
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Set the links for the mandate.
+   *
+   * @param links the links for the mandate
+   */
+  public void setLinks(Set<MandateLink> links) {
+    links.forEach(link -> link.setMandate(this));
+    this.links.clear();
+    this.links.addAll(links);
   }
 
   /**

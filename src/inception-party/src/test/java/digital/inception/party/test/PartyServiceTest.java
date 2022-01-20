@@ -47,6 +47,7 @@ import digital.inception.party.LanguageProficiencyLevel;
 import digital.inception.party.Lock;
 import digital.inception.party.Mandatary;
 import digital.inception.party.Mandate;
+import digital.inception.party.MandateLink;
 import digital.inception.party.MandateProperty;
 import digital.inception.party.MandateSortBy;
 import digital.inception.party.MandatesForParty;
@@ -2183,6 +2184,10 @@ public class PartyServiceTest {
 
     partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, secondPerson);
 
+    Person thirdPerson = getTestCompletePersonDetails(false);
+
+    partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, thirdPerson);
+
     Mandate mandate =
         new Mandate(
             IPartyService.DEFAULT_TENANT_ID,
@@ -2190,6 +2195,8 @@ public class PartyServiceTest {
             RequiredMandataries.ALL,
             LocalDate.of(2016, 7, 16),
             LocalDate.now());
+
+    mandate.addLink(new MandateLink("party_id", thirdPerson.getId().toString()));
 
     mandate.addMandatary(new Mandatary(firstPerson.getId(), "test_mandatary_type"));
     mandate.addMandatary(new Mandatary(secondPerson.getId(), "test_mandatary_type"));
@@ -3926,6 +3933,27 @@ public class PartyServiceTest {
         "The tenant ID values for the mandates do not match");
     assertEquals(
         mandate1.getType(), mandate2.getType(), "The type values for the mandates do not match");
+
+    assertEquals(
+        mandate1.getLinks().size(),
+        mandate2.getLinks().size(),
+        "The number of links for the mandates do not match");
+
+    for (MandateLink link1 : mandate1.getLinks()) {
+      boolean foundLink = false;
+
+      for (MandateLink link2 : mandate2.getLinks()) {
+        if ((link1.getType().equals(link2.getType()))
+            && (link1.getTarget().equals(link2.getTarget()))) {
+
+          foundLink = true;
+        }
+      }
+
+      if (!foundLink) {
+        fail("Failed to find the mandate link with type (" + link1.getType() + ") and target (" + link1.getTarget() + ")");
+      }
+    }
 
     assertEquals(
         mandate1.getMandataries().size(),

@@ -59,7 +59,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "mandate_links")
-@IdClass(MandataryId.class)
+@IdClass(MandateLinkId.class)
 public class MandateLink implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -79,6 +79,7 @@ public class MandateLink implements Serializable {
   @XmlElement(name = "Target", required = true)
   @NotNull
   @Size(min = 1, max = 200)
+  @Id
   @Column(name = "target", length = 200, nullable = false)
   private String target;
 
@@ -88,6 +89,7 @@ public class MandateLink implements Serializable {
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Size(min = 1, max = 30)
+  @Id
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
