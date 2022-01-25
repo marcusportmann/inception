@@ -285,6 +285,7 @@ public class MailService implements IMailService {
     }
   }
 
+  /** Initialize the Mail Service. */
   @PostConstruct
   public void init() {
     try {

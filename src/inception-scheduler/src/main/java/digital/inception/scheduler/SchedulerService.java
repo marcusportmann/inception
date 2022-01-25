@@ -320,6 +320,7 @@ public class SchedulerService implements ISchedulerService {
     }
   }
 
+  /** Initialize the Scheduler Service. */
   @PostConstruct
   public void init() {
     logger.info("Initializing the Scheduler Service (" + instanceName + ")");

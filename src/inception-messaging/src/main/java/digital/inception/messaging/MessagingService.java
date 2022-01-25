@@ -809,6 +809,7 @@ public class MessagingService implements IMessagingService {
     }
   }
 
+  /** Initialize the Messaging Service. */
   @PostConstruct
   public void init() {
     logger.info("Initializing the Messaging Service (" + instanceName + ")");

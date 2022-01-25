@@ -753,6 +753,7 @@ public interface IPartyReferenceService {
    * specified code for the tenant with the specified ID for the first matching locale.
    *
    * @param tenantId the ID for the tenant the mandate property type reference data is specific to
+   * @param mandateTypeCode the code for the mandate type
    * @param mandatePropertyTypeCode the code for the mandate property type
    * @return an Optional containing the mandate property type with the specified code for the
    *     mandate type with the specified code for the tenant with the specified ID for the first

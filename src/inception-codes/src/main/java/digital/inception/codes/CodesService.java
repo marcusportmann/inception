@@ -399,6 +399,40 @@ public class CodesService implements ICodesService {
   }
 
   @Override
+  public LocalDateTime getCodeCategoryLastModified(String codeCategoryId)
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    try {
+      Optional<LocalDateTime> updatedOptional =
+          codeCategoryRepository.getLastModifiedById(codeCategoryId);
+
+      if (updatedOptional.isPresent()) {
+        return updatedOptional.get();
+      }
+
+      // Check if one of the registered code providers supports the code category
+      for (ICodeProvider codeProvider : codeProviders) {
+        if (codeProvider.codeCategoryExists(codeCategoryId)) {
+          return codeProvider.getCodeCategoryLastModified(codeCategoryId);
+        }
+      }
+
+      throw new CodeCategoryNotFoundException(codeCategoryId);
+    } catch (CodeCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the date and time the code category ("
+              + codeCategoryId
+              + ") was last updated",
+          e);
+    }
+  }
+
+  @Override
   public String getCodeCategoryName(String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
@@ -435,40 +469,6 @@ public class CodesService implements ICodesService {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the code categories", e);
-    }
-  }
-
-  @Override
-  public LocalDateTime getCodeCategoryLastModified(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
-    try {
-      Optional<LocalDateTime> updatedOptional =
-          codeCategoryRepository.getLastModifiedById(codeCategoryId);
-
-      if (updatedOptional.isPresent()) {
-        return updatedOptional.get();
-      }
-
-      // Check if one of the registered code providers supports the code category
-      for (ICodeProvider codeProvider : codeProviders) {
-        if (codeProvider.codeCategoryExists(codeCategoryId)) {
-          return codeProvider.getCodeCategoryLastModified(codeCategoryId);
-        }
-      }
-
-      throw new CodeCategoryNotFoundException(codeCategoryId);
-    } catch (CodeCategoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the date and time the code category ("
-              + codeCategoryId
-              + ") was last updated",
-          e);
     }
   }
 
@@ -589,6 +589,7 @@ public class CodesService implements ICodesService {
     }
   }
 
+  /** Initialize the Codes Service. */
   @PostConstruct
   public void init() {
     logger.info("Initializing the Codes Service");

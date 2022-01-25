@@ -1655,6 +1655,7 @@ public class SecurityService implements ISecurityService {
     return userDirectory.getUsers(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
+  /** Initialize the Security Service. */
   @PostConstruct
   public void init() {
     try {
