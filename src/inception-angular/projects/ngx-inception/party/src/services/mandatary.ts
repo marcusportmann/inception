@@ -27,19 +27,19 @@ export class Mandatary {
   partyId: string;
 
   /**
-   * The code for the mandatary type.
+   * The code for the mandatary role.
    */
-  type: string;
+  role: string;
 
   /**
    * Constructs a new Mandatary.
    *
    * @param partyId The ID for the party who is the recipient of the mandate.
-   * @param type    The code for the mandatary type.
+   * @param role    The code for the mandatary role.
    */
-  constructor(partyId: string, type: string) {
+  constructor(partyId: string, role: string) {
     this.partyId = partyId;
-    this.type = type;
+    this.role = role;
   }
 }
 

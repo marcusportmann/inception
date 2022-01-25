@@ -228,7 +228,7 @@ public class PartyServiceTest {
         "Failed to confirm that the person has an attribute with type (weight)");
 
     person.setCountryOfTaxResidence("ZA");
-    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "0123456789"));
 
     person.addContactMechanism(
         new ContactMechanism(
@@ -390,11 +390,11 @@ public class PartyServiceTest {
             ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27825551234"));
 
     person.addIdentityDocument(
-        new IdentityDocument("passport", "ZW", LocalDate.of(2010, 5, 20), "ZW1234567890"));
+        new IdentityDocument("passport", "ZW", LocalDate.of(2010, 5, 20), "A01524783"));
 
     person.addResidencePermit(
         new ResidencePermit(
-            "za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "AA1234567890"));
+            "za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "AA0187236"));
 
     PhysicalAddress residentialAddress =
         new PhysicalAddress(
@@ -622,7 +622,7 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("correspondence_language", "EN"));
 
-    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "0123456789"));
 
     partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
   }
@@ -1192,6 +1192,90 @@ public class PartyServiceTest {
         "The correct number of constraint violations was not found for the association");
   }
 
+  /** Test the invalid preference functionality. */
+  @Test
+  public void invalidPreferenceTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addPreference(new Preference("test_preference", "invalid_test_preference_value"));
+
+    Set<ConstraintViolation<Person>> personConstraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        1,
+        personConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the person");
+
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addPreference(new Preference("test_preference", "invalid_test_preference_value"));
+
+    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
+        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    assertEquals(
+        1,
+        organizationConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the organization");
+  }
+
+  /** Test the invalid contact mechanism functionality. */
+  @Test
+  public void invalidContactMechanismTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismRole.MAIN_EMAIL_ADDRESS,
+            "invalid_contact_mechanism_role@test.com"));
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
+            "test@",
+            "invalid_purpose"));
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.SOCIAL_MEDIA,
+            ContactMechanismRole.TWITTER_ID,
+            "!invalid_twitter_id"));
+
+    Set<ConstraintViolation<Person>> personConstraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        4,
+        personConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the person");
+
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
+            "invalid_contact_mechanism_role@test.com"));
+
+    organization.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismRole.MAIN_EMAIL_ADDRESS,
+            "test@",
+            "invalid_purpose"));
+
+    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
+        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    assertEquals(
+        3,
+        organizationConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the organization");
+  }
+
   /** Test the invalid attribute functionality. */
   @Test
   public void invalidAttributeTest() throws Exception {
@@ -1505,6 +1589,49 @@ public class PartyServiceTest {
         15,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid farm address");
+  }
+
+  /** Test the pattern validation functionality. */
+  @Test
+  public void patternValidationTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addIdentityDocument(
+        new IdentityDocument(
+            "passport", "ZA", LocalDate.of(2016, 10, 7), LocalDate.of(2025, 9, 1), "A1234567890! "));
+
+    person.addIdentityDocument(
+        new IdentityDocument("za_id_card", "ZA", LocalDate.of(2018, 7, 16), "X89 04085800089!"));
+
+    person.addResidencePermit(
+        new ResidencePermit(
+            "za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "BA018723633711"));
+
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "0123456789!"));
+
+    Set<ConstraintViolation<Person>> personConstraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        4,
+        personConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid person");
+
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addIdentityDocument(
+        new IdentityDocument(
+            "za_company_registration", "ZA", LocalDate.of(2006, 4, 2), "X123456!"));
+
+    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "9123456789!"));
+
+    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
+        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    assertEquals(
+        2,
+        organizationConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid organization");
   }
 
   /** Test the invalid international address verification functionality. */
@@ -2329,7 +2456,7 @@ public class PartyServiceTest {
     assertTrue(organization.hasIdentityDocumentWithType("za_company_registration"));
 
     organization.setCountryOfTaxResidence("ZA");
-    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "9123456789"));
 
     partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -2632,7 +2759,7 @@ public class PartyServiceTest {
 
     person.addIdentityDocument(
         new IdentityDocument(
-            "passport", "ZA", LocalDate.of(2016, 10, 7), LocalDate.of(2025, 9, 1), "A1234567890"));
+            "passport", "ZA", LocalDate.of(2016, 10, 7), LocalDate.of(2025, 9, 1), "A01524783"));
 
     assertTrue(person.hasIdentityDocumentWithType("passport"));
 
@@ -3380,7 +3507,7 @@ public class PartyServiceTest {
     // Person tax numbers
     Person person = getTestBasicPersonDetails();
 
-    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "0123456789"));
 
     partyService.createPerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3405,7 +3532,7 @@ public class PartyServiceTest {
 
     comparePersons(person, retrievedPerson);
 
-    person.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "987654321")));
+    person.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "0987654321")));
 
     partyService.updatePerson(IPartyService.DEFAULT_TENANT_ID, person);
 
@@ -3418,7 +3545,7 @@ public class PartyServiceTest {
     // Organization tax numbers
     Organization organization = getTestBasicOrganizationDetails();
 
-    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
+    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "9123456789"));
 
     partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -3442,7 +3569,7 @@ public class PartyServiceTest {
 
     compareOrganizations(organization, retrievedOrganization);
 
-    organization.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "987654321")));
+    organization.setTaxNumbers(Set.of(new TaxNumber("za_income_tax_number", "ZA", "9987654321")));
 
     partyService.updateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
 
@@ -3953,7 +4080,12 @@ public class PartyServiceTest {
       }
 
       if (!foundLink) {
-        fail("Failed to find the mandate link with type (" + link1.getType() + ") and target (" + link1.getTarget() + ")");
+        fail(
+            "Failed to find the mandate link with type ("
+                + link1.getType()
+                + ") and target ("
+                + link1.getTarget()
+                + ")");
       }
     }
 
@@ -3967,7 +4099,7 @@ public class PartyServiceTest {
 
       for (Mandatary mandatary2 : mandate2.getMandataries()) {
         if ((mandatary1.getPartyId().equals(mandatary2.getPartyId()))
-            && (mandatary1.getType().equals(mandatary2.getType()))) {
+            && (mandatary1.getRole().equals(mandatary2.getRole()))) {
 
           foundMandatary = true;
         }

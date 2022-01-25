@@ -46,30 +46,30 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "A type of mandate property")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "mandateType",
-    "code",
-    "localeId",
-    "tenantId",
-    "sortIndex",
-    "name",
-    "description",
-    "valueType",
-    "pattern"
+  "mandateType",
+  "code",
+  "localeId",
+  "tenantId",
+  "sortIndex",
+  "name",
+  "description",
+  "valueType",
+  "pattern"
 })
 @XmlRootElement(name = "MandatePropertyType", namespace = "http://inception.digital/party")
 @XmlType(
     name = "MandatePropertyType",
     namespace = "http://inception.digital/party",
     propOrder = {
-        "mandateType",
-        "code",
-        "localeId",
-        "tenantId",
-        "sortIndex",
-        "name",
-        "description",
-        "valueType",
-        "pattern"
+      "mandateType",
+      "code",
+      "localeId",
+      "tenantId",
+      "sortIndex",
+      "name",
+      "description",
+      "valueType",
+      "pattern"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -78,19 +78,6 @@ import javax.xml.bind.annotation.XmlType;
 public class MandatePropertyType implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The code for the mandate type the mandate property type is associated with. */
-  @Schema(
-      description =
-          "The code for the mandate type the mandate property type is associated with",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "MandateType", required = true)
-  @NotNull
-  @Size(min = 1, max = 30)
-  @Id
-  @Column(name = "mandate_type", length = 30, nullable = false)
-  private String mandateType;
 
   /** The code for the mandate property type. */
   @Schema(description = "The code for the mandate property type", required = true)
@@ -126,6 +113,18 @@ public class MandatePropertyType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
+  /** The code for the mandate type the mandate property type is associated with. */
+  @Schema(
+      description = "The code for the mandate type the mandate property type is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "MandateType", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Id
+  @Column(name = "mandate_type", length = 30, nullable = false)
+  private String mandateType;
+
   /** The name of the mandate property type. */
   @Schema(description = "The name of the mandate property type", required = true)
   @JsonProperty(required = true)
@@ -136,8 +135,7 @@ public class MandatePropertyType implements Serializable {
   private String name;
 
   /**
-   * The regular expression pattern used to validate a string value for the mandate property
-   * type.
+   * The regular expression pattern used to validate a string value for the mandate property type.
    */
   @Schema(
       description =
@@ -201,15 +199,6 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Returns the code for the mandate type the mandate property type is associated with.
-   *
-   * @return the code for the mandate type the mandate property type is associated with
-   */
-  public String getMandateType() {
-    return mandateType;
-  }
-
-  /**
    * Returns the code for the mandate property type.
    *
    * @return the code for the mandate property type
@@ -251,6 +240,15 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
+   * Returns the code for the mandate type the mandate property type is associated with.
+   *
+   * @return the code for the mandate type the mandate property type is associated with
+   */
+  public String getMandateType() {
+    return mandateType;
+  }
+
+  /**
    * Returns the name of the mandate property type.
    *
    * @return the name of the mandate property type
@@ -260,11 +258,11 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Returns the regular expression pattern used to validate a string value for the mandate
-   * property type.
+   * Returns the regular expression pattern used to validate a string value for the mandate property
+   * type.
    *
-   * @return the regular expression pattern used to validate a string value for the mandate
-   *     property type
+   * @return the regular expression pattern used to validate a string value for the mandate property
+   *     type
    */
   public String getPattern() {
     return pattern;
@@ -310,16 +308,6 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Set the code for the mandate type the mandate property type is associated with.
-   *
-   * @param mandateType the code for the mandate type the mandate property type is associated
-   *     with
-   */
-  public void setMandateType(String mandateType) {
-    this.mandateType = mandateType;
-  }
-
-  /**
    * Set the code for the mandate property type.
    *
    * @param code the code for the mandate property type
@@ -347,6 +335,15 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
+   * Set the code for the mandate type the mandate property type is associated with.
+   *
+   * @param mandateType the code for the mandate type the mandate property type is associated with
+   */
+  public void setMandateType(String mandateType) {
+    this.mandateType = mandateType;
+  }
+
+  /**
    * Set the name of the mandate property type.
    *
    * @param name the name of the mandate property type
@@ -359,8 +356,8 @@ public class MandatePropertyType implements Serializable {
    * Set the regular expression pattern used to validate a string value for the mandate property
    * type.
    *
-   * @param pattern the regular expression pattern used to validate a string value for the
-   *     mandate property type
+   * @param pattern the regular expression pattern used to validate a string value for the mandate
+   *     property type
    */
   public void setPattern(String pattern) {
     this.pattern = pattern;

@@ -25,16 +25,11 @@ import java.util.Locale;
  */
 public class Generator {
 
-  /**
-   * The locale to use when generating random party data.
-   */
-  private Locale locale;
+  /** The locale to use when generating random party data. */
+  private final Locale locale;
 
-  /**
-   * Constructs a new <b>Generator</b>.
-   */
-  public Generator()
-  {
+  /** Constructs a new <b>Generator</b>. */
+  public Generator() {
     this.locale = Locale.forLanguageTag("en-US");
   }
 

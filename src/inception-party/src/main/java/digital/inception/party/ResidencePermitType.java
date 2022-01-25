@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -23,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -87,6 +89,9 @@ public class ResidencePermitType implements Serializable {
   @Id
   @Column(name = "code", length = 30, nullable = false)
   private String code;
+
+  /** The compiled pattern. */
+  @JsonIgnore private transient Pattern compiledPattern;
 
   /** The ISO 3166-1 alpha-2 code for the country of issue for the residence permit type. */
   @Schema(
@@ -190,6 +195,20 @@ public class ResidencePermitType implements Serializable {
    */
   public String getCode() {
     return code;
+  }
+
+  /**
+   * Returns the compiled pattern.
+   *
+   * @return the compiled pattern
+   */
+  @JsonIgnore
+  public Pattern getCompiledPattern() {
+    if (compiledPattern == null) {
+      compiledPattern = Pattern.compile(pattern);
+    }
+
+    return compiledPattern;
   }
 
   /**

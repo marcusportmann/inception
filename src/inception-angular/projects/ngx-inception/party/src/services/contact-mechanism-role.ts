@@ -52,6 +52,12 @@ export class ContactMechanismRole {
   partyTypes: string[];
 
   /**
+   * The regular expression pattern used to validate a contact mechanism value for the contact
+   * mechanism role.
+   */
+  pattern?: string;
+
+  /**
    * The sort index for the contact mechanism role.
    */
   sortIndex: number;
@@ -73,10 +79,13 @@ export class ContactMechanismRole {
    * @param description          The description for the contact mechanism role.
    * @param partyTypes           The codes for the party types the contact mechanism role is
    *                             associated with.
+   * @param pattern              The regular expression pattern used to validate a contact mechanism
+   *                             value for the contact mechanism role.
    * @param tenantId             The ID for the tenant the contact mechanism role is specific to.
    */
   constructor(contactMechanismType: string, code: string, localeId: string, sortIndex: number,
-              name: string, description: string, partyTypes: string[], tenantId?: string) {
+              name: string, description: string, partyTypes: string[], pattern?: string,
+              tenantId?: string) {
     this.contactMechanismType = contactMechanismType;
     this.code = code;
     this.localeId = localeId;
@@ -84,6 +93,7 @@ export class ContactMechanismRole {
     this.name = name;
     this.description = description;
     this.partyTypes = partyTypes;
+    this.pattern = pattern;
     this.tenantId = tenantId;
   }
 }

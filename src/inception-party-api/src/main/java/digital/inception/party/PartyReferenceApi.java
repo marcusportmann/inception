@@ -1142,18 +1142,18 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
-   * Retrieve the mandatary type reference data for a specific locale.
+   * Retrieve the mandatary role reference data for a specific locale.
    *
-   * @param tenantId the ID for the tenant the mandatary type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary type
+   * @param tenantId the ID for the tenant the mandatary role reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary role
    *     reference data for
-   * @return the mandatary type reference data
+   * @return the mandatary role reference data
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the mandatary type reference data could not be retrieved
+   * @throws ServiceUnavailableException if the mandatary role reference data could not be retrieved
    */
   @Operation(
-      summary = "Retrieve the mandatary type reference data for a specific locale",
-      description = "Retrieve the mandatary type reference data for a specific locale")
+      summary = "Retrieve the mandatary role reference data for a specific locale",
+      description = "Retrieve the mandatary role reference data for a specific locale")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -1179,11 +1179,11 @@ public class PartyReferenceApi extends SecureApi {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
-  public List<MandataryType> getMandataryTypes(
+  public List<MandataryRole> getMandataryRoles(
       @Parameter(
               name = "Tenant-ID",
               description =
-                  "The ID for the tenant the mandatary type reference data is specific to",
+                  "The ID for the tenant the mandatary role reference data is specific to",
               example = "00000000-0000-0000-0000-000000000000")
           @RequestHeader(
               name = "Tenant-ID",
@@ -1193,7 +1193,7 @@ public class PartyReferenceApi extends SecureApi {
       @Parameter(
               name = "localeId",
               description =
-                  "The Unicode locale identifier for the locale to retrieve the mandatary type reference data for",
+                  "The Unicode locale identifier for the locale to retrieve the mandatary role reference data for",
               example = IPartyReferenceService.DEFAULT_LOCALE_ID)
           @RequestParam(
               value = "localeId",
@@ -1201,7 +1201,7 @@ public class PartyReferenceApi extends SecureApi {
               defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
           String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return partyReferenceService.getMandataryTypes(tenantId, localeId);
+    return partyReferenceService.getMandataryRoles(tenantId, localeId);
   }
 
   /**

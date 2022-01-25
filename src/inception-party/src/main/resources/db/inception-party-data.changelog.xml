@@ -365,6 +365,7 @@
       <column name="name" value="Twitter ID"/>
       <column name="description" value="Twitter ID"/>
       <column name="party_types" value="person"/>
+      <column name="pattern">^@?(\w){1,15}$</column>
     </insert>
 
     <insert schemaName="party" tableName="employment_statuses">
@@ -1704,6 +1705,7 @@
       <column name="description" value="South African Company Registration"/>
       <column name="country_of_issue" value="ZA"/>
       <column name="party_types" value="organization"/>
+      <column name="pattern" value="((19|20)[\d]{2}/[\d]{6}/[\d]{2})"/>
     </insert>
     <insert schemaName="party" tableName="identity_document_types">
       <column name="code" value="passport"/>
@@ -1712,6 +1714,7 @@
       <column name="name" value="Passport"/>
       <column name="description" value="Passport"/>
       <column name="party_types" value="person"/>
+      <column name="pattern" value="^(?!(0))[a-zA-Z0-9]{6,9}$"/>
     </insert>
 
     <insert schemaName="party" tableName="link_types">
@@ -2481,6 +2484,7 @@
       <column name="name" value="General Work Visa"/>
       <column name="description" value="General Work Visa"/>
       <column name="country_of_issue" value="ZA"/>
+      <column name="pattern" value="^AA[\d]{7}$"/>
     </insert>
     <insert schemaName="party" tableName="residence_permit_types">
       <column name="code" value="za_critical_skills_visa"/>
@@ -3310,6 +3314,7 @@
       <column name="description" value="South African Income Tax Reference Number"/>
       <column name="country_of_issue" value="ZA"/>
       <column name="party_types" value="organization,person"/>
+      <column name="pattern" value="^(?:0|1|2|3|9)\d{9}$"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">
       <column name="code" value="uk_tax_number"/>
@@ -3355,6 +3360,7 @@
       <column name="description" value="South African VAT Tax Number"/>
       <column name="country_of_issue" value="ZA"/>
       <column name="party_types" value="organization,person"/>
+      <column name="pattern" value="((19|20)[\d]{2}/[\d]{6}/[\d]{2})"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">
       <column name="code" value="za_other_tax_number"/>
@@ -3728,160 +3734,173 @@
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="general_power_of_attorney"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
       <column name="name" value="General Power of Attorney"/>
       <column name="description" value="General Power of Attorney"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="special_power_of_attorney"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
       <column name="name" value="Special Power of Attorney"/>
       <column name="description" value="Special Power of Attorney"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="signature_authorization"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
       <column name="name" value="Signature Authorization"/>
       <column name="description" value="Signature Authorization (Signing Instruction)"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="trading_authorization"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
       <column name="name" value="Trading Authorization"/>
       <column name="description" value="Trading Authorization"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="guardianship"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
       <column name="name" value="Guardianship"/>
       <column name="description" value="Guardianship (Youth Consent)"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="court_authority_executor"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
       <column name="name" value="Court Authority - Executor"/>
       <column name="description" value="Court Authority - Executor"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="court_authority_curator"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="7"/>
       <column name="name" value="Court Authority - Curator"/>
       <column name="description" value="Court Authority - Curator"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="court_authority_trustee"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="8"/>
       <column name="name" value="Court Authority - Trustee"/>
       <column name="description" value="Court Authority - Trustee"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="court_authority_liquidator"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="9"/>
       <column name="name" value="Court Authority - Liquidator"/>
       <column name="description" value="Court Authority - Liquidator"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="court_authority_judicial"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="10"/>
       <column name="name" value="Court Authority - Judicial"/>
       <column name="description" value="Court Authority - Judicial"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="financial_advisor"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="11"/>
       <column name="name" value="Financial Advisor"/>
       <column name="description" value="Financial Advisor"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="doctor_patient"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="12"/>
       <column name="name" value="Doctor-Patient"/>
       <column name="description" value="Doctor-Patient"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="employer_employee"/>
       <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="13"/>
       <column name="name" value="Employer-Employee"/>
       <column name="description" value="Employer-Employee"/>
     </insert>
 
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="general_power_of_attorney"/>
       <column name="code" value="mandatary"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Mandatary"/>
       <column name="description" value="Mandatary"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="special_power_of_attorney"/>
       <column name="code" value="mandatary"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Mandatary"/>
       <column name="description" value="Mandatary"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="signature_authorization"/>
       <column name="code" value="authorized_signatory"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Authorized Signatory"/>
       <column name="description" value="Authorized Signatory"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="trading_authorization"/>
       <column name="code" value="authorized_trading_agent"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Authorized Trading Agent"/>
       <column name="description" value="Authorized Trading Agent"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="court_authority_executor"/>
       <column name="code" value="executor"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Executor"/>
       <column name="description" value="Executor"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="court_authority_curator"/>
       <column name="code" value="curator"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Curator"/>
       <column name="description" value="Curator"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="court_authority_trustee"/>
       <column name="code" value="trustee"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Trustee"/>
       <column name="description" value="Trustee"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="court_authority_liquidator"/>
       <column name="code" value="liquidator"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Liquidator"/>
       <column name="description" value="Liquidator"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="court_authority_judicial"/>
       <column name="code" value="judicial_manager"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Judicial Manager"/>
       <column name="description" value="Judicial Manager"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="financial_advisor"/>
       <column name="code" value="financial_advisor"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Financial Advisor"/>
       <column name="description" value="Financial Advisor"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="doctor_patient"/>
       <column name="code" value="doctor"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Doctor"/>
       <column name="description" value="Doctor"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="employer_employee"/>
       <column name="code" value="employer"/>
       <column name="locale_id" value="en-US"/>
@@ -3988,6 +4007,7 @@
       <column name="name" value="Mobile Number"/>
       <column name="plural" value="Mobile Numbers"/>
       <column name="description" value="Mobile Number"/>
+      <column name="pattern" value=""/>
     </insert>
     <insert schemaName="party" tableName="contact_mechanism_types">
       <column name="code" value="phone_number"/>
@@ -4247,6 +4267,7 @@
       <column name="name" value="Twitter ID"/>
       <column name="description" value="Twitter ID"/>
       <column name="party_types" value="person"/>
+      <column name="pattern">^@?(\w){1,15}$</column>
     </insert>
 
     <insert schemaName="party" tableName="employment_statuses">
@@ -5586,6 +5607,7 @@
       <column name="description" value="South African Company Registration"/>
       <column name="country_of_issue" value="ZA"/>
       <column name="party_types" value="organization"/>
+      <column name="pattern" value="((19|20)[\d]{2}/[\d]{6}/[\d]{2})"/>
     </insert>
     <insert schemaName="party" tableName="identity_document_types">
       <column name="code" value="passport"/>
@@ -5594,6 +5616,7 @@
       <column name="name" value="Passport"/>
       <column name="description" value="Passport"/>
       <column name="party_types" value="person"/>
+      <column name="pattern" value="^(?!(0))[a-zA-Z0-9]{6,9}$"/>
     </insert>
 
     <insert schemaName="party" tableName="link_types">
@@ -6363,6 +6386,7 @@
       <column name="name" value="General Work Visa"/>
       <column name="description" value="General Work Visa"/>
       <column name="country_of_issue" value="ZA"/>
+      <column name="pattern" value="^AA[\d]{7}$"/>
     </insert>
     <insert schemaName="party" tableName="residence_permit_types">
       <column name="code" value="za_critical_skills_visa"/>
@@ -7194,6 +7218,7 @@
       <column name="description" value="South African Income Tax Reference Number"/>
       <column name="country_of_issue" value="ZA"/>
       <column name="party_types" value="organization,person"/>
+      <column name="pattern" value="^(?:0|1|2|3|9)\d{9}$"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">
       <column name="code" value="uk_tax_number"/>
@@ -7239,6 +7264,7 @@
       <column name="description" value="South African VAT Tax Number"/>
       <column name="country_of_issue" value="ZA"/>
       <column name="party_types" value="organization,person"/>
+      <column name="pattern" value="((19|20)[\d]{2}/[\d]{6}/[\d]{2})"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">
       <column name="code" value="za_other_tax_number"/>
@@ -7610,160 +7636,173 @@
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="general_power_of_attorney"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="1"/>
       <column name="name" value="General Power of Attorney"/>
       <column name="description" value="General Power of Attorney"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="special_power_of_attorney"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="2"/>
       <column name="name" value="Special Power of Attorney"/>
       <column name="description" value="Special Power of Attorney"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="signature_authorization"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="3"/>
       <column name="name" value="Signature Authorization"/>
       <column name="description" value="Signature Authorization (Signing Instruction)"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="trading_authorization"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="4"/>
       <column name="name" value="Trading Authorization"/>
       <column name="description" value="Trading Authorization"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="guardianship"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="5"/>
       <column name="name" value="Guardianship"/>
       <column name="description" value="Guardianship (Youth Consent)"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="court_authority_executor"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="6"/>
       <column name="name" value="Court Authority - Executor"/>
       <column name="description" value="Court Authority - Executor"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="court_authority_curator"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="7"/>
       <column name="name" value="Court Authority - Curator"/>
       <column name="description" value="Court Authority - Curator"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="court_authority_trustee"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="8"/>
       <column name="name" value="Court Authority - Trustee"/>
       <column name="description" value="Court Authority - Trustee"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="court_authority_liquidator"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="9"/>
       <column name="name" value="Court Authority - Liquidator"/>
       <column name="description" value="Court Authority - Liquidator"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="court_authority_judicial"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="10"/>
       <column name="name" value="Court Authority - Judicial"/>
       <column name="description" value="Court Authority - Judicial"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="financial_advisor"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="11"/>
       <column name="name" value="Financial Advisor"/>
       <column name="description" value="Financial Advisor"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="doctor_patient"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="12"/>
       <column name="name" value="Doctor-Patient"/>
       <column name="description" value="Doctor-Patient"/>
     </insert>
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="employer_employee"/>
       <column name="locale_id" value="en-ZA"/>
+      <column name="sort_index" value="13"/>
       <column name="name" value="Employer-Employee"/>
       <column name="description" value="Employer-Employee"/>
     </insert>
 
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="general_power_of_attorney"/>
       <column name="code" value="mandatary"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Mandatary"/>
       <column name="description" value="Mandatary"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="special_power_of_attorney"/>
       <column name="code" value="mandatary"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Mandatary"/>
       <column name="description" value="Mandatary"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="signature_authorization"/>
       <column name="code" value="authorized_signatory"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Authorized Signatory"/>
       <column name="description" value="Authorized Signatory"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="trading_authorization"/>
       <column name="code" value="authorized_trading_agent"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Authorized Trading Agent"/>
       <column name="description" value="Authorized Trading Agent"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="court_authority_executor"/>
       <column name="code" value="executor"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Executor"/>
       <column name="description" value="Executor"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="court_authority_curator"/>
       <column name="code" value="curator"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Curator"/>
       <column name="description" value="Curator"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="court_authority_trustee"/>
       <column name="code" value="trustee"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Trustee"/>
       <column name="description" value="Trustee"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="court_authority_liquidator"/>
       <column name="code" value="liquidator"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Liquidator"/>
       <column name="description" value="Liquidator"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="court_authority_judicial"/>
       <column name="code" value="judicial_manager"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Judicial Manager"/>
       <column name="description" value="Judicial Manager"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="financial_advisor"/>
       <column name="code" value="financial_advisor"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Financial Advisor"/>
       <column name="description" value="Financial Advisor"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="doctor_patient"/>
       <column name="code" value="doctor"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Doctor"/>
       <column name="description" value="Doctor"/>
     </insert>
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="employer_employee"/>
       <column name="code" value="employer"/>
       <column name="locale_id" value="en-ZA"/>

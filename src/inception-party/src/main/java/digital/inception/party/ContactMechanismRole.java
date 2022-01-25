@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -56,7 +57,8 @@ import org.springframework.util.StringUtils;
   "sortIndex",
   "name",
   "description",
-  "partyTypes"
+  "partyTypes",
+  "pattern"
 })
 @XmlRootElement(name = "ContactMechanismRole", namespace = "http://inception.digital/party")
 @XmlType(
@@ -70,7 +72,8 @@ import org.springframework.util.StringUtils;
       "sortIndex",
       "name",
       "description",
-      "partyTypes"
+      "partyTypes",
+      "pattern"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -153,6 +156,9 @@ public class ContactMechanismRole implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
+  /** The compiled pattern. */
+  @JsonIgnore private transient Pattern compiledPattern;
+
   /** The code for the contact mechanism type the contact mechanism role is associated with. */
   @Schema(
       description =
@@ -205,6 +211,19 @@ public class ContactMechanismRole implements Serializable {
   @Size(min = 1, max = 310)
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
+
+  /**
+   * The regular expression pattern used to validate a contact mechanism value for the contact
+   * mechanism role.
+   */
+  @Schema(
+      description =
+          "The regular expression pattern used to validate a contact mechanism value for the contact mechanism role")
+  @JsonProperty
+  @XmlElement(name = "Pattern")
+  @Size(min = 1, max = 1000)
+  @Column(name = "pattern", length = 1000)
+  private String pattern;
 
   /** The sort index for the contact mechanism role. */
   @Schema(description = "The sort index for the contact mechanism role", required = true)
@@ -261,6 +280,20 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
+   * Returns the compiled pattern.
+   *
+   * @return the compiled pattern
+   */
+  @JsonIgnore
+  public Pattern getCompiledPattern() {
+    if (compiledPattern == null) {
+      compiledPattern = Pattern.compile(pattern);
+    }
+
+    return compiledPattern;
+  }
+
+  /**
    * Returns the code for the contact mechanism type the contact mechanism role is associated with.
    *
    * @return the code for the contact mechanism type the contact mechanism role is associated with
@@ -311,6 +344,17 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
+   * Returns the regular expression pattern used to validate a contact mechanism value for the
+   * contact mechanism role.
+   *
+   * @return the regular expression pattern used to validate a contact mechanism value for the
+   *     contact mechanism role
+   */
+  public String getPattern() {
+    return pattern;
+  }
+
+  /**
    * Returns the sort index for the contact mechanism role.
    *
    * @return the sort index for the contact mechanism role
@@ -348,6 +392,10 @@ public class ContactMechanismRole implements Serializable {
    *     otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
+    if (!StringUtils.hasText(partyTypeCode)) {
+      return false;
+    }
+
     return Arrays.stream(getPartyTypes())
         .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }
@@ -415,6 +463,17 @@ public class ContactMechanismRole implements Serializable {
   @JsonIgnore
   public void setPartyTypes(Collection<String> partyTypes) {
     this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
+  }
+
+  /**
+   * Set the regular expression pattern used to validate a contact mechanism value for the contact
+   * mechanism role.
+   *
+   * @param pattern the regular expression pattern used to validate a contact mechanism value for
+   *     the contact mechanism role
+   */
+  public void setPattern(String pattern) {
+    this.pattern = pattern;
   }
 
   /**

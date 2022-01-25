@@ -37,11 +37,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>MandataryType</b> class holds the information for a mandatary type.
+ * The <b>MandataryRole</b> class holds the information for a mandatary role.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A type of mandatary")
+@Schema(description = "A mandatary role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "mandateType",
@@ -52,21 +52,21 @@ import javax.xml.bind.annotation.XmlType;
   "name",
   "description"
 })
-@XmlRootElement(name = "MandataryType", namespace = "http://inception.digital/party")
+@XmlRootElement(name = "MandataryRole", namespace = "http://inception.digital/party")
 @XmlType(
-    name = "MandataryType",
+    name = "MandataryRole",
     namespace = "http://inception.digital/party",
     propOrder = {"mandateType", "code", "localeId", "tenantId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "mandatary_types")
-@IdClass(MandataryTypeId.class)
-public class MandataryType implements Serializable {
+@Table(schema = "party", name = "mandatary_roles")
+@IdClass(MandataryRoleId.class)
+public class MandataryRole implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the mandatary type. */
-  @Schema(description = "The code for the mandatary type", required = true)
+  /** The code for the mandatary role. */
+  @Schema(description = "The code for the mandatary role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -75,8 +75,8 @@ public class MandataryType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the mandatary type. */
-  @Schema(description = "The description for the mandatary type", required = true)
+  /** The description for the mandatary role. */
+  @Schema(description = "The description for the mandatary role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -84,8 +84,8 @@ public class MandataryType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the mandatary type. */
-  @Schema(description = "The Unicode locale identifier for the mandatary type", required = true)
+  /** The Unicode locale identifier for the mandatary role. */
+  @Schema(description = "The Unicode locale identifier for the mandatary role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -94,9 +94,9 @@ public class MandataryType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The code for the mandate type the mandatary type is associated with. */
+  /** The code for the mandate type the mandatary role is associated with. */
   @Schema(
-      description = "The code for the mandate type the mandatary type is associated with",
+      description = "The code for the mandate type the mandatary role is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MandateType", required = true)
@@ -106,8 +106,8 @@ public class MandataryType implements Serializable {
   @Column(name = "mandate_type", length = 30, nullable = false)
   private String mandateType;
 
-  /** The name of the mandatary type. */
-  @Schema(description = "The name of the mandatary type", required = true)
+  /** The name of the mandatary role. */
+  @Schema(description = "The name of the mandatary role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -115,23 +115,23 @@ public class MandataryType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the mandatary type. */
-  @Schema(description = "The sort index for the mandatary type", required = true)
+  /** The sort index for the mandatary role. */
+  @Schema(description = "The sort index for the mandatary role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** The ID for the tenant the mandatary type is specific to. */
-  @Schema(description = "The ID for the tenant the mandatary type is specific to")
+  /** The ID for the tenant the mandatary role is specific to. */
+  @Schema(description = "The ID for the tenant the mandatary role is specific to")
   @JsonProperty
   @XmlElement(name = "TenantId")
   @Column(name = "tenant_id")
   private UUID tenantId;
 
-  /** Constructs a new <b>MandataryType</b>. */
-  public MandataryType() {}
+  /** Constructs a new <b>MandataryRole</b>. */
+  public MandataryRole() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -153,7 +153,7 @@ public class MandataryType implements Serializable {
       return false;
     }
 
-    MandataryType other = (MandataryType) object;
+    MandataryRole other = (MandataryRole) object;
 
     return Objects.equals(mandateType, other.mandateType)
         && Objects.equals(code, other.code)
@@ -161,63 +161,63 @@ public class MandataryType implements Serializable {
   }
 
   /**
-   * Returns the code for the mandatary type.
+   * Returns the code for the mandatary role.
    *
-   * @return the code for the mandatary type
+   * @return the code for the mandatary role
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the mandatary type.
+   * Returns the description for the mandatary role.
    *
-   * @return the description for the mandatary type
+   * @return the description for the mandatary role
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the mandatary type.
+   * Returns the Unicode locale identifier for the mandatary role.
    *
-   * @return the Unicode locale identifier for the mandatary type
+   * @return the Unicode locale identifier for the mandatary role
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the code for the mandate type the mandatary type is associated with.
+   * Returns the code for the mandate type the mandatary role is associated with.
    *
-   * @return the code for the mandate type the mandatary type is associated with
+   * @return the code for the mandate type the mandatary role is associated with
    */
   public String getMandateType() {
     return mandateType;
   }
 
   /**
-   * Returns the name of the mandatary type.
+   * Returns the name of the mandatary role.
    *
-   * @return the name of the mandatary type
+   * @return the name of the mandatary role
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the mandatary type.
+   * Returns the sort index for the mandatary role.
    *
-   * @return the sort index for the mandatary type
+   * @return the sort index for the mandatary role
    */
   public Integer getSortIndex() {
     return sortIndex;
   }
 
   /**
-   * Returns the ID for the tenant the mandatary type is specific to.
+   * Returns the ID for the tenant the mandatary role is specific to.
    *
-   * @return the ID for the tenant the mandatary type is specific to
+   * @return the ID for the tenant the mandatary role is specific to
    */
   public UUID getTenantId() {
     return tenantId;
@@ -236,63 +236,63 @@ public class MandataryType implements Serializable {
   }
 
   /**
-   * Set the code for the mandatary type.
+   * Set the code for the mandatary role.
    *
-   * @param code the code for the mandatary type
+   * @param code the code for the mandatary role
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the mandatary type.
+   * Set the description for the mandatary role.
    *
-   * @param description the description for the mandatary type
+   * @param description the description for the mandatary role
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the mandatary type.
+   * Set the Unicode locale identifier for the mandatary role.
    *
-   * @param localeId the Unicode locale identifier for the mandatary type
+   * @param localeId the Unicode locale identifier for the mandatary role
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the code for the mandate type the mandatary type is associated with.
+   * Set the code for the mandate type the mandatary role is associated with.
    *
-   * @param mandateType the code for the mandate type the mandatary type is associated with
+   * @param mandateType the code for the mandate type the mandatary role is associated with
    */
   public void setMandateType(String mandateType) {
     this.mandateType = mandateType;
   }
 
   /**
-   * Set the name of the mandatary type.
+   * Set the name of the mandatary role.
    *
-   * @param name the name of the mandatary type
+   * @param name the name of the mandatary role
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the mandatary type.
+   * Set the sort index for the mandatary role.
    *
-   * @param sortIndex the sort index for the mandatary type
+   * @param sortIndex the sort index for the mandatary role
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
   }
 
   /**
-   * Set the ID for the tenant the mandatary type is specific to.
+   * Set the ID for the tenant the mandatary role is specific to.
    *
-   * @param tenantId the ID for the tenant the mandatary type is specific to
+   * @param tenantId the ID for the tenant the mandatary role is specific to
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;

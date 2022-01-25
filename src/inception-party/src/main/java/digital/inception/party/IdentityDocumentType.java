@@ -26,13 +26,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -92,6 +92,9 @@ public class IdentityDocumentType implements Serializable {
   @Id
   @Column(name = "code", length = 30, nullable = false)
   private String code;
+
+  /** The compiled pattern. */
+  @JsonIgnore private transient Pattern compiledPattern;
 
   /** The code for the country of issue for the identity document type. */
   @Schema(
@@ -207,6 +210,20 @@ public class IdentityDocumentType implements Serializable {
   }
 
   /**
+   * Returns the compiled pattern.
+   *
+   * @return the compiled pattern
+   */
+  @JsonIgnore
+  public Pattern getCompiledPattern() {
+    if (compiledPattern == null) {
+      compiledPattern = Pattern.compile(pattern);
+    }
+
+    return compiledPattern;
+  }
+
+  /**
    * Returns the code for the country of issue for the identity document type.
    *
    * @return the code for the country of issue for the identity document type
@@ -302,6 +319,10 @@ public class IdentityDocumentType implements Serializable {
    *     otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
+    if (!StringUtils.hasText(partyTypeCode)) {
+      return false;
+    }
+
     return Arrays.stream(getPartyTypes())
         .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }

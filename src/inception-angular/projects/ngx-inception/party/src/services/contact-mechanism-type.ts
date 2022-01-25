@@ -42,7 +42,8 @@ export class ContactMechanismType {
   name: string;
 
   /**
-   * The regular expression pattern used to validate a value for the contact mechanism type.
+   * The regular expression pattern used to validate a contact mechanism value for the contact
+   * mechanism type.
    */
   pattern?: string;
 
@@ -70,8 +71,8 @@ export class ContactMechanismType {
    * @param name        The name of the contact mechanism type.
    * @param description The description for the contact mechanism type.
    * @param plural      The plural for the contact mechanism type.
-   * @param pattern     The regular expression pattern used to validate a value for the contact
-   *                    mechanism type.
+   * @param pattern     The regular expression pattern used to validate a contact mechanism value
+   *                    for the contact mechanism type.
    * @param tenantId    The ID for the tenant the contact mechanism type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,

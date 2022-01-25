@@ -17,11 +17,14 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -38,8 +41,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <b>Mandatary</b> class holds the information for a mandatary for a mandate.
@@ -48,12 +53,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(name = "Mandatary", description = "A mandatary for a mandate")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"partyId", "type"})
+@JsonPropertyOrder({"partyId", "role", "effectiveFrom", "effectiveTo"})
 @XmlRootElement(name = "Mandatary", namespace = "http://inception.digital/party")
 @XmlType(
     name = "Mandatary",
     namespace = "http://inception.digital/party",
-    propOrder = {"partyId", "type"})
+    propOrder = {"partyId", "role", "effectiveFrom", "effectiveTo"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "mandataries")
@@ -61,6 +66,26 @@ import javax.xml.bind.annotation.XmlType;
 public class Mandatary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The date the mandatary is effective from. */
+  @Schema(description = "The date the mandatary is effective from")
+  @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  @XmlElement(name = "EffectiveFrom")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  @Column(name = "effective_from")
+  private LocalDate effectiveFrom;
+
+  /** The date the mandatary is effective to. */
+  @Schema(description = "The date the mandatary is effective to")
+  @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  @XmlElement(name = "EffectiveTo")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  @Column(name = "effective_to")
+  private LocalDate effectiveTo;
 
   /** The mandate the mandatary is associated with. */
   @Schema(hidden = true)
@@ -80,14 +105,14 @@ public class Mandatary implements Serializable {
   @Column(name = "party_id", nullable = false)
   private UUID partyId;
 
-  /** The code for the mandatary type. */
-  @Schema(description = "The code for the mandatary type", required = true)
+  /** The code for the mandatary role. */
+  @Schema(description = "The code for the mandatary role", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
+  @XmlElement(name = "Role", required = true)
   @NotNull
   @Size(min = 1, max = 30)
-  @Column(name = "type", length = 30, nullable = false)
-  private String type;
+  @Column(name = "role", length = 30, nullable = false)
+  private String role;
 
   /** Constructs a new <b>Mandatary</b>. */
   public Mandatary() {}
@@ -96,11 +121,11 @@ public class Mandatary implements Serializable {
    * Constructs a new <b>Mandatary</b>.
    *
    * @param partyId the ID for the party who is the recipient of the mandate
-   * @param type the code for the mandatary type
+   * @param role the code for the mandatary role
    */
-  public Mandatary(UUID partyId, String type) {
+  public Mandatary(UUID partyId, String role) {
     this.partyId = partyId;
-    this.type = type;
+    this.role = role;
   }
 
   /**
@@ -129,6 +154,24 @@ public class Mandatary implements Serializable {
   }
 
   /**
+   * Returns the date the mandatary is effective from.
+   *
+   * @return the date the mandatary is effective from
+   */
+  public LocalDate getEffectiveFrom() {
+    return effectiveFrom;
+  }
+
+  /**
+   * Returns the date the mandatary is effective to.
+   *
+   * @return the date the mandatary is effective to
+   */
+  public LocalDate getEffectiveTo() {
+    return effectiveTo;
+  }
+
+  /**
    * Returns the mandate the mandatary is associated with.
    *
    * @return the mandate the mandatary is associated with
@@ -148,12 +191,12 @@ public class Mandatary implements Serializable {
   }
 
   /**
-   * Returns the code for the mandatary type.
+   * Returns the code for the mandatary role.
    *
-   * @return the code for the mandatary type
+   * @return the code for the mandatary role
    */
-  public String getType() {
-    return type;
+  public String getRole() {
+    return role;
   }
 
   /**
@@ -165,6 +208,24 @@ public class Mandatary implements Serializable {
   public int hashCode() {
     return (((mandate == null) || (mandate.getId() == null)) ? 0 : mandate.getId().hashCode())
         + ((partyId == null) ? 0 : partyId.hashCode());
+  }
+
+  /**
+   * Set the date the mandatary is effective from.
+   *
+   * @param effectiveFrom the date the mandatary is effective from
+   */
+  public void setEffectiveFrom(LocalDate effectiveFrom) {
+    this.effectiveFrom = effectiveFrom;
+  }
+
+  /**
+   * Set the date the mandatary is effective to.
+   *
+   * @param effectiveTo the date the mandatary is effective to
+   */
+  public void setEffectiveTo(LocalDate effectiveTo) {
+    this.effectiveTo = effectiveTo;
   }
 
   /**
@@ -187,11 +248,11 @@ public class Mandatary implements Serializable {
   }
 
   /**
-   * Set the code for the mandatary type.
+   * Set the code for the mandatary role.
    *
-   * @param type the code for the mandatary type
+   * @param role the code for the mandatary role
    */
-  public void setType(String type) {
-    this.type = type;
+  public void setRole(String role) {
+    this.role = role;
   }
 }

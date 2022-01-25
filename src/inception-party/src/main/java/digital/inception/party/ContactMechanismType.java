@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -23,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -100,6 +102,9 @@ public class ContactMechanismType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
+  /** The compiled pattern. */
+  @JsonIgnore private transient Pattern compiledPattern;
+
   /** The description for the contact mechanism type. */
   @Schema(description = "The description for the contact mechanism type", required = true)
   @JsonProperty(required = true)
@@ -131,11 +136,12 @@ public class ContactMechanismType implements Serializable {
   private String name;
 
   /**
-   * The regular expression pattern used to validate a string value for the contact mechanism type.
+   * The regular expression pattern used to validate a contact mechanism value for the contact
+   * mechanism type.
    */
   @Schema(
       description =
-          "The regular expression pattern used to validate a string value for the contact mechanism type")
+          "The regular expression pattern used to validate a contact mechanism value for the contact mechanism type")
   @JsonProperty
   @XmlElement(name = "Pattern")
   @Size(min = 1, max = 1000)
@@ -204,6 +210,20 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
+   * Returns the compiled pattern.
+   *
+   * @return the compiled pattern
+   */
+  @JsonIgnore
+  public Pattern getCompiledPattern() {
+    if (compiledPattern == null) {
+      compiledPattern = Pattern.compile(pattern);
+    }
+
+    return compiledPattern;
+  }
+
+  /**
    * Returns the description for the contact mechanism type.
    *
    * @return the description for the contact mechanism type
@@ -231,11 +251,11 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
-   * Returns the regular expression pattern used to validate a string value for the contact
-   * mechanism type.
+   * Returns the regular expression pattern used to validate a contact mechanism value for the
+   * contact mechanism type.
    *
-   * @return the regular expression pattern used to validate a string value for the contact
-   *     mechanism type
+   * @return the regular expression pattern used to validate a contact mechanism value for the
+   *     contact mechanism type
    */
   public String getPattern() {
     return pattern;
@@ -315,11 +335,11 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate a string value for the contact mechanism
-   * type.
+   * Set the regular expression pattern used to validate a contact mechanism value for the contact
+   * mechanism type.
    *
-   * @param pattern the regular expression pattern used to validate a string value for the contact
-   *     mechanism type
+   * @param pattern the regular expression pattern used to validate a contact mechanism value for
+   *     the contact mechanism type
    */
   public void setPattern(String pattern) {
     this.pattern = pattern;

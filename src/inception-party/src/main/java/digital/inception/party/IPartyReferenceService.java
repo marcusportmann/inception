@@ -129,8 +129,7 @@ public interface IPartyReferenceService {
    * Retrieve the attribute type with the specified code for the party type with the specified code
    * for the tenant with the specified ID for the first matching locale.
    *
-   * @param tenantId the ID for the tenant the association property type reference data is specific
-   *     to
+   * @param tenantId the ID for the tenant the attribute type reference data is specific to
    * @param partyTypeCode the code for the party type
    * @param attributeTypeCode the code for the attribute type
    * @return an Optional containing the attribute type with the specified code for the party type
@@ -294,6 +293,28 @@ public interface IPartyReferenceService {
   List<ContactMechanismPurpose> getContactMechanismPurposes() throws ServiceUnavailableException;
 
   /**
+   * Retrieve the contact mechanism role with the specified code, for the contact mechanism type
+   * with the specified code and the party type with the specified code, for the tenant with the
+   * specified ID for the first matching locale.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyTypeCode the code for the party type
+   * @param contactMechanismTypeCode the code for the contact mechanism type
+   * @param contactMechanismRoleCode the code for the contact mechanism role
+   * @return an Optional containing the contact mechanism role with the specified code, for the
+   *     contact mechanism type with the specified code and the party type with the specified code,
+   *     for the tenant with the specified ID for the first matching locale or an empty Optional if
+   *     the attribute type could not be found
+   * @throws ServiceUnavailableException if the contact mechanism role type could not be retrieved
+   */
+  Optional<ContactMechanismRole> getContactMechanismRole(
+      UUID tenantId,
+      String partyTypeCode,
+      String contactMechanismTypeCode,
+      String contactMechanismRoleCode)
+      throws ServiceUnavailableException;
+
+  /**
    * Retrieve the contact mechanism role reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
@@ -328,6 +349,20 @@ public interface IPartyReferenceService {
    *     retrieved
    */
   List<ContactMechanismRole> getContactMechanismRoles() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the contact mechanism type with the specified code for the tenant with the specified
+   * ID for the first matching locale.
+   *
+   * @param tenantId the ID for the tenant
+   * @param contactMechanismTypeCode the code for the contact mechanism type
+   * @return an Optional containing the contact mechanism type with the specified code for the
+   *     tenant with the specified ID for the first matching locale or an empty Optional if the
+   *     contact mechanism type could not be found
+   * @throws ServiceUnavailableException if the contact mechanism type could not be retrieved
+   */
+  Optional<ContactMechanismType> getContactMechanismType(
+      UUID tenantId, String contactMechanismTypeCode) throws ServiceUnavailableException;
 
   /**
    * Retrieve the contact mechanism type reference data for a specific locale.
@@ -681,37 +716,37 @@ public interface IPartyReferenceService {
   List<LockType> getLockTypes() throws ServiceUnavailableException;
 
   /**
-   * Retrieve the mandatary type reference data for a specific locale.
+   * Retrieve the mandatary role reference data for a specific locale.
    *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary type
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary role
    *     reference data for
-   * @return the mandatary type reference data
+   * @return the mandatary role reference data
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the mandatary type reference data could not be retrieved
+   * @throws ServiceUnavailableException if the mandatary role reference data could not be retrieved
    */
-  List<MandataryType> getMandataryTypes(String localeId)
+  List<MandataryRole> getMandataryRoles(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the mandatary type reference data for a specific tenant and locale.
+   * Retrieve the mandatary role reference data for a specific tenant and locale.
    *
-   * @param tenantId the ID for the tenant the mandatary type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary type
+   * @param tenantId the ID for the tenant the mandatary role reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary role
    *     reference data for
-   * @return the mandatary type reference data
+   * @return the mandatary role reference data
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the mandatary type reference data could not be retrieved
+   * @throws ServiceUnavailableException if the mandatary role reference data could not be retrieved
    */
-  List<MandataryType> getMandataryTypes(UUID tenantId, String localeId)
+  List<MandataryRole> getMandataryRoles(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Retrieve the mandatary type reference data for all locales.
+   * Retrieve the mandatary role reference data for all locales.
    *
-   * @return the mandatary type reference data
-   * @throws ServiceUnavailableException if the mandatary type reference data could not be retrieved
+   * @return the mandatary role reference data
+   * @throws ServiceUnavailableException if the mandatary role reference data could not be retrieved
    */
-  List<MandataryType> getMandataryTypes() throws ServiceUnavailableException;
+  List<MandataryRole> getMandataryRoles() throws ServiceUnavailableException;
 
   /**
    * Retrieve the mandate property type with the specified code for the mandate type with the
@@ -1040,6 +1075,22 @@ public interface IPartyReferenceService {
    *     retrieved
    */
   List<PhysicalAddressType> getPhysicalAddressTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the preference type with the specified code for the party type with the specified code
+   * for the tenant with the specified ID for the first matching locale.
+   *
+   * @param tenantId the ID for the tenant the preference type reference data is specific to
+   * @param partyTypeCode the code for the party type
+   * @param preferenceTypeCode the code for the preference type
+   * @return an Optional containing the preference type with the specified code for the party type
+   *     with the specified code for the tenant with the specified ID for the first matching locale
+   *     or an empty Optional if the preference type could not be found
+   * @throws ServiceUnavailableException if the preference type could not be retrieved
+   */
+  Optional<PreferenceType> getPreferenceType(
+      UUID tenantId, String partyTypeCode, String preferenceTypeCode)
+      throws ServiceUnavailableException;
 
   /**
    * Retrieve the preference type category reference data for a specific locale.
@@ -1904,6 +1955,20 @@ public interface IPartyReferenceService {
   boolean isValidGender(UUID tenantId, String genderCode) throws ServiceUnavailableException;
 
   /**
+   * Check whether the identity document is valid.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyTypeCode the code for the party type
+   * @param identityDocumentTypeCode the code for the identity document type
+   * @param number the number for the identity document
+   * @return <b>true</b> if the identity document is valid or <b>false</b> otherwise
+   * @throws ServiceUnavailableException if the identity document check failed
+   */
+  boolean isValidIdentityDocument(
+      UUID tenantId, String partyTypeCode, String identityDocumentTypeCode, String number)
+      throws ServiceUnavailableException;
+
+  /**
    * Check whether the code is a valid code for an identity document type for the party type.
    *
    * @param tenantId the ID for the tenant
@@ -2123,6 +2188,20 @@ public interface IPartyReferenceService {
   boolean isValidRace(UUID tenantId, String raceCode) throws ServiceUnavailableException;
 
   /**
+   * Check whether the residence permit is valid.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyTypeCode the code for the party type
+   * @param residencePermitTypeCode the code for the residence permit type
+   * @param number the number for the residence permit
+   * @return <b>true</b> if the residence permit is valid or <b>false</b> otherwise
+   * @throws ServiceUnavailableException if the residence permit check failed
+   */
+  boolean isValidResidencePermit(
+      UUID tenantId, String partyTypeCode, String residencePermitTypeCode, String number)
+      throws ServiceUnavailableException;
+
+  /**
    * Check whether the code is a valid code for a residence permit type.
    *
    * @param tenantId the ID for the tenant
@@ -2237,6 +2316,20 @@ public interface IPartyReferenceService {
    * @throws ServiceUnavailableException if the status type category check failed
    */
   boolean isValidStatusTypeCategory(UUID tenantId, String statusTypeCategoryCode)
+      throws ServiceUnavailableException;
+
+  /**
+   * Check whether the tax number is valid.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyTypeCode the code for the party type
+   * @param taxNumberTypeCode the code for the tax number type
+   * @param number the number for the tax number
+   * @return <b>true</b> if the tax number is valid or <b>false</b> otherwise
+   * @throws ServiceUnavailableException if the tax number check failed
+   */
+  boolean isValidTaxNumber(
+      UUID tenantId, String partyTypeCode, String taxNumberTypeCode, String number)
       throws ServiceUnavailableException;
 
   /**

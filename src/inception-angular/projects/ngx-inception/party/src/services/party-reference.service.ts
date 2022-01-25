@@ -37,7 +37,7 @@ import {Gender} from './gender';
 import {IdentityDocumentType} from './identity-document-type';
 import {LockType} from "./lock-type";
 import {LockTypeCategory} from "./lock-type-category";
-import {MandataryType} from './mandatary-type';
+import {MandataryRole} from './mandatary-role';
 import {MandatePropertyType} from "./mandate-property-type";
 import {MandateType} from './mandate-type';
 import {MaritalStatus} from './marital-status';
@@ -491,19 +491,19 @@ export class PartyReferenceService {
   }
 
   /**
-   * Retrieve the mandatary types.
+   * Retrieve the mandatary roles.
    *
-   * @return The mandatary types.
+   * @return The mandatary roles.
    */
-  getMandataryTypes(): Observable<MandataryType[]> {
+  getMandataryRoles(): Observable<MandataryRole[]> {
     let params = new HttpParams();
 
     params = params.append('localeId', this.localeId);
 
-    return this.httpClient.get<MandataryType[]>(this.config.partyReferenceApiUrlPrefix + '/mandatary-types',
+    return this.httpClient.get<MandataryRole[]>(this.config.partyReferenceApiUrlPrefix + '/mandatary-types',
       {params, reportProgress: true})
-    .pipe(map((mandataryTypes: MandataryType[]) => {
-      return mandataryTypes;
+    .pipe(map((mandataryRoles: MandataryRole[]) => {
+      return mandataryRoles;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
         return throwError(new AccessDeniedError(httpErrorResponse));
@@ -511,7 +511,7 @@ export class PartyReferenceService {
         return throwError(new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the mandatary types.', httpErrorResponse));
+      return throwError(new ServiceUnavailableError('Failed to retrieve the mandatary roles.', httpErrorResponse));
     }));
   }
 

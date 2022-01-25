@@ -15,57 +15,57 @@
  */
 
 /**
- * The MandataryType class holds the information for a mandatary type.
+ * The MandataryRole class holds the information for a mandatary role.
  *
  * @author Marcus Portmann
  */
-export class MandataryType {
+export class MandataryRole {
 
   /**
-   * The code for the mandatary type.
+   * The code for the mandatary role.
    */
   code: string;
 
   /**
-   * The description for the mandatary type.
+   * The description for the mandatary role.
    */
   description: string;
 
   /**
-   * The Unicode locale identifier for the mandatary type.
+   * The Unicode locale identifier for the mandatary role.
    */
   localeId: string;
 
   /**
-   * The code for the mandate type the mandatary type is associated with.
+   * The code for the mandate type the mandatary role is associated with.
    */
   mandateType: string;
 
   /**
-   * The name of the mandatary type.
+   * The name of the mandatary role.
    */
   name: string;
 
   /**
-   * The sort index for the mandatary type.
+   * The sort index for the mandatary role.
    */
   sortIndex: number;
 
   /**
-   * The ID for the tenant the mandatary type is specific to.
+   * The ID for the tenant the mandatary role is specific to.
    */
   tenantId?: string;
 
   /**
-   * Constructs a new MandataryType.
+   * Constructs a new MandataryRole.
    *
-   * @param mandateType The code for the mandate type the mandatary type is associated with.
-   * @param code        The code for the mandatary type.
-   * @param localeId    The Unicode locale identifier for the mandatary type.
-   * @param sortIndex   The sort index for the mandatary type.
-   * @param name        The name of the mandatary type.
-   * @param description The description for the mandatary type.
-   * @param tenantId    The ID for the tenant the mandatary type is specific to.
+   * @param mandateType The code for the mandate type the mandatary role is associated with.
+   * @param code        The code for the mandatary role.
+   * @param localeId    The Unicode locale identifier for the mandatary role.
+   * @param sortIndex   The sort index for the mandatary role.
+   * @param name        The name of the mandatary role.
+   * @param description The description for the mandatary role.
+   * @param tenantId    The ID for the tenant the mandatary role is specific to.
    */
   constructor(mandateType: string, code: string, localeId: string, sortIndex: number, name: string,
               description: string, tenantId?: string) {

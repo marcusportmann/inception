@@ -152,7 +152,7 @@
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the contact mechanism type">
         <constraints nullable="false"/>
       </column>
-      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a value for the contact mechanism type"/>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a contact mechanism value for the contact mechanism type"/>
     </createTable>
     <createIndex indexName="contact_mechanism_types_locale_id_ix" schemaName="party" tableName="contact_mechanism_types">
       <column name="locale_id"/>
@@ -179,6 +179,7 @@
       <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the contact mechanism role is associated with">
         <constraints nullable="false"/>
       </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a contact mechanism value for the contact mechanism role"/>
     </createTable>
     <addForeignKeyConstraint constraintName="contact_mechanism_roles_contact_mechanism_type_fk" baseTableSchemaName="party"
       baseTableName="contact_mechanism_roles" baseColumnNames="contact_mechanism_type,locale_id" referencedTableSchemaName="party"
@@ -603,6 +604,7 @@
       <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the preference type is associated with">
         <constraints nullable="false"/>
       </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a value for the preference type"/>
     </createTable>
     <addForeignKeyConstraint constraintName="preference_types_preference_type_category_fk" baseTableSchemaName="party"
       baseTableName="preference_types" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
@@ -1782,32 +1784,32 @@
       <column name="locale_id"/>
     </createIndex>
 
-    <createTable schemaName="party" tableName="mandatary_types" remarks="Mandatary Types">
-      <column name="mandate_type" type="nvarchar(30)" remarks="The code for the mandate type the mandatary type is associated with">
+    <createTable schemaName="party" tableName="mandatary_roles" remarks="Mandatary Roles">
+      <column name="mandate_type" type="nvarchar(30)" remarks="The code for the mandate type the mandatary role is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="code" type="nvarchar(30)" remarks="The code for the mandatary type">
+      <column name="code" type="nvarchar(30)" remarks="The code for the mandatary role">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the mandatary type">
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the mandatary role">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the mandatary type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the mandatary type"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the mandatary type">
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the mandatary role is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the mandatary role"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the mandatary role">
         <constraints nullable="false"/>
       </column>
-      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the mandatary type">
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the mandatary role">
         <constraints nullable="false"/>
       </column>
     </createTable>
-    <addForeignKeyConstraint constraintName="mandatary_types_mandate_type_fk" baseTableSchemaName="party"
-      baseTableName="mandatary_types" baseColumnNames="mandate_type,locale_id" referencedTableSchemaName="party"
+    <addForeignKeyConstraint constraintName="mandatary_roles_mandate_type_fk" baseTableSchemaName="party"
+      baseTableName="mandatary_roles" baseColumnNames="mandate_type,locale_id" referencedTableSchemaName="party"
       referencedTableName="mandate_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
-    <createIndex indexName="mandatary_types_mandate_type_ix" schemaName="party" tableName="mandatary_types">
+    <createIndex indexName="mandatary_roles_mandate_type_ix" schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type"/>
     </createIndex>
-    <createIndex indexName="mandatary_types_locale_id_ix" schemaName="party" tableName="mandatary_types">
+    <createIndex indexName="mandatary_roles_locale_id_ix" schemaName="party" tableName="mandatary_roles">
       <column name="locale_id"/>
     </createIndex>
 
@@ -1862,9 +1864,11 @@
       <column name="party_id" type="uuid" remarks="The ID for the party who is the recipient of the mandate">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="type" type="nvarchar(30)" remarks="The code for the mandatary type">
+      <column name="role" type="nvarchar(30)" remarks="The code for the mandatary role">
         <constraints nullable="false"/>
       </column>
+      <column name="effective_from" type="date" remarks="The date that the mandatary is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the mandatary is effective to"/>
     </createTable>
     <addForeignKeyConstraint constraintName="mandataries_mandate_fk" baseTableSchemaName="party"
       baseTableName="mandataries" baseColumnNames="mandate_id" referencedTableSchemaName="party"

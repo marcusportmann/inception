@@ -69,5 +69,4 @@ public interface MandateRepository extends JpaRepository<Mandate, UUID> {
   @Query(
       "select m from Mandate m inner join m.mandataries mandatary where m.tenantId = :tenantId and mandatary.partyId = :partyId")
   Page<Mandate> findByTenantIdAndPartyId(UUID tenantId, UUID partyId, Pageable pageable);
-
 }

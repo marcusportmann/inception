@@ -131,64 +131,6 @@ public abstract class PartyValidator {
   }
 
   /**
-   * Validate the contact mechanism value.
-   *
-   * @param contactMechanism the contact mechanism
-   * @param hibernateConstraintValidatorContext the Hibernate constraint validator context
-   * @return <b>true</b> if the contact mechanism value is valid or <b>false</b> otherwise
-   */
-  protected boolean validateContactMechanismValue(
-      ContactMechanism contactMechanism,
-      HibernateConstraintValidatorContext hibernateConstraintValidatorContext)
-      throws ValidationException {
-    boolean isValid = true;
-
-    switch (contactMechanism.getType()) {
-      case "email_address":
-        if (!isValidEmailAddress(contactMechanism.getValue())) {
-          hibernateConstraintValidatorContext
-              .addMessageParameter("emailAddress", contactMechanism.getValue())
-              .buildConstraintViolationWithTemplate(
-                  "{digital.inception.party.constraints.PartyValidator.invalidEmailAddress.message}")
-              .addPropertyNode("contactMechanisms")
-              .addPropertyNode("value")
-              .inIterable()
-              .addConstraintViolation();
-
-          isValid = false;
-        }
-        break;
-
-      case "fax_number":
-        break;
-
-      case "mobile_number":
-        if (!isValidMobileNumber(contactMechanism.getValue())) {
-          hibernateConstraintValidatorContext
-              .addMessageParameter("mobileNumber", contactMechanism.getValue())
-              .buildConstraintViolationWithTemplate(
-                  "{digital.inception.party.constraints.PartyValidator.invalidMobileNumber.message}")
-              .addPropertyNode("contactMechanisms")
-              .addPropertyNode("value")
-              .inIterable()
-              .addConstraintViolation();
-
-          isValid = false;
-        }
-
-        break;
-
-      case "phone_number":
-        break;
-
-      case "social_media":
-        break;
-    }
-
-    return isValid;
-  }
-
-  /**
    * Validate the maximum size attribute constraint.
    *
    * @param maximumSize the maximum size

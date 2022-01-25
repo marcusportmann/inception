@@ -20,22 +20,22 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MandataryTypeId</b> class implements the ID class for the <b>MandataryType</b> class.
+ * The <b>MandataryRoleId</b> class implements the ID class for the <b>MandataryRole</b> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class MandataryTypeId implements Serializable {
+public class MandataryRoleId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the mandatary type. */
+  /** The code for the mandatary role. */
   private String code;
 
-  /** The Unicode locale identifier for the mandatary type. */
+  /** The Unicode locale identifier for the mandatary role. */
   private String localeId;
 
-  /** The code for the mandate type the mandatary type is associated with. */
+  /** The code for the mandate type the mandatary role is associated with. */
   private String mandateType;
 
   /**
@@ -58,7 +58,7 @@ public class MandataryTypeId implements Serializable {
       return false;
     }
 
-    MandataryTypeId other = (MandataryTypeId) object;
+    MandataryRoleId other = (MandataryRoleId) object;
 
     return Objects.equals(mandateType, other.mandateType)
         && Objects.equals(code, other.code)

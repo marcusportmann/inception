@@ -21,8 +21,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The <b>LinkTypeRepository</b> interface declares the repository for the <b> LinkType</b>
- * domain type.
+ * The <b>LinkTypeRepository</b> interface declares the repository for the <b> LinkType</b> domain
+ * type.
  *
  * @author Marcus Portmann
  */

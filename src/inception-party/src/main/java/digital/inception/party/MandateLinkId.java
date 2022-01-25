@@ -33,11 +33,11 @@ public class MandateLinkId implements Serializable {
   /** The ID for the mandate the mandate link is associated with. */
   private UUID mandate;
 
-  /** The code for the link type. */
-  private String type;
-
   /** The target for the mandate link. */
   private String target;
+
+  /** The code for the link type. */
+  private String type;
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -61,7 +61,9 @@ public class MandateLinkId implements Serializable {
 
     MandateLinkId other = (MandateLinkId) object;
 
-    return Objects.equals(mandate, other.mandate) && Objects.equals(type, other.type) && Objects.equals(target, other.target);
+    return Objects.equals(mandate, other.mandate)
+        && Objects.equals(type, other.type)
+        && Objects.equals(target, other.target);
   }
 
   /**

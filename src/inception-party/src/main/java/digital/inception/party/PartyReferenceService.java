@@ -91,8 +91,8 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Lock Type Repository */
   private final LockTypeRepository lockTypeRepository;
 
-  /** The Mandatary Type Repository. */
-  private final MandataryTypeRepository mandataryTypeRepository;
+  /** The Mandatary Role Repository. */
+  private final MandataryRoleRepository mandataryRoleRepository;
 
   /** The Mandate Property Type Repository. */
   private final MandatePropertyTypeRepository mandatePropertyTypeRepository;
@@ -205,7 +205,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param linkTypeRepository the Link Type Repository
    * @param lockTypeCategoryRepository the Lock Type Category Repository
    * @param lockTypeRepository the Lock Type Repository
-   * @param mandataryTypeRepository the Mandatary Type Repository
+   * @param mandataryRoleRepository the Mandatary Role Repository
    * @param mandatePropertyTypeRepository the Mandate Property Type Repository
    * @param mandateTypeRepository the Mandate Type Repository
    * @param maritalStatusRepository the Marital Status Repository
@@ -256,7 +256,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       LinkTypeRepository linkTypeRepository,
       LockTypeCategoryRepository lockTypeCategoryRepository,
       LockTypeRepository lockTypeRepository,
-      MandataryTypeRepository mandataryTypeRepository,
+      MandataryRoleRepository mandataryRoleRepository,
       MandatePropertyTypeRepository mandatePropertyTypeRepository,
       MandateTypeRepository mandateTypeRepository,
       MaritalStatusRepository maritalStatusRepository,
@@ -303,7 +303,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.linkTypeRepository = linkTypeRepository;
     this.lockTypeCategoryRepository = lockTypeCategoryRepository;
     this.lockTypeRepository = lockTypeRepository;
-    this.mandataryTypeRepository = mandataryTypeRepository;
+    this.mandataryRoleRepository = mandataryRoleRepository;
     this.mandatePropertyTypeRepository = mandatePropertyTypeRepository;
     this.mandateTypeRepository = mandateTypeRepository;
     this.maritalStatusRepository = maritalStatusRepository;
@@ -617,6 +617,26 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   @Override
+  public Optional<ContactMechanismRole> getContactMechanismRole(
+      UUID tenantId,
+      String partyTypeCode,
+      String contactMechanismTypeCode,
+      String contactMechanismRoleCode)
+      throws ServiceUnavailableException {
+    return self.getContactMechanismRoles().stream()
+        .filter(
+            contactMechanismRole ->
+                (contactMechanismRole.getTenantId() == null
+                        || Objects.equals(contactMechanismRole.getTenantId(), tenantId))
+                    && contactMechanismRole.isValidForPartyType(partyTypeCode)
+                    && contactMechanismRole
+                        .getContactMechanismType()
+                        .equals(contactMechanismTypeCode)
+                    && Objects.equals(contactMechanismRole.getCode(), contactMechanismRoleCode))
+        .findFirst();
+  }
+
+  @Override
   @Cacheable(cacheNames = "reference", key = "'contactMechanismRoles.' + #localeId")
   public List<ContactMechanismRole> getContactMechanismRoles(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -652,6 +672,18 @@ public class PartyReferenceService implements IPartyReferenceService {
                 (contactMechanismRole.getTenantId() == null
                     || (Objects.equals(contactMechanismRole.getTenantId(), tenantId))))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Optional<ContactMechanismType> getContactMechanismType(
+      UUID tenantId, String contactMechanismTypeCode) throws ServiceUnavailableException {
+    return self.getContactMechanismTypes().stream()
+        .filter(
+            contactMechanismType ->
+                (contactMechanismType.getTenantId() == null
+                        || Objects.equals(contactMechanismType.getTenantId(), tenantId))
+                    && Objects.equals(contactMechanismType.getCode(), contactMechanismTypeCode))
+        .findFirst();
   }
 
   @Override
@@ -1029,40 +1061,40 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   @Override
-  @Cacheable(cacheNames = "reference", key = "'mandataryTypes.' + #localeId")
-  public List<MandataryType> getMandataryTypes(String localeId)
+  @Cacheable(cacheNames = "reference", key = "'mandataryRoles.' + #localeId")
+  public List<MandataryRole> getMandataryRoles(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(localeId)) {
       throw new InvalidArgumentException("localeId");
     }
 
     try {
-      return mandataryTypeRepository.findByLocaleIdIgnoreCase(localeId);
+      return mandataryRoleRepository.findByLocaleIdIgnoreCase(localeId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the mandatary type reference data", e);
+          "Failed to retrieve the mandatary role reference data", e);
     }
   }
 
   @Override
-  @Cacheable(cacheNames = "reference", key = "'mandataryTypes.ALL'")
-  public List<MandataryType> getMandataryTypes() throws ServiceUnavailableException {
+  @Cacheable(cacheNames = "reference", key = "'mandataryRoles.ALL'")
+  public List<MandataryRole> getMandataryRoles() throws ServiceUnavailableException {
     try {
-      return mandataryTypeRepository.findAll();
+      return mandataryRoleRepository.findAll();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the mandatary type reference data", e);
+          "Failed to retrieve the mandatary role reference data", e);
     }
   }
 
   @Override
-  public List<MandataryType> getMandataryTypes(UUID tenantId, String localeId)
+  public List<MandataryRole> getMandataryRoles(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getMandataryTypes(localeId).stream()
+    return self.getMandataryRoles(localeId).stream()
         .filter(
-            mandataryType ->
-                (mandataryType.getTenantId() == null
-                    || (Objects.equals(mandataryType.getTenantId(), tenantId))))
+            mandataryRole ->
+                (mandataryRole.getTenantId() == null
+                    || (Objects.equals(mandataryRole.getTenantId(), tenantId))))
         .collect(Collectors.toList());
   }
 
@@ -1423,6 +1455,20 @@ public class PartyReferenceService implements IPartyReferenceService {
                 (physicalAddressType.getTenantId() == null
                     || (Objects.equals(physicalAddressType.getTenantId(), tenantId))))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Optional<PreferenceType> getPreferenceType(
+      UUID tenantId, String partyTypeCode, String preferenceTypeCode)
+      throws ServiceUnavailableException {
+    return self.getPreferenceTypes().stream()
+        .filter(
+            preferenceType ->
+                (preferenceType.getTenantId() == null
+                        || preferenceType.getTenantId().equals(tenantId))
+                    && Objects.equals(preferenceType.getCode(), preferenceTypeCode)
+                    && preferenceType.isValidForPartyType(partyTypeCode))
+        .findFirst();
   }
 
   @Override
@@ -2258,6 +2304,10 @@ public class PartyReferenceService implements IPartyReferenceService {
       String contactMechanismTypeCode,
       String contactMechanismRoleCode)
       throws ServiceUnavailableException {
+    if (!StringUtils.hasText(contactMechanismTypeCode)) {
+      return false;
+    }
+
     if (!StringUtils.hasText(contactMechanismRoleCode)) {
       return false;
     }
@@ -2410,6 +2460,36 @@ public class PartyReferenceService implements IPartyReferenceService {
             gender ->
                 (gender.getTenantId() == null || Objects.equals(gender.getTenantId(), tenantId))
                     && Objects.equals(gender.getCode(), genderCode));
+  }
+
+  @Override
+  public boolean isValidIdentityDocument(
+      UUID tenantId, String partyTypeCode, String identityDocumentTypeCode, String number)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(identityDocumentTypeCode)) {
+      return false;
+    }
+
+    return self.getIdentityDocumentTypes().stream()
+        .anyMatch(
+            identityDocumentType -> {
+              if ((identityDocumentType.getTenantId() == null
+                      || Objects.equals(identityDocumentType.getTenantId(), tenantId))
+                  && Objects.equals(identityDocumentType.getCode(), identityDocumentTypeCode)
+                  && identityDocumentType.isValidForPartyType(partyTypeCode)) {
+                if (StringUtils.hasText(identityDocumentType.getPattern())) {
+                  Pattern pattern = identityDocumentType.getCompiledPattern();
+
+                  Matcher matcher = pattern.matcher(number);
+
+                  return matcher.matches();
+                } else {
+                  return true;
+                }
+              } else {
+                return false;
+              }
+            });
   }
 
   @Override
@@ -2712,6 +2792,35 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   @Override
+  public boolean isValidResidencePermit(
+      UUID tenantId, String partyTypeCode, String residencePermitTypeCode, String number)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(residencePermitTypeCode)) {
+      return false;
+    }
+
+    return self.getResidencePermitTypes().stream()
+        .anyMatch(
+            residencePermitType -> {
+              if ((residencePermitType.getTenantId() == null
+                      || Objects.equals(residencePermitType.getTenantId(), tenantId))
+                  && Objects.equals(residencePermitType.getCode(), residencePermitTypeCode)) {
+                if (StringUtils.hasText(residencePermitType.getPattern())) {
+                  Pattern pattern = residencePermitType.getCompiledPattern();
+
+                  Matcher matcher = pattern.matcher(number);
+
+                  return matcher.matches();
+                } else {
+                  return true;
+                }
+              } else {
+                return false;
+              }
+            });
+  }
+
+  @Override
   public boolean isValidResidencePermitType(UUID tenantId, String residencePermitTypeCode)
       throws ServiceUnavailableException {
     if (!StringUtils.hasText(residencePermitTypeCode)) {
@@ -2859,6 +2968,36 @@ public class PartyReferenceService implements IPartyReferenceService {
                 (statusTypeCategory.getTenantId() == null
                         || Objects.equals(statusTypeCategory.getTenantId(), tenantId))
                     && Objects.equals(statusTypeCategory.getCode(), statusTypeCategoryCode));
+  }
+
+  @Override
+  public boolean isValidTaxNumber(
+      UUID tenantId, String partyTypeCode, String taxNumberTypeCode, String number)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(taxNumberTypeCode)) {
+      return false;
+    }
+
+    return self.getTaxNumberTypes().stream()
+        .anyMatch(
+            taxNumberType -> {
+              if ((taxNumberType.getTenantId() == null
+                      || Objects.equals(taxNumberType.getTenantId(), tenantId))
+                  && Objects.equals(taxNumberType.getCode(), taxNumberTypeCode)
+                  && taxNumberType.isValidForPartyType(partyTypeCode)) {
+                if (StringUtils.hasText(taxNumberType.getPattern())) {
+                  Pattern pattern = taxNumberType.getCompiledPattern();
+
+                  Matcher matcher = pattern.matcher(number);
+
+                  return matcher.matches();
+                } else {
+                  return true;
+                }
+              } else {
+                return false;
+              }
+            });
   }
 
   @Override

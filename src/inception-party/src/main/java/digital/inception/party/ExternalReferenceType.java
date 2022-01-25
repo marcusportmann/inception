@@ -297,6 +297,10 @@ public class ExternalReferenceType implements Serializable {
    *     otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
+    if (!StringUtils.hasText(partyTypeCode)) {
+      return false;
+    }
+
     return Arrays.stream(getPartyTypes())
         .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }

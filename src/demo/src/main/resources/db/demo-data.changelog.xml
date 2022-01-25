@@ -1529,7 +1529,8 @@
     <insert schemaName="party" tableName="mandataries">
       <column name="mandate_id" value="3d8396c3-88cd-42f6-ba52-7390d1f535fa"/>
       <column name="party_id" value="21166574-6564-468a-b845-8a5c127a4345"/>
-      <column name="type" value="mandatary"/>
+      <column name="role" value="mandatary"/>
+      <column name="effective_from" value="2011-07-22"/>
     </insert>
 
 

@@ -47,7 +47,7 @@
       <column name="description" value="Test Attribute Type"/>
       <column name="party_types" value="organization,person"/>
       <column name="value_type" value="string"/>
-      <column name="pattern" value="test_attribute_value"/>
+      <column name="pattern" value="^test_attribute_value$"/>
     </insert>
     <insert schemaName="party" tableName="attribute_types">
       <column name="category" value="test_attribute_type_category"/>
@@ -108,7 +108,7 @@
       <column name="description" value="Test String Attribute"/>
       <column name="party_types" value="organization,person"/>
       <column name="value_type" value="string"/>
-      <column name="pattern" value="test_attribute_value"/>
+      <column name="pattern" value="^test_attribute_value$"/>
     </insert>
 
     <insert schemaName="party" tableName="attribute_types">
@@ -120,7 +120,7 @@
       <column name="description" value="Test Attribute Type"/>
       <column name="party_types" value="organization,person"/>
       <column name="value_type" value="string"/>
-      <column name="pattern" value="test_attribute_value"/>
+      <column name="pattern" value="^test_attribute_value$"/>
     </insert>
     <insert schemaName="party" tableName="attribute_types">
       <column name="category" value="test_attribute_type_category"/>
@@ -181,7 +181,7 @@
       <column name="description" value="Test String Attribute"/>
       <column name="party_types" value="organization,person"/>
       <column name="value_type" value="string"/>
-      <column name="pattern" value="test_attribute_value"/>
+      <column name="pattern" value="^test_attribute_value$"/>
     </insert>
 
 
@@ -627,6 +627,7 @@
       <column name="name" value="Test Preference"/>
       <column name="description" value="Test Preference"/>
       <column name="party_types" value="organization,person"/>
+      <column name="pattern" value="^test_preference_value$"/>
     </insert>
     <insert schemaName="party" tableName="preference_types">
       <column name="category" value="test_preference_type_category"/>
@@ -673,6 +674,7 @@
       <column name="name" value="Test Preference"/>
       <column name="description" value="Test Preference"/>
       <column name="party_types" value="organization,person"/>
+      <column name="pattern" value="^test_preference_value$"/>
     </insert>
     <insert schemaName="party" tableName="preference_types">
       <column name="category" value="test_preference_type_category"/>
@@ -1845,24 +1847,24 @@
     </insert>
 
 
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="test_mandate_type"/>
-      <column name="code" value="test_mandatary_type"/>
+      <column name="code" value="test_mandatary_role"/>
       <column name="locale_id" value="en-US"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Mandatary Type"/>
-      <column name="description" value="Test Mandatary Type"/>
+      <column name="name" value="Test Mandatary Role"/>
+      <column name="description" value="Test Mandatary Role"/>
     </insert>
 
-    <insert schemaName="party" tableName="mandatary_types">
+    <insert schemaName="party" tableName="mandatary_roles">
       <column name="mandate_type" value="test_mandate_type"/>
-      <column name="code" value="test_mandatary_type"/>
+      <column name="code" value="test_mandatary_role"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="sort_index" value="1000"/>
-      <column name="name" value="Test Mandatary Type"/>
-      <column name="description" value="Test Mandatary Type"/>
+      <column name="name" value="Test Mandatary Role"/>
+      <column name="description" value="Test Mandatary Role"/>
     </insert>
 
 

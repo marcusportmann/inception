@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -91,6 +92,9 @@ public class TaxNumberType implements Serializable {
   @Id
   @Column(name = "code", length = 30, nullable = false)
   private String code;
+
+  /** The compiled pattern. */
+  @JsonIgnore private transient Pattern compiledPattern;
 
   /** The ISO 3166-1 alpha-2 code for the country of issue for the tax number type. */
   @Schema(
@@ -202,6 +206,20 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
+   * Returns the compiled pattern.
+   *
+   * @return the compiled pattern
+   */
+  @JsonIgnore
+  public Pattern getCompiledPattern() {
+    if (compiledPattern == null) {
+      compiledPattern = Pattern.compile(pattern);
+    }
+
+    return compiledPattern;
+  }
+
+  /**
    * Returns the ISO 3166-1 alpha-2 code for the country of issue for the tax number type.
    *
    * @return the ISO 3166-1 alpha-2 code for the country of issue for the tax number type
@@ -296,6 +314,10 @@ public class TaxNumberType implements Serializable {
    *     otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
+    if (!StringUtils.hasText(partyTypeCode)) {
+      return false;
+    }
+
     return Arrays.stream(getPartyTypes())
         .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }

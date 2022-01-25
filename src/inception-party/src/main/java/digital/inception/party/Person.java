@@ -591,7 +591,8 @@ public class Person extends PartyBase implements Serializable {
   public void addContactMechanism(ContactMechanism contactMechanism) {
     contactMechanisms.removeIf(
         existingContactMechanism ->
-            Objects.equals(existingContactMechanism.getType(), contactMechanism.getType()));
+            Objects.equals(existingContactMechanism.getType(), contactMechanism.getType())
+    && Objects.equals(existingContactMechanism.getRole(), contactMechanism.getRole()));
 
     contactMechanism.setParty(this);
 

@@ -37,7 +37,7 @@ import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocumentType;
 import digital.inception.party.LockType;
 import digital.inception.party.LockTypeCategory;
-import digital.inception.party.MandataryType;
+import digital.inception.party.MandataryRole;
 import digital.inception.party.MandatePropertyType;
 import digital.inception.party.MandateType;
 import digital.inception.party.MaritalStatus;
@@ -636,29 +636,29 @@ public class PartyReferenceServiceTest {
         13, retrievedMandateTypes.size(), "The correct number of mandate types was not retrieved");
   }
 
-  /** Test the mandatary type reference functionality. */
+  /** Test the mandatary role reference functionality. */
   @Test
-  public void mandataryTypeTest() throws Exception {
-    List<MandataryType> retrievedMandataryTypes =
-        partyReferenceService.getMandataryTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+  public void mandataryRoleTest() throws Exception {
+    List<MandataryRole> retrievedMandataryRoles =
+        partyReferenceService.getMandataryRoles(IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        13, retrievedMandataryTypes.size(), "The correct number of mandatary types was not retrieved");
+        13, retrievedMandataryRoles.size(), "The correct number of mandatary roles was not retrieved");
 
-    retrievedMandataryTypes =
-        partyReferenceService.getMandataryTypes(
+    retrievedMandataryRoles =
+        partyReferenceService.getMandataryRoles(
             IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        13, retrievedMandataryTypes.size(), "The correct number of mandatary types was not retrieved");
+        13, retrievedMandataryRoles.size(), "The correct number of mandatary roles was not retrieved");
 
-    retrievedMandataryTypes =
-        partyReferenceService.getMandataryTypes(
+    retrievedMandataryRoles =
+        partyReferenceService.getMandataryRoles(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
             IPartyReferenceService.DEFAULT_LOCALE_ID);
 
     assertEquals(
-        12, retrievedMandataryTypes.size(), "The correct number of mandatary types was not retrieved");
+        12, retrievedMandataryRoles.size(), "The correct number of mandatary roles was not retrieved");
   }
 
 

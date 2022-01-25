@@ -274,6 +274,10 @@ public class LockType implements Serializable {
    * @return <b>true</b> if the lock type is valid for the party type or <b>false</b> otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
+    if (!StringUtils.hasText(partyTypeCode)) {
+      return false;
+    }
+
     return Arrays.stream(getPartyTypes())
         .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }

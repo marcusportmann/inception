@@ -372,21 +372,21 @@ public class PartyReferenceWebService {
   }
 
   /**
-   * Retrieve the mandatary type reference data for a specific locale.
+   * Retrieve the mandatary role reference data for a specific locale.
    *
-   * @param tenantId the ID for the tenant the mandatary type reference data is specific to
-   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary type
+   * @param tenantId the ID for the tenant the mandatary role reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary role
    *     reference data for
-   * @return the mandatary type reference data
+   * @return the mandatary role reference data
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the mandatary type reference data could not be retrieved
+   * @throws ServiceUnavailableException if the mandatary role reference data could not be retrieved
    */
-  @WebMethod(operationName = "GetMandataryTypes")
-  public List<MandataryType> getMandataryTypes(
+  @WebMethod(operationName = "GetMandataryRoles")
+  public List<MandataryRole> getMandataryRoles(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return partyReferenceService.getMandataryTypes(tenantId, localeId);
+    return partyReferenceService.getMandataryRoles(tenantId, localeId);
   }
 
   /**

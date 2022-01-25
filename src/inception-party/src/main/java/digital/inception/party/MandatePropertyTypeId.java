@@ -20,8 +20,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>MandatePropertyTypeId</b> class implements the ID class for the
- * <b>MandatePropertyType</b> class.
+ * The <b>MandatePropertyTypeId</b> class implements the ID class for the <b>MandatePropertyType</b>
+ * class.
  *
  * @author Marcus Portmann
  */
@@ -30,14 +30,14 @@ public class MandatePropertyTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the mandate type the mandate property type is associated with. */
-  private String mandateType;
-
   /** The code for the mandate property type. */
   private String code;
 
   /** The Unicode locale identifier for the mandate property type. */
   private String localeId;
+
+  /** The code for the mandate type the mandate property type is associated with. */
+  private String mandateType;
 
   /**
    * Indicates whether some other object is "equal to" this one.

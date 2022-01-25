@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -56,7 +57,8 @@ import org.springframework.util.StringUtils;
   "sortIndex",
   "name",
   "description",
-  "partyTypes"
+  "partyTypes",
+  "pattern"
 })
 @XmlRootElement(name = "PreferenceType", namespace = "http://inception.digital/party")
 @XmlType(
@@ -70,7 +72,8 @@ import org.springframework.util.StringUtils;
       "sortIndex",
       "name",
       "description",
-      "partyTypes"
+      "partyTypes",
+      "pattern"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -101,6 +104,9 @@ public class PreferenceType implements Serializable {
   @Id
   @Column(name = "code", length = 30, nullable = false)
   private String code;
+
+  /** The compiled pattern. */
+  @JsonIgnore private transient Pattern compiledPattern;
 
   /** The description for the preference type. */
   @Schema(description = "The description for the preference type", required = true)
@@ -137,6 +143,16 @@ public class PreferenceType implements Serializable {
   @Size(min = 1, max = 310)
   @Column(name = "party_types", length = 310, nullable = false)
   private String partyTypes;
+
+  /** The regular expression pattern used to validate a string value for the preference type. */
+  @Schema(
+      description =
+          "The regular expression pattern used to validate a string value for the preference type")
+  @JsonProperty
+  @XmlElement(name = "Pattern")
+  @Size(min = 1, max = 1000)
+  @Column(name = "pattern", length = 1000)
+  private String pattern;
 
   /** The sort index for the preference type. */
   @Schema(description = "The sort index for the preference type", required = true)
@@ -200,6 +216,20 @@ public class PreferenceType implements Serializable {
   }
 
   /**
+   * Returns the compiled pattern.
+   *
+   * @return the compiled pattern
+   */
+  @JsonIgnore
+  public Pattern getCompiledPattern() {
+    if (compiledPattern == null) {
+      compiledPattern = Pattern.compile(pattern);
+    }
+
+    return compiledPattern;
+  }
+
+  /**
    * Returns the description for the preference type.
    *
    * @return the description for the preference type
@@ -241,6 +271,15 @@ public class PreferenceType implements Serializable {
   }
 
   /**
+   * Returns the regular expression pattern used to validate a string value for the preference type.
+   *
+   * @return the regular expression pattern used to validate a string value for the preference type
+   */
+  public String getPattern() {
+    return pattern;
+  }
+
+  /**
    * Returns the sort index for the preference type.
    *
    * @return the sort index for the preference type
@@ -276,6 +315,10 @@ public class PreferenceType implements Serializable {
    *     otherwise
    */
   public boolean isValidForPartyType(String partyTypeCode) {
+    if (!StringUtils.hasText(partyTypeCode)) {
+      return false;
+    }
+
     return Arrays.stream(getPartyTypes())
         .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }
@@ -343,6 +386,16 @@ public class PreferenceType implements Serializable {
   @JsonIgnore
   public void setPartyTypes(Collection<String> partyTypes) {
     this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
+  }
+
+  /**
+   * Set the regular expression pattern used to validate a string value for the preference type.
+   *
+   * @param pattern the regular expression pattern used to validate a string value for the
+   *     preference type
+   */
+  public void setPattern(String pattern) {
+    this.pattern = pattern;
   }
 
   /**
