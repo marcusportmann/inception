@@ -84,25 +84,20 @@ const routes: Routes = [{
 ];
 
 @NgModule({
-  declarations: [
-    // Components
-    EditJobComponent, JobParameterDialogComponent, JobsComponent, NewJobComponent
-  ],
-  entryComponents: [
-    // Components
-    JobParameterDialogComponent
-  ],
-  imports: [
-    // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
-
-    // Inception modules
-    CoreModule
-  ],
-  providers: [
-    // Resolvers
-    JobsTitleResolver, JobTitleResolver, EditJobTitleResolver, NewJobTitleResolver
-  ]
+    declarations: [
+        // Components
+        EditJobComponent, JobParameterDialogComponent, JobsComponent, NewJobComponent
+    ],
+    imports: [
+        // Angular modules
+        CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
+        // Inception modules
+        CoreModule
+    ],
+    providers: [
+        // Resolvers
+        JobsTitleResolver, JobTitleResolver, EditJobTitleResolver, NewJobTitleResolver
+    ]
 })
 export class SchedulerViewsModule {
 }
