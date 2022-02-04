@@ -67,10 +67,10 @@ Complete the following steps to setup a development environment on MacOS.
     ```
     brew install npm
     ```
-12. Install the Angular CLI 12 globally by executing the following command in a Terminal
+12. Install the Angular CLI 13 globally by executing the following command in a Terminal
     window.
     ```
-    npm install -g @angular/cli@12
+    npm install -g @angular/cli@13
     ```
 13. Execute the following command to change to the more conservative tilde (~) patch
     update approach for dependencies for npm.
@@ -161,10 +161,10 @@ Complete the following steps to checkout and build the Inception Framework on Ma
 4. Download the Node.js and npm package from *https://nodejs.org/en/download/* and install it.
 
    **NOTE:** Set the proxy for NPM if required.
-5. Install the Angular CLI 12 globally by executing the following command in a Git Bash
+5. Install the Angular CLI 13 globally by executing the following command in a Git Bash
    window.
    ```
-   npm install -g @angular/cli@12
+   npm install -g @angular/cli@13
    ```
 6. Execute the following command to change to the more conservative tilde (~) patch
    update approach for dependencies for npm.
