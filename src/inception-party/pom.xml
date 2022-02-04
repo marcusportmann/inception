@@ -5,18 +5,6 @@
 
   <artifactId>inception-party</artifactId>
   <name>inception-party</name>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>16</source>
-          <target>16</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
   <parent>
     <groupId>digital.inception</groupId>
@@ -81,11 +69,6 @@
       <version>5.0.1</version>
       <scope>test</scope>
     </dependency>
-
-
-
-
-
 
   </dependencies>
 </project>
