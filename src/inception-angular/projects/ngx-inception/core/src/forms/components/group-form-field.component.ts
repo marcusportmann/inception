@@ -267,6 +267,10 @@ export class GroupFormFieldComponent extends _GroupFormFieldBase
 
   /** Whether there are one or more errors associated with the group form field. */
   _hasError(): boolean {
+    //console.log('this._errorChildren = ', this._errorChildren);
+
+    console.log('this._radioGroupChild = ', this._radioGroupChild);
+
     if (this._errorChildren) {
       if (this._errorChildren.length > 0) {
         return true;

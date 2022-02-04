@@ -138,13 +138,13 @@
         <div class="col-sm">
           <group-form-field>
             <mat-label>Favorite color</mat-label>
-            <mat-radio-group formControlName="favoriteColor">
+            <mat-radio-group formControlName="favoriteColor" required>
               <mat-radio-button value="1">Red</mat-radio-button>
               <mat-radio-button value="2">Green</mat-radio-button>
               <mat-radio-button value="3">Blue</mat-radio-button>
             </mat-radio-group>
             <mat-hint>Select a favorite color.</mat-hint>
-            <mat-error *ngIf="exampleForm.controls['favoriteColor'].errors && !exampleForm.controls['favoriteColor'].untouched">
+            <mat-error *ngIf="exampleForm.controls['favoriteColor'].errors ">
               <span *ngIf="exampleForm.controls['favoriteColor'].errors?.required">A favorite colour is required.</span>
             </mat-error>
           </group-form-field>
