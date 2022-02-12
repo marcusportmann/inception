@@ -61,6 +61,7 @@ import digital.inception.party.RoleTypeAttributeTypeConstraint;
 import digital.inception.party.RoleTypePreferenceTypeConstraint;
 import digital.inception.party.Segment;
 import digital.inception.party.SegmentationType;
+import digital.inception.party.SkillType;
 import digital.inception.party.SourceOfFundsType;
 import digital.inception.party.SourceOfWealthType;
 import digital.inception.party.StatusType;
@@ -580,6 +581,37 @@ public class PartyReferenceServiceTest {
         2, retrievedLockTypes.size(), "The correct number of lock types was not retrieved");
   }
 
+  /** Test the mandatary role reference functionality. */
+  @Test
+  public void mandataryRoleTest() throws Exception {
+    List<MandataryRole> retrievedMandataryRoles =
+        partyReferenceService.getMandataryRoles(IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        13,
+        retrievedMandataryRoles.size(),
+        "The correct number of mandatary roles was not retrieved");
+
+    retrievedMandataryRoles =
+        partyReferenceService.getMandataryRoles(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        13,
+        retrievedMandataryRoles.size(),
+        "The correct number of mandatary roles was not retrieved");
+
+    retrievedMandataryRoles =
+        partyReferenceService.getMandataryRoles(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        12,
+        retrievedMandataryRoles.size(),
+        "The correct number of mandatary roles was not retrieved");
+  }
+
   /** Test the mandate property type reference functionality. */
   @Test
   public void mandatePropertyTypeTest() throws Exception {
@@ -635,32 +667,6 @@ public class PartyReferenceServiceTest {
     assertEquals(
         13, retrievedMandateTypes.size(), "The correct number of mandate types was not retrieved");
   }
-
-  /** Test the mandatary role reference functionality. */
-  @Test
-  public void mandataryRoleTest() throws Exception {
-    List<MandataryRole> retrievedMandataryRoles =
-        partyReferenceService.getMandataryRoles(IPartyReferenceService.DEFAULT_LOCALE_ID);
-
-    assertEquals(
-        13, retrievedMandataryRoles.size(), "The correct number of mandatary roles was not retrieved");
-
-    retrievedMandataryRoles =
-        partyReferenceService.getMandataryRoles(
-            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
-
-    assertEquals(
-        13, retrievedMandataryRoles.size(), "The correct number of mandatary roles was not retrieved");
-
-    retrievedMandataryRoles =
-        partyReferenceService.getMandataryRoles(
-            UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            IPartyReferenceService.DEFAULT_LOCALE_ID);
-
-    assertEquals(
-        12, retrievedMandataryRoles.size(), "The correct number of mandatary roles was not retrieved");
-  }
-
 
   /** Test the marital status reference functionality. */
   @Test
@@ -1240,6 +1246,31 @@ public class PartyReferenceServiceTest {
         2,
         retrievedSegmentationTypes.size(),
         "The correct number of segmentation types was not retrieved");
+  }
+
+  /** Test the skill type functionality. */
+  @Test
+  public void skillTypeTest() throws Exception {
+    List<SkillType> retrievedSkillTypes =
+        partyReferenceService.getSkillTypes(IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        42, retrievedSkillTypes.size(), "The correct number of skill types was not retrieved");
+
+    retrievedSkillTypes =
+        partyReferenceService.getSkillTypes(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        42, retrievedSkillTypes.size(), "The correct number of skill types was not retrieved");
+
+    retrievedSkillTypes =
+        partyReferenceService.getSkillTypes(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        41, retrievedSkillTypes.size(), "The correct number of skill types was not retrieved");
   }
 
   /** Test the source of funds types reference functionality. */

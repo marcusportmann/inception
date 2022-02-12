@@ -1409,6 +1409,23 @@
 
 
 
+    <insert schemaName="party" tableName="skill_types">
+      <column name="code" value="test_skill"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Skill"/>
+      <column name="description" value="Test Skill"/>
+    </insert>
+    <insert schemaName="party" tableName="skill_types">
+      <column name="code" value="test_skill"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Skill"/>
+      <column name="description" value="Test Skill"/>
+    </insert>
+
+
+
     <insert schemaName="party" tableName="source_of_funds_types">
       <column name="code" value="test_source_of_funds_type"/>
       <column name="locale_id" value="en-US"/>

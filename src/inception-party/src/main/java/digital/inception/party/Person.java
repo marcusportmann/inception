@@ -132,6 +132,7 @@ import org.springframework.util.StringUtils;
   "residencePermits",
   "roles",
   "segmentAllocations",
+  "skills",
   "sourcesOfFunds",
   "sourcesOfWealth",
   "statuses",
@@ -187,6 +188,7 @@ import org.springframework.util.StringUtils;
       "residencePermits",
       "roles",
       "segmentAllocations",
+      "skills",
       "sourcesOfFunds",
       "sourcesOfWealth",
       "statuses",
@@ -349,6 +351,16 @@ public class Person extends PartyBase implements Serializable {
       orphanRemoval = true)
   @OrderBy("segment")
   private final Set<SegmentAllocation> segmentAllocations = new HashSet<>();
+
+  /** The skills for the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "person",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  @OrderBy("type")
+  private final Set<Skill> skills = new HashSet<>();
 
   /** The sources of funds for the person. */
   @Valid
@@ -592,7 +604,7 @@ public class Person extends PartyBase implements Serializable {
     contactMechanisms.removeIf(
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), contactMechanism.getType())
-    && Objects.equals(existingContactMechanism.getRole(), contactMechanism.getRole()));
+                && Objects.equals(existingContactMechanism.getRole(), contactMechanism.getRole()));
 
     contactMechanism.setParty(this);
 
@@ -788,6 +800,19 @@ public class Person extends PartyBase implements Serializable {
     segmentAllocation.setParty(this);
 
     segmentAllocations.add(segmentAllocation);
+  }
+
+  /**
+   * Add the skill for the person.
+   *
+   * @param skill the skill
+   */
+  public void addSkill(Skill skill) {
+    skills.removeIf(existingSkill -> Objects.equals(existingSkill.getType(), skill.getType()));
+
+    skill.setPerson(this);
+
+    skills.add(skill);
   }
 
   /**
@@ -1660,6 +1685,31 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Retrieve the skill with the specified type for the person.
+   *
+   * @param type the code for the skill type
+   * @return an Optional containing the skill with the specified type for the person or an empty
+   *     Optional if the skill could not be found
+   */
+  public Optional<Skill> getSkillWithType(String type) {
+    return skills.stream().filter(skill -> Objects.equals(skill.getType(), type)).findFirst();
+  }
+
+  /**
+   * Returns the skills for the person.
+   *
+   * @return the skills for the person
+   */
+  @Schema(description = "The skills for the person")
+  @JsonProperty
+  @JsonManagedReference("skillReference")
+  @XmlElementWrapper(name = "Skills")
+  @XmlElement(name = "Skill")
+  public Set<Skill> getSkills() {
+    return skills;
+  }
+
+  /**
    * Retrieve the source of funds with the specified type for the person.
    *
    * @param type the code for the source of funds type
@@ -2000,6 +2050,16 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns whether the person has a skill with the specified type.
+   *
+   * @param type the code for the skill type
+   * @return <b>true</b> if the person has a skill with the specified type or <b>false</b> otherwise
+   */
+  public boolean hasSkill(String type) {
+    return skills.stream().anyMatch(skill -> Objects.equals(skill.getType(), type));
+  }
+
+  /**
    * Returns whether the person has a source of funds with the specified type.
    *
    * @param type the code for the source of funds type
@@ -2234,6 +2294,15 @@ public class Person extends PartyBase implements Serializable {
   public void removeSegmentAllocationWithSegment(String segment) {
     segmentAllocations.removeIf(
         segmentAllocation -> Objects.equals(segmentAllocation.getSegment(), segment));
+  }
+
+  /**
+   * Remove the skill with the specified type for the person.
+   *
+   * @param type the code for the skill type
+   */
+  public void removeSkillWithType(String type) {
+    skills.removeIf(existingSkill -> Objects.equals(existingSkill.getType(), type));
   }
 
   /**
@@ -2710,6 +2779,17 @@ public class Person extends PartyBase implements Serializable {
     segmentAllocations.forEach(segmentAllocation -> segmentAllocation.setParty(this));
     this.segmentAllocations.clear();
     this.segmentAllocations.addAll(segmentAllocations);
+  }
+
+  /**
+   * Set the skills for the person.
+   *
+   * @param skills the skills for the person
+   */
+  public void setSkills(Set<Skill> skills) {
+    skills.forEach(skill -> skill.setPerson(this));
+    this.skills.clear();
+    this.skills.addAll(skills);
   }
 
   /**
