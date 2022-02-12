@@ -67,10 +67,10 @@ Complete the following steps to setup a development environment on MacOS.
     ```
     brew install npm
     ```
-12. Install the Angular CLI 12 globally by executing the following command in a Terminal
+12. Install the Angular CLI 13 globally by executing the following command in a Terminal
     window.
     ```
-    npm install -g @angular/cli@12
+    npm install -g @angular/cli@13
     ```
 13. Execute the following command to change to the more conservative tilde (~) patch
     update approach for dependencies for npm.
@@ -161,10 +161,10 @@ Complete the following steps to checkout and build the Inception Framework on Ma
 4. Download the Node.js and npm package from *https://nodejs.org/en/download/* and install it.
 
    **NOTE:** Set the proxy for NPM if required.
-5. Install the Angular CLI 12 globally by executing the following command in a Git Bash
+5. Install the Angular CLI 13 globally by executing the following command in a Git Bash
    window.
    ```
-   npm install -g @angular/cli@12
+   npm install -g @angular/cli@13
    ```
 6. Execute the following command to change to the more conservative tilde (~) patch
    update approach for dependencies for npm.
@@ -349,11 +349,11 @@ Complete the following steps to create a new application based on the Inception 
             <plugin>
               <groupId>com.github.eirslett</groupId>
               <artifactId>frontend-maven-plugin</artifactId>
-              <version>1.6</version>
+              <version>1.12.1</version>
               <configuration>
                 <workingDirectory>src/main/frontend</workingDirectory>
-                <nodeVersion>v16.9.0</nodeVersion>
-                <npmVersion>7.21.1</npmVersion>
+                <nodeVersion>v16.14.0</nodeVersion>
+                <npmVersion>8.3.1</npmVersion>
               </configuration>
               <executions>
                 <execution>
@@ -400,6 +400,9 @@ Complete the following steps to create a new application based on the Inception 
       import org.springframework.context.annotation.Configuration;
       import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+      /**
+       * The <b>DemoConfiguration</b> class.
+       */
       @Configuration
       @ComponentScan(
           basePackages = {"digital.inception", "demo"})
@@ -613,10 +616,10 @@ Complete the following steps to create a new application based on the Inception 
    5. Execute the following commands under the *src/main/frontend* directory to install the
       dependencies for the *ngx-inception* library.
       ```
-      npm install --save @angular/cdk@12
-      npm install --save @angular/localize@12
-      npm install --save @angular/material@12
-      npm install --save @angular/material-moment-adapter@12
+      npm install --save @angular/cdk@13
+      npm install --save @angular/localize@13
+      npm install --save @angular/material@13
+      npm install --save @angular/material-moment-adapter@13
       npm install --save @auth0/angular-jwt@5
       npm install --save @fortawesome/fontawesome-free@5
       npm install --save bootstrap@4      
@@ -1219,7 +1222,6 @@ Complete the following steps to create a new application based on the Inception 
          }
 
          ngOnDestroy(): void {
-           this.unsubscribe$.next();
            this.unsubscribe$.complete();
          }
 
@@ -1249,7 +1251,7 @@ Complete the following steps to create a new application based on the Inception 
        ```
    27. Replace the contents of the *src/main/frontend/src/styles.scss* file with the following.
        ```
-       @import "~ngx-inception/assets/scss/default-theme.scss";
+       @import "./node_modules/ngx-inception/assets/scss/default-theme";
 
        .brand-full {
          display: inline-block;
