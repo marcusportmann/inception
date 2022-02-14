@@ -796,6 +796,24 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the skill type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the skill type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the skill type
+   *     reference data for
+   * @return the skill type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the skill type reference data could not be retrieved
+   */
+  @WebMethod(operationName = "GetSkillTypes")
+  public List<SkillType> getSkillTypes(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSkillTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the source of funds type reference data for a specific locale.
    *
    * @param tenantId the ID for the tenant the source of funds type reference data is specific to

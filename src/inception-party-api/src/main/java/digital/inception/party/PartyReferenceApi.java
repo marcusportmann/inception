@@ -2556,6 +2556,65 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the skill type reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the skill type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the skill type
+   *     reference data for
+   * @return the skill type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the skill type reference data could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the skill type reference data for a specific locale",
+      description = "Retrieve the skill type reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(value = "/skill-types", method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<SkillType> getSkillTypes(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant the skill type reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the skill type reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getSkillTypes(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the source of funds type reference data for a specific locale.
    *
    * @param tenantId the ID for the tenant the source of funds type reference data is specific to
