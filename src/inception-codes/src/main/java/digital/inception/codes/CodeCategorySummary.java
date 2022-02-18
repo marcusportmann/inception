@@ -45,12 +45,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @Schema(description = "A code category summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "name", "updated"})
+@JsonPropertyOrder({"id", "name", "lastModified"})
 @XmlRootElement(name = "CodeCategorySummary", namespace = "http://inception.digital/codes")
 @XmlType(
     name = "CodeCategorySummary",
     namespace = "http://inception.digital/codes",
-    propOrder = {"id", "name", "updated"})
+    propOrder = {"id", "name", "lastModified"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "codes", name = "code_categories")
@@ -68,6 +68,15 @@ public class CodeCategorySummary implements Serializable {
   @Column(name = "id", length = 100, nullable = false)
   private String id;
 
+  /** The date and time the code category was last modified. */
+  @Schema(description = "The date and time the code category was last modified")
+  @JsonProperty
+  @XmlElement(name = "LastModified")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "last_modified")
+  private LocalDateTime lastModified;
+
   /** The name of the code category. */
   @Schema(description = "The name of the code category", required = true)
   @JsonProperty(required = true)
@@ -77,15 +86,6 @@ public class CodeCategorySummary implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** The date and time the code category was last updated. */
-  @Schema(description = "The date and time the code category was last updated")
-  @JsonProperty
-  @XmlElement(name = "Updated")
-  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "updated")
-  private LocalDateTime updated;
-
   /** Constructs a new <b>CodeCategorySummary</b>. */
   public CodeCategorySummary() {}
 
@@ -94,12 +94,12 @@ public class CodeCategorySummary implements Serializable {
    *
    * @param id the ID for the code category
    * @param name the name of the code category
-   * @param updated the date and time the code category was last updated
+   * @param lastModified the date and time the code category was last modified
    */
-  public CodeCategorySummary(String id, String name, LocalDateTime updated) {
+  public CodeCategorySummary(String id, String name, LocalDateTime lastModified) {
     this.id = id;
     this.name = name;
-    this.updated = updated;
+    this.lastModified = lastModified;
   }
 
   /**
@@ -137,21 +137,21 @@ public class CodeCategorySummary implements Serializable {
   }
 
   /**
+   * Returns the date and time the code category was last modified.
+   *
+   * @return the date and time the code category was last modified
+   */
+  public LocalDateTime getLastModified() {
+    return lastModified;
+  }
+
+  /**
    * Returns the name of the code category.
    *
    * @return the name of the code category
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Returns the date and time the code category was last updated.
-   *
-   * @return the date and time the code category was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**

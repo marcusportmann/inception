@@ -108,8 +108,8 @@
     <glassfish-jaxb-runtime.version>2.4.0-b180830.0438</glassfish-jaxb-runtime.version>
     <groovy.version>3.0.9</groovy.version>
     <hibernate-validator.version>6.2.1.Final</hibernate-validator.version>
-    <jaxb-xew-plugin.version>1.11</jaxb-xew-plugin.version>
     <jasperreports.version>6.18.1</jasperreports.version>
+    <jaxb-xew-plugin.version>1.11</jaxb-xew-plugin.version>
     <jboss-transaction-spi.version>7.6.1.Final</jboss-transaction-spi.version>
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
     <liquibase-slf4j.version>4.0.0</liquibase-slf4j.version>

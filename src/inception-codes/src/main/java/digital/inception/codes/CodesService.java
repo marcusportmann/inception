@@ -406,11 +406,11 @@ public class CodesService implements ICodesService {
     }
 
     try {
-      Optional<LocalDateTime> updatedOptional =
+      Optional<LocalDateTime> lastModifiedOptional =
           codeCategoryRepository.getLastModifiedById(codeCategoryId);
 
-      if (updatedOptional.isPresent()) {
-        return updatedOptional.get();
+      if (lastModifiedOptional.isPresent()) {
+        return lastModifiedOptional.get();
       }
 
       // Check if one of the registered code providers supports the code category

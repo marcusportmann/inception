@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.LocalDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -36,8 +37,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <b>CodeCategory</b> class holds the information for a code category.
@@ -46,12 +49,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A collection of related codes")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "name", "data"})
+@JsonPropertyOrder({"id", "name", "data", "lastModified"})
 @XmlRootElement(name = "CodeCategory", namespace = "http://inception.digital/codes")
 @XmlType(
     name = "CodeCategory",
     namespace = "http://inception.digital/codes",
-    propOrder = {"id", "name", "data"})
+    propOrder = {"id", "name", "data", "lastModified"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "codes", name = "code_categories")
@@ -86,9 +89,12 @@ public class CodeCategory implements Serializable {
   private String name;
 
   /** The date and time the code category was last modified. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(name = "last_modified", insertable = false)
+  @Schema(description = "The date and time the code category was last modified")
+  @JsonProperty
+  @XmlElement(name = "LastModified")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "last_modified")
   private LocalDateTime lastModified;
 
   /** Constructs a new <b>CodeCategory</b>. */
