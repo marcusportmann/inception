@@ -847,10 +847,36 @@
     <createIndex indexName="segments_type_ix" schemaName="party" tableName="segments">
       <column name="type"/>
     </createIndex>
-
     <createIndex indexName="segments_locale_id_ix" schemaName="party" tableName="segments">
       <column name="locale_id"/>
     </createIndex>
+
+    <createTable schemaName="party" tableName="skill_types" remarks="Skill Types">
+      <column name="parent" type="nvarchar(30)" remarks="The code for the parent skill type"/>
+      <column name="code" type="nvarchar(30)" remarks="The code for the skill type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the skill type">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the skill type is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the skill type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the skill type">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the skill type">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="skill_types_parent_fk" baseTableSchemaName="party"
+      baseTableName="skill_types" baseColumnNames="parent, locale_id" referencedTableSchemaName="party"
+      referencedTableName="skill_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
+    <createIndex indexName="skill_types_parent_ix" schemaName="party" tableName="skill_types">
+      <column name="parent"/>
+    </createIndex>
+    <createIndex indexName="skill_types_locale_id_ix" schemaName="party" tableName="skill_types">
+      <column name="locale_id"/>
+    </createIndex>    
 
     <createTable schemaName="party" tableName="source_of_funds_types" remarks="Source Of Funds Types">
       <column name="code" type="nvarchar(30)" remarks="The code for the source of funds type">
@@ -1496,6 +1522,24 @@
     <createIndex indexName="segment_allocations_party_id_ix" schemaName="party" tableName="segment_allocations">
       <column name="party_id"/>
     </createIndex>
+
+    <createTable schemaName="party" tableName="skills" remarks="Skills">
+      <column name="person_id" type="uuid" remarks="The ID for the person the skill is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="level" type="nvarchar(20)" remarks="The proficiency level for the skill">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(30)" remarks="The code for the skill type">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="skills_person_fk" baseTableSchemaName="party"
+      baseTableName="skills" baseColumnNames="person_id" referencedTableSchemaName="party"
+      referencedTableName="persons" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="skills_person_id_ix" schemaName="party" tableName="skills">
+      <column name="person_id"/>
+    </createIndex>    
 
     <createTable schemaName="party" tableName="snapshots" remarks="Snapshots">
       <column name="id" type="uuid" remarks="The ID for the snapshot">

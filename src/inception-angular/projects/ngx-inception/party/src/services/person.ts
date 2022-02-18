@@ -30,6 +30,7 @@ import {Preference} from './preference';
 import {ResidencePermit} from "./residence-permit";
 import {Role} from './role';
 import {SegmentAllocation} from './segment-allocation';
+import {Skill} from './skill';
 import {SourceOfFunds} from "./source-of-funds";
 import {SourceOfWealth} from "./source-of-wealth";
 import {Status} from './status';
@@ -246,6 +247,11 @@ export class Person {
    * The segment allocations for the person.
    */
   segmentAllocations: SegmentAllocation[] = [];
+
+  /**
+   * The skills for the person.
+   */
+  skills: Skill[] = [];
 
   /**
    * The sources of funds for the person.

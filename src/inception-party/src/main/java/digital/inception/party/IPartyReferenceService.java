@@ -1513,6 +1513,39 @@ public interface IPartyReferenceService {
   List<Segment> getSegments() throws ServiceUnavailableException;
 
   /**
+   * Retrieve the skill type reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the skill type
+   *     reference data for
+   * @return the skill type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the skill type reference data could not be retrieved
+   */
+  List<SkillType> getSkillTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the skill type reference data for a specific tenant and locale.
+   *
+   * @param tenantId the ID for the tenant the skill type reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the skill type
+   *     reference data for
+   * @return the skill type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the skill type reference data could not be retrieved
+   */
+  List<SkillType> getSkillTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the skill type reference data for all locales.
+   *
+   * @return the skill type reference data
+   * @throws ServiceUnavailableException if the skill type reference data could not be retrieved
+   */
+  List<SkillType> getSkillTypes() throws ServiceUnavailableException;
+
+  /**
    * Retrieve the source of funds type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the source of funds

@@ -161,6 +161,9 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Segmentation Type Repository. */
   private final SegmentationTypeRepository segmentationTypeRepository;
 
+  /** The Skill Type Repository */
+  private final SkillTypeRepository skillTypeRepository;
+
   /** The Source of Funds Type Repository. */
   private final SourceOfFundsTypeRepository sourceOfFundsTypeRepository;
 
@@ -230,6 +233,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    *     Repository
    * @param segmentationTypeRepository the Segmentation Type Repository
    * @param segmentRepository the Segment Repository
+   * @param skillTypeRepository the Skill Type Repository
    * @param sourceOfFundsTypeRepository the Source Of Funds Repository
    * @param sourceOfWealthTypeRepository the Source Of Wealth Repository
    * @param statusTypeCategoryRepository the Status Type Category Repository
@@ -279,6 +283,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       RoleTypePreferenceTypeConstraintRepository roleTypePreferenceTypeConstraintRepository,
       SegmentationTypeRepository segmentationTypeRepository,
       SegmentRepository segmentRepository,
+      SkillTypeRepository skillTypeRepository,
       SourceOfFundsTypeRepository sourceOfFundsTypeRepository,
       SourceOfWealthTypeRepository sourceOfWealthTypeRepository,
       StatusTypeCategoryRepository statusTypeCategoryRepository,
@@ -326,6 +331,7 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.roleTypePreferenceTypeConstraintRepository = roleTypePreferenceTypeConstraintRepository;
     this.segmentationTypeRepository = segmentationTypeRepository;
     this.segmentRepository = segmentRepository;
+    this.skillTypeRepository = skillTypeRepository;
     this.sourceOfFundsTypeRepository = sourceOfFundsTypeRepository;
     this.sourceOfWealthTypeRepository = sourceOfWealthTypeRepository;
     this.statusTypeCategoryRepository = statusTypeCategoryRepository;
@@ -1930,6 +1936,42 @@ public class PartyReferenceService implements IPartyReferenceService {
             segment ->
                 (segment.getTenantId() == null
                     || (Objects.equals(segment.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'skillTypes.' + #localeId")
+  public List<SkillType> getSkillTypes(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    try {
+      return skillTypeRepository.findByLocaleIdIgnoreCase(localeId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the skill type reference data", e);
+    }
+  }
+
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'skillTypes.ALL'")
+  public List<SkillType> getSkillTypes() throws ServiceUnavailableException {
+    try {
+      return skillTypeRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to retrieve the skill type reference data", e);
+    }
+  }
+
+  @Override
+  public List<SkillType> getSkillTypes(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getSkillTypes(localeId).stream()
+        .filter(
+            skillType ->
+                (skillType.getTenantId() == null
+                    || (Objects.equals(skillType.getTenantId(), tenantId))))
         .collect(Collectors.toList());
   }
 
