@@ -17,15 +17,10 @@
 
 import {Injectable} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {render} from 'es6-template-string';
 import {ReplaySubject, Subject} from 'rxjs';
 import {filter} from 'rxjs/operators';
-//import * as format_ from 'string-template';
 import {Breadcrumb} from './breadcrumb';
-//import format = require('string-template');
-
-//import {format} from 'string-template';
-
-//const format = format_;
 
 /**
  * The Breadcrumbs Service implementation.
@@ -67,10 +62,7 @@ export class BreadcrumbsService {
 
               if (routeSnapshot.data.title) {
                 if (!!routeSnapshot.params) {
-                  console.log('FIX ME [BreadcrumbsService] routeSnapshot.params = ', routeSnapshot.params);
-                  // REPLACE string-format library
-                  breadcrumbs.push(new Breadcrumb(routeSnapshot.data.title, url));
-                  //breadcrumbs.push(new Breadcrumb(Format(routeSnapshot.data.title, routeSnapshot.params), url));
+                  breadcrumbs.push(new Breadcrumb(render(routeSnapshot.data.title, routeSnapshot.params), url));
                 } else {
                   breadcrumbs.push(new Breadcrumb(routeSnapshot.data.title, url));
                 }

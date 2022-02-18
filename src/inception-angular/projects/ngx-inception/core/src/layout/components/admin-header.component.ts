@@ -29,7 +29,7 @@ import {Replace} from '../../util/replace';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'admin-header',
   template: `
     <header class="admin-header">

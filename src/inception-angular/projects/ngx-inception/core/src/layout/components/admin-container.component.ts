@@ -103,7 +103,7 @@ export class AdminContainerComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
-  
+
   /**
    * Process the router outlet activate event.
    *

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Directive, Host, Optional, Self, ViewContainerRef} from '@angular/core';
+import {
+  AfterViewInit, Directive, Host, HostListener, Optional, Self, ViewContainerRef
+} from '@angular/core';
 import {FormGroupDirective} from '@angular/forms';
 
 /**
@@ -23,12 +25,8 @@ import {FormGroupDirective} from '@angular/forms';
  * @author Marcus Portmann
  */
 @Directive({
-  // eslint-disable-next-line
-  selector: 'form[validatedForm]', // eslint-disable-next-line
-  host: {
-    '(submit)': 'onSubmit()',
-    '(reset)': 'onReset()'
-  }
+  // eslint-disable-next-line @angular-eslint/directive-selector
+  selector: 'form[validatedForm]'
 })
 export class ValidatedFormDirective {
 
@@ -42,9 +40,11 @@ export class ValidatedFormDirective {
               @Host() @Self() @Optional() private formGroupDirective: FormGroupDirective) {
   }
 
+  @HostListener('reset')
   onReset(): void {
   }
 
+  @HostListener('submit')
   onSubmit(): boolean {
     // Mark all controls as touched
     if (this.formGroupDirective && this.formGroupDirective.control && this.formGroupDirective.control.controls) {

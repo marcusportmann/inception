@@ -22,7 +22,7 @@ import {Directive, HostListener} from '@angular/core';
  * @author Marcus Portmann
  */
 @Directive({
-  // eslint-disable-next-line
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[sidebarOffCanvasClose]'
 })
 export class SidebarOffCanvasCloseDirective {

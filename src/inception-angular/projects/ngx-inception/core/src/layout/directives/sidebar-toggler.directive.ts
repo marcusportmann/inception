@@ -24,7 +24,7 @@ import {SIDEBAR_CSS_CLASSES} from '../components/sidebar-css-classes';
  * @author Marcus Portmann
  */
 @Directive({
-  // eslint-disable-next-line
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[sidebarToggler]'
 })
 export class SidebarTogglerDirective implements OnInit {
