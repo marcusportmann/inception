@@ -35,14 +35,4 @@ public interface RoleTypeRepository extends JpaRepository<RoleType, RoleTypeId> 
    */
   @Query("select rt from RoleType rt order by rt.localeId, -rt.sortIndex DESC, rt.name")
   List<RoleType> findAll();
-
-  /**
-   * Retrieve the role types for the specified locale sorted by locale ID, sort index, and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the role types for
-   * @return the role types for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select rt from RoleType rt where upper(rt.localeId) = upper(:localeId) order by rt.localeId, -rt.sortIndex DESC, rt.name")
-  List<RoleType> findByLocaleIdIgnoreCase(String localeId);
 }

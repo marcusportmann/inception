@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -313,6 +314,36 @@ public class AssociationType implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
+  }
+
+  /**
+   * Returns whether the party type is valid for the first party.
+   *
+   * @param partyTypeCode the code for the party type
+   * @return <b>true</b> if the party type is valid for the first party or <b>false</b> otherwise
+   */
+  public boolean isValidFirstPartyType(String partyTypeCode) {
+    if (!StringUtils.hasText(partyTypeCode)) {
+      return false;
+    }
+
+    return Arrays.stream(getFirstPartyTypes())
+        .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
+  }
+
+  /**
+   * Returns whether the party type is valid for the second party.
+   *
+   * @param partyTypeCode the code for the party type
+   * @return <b>true</b> if the party type is valid for the second party or <b>false</b> otherwise
+   */
+  public boolean isValidSecondPartyType(String partyTypeCode) {
+    if (!StringUtils.hasText(partyTypeCode)) {
+      return false;
+    }
+
+    return Arrays.stream(getSecondPartyTypes())
+        .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }
 
   /**

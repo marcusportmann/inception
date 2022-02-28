@@ -35,14 +35,4 @@ public interface MarriageTypeRepository extends JpaRepository<MarriageType, Marr
    */
   @Query("select mt from MarriageType mt order by mt.localeId, -mt.sortIndex DESC, mt.name")
   List<MarriageType> findAll();
-
-  /**
-   * Retrieve the marriage types for the specified locale sorted by locale ID, sort index, and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the marriage types for
-   * @return the marriage types for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select mt from MarriageType mt where upper(mt.localeId) = upper(:localeId) order by mt.localeId, -mt.sortIndex DESC, mt.name")
-  List<MarriageType> findByLocaleIdIgnoreCase(String localeId);
 }

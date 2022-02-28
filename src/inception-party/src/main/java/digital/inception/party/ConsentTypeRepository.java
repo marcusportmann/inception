@@ -35,14 +35,4 @@ public interface ConsentTypeRepository extends JpaRepository<ConsentType, Consen
    */
   @Query("select ct from ConsentType ct order by ct.localeId, -ct.sortIndex DESC, ct.name")
   List<ConsentType> findAll();
-
-  /**
-   * Retrieve the consent types for the specified locale sorted by locale ID, sort index, and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the consent types for
-   * @return the consent types for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select ct from ConsentType ct where upper(ct.localeId) = upper(:localeId) order by ct.localeId, -ct.sortIndex DESC, ct.name")
-  List<ConsentType> findByLocaleIdIgnoreCase(String localeId);
 }

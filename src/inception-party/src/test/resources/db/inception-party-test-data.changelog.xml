@@ -396,6 +396,66 @@
 
 
 
+    <insert schemaName="party" tableName="industry_classification_systems">
+      <column name="code" value="test_sic"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Standard Industry Classification"/>
+      <column name="description" value="Test Standard Industry Classification"/>
+    </insert>
+
+    <insert schemaName="party" tableName="industry_classification_systems">
+      <column name="code" value="test_sic"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Standard Industry Classification"/>
+      <column name="description" value="Test Standard Industry Classification"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="industry_classification_categories">
+      <column name="system" value="test_sic"/>
+      <column name="code" value="test_category"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Category"/>
+      <column name="description" value="Test Category"/>
+    </insert>
+
+    <insert schemaName="party" tableName="industry_classification_categories">
+      <column name="system" value="test_sic"/>
+      <column name="code" value="test_category"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Category"/>
+      <column name="description" value="Test Category"/>
+    </insert>
+
+
+
+    <insert schemaName="party" tableName="industry_classifications">
+      <column name="system" value="test_sic"/>
+      <column name="category" value="test_category"/>
+      <column name="code" value="test_classification"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Classification"/>
+      <column name="description" value="Test Classification"/>
+    </insert>
+
+    <insert schemaName="party" tableName="industry_classifications">
+      <column name="system" value="test_sic"/>
+      <column name="category" value="test_category"/>
+      <column name="code" value="test_classification"/>
+      <column name="locale_id" value="en-ZA"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Test Classification"/>
+      <column name="description" value="Test Classification"/>
+    </insert>
+
+
+
     <insert schemaName="party" tableName="lock_type_categories">
       <column name="code" value="test_lock_type_category"/>
       <column name="locale_id" value="en-US"/>

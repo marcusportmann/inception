@@ -35,16 +35,4 @@ public interface TimeToContactRepository extends JpaRepository<TimeToContact, Ti
    */
   @Query("select ttc from TimeToContact ttc order by ttc.localeId, -ttc.sortIndex DESC, ttc.name")
   List<TimeToContact> findAll();
-
-  /**
-   * Retrieve the times to contact for the specified locale sorted by locale ID, sort index, and
-   * name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
-   *     for
-   * @return the times to contact for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select ttc from TimeToContact ttc where upper(ttc.localeId) = upper(:localeId) order by ttc.localeId, -ttc.sortIndex DESC, ttc.name")
-  List<TimeToContact> findByLocaleIdIgnoreCase(String localeId);
 }

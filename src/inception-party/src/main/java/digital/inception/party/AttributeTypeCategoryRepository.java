@@ -36,17 +36,4 @@ public interface AttributeTypeCategoryRepository
    */
   @Query("select atc from AttributeTypeCategory atc order by -atc.sortIndex DESC, atc.name")
   List<AttributeTypeCategory> findAll();
-
-  /**
-   * Retrieve the attribute type categories for the specified locale sorted by locale ID, sort
-   * index, and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the attribute type
-   *     categories for
-   * @return the attribute type categories for the specified locale sorted by locale ID, sort index,
-   *     and name
-   */
-  @Query(
-      "select atc from AttributeTypeCategory atc where upper(atc.localeId) = upper(:localeId) order by -atc.sortIndex DESC, atc.name")
-  List<AttributeTypeCategory> findByLocaleIdIgnoreCase(String localeId);
 }

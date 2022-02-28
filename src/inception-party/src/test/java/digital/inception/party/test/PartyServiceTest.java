@@ -42,6 +42,7 @@ import digital.inception.party.EntityType;
 import digital.inception.party.ExternalReference;
 import digital.inception.party.IPartyService;
 import digital.inception.party.IdentityDocument;
+import digital.inception.party.IndustryAllocation;
 import digital.inception.party.LanguageProficiency;
 import digital.inception.party.LanguageProficiencyLevel;
 import digital.inception.party.Lock;
@@ -73,6 +74,8 @@ import digital.inception.party.RequiredMandataries;
 import digital.inception.party.ResidencePermit;
 import digital.inception.party.Role;
 import digital.inception.party.SegmentAllocation;
+import digital.inception.party.Skill;
+import digital.inception.party.SkillProficiencyLevel;
 import digital.inception.party.Snapshots;
 import digital.inception.party.SourceOfFunds;
 import digital.inception.party.SourceOfWealth;
@@ -330,6 +333,8 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("correspondence_language", "EN"));
 
+    person.addSkill(new Skill("administration", SkillProficiencyLevel.EXPERT));
+
     return person;
   }
 
@@ -393,8 +398,7 @@ public class PartyServiceTest {
         new IdentityDocument("passport", "ZW", LocalDate.of(2010, 5, 20), "A01524783"));
 
     person.addResidencePermit(
-        new ResidencePermit(
-            "za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "AA0187236"));
+        new ResidencePermit("za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "AA0187236"));
 
     PhysicalAddress residentialAddress =
         new PhysicalAddress(
@@ -432,6 +436,9 @@ public class PartyServiceTest {
     organization.addIdentityDocument(
         new IdentityDocument(
             "za_company_registration", "ZA", LocalDate.of(2006, 4, 2), "2006/123456/23"));
+
+    organization.addIndustryAllocation(
+        new IndustryAllocation("sars_sic", "63", LocalDate.now(), LocalDate.of(2036, 4, 2)));
 
     organization.addRole(new Role("employer"));
 
@@ -1192,90 +1199,6 @@ public class PartyServiceTest {
         "The correct number of constraint violations was not found for the association");
   }
 
-  /** Test the invalid preference functionality. */
-  @Test
-  public void invalidPreferenceTest() throws Exception {
-    Person person = getTestBasicPersonDetails();
-
-    person.addPreference(new Preference("test_preference", "invalid_test_preference_value"));
-
-    Set<ConstraintViolation<Person>> personConstraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
-
-    assertEquals(
-        1,
-        personConstraintViolations.size(),
-        "The correct number of constraint violations was not found for the person");
-
-    Organization organization = getTestBasicOrganizationDetails();
-
-    organization.addPreference(new Preference("test_preference", "invalid_test_preference_value"));
-
-    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
-
-    assertEquals(
-        1,
-        organizationConstraintViolations.size(),
-        "The correct number of constraint violations was not found for the organization");
-  }
-
-  /** Test the invalid contact mechanism functionality. */
-  @Test
-  public void invalidContactMechanismTest() throws Exception {
-    Person person = getTestBasicPersonDetails();
-
-    person.addContactMechanism(
-        new ContactMechanism(
-            ContactMechanismType.EMAIL_ADDRESS,
-            ContactMechanismRole.MAIN_EMAIL_ADDRESS,
-            "invalid_contact_mechanism_role@test.com"));
-
-    person.addContactMechanism(
-        new ContactMechanism(
-            ContactMechanismType.EMAIL_ADDRESS,
-            ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
-            "test@",
-            "invalid_purpose"));
-
-    person.addContactMechanism(
-        new ContactMechanism(
-            ContactMechanismType.SOCIAL_MEDIA,
-            ContactMechanismRole.TWITTER_ID,
-            "!invalid_twitter_id"));
-
-    Set<ConstraintViolation<Person>> personConstraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
-
-    assertEquals(
-        4,
-        personConstraintViolations.size(),
-        "The correct number of constraint violations was not found for the person");
-
-    Organization organization = getTestBasicOrganizationDetails();
-
-    organization.addContactMechanism(
-        new ContactMechanism(
-            ContactMechanismType.EMAIL_ADDRESS,
-            ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
-            "invalid_contact_mechanism_role@test.com"));
-
-    organization.addContactMechanism(
-        new ContactMechanism(
-            ContactMechanismType.EMAIL_ADDRESS,
-            ContactMechanismRole.MAIN_EMAIL_ADDRESS,
-            "test@",
-            "invalid_purpose"));
-
-    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
-
-    assertEquals(
-        3,
-        organizationConstraintViolations.size(),
-        "The correct number of constraint violations was not found for the organization");
-  }
-
   /** Test the invalid attribute functionality. */
   @Test
   public void invalidAttributeTest() throws Exception {
@@ -1459,6 +1382,62 @@ public class PartyServiceTest {
         "The correct number of constraint violations was not found for the invalid complex address");
   }
 
+  /** Test the invalid contact mechanism functionality. */
+  @Test
+  public void invalidContactMechanismTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismRole.MAIN_EMAIL_ADDRESS,
+            "invalid_contact_mechanism_role@test.com"));
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
+            "test@",
+            "invalid_purpose"));
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.SOCIAL_MEDIA,
+            ContactMechanismRole.TWITTER_ID,
+            "!invalid_twitter_id"));
+
+    Set<ConstraintViolation<Person>> personConstraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        4,
+        personConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the person");
+
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
+            "invalid_contact_mechanism_role@test.com"));
+
+    organization.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismRole.MAIN_EMAIL_ADDRESS,
+            "test@",
+            "invalid_purpose"));
+
+    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
+        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    assertEquals(
+        3,
+        organizationConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the organization");
+  }
+
   /** Test the invalid education verification functionality. */
   @Test
   public void invalidEducationTest() throws Exception {
@@ -1589,49 +1568,6 @@ public class PartyServiceTest {
         15,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid farm address");
-  }
-
-  /** Test the pattern validation functionality. */
-  @Test
-  public void patternValidationTest() throws Exception {
-    Person person = getTestBasicPersonDetails();
-
-    person.addIdentityDocument(
-        new IdentityDocument(
-            "passport", "ZA", LocalDate.of(2016, 10, 7), LocalDate.of(2025, 9, 1), "A1234567890! "));
-
-    person.addIdentityDocument(
-        new IdentityDocument("za_id_card", "ZA", LocalDate.of(2018, 7, 16), "X89 04085800089!"));
-
-    person.addResidencePermit(
-        new ResidencePermit(
-            "za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "BA018723633711"));
-
-    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "0123456789!"));
-
-    Set<ConstraintViolation<Person>> personConstraintViolations =
-        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
-
-    assertEquals(
-        4,
-        personConstraintViolations.size(),
-        "The correct number of constraint violations was not found for the invalid person");
-
-    Organization organization = getTestBasicOrganizationDetails();
-
-    organization.addIdentityDocument(
-        new IdentityDocument(
-            "za_company_registration", "ZA", LocalDate.of(2006, 4, 2), "X123456!"));
-
-    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "9123456789!"));
-
-    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
-        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
-
-    assertEquals(
-        2,
-        organizationConstraintViolations.size(),
-        "The correct number of constraint violations was not found for the invalid organization");
   }
 
   /** Test the invalid international address verification functionality. */
@@ -1816,6 +1752,23 @@ public class PartyServiceTest {
         "The correct number of constraint violations was not found for the invalid organization");
   }
 
+  /** Test the invalid organization industry allocation test. */
+  @Test
+  public void invalidOrganizationIndustryAllocationTest() throws Exception {
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addIndustryAllocation(
+        new IndustryAllocation("invalid_system_code", "invalid_industry_code"));
+
+    Set<ConstraintViolation<Organization>> constraintViolations =
+        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    assertEquals(
+        1,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid organization");
+  }
+
   /** Test the invalid organization segment allocation test. */
   @Test
   public void invalidOrganizationSegmentAllocationTest() throws Exception {
@@ -1830,6 +1783,38 @@ public class PartyServiceTest {
         1,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid organization");
+  }
+
+  /** Test the invalid party types for association functionality. */
+  @Test
+  public void invalidPartyTypesForAssociationTest() throws Exception {
+    Organization firstOrganization = getTestBasicOrganizationDetails();
+
+    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, firstOrganization);
+
+    Organization secondOrganization = getTestBasicOrganizationDetails();
+
+    partyService.createOrganization(IPartyService.DEFAULT_TENANT_ID, secondOrganization);
+
+    Association association =
+        new Association(
+            IPartyService.DEFAULT_TENANT_ID,
+            "parent_child",
+            firstOrganization.getId(),
+            secondOrganization.getId(),
+            LocalDate.now());
+
+    Set<ConstraintViolation<Association>> constraintViolations =
+        partyService.validateAssociation(IPartyService.DEFAULT_TENANT_ID, association);
+
+    assertEquals(
+        2,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the association");
+
+    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, firstOrganization.getId());
+
+    partyService.deleteOrganization(IPartyService.DEFAULT_TENANT_ID, secondOrganization.getId());
   }
 
   /** Test the invalid person attribute functionality. */
@@ -1890,6 +1875,22 @@ public class PartyServiceTest {
     Person person = getTestBasicPersonDetails();
 
     person.addSegmentAllocation(new SegmentAllocation("invalid_segment_allocation"));
+
+    Set<ConstraintViolation<Person>> constraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        1,
+        constraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid person");
+  }
+
+  /** Test the invalid person skill functionality. */
+  @Test
+  public void invalidPersonSkillTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addSkill(new Skill("invalid_skill", SkillProficiencyLevel.EXPERT));
 
     Set<ConstraintViolation<Person>> constraintViolations =
         partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
@@ -1994,6 +1995,34 @@ public class PartyServiceTest {
         3,
         constraintViolations.size(),
         "The correct number of constraint violations was not found for the invalid physical address");
+  }
+
+  /** Test the invalid preference functionality. */
+  @Test
+  public void invalidPreferenceTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addPreference(new Preference("test_preference", "invalid_test_preference_value"));
+
+    Set<ConstraintViolation<Person>> personConstraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        1,
+        personConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the person");
+
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addPreference(new Preference("test_preference", "invalid_test_preference_value"));
+
+    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
+        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    assertEquals(
+        1,
+        organizationConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the organization");
   }
 
   /** Test the invalid site address verification functionality. */
@@ -2630,6 +2659,53 @@ public class PartyServiceTest {
     partyService.deleteParty(IPartyService.DEFAULT_TENANT_ID, organization.getId());
   }
 
+  /** Test the pattern validation functionality. */
+  @Test
+  public void patternValidationTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addIdentityDocument(
+        new IdentityDocument(
+            "passport",
+            "ZA",
+            LocalDate.of(2016, 10, 7),
+            LocalDate.of(2025, 9, 1),
+            "A1234567890! "));
+
+    person.addIdentityDocument(
+        new IdentityDocument("za_id_card", "ZA", LocalDate.of(2018, 7, 16), "X89 04085800089!"));
+
+    person.addResidencePermit(
+        new ResidencePermit(
+            "za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "BA018723633711"));
+
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "0123456789!"));
+
+    Set<ConstraintViolation<Person>> personConstraintViolations =
+        partyService.validatePerson(IPartyService.DEFAULT_TENANT_ID, person);
+
+    assertEquals(
+        4,
+        personConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid person");
+
+    Organization organization = getTestBasicOrganizationDetails();
+
+    organization.addIdentityDocument(
+        new IdentityDocument(
+            "za_company_registration", "ZA", LocalDate.of(2006, 4, 2), "X123456!"));
+
+    organization.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "9123456789!"));
+
+    Set<ConstraintViolation<Organization>> organizationConstraintViolations =
+        partyService.validateOrganization(IPartyService.DEFAULT_TENANT_ID, organization);
+
+    assertEquals(
+        2,
+        organizationConstraintViolations.size(),
+        "The correct number of constraint violations was not found for the invalid organization");
+  }
+
   /** Test the person functionality. */
   @Test
   public void personTest() throws Exception {
@@ -2772,6 +2848,14 @@ public class PartyServiceTest {
     assertFalse(person.hasPreferenceWithType("correspondence_language"));
 
     person.addPreference(new Preference("time_to_contact", "anytime"));
+
+    person.addSkill(new Skill("marketing", SkillProficiencyLevel.EXPERT));
+
+    assertTrue(person.hasSkillWithType("marketing"));
+
+    person.removeSkillWithType("marketing");
+
+    assertFalse(person.hasSkillWithType("marketing"));
 
     person.addTaxNumber(new TaxNumber("uk_tax_number", "GB"));
 
@@ -4929,6 +5013,29 @@ public class PartyServiceTest {
     }
 
     assertEquals(
+        person1.getSkills().size(),
+        person2.getSkills().size(),
+        "The number of skills for the persons do not match");
+
+    for (Skill person1Skill : person1.getSkills()) {
+      boolean foundSkill = false;
+
+      for (Skill person2Skill : person2.getSkills()) {
+        if (Objects.equals(person1Skill.getPerson(), person2Skill.getPerson())
+            && Objects.equals(person1Skill.getType(), person2Skill.getType())) {
+
+          compareSkills(person1Skill, person2Skill);
+
+          foundSkill = true;
+        }
+      }
+
+      if (!foundSkill) {
+        fail("Failed to find the skill (" + person1Skill.getType() + ")");
+      }
+    }
+
+    assertEquals(
         person1.getStatuses().size(),
         person2.getStatuses().size(),
         "The number of statuses for the persons do not match");
@@ -5143,6 +5250,13 @@ public class PartyServiceTest {
         segmentAllocation1.getSegment(),
         segmentAllocation2.getSegment(),
         "The segment values for the segment allocations do not match");
+  }
+
+  private void compareSkills(Skill skill1, Skill skill2) {
+    assertEquals(
+        skill1.getLevel(), skill2.getLevel(), "The level values for the skills do not match");
+    assertEquals(skill1.getPerson(), skill2.getPerson(), "The persons for the skills do not match");
+    assertEquals(skill1.getType(), skill2.getType(), "The types skills the consents do not match");
   }
 
   private void compareSourcesOfFunds(SourceOfFunds sourceOfFunds1, SourceOfFunds sourceOfFunds2) {

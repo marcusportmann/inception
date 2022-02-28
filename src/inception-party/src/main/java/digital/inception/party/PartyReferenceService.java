@@ -82,6 +82,15 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Identity Document Type Repository. */
   private final IdentityDocumentTypeRepository identityDocumentTypeRepository;
 
+  /** The Industry Classification Category Repository. */
+  private final IndustryClassificationCategoryRepository industryClassificationCategoryRepository;
+
+  /** The Industry Classification Repository. */
+  private final IndustryClassificationRepository industryClassificationRepository;
+
+  /** The Industry Classification System Repository. */
+  private final IndustryClassificationSystemRepository industryClassificationSystemRepository;
+
   /** The Link Type Repository */
   private final LinkTypeRepository linkTypeRepository;
 
@@ -205,6 +214,9 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param fieldOfStudyRepository the Field Of Study Repository
    * @param genderRepository the Gender Repository
    * @param identityDocumentTypeRepository the Identity Document Type Repository
+   * @param industryClassificationRepository the Industry Classification Repository
+   * @param industryClassificationCategoryRepository the Industry Classification Category Repository
+   * @param industryClassificationSystemRepository the Industry Classification System Repository
    * @param linkTypeRepository the Link Type Repository
    * @param lockTypeCategoryRepository the Lock Type Category Repository
    * @param lockTypeRepository the Lock Type Repository
@@ -257,6 +269,9 @@ public class PartyReferenceService implements IPartyReferenceService {
       FieldOfStudyRepository fieldOfStudyRepository,
       GenderRepository genderRepository,
       IdentityDocumentTypeRepository identityDocumentTypeRepository,
+      IndustryClassificationRepository industryClassificationRepository,
+      IndustryClassificationCategoryRepository industryClassificationCategoryRepository,
+      IndustryClassificationSystemRepository industryClassificationSystemRepository,
       LinkTypeRepository linkTypeRepository,
       LockTypeCategoryRepository lockTypeCategoryRepository,
       LockTypeRepository lockTypeRepository,
@@ -305,6 +320,9 @@ public class PartyReferenceService implements IPartyReferenceService {
     this.fieldOfStudyRepository = fieldOfStudyRepository;
     this.genderRepository = genderRepository;
     this.identityDocumentTypeRepository = identityDocumentTypeRepository;
+    this.industryClassificationRepository = industryClassificationRepository;
+    this.industryClassificationCategoryRepository = industryClassificationCategoryRepository;
+    this.industryClassificationSystemRepository = industryClassificationSystemRepository;
     this.linkTypeRepository = linkTypeRepository;
     this.lockTypeCategoryRepository = lockTypeCategoryRepository;
     this.lockTypeRepository = lockTypeRepository;
@@ -369,12 +387,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return associationPropertyTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the association property type reference data", e);
-    }
+    return self.getAssociationPropertyTypes().stream()
+        .filter(
+            associationPropertyType ->
+                (associationPropertyType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(associationPropertyType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -401,6 +419,22 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   @Override
+  public Optional<AssociationType> getAssociationType(UUID tenantId, String associationTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(associationTypeCode)) {
+      return Optional.empty();
+    }
+
+    return self.getAssociationTypes().stream()
+        .filter(
+            associationType ->
+                (associationType.getTenantId() == null
+                        || Objects.equals(associationType.getTenantId(), tenantId))
+                    && Objects.equals(associationType.getCode(), associationTypeCode))
+        .findFirst();
+  }
+
+  @Override
   @Cacheable(cacheNames = "reference", key = "'associationTypes.' + #localeId")
   public List<AssociationType> getAssociationTypes(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -408,12 +442,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return associationTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the association type reference data", e);
-    }
+    return self.getAssociationTypes().stream()
+        .filter(
+            associationType ->
+                (associationType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(associationType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -460,12 +494,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return attributeTypeCategoryRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the attribute type category reference data", e);
-    }
+    return self.getAttributeTypeCategories().stream()
+        .filter(
+            attributeTypeCategory ->
+                (attributeTypeCategory.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(attributeTypeCategory.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -515,12 +549,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return attributeTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the attribute type reference data", e);
-    }
+    return self.getAttributeTypes().stream()
+        .filter(
+            attributeType ->
+                (attributeType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(attributeType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -553,12 +587,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return consentTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the consent type reference data", e);
-    }
+    return self.getConsentTypes().stream()
+        .filter(
+            consentType ->
+                (consentType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(consentType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -591,12 +625,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return contactMechanismPurposeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the contact mechanism purpose reference data", e);
-    }
+    return self.getContactMechanismPurposes().stream()
+        .filter(
+            contactMechanismPurpose ->
+                (contactMechanismPurpose.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(contactMechanismPurpose.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -650,12 +684,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return contactMechanismRoleRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the contact mechanism role reference data", e);
-    }
+    return self.getContactMechanismRoles().stream()
+        .filter(
+            contactMechanismRole ->
+                (contactMechanismRole.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(contactMechanismRole.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -700,12 +734,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return contactMechanismTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the contact mechanism type reference data", e);
-    }
+    return self.getContactMechanismTypes().stream()
+        .filter(
+            contactMechanismType ->
+                (contactMechanismType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(contactMechanismType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -738,12 +772,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return employmentStatusRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the employment status reference data", e);
-    }
+    return self.getEmploymentStatuses().stream()
+        .filter(
+            employmentStatus ->
+                (employmentStatus.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(employmentStatus.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -776,12 +810,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return employmentTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the employment type reference data", e);
-    }
+    return self.getEmploymentTypes().stream()
+        .filter(
+            employmentType ->
+                (employmentType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(employmentType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -814,12 +848,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return externalReferenceTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the external reference type reference data", e);
-    }
+    return self.getExternalReferenceTypes().stream()
+        .filter(
+            externalReferenceType ->
+                (externalReferenceType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(externalReferenceType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -853,12 +887,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return fieldOfStudyRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the fields of study reference data", e);
-    }
+    return self.getFieldsOfStudy().stream()
+        .filter(
+            fieldOfStudy ->
+                (fieldOfStudy.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(fieldOfStudy.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -891,11 +925,11 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return genderRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the gender reference data", e);
-    }
+    return self.getGenders().stream()
+        .filter(
+            gender ->
+                (gender.getLocaleId() == null || localeId.equalsIgnoreCase(gender.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -926,12 +960,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return identityDocumentTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the identity document type reference data", e);
-    }
+    return self.getIdentityDocumentTypes().stream()
+        .filter(
+            identityDocumentType ->
+                (identityDocumentType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(identityDocumentType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -957,6 +991,117 @@ public class PartyReferenceService implements IPartyReferenceService {
   }
 
   @Override
+  public List<IndustryClassificationCategory> getIndustryClassificationCategories(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    return self.getIndustryClassificationCategories().stream()
+        .filter(
+            industryClassificationCategory ->
+                (industryClassificationCategory.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(industryClassificationCategory.getLocaleId())))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<IndustryClassificationCategory> getIndustryClassificationCategories(
+      UUID tenantId, String localeId) throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getIndustryClassificationCategories(localeId).stream()
+        .filter(
+            industryClassificationCategory ->
+                (industryClassificationCategory.getTenantId() == null
+                    || (Objects.equals(industryClassificationCategory.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<IndustryClassificationCategory> getIndustryClassificationCategories()
+      throws ServiceUnavailableException {
+    try {
+      return industryClassificationCategoryRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the industry classification category reference data", e);
+    }
+  }
+
+  @Override
+  public List<IndustryClassificationSystem> getIndustryClassificationSystems(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    return self.getIndustryClassificationSystems().stream()
+        .filter(
+            industryClassificationSystem ->
+                (industryClassificationSystem.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(industryClassificationSystem.getLocaleId())))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<IndustryClassificationSystem> getIndustryClassificationSystems(
+      UUID tenantId, String localeId) throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getIndustryClassificationSystems(localeId).stream()
+        .filter(
+            industryClassificationSystem ->
+                (industryClassificationSystem.getTenantId() == null
+                    || (Objects.equals(industryClassificationSystem.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<IndustryClassificationSystem> getIndustryClassificationSystems()
+      throws ServiceUnavailableException {
+    try {
+      return industryClassificationSystemRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the industry classification system reference data", e);
+    }
+  }
+
+  @Override
+  public List<IndustryClassification> getIndustryClassifications(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(localeId)) {
+      throw new InvalidArgumentException("localeId");
+    }
+
+    return self.getIndustryClassifications().stream()
+        .filter(
+            industryClassification ->
+                (industryClassification.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(industryClassification.getLocaleId())))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<IndustryClassification> getIndustryClassifications(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return self.getIndustryClassifications(localeId).stream()
+        .filter(
+            industryClassification ->
+                (industryClassification.getTenantId() == null
+                    || (Objects.equals(industryClassification.getTenantId(), tenantId))))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<IndustryClassification> getIndustryClassifications()
+      throws ServiceUnavailableException {
+    try {
+      return industryClassificationRepository.findAll();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the industry classification reference data", e);
+    }
+  }
+
+  @Override
   @Cacheable(cacheNames = "reference", key = "'linkTypes.' + #localeId")
   public List<LinkType> getLinkTypes(String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -964,11 +1109,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return linkTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the link type reference data", e);
-    }
+    return self.getLinkTypes().stream()
+        .filter(
+            linkType ->
+                (linkType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(linkType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1000,12 +1146,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return lockTypeCategoryRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the lock type category reference data", e);
-    }
+    return self.getLockTypeCategories().stream()
+        .filter(
+            lockTypeCategory ->
+                (lockTypeCategory.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(lockTypeCategory.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1038,11 +1184,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return lockTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the lock type reference data", e);
-    }
+    return self.getLockTypes().stream()
+        .filter(
+            lockType ->
+                (lockType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(lockType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1074,12 +1221,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return mandataryRoleRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the mandatary role reference data", e);
-    }
+    return self.getMandataryRoles().stream()
+        .filter(
+            mandataryRole ->
+                (mandataryRole.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(mandataryRole.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1130,12 +1277,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return mandatePropertyTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the mandate property type reference data", e);
-    }
+    return self.getMandatePropertyTypes().stream()
+        .filter(
+            mandatePropertyType ->
+                (mandatePropertyType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(mandatePropertyType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1168,12 +1315,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return mandateTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the mandate type reference data", e);
-    }
+    return self.getMandateTypes().stream()
+        .filter(
+            mandateType ->
+                (mandateType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(mandateType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1206,12 +1353,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return maritalStatusRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the marital status reference data", e);
-    }
+    return self.getMaritalStatuses().stream()
+        .filter(
+            maritalStatus ->
+                (maritalStatus.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(maritalStatus.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1244,12 +1391,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return marriageTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the marriage type reference data", e);
-    }
+    return self.getMarriageTypes().stream()
+        .filter(
+            marriageType ->
+                (marriageType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(marriageType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1282,12 +1429,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return nextOfKinTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the next of kin type reference data", e);
-    }
+    return self.getNextOfKinTypes().stream()
+        .filter(
+            nextOfKinType ->
+                (nextOfKinType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(nextOfKinType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1320,11 +1467,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return occupationRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the occupation reference data", e);
-    }
+    return self.getOccupations().stream()
+        .filter(
+            occupation ->
+                (occupation.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(occupation.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1356,12 +1504,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return physicalAddressPurposeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the physical address purpose reference data", e);
-    }
+    return self.getPhysicalAddressPurposes().stream()
+        .filter(
+            physicalAddressPurpose ->
+                (physicalAddressPurpose.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(physicalAddressPurpose.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1395,12 +1543,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return physicalAddressRoleRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the physical address role reference data", e);
-    }
+    return self.getPhysicalAddressRoles().stream()
+        .filter(
+            physicalAddressRole ->
+                (physicalAddressRole.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(physicalAddressRole.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1433,12 +1581,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return physicalAddressTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the physical address type reference data", e);
-    }
+    return self.getPhysicalAddressTypes().stream()
+        .filter(
+            physicalAddressType ->
+                (physicalAddressType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(physicalAddressType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1485,12 +1633,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return preferenceTypeCategoryRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the preference type category reference data", e);
-    }
+    return self.getPreferenceTypeCategories().stream()
+        .filter(
+            preferenceTypeCategory ->
+                (preferenceTypeCategory.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(preferenceTypeCategory.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1524,12 +1672,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return preferenceTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the preference type reference data", e);
-    }
+    return self.getPreferenceTypes().stream()
+        .filter(
+            preferenceType ->
+                (preferenceType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(preferenceType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1562,12 +1710,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return qualificationTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the qualification type reference data", e);
-    }
+    return self.getQualificationTypes().stream()
+        .filter(
+            qualificationType ->
+                (qualificationType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(qualificationType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1600,11 +1748,10 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return raceRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the race reference data", e);
-    }
+    return self.getRaces().stream()
+        .filter(
+            race -> (race.getLocaleId() == null || localeId.equalsIgnoreCase(race.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1634,12 +1781,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return residencePermitTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the residence permit type reference data", e);
-    }
+    return self.getResidencePermitTypes().stream()
+        .filter(
+            residencePermitType ->
+                (residencePermitType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(residencePermitType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1672,12 +1819,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return residencyStatusRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the residency status reference data", e);
-    }
+    return self.getResidencyStatuses().stream()
+        .filter(
+            residencyStatus ->
+                (residencyStatus.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(residencyStatus.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1710,12 +1857,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return residentialTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the residential type reference data", e);
-    }
+    return self.getResidentialTypes().stream()
+        .filter(
+            residentialType ->
+                (residentialType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(residentialType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1748,12 +1895,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return rolePurposeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the role purpose reference data", e);
-    }
+    return self.getRolePurposes().stream()
+        .filter(
+            rolePurpose ->
+                (rolePurpose.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(rolePurpose.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1848,11 +1995,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return roleTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the role type reference data", e);
-    }
+    return self.getRoleTypes().stream()
+        .filter(
+            roleType ->
+                (roleType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(roleType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1895,8 +2043,20 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
+    return self.getSegmentationTypes().stream()
+        .filter(
+            segmentationType ->
+                (segmentationType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(segmentationType.getLocaleId())))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  @Cacheable(cacheNames = "reference", key = "'segmentationTypes.ALL'")
+  public List<SegmentationType> getSegmentationTypes()
+      throws InvalidArgumentException, ServiceUnavailableException {
     try {
-      return segmentationTypeRepository.findByLocaleIdIgnoreCase(localeId);
+      return segmentationTypeRepository.findAll();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the segmentation type reference data", e);
@@ -1911,11 +2071,11 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return segmentRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the segment reference data", e);
-    }
+    return self.getSegments().stream()
+        .filter(
+            segment ->
+                (segment.getLocaleId() == null || localeId.equalsIgnoreCase(segment.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1947,11 +2107,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return skillTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the skill type reference data", e);
-    }
+    return self.getSkillTypes().stream()
+        .filter(
+            skillType ->
+                (skillType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(skillType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -1983,12 +2144,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return sourceOfFundsTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the source of funds type reference data", e);
-    }
+    return self.getSourceOfFundsTypes().stream()
+        .filter(
+            sourceOfFundsType ->
+                (sourceOfFundsType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(sourceOfFundsType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -2021,12 +2182,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return sourceOfWealthTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the source of wealth type reference data", e);
-    }
+    return self.getSourceOfWealthTypes().stream()
+        .filter(
+            sourceOfWealthType ->
+                (sourceOfWealthType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(sourceOfWealthType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -2059,12 +2220,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return statusTypeCategoryRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the status type category reference data", e);
-    }
+    return self.getStatusTypeCategories().stream()
+        .filter(
+            statusTypeCategory ->
+                (statusTypeCategory.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(statusTypeCategory.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -2097,11 +2258,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return statusTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the status type reference data", e);
-    }
+    return self.getStatusTypes().stream()
+        .filter(
+            statusType ->
+                (statusType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(statusType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -2133,12 +2295,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return taxNumberTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the tax number type reference data", e);
-    }
+    return self.getTaxNumberTypes().stream()
+        .filter(
+            taxNumberType ->
+                (taxNumberType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(taxNumberType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -2171,12 +2333,12 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return timeToContactRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the times to contact reference data", e);
-    }
+    return self.getTimesToContact().stream()
+        .filter(
+            timeToContact ->
+                (timeToContact.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(timeToContact.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -2209,11 +2371,11 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return titleRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the title reference data", e);
-    }
+    return self.getTitles().stream()
+        .filter(
+            title ->
+                (title.getLocaleId() == null || localeId.equalsIgnoreCase(title.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -2549,6 +2711,27 @@ public class PartyReferenceService implements IPartyReferenceService {
                         || Objects.equals(identityDocumentType.getTenantId(), tenantId))
                     && Objects.equals(identityDocumentType.getCode(), identityDocumentTypeCode)
                     && identityDocumentType.isValidForPartyType(partyTypeCode));
+  }
+
+  @Override
+  public boolean isValidIndustryClassification(
+      UUID tenantId, String industryClassificationSystemCode, String industryClassificationCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(industryClassificationSystemCode)) {
+      return false;
+    }
+
+    if (!StringUtils.hasText(industryClassificationCode)) {
+      return false;
+    }
+
+    return self.getIndustryClassifications().stream()
+        .anyMatch(
+            industryClassification ->
+                (Objects.equals(
+                        industryClassification.getSystem(), industryClassificationSystemCode)
+                    && Objects.equals(
+                        industryClassification.getCode(), industryClassificationCode)));
   }
 
   @Override
@@ -2949,6 +3132,21 @@ public class PartyReferenceService implements IPartyReferenceService {
             segment ->
                 (segment.getTenantId() == null || Objects.equals(segment.getTenantId(), tenantId))
                     && Objects.equals(segment.getCode(), segmentCode));
+  }
+
+  @Override
+  public boolean isValidSkillType(UUID tenantId, String skillTypeCode)
+      throws ServiceUnavailableException {
+    if (!StringUtils.hasText(skillTypeCode)) {
+      return false;
+    }
+
+    return self.getSkillTypes().stream()
+        .anyMatch(
+            skillType ->
+                (skillType.getTenantId() == null
+                        || Objects.equals(skillType.getTenantId(), tenantId))
+                    && Objects.equals(skillType.getCode(), skillTypeCode));
   }
 
   @Override

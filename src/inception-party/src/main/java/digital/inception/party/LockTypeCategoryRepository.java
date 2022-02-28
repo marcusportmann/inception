@@ -37,17 +37,4 @@ public interface LockTypeCategoryRepository
   @Query(
       "select ltc from LockTypeCategory ltc order by ltc.localeId, -ltc.sortIndex DESC, ltc.name")
   List<LockTypeCategory> findAll();
-
-  /**
-   * Retrieve the lock type categories for the specified locale sorted by locale ID, sort index, and
-   * name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock type
-   *     categories for
-   * @return the lock type categories for the specified locale sorted by locale ID, sort index, and
-   *     name
-   */
-  @Query(
-      "select ltc from LockTypeCategory ltc where upper(ltc.localeId) = upper(:localeId) order by ltc.localeId, -ltc.sortIndex DESC, ltc.name")
-  List<LockTypeCategory> findByLocaleIdIgnoreCase(String localeId);
 }

@@ -37,17 +37,4 @@ public interface PhysicalAddressRoleRepository
   @Query(
       "select par from PhysicalAddressRole par order by par.localeId, -par.sortIndex DESC, par.name")
   List<PhysicalAddressRole> findAll();
-
-  /**
-   * Retrieve the physical address roles for the specified locale sorted by locale ID, sort index,
-   * and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     roles for
-   * @return the physical address roles for the specified locale sorted by locale ID, sort index,
-   *     and name
-   */
-  @Query(
-      "select par from PhysicalAddressRole par where upper(par.localeId) = upper(:localeId) order by par.localeId, -par.sortIndex DESC, par.name")
-  List<PhysicalAddressRole> findByLocaleIdIgnoreCase(String localeId);
 }

@@ -35,16 +35,4 @@ public interface PreferenceTypeRepository extends JpaRepository<PreferenceType, 
    */
   @Query("select pt from PreferenceType pt order by pt.localeId, -pt.sortIndex DESC, pt.name")
   List<PreferenceType> findAll();
-
-  /**
-   * Retrieve the preference types for the specified locale sorted by locale ID, sort index, and
-   * name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the preference types
-   *     for
-   * @return the preference types for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select pt from PreferenceType pt where upper(pt.localeId) = upper(:localeId) order by pt.localeId, -pt.sortIndex DESC, pt.name")
-  List<PreferenceType> findByLocaleIdIgnoreCase(String localeId);
 }

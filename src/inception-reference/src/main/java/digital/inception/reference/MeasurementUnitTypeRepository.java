@@ -37,17 +37,4 @@ public interface MeasurementUnitTypeRepository
   @Query(
       "select mut from MeasurementUnitType mut order by mut.localeId, -mut.sortIndex DESC, mut.name")
   List<MeasurementUnitType> findAll();
-
-  /**
-   * Retrieve the measurement unit types for the specified locale sorted by locale ID, sort index,
-   * and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the measurement unit
-   *     types for
-   * @return the measurement unit types for the specified locale sorted by locale ID, sort index,
-   *     and name
-   */
-  @Query(
-      "select mut from MeasurementUnitType mut where upper(mut.localeId) = upper(:localeId) order by mut.localeId, -mut.sortIndex DESC, mut.name")
-  List<MeasurementUnitType> findByLocaleIdIgnoreCase(String localeId);
 }

@@ -35,16 +35,4 @@ public interface MandataryRoleRepository extends JpaRepository<MandataryRole, Ma
    */
   @Query("select mr from MandataryRole mr order by mr.localeId, -mr.sortIndex DESC, mr.name")
   List<MandataryRole> findAll();
-
-  /**
-   * Retrieve the mandatary roles for the specified locale sorted by locale ID, sort index, and
-   * name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the mandatary roles
-   *     for
-   * @return the mandatary roles for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select mr from MandataryRole mr where upper(mr.localeId) = upper(:localeId) order by mr.localeId, -mr.sortIndex DESC, mr.name")
-  List<MandataryRole> findByLocaleIdIgnoreCase(String localeId);
 }

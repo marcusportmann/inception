@@ -35,16 +35,4 @@ public interface EmploymentTypeRepository extends JpaRepository<EmploymentType, 
    */
   @Query("select et from EmploymentType et order by et.localeId, -et.sortIndex DESC, et.name")
   List<EmploymentType> findAll();
-
-  /**
-   * Retrieve the employment types for the specified locale sorted by locale ID, sort index, and
-   * name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment types
-   *     for
-   * @return the employment types for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select et from EmploymentType et where upper(et.localeId) = upper(:localeId) order by et.localeId, -et.sortIndex DESC, et.name")
-  List<EmploymentType> findByLocaleIdIgnoreCase(String localeId);
 }

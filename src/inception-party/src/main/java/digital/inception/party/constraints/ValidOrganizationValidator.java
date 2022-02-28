@@ -25,6 +25,7 @@ import digital.inception.party.ContactMechanismType;
 import digital.inception.party.ExternalReference;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocument;
+import digital.inception.party.IndustryAllocation;
 import digital.inception.party.Lock;
 import digital.inception.party.Organization;
 import digital.inception.party.PhysicalAddress;
@@ -467,6 +468,27 @@ public class ValidOrganizationValidator extends PartyValidator
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraints.ValidOrganization.invalidIdentityDocument.message}")
                   .addPropertyNode("identityDocuments")
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+        }
+
+        // Validate industry allocations
+        for (IndustryAllocation industryAllocation : organization.getIndustryAllocations()) {
+          if (StringUtils.hasText(industryAllocation.getSystem()) && StringUtils.hasText(industryAllocation.getIndustry())) {
+            if (!getPartyReferenceService()
+                .isValidIndustryClassification(organization.getTenantId(), industryAllocation.getSystem(), industryAllocation.getIndustry())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter(
+                      "industryClassificationSystem", industryAllocation.getSystem())
+                  .addMessageParameter("industryClassification", industryAllocation.getIndustry())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidOrganization.invalidIndustryAllocation.message}")
+                  .addPropertyNode("industryAllocations")
+                  .addPropertyNode("industry")
+                  .inIterable()
                   .addConstraintViolation();
 
               isValid = false;

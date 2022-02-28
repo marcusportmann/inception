@@ -142,13 +142,13 @@
       <column name="type" type="nvarchar(30)" remarks="The code for the measurement unit type"/>
     </createTable>
     <addForeignKeyConstraint constraintName="measurement_units_measurement_system_fk"
-      baseTableSchemaName="reference" baseTableName="measurement_units" baseColumnNames="system, locale_id"
+      baseTableSchemaName="reference" baseTableName="measurement_units" baseColumnNames="system,locale_id"
       referencedTableSchemaName="reference" referencedTableName="measurement_systems"
-      referencedColumnNames="code, locale_id" onDelete="CASCADE"/>
+      referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <addForeignKeyConstraint constraintName="measurement_units_measurement_unit_type_fk"
-      baseTableSchemaName="reference" baseTableName="measurement_units" baseColumnNames="type, locale_id"
+      baseTableSchemaName="reference" baseTableName="measurement_units" baseColumnNames="type,locale_id"
       referencedTableSchemaName="reference" referencedTableName="measurement_unit_types"
-      referencedColumnNames="code, locale_id" onDelete="CASCADE"/>
+      referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="measurement_units_locale_id_ix" schemaName="reference" tableName="measurement_units">
       <column name="locale_id"/>
     </createIndex>

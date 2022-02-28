@@ -40,6 +40,7 @@ import digital.inception.party.Role;
 import digital.inception.party.RoleTypeAttributeTypeConstraint;
 import digital.inception.party.RoleTypePreferenceTypeConstraint;
 import digital.inception.party.SegmentAllocation;
+import digital.inception.party.Skill;
 import digital.inception.party.SourceOfFunds;
 import digital.inception.party.SourceOfWealth;
 import digital.inception.party.Status;
@@ -1021,6 +1022,25 @@ public class ValidPersonValidator extends PartyValidator
                       "{digital.inception.party.constraints.ValidPerson.invalidSegmentForSegmentAllocation.message}")
                   .addPropertyNode("segmentAllocations")
                   .addPropertyNode("segment")
+                  .inIterable()
+                  .addConstraintViolation();
+
+              isValid = false;
+            }
+          }
+        }
+
+        // Validate skills
+        for (Skill skill : person.getSkills()) {
+          if (StringUtils.hasText(skill.getType())) {
+            if (!getPartyReferenceService()
+                .isValidSkillType(person.getTenantId(), skill.getType())) {
+              hibernateConstraintValidatorContext
+                  .addMessageParameter("skillType", skill.getType())
+                  .buildConstraintViolationWithTemplate(
+                      "{digital.inception.party.constraints.ValidPerson.invalidSkillType.message}")
+                  .addPropertyNode("skills")
+                  .addPropertyNode("type")
                   .inIterable()
                   .addConstraintViolation();
 

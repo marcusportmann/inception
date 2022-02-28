@@ -960,6 +960,203 @@ public class PartyReferenceApi extends SecureApi {
   }
 
   /**
+   * Retrieve the industry classification category reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the industry classification category reference data is
+   *     specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification category reference data for
+   * @return the industry classification category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification category reference data
+   *     could not be retrieved
+   */
+  @Operation(
+      summary =
+          "Retrieve the industry classification category reference data for a specific locale",
+      description =
+          "Retrieve the industry classification category reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/industry-classification-categories",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<IndustryClassificationCategory> getIndustryClassificationCategories(
+      @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The ID for the tenant the industry classification category reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the industry classification category reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getIndustryClassificationCategories(tenantId, localeId);
+  }
+
+  /**
+   * Retrieve the industry classification system reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the industry classification system reference data is
+   *     specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification system reference data for
+   * @return the industry classification system reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification system reference data could
+   *     not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the industry classification system reference data for a specific locale",
+      description =
+          "Retrieve the industry classification system reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/industry-classification-systems",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<IndustryClassificationSystem> getIndustryClassificationSystems(
+      @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The ID for the tenant the industry classification system reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the industry classification system reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getIndustryClassificationSystems(tenantId, localeId);
+  }
+
+  /**
+   * Retrieve the industry classification reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the industry classification reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification reference data for
+   * @return the industry classification reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification reference data could not be
+   *     retrieved
+   */
+  @Operation(
+      summary = "Retrieve the industry classification reference data for a specific locale",
+      description = "Retrieve the industry classification reference data for a specific locale")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/industry-classifications",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("isSecurityDisabled() or isAuthenticated()")
+  public List<IndustryClassification> getIndustryClassifications(
+      @Parameter(
+              name = "Tenant-ID",
+              description =
+                  "The ID for the tenant the industry classification reference data is specific to",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The Unicode locale identifier for the locale to retrieve the industry classification reference data for",
+              example = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          @RequestParam(
+              value = "localeId",
+              required = false,
+              defaultValue = IPartyReferenceService.DEFAULT_LOCALE_ID)
+          String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getIndustryClassifications(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the link type reference data for a specific locale.
    *
    * @param tenantId the ID for the tenant the link type reference data is specific to

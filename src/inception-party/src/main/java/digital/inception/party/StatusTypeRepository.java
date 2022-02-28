@@ -35,14 +35,4 @@ public interface StatusTypeRepository extends JpaRepository<StatusType, StatusTy
    */
   @Query("select st from StatusType st order by st.localeId, -st.sortIndex DESC, st.name")
   List<StatusType> findAll();
-
-  /**
-   * Retrieve the status types for the specified locale sorted by locale ID, sort index, and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the status types for
-   * @return the status types for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select st from StatusType st where upper(st.localeId) = upper(:localeId) order by st.localeId, -st.sortIndex DESC, st.name")
-  List<StatusType> findByLocaleIdIgnoreCase(String localeId);
 }

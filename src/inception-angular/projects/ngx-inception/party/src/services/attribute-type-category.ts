@@ -15,7 +15,7 @@
  */
 
 /**
- * The AttributeTypeCategory class holds the information for a attribute type category.
+ * The AttributeTypeCategory class holds the information for an attribute type category.
  *
  * @author Marcus Portmann
  */

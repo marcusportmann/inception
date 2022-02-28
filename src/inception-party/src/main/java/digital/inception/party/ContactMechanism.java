@@ -72,10 +72,10 @@ import org.springframework.util.StringUtils;
 @IdClass(ContactMechanismId.class)
 public class ContactMechanism implements Serializable {
 
-//  /** The valid contact mechanism types. */
-//  @JsonIgnore @XmlTransient
-//  public static final Set<String> VALID_CONTACT_MECHANISM_TYPES =
-//      Set.of("mobile_number", "phone_number", "fax_number", "email_address", "social_media");
+  //  /** The valid contact mechanism types. */
+  //  @JsonIgnore @XmlTransient
+  //  public static final Set<String> VALID_CONTACT_MECHANISM_TYPES =
+  //      Set.of("mobile_number", "phone_number", "fax_number", "email_address", "social_media");
 
   private static final long serialVersionUID = 1000000;
 

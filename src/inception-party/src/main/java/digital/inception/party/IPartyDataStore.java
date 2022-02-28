@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import java.time.LocalDate;
@@ -337,6 +338,19 @@ public interface IPartyDataStore {
    *     not be retrieved
    */
   Optional<UUID> getTenantIdForParty(UUID partyId) throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the party type for the party.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
+   * @return an Optional containing the party type for the party or an empty Optional if the party
+   *     could not be found
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the party type for the party could not be retrieved
+   */
+  Optional<PartyType> getTypeForParty(UUID tenantId, UUID partyId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Update the association.

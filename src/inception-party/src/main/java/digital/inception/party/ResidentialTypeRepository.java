@@ -36,17 +36,4 @@ public interface ResidentialTypeRepository
    */
   @Query("select rt from ResidentialType rt order by rt.localeId, -rt.sortIndex DESC, rt.name")
   List<ResidentialType> findAll();
-
-  /**
-   * Retrieve the residential types for the specified locale sorted by locale ID, sort index, and
-   * name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the residential types
-   *     for
-   * @return the residential types for the specified locale sorted by locale ID, sort index, and
-   *     name
-   */
-  @Query(
-      "select rt from ResidentialType rt where upper(rt.localeId) = upper(:localeId) order by rt.localeId, -rt.sortIndex DESC, rt.name")
-  List<ResidentialType> findByLocaleIdIgnoreCase(String localeId);
 }

@@ -2055,7 +2055,7 @@ public class Person extends PartyBase implements Serializable {
    * @param type the code for the skill type
    * @return <b>true</b> if the person has a skill with the specified type or <b>false</b> otherwise
    */
-  public boolean hasSkill(String type) {
+  public boolean hasSkillWithType(String type) {
     return skills.stream().anyMatch(skill -> Objects.equals(skill.getType(), type));
   }
 

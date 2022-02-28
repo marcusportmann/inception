@@ -79,7 +79,7 @@
       <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate a string value for the attribute type"/>
     </createTable>
     <addForeignKeyConstraint constraintName="attribute_types_attribute_type_category_fk" baseTableSchemaName="party"
-      baseTableName="attribute_types" baseColumnNames="category, locale_id" referencedTableSchemaName="party"
+      baseTableName="attribute_types" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
       referencedTableName="attribute_type_categories" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="attribute_types_category_ix" schemaName="party" tableName="attribute_types">
       <column name="category"/>
@@ -336,6 +336,88 @@
       <column name="country_of_issue"/>
     </createIndex>
 
+    <createTable schemaName="party" tableName="industry_classification_systems" remarks="Industry Classification Systems">
+      <column name="code" type="nvarchar(30)" remarks="The code for the industry classification system">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the industry classification system">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the industry classification system is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the industry classification system"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the industry classification system">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the industry classification system">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex indexName="industry_classification_systems_locale_id_ix" schemaName="party" tableName="industry_classification_systems">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="industry_classification_categories" remarks="Industry Classification Categories">
+      <column name="system" type="nvarchar(30)" remarks="The code for the industry classification system for the industry classification category">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="code" type="nvarchar(30)" remarks="The code for the industry classification category">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the industry classification category">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the industry classification category is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the industry classification category"/>
+      <column name="name" type="nvarchar(200)" remarks="The name of the industry classification category">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(1000)" defaultValue="" remarks="The description for the industry classification category">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="industry_classification_categories_system_fk" baseTableSchemaName="party"
+      baseTableName="industry_classification_categories" baseColumnNames="system,locale_id" referencedTableSchemaName="party"
+      referencedTableName="industry_classification_systems" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
+    <createIndex indexName="industry_classification_categories_locale_id_ix" schemaName="party" tableName="industry_classification_categories">
+      <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="industry_classification_categories_system_ix" schemaName="party" tableName="industry_classification_categories">
+      <column name="system"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="industry_classifications" remarks="Industry Classifications">
+      <column name="system" type="nvarchar(30)" remarks="The code for the industry classification system for the industry classification">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="category" type="nvarchar(30)" remarks="The code for the industry classification category for the industry classification"/>
+      <column name="code" type="nvarchar(30)" remarks="The code for the industry classification">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the industry classification">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid" remarks="The ID for the tenant the industry classification is specific to"/>
+      <column name="sort_index" type="int" remarks="The sort index for the industry classification"/>
+      <column name="name" type="nvarchar(200)" remarks="The name of the industry classification">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="nvarchar(1000)" defaultValue="" remarks="The description for the industry classification">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="industry_classifications_system_fk" baseTableSchemaName="party"
+      baseTableName="industry_classifications" baseColumnNames="system,locale_id" referencedTableSchemaName="party"
+      referencedTableName="industry_classification_systems" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
+    <addForeignKeyConstraint constraintName="industry_classifications_category_fk" baseTableSchemaName="party"
+      baseTableName="industry_classifications" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
+      referencedTableName="industry_classification_categories" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
+    <createIndex indexName="industry_classifications_locale_id_ix" schemaName="party" tableName="industry_classifications">
+      <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="industry_classifications_system_ix" schemaName="party" tableName="industry_classifications">
+      <column name="system"/>
+    </createIndex>
+
     <createTable schemaName="party" tableName="lock_type_categories" remarks="Lock Type Categories">
       <column name="code" type="nvarchar(30)" remarks="The code for the lock type category">
         <constraints primaryKey="true" nullable="false"/>
@@ -379,7 +461,7 @@
       </column>
     </createTable>
     <addForeignKeyConstraint constraintName="lock_types_lock_type_category_fk" baseTableSchemaName="party"
-      baseTableName="lock_types" baseColumnNames="category, locale_id" referencedTableSchemaName="party"
+      baseTableName="lock_types" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
       referencedTableName="lock_type_categories" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="lock_types_category_ix" schemaName="party" tableName="lock_types">
       <column name="category"/>
@@ -842,7 +924,7 @@
       </column>
     </createTable>
     <addForeignKeyConstraint constraintName="segments_segmentation_type_fk" baseTableSchemaName="party"
-      baseTableName="segments" baseColumnNames="type, locale_id" referencedTableSchemaName="party"
+      baseTableName="segments" baseColumnNames="type,locale_id" referencedTableSchemaName="party"
       referencedTableName="segmentation_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="segments_type_ix" schemaName="party" tableName="segments">
       <column name="type"/>
@@ -869,7 +951,7 @@
       </column>
     </createTable>
     <addForeignKeyConstraint constraintName="skill_types_parent_fk" baseTableSchemaName="party"
-      baseTableName="skill_types" baseColumnNames="parent, locale_id" referencedTableSchemaName="party"
+      baseTableName="skill_types" baseColumnNames="parent,locale_id" referencedTableSchemaName="party"
       referencedTableName="skill_types" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="skill_types_parent_ix" schemaName="party" tableName="skill_types">
       <column name="parent"/>
@@ -961,7 +1043,7 @@
       </column>
     </createTable>
     <addForeignKeyConstraint constraintName="status_types_status_type_category_fk" baseTableSchemaName="party"
-      baseTableName="status_types" baseColumnNames="category, locale_id" referencedTableSchemaName="party"
+      baseTableName="status_types" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
       referencedTableName="status_type_categories" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="status_types_category_ix" schemaName="party" tableName="status_types">
       <column name="category"/>
@@ -1293,6 +1375,26 @@
       referencedTableName="parties" referencedColumnNames="id" onDelete="CASCADE"/>
     <createIndex indexName="identity_documents_party_id_ix" schemaName="party" tableName="identity_documents">
       <column name="party_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="industry_allocations" remarks="Industry Allocations">
+      <column name="organization_id" type="uuid" remarks="The ID for the organization the industry allocation is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="system" type="nvarchar(30)" remarks="The code for the industry classification system">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="industry" type="nvarchar(30)" remarks="The code for the industry classification">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="effective_from" type="date" remarks="The date that the industry allocation is effective from"/>
+      <column name="effective_to" type="date" remarks="The date that the industry allocation is effective to"/>
+    </createTable>
+    <addForeignKeyConstraint constraintName="industry_allocations_organization_fk" baseTableSchemaName="party"
+      baseTableName="industry_allocations" baseColumnNames="organization_id" referencedTableSchemaName="party"
+      referencedTableName="organizations" referencedColumnNames="id" onDelete="CASCADE"/>
+    <createIndex indexName="industry_allocations_organization_id_ix" schemaName="party" tableName="industry_allocations">
+      <column name="organization_id"/>
     </createIndex>
 
     <createTable schemaName="party" tableName="language_proficiencies" remarks="Language Proficiencies">

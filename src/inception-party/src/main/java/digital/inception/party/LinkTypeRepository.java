@@ -35,14 +35,4 @@ public interface LinkTypeRepository extends JpaRepository<LinkType, LinkTypeId> 
    */
   @Query("select lt from LinkType lt order by lt.localeId, -lt.sortIndex DESC, lt.name")
   List<LinkType> findAll();
-
-  /**
-   * Retrieve the link types for the specified locale sorted by locale ID, sort index, and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the link types for
-   * @return the link types for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select lt from LinkType lt where upper(lt.localeId) = upper(:localeId) order by lt.localeId, -lt.sortIndex DESC, lt.name")
-  List<LinkType> findByLocaleIdIgnoreCase(String localeId);
 }

@@ -37,17 +37,4 @@ public interface MandatePropertyTypeRepository
   @Query(
       "select mpt from MandatePropertyType mpt order by mpt.localeId, -mpt.sortIndex DESC, mpt.name")
   List<MandatePropertyType> findAll();
-
-  /**
-   * Retrieve the mandate property types for the specified locale sorted by locale ID, sort index,
-   * and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the mandate property
-   *     types for
-   * @return the mandate property types for the specified locale sorted by locale ID, sort index,
-   *     and name
-   */
-  @Query(
-      "select mpt from MandatePropertyType mpt where upper(mpt.localeId) = upper(:localeId) order by mpt.localeId, -mpt.sortIndex DESC, mpt.name")
-  List<MandatePropertyType> findByLocaleIdIgnoreCase(String localeId);
 }

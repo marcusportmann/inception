@@ -17,6 +17,7 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import java.time.LocalDate;
@@ -746,6 +747,22 @@ public class InternalPartyDataStore implements IPartyDataStore {
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the tenant ID for the party (" + partyId + ")", e);
+    }
+  }
+
+  @Override
+  public Optional<PartyType> getTypeForParty(UUID tenantId, UUID partyId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    try {
+      return partyRepository.getTypeByTenantIdAndPartyId(tenantId, partyId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the type for the party ("
+              + partyId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 

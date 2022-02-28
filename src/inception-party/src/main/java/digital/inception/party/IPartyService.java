@@ -370,6 +370,19 @@ public interface IPartyService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Retrieve the party type for the party.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
+   * @return an Optional containing the party type for the party or an empty Optional if the party
+   *     could not be found
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the party type for the party could not be retrieved
+   */
+  Optional<PartyType> getTypeForParty(UUID tenantId, UUID partyId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Update the association.
    *
    * @param tenantId the ID for the tenant

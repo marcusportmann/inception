@@ -36,17 +36,4 @@ public interface SegmentationTypeRepository
    */
   @Query("select st from SegmentationType st order by st.localeId, -st.sortIndex DESC, st.name")
   List<SegmentationType> findAll();
-
-  /**
-   * Retrieve the segmentation types for the specified locale sorted by locale ID, sort index, and
-   * name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the segmentation types
-   *     for
-   * @return the segmentation types for the specified locale sorted by locale ID, sort index, and
-   *     name
-   */
-  @Query(
-      "select st from SegmentationType st where upper(st.localeId) = upper(:localeId) order by st.localeId, -st.sortIndex DESC, st.name")
-  List<SegmentationType> findByLocaleIdIgnoreCase(String localeId);
 }

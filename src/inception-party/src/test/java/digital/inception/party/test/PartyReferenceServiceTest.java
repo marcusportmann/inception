@@ -35,6 +35,9 @@ import digital.inception.party.FieldOfStudy;
 import digital.inception.party.Gender;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.IdentityDocumentType;
+import digital.inception.party.IndustryClassification;
+import digital.inception.party.IndustryClassificationCategory;
+import digital.inception.party.IndustryClassificationSystem;
 import digital.inception.party.LockType;
 import digital.inception.party.LockTypeCategory;
 import digital.inception.party.MandataryRole;
@@ -523,6 +526,101 @@ public class PartyReferenceServiceTest {
         5,
         retrievedIdentityDocumentTypes.size(),
         "The correct number of identity document types was not retrieved");
+  }
+
+  /** Test the industry classification category functionality. */
+  @Test
+  public void industryClassificationCategoryTest() throws Exception {
+    List<IndustryClassificationCategory> retrievedIndustryClassificationCategories =
+        partyReferenceService.getIndustryClassificationCategories(
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        22,
+        retrievedIndustryClassificationCategories.size(),
+        "The correct number of industry classification categories was not retrieved");
+
+    retrievedIndustryClassificationCategories =
+        partyReferenceService.getIndustryClassificationCategories(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        22,
+        retrievedIndustryClassificationCategories.size(),
+        "The correct number of industry classification categories was not retrieved");
+
+    retrievedIndustryClassificationCategories =
+        partyReferenceService.getIndustryClassificationCategories(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        21,
+        retrievedIndustryClassificationCategories.size(),
+        "The correct number of industry classification categories was not retrieved");
+  }
+
+  /** Test the industry classification system functionality. */
+  @Test
+  public void industryClassificationSystemTest() throws Exception {
+    List<IndustryClassificationSystem> retrievedIndustryClassificationSystems =
+        partyReferenceService.getIndustryClassificationSystems(
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        2,
+        retrievedIndustryClassificationSystems.size(),
+        "The correct number of industry classification systems was not retrieved");
+
+    retrievedIndustryClassificationSystems =
+        partyReferenceService.getIndustryClassificationSystems(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        2,
+        retrievedIndustryClassificationSystems.size(),
+        "The correct number of industry classification systems was not retrieved");
+
+    retrievedIndustryClassificationSystems =
+        partyReferenceService.getIndustryClassificationSystems(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        1,
+        retrievedIndustryClassificationSystems.size(),
+        "The correct number of industry classification systems was not retrieved");
+  }
+
+  /** Test the industry classification functionality. */
+  @Test
+  public void industryClassificationTest() throws Exception {
+    List<IndustryClassification> retrievedIndustryClassifications =
+        partyReferenceService.getIndustryClassifications(IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        89,
+        retrievedIndustryClassifications.size(),
+        "The correct number of industry classifications was not retrieved");
+
+    retrievedIndustryClassifications =
+        partyReferenceService.getIndustryClassifications(
+            IPartyReferenceService.DEFAULT_TENANT_ID, IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        89,
+        retrievedIndustryClassifications.size(),
+        "The correct number of industry classifications was not retrieved");
+
+    retrievedIndustryClassifications =
+        partyReferenceService.getIndustryClassifications(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            IPartyReferenceService.DEFAULT_LOCALE_ID);
+
+    assertEquals(
+        88,
+        retrievedIndustryClassifications.size(),
+        "The correct number of industry classifications was not retrieved");
   }
 
   /** Test the lock type category reference functionality. */

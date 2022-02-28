@@ -101,11 +101,11 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return countryRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the country reference data", e);
-    }
+    return self.getCountries().stream()
+        .filter(
+            country ->
+                (country.getLocaleId() == null || localeId.equalsIgnoreCase(country.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -126,11 +126,12 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return languageRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the language reference data", e);
-    }
+    return self.getLanguages().stream()
+        .filter(
+            language ->
+                (language.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(language.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -152,12 +153,12 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return measurementSystemRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the measurement system reference data", e);
-    }
+    return self.getMeasurementSystems().stream()
+        .filter(
+            measurementSystem ->
+                (measurementSystem.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(measurementSystem.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -179,12 +180,12 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return measurementUnitTypeRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the measurement unit type reference data", e);
-    }
+    return self.getMeasurementUnitTypes().stream()
+        .filter(
+            measurementUnitType ->
+                (measurementUnitType.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(measurementUnitType.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -206,12 +207,12 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return measurementUnitRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the measurement unit reference data", e);
-    }
+    return self.getMeasurementUnits().stream()
+        .filter(
+            measurementUnit ->
+                (measurementUnit.getLocaleId() == null
+                    || localeId.equalsIgnoreCase(measurementUnit.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -232,11 +233,11 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      return regionRepository.findByLocaleIdIgnoreCase(localeId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the region reference data", e);
-    }
+    return self.getRegions().stream()
+        .filter(
+            region ->
+                (region.getLocaleId() == null || localeId.equalsIgnoreCase(region.getLocaleId())))
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -247,14 +248,19 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    try {
-      if (StringUtils.hasText(country)) {
-        return regionRepository.findByLocaleIdIgnoreCaseAndCountryIgnoreCase(localeId, country);
-      } else {
-        return regionRepository.findByLocaleIdIgnoreCase(localeId);
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException("Failed to retrieve the region reference data", e);
+    if (StringUtils.hasText(country)) {
+      return self.getRegions().stream()
+          .filter(
+              region ->
+                  ((region.getLocaleId() == null || localeId.equalsIgnoreCase(region.getLocaleId()))
+                      && (country.equalsIgnoreCase(region.getCountry()))))
+          .collect(Collectors.toList());
+    } else {
+      return self.getRegions().stream()
+          .filter(
+              region ->
+                  (region.getLocaleId() == null || localeId.equalsIgnoreCase(region.getLocaleId())))
+          .collect(Collectors.toList());
     }
   }
 

@@ -53,6 +53,20 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
+   * Retrieve the association type with the specified code for the tenant with the specified ID for
+   * the first matching locale.
+   *
+   * @param tenantId the ID for the tenant the association type reference data is specific to
+   * @param associationTypeCode the code for the association type
+   * @return an Optional containing the association type with the specified code for the tenant with
+   *     the specified ID for the first matching locale or an empty Optional if the association type
+   *     could not be found
+   * @throws ServiceUnavailableException if the association type could not be retrieved
+   */
+  Optional<AssociationType> getAssociationType(UUID tenantId, String associationTypeCode)
+      throws ServiceUnavailableException;
+
+  /**
    * Retrieve the association property type reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the association
@@ -612,6 +626,118 @@ public interface IPartyReferenceService {
    *     retrieved
    */
   List<IdentityDocumentType> getIdentityDocumentTypes() throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the industry classification category reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification category reference data for
+   * @return the industry classification category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification category reference data
+   *     could not be retrieved
+   */
+  List<IndustryClassificationCategory> getIndustryClassificationCategories(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the industry classification category reference data for a specific tenant and locale.
+   *
+   * @param tenantId the ID for the tenant the industry classification category reference data is
+   *     specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification category reference data for
+   * @return the industry classification category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification category reference data
+   *     could not be retrieved
+   */
+  List<IndustryClassificationCategory> getIndustryClassificationCategories(
+      UUID tenantId, String localeId) throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the industry classification category reference data for all locales.
+   *
+   * @return the industry classification category reference data
+   * @throws ServiceUnavailableException if the industry classification category reference data
+   *     could not be retrieved
+   */
+  List<IndustryClassificationCategory> getIndustryClassificationCategories()
+      throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the industry classification system reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification system reference data for
+   * @return the industry classification system reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification system reference data could
+   *     not be retrieved
+   */
+  List<IndustryClassificationSystem> getIndustryClassificationSystems(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the industry classification system reference data for a specific tenant and locale.
+   *
+   * @param tenantId the ID for the tenant the industry classification system reference data is
+   *     specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification system reference data for
+   * @return the industry classification system reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification system reference data could
+   *     not be retrieved
+   */
+  List<IndustryClassificationSystem> getIndustryClassificationSystems(
+      UUID tenantId, String localeId) throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the industry classification system reference data for all locales.
+   *
+   * @return the industry classification system reference data
+   * @throws ServiceUnavailableException if the industry classification system reference data could
+   *     not be retrieved
+   */
+  List<IndustryClassificationSystem> getIndustryClassificationSystems()
+      throws ServiceUnavailableException;
+
+  /**
+   * Retrieve the industry classification reference data for a specific locale.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification reference data for
+   * @return the industry classification reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification reference data could not be
+   *     retrieved
+   */
+  List<IndustryClassification> getIndustryClassifications(String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the industry classification reference data for a specific tenant and locale.
+   *
+   * @param tenantId the ID for the tenant the industry classification reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification reference data for
+   * @return the industry classification reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification reference data could not be
+   *     retrieved
+   */
+  List<IndustryClassification> getIndustryClassifications(UUID tenantId, String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the industry classification reference data for all locales.
+   *
+   * @return the industry classification reference data
+   * @throws ServiceUnavailableException if the industry classification reference data could not be
+   *     retrieved
+   */
+  List<IndustryClassification> getIndustryClassifications() throws ServiceUnavailableException;
 
   /**
    * Retrieve the link type reference data for a specific locale.
@@ -1480,6 +1606,17 @@ public interface IPartyReferenceService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Retrieve the segmentation type reference data for all locales.
+   *
+   * @return the segmentation type reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the segmentation type reference data could not be
+   *     retrieved
+   */
+  List<SegmentationType> getSegmentationTypes()
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Retrieve the segment reference data for a specific locale.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the segment reference
@@ -2017,6 +2154,20 @@ public interface IPartyReferenceService {
       throws ServiceUnavailableException;
 
   /**
+   * Check whether the code is a valid code for an industry classification for the party type.
+   *
+   * @param tenantId the ID for the tenant
+   * @param industryClassificationSystemCode the code for the industry classification system
+   * @param industryClassificationCode the code for the industry classification
+   * @return <b>true</b> if the code is a valid code for an industry classification or <b>false</b>
+   *     otherwise
+   * @throws ServiceUnavailableException if the industry classification check failed
+   */
+  boolean isValidIndustryClassification(
+      UUID tenantId, String industryClassificationSystemCode, String industryClassificationCode)
+      throws ServiceUnavailableException;
+
+  /**
    * Check whether the code is a valid code for a lock type for the party type.
    *
    * @param tenantId the ID for the tenant
@@ -2303,6 +2454,16 @@ public interface IPartyReferenceService {
    * @throws ServiceUnavailableException if the segment check failed
    */
   boolean isValidSegment(UUID tenantId, String segmentCode) throws ServiceUnavailableException;
+
+  /**
+   * Check whether the code is a valid code for a skill type.
+   *
+   * @param tenantId the ID for the tenant
+   * @param skillTypeCode the code for the skill type
+   * @return <b>true</b> if the code is a valid code for a skill type or <b>false</b> otherwise
+   * @throws ServiceUnavailableException if the skill type check failed
+   */
+  boolean isValidSkillType(UUID tenantId, String skillTypeCode) throws ServiceUnavailableException;
 
   /**
    * Check whether the code is a valid code for a source of funds type.

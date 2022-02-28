@@ -317,6 +317,65 @@ public class PartyReferenceWebService {
   }
 
   /**
+   * Retrieve the industry classification category reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the industry classification category reference data is
+   *     specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification category reference data for
+   * @return the industry classification category reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification category reference data
+   *     could not be retrieved
+   */
+  @WebMethod(operationName = "GetIndustryClassificationCategories")
+  public List<IndustryClassificationCategory> getIndustryClassificationCategories(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getIndustryClassificationCategories(tenantId, localeId);
+  }
+
+  /**
+   * Retrieve the industry classification system reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the industry classification system reference data is
+   *     specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification system reference data for
+   * @return the industry classification system reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification system reference data could
+   *     not be retrieved
+   */
+  @WebMethod(operationName = "GetIndustryClassificationSystems")
+  public List<IndustryClassificationSystem> getIndustryClassificationSystems(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getIndustryClassificationSystems(tenantId, localeId);
+  }
+
+  /**
+   * Retrieve the industry classification reference data for a specific locale.
+   *
+   * @param tenantId the ID for the tenant the industry classification reference data is specific to
+   * @param localeId the Unicode locale identifier for the locale to retrieve the industry
+   *     classification reference data for
+   * @return the industry classification reference data
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the industry classification reference data could not be
+   *     retrieved
+   */
+  @WebMethod(operationName = "GetIndustryClassifications")
+  public List<IndustryClassification> getIndustryClassifications(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    return partyReferenceService.getIndustryClassifications(tenantId, localeId);
+  }
+
+  /**
    * Retrieve the link type reference data for a specific locale.
    *
    * @param tenantId the ID for the tenant the link type reference data is specific to

@@ -37,17 +37,4 @@ public interface ContactMechanismRoleRepository
   @Query(
       "select cmr from ContactMechanismRole cmr order by cmr.localeId, -cmr.sortIndex DESC, cmr.name")
   List<ContactMechanismRole> findAll();
-
-  /**
-   * Retrieve the contact mechanism roles for the specified locale sorted by locale ID, sort index,
-   * and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     roles for
-   * @return the contact mechanism roles for the specified locale sorted by locale ID, sort index,
-   *     and name
-   */
-  @Query(
-      "select cmr from ContactMechanismRole cmr where upper(cmr.localeId) = upper(:localeId) order by cmr.localeId, -cmr.sortIndex DESC, cmr.name")
-  List<ContactMechanismRole> findByLocaleIdIgnoreCase(String localeId);
 }

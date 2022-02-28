@@ -35,14 +35,4 @@ public interface SkillTypeRepository extends JpaRepository<SkillType, SkillTypeI
    */
   @Query("select st from SkillType st order by st.localeId, -st.sortIndex DESC, st.name")
   List<SkillType> findAll();
-
-  /**
-   * Retrieve the skill types for the specified locale sorted by locale ID, sort index, and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the skill types for
-   * @return the skill types for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select st from SkillType st where upper(st.localeId) = upper(:localeId) order by st.localeId, -st.sortIndex DESC, st.name")
-  List<SkillType> findByLocaleIdIgnoreCase(String localeId);
 }

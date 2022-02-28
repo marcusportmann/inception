@@ -17,7 +17,6 @@
 package digital.inception.party.constraints;
 
 import digital.inception.party.Attribute;
-import digital.inception.party.ContactMechanism;
 import digital.inception.party.IPartyReferenceService;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressType;

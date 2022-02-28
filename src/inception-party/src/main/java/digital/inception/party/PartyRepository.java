@@ -83,11 +83,24 @@ public interface PartyRepository extends JpaRepository<Party, UUID> {
       @Param("tenantId") UUID tenantId, @Param("filter") String filter, Pageable pageable);
 
   /**
-   * Retrieve the ID for the tenant the party is associated with
+   * Retrieve the ID for the tenant the party is associated with.
    *
    * @param partyId the ID for the party
-   * @return the ID for the tenant the party is associated with
+   * @return an Optional containing the ID for the tenant the party is associated with or an empty
+   *     Optional if the party could not be found
    */
   @Query("select p.tenantId from Party p where p.id = :partyId")
   Optional<UUID> getTenantIdByPartyId(@Param("partyId") UUID partyId);
+
+  /**
+   * Retrieve the party type for the party.
+   *
+   * @param tenantId the ID for the tenant
+   * @param partyId the ID for the party
+   * @return an Optional containing the party type for the party or an empty Optional if the party
+   *     could not be found
+   */
+  @Query("select p.type from Party p where p.tenantId = :tenantId and p.id = :partyId")
+  Optional<PartyType> getTypeByTenantIdAndPartyId(
+      @Param("tenantId") UUID tenantId, @Param("partyId") UUID partyId);
 }

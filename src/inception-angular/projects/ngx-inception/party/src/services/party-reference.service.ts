@@ -35,6 +35,9 @@ import {ExternalReferenceType} from "./external-reference-type";
 import {FieldOfStudy} from "./field-of-study";
 import {Gender} from './gender';
 import {IdentityDocumentType} from './identity-document-type';
+import {IndustryClassification} from './industry-classification';
+import {IndustryClassificationCategory} from './industry-classification-category';
+import {IndustryClassificationSystem} from './industry-classification-system';
 import {LockType} from "./lock-type";
 import {LockTypeCategory} from "./lock-type-category";
 import {MandataryRole} from './mandatary-role';
@@ -60,6 +63,7 @@ import {RoleTypeAttributeTypeConstraint} from "./role-type-attribute-type-constr
 import {RoleTypePreferenceTypeConstraint} from "./role-type-preference-type-constraint";
 import {Segment} from "./segment";
 import {SegmentationType} from "./segmentation-type";
+import {SkillType} from './skill-type';
 import {SourceOfFundsType} from './source-of-funds-type';
 import {SourceOfWealthType} from "./source-of-wealth-type";
 import {StatusType} from "./status-type";
@@ -437,6 +441,81 @@ export class PartyReferenceService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to retrieve the identity document types.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the industry classification categories.
+   *
+   * @return The industry classification categories.
+   */
+  getIndustryClassificationCategories(): Observable<IndustryClassificationCategory[]> {
+    let params = new HttpParams();
+
+    params = params.append('localeId', this.localeId);
+
+    return this.httpClient.get<IndustryClassificationCategory[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classification-categories',
+      {params, reportProgress: true})
+    .pipe(map((industryClassificationCategories: IndustryClassificationCategory[]) => {
+      return industryClassificationCategories;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the industry classification categories.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the industry classification systems.
+   *
+   * @return The industry classification systems.
+   */
+  getIndustryClassificationSystems(): Observable<IndustryClassificationSystem[]> {
+    let params = new HttpParams();
+
+    params = params.append('localeId', this.localeId);
+
+    return this.httpClient.get<IndustryClassificationSystem[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classification-systems',
+      {params, reportProgress: true})
+    .pipe(map((industryClassificationSystems: IndustryClassificationSystem[]) => {
+      return industryClassificationSystems;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the industry classification systems.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the industry classifications.
+   *
+   * @return The industry classifications.
+   */
+  getIndustryClassifications(): Observable<IndustryClassification[]> {
+    let params = new HttpParams();
+
+    params = params.append('localeId', this.localeId);
+
+    return this.httpClient.get<IndustryClassification[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classifications',
+      {params, reportProgress: true})
+    .pipe(map((industryClassifications: IndustryClassification[]) => {
+      return industryClassifications;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the industry classifications.', httpErrorResponse));
     }));
   }
 
@@ -915,7 +994,6 @@ export class PartyReferenceService {
     }));
   }
 
-
   /**
    * Retrieve the role purposes.
    *
@@ -1075,6 +1153,31 @@ export class PartyReferenceService {
       }
 
       return throwError(new ServiceUnavailableError('Failed to retrieve the segments.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Retrieve the skill types.
+   *
+   * @return The skill types.
+   */
+  getSkillTypes(): Observable<SkillType[]> {
+    let params = new HttpParams();
+
+    params = params.append('localeId', this.localeId);
+
+    return this.httpClient.get<SkillType[]>(this.config.partyReferenceApiUrlPrefix + '/skill-types',
+      {params, reportProgress: true})
+    .pipe(map((skillTypes: SkillType[]) => {
+      return skillTypes;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      }
+
+      return throwError(new ServiceUnavailableError('Failed to retrieve the skill types.', httpErrorResponse));
     }));
   }
 
@@ -1252,4 +1355,5 @@ export class PartyReferenceService {
       return throwError(new ServiceUnavailableError('Failed to retrieve the titles.', httpErrorResponse));
     }));
   }
+
 }

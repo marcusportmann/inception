@@ -35,14 +35,4 @@ public interface LockTypeRepository extends JpaRepository<LockType, LockTypeId> 
    */
   @Query("select lt from LockType lt order by lt.localeId, -lt.sortIndex DESC, lt.name")
   List<LockType> findAll();
-
-  /**
-   * Retrieve the lock types for the specified locale sorted by locale ID, sort index, and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the lock types for
-   * @return the lock types for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select lt from LockType lt where upper(lt.localeId) = upper(:localeId) order by lt.localeId, -lt.sortIndex DESC, lt.name")
-  List<LockType> findByLocaleIdIgnoreCase(String localeId);
 }

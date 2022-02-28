@@ -88,6 +88,7 @@ import org.springframework.util.StringUtils;
   "contactMechanisms",
   "externalReferences",
   "identityDocuments",
+  "industryAllocations",
   "locks",
   "physicalAddresses",
   "preferences",
@@ -109,6 +110,7 @@ import org.springframework.util.StringUtils;
       "contactMechanisms",
       "externalReferences",
       "identityDocuments",
+      "industryAllocations",
       "locks",
       "physicalAddresses",
       "preferences",
@@ -165,6 +167,16 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   @OrderBy("type")
   private final Set<IdentityDocument> identityDocuments = new HashSet<>();
+
+  /** The industry allocations for the organization. */
+  @Valid
+  @OneToMany(
+      mappedBy = "organization",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  @OrderBy("system, industry")
+  private final Set<IndustryAllocation> industryAllocations = new HashSet<>();
 
   /** The locks applied to the organization. */
   @Valid
@@ -327,6 +339,23 @@ public class Organization extends PartyBase implements Serializable {
     identityDocument.setParty(this);
 
     identityDocuments.add(identityDocument);
+  }
+
+  /**
+   * Add the industry allocation for the organization.
+   *
+   * @param industryAllocation the industry allocation
+   */
+  public void addIndustryAllocation(IndustryAllocation industryAllocation) {
+    industryAllocations.removeIf(
+        existingIndustryAllocation ->
+            (Objects.equals(existingIndustryAllocation.getSystem(), industryAllocation.getSystem())
+                && Objects.equals(
+                    existingIndustryAllocation.getIndustry(), industryAllocation.getIndustry())));
+
+    industryAllocation.setOrganization(this);
+
+    industryAllocations.add(industryAllocation);
   }
 
   /**
@@ -616,6 +645,40 @@ public class Organization extends PartyBase implements Serializable {
   @XmlElement(name = "IdentityDocument")
   public Set<IdentityDocument> getIdentityDocuments() {
     return identityDocuments;
+  }
+
+  /**
+   * Retrieve the industry allocation with the specified industry classification system and industry
+   * classification for the organization.
+   *
+   * @param system the code for the industry classification system
+   * @param industry the code for the industry classification
+   * @return an Optional containing the industry allocation with the specified industry
+   *     classification system and industry classification for the organization or an empty Optional
+   *     if the industry allocation could not be found
+   */
+  public Optional<IndustryAllocation> getIndustryAllocationWithSystemAndIndustry(
+      String system, String industry) {
+    return industryAllocations.stream()
+        .filter(
+            industryAllocation ->
+                Objects.equals(industryAllocation.getSystem(), system)
+                    && Objects.equals(industryAllocation.getIndustry(), industry))
+        .findFirst();
+  }
+
+  /**
+   * Returns the industry allocations for the organization.
+   *
+   * @return the industry allocations for the organization
+   */
+  @Schema(description = "The industry allocations for the organization")
+  @JsonProperty
+  @JsonManagedReference("industryAllocationReference")
+  @XmlElementWrapper(name = "IndustryAllocations")
+  @XmlElement(name = "IndustryAllocation")
+  public Set<IndustryAllocation> getIndustryAllocations() {
+    return industryAllocations;
   }
 
   /**
@@ -919,6 +982,23 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns whether the organization has an industry allocation with the specified industry
+   * classification system and industry classification.
+   *
+   * @param system the code for the industry classification system
+   * @param industry the code for the industry classification
+   * @return <b>true</b> if the organization has an industry allocation with the specified industry
+   *     classification system and industry classification or <b>false</b> otherwise
+   */
+  public boolean hasIndustryAllocationWithSystemAndIndustry(String system, String industry) {
+    return industryAllocations.stream()
+        .anyMatch(
+            industryAllocation ->
+                (Objects.equals(industryAllocation.getSystem(), system)
+                    && Objects.equals(industryAllocation.getIndustry(), industry)));
+  }
+
+  /**
    * Returns whether the organization has a lock with the specified type.
    *
    * @param type the code for the lock type
@@ -1008,7 +1088,8 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Remove the attribute with the specified type for the organization.
+   * Remove the industry allocation with the specified industry classification system and industry
+   * classification for the organization.
    *
    * @param type the code for the attribute type
    */
@@ -1044,6 +1125,19 @@ public class Organization extends PartyBase implements Serializable {
   public void removeIdentityDocumentWithType(String type) {
     identityDocuments.removeIf(
         existingIdentityDocument -> Objects.equals(existingIdentityDocument.getType(), type));
+  }
+
+  /**
+   * Remove the attribute with the specified type for the organization.
+   *
+   * @param system the code for the industry classification system
+   * @param industry the code for the industry classification
+   */
+  public void removeIndustryAllocationWithSystemAndIndustry(String system, String industry) {
+    industryAllocations.removeIf(
+        industryAllocation ->
+            (Objects.equals(industryAllocation.getSystem(), system)
+                && Objects.equals(industryAllocation.getIndustry(), industry)));
   }
 
   /**
@@ -1185,6 +1279,17 @@ public class Organization extends PartyBase implements Serializable {
     identityDocuments.forEach(identityDocument -> identityDocument.setParty(this));
     this.identityDocuments.clear();
     this.identityDocuments.addAll(identityDocuments);
+  }
+
+  /**
+   * Set the industry allocations for the organization.
+   *
+   * @param industryAllocations the industry allocations for the organization
+   */
+  public void setIndustryAllocations(Set<IndustryAllocation> industryAllocations) {
+    industryAllocations.forEach(industryAllocation -> industryAllocation.setOrganization(this));
+    this.industryAllocations.clear();
+    this.industryAllocations.addAll(industryAllocations);
   }
 
   /**

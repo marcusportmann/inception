@@ -35,14 +35,4 @@ public interface MandateTypeRepository extends JpaRepository<MandateType, Mandat
    */
   @Query("select mt from MandateType mt order by mt.localeId, -mt.sortIndex DESC, mt.name")
   List<MandateType> findAll();
-
-  /**
-   * Retrieve the mandate types for the specified locale sorted by locale ID, sort index, and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the mandate types for
-   * @return the mandate types for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select mt from MandateType mt where upper(mt.localeId) = upper(:localeId) order by mt.localeId, -mt.sortIndex DESC, mt.name")
-  List<MandateType> findByLocaleIdIgnoreCase(String localeId);
 }

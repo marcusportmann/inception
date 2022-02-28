@@ -35,14 +35,4 @@ public interface OccupationRepository extends JpaRepository<Occupation, Occupati
    */
   @Query("select o from Occupation o order by o.localeId, -o.sortIndex DESC, o.name")
   List<Occupation> findAll();
-
-  /**
-   * Retrieve the occupations for the specified locale sorted by locale ID, sort index, and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for
-   * @return the occupations for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select o from Occupation o where upper(o.localeId) = upper(:localeId) order by o.localeId, -o.sortIndex DESC, o.name")
-  List<Occupation> findByLocaleIdIgnoreCase(String localeId);
 }

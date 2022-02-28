@@ -104,7 +104,6 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
-  @CachePut(cacheNames = "associations", key = "#association.id")
   public Association createAssociation(UUID tenantId, Association association)
       throws InvalidArgumentException, DuplicateAssociationException, PartyNotFoundException,
           ServiceUnavailableException {
@@ -133,7 +132,6 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
-  @CachePut(cacheNames = "mandates", key = "#mandate.id")
   public Mandate createMandate(UUID tenantId, Mandate mandate)
       throws InvalidArgumentException, DuplicateMandateException, PartyNotFoundException,
           ServiceUnavailableException {
@@ -216,7 +214,6 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
-  @CacheEvict(cacheNames = "associations", key = "#associationId")
   public void deleteAssociation(UUID tenantId, UUID associationId)
       throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -232,7 +229,6 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
-  @CacheEvict(cacheNames = "mandates", key = "#mandateId")
   public void deleteMandate(UUID tenantId, UUID mandateId)
       throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -248,7 +244,7 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
-  @CacheEvict(cacheNames = "organizations", key = "#organizationId")
+  @CacheEvict(cacheNames = {"organizations", "partyTenantIds", "partyTypes"}, key = "#organizationId")
   public void deleteOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -265,7 +261,7 @@ public class PartyService implements IPartyService {
   @Override
   @Transactional
   @CacheEvict(
-      cacheNames = {"organizations", "persons"},
+      cacheNames = {"organizations", "persons", "partyTenantIds", "partyTypes"},
       key = "#partyId")
   public void deleteParty(UUID tenantId, UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, ServiceUnavailableException {
@@ -282,7 +278,7 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
-  @CacheEvict(cacheNames = "persons", key = "#personId")
+  @CacheEvict(cacheNames = {"persons", "partyTenantIds", "partyTypes"}, key = "#personId")
   public void deletePerson(UUID tenantId, UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -297,7 +293,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Cacheable(cacheNames = "associations", key = "#associationId")
   public Association getAssociation(UUID tenantId, UUID associationId)
       throws InvalidArgumentException, AssociationNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -359,7 +354,6 @@ public class PartyService implements IPartyService {
   }
 
   @Override
-  @Cacheable(cacheNames = "mandates", key = "#mandateId")
   public Mandate getMandate(UUID tenantId, UUID mandateId)
       throws InvalidArgumentException, MandateNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -637,8 +631,22 @@ public class PartyService implements IPartyService {
   }
 
   @Override
+  @Cacheable(cacheNames = "partyTypes", key = "#partyId")
+  public Optional<PartyType> getTypeForParty(UUID tenantId, UUID partyId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (partyId == null) {
+      throw new InvalidArgumentException("partyId");
+    }
+
+    return getDataStore().getTypeForParty(tenantId, partyId);
+  }
+
+  @Override
   @Transactional
-  @CachePut(cacheNames = "associations", key = "#association.id")
   public Association updateAssociation(UUID tenantId, Association association)
       throws InvalidArgumentException, AssociationNotFoundException, PartyNotFoundException,
           ServiceUnavailableException {
@@ -663,7 +671,6 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
-  @CachePut(cacheNames = "mandates", key = "#mandate.id")
   public Mandate updateMandate(UUID tenantId, Mandate mandate)
       throws InvalidArgumentException, MandateNotFoundException, PartyNotFoundException,
           ServiceUnavailableException {

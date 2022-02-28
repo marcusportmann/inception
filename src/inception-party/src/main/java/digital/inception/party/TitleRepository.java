@@ -34,14 +34,4 @@ public interface TitleRepository extends JpaRepository<Title, TitleId> {
    */
   @Query("select t from Title t order by -t.sortIndex DESC, t.name")
   List<Title> findAll();
-
-  /**
-   * Retrieve the titles for the specified locale sorted by locale ID, sort index, and name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the titles for
-   * @return the titles for the specified locale sorted by locale ID, sort index, and name
-   */
-  @Query(
-      "select t from Title t where upper(t.localeId) = upper(:localeId) order by -t.sortIndex DESC, t.name")
-  List<Title> findByLocaleIdIgnoreCase(String localeId);
 }

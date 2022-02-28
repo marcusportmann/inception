@@ -19,21 +19,15 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   AssociationPropertyType, AssociationType, AttributeType, AttributeTypeCategory, ConsentType,
-  ContactMechanismPurpose,
-  ContactMechanismRole, ContactMechanismType, EmploymentStatus, EmploymentType,
-  ExternalReferenceType, FieldOfStudy, Gender,
-  IdentityDocumentType, LockType, LockTypeCategory, MaritalStatus, MarriageType, NextOfKinType,
-  Occupation,
-  PartyReferenceService, PhysicalAddressPurpose, PhysicalAddressRole, PhysicalAddressType,
-  PreferenceType,
-  PreferenceTypeCategory, QualificationType, Race,
-  ResidencePermitType,
-  ResidencyStatus,
+  ContactMechanismPurpose, ContactMechanismRole, ContactMechanismType, EmploymentStatus,
+  EmploymentType, ExternalReferenceType, FieldOfStudy, Gender, IdentityDocumentType,
+  IndustryClassification, IndustryClassificationCategory, IndustryClassificationSystem, LockType,
+  LockTypeCategory, MaritalStatus, MarriageType, NextOfKinType, Occupation, PartyReferenceService,
+  PhysicalAddressPurpose, PhysicalAddressRole, PhysicalAddressType, PreferenceType,
+  PreferenceTypeCategory, QualificationType, Race, ResidencePermitType, ResidencyStatus,
   ResidentialType, RolePurpose, RoleType, RoleTypeAttributeTypeConstraint,
-  RoleTypePreferenceTypeConstraint,
-  Segment, SegmentationType,
-  SourceOfFundsType, SourceOfWealthType, StatusType, StatusTypeCategory, TaxNumberType,
-  TimeToContact, Title
+  RoleTypePreferenceTypeConstraint, Segment, SegmentationType, SkillType, SourceOfFundsType,
+  SourceOfWealthType, StatusType, StatusTypeCategory, TaxNumberType, TimeToContact, Title
 } from 'ngx-inception/party';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime, first, map, startWith} from 'rxjs/operators';
@@ -75,6 +69,12 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
   filteredGenders$: Subject<Gender[]> = new ReplaySubject<Gender[]>();
 
   filteredIdentityDocumentTypes$: Subject<IdentityDocumentType[]> = new ReplaySubject<IdentityDocumentType[]>();
+
+  filteredIndustryClassificationCategories$: Subject<IndustryClassificationCategory[]> = new ReplaySubject<IndustryClassificationCategory[]>();
+
+  filteredIndustryClassificationSystems$: Subject<IndustryClassificationSystem[]> = new ReplaySubject<IndustryClassificationSystem[]>();
+
+  filteredIndustryClassifications$: Subject<IndustryClassification[]> = new ReplaySubject<IndustryClassification[]>();
 
   filteredLockTypeCategories$: Subject<LockTypeCategory[]> = new ReplaySubject<LockTypeCategory[]>();
 
@@ -120,6 +120,8 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
 
   filteredSegments$: Subject<Segment[]> = new ReplaySubject<Segment[]>();
 
+  filteredSkillTypes$: Subject<SkillType[]> = new ReplaySubject<SkillType[]>();
+
   filteredSourceOfFundsTypes$: Subject<SourceOfFundsType[]> = new ReplaySubject<SourceOfFundsType[]>();
 
   filteredSourceOfWealthTypes$: Subject<SourceOfWealthType[]> = new ReplaySubject<SourceOfWealthType[]>();
@@ -159,6 +161,9 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
       fieldOfStudy: ['', Validators.required],
       gender: ['', Validators.required],
       identityDocumentType: ['', Validators.required],
+      industryClassification: ['', Validators.required],
+      industryClassificationCategory: ['', Validators.required],
+      industryClassificationSystem: ['', Validators.required],
       lockTypeCategory: ['', Validators.required],
       lockType: ['', Validators.required],
       maritalStatus: ['', Validators.required],
@@ -182,6 +187,7 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
       roleType: ['', Validators.required],
       segmentationType: ['', Validators.required],
       segment: ['', Validators.required],
+      skillType: ['', Validators.required],
       sourceOfFundsType: ['', Validators.required],
       sourceOfWealthType: ['', Validators.required],
       statusTypeCategory: ['', Validators.required],
@@ -208,17 +214,17 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayAttributeTypeCategory(attributeTypeCategory: AttributeTypeCategory): string {
-    if (!!attributeTypeCategory) {
-      return attributeTypeCategory.name;
+  displayAttributeType(attributeType: AttributeType): string {
+    if (!!attributeType) {
+      return attributeType.name;
     } else {
       return '';
     }
   }
 
-  displayAttributeType(attributeType: AttributeType): string {
-    if (!!attributeType) {
-      return attributeType.name;
+  displayAttributeTypeCategory(attributeTypeCategory: AttributeTypeCategory): string {
+    if (!!attributeTypeCategory) {
+      return attributeTypeCategory.name;
     } else {
       return '';
     }
@@ -304,9 +310,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayLockTypeCategory(lockTypeCategory: LockTypeCategory): string {
-    if (!!lockTypeCategory) {
-      return lockTypeCategory.name;
+  displayIndustryClassification(industryClassification: IndustryClassification): string {
+    if (!!industryClassification) {
+      return industryClassification.name;
+    } else {
+      return '';
+    }
+  }
+
+  displayIndustryClassificationCategory(industryClassificationCategory: IndustryClassificationCategory): string {
+    if (!!industryClassificationCategory) {
+      return industryClassificationCategory.name;
+    } else {
+      return '';
+    }
+  }
+
+  displayIndustryClassificationSystem(industryClassificationSystem: IndustryClassificationSystem): string {
+    if (!!industryClassificationSystem) {
+      return industryClassificationSystem.name;
     } else {
       return '';
     }
@@ -315,6 +337,14 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
   displayLockType(lockType: LockType): string {
     if (!!lockType) {
       return lockType.name;
+    } else {
+      return '';
+    }
+  }
+
+  displayLockTypeCategory(lockTypeCategory: LockTypeCategory): string {
+    if (!!lockTypeCategory) {
+      return lockTypeCategory.name;
     } else {
       return '';
     }
@@ -376,17 +406,17 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayPreferenceTypeCategory(preferenceTypeCategory: PreferenceTypeCategory): string {
-    if (!!preferenceTypeCategory) {
-      return preferenceTypeCategory.name;
+  displayPreferenceType(preferenceType: PreferenceType): string {
+    if (!!preferenceType) {
+      return preferenceType.name;
     } else {
       return '';
     }
   }
 
-  displayPreferenceType(preferenceType: PreferenceType): string {
-    if (!!preferenceType) {
-      return preferenceType.name;
+  displayPreferenceTypeCategory(preferenceTypeCategory: PreferenceTypeCategory): string {
+    if (!!preferenceTypeCategory) {
+      return preferenceTypeCategory.name;
     } else {
       return '';
     }
@@ -440,6 +470,14 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  displayRoleType(roleType: RoleType): string {
+    if (!!roleType) {
+      return roleType.name;
+    } else {
+      return '';
+    }
+  }
+
   displayRoleTypeAttributeTypeConstraint(roleTypeAttributeTypeConstraint: RoleTypeAttributeTypeConstraint): string {
     if (!!roleTypeAttributeTypeConstraint) {
       return roleTypeAttributeTypeConstraint.roleType + ' - ' + roleTypeAttributeTypeConstraint.attributeType;
@@ -456,9 +494,9 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayRoleType(roleType: RoleType): string {
-    if (!!roleType) {
-      return roleType.name;
+  displaySegment(segment: Segment): string {
+    if (!!segment) {
+      return segment.name;
     } else {
       return '';
     }
@@ -472,9 +510,9 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  displaySegment(segment: Segment): string {
-    if (!!segment) {
-      return segment.name;
+  displaySkillType(skillType: SkillType): string {
+    if (!!skillType) {
+      return skillType.name;
     } else {
       return '';
     }
@@ -496,17 +534,17 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayStatusTypeCategory(statusTypeCategory: StatusTypeCategory): string {
-    if (!!statusTypeCategory) {
-      return statusTypeCategory.name;
+  displayStatusType(statusType: StatusType): string {
+    if (!!statusType) {
+      return statusType.name;
     } else {
       return '';
     }
   }
 
-  displayStatusType(statusType: StatusType): string {
-    if (!!statusType) {
-      return statusType.name;
+  displayStatusTypeCategory(statusTypeCategory: StatusTypeCategory): string {
+    if (!!statusTypeCategory) {
+      return statusTypeCategory.name;
     } else {
       return '';
     }
@@ -802,6 +840,65 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
             } else {
               this.filteredIdentityDocumentTypes$.next(identityDocumentTypes.filter(
                 identityDocumentType => identityDocumentType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+            }
+          })).subscribe());
+      }
+    });
+
+    this.partyReferenceService.getIndustryClassifications().pipe(first()).subscribe((industryClassifications: IndustryClassification[]) => {
+      const industryClassificationControl = this.partyReferenceForm.get('industryClassification');
+
+      if (industryClassificationControl) {
+        this.subscriptions.add(industryClassificationControl.valueChanges.pipe(
+          startWith(''),
+          debounceTime(500),
+          map((value: string | IndustryClassification) => {
+            if (typeof (value) === 'string') {
+              this.filteredIndustryClassifications$.next(industryClassifications.filter(
+                industryClassification => industryClassification.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+            } else {
+              this.filteredIndustryClassifications$.next(industryClassifications.filter(
+                industryClassification => industryClassification.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+            }
+          })).subscribe());
+      }
+    });
+
+    this.partyReferenceService.getIndustryClassificationCategories().pipe(first()).subscribe((industryClassificationCategories: IndustryClassificationCategory[]) => {
+      const industryClassificationCategoryControl = this.partyReferenceForm.get('industryClassificationCategory');
+
+      if (industryClassificationCategoryControl) {
+        this.subscriptions.add(industryClassificationCategoryControl.valueChanges.pipe(
+          startWith(''),
+          debounceTime(500),
+          map((value: string | IndustryClassificationCategory) => {
+            if (typeof (value) === 'string') {
+              this.filteredIndustryClassificationCategories$.next(industryClassificationCategories.filter(
+                industryClassificationCategory => industryClassificationCategory.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+            } else {
+              this.filteredIndustryClassificationCategories$.next(industryClassificationCategories.filter(
+                industryClassificationCategory => industryClassificationCategory.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+            }
+          })).subscribe());
+      }
+    });
+
+
+
+    this.partyReferenceService.getIndustryClassificationSystems().pipe(first()).subscribe((industryClassificationSystems: IndustryClassificationSystem[]) => {
+      const industryClassificationSystemControl = this.partyReferenceForm.get('industryClassificationSystem');
+
+      if (industryClassificationSystemControl) {
+        this.subscriptions.add(industryClassificationSystemControl.valueChanges.pipe(
+          startWith(''),
+          debounceTime(500),
+          map((value: string | IndustryClassificationSystem) => {
+            if (typeof (value) === 'string') {
+              this.filteredIndustryClassificationSystems$.next(industryClassificationSystems.filter(
+                industryClassificationSystem => industryClassificationSystem.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+            } else {
+              this.filteredIndustryClassificationSystems$.next(industryClassificationSystems.filter(
+                industryClassificationSystem => industryClassificationSystem.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
             }
           })).subscribe());
       }
@@ -1225,6 +1322,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.partyReferenceService.getSkillTypes().pipe(first()).subscribe((skillTypes: SkillType[]) => {
+      const skillTypeControl = this.partyReferenceForm.get('skillType');
+
+      if (skillTypeControl) {
+        this.subscriptions.add(skillTypeControl.valueChanges.pipe(
+          startWith(''),
+          debounceTime(500),
+          map((value: string | SkillType) => {
+            if (typeof (value) === 'string') {
+              this.filteredSkillTypes$.next(skillTypes.filter(
+                skillType => skillType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+            } else {
+              this.filteredSkillTypes$.next(skillTypes.filter(
+                skillType => skillType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+            }
+          })).subscribe());
+      }
+    });
+
     this.partyReferenceService.getSourceOfFundsTypes().pipe(first()).subscribe((sourceOfFundsTypes: SourceOfFundsType[]) => {
       const sourceOfFundsTypeControl = this.partyReferenceForm.get('sourceOfFundsType');
 
@@ -1373,6 +1489,9 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     console.log('Field Of Study = ', this.partyReferenceForm.get('fieldOfStudy')!.value);
     console.log('Gender = ', this.partyReferenceForm.get('gender')!.value);
     console.log('Identity Document Type = ', this.partyReferenceForm.get('identityDocumentType')!.value);
+    console.log('Industry Classification = ', this.partyReferenceForm.get('industryClassification')!.value);
+    console.log('Industry Classification Category = ', this.partyReferenceForm.get('industryClassificationCategory')!.value);
+    console.log('Industry Classification System = ', this.partyReferenceForm.get('industryClassificationSystem')!.value);
     console.log('Lock Type Category = ', this.partyReferenceForm.get('lockTypeCategory')!.value);
     console.log('Lock Type = ', this.partyReferenceForm.get('lockType')!.value);
     console.log('Marital Status = ', this.partyReferenceForm.get('maritalStatus')!.value);
@@ -1395,6 +1514,7 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
     console.log('Role Type = ', this.partyReferenceForm.get('roleType')!.value);
     console.log('Segmentation Type = ', this.partyReferenceForm.get('segmentationType')!.value);
     console.log('Segment = ', this.partyReferenceForm.get('segment')!.value);
+    console.log('Skill Type = ', this.partyReferenceForm.get('skillType')!.value);
     console.log('Source Of Funds = ', this.partyReferenceForm.get('sourceOfFundsType')!.value);
     console.log('Source Of Wealth = ', this.partyReferenceForm.get('sourceOfWealthType')!.value);
     console.log('Status Type Category = ', this.partyReferenceForm.get('statusTypeCategory')!.value);

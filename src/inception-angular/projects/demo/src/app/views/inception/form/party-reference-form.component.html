@@ -260,6 +260,54 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
+            <mat-label>Industry classification</mat-label>
+            <input type="text" matInput formControlName="industryClassification" autocompleteSelectionRequired [matAutocomplete]="industryClassificationAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #industryClassificationAutocomplete="matAutocomplete" [displayWith]="displayIndustryClassification">
+              <mat-option *ngFor="let industryClassification of filteredIndustryClassifications$ | async" [value]="industryClassification">
+                {{industryClassification.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="partyReferenceForm.controls['industryClassification'].errors && !partyReferenceForm.controls['industryClassification'].untouched">
+              <span *ngIf="partyReferenceForm.controls['industryClassification'].errors?.required">An industry classification is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Industry classification category</mat-label>
+            <input type="text" matInput formControlName="industryClassificationCategory" autocompleteSelectionRequired [matAutocomplete]="industryClassificationCategoryAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #industryClassificationCategoryAutocomplete="matAutocomplete" [displayWith]="displayIndustryClassificationCategory">
+              <mat-option *ngFor="let industryClassificationCategory of filteredIndustryClassificationCategories$ | async" [value]="industryClassificationCategory">
+                {{industryClassificationCategory.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="partyReferenceForm.controls['industryClassificationCategory'].errors && !partyReferenceForm.controls['industryClassificationCategory'].untouched">
+              <span *ngIf="partyReferenceForm.controls['industryClassificationCategory'].errors?.required">An industry classification category is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Industry classification system</mat-label>
+            <input type="text" matInput formControlName="industryClassificationSystem" autocompleteSelectionRequired [matAutocomplete]="industryClassificationSystemAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #industryClassificationSystemAutocomplete="matAutocomplete" [displayWith]="displayIndustryClassificationSystem">
+              <mat-option *ngFor="let industryClassificationSystem of filteredIndustryClassificationSystems$ | async" [value]="industryClassificationSystem">
+                {{industryClassificationSystem.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="partyReferenceForm.controls['industryClassificationSystem'].errors && !partyReferenceForm.controls['industryClassificationSystem'].untouched">
+              <span *ngIf="partyReferenceForm.controls['industryClassificationSystem'].errors?.required">An industry classification system is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
             <mat-label>Marital status</mat-label>
             <input type="text" matInput formControlName="maritalStatus" autocompleteSelectionRequired [matAutocomplete]="maritalStatusAutocomplete">
             <mat-autocomplete autoActiveFirstOption #maritalStatusAutocomplete="matAutocomplete" [displayWith]="displayMaritalStatus">
@@ -401,7 +449,6 @@
           </mat-form-field>
         </div>
       </div>
-
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
@@ -418,7 +465,6 @@
           </mat-form-field>
         </div>
       </div>
-
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
@@ -575,6 +621,22 @@
             </mat-autocomplete>
             <mat-error *ngIf="partyReferenceForm.controls['segment'].errors && !partyReferenceForm.controls['segment'].untouched">
               <span *ngIf="partyReferenceForm.controls['segment'].errors?.required">A segment is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Skill type</mat-label>
+            <input type="text" matInput formControlName="skillType" autocompleteSelectionRequired [matAutocomplete]="skillTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #skillTypeAutocomplete="matAutocomplete" [displayWith]="displaySkillType">
+              <mat-option *ngFor="let skillType of filteredSkillTypes$ | async" [value]="skillType">
+                {{skillType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="partyReferenceForm.controls['skillType'].errors && !partyReferenceForm.controls['skillType'].untouched">
+              <span *ngIf="partyReferenceForm.controls['skillType'].errors?.required">A skill type is required.</span>
             </mat-error>
           </mat-form-field>
         </div>

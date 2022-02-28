@@ -36,17 +36,4 @@ public interface EmploymentStatusRepository
    */
   @Query("select es from EmploymentStatus es order by es.localeId, -es.sortIndex DESC, es.name")
   List<EmploymentStatus> findAll();
-
-  /**
-   * Retrieve the employment statuses for the specified locale sorted by locale ID, sort index, and
-   * name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the employment
-   *     statuses for
-   * @return the employment statuses for the specified locale sorted by locale ID, sort index, and
-   *     name
-   */
-  @Query(
-      "select es from EmploymentStatus es where upper(es.localeId) = upper(:localeId) order by es.localeId, -es.sortIndex DESC, es.name")
-  List<EmploymentStatus> findByLocaleIdIgnoreCase(String localeId);
 }

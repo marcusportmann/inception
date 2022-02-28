@@ -36,17 +36,4 @@ public interface AssociationTypeRepository
    */
   @Query("select at from AssociationType at order by at.localeId, -at.sortIndex DESC, at.name")
   List<AssociationType> findAll();
-
-  /**
-   * Retrieve the association types for the specified locale sorted by locale ID, sort index, and
-   * name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the association types
-   *     for
-   * @return the association types for the specified locale sorted by locale ID, sort index, and
-   *     name
-   */
-  @Query(
-      "select at from AssociationType at where upper(at.localeId) = upper(:localeId) order by at.localeId, -at.sortIndex DESC, at.name")
-  List<AssociationType> findByLocaleIdIgnoreCase(String localeId);
 }

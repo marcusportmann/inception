@@ -35,17 +35,4 @@ public interface NextOfKinTypeRepository extends JpaRepository<NextOfKinType, Ne
    */
   @Query("select nok from NextOfKinType nok order by nok.localeId, -nok.sortIndex DESC, nok.name")
   List<NextOfKinType> findAll();
-
-  /**
-   * Retrieve the next of kin types for the specified locale sorted by locale ID, sort index, and
-   * name.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin types
-   *     for
-   * @return the next of kin types for the specified locale sorted by locale ID, sort index, and
-   *     name
-   */
-  @Query(
-      "select nok from NextOfKinType nok where upper(nok.localeId) = upper(:localeId) order by nok.localeId, -nok.sortIndex DESC, nok.name")
-  List<NextOfKinType> findByLocaleIdIgnoreCase(String localeId);
 }
