@@ -72,6 +72,12 @@ import {ReferenceService} from '../services/reference.service';
       </mat-autocomplete>
     </div>
   `,
+  styles: [`
+    .mat-chip {
+      font-weight: normal;
+    }
+  `
+  ],
   providers: [
     {
       provide: MatFormFieldControl,

@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {PartyReferenceService, Person} from 'ngx-inception/party';
-import {Language, ReferenceService} from 'ngx-inception/reference';
-import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {ReferenceService} from 'ngx-inception/reference';
+import {Subscription} from 'rxjs';
 
 /**
  * The PersonComponent class implements the person component.
@@ -41,6 +40,18 @@ export class PersonComponent implements OnInit, OnDestroy {
   languageControl: FormControl = new FormControl('', Validators.required);
 
   nameControl: FormControl = new FormControl({value: '', disabled: true});
+
+  activePanel: number = 0;
+
+  surnameControl: FormControl = new FormControl('', Validators.required);
+
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(private partyReferenceService: PartyReferenceService,
+              private referenceService: ReferenceService) {
+  }
+
+  private _person: Person | null = null;
 
   /**
    * The person.
@@ -65,16 +76,6 @@ export class PersonComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _person: Person | null = null;
-
-  surnameControl: FormControl = new FormControl('', Validators.required);
-
-  private subscriptions: Subscription = new Subscription();
-
-  constructor(private partyReferenceService: PartyReferenceService,
-              private referenceService: ReferenceService) {
-  }
-
   clickMe(): void {
     console.log('[PersonComponent][clickMe] this.countriesOfCitizenshipControl.value = ', this.countriesOfCitizenshipControl.value);
     console.log('[PersonComponent][clickMe] this.givenName.value = ', this.givenNameControl.value);
@@ -83,11 +84,23 @@ export class PersonComponent implements OnInit, OnDestroy {
     console.log('[PersonComponent][clickMe] this.surnameControl.value = ', this.surnameControl.value);
   }
 
+  nextPanel(): void {
+    this.activePanel++;
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
   ngOnInit(): void {
     console.log('[PersonComponent][ngOnInit] this.person = ', this.person);
+  }
+
+  previousPanel(): void {
+    this.activePanel--;
+  }
+
+  setActivePanel(activePanel: number): void {
+    this.activePanel = activePanel;
   }
 }

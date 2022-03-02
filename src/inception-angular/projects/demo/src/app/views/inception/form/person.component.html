@@ -1,10 +1,15 @@
-<mat-tab-group>
-
-
-
-
-
-  <mat-tab label="General">
+<mat-accordion>
+  <!-- General Panel -->
+  <mat-expansion-panel [expanded]="activePanel === 0" (opened)="setActivePanel(0)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Personal Details
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The personal details for the person.
+        <i class="fa fa-user"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
 
     <div class="row">
       <div class="col-sm">
@@ -14,7 +19,6 @@
         </mat-form-field>
       </div>
     </div>
-
     <div class="row">
       <div class="col-sm">
         <mat-form-field>
@@ -64,79 +68,331 @@
       </div>
     </div>
 
+    <mat-action-row>
+      <button mat-button (click)="nextPanel()">Next</button>
+    </mat-action-row>
+  </mat-expansion-panel>
 
+  <mat-expansion-panel [expanded]="activePanel === 1" (opened)="setActivePanel(1)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Attributes
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The attributes for the person.
+        <i class="far fa-list-alt"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
 
-    <input type="button" value="Click Me!" (click)="clickMe()">
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">Next</button>
+    </mat-action-row>
+  </mat-expansion-panel>
 
+  <mat-expansion-panel [expanded]="activePanel === 2" (opened)="setActivePanel(2)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Consents
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The consents provided by the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
 
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
 
-  </mat-tab>
+  <mat-expansion-panel [expanded]="activePanel === 3" (opened)="setActivePanel(3)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Contact Mechanisms
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The contact mechanisms for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
 
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
 
+  <mat-expansion-panel [expanded]="activePanel === 4" (opened)="setActivePanel(4)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Educations
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The educations for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
 
-  <mat-tab label="Attributes">
-    The attributes for the person.
-  </mat-tab>
-  <mat-tab label="Consents" >
-    The consents provided by the person.
-  </mat-tab>
-  <mat-tab label="Contact Mechanisms">
-    The contact mechanisms for the person.
-  </mat-tab>
-  <mat-tab label="Educations">
-    The educations for the person.
-  </mat-tab>
-  <mat-tab label="Employments">
-    The employments for the person.
-  </mat-tab>
-  <mat-tab label="External References">
-    The external references for the person.
-  </mat-tab>
-  <mat-tab label="Identity Documents">
-    The identity documents for the person.
-  </mat-tab>
-  <mat-tab label="Languages">
-    The language proficiencies for the person.
-  </mat-tab>
-  <mat-tab label="Locks">
-    The locks applied to the person.
-  </mat-tab>
-  <mat-tab label="Locks">
-    The locks applied to the person.
-  </mat-tab>
-  <mat-tab label="Next of Kin">
-    The next of kin for the person.
-  </mat-tab>
-  <mat-tab label="Physical Addresses">
-    The physical addresses for the person.
-  </mat-tab>
-  <mat-tab label="Preferences">
-    The preferences for the person.
-  </mat-tab>
-  <mat-tab label="Residence Permits">
-    The residence permits for the person.
-  </mat-tab>
-  <mat-tab label="Roles">
-    The roles assigned directly to the person.
-  </mat-tab>
-  <mat-tab label="Segmentation">
-    The segment allocations for the person.
-  </mat-tab>
-  <mat-tab label="Sources of Funds">
-    The sources of funds for the person.
-  </mat-tab>
-  <mat-tab label="Sources of Wealth">
-    The sources of wealth for the person.
-  </mat-tab>
-  <mat-tab label="Statuses">
-    The statuses assigned to the person.
-  </mat-tab>
-  <mat-tab label="Tax Numbers">
-    The tax numbers for the person.
-  </mat-tab>
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
 
+  <mat-expansion-panel [expanded]="activePanel === 5" (opened)="setActivePanel(5)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Employments
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The employments for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
 
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
 
+  <mat-expansion-panel [expanded]="activePanel === 6" (opened)="setActivePanel(6)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        External References
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The external references for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
 
-</mat-tab-group>
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
 
+  <mat-expansion-panel [expanded]="activePanel === 7" (opened)="setActivePanel(7)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Identity Documents
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The identity documents for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 8" (opened)="setActivePanel(8)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Languages
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The language proficiencies for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 9" (opened)="setActivePanel(9)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Locks
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The locks applied to the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 10" (opened)="setActivePanel(10)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Next of Kin
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The next of kin for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 11" (opened)="setActivePanel(11)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Physical Addresses
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The physical addresses for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 12" (opened)="setActivePanel(12)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Preferences
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The preferences for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 13" (opened)="setActivePanel(13)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Residence Permits
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The residence permits for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 14" (opened)="setActivePanel(14)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Roles
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The roles assigned directly to the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 15" (opened)="setActivePanel(15)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Segmentation
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The segment allocations for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 16" (opened)="setActivePanel(16)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Sources of Funds
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The sources of funds for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 17" (opened)="setActivePanel(17)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Sources of Wealth
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The sources of wealth for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 18" (opened)="setActivePanel(18)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Statuses
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The statuses assigned to the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+      <button mat-button (click)="nextPanel()">End</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="activePanel === 19" (opened)="setActivePanel(19)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Tax Numbers
+      </mat-panel-title>
+      <mat-panel-description class="d-sm-down-none">
+        The tax numbers for the person.
+        <i class="fa fa-user-circle"></i>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <button mat-button (click)="previousPanel()">Previous</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+</mat-accordion>
