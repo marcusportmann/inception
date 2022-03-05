@@ -1197,7 +1197,7 @@
       <column name="type" value="passport"/>
       <column name="country_of_issue" value="GB"/>
       <column name="date_of_issue" value="2015-04-02"/>
-      <column name="number" value="A1234567890"/>
+      <column name="number" value="A12345678"/>
       <column name="date_of_expiry" value="2025-04-02"/>
       <column name="date_provided" value="2020-08-17"/>
     </insert>
@@ -1273,7 +1273,7 @@
       <column name="type" value="za_general_work_visa"/>
       <column name="country_of_issue" value="ZA"/>
       <column name="date_of_issue" value="2003-02-15"/>
-      <column name="number" value="X1234567890"/>
+      <column name="number" value="AA1234567"/>
       <column name="date_of_expiry" value="2030-03-22"/>
     </insert>
     <insert schemaName="party" tableName="roles">

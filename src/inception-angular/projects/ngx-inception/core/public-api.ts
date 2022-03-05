@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 export * from './src/core.module';
 
+export * from './src/cache/services/cache.service';
 
 export * from './src/forms/components/file-upload.component';
 export * from './src/forms/components/group-form-field.component';

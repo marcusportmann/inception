@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -267,10 +267,6 @@ export class GroupFormFieldComponent extends _GroupFormFieldBase
 
   /** Whether there are one or more errors associated with the group form field. */
   _hasError(): boolean {
-    //console.log('this._errorChildren = ', this._errorChildren);
-
-    console.log('this._radioGroupChild = ', this._radioGroupChild);
-
     if (this._errorChildren) {
       if (this._errorChildren.length > 0) {
         return true;

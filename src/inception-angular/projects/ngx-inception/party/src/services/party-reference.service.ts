@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {
-  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, ServiceUnavailableError
+  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, ServiceUnavailableError, CacheService
 } from 'ngx-inception/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
@@ -90,7 +90,8 @@ export class PartyReferenceService {
    * @param httpClient The HTTP client.
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-              @Inject(LOCALE_ID) private localeId: string, private httpClient: HttpClient) {
+              @Inject(LOCALE_ID) private localeId: string, private httpClient: HttpClient,
+              private cacheService: CacheService) {
     console.log('Initializing the Party Reference Service (' + localeId + ')');
   }
 

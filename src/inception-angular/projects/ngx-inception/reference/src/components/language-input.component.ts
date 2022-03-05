@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,7 @@ import {ReferenceService} from '../services/reference.service';
       <mat-autocomplete
         #languageAutocomplete="matAutocomplete"
         [displayWith]="displayLanguage"
+
         (optionSelected)="selectLanguage($event)">
         <mat-option *ngFor="let language of filteredLanguages$ | async" [value]="language">
           {{language.shortName}}
@@ -118,29 +119,6 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
-  /**
-   * Whether the control is disabled.
-   * @private
-   */
-  private _disabled = false;
-
-  /**
-   * The placeholder for the language input.
-   * @private
-   */
-  private _placeholder: string = '';
-
-  /**
-   * Whether the control is required.
-   * @private
-   */
-  private _required: boolean = false;
-
-  /**
-   * The ISO 639-1 alpha-2 code for the selected language.
-   */
-  private _value: string | null = null;
-
   private subscriptions: Subscription = new Subscription();
 
   constructor(private referenceService: ReferenceService,
@@ -154,6 +132,12 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
       this.ngControl.valueAccessor = this;
     }
   }
+
+  /**
+   * Whether the control is disabled.
+   * @private
+   */
+  private _disabled = false;
 
   @Input()
   get disabled(): boolean {
@@ -170,13 +154,11 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
     this.stateChanges.next();
   }
 
-  get empty(): boolean {
-    return this.languageInput.empty;
-  }
-
-  get errorState(): boolean {
-    return this.required && this.languageInput.empty && this.touched;
-  }
+  /**
+   * The placeholder for the language input.
+   * @private
+   */
+  private _placeholder: string = '';
 
   @Input()
   get placeholder() {
@@ -188,6 +170,12 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
     this.stateChanges.next();
   }
 
+  /**
+   * Whether the control is required.
+   * @private
+   */
+  private _required: boolean = false;
+
   @Input()
   get required(): boolean {
     return this._required;
@@ -198,10 +186,10 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
     this.stateChanges.next();
   }
 
-  @HostBinding('class.floating')
-  get shouldLabelFloat() {
-    return this.focused || !this.empty || this.languageInput.focused;
-  }
+  /**
+   * The ISO 639-1 alpha-2 code for the selected language.
+   */
+  private _value: string | null = null;
 
   /**
    * Returns the ISO 639-1 alpha-2 code for the selected language.
@@ -219,19 +207,43 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
    */
   @Input()
   public set value(value: string | null) {
-    if (value !== undefined) {
-      if (this._value !== value) {
-        this._value = value;
+    if (value == undefined) {
+      value = null;
+    }
+
+    if (this._value !== value) {
+      this.referenceService.getLanguages().pipe(first()).subscribe((languages: Map<string, Language>) => {
+        this._value = null;
+        this.languageInput.value = '';
+
+        if (!!value) {
+          for (const language of languages.values()) {
+            if (language.code === value) {
+              this._value = value;
+              this.languageInput.value = language.shortName;
+              break;
+            }
+          }
+        }
+
         this.onChange(this._value);
         this.changeDetectorRef.detectChanges();
         this.stateChanges.next();
-      }
-    } else {
-      this._value = null
-      this.onChange(this._value);
-      this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
+      });
     }
+  }
+
+  get empty(): boolean {
+    return ((this._value == null) || (this._value.length == 0));
+  }
+
+  get errorState(): boolean {
+    return this.required && ((this._value == null) || (this._value.length == 0)) && this.touched;
+  }
+
+  @HostBinding('class.floating')
+  get shouldLabelFloat() {
+    return this.focused || !this.empty || this.languageInput.focused;
   }
 
   displayLanguage(language: Language): string {
@@ -297,6 +309,14 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
+    // If we have cleared the language input then clear the value when losing focus
+    if ((!!this._value) && (!this.languageInput.value)) {
+      this._value = null;
+      this.onChange(this._value);
+      this.changeDetectorRef.detectChanges();
+      this.stateChanges.next();
+    }
+
     this.touched = true;
     this.onTouched();
     this.focused = this.languageInput.focused;
@@ -332,18 +352,18 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
     // controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
+  /**
+   * Writes a new value to the control.
+   *
+   * This method is called by the forms API to write to the view when programmatic changes from
+   * model to view are requested.
+   *
+   * @param value The new value for the control.
+   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeValue(value: any): void {
-    console.log('[LanguageInputComponent][writeValue] value = ', value);
-
     if (typeof value === 'string') {
-      this._value = value as string;
+      this.value = value as string;
     }
-  }
-
-  private _valueChanged(value: string | null) {
-    this.onChange(value);
-    this.changeDetectorRef.detectChanges();
-    this.stateChanges.next();
   }
 }

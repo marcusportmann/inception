@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -246,6 +246,14 @@ export class FileUploadComponent extends _FileUploadMixinBase implements MatForm
     this._renderer.setProperty(this._elementRef.nativeElement, 'disabled', isDisabled);
   }
 
+  /**
+   * Writes a new value to the control.
+   *
+   * This method is called by the forms API to write to the view when programmatic changes from
+   * model to view are requested.
+   *
+   * @param value The new value for the control.
+   */
   writeValue(files: File[] | null): void {
     this._renderer.setProperty(this._elementRef.nativeElement, 'value', files);
   }

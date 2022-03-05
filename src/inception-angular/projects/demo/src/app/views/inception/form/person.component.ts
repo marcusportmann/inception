@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,15 +33,21 @@ import {Subscription} from 'rxjs';
 })
 export class PersonComponent implements OnInit, OnDestroy {
 
+  activePanel: number = 0;
+
   countriesOfCitizenshipControl: FormControl = new FormControl([], Validators.required);
+
+  countryOfBirthControl: FormControl = new FormControl('', Validators.required);
 
   givenNameControl: FormControl = new FormControl('', Validators.required);
 
   languageControl: FormControl = new FormControl('', Validators.required);
 
-  nameControl: FormControl = new FormControl({value: '', disabled: true});
+  maidenNameControl: FormControl = new FormControl('');
 
-  activePanel: number = 0;
+  middleNamesControl: FormControl = new FormControl('');
+
+  nameControl: FormControl = new FormControl({value: '', disabled: true});
 
   surnameControl: FormControl = new FormControl('', Validators.required);
 
@@ -57,31 +63,52 @@ export class PersonComponent implements OnInit, OnDestroy {
    * The person.
    */
   @Input() get person(): Person | null {
+
+    if (this._person != null) {
+      this._person.countriesOfCitizenship = (!!this.countriesOfCitizenshipControl.value) ? this.countriesOfCitizenshipControl.value : [];
+      this._person.countryOfBirth = (!!this.countryOfBirthControl.value) ? this.countryOfBirthControl.value : undefined;
+      this._person.givenName = (!!this.givenNameControl.value) ? this.givenNameControl.value : undefined;
+      this._person.language = (!!this.languageControl.value) ? this.languageControl.value : undefined;
+      this._person.maidenName = (!!this.maidenNameControl.value) ? this.maidenNameControl.value : undefined;
+      this._person.middleNames = (!!this.middleNamesControl.value) ? this.middleNamesControl.value : undefined;
+      this._person.name = (!!this.nameControl.value) ? this.nameControl.value : undefined;
+      this._person.surname = (!!this.surnameControl.value) ? this.surnameControl.value : undefined;
+    }
+
     return this._person;
   }
 
   set person(person: Person | null) {
-    console.log('[PersonComponent][person] person = ', person);
+    if (person != null) {
+      this.countriesOfCitizenshipControl.setValue(person.countriesOfCitizenship);
+      this.countryOfBirthControl.setValue(person.countryOfBirth);
+      this.givenNameControl.setValue(person.givenName);
+      this.languageControl.setValue(person.language);
+      this.maidenNameControl.setValue(person.maidenName);
+      this.middleNamesControl.setValue(person.middleNames);
+      this.nameControl.setValue(person.name);
+      this.surnameControl.setValue(person.surname);
+    }
 
     this._person = person;
-
-    if (person != null) {
-      this.countriesOfCitizenshipControl.setValue(this._person?.countriesOfCitizenship);
-      this.givenNameControl.setValue(this._person?.givenName);
-      this.languageControl.setValue(this._person?.language);
-      this.nameControl.setValue(this._person?.name);
-      this.surnameControl.setValue(this._person?.surname);
-
-
-    }
   }
 
-  clickMe(): void {
-    console.log('[PersonComponent][clickMe] this.countriesOfCitizenshipControl.value = ', this.countriesOfCitizenshipControl.value);
-    console.log('[PersonComponent][clickMe] this.givenName.value = ', this.givenNameControl.value);
-    console.log('[PersonComponent][clickMe] this.languageControl.value = ', this.languageControl.value);
-    console.log('[PersonComponent][clickMe] this.nameControl.value = ', this.nameControl.value);
-    console.log('[PersonComponent][clickMe] this.surnameControl.value = ', this.surnameControl.value);
+  get valid(): boolean {
+    return this.countriesOfCitizenshipControl.valid
+      && this.countryOfBirthControl.valid
+      && this.givenNameControl.valid
+      && this.languageControl.valid
+      && this.maidenNameControl.valid
+      && this.middleNamesControl.valid
+      && this.surnameControl.valid;
+  }
+
+  deriveName(): void {
+    let derivedName: string = this.givenNameControl.value
+      + ((!!this.middleNamesControl.value) ? (' ' + this.middleNamesControl.value + ' ') : ' ')
+      + this.surnameControl.value;
+
+    this.nameControl.setValue(derivedName);
   }
 
   nextPanel(): void {
@@ -93,7 +120,17 @@ export class PersonComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('[PersonComponent][ngOnInit] this.person = ', this.person);
+    this.subscriptions.add(this.givenNameControl.valueChanges.subscribe((value: string) => {
+      this.deriveName();
+    }));
+
+    this.subscriptions.add(this.middleNamesControl.valueChanges.subscribe((value: string) => {
+      this.deriveName();
+    }));
+
+    this.subscriptions.add(this.surnameControl.valueChanges.subscribe((value: string) => {
+      this.deriveName();
+    }));
   }
 
   previousPanel(): void {
@@ -104,3 +141,6 @@ export class PersonComponent implements OnInit, OnDestroy {
     this.activePanel = activePanel;
   }
 }
+
+
+

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,9 +42,9 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
 
   editUserDirectoryForm: FormGroup;
 
-  @ViewChild(InternalUserDirectoryComponent) internalUserDirectory?: InternalUserDirectoryComponent;
+  @ViewChild(InternalUserDirectoryComponent) internalUserDirectoryComponent?: InternalUserDirectoryComponent;
 
-  @ViewChild(LdapUserDirectoryComponent) ldapUserDirectory?: LdapUserDirectoryComponent;
+  @ViewChild(LdapUserDirectoryComponent) ldapUserDirectoryComponent?: LdapUserDirectoryComponent;
 
   nameFormControl: FormControl;
 
@@ -141,10 +141,10 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
       this.userDirectory.name = this.nameFormControl.value;
       this.userDirectory.type = this.userDirectoryTypeFormControl.value;
 
-      if (this.internalUserDirectory) {
-        this.userDirectory.parameters = this.internalUserDirectory.getParameters();
-      } else if (this.ldapUserDirectory) {
-        this.userDirectory.parameters = this.ldapUserDirectory.getParameters();
+      if (this.internalUserDirectoryComponent) {
+        this.userDirectory.parameters = this.internalUserDirectoryComponent.getParameters();
+      } else if (this.ldapUserDirectoryComponent) {
+        this.userDirectory.parameters = this.ldapUserDirectoryComponent.getParameters();
       }
 
       this.spinnerService.showSpinner();
@@ -188,10 +188,10 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
 
     // Populate the nested InternalUserDirectoryComponent or LdapUserDirectoryComponent
     if (this.userDirectory) {
-      if (this.internalUserDirectory) {
-        this.internalUserDirectory.setParameters(this.userDirectory.parameters);
-      } else if (this.ldapUserDirectory) {
-        this.ldapUserDirectory.setParameters(this.userDirectory.parameters);
+      if (this.internalUserDirectoryComponent) {
+        this.internalUserDirectoryComponent.setParameters(this.userDirectory.parameters);
+      } else if (this.ldapUserDirectoryComponent) {
+        this.ldapUserDirectoryComponent.setParameters(this.userDirectory.parameters);
       }
     }
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@ import {RouterModule} from '@angular/router';
 import {
   PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule
 } from 'ngx-perfect-scrollbar';
+import {CacheService} from './cache/services/cache.service';
 import {ConfirmationDialogComponent} from './dialogs/components/confirmation-dialog.component';
 import {ErrorDialogComponent} from './dialogs/components/error-dialog.component';
 import {InformationDialogComponent} from './dialogs/components/information-dialog.component';
@@ -229,6 +230,9 @@ export class CoreModule {
           provide: PERFECT_SCROLLBAR_CONFIG,
           useValue: INCEPTION_PERFECT_SCROLLBAR_CONFIG
         },
+
+        // Cache Services
+        CacheService,
 
         // Dialog Services
         DialogService,

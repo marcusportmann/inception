@@ -40,6 +40,24 @@
       </div>
     </div>
     <div class="row">
+      <div class="col-sm">
+        <mat-form-field>
+          <mat-label>Middle Names</mat-label>
+          <input type="text" matInput [formControl]="middleNamesControl">
+          <mat-error *ngIf="middleNamesControl.errors && !middleNamesControl.untouched">
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm">
+        <mat-form-field>
+          <mat-label>Maiden Name</mat-label>
+          <input type="text" matInput [formControl]="maidenNameControl">
+          <mat-error *ngIf="maidenNameControl.errors && !maidenNameControl.untouched">
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
       <div class="col">
         <mat-form-field>
           <mat-label>Countries of Citizenship</mat-label>
@@ -68,11 +86,29 @@
       </div>
     </div>
 
+
+    <div class="row">
+      <div class="col-sm">
+        <mat-form-field>
+          <mat-label>Country of Birth</mat-label>
+          <country-input [formControl]="countryOfBirthControl" required></country-input>
+          <mat-error *ngIf="countryOfBirthControl.errors && !countryOfBirthControl.untouched">
+            <span *ngIf="countryOfBirthControl.errors?.required">A country of birth is required.</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm">
+
+      </div>
+    </div>
+
+
     <mat-action-row>
       <button mat-button (click)="nextPanel()">Next</button>
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Attributes Panel -->
   <mat-expansion-panel [expanded]="activePanel === 1" (opened)="setActivePanel(1)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -90,6 +126,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Consents Panel -->
   <mat-expansion-panel [expanded]="activePanel === 2" (opened)="setActivePanel(2)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -97,7 +134,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The consents provided by the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="far fa-check-square"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -107,6 +144,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Contact Mechanisms Panel -->
   <mat-expansion-panel [expanded]="activePanel === 3" (opened)="setActivePanel(3)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -114,7 +152,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The contact mechanisms for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-phone"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -124,6 +162,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Educations Panel -->
   <mat-expansion-panel [expanded]="activePanel === 4" (opened)="setActivePanel(4)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -131,7 +170,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The educations for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-university"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -141,6 +180,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Employments Panel -->
   <mat-expansion-panel [expanded]="activePanel === 5" (opened)="setActivePanel(5)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -148,7 +188,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The employments for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-briefcase"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -158,6 +198,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- External References Panel -->
   <mat-expansion-panel [expanded]="activePanel === 6" (opened)="setActivePanel(6)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -165,7 +206,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The external references for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-external-link-alt"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -175,6 +216,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Identity Documents Panel -->
   <mat-expansion-panel [expanded]="activePanel === 7" (opened)="setActivePanel(7)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -182,7 +224,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The identity documents for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="far fa-id-card"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -192,6 +234,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Languages Panel -->
   <mat-expansion-panel [expanded]="activePanel === 8" (opened)="setActivePanel(8)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -199,7 +242,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The language proficiencies for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-language"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -209,6 +252,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Locks Panel -->
   <mat-expansion-panel [expanded]="activePanel === 9" (opened)="setActivePanel(9)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -216,7 +260,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The locks applied to the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-user-lock"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -226,6 +270,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Next of Kin Panel -->
   <mat-expansion-panel [expanded]="activePanel === 10" (opened)="setActivePanel(10)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -233,7 +278,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The next of kin for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-people-arrows"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -243,6 +288,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Physical Addresses -->
   <mat-expansion-panel [expanded]="activePanel === 11" (opened)="setActivePanel(11)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -250,7 +296,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The physical addresses for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-map-marker-alt"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -260,6 +306,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Preferences Panel -->
   <mat-expansion-panel [expanded]="activePanel === 12" (opened)="setActivePanel(12)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -267,7 +314,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The preferences for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-asterisk"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -277,6 +324,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Residence Permits Panel -->
   <mat-expansion-panel [expanded]="activePanel === 13" (opened)="setActivePanel(13)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -284,7 +332,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The residence permits for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="far fa-address-card"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -294,6 +342,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Roles Panel -->
   <mat-expansion-panel [expanded]="activePanel === 14" (opened)="setActivePanel(14)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -301,7 +350,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The roles assigned directly to the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-user-tag"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -311,6 +360,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Segmentation Panel -->
   <mat-expansion-panel [expanded]="activePanel === 15" (opened)="setActivePanel(15)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -318,7 +368,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The segment allocations for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-layer-group"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -328,6 +378,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Sources of Funds Panel -->
   <mat-expansion-panel [expanded]="activePanel === 16" (opened)="setActivePanel(16)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -335,7 +386,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The sources of funds for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-wallet"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -345,6 +396,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Sources of Wealth Panel -->
   <mat-expansion-panel [expanded]="activePanel === 17" (opened)="setActivePanel(17)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -352,7 +404,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The sources of wealth for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-coins"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -362,6 +414,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Status Panel -->
   <mat-expansion-panel [expanded]="activePanel === 18" (opened)="setActivePanel(18)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -369,7 +422,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The statuses assigned to the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-toggle-off"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -379,6 +432,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <!-- Tax Numbers Panel -->
   <mat-expansion-panel [expanded]="activePanel === 19" (opened)="setActivePanel(19)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -386,7 +440,7 @@
       </mat-panel-title>
       <mat-panel-description class="d-sm-down-none">
         The tax numbers for the person.
-        <i class="fa fa-user-circle"></i>
+        <i class="fas fa-globe"></i>
       </mat-panel-description>
     </mat-expansion-panel-header>
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -22,6 +22,7 @@ import {
 } from 'ngx-inception/party';
 import {forkJoin, Subscription} from "rxjs";
 import {first} from 'rxjs/operators';
+import {PersonComponent} from './person.component';
 
 /**
  * The PersonFormComponent class implements the person form component.
@@ -35,7 +36,7 @@ export class PersonFormComponent implements OnInit, OnDestroy {
 
   personForm: FormGroup;
 
-  person: Person | null = null;
+  @ViewChild(PersonComponent) personComponent?: PersonComponent;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -56,11 +57,17 @@ export class PersonFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.partyService.getPerson('21166574-6564-468a-b845-8a5c127a4345').pipe(first()).subscribe((person: Person) => {
-      this.person = person;
+      if (this.personComponent) {
+        this.personComponent.person = person;
+      }
     });
   }
 
   ok(): void {
+
+    console.log('person = ', this.personComponent?.person);
+
+    /*
     forkJoin({
       party: this.partyService.getParty('21166574-6564-468a-b845-8a5c127a4345'),
       parties: this.partyService.getParties(),
@@ -95,7 +102,7 @@ export class PersonFormComponent implements OnInit, OnDestroy {
         }
       });
     });
-
+    */
 
   }
 }

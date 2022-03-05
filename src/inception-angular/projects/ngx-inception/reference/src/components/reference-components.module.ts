@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,13 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatInputModule} from '@angular/material/input';
 import {ReferenceServicesModule} from '../services/reference-services.module';
 import {CountriesChipListComponent} from './countries-chip-list.component';
+import {CountryInputComponent} from './country-input.component';
 import {LanguageInputComponent} from './language-input.component';
 
 @NgModule({
   declarations: [
     // Components
-    CountriesChipListComponent, LanguageInputComponent
+    CountriesChipListComponent, CountryInputComponent, LanguageInputComponent
   ],
   imports: [
     // Angular modules
@@ -39,7 +40,7 @@ import {LanguageInputComponent} from './language-input.component';
     MatAutocompleteModule, MatChipsModule, MatInputModule
   ],
   exports: [
-    CountriesChipListComponent, LanguageInputComponent
+    CountriesChipListComponent, CountryInputComponent, LanguageInputComponent
   ]
 })
 export class ReferenceComponentsModule {

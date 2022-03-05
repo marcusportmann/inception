@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 
 export * from './src/components/countries-chip-list.component';
+export * from './src/components/country-input.component';
 export * from './src/components/language-input.component';
 export * from './src/components/reference-components.module';
 

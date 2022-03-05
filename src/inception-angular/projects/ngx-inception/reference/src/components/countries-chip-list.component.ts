@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Marcus Portmann
+ * Copyright 2022 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -244,31 +244,40 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
    */
   @Input()
   public set value(countryCodes: string[] | null) {
-    if (countryCodes !== undefined) {
-      if (this._value !== countryCodes) {
-        this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
-          this._countries = [];
-          this._value = [];
+    if (countryCodes == undefined) {
+      countryCodes = null;
+    }
 
-          if (!!countryCodes) {
-            for (const countryCode of countryCodes) {
-              let country: Country | undefined = countries.get(countryCode);
+    if (this._value !== countryCodes) {
+      this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
+        this._countries = [];
+        this._value = [];
 
-              if (!!country) {
-                this.countries.push(country);
-                this._value.push(country.code);
-              }
+        if (!!countryCodes) {
+          for (const countryCode of countryCodes) {
+            let country: Country | undefined = countries.get(countryCode);
+
+            if (!!country) {
+              this.countries.push(country);
+              this._value.push(country.code);
             }
-
-            this._valueChanged(this._value);
           }
-        });
-      }
+        }
+
+        this._valueChanged(this._value);
+      });
+    }
+
+
+    /*
+    if (countryCodes !== undefined) {
+
     } else {
       this._countries = [];
       this._value = [];
       this._valueChanged(this._value);
     }
+    */
   }
 
   get empty(): boolean {
@@ -378,6 +387,14 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
     // controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
+  /**
+   * Writes a new value to the control.
+   *
+   * This method is called by the forms API to write to the view when programmatic changes from
+   * model to view are requested.
+   *
+   * @param value The new value for the control.
+   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeValue(value: any): void {
     if (typeof value === 'string') {
