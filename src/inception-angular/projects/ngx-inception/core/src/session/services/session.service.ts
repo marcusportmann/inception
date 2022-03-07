@@ -91,24 +91,24 @@ export class SessionService {
         if (httpErrorResponse.error && (httpErrorResponse.error.error === 'invalid_grant') &&
           httpErrorResponse.error.error_description) {
           if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
-            return throwError(new LoginError(httpErrorResponse));
+            return throwError(() => new LoginError(httpErrorResponse));
           } else if (httpErrorResponse.error.error_description.includes('User locked')) {
-            return throwError(new UserLockedError(httpErrorResponse));
+            return throwError(() => new UserLockedError(httpErrorResponse));
           } else if (httpErrorResponse.error.error_description.includes('Credentials expired')) {
-            return throwError(new PasswordExpiredError(httpErrorResponse));
+            return throwError(() => new PasswordExpiredError(httpErrorResponse));
           }
         }
 
-        return throwError(new LoginError(httpErrorResponse));
+        return throwError(() => new LoginError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to login', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to login', httpErrorResponse));
     }));
   }
 

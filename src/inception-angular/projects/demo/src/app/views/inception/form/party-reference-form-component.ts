@@ -579,7 +579,7 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.partyReferenceService.getAssociationPropertyTypes().pipe(first()).subscribe((associationPropertyTypes: AssociationPropertyType[]) => {
+    this.partyReferenceService.getAssociationPropertyTypes().pipe(first()).subscribe((associationPropertyTypes: Map<string, AssociationPropertyType>) => {
       const associationPropertyTypeControl = this.partyReferenceForm.get('associationPropertyType');
 
       if (associationPropertyTypeControl) {
@@ -588,17 +588,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | AssociationPropertyType) => {
             if (typeof (value) === 'string') {
-              this.filteredAssociationPropertyTypes$.next(associationPropertyTypes.filter(
-                associationPropertyType => associationPropertyType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredAssociationPropertyTypes$.next(associationPropertyTypes.filter(
-                associationPropertyType => associationPropertyType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredAssociationPropertyTypes: AssociationPropertyType[] = [];
+
+            for (const associationPropertyType of associationPropertyTypes.values()) {
+              if (associationPropertyType.name.toLowerCase().indexOf(value) === 0) {
+                filteredAssociationPropertyTypes.push(associationPropertyType);
+              }
+            }
+
+            this.filteredAssociationPropertyTypes$.next(filteredAssociationPropertyTypes);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getAssociationTypes().pipe(first()).subscribe((associationTypes: AssociationType[]) => {
+    this.partyReferenceService.getAssociationTypes().pipe(first()).subscribe((associationTypes: Map<string, AssociationType>) => {
       const associationTypeControl = this.partyReferenceForm.get('associationType');
 
       if (associationTypeControl) {
@@ -607,17 +615,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | AssociationType) => {
             if (typeof (value) === 'string') {
-              this.filteredAssociationTypes$.next(associationTypes.filter(
-                associationType => associationType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredAssociationTypes$.next(associationTypes.filter(
-                associationType => associationType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredAssociationTypes: AssociationType[] = [];
+
+            for (const associationType of associationTypes.values()) {
+              if (associationType.name.toLowerCase().indexOf(value) === 0) {
+                filteredAssociationTypes.push(associationType);
+              }
+            }
+
+            this.filteredAssociationTypes$.next(filteredAssociationTypes);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getAttributeTypeCategories().pipe(first()).subscribe((attributeTypeCategories: AttributeTypeCategory[]) => {
+    this.partyReferenceService.getAttributeTypeCategories().pipe(first()).subscribe((attributeTypeCategories: Map<string, AttributeTypeCategory>) => {
       const attributeTypeCategoryControl = this.partyReferenceForm.get('attributeTypeCategory');
 
       if (attributeTypeCategoryControl) {
@@ -626,17 +642,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | AttributeTypeCategory) => {
             if (typeof (value) === 'string') {
-              this.filteredAttributeTypeCategories$.next(attributeTypeCategories.filter(
-                attributeTypeCategory => attributeTypeCategory.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredAttributeTypeCategories$.next(attributeTypeCategories.filter(
-                attributeTypeCategory => attributeTypeCategory.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredAttributeTypeCategories: AttributeTypeCategory[] = [];
+
+            for (const attributeTypeCategory of attributeTypeCategories.values()) {
+              if (attributeTypeCategory.name.toLowerCase().indexOf(value) === 0) {
+                filteredAttributeTypeCategories.push(attributeTypeCategory);
+              }
+            }
+
+            this.filteredAttributeTypeCategories$.next(filteredAttributeTypeCategories);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getAttributeTypes().pipe(first()).subscribe((attributeTypes: AttributeType[]) => {
+    this.partyReferenceService.getAttributeTypes().pipe(first()).subscribe((attributeTypes: Map<string, AttributeType>) => {
       const attributeTypeControl = this.partyReferenceForm.get('attributeType');
 
       if (attributeTypeControl) {
@@ -645,17 +669,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | AttributeType) => {
             if (typeof (value) === 'string') {
-              this.filteredAttributeTypes$.next(attributeTypes.filter(
-                attributeType => attributeType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredAttributeTypes$.next(attributeTypes.filter(
-                attributeType => attributeType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredAttributeTypes: AttributeType[] = [];
+
+            for (const attributeType of attributeTypes.values()) {
+              if (attributeType.name.toLowerCase().indexOf(value) === 0) {
+                filteredAttributeTypes.push(attributeType);
+              }
+            }
+
+            this.filteredAttributeTypes$.next(filteredAttributeTypes);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getConsentTypes().pipe(first()).subscribe((consentTypes: ConsentType[]) => {
+    this.partyReferenceService.getConsentTypes().pipe(first()).subscribe((consentTypes: Map<string, ConsentType>) => {
       const consentTypeControl = this.partyReferenceForm.get('consentType');
 
       if (consentTypeControl) {
@@ -664,17 +696,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | ConsentType) => {
             if (typeof (value) === 'string') {
-              this.filteredConsentTypes$.next(consentTypes.filter(
-                attributeType => attributeType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredConsentTypes$.next(consentTypes.filter(
-                attributeType => attributeType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredConsentTypes: ConsentType[] = [];
+
+            for (const consentType of consentTypes.values()) {
+              if (consentType.name.toLowerCase().indexOf(value) === 0) {
+                filteredConsentTypes.push(consentType);
+              }
+            }
+
+            this.filteredConsentTypes$.next(filteredConsentTypes);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getContactMechanismPurposes().pipe(first()).subscribe((contactMechanismPurposes: ContactMechanismPurpose[]) => {
+    this.partyReferenceService.getContactMechanismPurposes().pipe(first()).subscribe((contactMechanismPurposes: Map<string, ContactMechanismPurpose>) => {
       const contactMechanismPurposeControl = this.partyReferenceForm.get('contactMechanismPurpose');
 
       if (contactMechanismPurposeControl) {
@@ -683,17 +723,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | ContactMechanismPurpose) => {
             if (typeof (value) === 'string') {
-              this.filteredContactMechanismPurposes$.next(contactMechanismPurposes.filter(
-                contactMechanismPurpose => contactMechanismPurpose.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredContactMechanismPurposes$.next(contactMechanismPurposes.filter(
-                contactMechanismPurpose => contactMechanismPurpose.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredContactMechanismPurposes: ContactMechanismPurpose[] = [];
+
+            for (const contactMechanismPurpose of contactMechanismPurposes.values()) {
+              if (contactMechanismPurpose.name.toLowerCase().indexOf(value) === 0) {
+                filteredContactMechanismPurposes.push(contactMechanismPurpose);
+              }
+            }
+
+            this.filteredContactMechanismPurposes$.next(filteredContactMechanismPurposes);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getContactMechanismRoles().pipe(first()).subscribe((contactMechanismRoles: ContactMechanismRole[]) => {
+    this.partyReferenceService.getContactMechanismRoles().pipe(first()).subscribe((contactMechanismRoles: Map<string, ContactMechanismRole>) => {
       const contactMechanismRoleControl = this.partyReferenceForm.get('contactMechanismRole');
 
       if (contactMechanismRoleControl) {
@@ -702,17 +750,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | ContactMechanismRole) => {
             if (typeof (value) === 'string') {
-              this.filteredContactMechanismRoles$.next(contactMechanismRoles.filter(
-                contactMechanismRole => contactMechanismRole.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredContactMechanismRoles$.next(contactMechanismRoles.filter(
-                contactMechanismRole => contactMechanismRole.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredContactMechanismRoles: ContactMechanismRole[] = [];
+
+            for (const contactMechanismRole of contactMechanismRoles.values()) {
+              if (contactMechanismRole.name.toLowerCase().indexOf(value) === 0) {
+                filteredContactMechanismRoles.push(contactMechanismRole);
+              }
+            }
+
+            this.filteredContactMechanismRoles$.next(filteredContactMechanismRoles);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getContactMechanismTypes().pipe(first()).subscribe((contactMechanismTypes: ContactMechanismType[]) => {
+    this.partyReferenceService.getContactMechanismTypes().pipe(first()).subscribe((contactMechanismTypes: Map<string, ContactMechanismType>) => {
       const contactMechanismTypeControl = this.partyReferenceForm.get('contactMechanismType');
 
       if (contactMechanismTypeControl) {
@@ -721,17 +777,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | ContactMechanismType) => {
             if (typeof (value) === 'string') {
-              this.filteredContactMechanismTypes$.next(contactMechanismTypes.filter(
-                contactMechanismType => contactMechanismType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredContactMechanismTypes$.next(contactMechanismTypes.filter(
-                contactMechanismType => contactMechanismType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredContactMechanismTypes: ContactMechanismType[] = [];
+
+            for (const contactMechanismType of contactMechanismTypes.values()) {
+              if (contactMechanismType.name.toLowerCase().indexOf(value) === 0) {
+                filteredContactMechanismTypes.push(contactMechanismType);
+              }
+            }
+
+            this.filteredContactMechanismTypes$.next(filteredContactMechanismTypes);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getEmploymentStatuses().pipe(first()).subscribe((employmentStatuses: EmploymentStatus[]) => {
+    this.partyReferenceService.getEmploymentStatuses().pipe(first()).subscribe((employmentStatuses: Map<string, EmploymentStatus>) => {
       const employmentStatusControl = this.partyReferenceForm.get('employmentStatus');
 
       if (employmentStatusControl) {
@@ -740,17 +804,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | EmploymentStatus) => {
             if (typeof (value) === 'string') {
-              this.filteredEmploymentStatuses$.next(employmentStatuses.filter(
-                employmentStatus => employmentStatus.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredEmploymentStatuses$.next(employmentStatuses.filter(
-                employmentStatus => employmentStatus.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredEmploymentStatuses: EmploymentStatus[] = [];
+
+            for (const employmentStatus of employmentStatuses.values()) {
+              if (employmentStatus.name.toLowerCase().indexOf(value) === 0) {
+                filteredEmploymentStatuses.push(employmentStatus);
+              }
+            }
+
+            this.filteredEmploymentStatuses$.next(filteredEmploymentStatuses);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getEmploymentTypes().pipe(first()).subscribe((employmentTypes: EmploymentType[]) => {
+    this.partyReferenceService.getEmploymentTypes().pipe(first()).subscribe((employmentTypes: Map<string, EmploymentType>) => {
       const employmentTypeControl = this.partyReferenceForm.get('employmentType');
 
       if (employmentTypeControl) {
@@ -759,17 +831,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | EmploymentType) => {
             if (typeof (value) === 'string') {
-              this.filteredEmploymentTypes$.next(employmentTypes.filter(
-                employmentType => employmentType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredEmploymentTypes$.next(employmentTypes.filter(
-                employmentType => employmentType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredEmploymentTypes: EmploymentType[] = [];
+
+            for (const employmentType of employmentTypes.values()) {
+              if (employmentType.name.toLowerCase().indexOf(value) === 0) {
+                filteredEmploymentTypes.push(employmentType);
+              }
+            }
+
+            this.filteredEmploymentTypes$.next(filteredEmploymentTypes);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getExternalReferenceTypes().pipe(first()).subscribe((externalReferenceTypes: ExternalReferenceType[]) => {
+    this.partyReferenceService.getExternalReferenceTypes().pipe(first()).subscribe((externalReferenceTypes: Map<string, ExternalReferenceType>) => {
       const externalReferenceTypeControl = this.partyReferenceForm.get('externalReferenceType');
 
       if (externalReferenceTypeControl) {
@@ -778,17 +858,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | ExternalReferenceType) => {
             if (typeof (value) === 'string') {
-              this.filteredExternalReferenceTypes$.next(externalReferenceTypes.filter(
-                attributeType => attributeType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredExternalReferenceTypes$.next(externalReferenceTypes.filter(
-                attributeType => attributeType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredExternalReferenceTypes: ExternalReferenceType[] = [];
+
+            for (const externalReferenceType of externalReferenceTypes.values()) {
+              if (externalReferenceType.name.toLowerCase().indexOf(value) === 0) {
+                filteredExternalReferenceTypes.push(externalReferenceType);
+              }
+            }
+
+            this.filteredExternalReferenceTypes$.next(filteredExternalReferenceTypes);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getFieldsOfStudy().pipe(first()).subscribe((fieldsOfStudy: FieldOfStudy[]) => {
+    this.partyReferenceService.getFieldsOfStudy().pipe(first()).subscribe((fieldsOfStudy: Map<string, FieldOfStudy>) => {
       const fieldOfStudyControl = this.partyReferenceForm.get('fieldOfStudy');
 
       if (fieldOfStudyControl) {
@@ -797,17 +885,25 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | FieldOfStudy) => {
             if (typeof (value) === 'string') {
-              this.filteredFieldsOfStudy$.next(fieldsOfStudy.filter(
-                fieldOfStudy => fieldOfStudy.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredFieldsOfStudy$.next(fieldsOfStudy.filter(
-                fieldOfStudy => fieldOfStudy.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredFieldsOfStudy: FieldOfStudy[] = [];
+
+            for (const fieldOfStudy of fieldsOfStudy.values()) {
+              if (fieldOfStudy.name.toLowerCase().indexOf(value) === 0) {
+                filteredFieldsOfStudy.push(fieldOfStudy);
+              }
+            }
+
+            this.filteredFieldsOfStudy$.next(filteredFieldsOfStudy);
           })).subscribe());
       }
     });
 
-    this.partyReferenceService.getGenders().pipe(first()).subscribe((genders: Gender[]) => {
+    this.partyReferenceService.getGenders().pipe(first()).subscribe((genders: Map<string, Gender>) => {
       const genderControl = this.partyReferenceForm.get('gender');
 
       if (genderControl) {
@@ -816,12 +912,20 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           debounceTime(500),
           map((value: string | Gender) => {
             if (typeof (value) === 'string') {
-              this.filteredGenders$.next(genders.filter(
-                gender => gender.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              value = value.toLowerCase();
             } else {
-              this.filteredGenders$.next(genders.filter(
-                gender => gender.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              value = value.name.toLowerCase();
             }
+
+            let filteredGenders: Gender[] = [];
+
+            for (const gender of genders.values()) {
+              if (gender.name.toLowerCase().indexOf(value) === 0) {
+                filteredGenders.push(gender);
+              }
+            }
+
+            this.filteredGenders$.next(filteredGenders);
           })).subscribe());
       }
     });
@@ -882,7 +986,6 @@ export class PartyReferenceFormComponent implements OnInit, OnDestroy {
           })).subscribe());
       }
     });
-
 
 
     this.partyReferenceService.getIndustryClassificationSystems().pipe(first()).subscribe((industryClassificationSystems: IndustryClassificationSystem[]) => {

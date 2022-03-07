@@ -74,16 +74,16 @@ export class MailService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateMailTemplateError.TYPE)) {
-        return throwError(new MailTemplateNotFoundError(httpErrorResponse));
+        return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to create the mail template.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to create the mail template.', httpErrorResponse));
     }));
   }
 
@@ -101,16 +101,16 @@ export class MailService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, MailTemplateNotFoundError.TYPE)) {
-        return throwError(new MailTemplateNotFoundError(httpErrorResponse));
+        return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to delete the mail template.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to delete the mail template.', httpErrorResponse));
     }));
   }
 
@@ -128,16 +128,16 @@ export class MailService {
       return mailTemplate;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, MailTemplateNotFoundError.TYPE)) {
-        return throwError(new MailTemplateNotFoundError(httpErrorResponse));
+        return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the mail template.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mail template.', httpErrorResponse));
     }));
   }
 
@@ -156,16 +156,16 @@ export class MailService {
       return mailTemplateName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, MailTemplateNotFoundError.TYPE)) {
-        return throwError(new MailTemplateNotFoundError(httpErrorResponse));
+        return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the mail template name.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mail template name.', httpErrorResponse));
     }));
   }
 
@@ -181,12 +181,12 @@ export class MailService {
       return mailTemplateSummaries;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the mail templates.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the summaries for the mail templates.', httpErrorResponse));
     }));
   }
 
@@ -201,12 +201,12 @@ export class MailService {
       return mailTemplates;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the mail templates.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mail templates.', httpErrorResponse));
     }));
   }
 
@@ -225,16 +225,16 @@ export class MailService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, MailTemplateNotFoundError.TYPE)) {
-        return throwError(new MailTemplateNotFoundError(httpErrorResponse));
+        return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to update the mail template.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to update the mail template.', httpErrorResponse));
     }));
   }
 }

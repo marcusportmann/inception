@@ -64,16 +64,16 @@ export class ReportingService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateReportDefinitionError.TYPE)) {
-        return throwError(new DuplicateReportDefinitionError(httpErrorResponse));
+        return throwError(() => new DuplicateReportDefinitionError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to create the report definition.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to create the report definition.', httpErrorResponse));
     }));
   }
 
@@ -92,16 +92,16 @@ export class ReportingService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, ReportDefinitionNotFoundError.TYPE)) {
-        return throwError(new ReportDefinitionNotFoundError(httpErrorResponse));
+        return throwError(() => new ReportDefinitionNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to delete the report definition.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to delete the report definition.', httpErrorResponse));
     }));
   }
 
@@ -120,16 +120,16 @@ export class ReportingService {
       return reportDefinition;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, ReportDefinitionNotFoundError.TYPE)) {
-        return throwError(new ReportDefinitionNotFoundError(httpErrorResponse));
+        return throwError(() => new ReportDefinitionNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the report definition.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the report definition.', httpErrorResponse));
     }));
   }
 
@@ -148,16 +148,16 @@ export class ReportingService {
       return reportDefinitionName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, ReportDefinitionNotFoundError.TYPE)) {
-        return throwError(new ReportDefinitionNotFoundError(httpErrorResponse));
+        return throwError(() => new ReportDefinitionNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the report definition name.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the report definition name.', httpErrorResponse));
     }));
   }
 
@@ -173,12 +173,12 @@ export class ReportingService {
       return reportDefinitionSummaries;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the report definitions.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the summaries for the report definitions.', httpErrorResponse));
     }));
   }
 
@@ -194,12 +194,12 @@ export class ReportingService {
       return reportDefinitions;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the report definitions.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the report definitions.', httpErrorResponse));
     }));
   }
 
@@ -218,16 +218,16 @@ export class ReportingService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, ReportDefinitionNotFoundError.TYPE)) {
-        return throwError(new ReportDefinitionNotFoundError(httpErrorResponse));
+        return throwError(() => new ReportDefinitionNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to update the report definition.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to update the report definition.', httpErrorResponse));
     }));
   }
 }

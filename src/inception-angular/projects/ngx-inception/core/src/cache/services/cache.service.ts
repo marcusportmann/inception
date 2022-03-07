@@ -57,7 +57,7 @@ export class CacheService {
    *
    * @param key The key identifying the cached value.
    *
-   * @return The cached value or null if the cached value could not be found.
+   * @return The cached value or undefined if the cached value could not be found.
    */
   get(key: string): any | undefined {
     return this.cache.get(key);

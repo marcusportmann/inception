@@ -59,16 +59,16 @@ export class ConfigService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, ConfigNotFoundError.TYPE)) {
-        return throwError(new ConfigNotFoundError(httpErrorResponse));
+        return throwError(() => new ConfigNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to delete the config.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to delete the config.', httpErrorResponse));
     }));
   }
 
@@ -86,16 +86,16 @@ export class ConfigService {
       return config;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, ConfigNotFoundError.TYPE)) {
-        return throwError(new ConfigNotFoundError(httpErrorResponse));
+        return throwError(() => new ConfigNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the config.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the config.', httpErrorResponse));
     }));
   }
 
@@ -114,16 +114,16 @@ export class ConfigService {
       return value;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, ConfigNotFoundError.TYPE)) {
-        return throwError(new ConfigNotFoundError(httpErrorResponse));
+        return throwError(() => new ConfigNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the config value.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the config value.', httpErrorResponse));
     }));
   }
 
@@ -139,12 +139,12 @@ export class ConfigService {
       return configs;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the configs.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the configs.', httpErrorResponse));
     }));
   }
 
@@ -162,14 +162,14 @@ export class ConfigService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to save the config.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to save the config.', httpErrorResponse));
     }));
   }
 }

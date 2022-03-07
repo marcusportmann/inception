@@ -196,38 +196,6 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Lock type category</mat-label>
-            <input type="text" matInput formControlName="lockTypeCategory" autocompleteSelectionRequired [matAutocomplete]="lockTypeCategoryAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #lockTypeCategoryAutocomplete="matAutocomplete" [displayWith]="displayLockTypeCategory">
-              <mat-option *ngFor="let lockTypeCategory of filteredLockTypeCategories$ | async" [value]="lockTypeCategory">
-                {{lockTypeCategory.name}}
-              </mat-option>
-            </mat-autocomplete>
-            <mat-error *ngIf="partyReferenceForm.controls['lockTypeCategory'].errors && !partyReferenceForm.controls['lockTypeCategory'].untouched">
-              <span *ngIf="partyReferenceForm.controls['lockTypeCategory'].errors?.required">A lock type category is required.</span>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm">
-          <mat-form-field>
-            <mat-label>Lock type</mat-label>
-            <input type="text" matInput formControlName="lockType" autocompleteSelectionRequired [matAutocomplete]="lockTypeAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #lockTypeAutocomplete="matAutocomplete" [displayWith]="displayLockType">
-              <mat-option *ngFor="let lockType of filteredLockTypes$ | async" [value]="lockType">
-                {{lockType.name}}
-              </mat-option>
-            </mat-autocomplete>
-            <mat-error *ngIf="partyReferenceForm.controls['lockType'].errors && !partyReferenceForm.controls['lockType'].untouched">
-              <span *ngIf="partyReferenceForm.controls['lockType'].errors?.required">A lock type is required.</span>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm">
-          <mat-form-field>
             <mat-label>Gender</mat-label>
             <input type="text" matInput formControlName="gender" autocompleteSelectionRequired [matAutocomplete]="genderAutocomplete">
             <mat-autocomplete autoActiveFirstOption #genderAutocomplete="matAutocomplete" [displayWith]="displayGender">
@@ -301,6 +269,38 @@
             </mat-autocomplete>
             <mat-error *ngIf="partyReferenceForm.controls['industryClassificationSystem'].errors && !partyReferenceForm.controls['industryClassificationSystem'].untouched">
               <span *ngIf="partyReferenceForm.controls['industryClassificationSystem'].errors?.required">An industry classification system is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Lock type category</mat-label>
+            <input type="text" matInput formControlName="lockTypeCategory" autocompleteSelectionRequired [matAutocomplete]="lockTypeCategoryAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #lockTypeCategoryAutocomplete="matAutocomplete" [displayWith]="displayLockTypeCategory">
+              <mat-option *ngFor="let lockTypeCategory of filteredLockTypeCategories$ | async" [value]="lockTypeCategory">
+                {{lockTypeCategory.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="partyReferenceForm.controls['lockTypeCategory'].errors && !partyReferenceForm.controls['lockTypeCategory'].untouched">
+              <span *ngIf="partyReferenceForm.controls['lockTypeCategory'].errors?.required">A lock type category is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Lock type</mat-label>
+            <input type="text" matInput formControlName="lockType" autocompleteSelectionRequired [matAutocomplete]="lockTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #lockTypeAutocomplete="matAutocomplete" [displayWith]="displayLockType">
+              <mat-option *ngFor="let lockType of filteredLockTypes$ | async" [value]="lockType">
+                {{lockType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="partyReferenceForm.controls['lockType'].errors && !partyReferenceForm.controls['lockType'].untouched">
+              <span *ngIf="partyReferenceForm.controls['lockType'].errors?.required">A lock type is required.</span>
             </mat-error>
           </mat-form-field>
         </div>

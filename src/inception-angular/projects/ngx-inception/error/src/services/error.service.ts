@@ -63,14 +63,14 @@ export class ErrorService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to send the error report.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to send the error report.', httpErrorResponse));
     }));
   }
 }

@@ -17,9 +17,10 @@
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {
-  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, ServiceUnavailableError, CacheService
+  AccessDeniedError, CacheService, CommunicationError, INCEPTION_CONFIG, InceptionConfig,
+  ServiceUnavailableError
 } from 'ngx-inception/core';
-import {Observable, throwError} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {AssociationPropertyType} from "./association-property-type";
 import {AssociationType} from "./association-type";
@@ -100,24 +101,37 @@ export class PartyReferenceService {
    *
    * @return The association property types.
    */
-  getAssociationPropertyTypes(): Observable<AssociationPropertyType[]> {
-    let params = new HttpParams();
+  getAssociationPropertyTypes(): Observable<Map<string, AssociationPropertyType>> {
+    let cachedAssociationPropertyTypes: Map<string, AssociationPropertyType> = this.cacheService.get('associationPropertyTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedAssociationPropertyTypes !== undefined) {
+      return of(cachedAssociationPropertyTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<AssociationPropertyType[]>(this.config.partyReferenceApiUrlPrefix + '/association-property-types',
-      {params, reportProgress: true})
-    .pipe(map((associationPropertyTypes: AssociationPropertyType[]) => {
-      return associationPropertyTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the association property types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<AssociationPropertyType[]>(this.config.partyReferenceApiUrlPrefix + '/association-property-types',
+        {params, reportProgress: true})
+      .pipe(map((associationPropertyTypes: AssociationPropertyType[]) => {
+        cachedAssociationPropertyTypes = new Map<string, AssociationPropertyType>();
+
+        for (const associationPropertyType of associationPropertyTypes) {
+          cachedAssociationPropertyTypes.set(associationPropertyType.code, associationPropertyType);
+        }
+
+        this.cacheService.set('associationPropertyTypes', cachedAssociationPropertyTypes);
+        return cachedAssociationPropertyTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the association property types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -125,24 +139,37 @@ export class PartyReferenceService {
    *
    * @return The association types.
    */
-  getAssociationTypes(): Observable<AssociationType[]> {
-    let params = new HttpParams();
+  getAssociationTypes(): Observable<Map<string, AssociationType>> {
+    let cachedAssociationTypes: Map<string, AssociationType> = this.cacheService.get('associationTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedAssociationTypes !== undefined) {
+      return of(cachedAssociationTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<AssociationType[]>(this.config.partyReferenceApiUrlPrefix + '/association-types',
-      {params, reportProgress: true})
-    .pipe(map((associationTypes: AssociationType[]) => {
-      return associationTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the association types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<AssociationType[]>(this.config.partyReferenceApiUrlPrefix + '/association-types',
+        {params, reportProgress: true})
+      .pipe(map((associationTypes: AssociationType[]) => {
+        cachedAssociationTypes = new Map<string, AssociationType>();
+
+        for (const associationType of associationTypes) {
+          cachedAssociationTypes.set(associationType.code, associationType);
+        }
+
+        this.cacheService.set('associationTypes', cachedAssociationTypes);
+        return cachedAssociationTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the association types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -150,24 +177,37 @@ export class PartyReferenceService {
    *
    * @return The attribute type categories.
    */
-  getAttributeTypeCategories(): Observable<AttributeTypeCategory[]> {
-    let params = new HttpParams();
+  getAttributeTypeCategories(): Observable<Map<string, AttributeTypeCategory>> {
+    let cachedAttributeTypeCategories: Map<string, AttributeTypeCategory> = this.cacheService.get('attributeTypeCategories');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedAttributeTypeCategories !== undefined) {
+      return of(cachedAttributeTypeCategories);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<AttributeTypeCategory[]>(this.config.partyReferenceApiUrlPrefix + '/attribute-type-categories',
-      {params, reportProgress: true})
-    .pipe(map((attributeTypeCategories: AttributeTypeCategory[]) => {
-      return attributeTypeCategories;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the attribute type categories.', httpErrorResponse));
-    }));
+      return this.httpClient.get<AttributeTypeCategory[]>(this.config.partyReferenceApiUrlPrefix + '/attribute-type-categories',
+        {params, reportProgress: true})
+      .pipe(map((attributeTypeCategories: AttributeTypeCategory[]) => {
+        cachedAttributeTypeCategories = new Map<string, AttributeTypeCategory>();
+
+        for (const attributeTypeCategory of attributeTypeCategories) {
+          cachedAttributeTypeCategories.set(attributeTypeCategory.code, attributeTypeCategory);
+        }
+
+        this.cacheService.set('attributeTypeCategories', cachedAttributeTypeCategories);
+        return cachedAttributeTypeCategories;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the attribute type categories.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -175,24 +215,37 @@ export class PartyReferenceService {
    *
    * @return The attribute types.
    */
-  getAttributeTypes(): Observable<AttributeType[]> {
-    let params = new HttpParams();
+  getAttributeTypes(): Observable<Map<string, AttributeType>> {
+    let cachedAttributeTypes: Map<string, AttributeType> = this.cacheService.get('attributeTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedAttributeTypes !== undefined) {
+      return of(cachedAttributeTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<AttributeType[]>(this.config.partyReferenceApiUrlPrefix + '/attribute-types',
-      {params, reportProgress: true})
-    .pipe(map((attributeTypes: AttributeType[]) => {
-      return attributeTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the attribute types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<AttributeType[]>(this.config.partyReferenceApiUrlPrefix + '/attribute-types',
+        {params, reportProgress: true})
+      .pipe(map((attributeTypes: AttributeType[]) => {
+        cachedAttributeTypes = new Map<string, AttributeType>();
+
+        for (const attributeType of attributeTypes) {
+          cachedAttributeTypes.set(attributeType.code, attributeType);
+        }
+
+        this.cacheService.set('attributeTypes', cachedAttributeTypes);
+        return cachedAttributeTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the attribute types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -200,24 +253,37 @@ export class PartyReferenceService {
    *
    * @return The consent types.
    */
-  getConsentTypes(): Observable<ConsentType[]> {
-    let params = new HttpParams();
+  getConsentTypes(): Observable<Map<string, ConsentType>> {
+    let cachedConsentTypes: Map<string, ConsentType> = this.cacheService.get('consentTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedConsentTypes !== undefined) {
+      return of(cachedConsentTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<ConsentType[]>(this.config.partyReferenceApiUrlPrefix + '/consent-types',
-      {params, reportProgress: true})
-    .pipe(map((consentTypes: ConsentType[]) => {
-      return consentTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the consent types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<ConsentType[]>(this.config.partyReferenceApiUrlPrefix + '/consent-types',
+        {params, reportProgress: true})
+      .pipe(map((consentTypes: ConsentType[]) => {
+        cachedConsentTypes = new Map<string, ConsentType>();
+
+        for (const consentType of consentTypes) {
+          cachedConsentTypes.set(consentType.code, consentType);
+        }
+
+        this.cacheService.set('consentTypes', cachedConsentTypes);
+        return cachedConsentTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the consent types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -225,24 +291,37 @@ export class PartyReferenceService {
    *
    * @return The contact mechanism purposes.
    */
-  getContactMechanismPurposes(): Observable<ContactMechanismPurpose[]> {
-    let params = new HttpParams();
+  getContactMechanismPurposes(): Observable<Map<string, ContactMechanismPurpose>> {
+    let cachedContactMechanismPurposes: Map<string, ContactMechanismPurpose> = this.cacheService.get('contactMechanismPurposes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedContactMechanismPurposes !== undefined) {
+      return of(cachedContactMechanismPurposes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<ContactMechanismPurpose[]>(this.config.partyReferenceApiUrlPrefix + '/contact-mechanism-purposes',
-      {params, reportProgress: true})
-    .pipe(map((contactMechanismPurposes: ContactMechanismPurpose[]) => {
-      return contactMechanismPurposes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism purposes.', httpErrorResponse));
-    }));
+      return this.httpClient.get<ContactMechanismPurpose[]>(this.config.partyReferenceApiUrlPrefix + '/contact-mechanism-purposes',
+        {params, reportProgress: true})
+      .pipe(map((contactMechanismPurposes: ContactMechanismPurpose[]) => {
+        cachedContactMechanismPurposes = new Map<string, ContactMechanismPurpose>();
+
+        for (const contactMechanismPurpose of contactMechanismPurposes) {
+          cachedContactMechanismPurposes.set(contactMechanismPurpose.code, contactMechanismPurpose);
+        }
+
+        this.cacheService.set('contactMechanismPurposes', cachedContactMechanismPurposes);
+        return cachedContactMechanismPurposes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the contact mechanism purposes.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -250,24 +329,37 @@ export class PartyReferenceService {
    *
    * @return The contact mechanism roles.
    */
-  getContactMechanismRoles(): Observable<ContactMechanismRole[]> {
-    let params = new HttpParams();
+  getContactMechanismRoles(): Observable<Map<string, ContactMechanismRole>> {
+    let cachedContactMechanismRoles: Map<string, ContactMechanismRole> = this.cacheService.get('contactMechanismRoles');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedContactMechanismRoles !== undefined) {
+      return of(cachedContactMechanismRoles);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<ContactMechanismRole[]>(this.config.partyReferenceApiUrlPrefix + '/contact-mechanism-roles',
-      {params, reportProgress: true})
-    .pipe(map((contactMechanismRoles: ContactMechanismRole[]) => {
-      return contactMechanismRoles;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism roles.', httpErrorResponse));
-    }));
+      return this.httpClient.get<ContactMechanismRole[]>(this.config.partyReferenceApiUrlPrefix + '/contact-mechanism-roles',
+        {params, reportProgress: true})
+      .pipe(map((contactMechanismRoles: ContactMechanismRole[]) => {
+        cachedContactMechanismRoles = new Map<string, ContactMechanismRole>();
+
+        for (const contactMechanismRole of contactMechanismRoles) {
+          cachedContactMechanismRoles.set(contactMechanismRole.code, contactMechanismRole);
+        }
+
+        this.cacheService.set('contactMechanismRoles', cachedContactMechanismRoles);
+        return cachedContactMechanismRoles;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the contact mechanism roles.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -275,24 +367,37 @@ export class PartyReferenceService {
    *
    * @return The contact mechanism types.
    */
-  getContactMechanismTypes(): Observable<ContactMechanismType[]> {
-    let params = new HttpParams();
+  getContactMechanismTypes(): Observable<Map<string, ContactMechanismType>> {
+    let cachedContactMechanismTypes: Map<string, ContactMechanismType> = this.cacheService.get('contactMechanismTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedContactMechanismTypes !== undefined) {
+      return of(cachedContactMechanismTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<ContactMechanismType[]>(this.config.partyReferenceApiUrlPrefix + '/contact-mechanism-types',
-      {params, reportProgress: true})
-    .pipe(map((contactMechanismTypes: ContactMechanismType[]) => {
-      return contactMechanismTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<ContactMechanismType[]>(this.config.partyReferenceApiUrlPrefix + '/contact-mechanism-types',
+        {params, reportProgress: true})
+      .pipe(map((contactMechanismTypes: ContactMechanismType[]) => {
+        cachedContactMechanismTypes = new Map<string, ContactMechanismType>();
+
+        for (const contactMechanismType of contactMechanismTypes) {
+          cachedContactMechanismTypes.set(contactMechanismType.code, contactMechanismType);
+        }
+
+        this.cacheService.set('contactMechanismTypes', cachedContactMechanismTypes);
+        return cachedContactMechanismTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the contact mechanism types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -300,24 +405,37 @@ export class PartyReferenceService {
    *
    * @return The employment statuses.
    */
-  getEmploymentStatuses(): Observable<EmploymentStatus[]> {
-    let params = new HttpParams();
+  getEmploymentStatuses(): Observable<Map<string, EmploymentStatus>> {
+    let cachedEmploymentStatuses: Map<string, EmploymentStatus> = this.cacheService.get('employmentStatuses');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedEmploymentStatuses !== undefined) {
+      return of(cachedEmploymentStatuses);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<EmploymentStatus[]>(this.config.partyReferenceApiUrlPrefix + '/employment-statuses',
-      {params, reportProgress: true})
-    .pipe(map((employmentStatuses: EmploymentStatus[]) => {
-      return employmentStatuses;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the employment statuses.', httpErrorResponse));
-    }));
+      return this.httpClient.get<EmploymentStatus[]>(this.config.partyReferenceApiUrlPrefix + '/employment-statuses',
+        {params, reportProgress: true})
+      .pipe(map((employmentStatuses: EmploymentStatus[]) => {
+        cachedEmploymentStatuses = new Map<string, EmploymentStatus>();
+
+        for (const employmentStatus of employmentStatuses) {
+          cachedEmploymentStatuses.set(employmentStatus.code, employmentStatus);
+        }
+
+        this.cacheService.set('employmentStatuses', cachedEmploymentStatuses);
+        return cachedEmploymentStatuses;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the employment statuses.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -325,24 +443,37 @@ export class PartyReferenceService {
    *
    * @return The employment types.
    */
-  getEmploymentTypes(): Observable<EmploymentType[]> {
-    let params = new HttpParams();
+  getEmploymentTypes(): Observable<Map<string, EmploymentType>> {
+    let cachedEmploymentTypes: Map<string, EmploymentType> = this.cacheService.get('employmentTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedEmploymentTypes !== undefined) {
+      return of(cachedEmploymentTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<EmploymentType[]>(this.config.partyReferenceApiUrlPrefix + '/employment-types',
-      {params, reportProgress: true})
-    .pipe(map((employmentTypes: EmploymentType[]) => {
-      return employmentTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the employment types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<EmploymentType[]>(this.config.partyReferenceApiUrlPrefix + '/employment-types',
+        {params, reportProgress: true})
+      .pipe(map((employmentTypes: EmploymentType[]) => {
+        cachedEmploymentTypes = new Map<string, EmploymentType>();
+
+        for (const employmentType of employmentTypes) {
+          cachedEmploymentTypes.set(employmentType.code, employmentType);
+        }
+
+        this.cacheService.set('employmentTypes', cachedEmploymentTypes);
+        return cachedEmploymentTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the employment types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -350,24 +481,37 @@ export class PartyReferenceService {
    *
    * @return The external reference types.
    */
-  getExternalReferenceTypes(): Observable<ExternalReferenceType[]> {
-    let params = new HttpParams();
+  getExternalReferenceTypes(): Observable<Map<string, ExternalReferenceType>> {
+    let cachedExternalReferenceTypes: Map<string, ExternalReferenceType> = this.cacheService.get('externalReferenceTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedExternalReferenceTypes !== undefined) {
+      return of(cachedExternalReferenceTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<ExternalReferenceType[]>(this.config.partyReferenceApiUrlPrefix + '/external-reference-types',
-      {params, reportProgress: true})
-    .pipe(map((externalReferenceTypes: ExternalReferenceType[]) => {
-      return externalReferenceTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the external reference types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<ExternalReferenceType[]>(this.config.partyReferenceApiUrlPrefix + '/external-reference-types',
+        {params, reportProgress: true})
+      .pipe(map((externalReferenceTypes: ExternalReferenceType[]) => {
+        cachedExternalReferenceTypes = new Map<string, ExternalReferenceType>();
+
+        for (const externalReferenceType of externalReferenceTypes) {
+          cachedExternalReferenceTypes.set(externalReferenceType.code, externalReferenceType);
+        }
+
+        this.cacheService.set('externalReferenceTypes', cachedExternalReferenceTypes);
+        return cachedExternalReferenceTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the external reference types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -375,24 +519,37 @@ export class PartyReferenceService {
    *
    * @return The fields of study.
    */
-  getFieldsOfStudy(): Observable<FieldOfStudy[]> {
-    let params = new HttpParams();
+  getFieldsOfStudy(): Observable<Map<string, FieldOfStudy>> {
+    let cachedFieldsOfStudy: Map<string, FieldOfStudy> = this.cacheService.get('fieldsOfStudy');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedFieldsOfStudy !== undefined) {
+      return of(cachedFieldsOfStudy);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<FieldOfStudy[]>(this.config.partyReferenceApiUrlPrefix + '/fields-of-study',
-      {params, reportProgress: true})
-    .pipe(map((fieldsOfStudy: FieldOfStudy[]) => {
-      return fieldsOfStudy;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the fields of study.', httpErrorResponse));
-    }));
+      return this.httpClient.get<FieldOfStudy[]>(this.config.partyReferenceApiUrlPrefix + '/fields-of-study',
+        {params, reportProgress: true})
+      .pipe(map((fieldsOfStudy: FieldOfStudy[]) => {
+        cachedFieldsOfStudy = new Map<string, FieldOfStudy>();
+
+        for (const fieldOfStudy of fieldsOfStudy) {
+          cachedFieldsOfStudy.set(fieldOfStudy.code, fieldOfStudy);
+        }
+
+        this.cacheService.set('fieldsOfStudy', cachedFieldsOfStudy);
+        return cachedFieldsOfStudy;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the fields of study.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -400,24 +557,37 @@ export class PartyReferenceService {
    *
    * @return The genders.
    */
-  getGenders(): Observable<Gender[]> {
-    let params = new HttpParams();
+  getGenders(): Observable<Map<string, Gender>> {
+    let cachedGenders: Map<string, Gender> = this.cacheService.get('genders');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedGenders !== undefined) {
+      return of(cachedGenders);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<Gender[]>(this.config.partyReferenceApiUrlPrefix + '/genders',
-      {params, reportProgress: true})
-    .pipe(map((genders: Gender[]) => {
-      return genders;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the genders.', httpErrorResponse));
-    }));
+      return this.httpClient.get<Gender[]>(this.config.partyReferenceApiUrlPrefix + '/genders',
+        {params, reportProgress: true})
+      .pipe(map((genders: Gender[]) => {
+        cachedGenders = new Map<string, Gender>();
+
+        for (const gender of genders) {
+          cachedGenders.set(gender.code, gender);
+        }
+
+        this.cacheService.set('genders', cachedGenders);
+        return cachedGenders;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the genders.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -436,12 +606,12 @@ export class PartyReferenceService {
       return identityDocumentTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the identity document types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the identity document types.', httpErrorResponse));
     }));
   }
 
@@ -461,12 +631,12 @@ export class PartyReferenceService {
       return industryClassificationCategories;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the industry classification categories.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the industry classification categories.', httpErrorResponse));
     }));
   }
 
@@ -486,12 +656,12 @@ export class PartyReferenceService {
       return industryClassificationSystems;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the industry classification systems.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the industry classification systems.', httpErrorResponse));
     }));
   }
 
@@ -511,12 +681,12 @@ export class PartyReferenceService {
       return industryClassifications;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the industry classifications.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the industry classifications.', httpErrorResponse));
     }));
   }
 
@@ -536,12 +706,12 @@ export class PartyReferenceService {
       return lockTypeCategories;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the lock type categories.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the lock type categories.', httpErrorResponse));
     }));
   }
 
@@ -561,12 +731,12 @@ export class PartyReferenceService {
       return lockTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the lock types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the lock types.', httpErrorResponse));
     }));
   }
 
@@ -586,12 +756,12 @@ export class PartyReferenceService {
       return mandataryRoles;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the mandatary roles.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mandatary roles.', httpErrorResponse));
     }));
   }
 
@@ -611,12 +781,12 @@ export class PartyReferenceService {
       return mandatePropertyTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the mandate property types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mandate property types.', httpErrorResponse));
     }));
   }
 
@@ -636,12 +806,12 @@ export class PartyReferenceService {
       return mandateTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the mandate types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mandate types.', httpErrorResponse));
     }));
   }
 
@@ -661,12 +831,12 @@ export class PartyReferenceService {
       return maritalStatuses;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the marital statuses.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the marital statuses.', httpErrorResponse));
     }));
   }
 
@@ -686,12 +856,12 @@ export class PartyReferenceService {
       return marriageTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the marriage types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the marriage types.', httpErrorResponse));
     }));
   }
 
@@ -711,12 +881,12 @@ export class PartyReferenceService {
       return nextOfKinTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the next of kin types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the next of kin types.', httpErrorResponse));
     }));
   }
 
@@ -736,12 +906,12 @@ export class PartyReferenceService {
       return occupations;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the occupations.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the occupations.', httpErrorResponse));
     }));
   }
 
@@ -761,12 +931,12 @@ export class PartyReferenceService {
       return physicalAddressPurposes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the physical address purposes.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the physical address purposes.', httpErrorResponse));
     }));
   }
 
@@ -786,12 +956,12 @@ export class PartyReferenceService {
       return physicalAddressRoles;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the physical address roles.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the physical address roles.', httpErrorResponse));
     }));
   }
 
@@ -811,12 +981,12 @@ export class PartyReferenceService {
       return physicalAddressTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the physical address types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the physical address types.', httpErrorResponse));
     }));
   }
 
@@ -836,12 +1006,12 @@ export class PartyReferenceService {
       return preferenceTypeCategories;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the preference type categories.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the preference type categories.', httpErrorResponse));
     }));
   }
 
@@ -861,12 +1031,12 @@ export class PartyReferenceService {
       return preferenceTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the preference types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the preference types.', httpErrorResponse));
     }));
   }
 
@@ -886,12 +1056,12 @@ export class PartyReferenceService {
       return qualificationTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the qualification types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the qualification types.', httpErrorResponse));
     }));
   }
 
@@ -911,12 +1081,12 @@ export class PartyReferenceService {
       return races;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the races.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the races.', httpErrorResponse));
     }));
   }
 
@@ -936,12 +1106,12 @@ export class PartyReferenceService {
       return residencePermitTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the residence permit types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the residence permit types.', httpErrorResponse));
     }));
   }
 
@@ -961,12 +1131,12 @@ export class PartyReferenceService {
       return residencyStatuses;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the residency statuses.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the residency statuses.', httpErrorResponse));
     }));
   }
 
@@ -986,12 +1156,12 @@ export class PartyReferenceService {
       return residentialTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the residential types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the residential types.', httpErrorResponse));
     }));
   }
 
@@ -1011,12 +1181,12 @@ export class PartyReferenceService {
       return rolePurposes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the role purposes.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the role purposes.', httpErrorResponse));
     }));
   }
 
@@ -1042,12 +1212,12 @@ export class PartyReferenceService {
       return roleTypeAttributeTypeConstraints;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the role type attribute type constraints.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the role type attribute type constraints.', httpErrorResponse));
     }));
   }
 
@@ -1073,12 +1243,12 @@ export class PartyReferenceService {
       return roleTypePreferenceTypeConstraints;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the role type preference type constraints.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the role type preference type constraints.', httpErrorResponse));
     }));
   }
 
@@ -1098,12 +1268,12 @@ export class PartyReferenceService {
       return roleTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the role types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the role types.', httpErrorResponse));
     }));
   }
 
@@ -1123,12 +1293,12 @@ export class PartyReferenceService {
       return segmentationTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the segmentation types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the segmentation types.', httpErrorResponse));
     }));
   }
 
@@ -1148,12 +1318,12 @@ export class PartyReferenceService {
       return segments;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the segments.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the segments.', httpErrorResponse));
     }));
   }
 
@@ -1173,12 +1343,12 @@ export class PartyReferenceService {
       return skillTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the skill types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the skill types.', httpErrorResponse));
     }));
   }
 
@@ -1198,12 +1368,12 @@ export class PartyReferenceService {
       return sourceOfFundsTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the source of funds types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the source of funds types.', httpErrorResponse));
     }));
   }
 
@@ -1223,12 +1393,12 @@ export class PartyReferenceService {
       return sourceOfWealthTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the source of wealth types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the source of wealth types.', httpErrorResponse));
     }));
   }
 
@@ -1248,12 +1418,12 @@ export class PartyReferenceService {
       return statusTypeCategories;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the status type categories.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the status type categories.', httpErrorResponse));
     }));
   }
 
@@ -1273,12 +1443,12 @@ export class PartyReferenceService {
       return statusTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the status types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the status types.', httpErrorResponse));
     }));
   }
 
@@ -1298,12 +1468,12 @@ export class PartyReferenceService {
       return taxNumberTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the tax number types.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the tax number types.', httpErrorResponse));
     }));
   }
 
@@ -1323,12 +1493,12 @@ export class PartyReferenceService {
       return timesToContact;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the times to contact.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the times to contact.', httpErrorResponse));
     }));
   }
 
@@ -1348,12 +1518,12 @@ export class PartyReferenceService {
       return titles;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the titles.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the titles.', httpErrorResponse));
     }));
   }
 

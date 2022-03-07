@@ -81,18 +81,18 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateAssociationError.TYPE)) {
-        return throwError(new DuplicateAssociationError(httpErrorResponse));
+        return throwError(() => new DuplicateAssociationError(httpErrorResponse));
       } else if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
-        return throwError(new PartyNotFoundError(httpErrorResponse));
+        return throwError(() => new PartyNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to create the association.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to create the association.', httpErrorResponse));
     }));
   }
 
@@ -111,18 +111,18 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateMandateError.TYPE)) {
-        return throwError(new DuplicateMandateError(httpErrorResponse));
+        return throwError(() => new DuplicateMandateError(httpErrorResponse));
       } else if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
-        return throwError(new PartyNotFoundError(httpErrorResponse));
+        return throwError(() => new PartyNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to create the mandate.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to create the mandate.', httpErrorResponse));
     }));
   }
 
@@ -141,16 +141,16 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateOrganizationError.TYPE)) {
-        return throwError(new DuplicateOrganizationError(httpErrorResponse));
+        return throwError(() => new DuplicateOrganizationError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to create the organization.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to create the organization.', httpErrorResponse));
     }));
   }
 
@@ -169,16 +169,16 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicatePersonError.TYPE)) {
-        return throwError(new DuplicatePersonError(httpErrorResponse));
+        return throwError(() => new DuplicatePersonError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to create the person.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to create the person.', httpErrorResponse));
     }));
   }
 
@@ -196,16 +196,16 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, AssociationNotFoundError.TYPE)) {
-        return throwError(new AssociationNotFoundError(httpErrorResponse));
+        return throwError(() => new AssociationNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to delete the association.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to delete the association.', httpErrorResponse));
     }));
   }
 
@@ -223,16 +223,16 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, MandateNotFoundError.TYPE)) {
-        return throwError(new MandateNotFoundError(httpErrorResponse));
+        return throwError(() => new MandateNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to delete the mandate.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to delete the mandate.', httpErrorResponse));
     }));
   }
 
@@ -250,16 +250,16 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, OrganizationNotFoundError.TYPE)) {
-        return throwError(new OrganizationNotFoundError(httpErrorResponse));
+        return throwError(() => new OrganizationNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to delete the organization.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to delete the organization.', httpErrorResponse));
     }));
   }
 
@@ -277,16 +277,16 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, PersonNotFoundError.TYPE)) {
-        return throwError(new PersonNotFoundError(httpErrorResponse));
+        return throwError(() => new PersonNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to delete the person.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to delete the person.', httpErrorResponse));
     }));
   }
 
@@ -304,16 +304,16 @@ export class PartyService {
       return association;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, AssociationNotFoundError.TYPE)) {
-        return throwError(new AssociationNotFoundError(httpErrorResponse));
+        return throwError(() => new AssociationNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the association.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the association.', httpErrorResponse));
     }));
   }
 
@@ -358,16 +358,16 @@ export class PartyService {
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
       if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
-        return throwError(new PartyNotFoundError(httpErrorResponse));
+        return throwError(() => new PartyNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the associations for the party.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the associations for the party.', httpErrorResponse));
     }));
   }
 
@@ -385,16 +385,16 @@ export class PartyService {
       return mandate;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, MandateNotFoundError.TYPE)) {
-        return throwError(new MandateNotFoundError(httpErrorResponse));
+        return throwError(() => new MandateNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the mandate.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mandate.', httpErrorResponse));
     }));
   }
 
@@ -439,16 +439,16 @@ export class PartyService {
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
       if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
-        return throwError(new PartyNotFoundError(httpErrorResponse));
+        return throwError(() => new PartyNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the mandates for the party.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mandates for the party.', httpErrorResponse));
     }));
   }
 
@@ -466,16 +466,16 @@ export class PartyService {
       return organization;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, OrganizationNotFoundError.TYPE)) {
-        return throwError(new OrganizationNotFoundError(httpErrorResponse));
+        return throwError(() => new OrganizationNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the organization.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the organization.', httpErrorResponse));
     }));
   }
 
@@ -523,14 +523,14 @@ export class PartyService {
       return organizations;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the organizations.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the organizations.', httpErrorResponse));
     }));
   }
 
@@ -578,14 +578,14 @@ export class PartyService {
       return parties;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the parties.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the parties.', httpErrorResponse));
     }));
   }
 
@@ -603,16 +603,16 @@ export class PartyService {
       return party;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
-        return throwError(new PartyNotFoundError(httpErrorResponse));
+        return throwError(() => new PartyNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the party.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the party.', httpErrorResponse));
     }));
   }
 
@@ -630,16 +630,16 @@ export class PartyService {
       return person;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, PersonNotFoundError.TYPE)) {
-        return throwError(new PersonNotFoundError(httpErrorResponse));
+        return throwError(() => new PersonNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the person.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the person.', httpErrorResponse));
     }));
   }
 
@@ -687,14 +687,14 @@ export class PartyService {
       return persons;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the persons.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the persons.', httpErrorResponse));
     }));
   }
 
@@ -740,14 +740,14 @@ export class PartyService {
       return snapshots;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to retrieve the snapshots.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the snapshots.', httpErrorResponse));
     }));
   }
 
@@ -765,18 +765,18 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, AssociationNotFoundError.TYPE)) {
-        return throwError(new AssociationNotFoundError(httpErrorResponse));
+        return throwError(() => new AssociationNotFoundError(httpErrorResponse));
       } else if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
-        return throwError(new PartyNotFoundError(httpErrorResponse));
+        return throwError(() => new PartyNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to update the association.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to update the association.', httpErrorResponse));
     }));
   }
 
@@ -794,18 +794,18 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, MandateNotFoundError.TYPE)) {
-        return throwError(new MandateNotFoundError(httpErrorResponse));
+        return throwError(() => new MandateNotFoundError(httpErrorResponse));
       } else if (ProblemDetails.isProblemDetails(httpErrorResponse, PartyNotFoundError.TYPE)) {
-        return throwError(new PartyNotFoundError(httpErrorResponse));
+        return throwError(() => new PartyNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to update the mandate.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to update the mandate.', httpErrorResponse));
     }));
   }
 
@@ -823,16 +823,16 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, OrganizationNotFoundError.TYPE)) {
-        return throwError(new OrganizationNotFoundError(httpErrorResponse));
+        return throwError(() => new OrganizationNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to update the organization.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to update the organization.', httpErrorResponse));
     }));
   }
 
@@ -850,16 +850,16 @@ export class PartyService {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, PersonNotFoundError.TYPE)) {
-        return throwError(new PersonNotFoundError(httpErrorResponse));
+        return throwError(() => new PersonNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(new AccessDeniedError(httpErrorResponse));
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
+        return throwError(() => new CommunicationError(httpErrorResponse));
       } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(new InvalidArgumentError(httpErrorResponse));
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(new ServiceUnavailableError('Failed to update the person.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to update the person.', httpErrorResponse));
     }));
   }
 }
