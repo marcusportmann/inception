@@ -595,24 +595,37 @@ export class PartyReferenceService {
    *
    * @return The identity document types.
    */
-  getIdentityDocumentTypes(): Observable<IdentityDocumentType[]> {
-    let params = new HttpParams();
+  getIdentityDocumentTypes(): Observable<Map<string, IdentityDocumentType>> {
+    let cachedIdentityDocumentTypes: Map<string, IdentityDocumentType> = this.cacheService.get('identityDocumentTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedIdentityDocumentTypes !== undefined) {
+      return of(cachedIdentityDocumentTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<IdentityDocumentType[]>(this.config.partyReferenceApiUrlPrefix + '/identity-document-types',
-      {params, reportProgress: true})
-    .pipe(map((identityDocumentTypes: IdentityDocumentType[]) => {
-      return identityDocumentTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the identity document types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<IdentityDocumentType[]>(this.config.partyReferenceApiUrlPrefix + '/identity-document-types',
+        {params, reportProgress: true})
+      .pipe(map((identityDocumentTypes: IdentityDocumentType[]) => {
+        cachedIdentityDocumentTypes = new Map<string, IdentityDocumentType>();
+
+        for (const identityDocumentType of identityDocumentTypes) {
+          cachedIdentityDocumentTypes.set(identityDocumentType.code, identityDocumentType);
+        }
+
+        this.cacheService.set('identityDocumentTypes', cachedIdentityDocumentTypes);
+        return cachedIdentityDocumentTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the identity document types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -620,24 +633,37 @@ export class PartyReferenceService {
    *
    * @return The industry classification categories.
    */
-  getIndustryClassificationCategories(): Observable<IndustryClassificationCategory[]> {
-    let params = new HttpParams();
+  getIndustryClassificationCategories(): Observable<Map<string, IndustryClassificationCategory>> {
+    let cachedIndustryClassificationCategories: Map<string, IndustryClassificationCategory> = this.cacheService.get('industryClassificationCategories');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedIndustryClassificationCategories !== undefined) {
+      return of(cachedIndustryClassificationCategories);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<IndustryClassificationCategory[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classification-categories',
-      {params, reportProgress: true})
-    .pipe(map((industryClassificationCategories: IndustryClassificationCategory[]) => {
-      return industryClassificationCategories;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the industry classification categories.', httpErrorResponse));
-    }));
+      return this.httpClient.get<IndustryClassificationCategory[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classification-categories',
+        {params, reportProgress: true})
+      .pipe(map((industryClassificationCategories: IndustryClassificationCategory[]) => {
+        cachedIndustryClassificationCategories = new Map<string, IndustryClassificationCategory>();
+
+        for (const industryClassificationCategory of industryClassificationCategories) {
+          cachedIndustryClassificationCategories.set(industryClassificationCategory.code, industryClassificationCategory);
+        }
+
+        this.cacheService.set('industryClassificationCategories', cachedIndustryClassificationCategories);
+        return cachedIndustryClassificationCategories;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the industry classification categories.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -645,24 +671,37 @@ export class PartyReferenceService {
    *
    * @return The industry classification systems.
    */
-  getIndustryClassificationSystems(): Observable<IndustryClassificationSystem[]> {
-    let params = new HttpParams();
+  getIndustryClassificationSystems(): Observable<Map<string, IndustryClassificationSystem>> {
+    let cachedIndustryClassificationSystems: Map<string, IndustryClassificationSystem> = this.cacheService.get('industryClassificationSystems');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedIndustryClassificationSystems !== undefined) {
+      return of(cachedIndustryClassificationSystems);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<IndustryClassificationSystem[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classification-systems',
-      {params, reportProgress: true})
-    .pipe(map((industryClassificationSystems: IndustryClassificationSystem[]) => {
-      return industryClassificationSystems;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the industry classification systems.', httpErrorResponse));
-    }));
+      return this.httpClient.get<IndustryClassificationSystem[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classification-systems',
+        {params, reportProgress: true})
+      .pipe(map((industryClassificationSystems: IndustryClassificationSystem[]) => {
+        cachedIndustryClassificationSystems = new Map<string, IndustryClassificationSystem>();
+
+        for (const industryClassificationSystem of industryClassificationSystems) {
+          cachedIndustryClassificationSystems.set(industryClassificationSystem.code, industryClassificationSystem);
+        }
+
+        this.cacheService.set('industryClassificationSystems', cachedIndustryClassificationSystems);
+        return cachedIndustryClassificationSystems;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the industry classification systems.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -670,24 +709,37 @@ export class PartyReferenceService {
    *
    * @return The industry classifications.
    */
-  getIndustryClassifications(): Observable<IndustryClassification[]> {
-    let params = new HttpParams();
+  getIndustryClassifications(): Observable<Map<string, IndustryClassification>> {
+    let cachedIndustryClassifications: Map<string, IndustryClassification> = this.cacheService.get('industryClassifications');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedIndustryClassifications !== undefined) {
+      return of(cachedIndustryClassifications);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<IndustryClassification[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classifications',
-      {params, reportProgress: true})
-    .pipe(map((industryClassifications: IndustryClassification[]) => {
-      return industryClassifications;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the industry classifications.', httpErrorResponse));
-    }));
+      return this.httpClient.get<IndustryClassification[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classifications',
+        {params, reportProgress: true})
+      .pipe(map((industryClassifications: IndustryClassification[]) => {
+        cachedIndustryClassifications = new Map<string, IndustryClassification>();
+
+        for (const industryClassification of industryClassifications) {
+          cachedIndustryClassifications.set(industryClassification.code, industryClassification);
+        }
+
+        this.cacheService.set('industryClassifications', cachedIndustryClassifications);
+        return cachedIndustryClassifications;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the industry classifications.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -695,24 +747,37 @@ export class PartyReferenceService {
    *
    * @return The lock type categories.
    */
-  getLockTypeCategories(): Observable<LockTypeCategory[]> {
-    let params = new HttpParams();
+  getLockTypeCategories(): Observable<Map<string, LockTypeCategory>> {
+    let cachedLockTypeCategories: Map<string, LockTypeCategory> = this.cacheService.get('lockTypeCategories');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedLockTypeCategories !== undefined) {
+      return of(cachedLockTypeCategories);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<LockTypeCategory[]>(this.config.partyReferenceApiUrlPrefix + '/lock-type-categories',
-      {params, reportProgress: true})
-    .pipe(map((lockTypeCategories: LockTypeCategory[]) => {
-      return lockTypeCategories;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the lock type categories.', httpErrorResponse));
-    }));
+      return this.httpClient.get<LockTypeCategory[]>(this.config.partyReferenceApiUrlPrefix + '/lock-type-categories',
+        {params, reportProgress: true})
+      .pipe(map((lockTypeCategories: LockTypeCategory[]) => {
+        cachedLockTypeCategories = new Map<string, LockTypeCategory>();
+
+        for (const lockTypeCategory of lockTypeCategories) {
+          cachedLockTypeCategories.set(lockTypeCategory.code, lockTypeCategory);
+        }
+
+        this.cacheService.set('lockTypeCategories', cachedLockTypeCategories);
+        return cachedLockTypeCategories;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the lock type categories.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -720,24 +785,37 @@ export class PartyReferenceService {
    *
    * @return The lock types.
    */
-  getLockTypes(): Observable<LockType[]> {
-    let params = new HttpParams();
+  getLockTypes(): Observable<Map<string, LockType>> {
+    let cachedLockTypes: Map<string, LockType> = this.cacheService.get('lockTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedLockTypes !== undefined) {
+      return of(cachedLockTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<LockType[]>(this.config.partyReferenceApiUrlPrefix + '/lock-types',
-      {params, reportProgress: true})
-    .pipe(map((lockTypes: LockType[]) => {
-      return lockTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the lock types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<LockType[]>(this.config.partyReferenceApiUrlPrefix + '/lock-types',
+        {params, reportProgress: true})
+      .pipe(map((lockTypes: LockType[]) => {
+        cachedLockTypes = new Map<string, LockType>();
+
+        for (const lockType of lockTypes) {
+          cachedLockTypes.set(lockType.code, lockType);
+        }
+
+        this.cacheService.set('lockTypes', cachedLockTypes);
+        return cachedLockTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the lock types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -745,24 +823,37 @@ export class PartyReferenceService {
    *
    * @return The mandatary roles.
    */
-  getMandataryRoles(): Observable<MandataryRole[]> {
-    let params = new HttpParams();
+  getMandataryRoles(): Observable<Map<string, MandataryRole>> {
+    let cachedMandataryRoles: Map<string, MandataryRole> = this.cacheService.get('mandataryRoles');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedMandataryRoles !== undefined) {
+      return of(cachedMandataryRoles);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<MandataryRole[]>(this.config.partyReferenceApiUrlPrefix + '/mandatary-types',
-      {params, reportProgress: true})
-    .pipe(map((mandataryRoles: MandataryRole[]) => {
-      return mandataryRoles;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mandatary roles.', httpErrorResponse));
-    }));
+      return this.httpClient.get<MandataryRole[]>(this.config.partyReferenceApiUrlPrefix + '/mandatary-types',
+        {params, reportProgress: true})
+      .pipe(map((mandataryRoles: MandataryRole[]) => {
+        cachedMandataryRoles = new Map<string, MandataryRole>();
+
+        for (const mandataryRole of mandataryRoles) {
+          cachedMandataryRoles.set(mandataryRole.code, mandataryRole);
+        }
+
+        this.cacheService.set('mandataryRoles', cachedMandataryRoles);
+        return cachedMandataryRoles;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the mandatary roles.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -770,24 +861,37 @@ export class PartyReferenceService {
    *
    * @return The mandate property types.
    */
-  getMandatePropertyTypes(): Observable<MandatePropertyType[]> {
-    let params = new HttpParams();
+  getMandatePropertyTypes(): Observable<Map<string, MandatePropertyType>> {
+    let cachedMandatePropertyTypes: Map<string, MandatePropertyType> = this.cacheService.get('mandatePropertyTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedMandatePropertyTypes !== undefined) {
+      return of(cachedMandatePropertyTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<MandatePropertyType[]>(this.config.partyReferenceApiUrlPrefix + '/mandate-property-types',
-      {params, reportProgress: true})
-    .pipe(map((mandatePropertyTypes: MandatePropertyType[]) => {
-      return mandatePropertyTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mandate property types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<MandatePropertyType[]>(this.config.partyReferenceApiUrlPrefix + '/mandate-property-types',
+        {params, reportProgress: true})
+      .pipe(map((mandatePropertyTypes: MandatePropertyType[]) => {
+        cachedMandatePropertyTypes = new Map<string, MandatePropertyType>();
+
+        for (const mandatePropertyType of mandatePropertyTypes) {
+          cachedMandatePropertyTypes.set(mandatePropertyType.code, mandatePropertyType);
+        }
+
+        this.cacheService.set('mandatePropertyTypes', cachedMandatePropertyTypes);
+        return cachedMandatePropertyTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the mandate property types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -795,24 +899,37 @@ export class PartyReferenceService {
    *
    * @return The mandate types.
    */
-  getMandateTypes(): Observable<MandateType[]> {
-    let params = new HttpParams();
+  getMandateTypes(): Observable<Map<string, MandateType>> {
+    let cachedMandateTypes: Map<string, MandateType> = this.cacheService.get('mandateTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedMandateTypes !== undefined) {
+      return of(cachedMandateTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<MandateType[]>(this.config.partyReferenceApiUrlPrefix + '/mandate-types',
-      {params, reportProgress: true})
-    .pipe(map((mandateTypes: MandateType[]) => {
-      return mandateTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the mandate types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<MandateType[]>(this.config.partyReferenceApiUrlPrefix + '/mandate-types',
+        {params, reportProgress: true})
+      .pipe(map((mandateTypes: MandateType[]) => {
+        cachedMandateTypes = new Map<string, MandateType>();
+
+        for (const mandateType of mandateTypes) {
+          cachedMandateTypes.set(mandateType.code, mandateType);
+        }
+
+        this.cacheService.set('mandateTypes', cachedMandateTypes);
+        return cachedMandateTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the mandate types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -820,24 +937,37 @@ export class PartyReferenceService {
    *
    * @return The marital statuses.
    */
-  getMaritalStatuses(): Observable<MaritalStatus[]> {
-    let params = new HttpParams();
+  getMaritalStatuses(): Observable<Map<string, MaritalStatus>> {
+    let cachedMaritalStatuses: Map<string, MaritalStatus> = this.cacheService.get('maritalStatuses');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedMaritalStatuses !== undefined) {
+      return of(cachedMaritalStatuses);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<MaritalStatus[]>(this.config.partyReferenceApiUrlPrefix + '/marital-statuses',
-      {params, reportProgress: true})
-    .pipe(map((maritalStatuses: MaritalStatus[]) => {
-      return maritalStatuses;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the marital statuses.', httpErrorResponse));
-    }));
+      return this.httpClient.get<MaritalStatus[]>(this.config.partyReferenceApiUrlPrefix + '/marital-statuses',
+        {params, reportProgress: true})
+      .pipe(map((maritalStatuses: MaritalStatus[]) => {
+        cachedMaritalStatuses = new Map<string, MaritalStatus>();
+
+        for (const maritalStatus of maritalStatuses) {
+          cachedMaritalStatuses.set(maritalStatus.code, maritalStatus);
+        }
+
+        this.cacheService.set('maritalStatuses', cachedMaritalStatuses);
+        return cachedMaritalStatuses;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the marital statuses.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -845,24 +975,37 @@ export class PartyReferenceService {
    *
    * @return The marriage types.
    */
-  getMarriageTypes(): Observable<MarriageType[]> {
-    let params = new HttpParams();
+  getMarriageTypes(): Observable<Map<string, MarriageType>> {
+    let cachedMarriageTypes: Map<string, MarriageType> = this.cacheService.get('marriageTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedMarriageTypes !== undefined) {
+      return of(cachedMarriageTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<MarriageType[]>(this.config.partyReferenceApiUrlPrefix + '/marriage-types',
-      {params, reportProgress: true})
-    .pipe(map((marriageTypes: MarriageType[]) => {
-      return marriageTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the marriage types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<MarriageType[]>(this.config.partyReferenceApiUrlPrefix + '/marriage-types',
+        {params, reportProgress: true})
+      .pipe(map((marriageTypes: MarriageType[]) => {
+        cachedMarriageTypes = new Map<string, MarriageType>();
+
+        for (const marriageType of marriageTypes) {
+          cachedMarriageTypes.set(marriageType.code, marriageType);
+        }
+
+        this.cacheService.set('marriageTypes', cachedMarriageTypes);
+        return cachedMarriageTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the marriage types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -870,24 +1013,37 @@ export class PartyReferenceService {
    *
    * @return The next of kin types.
    */
-  getNextOfKinTypes(): Observable<NextOfKinType[]> {
-    let params = new HttpParams();
+  getNextOfKinTypes(): Observable<Map<string, NextOfKinType>> {
+    let cachedNextOfKinTypes: Map<string, NextOfKinType> = this.cacheService.get('nextOfKinTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedNextOfKinTypes !== undefined) {
+      return of(cachedNextOfKinTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<NextOfKinType[]>(this.config.partyReferenceApiUrlPrefix + '/next-of-kin-types',
-      {params, reportProgress: true})
-    .pipe(map((nextOfKinTypes: NextOfKinType[]) => {
-      return nextOfKinTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the next of kin types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<NextOfKinType[]>(this.config.partyReferenceApiUrlPrefix + '/next-of-kin-types',
+        {params, reportProgress: true})
+      .pipe(map((nextOfKinTypes: NextOfKinType[]) => {
+        cachedNextOfKinTypes = new Map<string, NextOfKinType>();
+
+        for (const nextOfKinType of nextOfKinTypes) {
+          cachedNextOfKinTypes.set(nextOfKinType.code, nextOfKinType);
+        }
+
+        this.cacheService.set('nextOfKinTypes', cachedNextOfKinTypes);
+        return cachedNextOfKinTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the next of kin types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -895,24 +1051,37 @@ export class PartyReferenceService {
    *
    * @return The occupations.
    */
-  getOccupations(): Observable<Occupation[]> {
-    let params = new HttpParams();
+  getOccupations(): Observable<Map<string, Occupation>> {
+    let cachedOccupations: Map<string, Occupation> = this.cacheService.get('occupations');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedOccupations !== undefined) {
+      return of(cachedOccupations);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<Occupation[]>(this.config.partyReferenceApiUrlPrefix + '/occupations',
-      {params, reportProgress: true})
-    .pipe(map((occupations: Occupation[]) => {
-      return occupations;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the occupations.', httpErrorResponse));
-    }));
+      return this.httpClient.get<Occupation[]>(this.config.partyReferenceApiUrlPrefix + '/occupations',
+        {params, reportProgress: true})
+      .pipe(map((occupations: Occupation[]) => {
+        cachedOccupations = new Map<string, Occupation>();
+
+        for (const occupation of occupations) {
+          cachedOccupations.set(occupation.code, occupation);
+        }
+
+        this.cacheService.set('occupations', cachedOccupations);
+        return cachedOccupations;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the occupations.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -920,24 +1089,37 @@ export class PartyReferenceService {
    *
    * @return The physical address purposes.
    */
-  getPhysicalAddressPurposes(): Observable<PhysicalAddressPurpose[]> {
-    let params = new HttpParams();
+  getPhysicalAddressPurposes(): Observable<Map<string, PhysicalAddressPurpose>> {
+    let cachedPhysicalAddressPurposes: Map<string, PhysicalAddressPurpose> = this.cacheService.get('physicalAddressPurposes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedPhysicalAddressPurposes !== undefined) {
+      return of(cachedPhysicalAddressPurposes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<PhysicalAddressPurpose[]>(this.config.partyReferenceApiUrlPrefix + '/physical-address-purposes',
-      {params, reportProgress: true})
-    .pipe(map((physicalAddressPurposes: PhysicalAddressPurpose[]) => {
-      return physicalAddressPurposes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the physical address purposes.', httpErrorResponse));
-    }));
+      return this.httpClient.get<PhysicalAddressPurpose[]>(this.config.partyReferenceApiUrlPrefix + '/physical-address-purposes',
+        {params, reportProgress: true})
+      .pipe(map((physicalAddressPurposes: PhysicalAddressPurpose[]) => {
+        cachedPhysicalAddressPurposes = new Map<string, PhysicalAddressPurpose>();
+
+        for (const physicalAddressPurpose of physicalAddressPurposes) {
+          cachedPhysicalAddressPurposes.set(physicalAddressPurpose.code, physicalAddressPurpose);
+        }
+
+        this.cacheService.set('physicalAddressPurposes', cachedPhysicalAddressPurposes);
+        return cachedPhysicalAddressPurposes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the physical address purposes.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -945,24 +1127,37 @@ export class PartyReferenceService {
    *
    * @return The physical address roles.
    */
-  getPhysicalAddressRoles(): Observable<PhysicalAddressRole[]> {
-    let params = new HttpParams();
+  getPhysicalAddressRoles(): Observable<Map<string, PhysicalAddressRole>> {
+    let cachedPhysicalAddressRoles: Map<string, PhysicalAddressRole> = this.cacheService.get('physicalAddressRoles');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedPhysicalAddressRoles !== undefined) {
+      return of(cachedPhysicalAddressRoles);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<PhysicalAddressRole[]>(this.config.partyReferenceApiUrlPrefix + '/physical-address-roles',
-      {params, reportProgress: true})
-    .pipe(map((physicalAddressRoles: PhysicalAddressRole[]) => {
-      return physicalAddressRoles;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the physical address roles.', httpErrorResponse));
-    }));
+      return this.httpClient.get<PhysicalAddressRole[]>(this.config.partyReferenceApiUrlPrefix + '/physical-address-roles',
+        {params, reportProgress: true})
+      .pipe(map((physicalAddressRoles: PhysicalAddressRole[]) => {
+        cachedPhysicalAddressRoles = new Map<string, PhysicalAddressRole>();
+
+        for (const physicalAddressRole of physicalAddressRoles) {
+          cachedPhysicalAddressRoles.set(physicalAddressRole.code, physicalAddressRole);
+        }
+
+        this.cacheService.set('physicalAddressRoles', cachedPhysicalAddressRoles);
+        return cachedPhysicalAddressRoles;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the physical address roles.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -970,24 +1165,37 @@ export class PartyReferenceService {
    *
    * @return The physical address types.
    */
-  getPhysicalAddressTypes(): Observable<PhysicalAddressType[]> {
-    let params = new HttpParams();
+  getPhysicalAddressTypes(): Observable<Map<string, PhysicalAddressType>> {
+    let cachedPhysicalAddressTypes: Map<string, PhysicalAddressType> = this.cacheService.get('physicalAddressTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedPhysicalAddressTypes !== undefined) {
+      return of(cachedPhysicalAddressTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<PhysicalAddressRole[]>(this.config.partyReferenceApiUrlPrefix + '/physical-address-types',
-      {params, reportProgress: true})
-    .pipe(map((physicalAddressTypes: PhysicalAddressType[]) => {
-      return physicalAddressTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the physical address types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<PhysicalAddressRole[]>(this.config.partyReferenceApiUrlPrefix + '/physical-address-types',
+        {params, reportProgress: true})
+      .pipe(map((physicalAddressTypes: PhysicalAddressType[]) => {
+        cachedPhysicalAddressTypes = new Map<string, PhysicalAddressType>();
+
+        for (const physicalAddressType of physicalAddressTypes) {
+          cachedPhysicalAddressTypes.set(physicalAddressType.code, physicalAddressType);
+        }
+
+        this.cacheService.set('physicalAddressTypes', cachedPhysicalAddressTypes);
+        return cachedPhysicalAddressTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the physical address types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -995,24 +1203,37 @@ export class PartyReferenceService {
    *
    * @return The preference type categories.
    */
-  getPreferenceTypeCategories(): Observable<PreferenceTypeCategory[]> {
-    let params = new HttpParams();
+  getPreferenceTypeCategories(): Observable<Map<string, PreferenceTypeCategory>> {
+    let cachedPreferenceTypeCategories: Map<string, PreferenceTypeCategory> = this.cacheService.get('preferenceTypeCategories');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedPreferenceTypeCategories !== undefined) {
+      return of(cachedPreferenceTypeCategories);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<PhysicalAddressRole[]>(this.config.partyReferenceApiUrlPrefix + '/preference-type-categories',
-      {params, reportProgress: true})
-    .pipe(map((preferenceTypeCategories: PreferenceTypeCategory[]) => {
-      return preferenceTypeCategories;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the preference type categories.', httpErrorResponse));
-    }));
+      return this.httpClient.get<PhysicalAddressRole[]>(this.config.partyReferenceApiUrlPrefix + '/preference-type-categories',
+        {params, reportProgress: true})
+      .pipe(map((preferenceTypeCategories: PreferenceTypeCategory[]) => {
+        cachedPreferenceTypeCategories = new Map<string, PreferenceTypeCategory>();
+
+        for (const preferenceTypeCategory of preferenceTypeCategories) {
+          cachedPreferenceTypeCategories.set(preferenceTypeCategory.code, preferenceTypeCategory);
+        }
+
+        this.cacheService.set('preferenceTypeCategories', cachedPreferenceTypeCategories);
+        return cachedPreferenceTypeCategories;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the preference type categories.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1020,24 +1241,37 @@ export class PartyReferenceService {
    *
    * @return The preference types.
    */
-  getPreferenceTypes(): Observable<PreferenceType[]> {
-    let params = new HttpParams();
+  getPreferenceTypes(): Observable<Map<string, PreferenceType>> {
+    let cachedPreferenceTypes: Map<string, PreferenceType> = this.cacheService.get('preferenceTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedPreferenceTypes !== undefined) {
+      return of(cachedPreferenceTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<PreferenceType[]>(this.config.partyReferenceApiUrlPrefix + '/preference-types',
-      {params, reportProgress: true})
-    .pipe(map((preferenceTypes: PreferenceType[]) => {
-      return preferenceTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the preference types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<PreferenceType[]>(this.config.partyReferenceApiUrlPrefix + '/preference-types',
+        {params, reportProgress: true})
+      .pipe(map((preferenceTypes: PreferenceType[]) => {
+        cachedPreferenceTypes = new Map<string, PreferenceType>();
+
+        for (const preferenceType of preferenceTypes) {
+          cachedPreferenceTypes.set(preferenceType.code, preferenceType);
+        }
+
+        this.cacheService.set('preferenceTypes', cachedPreferenceTypes);
+        return cachedPreferenceTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the preference types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1045,24 +1279,37 @@ export class PartyReferenceService {
    *
    * @return The qualification types.
    */
-  getQualificationTypes(): Observable<QualificationType[]> {
-    let params = new HttpParams();
+  getQualificationTypes(): Observable<Map<string, QualificationType>> {
+    let cachedQualificationTypes: Map<string, QualificationType> = this.cacheService.get('qualificationTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedQualificationTypes !== undefined) {
+      return of(cachedQualificationTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<QualificationType[]>(this.config.partyReferenceApiUrlPrefix + '/qualification-types',
-      {params, reportProgress: true})
-    .pipe(map((qualificationTypes: QualificationType[]) => {
-      return qualificationTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the qualification types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<QualificationType[]>(this.config.partyReferenceApiUrlPrefix + '/qualification-types',
+        {params, reportProgress: true})
+      .pipe(map((qualificationTypes: QualificationType[]) => {
+        cachedQualificationTypes = new Map<string, QualificationType>();
+
+        for (const qualificationType of qualificationTypes) {
+          cachedQualificationTypes.set(qualificationType.code, qualificationType);
+        }
+
+        this.cacheService.set('qualificationTypes', cachedQualificationTypes);
+        return cachedQualificationTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the qualification types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1070,24 +1317,37 @@ export class PartyReferenceService {
    *
    * @return The races.
    */
-  getRaces(): Observable<Race[]> {
-    let params = new HttpParams();
+  getRaces(): Observable<Map<string, Race>> {
+    let cachedRaces: Map<string, Race> = this.cacheService.get('races');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedRaces !== undefined) {
+      return of(cachedRaces);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<Race[]>(this.config.partyReferenceApiUrlPrefix + '/races',
-      {params, reportProgress: true})
-    .pipe(map((races: Race[]) => {
-      return races;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the races.', httpErrorResponse));
-    }));
+      return this.httpClient.get<Race[]>(this.config.partyReferenceApiUrlPrefix + '/races',
+        {params, reportProgress: true})
+      .pipe(map((races: Race[]) => {
+        cachedRaces = new Map<string, Race>();
+
+        for (const race of races) {
+          cachedRaces.set(race.code, race);
+        }
+
+        this.cacheService.set('races', cachedRaces);
+        return cachedRaces;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the races.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1095,24 +1355,37 @@ export class PartyReferenceService {
    *
    * @return The residence permit types.
    */
-  getResidencePermitTypes(): Observable<ResidencePermitType[]> {
-    let params = new HttpParams();
+  getResidencePermitTypes(): Observable<Map<string, ResidencePermitType>> {
+    let cachedResidencePermitTypes: Map<string, ResidencePermitType> = this.cacheService.get('residencePermitTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedResidencePermitTypes !== undefined) {
+      return of(cachedResidencePermitTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<ResidencePermitType[]>(this.config.partyReferenceApiUrlPrefix + '/residence-permit-types',
-      {params, reportProgress: true})
-    .pipe(map((residencePermitTypes: ResidencePermitType[]) => {
-      return residencePermitTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the residence permit types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<ResidencePermitType[]>(this.config.partyReferenceApiUrlPrefix + '/residence-permit-types',
+        {params, reportProgress: true})
+      .pipe(map((residencePermitTypes: ResidencePermitType[]) => {
+        cachedResidencePermitTypes = new Map<string, ResidencePermitType>();
+
+        for (const residencePermitType of residencePermitTypes) {
+          cachedResidencePermitTypes.set(residencePermitType.code, residencePermitType);
+        }
+
+        this.cacheService.set('residencePermitTypes', cachedResidencePermitTypes);
+        return cachedResidencePermitTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the residence permit types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1120,24 +1393,37 @@ export class PartyReferenceService {
    *
    * @return The residency statuses.
    */
-  getResidencyStatuses(): Observable<ResidencyStatus[]> {
-    let params = new HttpParams();
+  getResidencyStatuses(): Observable<Map<string, ResidencyStatus>> {
+    let cachedResidencyStatuses: Map<string, ResidencyStatus> = this.cacheService.get('residencyStatuses');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedResidencyStatuses !== undefined) {
+      return of(cachedResidencyStatuses);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<ResidencyStatus[]>(this.config.partyReferenceApiUrlPrefix + '/residency-statuses',
-      {params, reportProgress: true})
-    .pipe(map((residencyStatuses: ResidencyStatus[]) => {
-      return residencyStatuses;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the residency statuses.', httpErrorResponse));
-    }));
+      return this.httpClient.get<ResidencyStatus[]>(this.config.partyReferenceApiUrlPrefix + '/residency-statuses',
+        {params, reportProgress: true})
+      .pipe(map((residencyStatuses: ResidencyStatus[]) => {
+        cachedResidencyStatuses = new Map<string, ResidencePermitType>();
+
+        for (const residencyStatus of residencyStatuses) {
+          cachedResidencyStatuses.set(residencyStatus.code, residencyStatus);
+        }
+
+        this.cacheService.set('residencyStatuses', cachedResidencyStatuses);
+        return cachedResidencyStatuses;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the residency statuses.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1145,24 +1431,37 @@ export class PartyReferenceService {
    *
    * @return The residential types.
    */
-  getResidentialTypes(): Observable<ResidentialType[]> {
-    let params = new HttpParams();
+  getResidentialTypes(): Observable<Map<string, ResidentialType>> {
+    let cachedResidentialTypes: Map<string, ResidentialType> = this.cacheService.get('residentialTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedResidentialTypes !== undefined) {
+      return of(cachedResidentialTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<ResidentialType[]>(this.config.partyReferenceApiUrlPrefix + '/residential-types',
-      {params, reportProgress: true})
-    .pipe(map((residentialTypes: ResidentialType[]) => {
-      return residentialTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the residential types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<ResidentialType[]>(this.config.partyReferenceApiUrlPrefix + '/residential-types',
+        {params, reportProgress: true})
+      .pipe(map((residentialTypes: ResidentialType[]) => {
+        cachedResidentialTypes = new Map<string, ResidentialType>();
+
+        for (const residentialType of residentialTypes) {
+          cachedResidentialTypes.set(residentialType.code, residentialType);
+        }
+
+        this.cacheService.set('residentialTypes', cachedResidentialTypes);
+        return cachedResidentialTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the residential types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1170,24 +1469,37 @@ export class PartyReferenceService {
    *
    * @return The role purposes.
    */
-  getRolePurposes(): Observable<RolePurpose[]> {
-    let params = new HttpParams();
+  getRolePurposes(): Observable<Map<string, RolePurpose>> {
+    let cachedRolePurposes: Map<string, RolePurpose> = this.cacheService.get('rolePurposes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedRolePurposes !== undefined) {
+      return of(cachedRolePurposes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<ResidentialType[]>(this.config.partyReferenceApiUrlPrefix + '/role-purposes',
-      {params, reportProgress: true})
-    .pipe(map((rolePurposes: RolePurpose[]) => {
-      return rolePurposes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the role purposes.', httpErrorResponse));
-    }));
+      return this.httpClient.get<ResidentialType[]>(this.config.partyReferenceApiUrlPrefix + '/role-purposes',
+        {params, reportProgress: true})
+      .pipe(map((rolePurposes: RolePurpose[]) => {
+        cachedRolePurposes = new Map<string, RolePurpose>();
+
+        for (const rolePurpose of rolePurposes) {
+          cachedRolePurposes.set(rolePurpose.code, rolePurpose);
+        }
+
+        this.cacheService.set('rolePurposes', cachedRolePurposes);
+        return cachedRolePurposes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the role purposes.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1257,24 +1569,37 @@ export class PartyReferenceService {
    *
    * @return The role types.
    */
-  getRoleTypes(): Observable<RoleType[]> {
-    let params = new HttpParams();
+  getRoleTypes(): Observable<Map<string, RoleType>> {
+    let cachedRoleTypes: Map<string, RoleType> = this.cacheService.get('roleTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedRoleTypes !== undefined) {
+      return of(cachedRoleTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<RoleType[]>(this.config.partyReferenceApiUrlPrefix + '/role-types',
-      {params, reportProgress: true})
-    .pipe(map((roleTypes: RoleType[]) => {
-      return roleTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the role types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<RoleType[]>(this.config.partyReferenceApiUrlPrefix + '/role-types',
+        {params, reportProgress: true})
+      .pipe(map((roleTypes: RoleType[]) => {
+        cachedRoleTypes = new Map<string, RoleType>();
+
+        for (const roleType of roleTypes) {
+          cachedRoleTypes.set(roleType.code, roleType);
+        }
+
+        this.cacheService.set('roleTypes', cachedRoleTypes);
+        return cachedRoleTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the role types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1282,24 +1607,37 @@ export class PartyReferenceService {
    *
    * @return The segmentation types.
    */
-  getSegmentationTypes(): Observable<SegmentationType[]> {
-    let params = new HttpParams();
+  getSegmentationTypes(): Observable<Map<string, SegmentationType>> {
+    let cachedSegmentationTypes: Map<string, SegmentationType> = this.cacheService.get('segmentationTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedSegmentationTypes !== undefined) {
+      return of(cachedSegmentationTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<SegmentationType[]>(this.config.partyReferenceApiUrlPrefix + '/segmentation-types',
-      {params, reportProgress: true})
-    .pipe(map((segmentationTypes: SegmentationType[]) => {
-      return segmentationTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the segmentation types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<SegmentationType[]>(this.config.partyReferenceApiUrlPrefix + '/segmentation-types',
+        {params, reportProgress: true})
+      .pipe(map((segmentationTypes: SegmentationType[]) => {
+        cachedSegmentationTypes = new Map<string, SegmentationType>();
+
+        for (const segmentationType of segmentationTypes) {
+          cachedSegmentationTypes.set(segmentationType.code, segmentationType);
+        }
+
+        this.cacheService.set('segmentationTypes', cachedSegmentationTypes);
+        return cachedSegmentationTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the segmentation types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1307,24 +1645,37 @@ export class PartyReferenceService {
    *
    * @return The segments.
    */
-  getSegments(): Observable<Segment[]> {
-    let params = new HttpParams();
+  getSegments(): Observable<Map<string, Segment>> {
+    let cachedSegments: Map<string, Segment> = this.cacheService.get('segments');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedSegments !== undefined) {
+      return of(cachedSegments);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<Segment[]>(this.config.partyReferenceApiUrlPrefix + '/segments',
-      {params, reportProgress: true})
-    .pipe(map((segments: Segment[]) => {
-      return segments;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the segments.', httpErrorResponse));
-    }));
+      return this.httpClient.get<Segment[]>(this.config.partyReferenceApiUrlPrefix + '/segments',
+        {params, reportProgress: true})
+      .pipe(map((segments: Segment[]) => {
+        cachedSegments = new Map<string, Segment>();
+
+        for (const segment of segments) {
+          cachedSegments.set(segment.code, segment);
+        }
+
+        this.cacheService.set('segments', cachedSegments);
+        return cachedSegments;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the segments.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1332,24 +1683,37 @@ export class PartyReferenceService {
    *
    * @return The skill types.
    */
-  getSkillTypes(): Observable<SkillType[]> {
-    let params = new HttpParams();
+  getSkillTypes(): Observable<Map<string, SkillType>> {
+    let cachedSkillTypes: Map<string, SkillType> = this.cacheService.get('skillTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedSkillTypes !== undefined) {
+      return of(cachedSkillTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<SkillType[]>(this.config.partyReferenceApiUrlPrefix + '/skill-types',
-      {params, reportProgress: true})
-    .pipe(map((skillTypes: SkillType[]) => {
-      return skillTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the skill types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<SkillType[]>(this.config.partyReferenceApiUrlPrefix + '/skill-types',
+        {params, reportProgress: true})
+      .pipe(map((skillTypes: SkillType[]) => {
+        cachedSkillTypes = new Map<string, SkillType>();
+
+        for (const skillType of skillTypes) {
+          cachedSkillTypes.set(skillType.code, skillType);
+        }
+
+        this.cacheService.set('skillTypes', cachedSkillTypes);
+        return cachedSkillTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the skill types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1357,24 +1721,37 @@ export class PartyReferenceService {
    *
    * @return The source of funds types.
    */
-  getSourceOfFundsTypes(): Observable<SourceOfFundsType[]> {
-    let params = new HttpParams();
+  getSourceOfFundsTypes(): Observable<Map<string, SourceOfFundsType>> {
+    let cachedSourceOfFundsTypes: Map<string, SourceOfFundsType> = this.cacheService.get('sourceOfFundsTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedSourceOfFundsTypes !== undefined) {
+      return of(cachedSourceOfFundsTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<SourceOfFundsType[]>(this.config.partyReferenceApiUrlPrefix + '/source-of-funds-types',
-      {params, reportProgress: true})
-    .pipe(map((sourceOfFundsTypes: SourceOfFundsType[]) => {
-      return sourceOfFundsTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the source of funds types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<SourceOfFundsType[]>(this.config.partyReferenceApiUrlPrefix + '/source-of-funds-types',
+        {params, reportProgress: true})
+      .pipe(map((sourceOfFundsTypes: SourceOfFundsType[]) => {
+        cachedSourceOfFundsTypes = new Map<string, SkillType>();
+
+        for (const sourceOfFundsType of sourceOfFundsTypes) {
+          cachedSourceOfFundsTypes.set(sourceOfFundsType.code, sourceOfFundsType);
+        }
+
+        this.cacheService.set('sourceOfFundsTypes', cachedSourceOfFundsTypes);
+        return cachedSourceOfFundsTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the source of funds types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1382,24 +1759,37 @@ export class PartyReferenceService {
    *
    * @return The source of wealth types.
    */
-  getSourceOfWealthTypes(): Observable<SourceOfWealthType[]> {
-    let params = new HttpParams();
+  getSourceOfWealthTypes(): Observable<Map<string, SourceOfWealthType>> {
+    let cachedSourceOfWealthTypes: Map<string, SourceOfWealthType> = this.cacheService.get('sourceOfWealthTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedSourceOfWealthTypes !== undefined) {
+      return of(cachedSourceOfWealthTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<SourceOfWealthType[]>(this.config.partyReferenceApiUrlPrefix + '/source-of-wealth-types',
-      {params, reportProgress: true})
-    .pipe(map((sourceOfWealthTypes: SourceOfWealthType[]) => {
-      return sourceOfWealthTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the source of wealth types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<SourceOfWealthType[]>(this.config.partyReferenceApiUrlPrefix + '/source-of-wealth-types',
+        {params, reportProgress: true})
+      .pipe(map((sourceOfWealthTypes: SourceOfWealthType[]) => {
+        cachedSourceOfWealthTypes = new Map<string, SourceOfWealthType>();
+
+        for (const sourceOfWealthType of sourceOfWealthTypes) {
+          cachedSourceOfWealthTypes.set(sourceOfWealthType.code, sourceOfWealthType);
+        }
+
+        this.cacheService.set('sourceOfWealthTypes', cachedSourceOfWealthTypes);
+        return cachedSourceOfWealthTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the source of wealth types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1407,24 +1797,37 @@ export class PartyReferenceService {
    *
    * @return The status type categories.
    */
-  getStatusTypeCategories(): Observable<StatusTypeCategory[]> {
-    let params = new HttpParams();
+  getStatusTypeCategories(): Observable<Map<string, StatusTypeCategory>> {
+    let cachedStatusTypeCategories: Map<string, StatusTypeCategory> = this.cacheService.get('statusTypeCategories');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedStatusTypeCategories !== undefined) {
+      return of(cachedStatusTypeCategories);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<StatusTypeCategory[]>(this.config.partyReferenceApiUrlPrefix + '/status-type-categories',
-      {params, reportProgress: true})
-    .pipe(map((statusTypeCategories: StatusTypeCategory[]) => {
-      return statusTypeCategories;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the status type categories.', httpErrorResponse));
-    }));
+      return this.httpClient.get<StatusTypeCategory[]>(this.config.partyReferenceApiUrlPrefix + '/status-type-categories',
+        {params, reportProgress: true})
+      .pipe(map((statusTypeCategories: StatusTypeCategory[]) => {
+        cachedStatusTypeCategories = new Map<string, StatusTypeCategory>();
+
+        for (const statusTypeCategory of statusTypeCategories) {
+          cachedStatusTypeCategories.set(statusTypeCategory.code, statusTypeCategory);
+        }
+
+        this.cacheService.set('statusTypeCategories', cachedStatusTypeCategories);
+        return cachedStatusTypeCategories;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the status type categories.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1432,24 +1835,37 @@ export class PartyReferenceService {
    *
    * @return The status types.
    */
-  getStatusTypes(): Observable<StatusType[]> {
-    let params = new HttpParams();
+  getStatusTypes(): Observable<Map<string, StatusType>> {
+    let cachedStatusTypes: Map<string, StatusType> = this.cacheService.get('statusTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedStatusTypes !== undefined) {
+      return of(cachedStatusTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<StatusType[]>(this.config.partyReferenceApiUrlPrefix + '/status-types',
-      {params, reportProgress: true})
-    .pipe(map((statusTypes: StatusType[]) => {
-      return statusTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the status types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<StatusType[]>(this.config.partyReferenceApiUrlPrefix + '/status-types',
+        {params, reportProgress: true})
+      .pipe(map((statusTypes: StatusType[]) => {
+        cachedStatusTypes = new Map<string, StatusType>();
+
+        for (const statusType of statusTypes) {
+          cachedStatusTypes.set(statusType.code, statusType);
+        }
+
+        this.cacheService.set('statusTypes', cachedStatusTypes);
+        return cachedStatusTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the status types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1457,24 +1873,37 @@ export class PartyReferenceService {
    *
    * @return The tax number types.
    */
-  getTaxNumberTypes(): Observable<TaxNumberType[]> {
-    let params = new HttpParams();
+  getTaxNumberTypes(): Observable<Map<string, TaxNumberType>> {
+    let cachedTaxNumberTypes: Map<string, TaxNumberType> = this.cacheService.get('taxNumberTypes');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedTaxNumberTypes !== undefined) {
+      return of(cachedTaxNumberTypes);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<TaxNumberType[]>(this.config.partyReferenceApiUrlPrefix + '/tax-number-types',
-      {params, reportProgress: true})
-    .pipe(map((taxNumberTypes: TaxNumberType[]) => {
-      return taxNumberTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the tax number types.', httpErrorResponse));
-    }));
+      return this.httpClient.get<TaxNumberType[]>(this.config.partyReferenceApiUrlPrefix + '/tax-number-types',
+        {params, reportProgress: true})
+      .pipe(map((taxNumberTypes: TaxNumberType[]) => {
+        cachedTaxNumberTypes = new Map<string, TaxNumberType>();
+
+        for (const taxNumberType of taxNumberTypes) {
+          cachedTaxNumberTypes.set(taxNumberType.code, taxNumberType);
+        }
+
+        this.cacheService.set('taxNumberTypes', cachedTaxNumberTypes);
+        return cachedTaxNumberTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the tax number types.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1482,24 +1911,37 @@ export class PartyReferenceService {
    *
    * @return The times to contact.
    */
-  getTimesToContact(): Observable<TimeToContact[]> {
-    let params = new HttpParams();
+  getTimesToContact(): Observable<Map<string, TimeToContact>> {
+    let cachedTimesToContact: Map<string, TimeToContact> = this.cacheService.get('timesToContact');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedTimesToContact !== undefined) {
+      return of(cachedTimesToContact);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<TimeToContact[]>(this.config.partyReferenceApiUrlPrefix + '/times-to-contact',
-      {params, reportProgress: true})
-    .pipe(map((timesToContact: TimeToContact[]) => {
-      return timesToContact;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the times to contact.', httpErrorResponse));
-    }));
+      return this.httpClient.get<TimeToContact[]>(this.config.partyReferenceApiUrlPrefix + '/times-to-contact',
+        {params, reportProgress: true})
+      .pipe(map((timesToContact: TimeToContact[]) => {
+        cachedTimesToContact = new Map<string, TimeToContact>();
+
+        for (const timeToContact of timesToContact) {
+          cachedTimesToContact.set(timeToContact.code, timeToContact);
+        }
+
+        this.cacheService.set('timesToContact', cachedTimesToContact);
+        return cachedTimesToContact;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the times to contact.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1507,24 +1949,36 @@ export class PartyReferenceService {
    *
    * @return The titles.
    */
-  getTitles(): Observable<Title[]> {
-    let params = new HttpParams();
+  getTitles(): Observable<Map<string, Title>> {
+    let cachedTitles: Map<string, Title> = this.cacheService.get('titles');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedTitles !== undefined) {
+      return of(cachedTitles);
+    } else {
+      let params = new HttpParams();
 
-    return this.httpClient.get<Title[]>(this.config.partyReferenceApiUrlPrefix + '/titles',
-      {params, reportProgress: true})
-    .pipe(map((titles: Title[]) => {
-      return titles;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      }
+      params = params.append('localeId', this.localeId);
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the titles.', httpErrorResponse));
-    }));
+      return this.httpClient.get<Title[]>(this.config.partyReferenceApiUrlPrefix + '/titles',
+        {params, reportProgress: true})
+      .pipe(map((titles: Title[]) => {
+        cachedTitles = new Map<string, Title>();
+
+        for (const title of titles) {
+          cachedTitles.set(title.code, title);
+        }
+
+        this.cacheService.set('titles', cachedTitles);
+        return cachedTitles;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the titles.', httpErrorResponse));
+      }));
+    }
   }
-
 }
