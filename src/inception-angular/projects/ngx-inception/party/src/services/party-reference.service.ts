@@ -1510,27 +1510,55 @@ export class PartyReferenceService {
    * @return The role type attribute type constraints.
    */
   getRoleTypeAttributeTypeConstraints(roleType?: string): Observable<RoleTypeAttributeTypeConstraint[]> {
-    let params = new HttpParams();
+    let cachedRoleTypeAttributeTypeConstraints: RoleTypeAttributeTypeConstraint[] = this.cacheService.get('roleTypeAttributeTypeConstraints');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedRoleTypeAttributeTypeConstraints !== undefined) {
+      if (!!roleType) {
+        let roleTypeAttributeTypeConstraintsForRole: RoleTypeAttributeTypeConstraint[] = [];
 
-    if (!!roleType) {
-      params = params.append('roleType', roleType);
-    }
+        for (const cachedRoleTypeAttributeTypeConstraint of cachedRoleTypeAttributeTypeConstraints) {
+          if (roleType! === cachedRoleTypeAttributeTypeConstraint.roleType) {
+            roleTypeAttributeTypeConstraintsForRole.push(cachedRoleTypeAttributeTypeConstraint)
+          }
+        }
 
-    return this.httpClient.get<RoleTypeAttributeTypeConstraint[]>(this.config.partyReferenceApiUrlPrefix + '/role-type-attribute-type-constraints',
-      {params, reportProgress: true})
-    .pipe(map((roleTypeAttributeTypeConstraints: RoleTypeAttributeTypeConstraint[]) => {
-      return roleTypeAttributeTypeConstraints;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
+        return of(roleTypeAttributeTypeConstraintsForRole);
+      } else {
+        return of(cachedRoleTypeAttributeTypeConstraints);
       }
+    } else {
+      let params = new HttpParams();
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the role type attribute type constraints.', httpErrorResponse));
-    }));
+      params = params.append('localeId', this.localeId);
+
+      return this.httpClient.get<RoleTypeAttributeTypeConstraint[]>(this.config.partyReferenceApiUrlPrefix + '/role-type-attribute-type-constraints',
+        {params, reportProgress: true})
+      .pipe(map((roleTypeAttributeTypeConstraints: RoleTypeAttributeTypeConstraint[]) => {
+        this.cacheService.set('roleTypeAttributeTypeConstraints', roleTypeAttributeTypeConstraints);
+
+        if (!!roleType) {
+          let roleTypeAttributeTypeConstraintsForRole: RoleTypeAttributeTypeConstraint[] = [];
+
+          for (const roleTypeAttributeTypeConstraint of roleTypeAttributeTypeConstraints) {
+            if (roleType! === roleTypeAttributeTypeConstraint.roleType) {
+              roleTypeAttributeTypeConstraintsForRole.push(roleTypeAttributeTypeConstraint)
+            }
+          }
+
+          return roleTypeAttributeTypeConstraintsForRole;
+        } else {
+          return roleTypeAttributeTypeConstraints;
+        }
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the role type attribute type constraints.', httpErrorResponse));
+      }));
+    }
   }
 
   /**
@@ -1541,27 +1569,59 @@ export class PartyReferenceService {
    * @return The role type preference type constraints.
    */
   getRoleTypePreferenceTypeConstraints(roleType?: string): Observable<RoleTypePreferenceTypeConstraint[]> {
-    let params = new HttpParams();
+    let cachedRoleTypePreferenceTypeConstraints: RoleTypePreferenceTypeConstraint[] = this.cacheService.get('roleTypePreferenceTypeConstraints');
 
-    params = params.append('localeId', this.localeId);
+    if (cachedRoleTypePreferenceTypeConstraints !== undefined) {
+      if (!!roleType) {
+        let roleTypePreferenceTypeConstraintsForRole: RoleTypePreferenceTypeConstraint[] = [];
 
-    if (!!roleType) {
-      params = params.append('roleType', roleType);
-    }
+        for (const cachedRoleTypePreferenceTypeConstraint of cachedRoleTypePreferenceTypeConstraints) {
+          if (roleType! === cachedRoleTypePreferenceTypeConstraint.roleType) {
+            roleTypePreferenceTypeConstraintsForRole.push(cachedRoleTypePreferenceTypeConstraint)
+          }
+        }
 
-    return this.httpClient.get<RoleTypePreferenceTypeConstraint[]>(this.config.partyReferenceApiUrlPrefix + '/role-type-preference-type-constraints',
-      {params, reportProgress: true})
-    .pipe(map((roleTypePreferenceTypeConstraints: RoleTypePreferenceTypeConstraint[]) => {
-      return roleTypePreferenceTypeConstraints;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
+        return of(roleTypePreferenceTypeConstraintsForRole);
+      } else {
+        return of(cachedRoleTypePreferenceTypeConstraints);
+      }
+    } else {
+      let params = new HttpParams();
+
+      params = params.append('localeId', this.localeId);
+
+      if (!!roleType) {
+        params = params.append('roleType', roleType);
       }
 
-      return throwError(() => new ServiceUnavailableError('Failed to retrieve the role type preference type constraints.', httpErrorResponse));
-    }));
+      return this.httpClient.get<RoleTypePreferenceTypeConstraint[]>(this.config.partyReferenceApiUrlPrefix + '/role-type-preference-type-constraints',
+        {params, reportProgress: true})
+      .pipe(map((roleTypePreferenceTypeConstraints: RoleTypePreferenceTypeConstraint[]) => {
+        this.cacheService.set('roleTypePreferenceTypeConstraints', roleTypePreferenceTypeConstraints);
+
+        if (!!roleType) {
+          let roleTypePreferenceTypeConstraintsForRole: RoleTypePreferenceTypeConstraint[] = [];
+
+          for (const roleTypePreferenceTypeConstraint of roleTypePreferenceTypeConstraints) {
+            if (roleType! === roleTypePreferenceTypeConstraint.roleType) {
+              roleTypePreferenceTypeConstraintsForRole.push(roleTypePreferenceTypeConstraint)
+            }
+          }
+
+          return roleTypePreferenceTypeConstraintsForRole;
+        } else {
+          return roleTypePreferenceTypeConstraints;
+        }
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the role type preference type constraints.', httpErrorResponse));
+      }));
+    }
   }
 
   /**

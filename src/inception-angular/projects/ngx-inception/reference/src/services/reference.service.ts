@@ -135,11 +135,11 @@ export class ReferenceService {
    * @return The regions.
    */
   getRegions(country: string): Observable<Map<string, Region>> {
-    let cachedRegionsForCountries: Map<string, Map<string, Region>> = this.cacheService.get('cachedRegionsForCountries');
+    let cachedRegionsForCountries: Map<string, Map<string, Region>> = this.cacheService.get('regionsForCountries');
 
     if (cachedRegionsForCountries === undefined) {
       cachedRegionsForCountries = new Map<string, Map<string, Region>>();
-      this.cacheService.set('cachedRegionsForCountries', cachedRegionsForCountries);
+      this.cacheService.set('regionsForCountries', cachedRegionsForCountries);
     }
 
     let cachedRegionsForCountry: Map<string, Region> | undefined = cachedRegionsForCountries.get(country);
