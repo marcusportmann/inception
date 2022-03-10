@@ -139,20 +139,20 @@
       }
     }
 
-    @each $color, $value in $theme-colors {
-      &.nav-link-#{"" + $color} {
-        background: $value;
-        .nav-icon {
-          color: rgba(255, 255, 255, .7);
-        }
-        &:hover {
-          background: darken($value, 5%);
-          i {
-            color: #fff;
-          }
-        }
-      }
-    }
+    //@each $color, $value in $theme-colors {
+    //  &.nav-link-#{"" + $color} {
+    //    background: $value;
+    //    .nav-icon {
+    //      color: rgba(255, 255, 255, .7);
+    //    }
+    //    &:hover {
+    //      background: darken($value, 5%);
+    //      i {
+    //        color: $white;
+    //      }
+    //    }
+    //  }
+    //}
   }
 
   .nav-dropdown-toggle {

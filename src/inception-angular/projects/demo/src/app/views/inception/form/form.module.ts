@@ -17,11 +17,11 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatInputModule} from '@angular/material/input';
 import {RouterModule, Routes} from '@angular/router';
 import {CoreModule} from 'ngx-inception/core';
 import {ReferenceComponentsModule} from 'ngx-inception/reference';
 import {ExampleFormComponent} from './example-form.component';
+import {PartyComponentsFormComponent} from './party-components-form.component';
 import {PartyReferenceFormComponent} from './party-reference-form-component';
 import {PersonFormComponent} from "./person-form.component";
 import {PersonComponent} from "./person.component";
@@ -35,6 +35,12 @@ const routes: Routes = [{
   component: ExampleFormComponent,
   data: {
     title: 'Example Form',
+  }
+}, {
+  path: 'party-components-form',
+  component: PartyComponentsFormComponent,
+  data: {
+    title: 'Party Components Form',
   }
 }, {
   path: 'party-reference-form',
@@ -65,8 +71,8 @@ const routes: Routes = [{
     // Inception modules
     CoreModule, ReferenceComponentsModule,
   ],
-  declarations: [ExampleFormComponent, PartyReferenceFormComponent, PersonComponent,
-    PersonFormComponent, ReferenceFormComponent],
+  declarations: [ExampleFormComponent, PartyComponentsFormComponent, PartyReferenceFormComponent,
+    PersonComponent, PersonFormComponent, ReferenceFormComponent],
   providers: []
 })
 export class FormModule {

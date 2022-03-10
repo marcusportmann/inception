@@ -4,14 +4,14 @@
 
 @include mat.core();
 
-$inception-palette-base:  #20a8d8 !default;
+$inception-palette-base:  $blue !default;
 
 $inception-palette-50:  #e4f5fa !default;
 $inception-palette-100:  #bce5f3 !default;
 $inception-palette-200:  #90d4ec !default;
 $inception-palette-300:  #63c2e4 !default;
 $inception-palette-400:  #41b5de !default;
-$inception-palette-500:  #20a8d8 !default;
+$inception-palette-500:  $blue !default;
 $inception-palette-600:  #1ca0d4 !default;
 $inception-palette-700:  #1897ce !default;
 $inception-palette-800:  #138dc8 !default;
@@ -113,18 +113,10 @@ label {
     .mat-button:not(:last-child), .mat-flat-button:not(:last-child), .mat-raised-button:not(:last-child), .mat-icon-button:not(:last-child) {
       margin-right: 10px;
     }
-    /*
-    &.align-right {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      align-content: center;
-    }
-    */
   }
 
   > .mat-card-actions:last-child {
-    margin: 0px!important;
+    margin: 0px !important;
     padding-left: 1rem !important;
     padding-right: 1rem !important;
     padding-bottom: 1rem !important;
@@ -136,23 +128,23 @@ label {
   }
 
   .mat-card-content {
-    line-height: 19px;
+    line-height: 1.1875rem;
     padding: 1rem;
     margin-bottom: 0;
   }
 
   .mat-card-header {
-    padding: 12px;
+    padding: 0.75rem;
     border-radius: $card-border-radius $card-border-radius 0 0;
 
     .mat-card-subtitle, .mat-card-subtitle:not(:first-child) {
       margin-bottom: 0px;
-      margin-top: -4px;
+      margin-top: -0.25rem;
     }
 
     .mat-card-title {
       margin-bottom: 0px;
-      font-size: 18px; /* TODO: Use the correct variable here -- MARCUS */
+      font-size: 1.125rem;
     }
 
     &.text-white {
@@ -161,13 +153,13 @@ label {
       }
 
       .mat-card-title {
-        color:$white;
+        color: $white;
       }
     }
   }
 
   .mat-card-subtitle {
-    margin-top: -4px;
+    margin-top: -0.25rem;
     margin-bottom: 0px;
   }
 
@@ -191,9 +183,9 @@ label {
 .mat-menu-panel {
   border-radius: 0;
 
-  border-top: 1px solid $gray-300;
-  border-left: 1px solid $gray-300;
-  border-right: 1px solid $gray-300;
+  border-top: 1px solid #dee2e6;
+  border-left: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
 
   .mat-menu-content {
     padding: 0;
@@ -205,12 +197,12 @@ label {
 
       height: auto;
 
-      line-height: 48px;
+      line-height: 3rem;
 
       padding-right: 20px;
       padding-left: 20px;
 
-      border-bottom: 1px solid $gray-300;
+      border-bottom: 1px solid #dee2e6;
 
       i {
         display: inline-block;
@@ -284,15 +276,15 @@ label {
 
   &.mat-form-field-invalid {
     ::placeholder {
-      color: $danger;
+      color: #dc3545;
     }
 
     :-ms-input-placeholder {
-      color: $danger;
+      color: #dc3545;
     }
 
     ::-ms-input-placeholder {
-      color: $danger;
+      color: #dc3545;
     }
   }
 
@@ -505,7 +497,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
   border-bottom: 1px solid $gray-200;
   color: mat.get-color-from-palette($foreground, secondary-text);
   font-weight: bold;
-  min-height: 48px;
+  min-height: 3rem;
   padding-right: 6px;
 }
 
@@ -516,7 +508,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
   margin-right: 6px;
 
   .mat-nested-header-row, .mat-nested-footer-row, .mat-nested-row {
-    min-height: 48px;
+    min-height: 3rem;
   }
 
   .mat-nested-row, .mat-nested-header-row, .mat-nested-footer-row {
@@ -626,7 +618,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
   .mat-dialog-title {
     font-size: 1rem;
     color: $white;
-    background-color: $primary;
+    background-color: #007bff;
     margin: 0;
     padding: 16px;
   }
@@ -694,45 +686,45 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 
   .confirmation-dialog {
     .header {
-      background-color: $primary;
+      background-color: #007bff;
     }
 
     .mat-flat-button {
-      color: #ffffff;
-      background-color: $primary;
+      color: $white;
+      background-color: #007bff;
     }
   }
 
   .error-dialog {
     .header {
-      background-color: $danger;
+      background-color: #dc3545;
     }
 
     .mat-flat-button {
-      color: #ffffff;
-      background-color: $danger;
+      color: $white;
+      background-color: #dc3545;
     }
   }
 
   .information-dialog {
     .header {
-      background-color: $info;
+      background-color: #17a2b8;
     }
 
     .mat-flat-button {
-      color: #ffffff;
-      background-color: $info;
+      color: $white;
+      background-color: #17a2b8;
     }
   }
 
   .warning-dialog {
     .header {
-      background-color: $warning;
+      background-color: $yellow;
     }
 
     .mat-flat-button {
-      color: #ffffff;
-      background-color: $warning;
+      color: $white;
+      background-color: $yellow;
     }
   }
 }
@@ -824,13 +816,10 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
   }
 }
 
-
 .cdk-global-scrollblock {
   position: static;
   overflow: hidden !important;
 }
-
-
 
 .mat-expansion-panel-header.mat-expanded {
   border-bottom-style: solid;

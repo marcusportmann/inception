@@ -186,6 +186,10 @@ admin-root {
   }
 }
 
+
+
+
+
 .admin-body {
   display: flex;
   flex-direction: row;
@@ -203,23 +207,7 @@ admin-root {
     }
 
     .breadcrumb {
-      @include borders($breadcrumb-borders);
-      background-color: $breadcrumb-bg;
-
-      .breadcrumb-item {
-        max-width: 300px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .breadcrumb-item + .breadcrumb-item {
-        padding-left: 0.4rem;
-      }
-
-      .breadcrumb-item + .breadcrumb-item::before {
-        padding-right: 0.4rem !important;
-      }
+      border-bottom: 1px solid $gray-300;
     }
 
     .container-fluid {
@@ -326,45 +314,6 @@ admin-root {
     left:  0;
     right: 0;
     z-index: $zindex-sticky - 3;
-  }
-}
-
-//
-// Breadcrumb
-//
-.breadcrumb {
-  font-size: $breadcrumb-font-size;
-  padding: 0 15px;
-
-  .breadcrumb-item {
-    line-height: $breadcrumb-height;
-  }
-}
-
-.breadcrumbs-fixed {
-  .main {
-    padding-top: $breadcrumb-height;
-  }
-
-  .breadcrumb {
-    $breadcrumb-top: $admin-header-height;
-    position: fixed;
-    top: $breadcrumb-top;
-    left: 0;
-    right: 0;
-    z-index: $zindex-sticky - 3;
-  }
-}
-
-.breadcrumbs-fixed.title-bar-fixed {
-  .main {
-    padding-top: $title-bar-height + $breadcrumb-height;
-  }
-
-  .breadcrumb {
-    $breadcrumb-top: $admin-header-height + $title-bar-height;
-    top: $breadcrumb-top;
-    margin-top: 1px;
   }
 }
 
@@ -598,17 +547,12 @@ admin-root {
   transition: left $layout-transition-speed, right $layout-transition-speed, width $layout-transition-speed;
 }
 
-//
 // Dialogs
-//
 .form-dialog-panel {
 
 }
 
-//
 // Mobile layout
-//
-
 @include media-breakpoint-down(md) {
   .admin-header {
     position: fixed;
@@ -626,7 +570,7 @@ admin-root {
       @if (lightness( $admin-header-brand-bg ) > 40) {
         color: $admin-header-color;
       } @else {
-        color: #fff;
+        color: $white;
       }
     }
 
@@ -636,8 +580,6 @@ admin-root {
       margin-left: - (math.div($admin-header-brand-width, 2) + 24);
     }
   }
-
-
 
   .admin-body {
     margin-top: $admin-header-height;

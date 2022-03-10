@@ -622,7 +622,6 @@ Complete the following steps to create a new application based on the Inception 
       npm install --save @angular/material-moment-adapter@13
       npm install --save @auth0/angular-jwt@5
       npm install --save @fortawesome/fontawesome-free@5
-      npm install --save bootstrap@4      
       npm install --save moment@2
       npm install --save ngx-perfect-scrollbar@10
       npm install --save es6-template-string@1

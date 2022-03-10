@@ -1,9 +1,5 @@
 @use "sass:math";
 
-//
-// Base styles
-//
-
 .switch {
   display: inline-block;
   width: $switch-width;
@@ -19,7 +15,7 @@
   display: block;
   height: inherit;
   cursor: pointer;
-  background-color: #fff;
+  background-color: $white;
   border: $border-width solid $border-color;
   transition: .15s ease-out;
   @include border-radius($border-radius);
@@ -32,7 +28,7 @@
     width: $switch-height - ($switch-handle-margin * 2) - ($border-width * 2);
     height: $switch-height - ($switch-handle-margin * 2) - ($border-width * 2);
     content: "";
-    background-color: #fff;
+    background-color: $white;
     border: 1px solid $border-color;
     transition: .15s ease-out;
     @include border-radius(math.div($border-radius, 2));
@@ -50,10 +46,6 @@
   opacity: .5;
 }
 
-//
-// Switch Sizes
-//
-
 .switch-lg {
   @include switch-size($switch-lg-width, $switch-lg-height, $switch-lg-font-size, $switch-handle-margin);
 }
@@ -62,9 +54,6 @@
   @include switch-size($switch-sm-width, $switch-sm-height, $switch-sm-font-size, $switch-handle-margin);
 }
 
-//
-// Switch with label
-//
 .switch-label {
   width: $switch-label-width;
 
@@ -82,7 +71,7 @@
       font-size: $switch-font-size;
       font-weight: 600;
       line-height: 1;
-      color: $gray-300;
+      color: #dee2e6;
       text-align: center;
       text-transform: uppercase;
       content: attr(data-unchecked);
@@ -96,7 +85,7 @@
     }
     &::after {
       left: 1px;
-      color: #fff;
+      color: $white;
       content: attr(data-checked);
     }
   }
@@ -110,10 +99,6 @@
     @include switch-size($switch-label-sm-width, $switch-sm-height, $switch-sm-font-size, $switch-handle-margin);
   }
 }
-
-//
-// Switch 3d
-//
 
 .switch-3d {
   .switch-slider {
@@ -140,10 +125,6 @@
     @include switch-3d-size($switch-sm-width, $switch-sm-height);
   }
 }
-
-//
-// Switch Variants
-//
 
 @each $color, $value in $theme-colors {
   //normal style
