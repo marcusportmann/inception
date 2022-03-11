@@ -1,6 +1,7 @@
 @use "sass:math";
 
 // IE10&11 Flexbox fix
+// noinspection SassScssResolvedByNameOnly
 @media all and (-ms-high-contrast: none) {
   html {
     display: flex;
@@ -34,6 +35,7 @@ admin-root {
   min-height: 100vh;
 }
 
+// noinspection SassScssResolvedByNameOnly
 .admin-header {
   position: relative;
   display: flex;
@@ -176,7 +178,7 @@ admin-root {
           top: 50%;
           left: 50%;
           margin-top: -16px;
-          margin-left: 0px;
+          margin-left: 0;
           border-radius: 10rem;
           padding-right: 0.6em;
           padding-left: 0.6em;
@@ -186,10 +188,7 @@ admin-root {
   }
 }
 
-
-
-
-
+// noinspection SassScssResolvedByNameOnly
 .admin-body {
   display: flex;
   flex-direction: row;
@@ -225,7 +224,7 @@ admin-root {
     }
   }
 }
-
+// noinspection SassScssResolvedByNameOnly
 @include media-breakpoint-down(md) {
   .admin-header {
     .brand {
@@ -234,6 +233,7 @@ admin-root {
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @include media-breakpoint-up(lg) {
   .admin-brand-minimized {
     .admin-header {
@@ -254,6 +254,7 @@ admin-root {
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 .admin-footer {
   display: flex;
   flex: 0 0 $admin-footer-height;
@@ -266,6 +267,7 @@ admin-root {
   @include borders($admin-footer-borders);
 }
 
+// noinspection SassScssResolvedByNameOnly
 .sidebar {
   // $sidebar-width is the width of the columns
   flex: 0 0 $sidebar-width;
@@ -279,6 +281,7 @@ admin-root {
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 .title-bar {
   background-color: $title-bar-bg;
   color: $title-bar-color;
@@ -286,8 +289,8 @@ admin-root {
 
   .back {
     position: absolute;
-    x: 0;
-    y: 0;
+    top: 0;
+    left: 0;
     color: $title-bar-back-color;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -302,6 +305,7 @@ admin-root {
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 .title-bar-fixed {
   .main {
     padding-top: $title-bar-height;
@@ -317,6 +321,7 @@ admin-root {
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @include media-breakpoint-up(lg) {
   //
   // Header
@@ -414,6 +419,7 @@ admin-root {
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @each $breakpoint in map-keys($grid-breakpoints) {
   @include media-breakpoint-up($breakpoint) {
     $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
@@ -516,6 +522,7 @@ admin-root {
 //
 // Footer
 //
+// noinspection SassScssResolvedByNameOnly
 .admin-footer-fixed {
   .admin-footer {
     position: fixed;
@@ -534,15 +541,20 @@ admin-root {
 //
 // Animations
 //
+// noinspection SassScssResolvedByNameOnly
 .admin-header,
 .admin-footer,
 .sidebar,
 .main {
   transition: margin-left $layout-transition-speed, margin-right $layout-transition-speed, width $layout-transition-speed, flex $layout-transition-speed;
 }
+
+// noinspection SassScssResolvedByNameOnly
 .sidebar-nav {
   transition: width $layout-transition-speed;
 }
+
+// noinspection SassScssResolvedByNameOnly
 .breadcrumb {
   transition: left $layout-transition-speed, right $layout-transition-speed, width $layout-transition-speed;
 }
@@ -553,6 +565,7 @@ admin-root {
 }
 
 // Mobile layout
+// noinspection SassScssResolvedByNameOnly
 @include media-breakpoint-down(md) {
   .admin-header {
     position: fixed;
@@ -609,6 +622,7 @@ admin-root {
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @include media-breakpoint-down(xs) {
   .admin-body {
     margin-top: $admin-header-height;
@@ -616,6 +630,7 @@ admin-root {
 }
 
 // Sidebar needs to be bigger on mobile devices
+// noinspection SassScssResolvedByNameOnly
 @include media-breakpoint-down(sm) {
   .sidebar {
     flex: 0 0 $mobile-sidebar-width !important;
@@ -659,6 +674,7 @@ simple-container {
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @include media-breakpoint-down(xs) {
   simple-container .container .mat-card {
     min-width: 300px !important;
@@ -667,6 +683,7 @@ simple-container {
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @include media-breakpoint-up(sm) {
   simple-container .container .mat-card {
     min-width: 400px !important;

@@ -1,5 +1,6 @@
 // Container widths
 // Set the container width, and override it for fixed navbars in media queries.
+// noinspection SassScssResolvedByNameOnly
 @if $enable-grid-classes {
   // Single container class with breakpoint max-widths
   .container,
@@ -39,6 +40,7 @@
 }
 
 // Rows contain your columns.
+// noinspection SassScssResolvedByNameOnly
 @if $enable-grid-classes {
   .row {
     @include make-row();
@@ -59,6 +61,7 @@
 }
 
 // Common styles for small and large grid columns
+// noinspection SassScssResolvedByNameOnly
 @if $enable-grid-classes {
   @include make-grid-columns();
 }

@@ -1,4 +1,5 @@
 // Utilities for common `display` values
+// noinspection SassScssResolvedByNameOnly
 @each $breakpoint in map-keys($grid-breakpoints) {
   @include media-breakpoint-up($breakpoint) {
     $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
@@ -10,6 +11,7 @@
 }
 
 // Utilities for toggling `display` in print
+// noinspection SassScssResolvedByNameOnly
 @media print {
   @each $value in $displays {
     .d-print-#{$value} { display: $value !important; }

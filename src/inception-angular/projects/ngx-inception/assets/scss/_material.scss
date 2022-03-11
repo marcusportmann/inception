@@ -4,6 +4,7 @@
 
 @include mat.core();
 
+// noinspection SassScssResolvedByNameOnly
 $inception-palette-base:  $blue !default;
 
 $inception-palette-50:  #e4f5fa !default;
@@ -11,6 +12,8 @@ $inception-palette-100:  #bce5f3 !default;
 $inception-palette-200:  #90d4ec !default;
 $inception-palette-300:  #63c2e4 !default;
 $inception-palette-400:  #41b5de !default;
+
+// noinspection SassScssResolvedByNameOnly
 $inception-palette-500:  $blue !default;
 $inception-palette-600:  #1ca0d4 !default;
 $inception-palette-700:  #1897ce !default;
@@ -99,6 +102,7 @@ label {
   z-index: 10000;
 }
 
+// noinspection SassScssResolvedByNameOnly
 .mat-card {
   display: flex !important;
   flex-direction: column !important;
@@ -106,7 +110,7 @@ label {
   box-shadow: 0 1px 1px -2px rgba(0,0,0,.05), 0 1px 1px 0 rgba(0,0,0,.12), 0 1px 5px 0 rgba(0,0,0,.12) !important;
   /*-webkit-box-shadow: 0 1px 1px -2px rgba(0,0,0,.12), 0 2px 2px 0 rgba(0,0,0,.12), 0 1px 5px 0 rgba(0,0,0,.12) !important;*/
 
-  padding: 0px!important;
+  padding: 0 !important;
   border-radius: $card-border-radius;
 
   .mat-card-actions {
@@ -116,7 +120,7 @@ label {
   }
 
   > .mat-card-actions:last-child {
-    margin: 0px !important;
+    margin: 0 !important;
     padding-left: 1rem !important;
     padding-right: 1rem !important;
     padding-bottom: 1rem !important;
@@ -138,12 +142,12 @@ label {
     border-radius: $card-border-radius $card-border-radius 0 0;
 
     .mat-card-subtitle, .mat-card-subtitle:not(:first-child) {
-      margin-bottom: 0px;
+      margin-bottom: 0;
       margin-top: -0.25rem;
     }
 
     .mat-card-title {
-      margin-bottom: 0px;
+      margin-bottom: 0;
       font-size: 1.125rem;
     }
 
@@ -160,7 +164,7 @@ label {
 
   .mat-card-subtitle {
     margin-top: -0.25rem;
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 
   > .mat-card-subtitle {
@@ -180,6 +184,7 @@ label {
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 .mat-menu-panel {
   border-radius: 0;
 
@@ -219,7 +224,7 @@ label {
   }
 }
 
-
+// noinspection SassScssResolvedByNameOnly
 .mat-button {
   border: 1px solid rgba(0, 0, 0, 0.87) !important;
 
@@ -261,6 +266,7 @@ label {
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 .mat-form-field {
   width: 100%;
 
@@ -436,6 +442,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 .mat-table-header {
   display: flex;
   justify-content: space-between;
@@ -490,6 +497,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 .mat-nested-table-header {
   display: flex;
   justify-content: space-between;
@@ -611,6 +619,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
 
+// noinspection SassScssResolvedByNameOnly
 .mat-dialog-container {
 
   padding: 0 !important;
@@ -639,9 +648,6 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
     }
   }
 
-
-
-
   .confirmation-dialog, .error-dialog, .information-dialog, .warning-dialog {
     display: block;
     padding: 0;
@@ -659,10 +665,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
     .message-holder {
       display: flex;
       justify-content: space-around;
-      padding-top: 2.5rem;
-      padding-right: 1.25rem;
-      padding-left: 1.25rem;
-      padding-bottom: 2rem;
+      padding: 2.5rem 1.25rem 2rem;
 
       max-width: 360px;
 
@@ -759,7 +762,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 
 .mat-menu-panel.user-menu {
   position: absolute !important;
-  right: 0px !important;
+  right: 0 !important;
   top: 0 !important;
 
   border-top: none !important;
@@ -784,8 +787,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 
             .mat-form-field-infix {
               min-height: 0;
-              padding: 0;
-              padding-bottom: 2px;
+              padding: 0 0 2px;
               border-top: none;
 
               .mat-select:not(.mat-select-empty) {

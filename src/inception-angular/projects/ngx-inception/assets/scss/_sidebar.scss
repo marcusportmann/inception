@@ -1,6 +1,7 @@
 @use "sass:math";
 
 // stylelint-disable selector-max-class, declaration-no-important, selector-max-compound-selectors
+// noinspection SassScssResolvedByNameOnly
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -274,6 +275,7 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @include media-breakpoint-up(lg) {
   .sidebar-compact {
     .sidebar {

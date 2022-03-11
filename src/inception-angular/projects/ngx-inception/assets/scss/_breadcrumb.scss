@@ -1,3 +1,4 @@
+// noinspection SassScssResolvedByNameOnly
 .breadcrumb {
   display: flex;
   flex-wrap: wrap;
@@ -10,6 +11,7 @@
   @include border-radius($breadcrumb-border-radius);
 }
 
+// noinspection SassScssResolvedByNameOnly
 .breadcrumb-item {
   max-width: 300px;
   white-space: nowrap;

@@ -1,5 +1,6 @@
 @use "sass:math";
 
+// noinspection SassScssResolvedByNameOnly
 .switch {
   display: inline-block;
   width: $switch-width;
@@ -10,6 +11,7 @@
   display: none;
 }
 
+// noinspection SassScssResolvedByNameOnly
 .switch-slider {
   position: relative;
   display: block;
@@ -35,6 +37,7 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 .switch-input:checked ~ .switch-slider {
   &::before {
     transform: translateX($switch-width - $switch-height);
@@ -46,14 +49,17 @@
   opacity: .5;
 }
 
+// noinspection SassScssResolvedByNameOnly
 .switch-lg {
   @include switch-size($switch-lg-width, $switch-lg-height, $switch-lg-font-size, $switch-handle-margin);
 }
 
+// noinspection SassScssResolvedByNameOnly
 .switch-sm {
   @include switch-size($switch-sm-width, $switch-sm-height, $switch-sm-font-size, $switch-handle-margin);
 }
 
+// noinspection SassScssResolvedByNameOnly
 .switch-label {
   width: $switch-label-width;
 
@@ -100,6 +106,7 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 .switch-3d {
   .switch-slider {
     background-color: $gray-100;
@@ -126,6 +133,7 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @each $color, $value in $theme-colors {
   //normal style
   .switch-#{"" + $color} {

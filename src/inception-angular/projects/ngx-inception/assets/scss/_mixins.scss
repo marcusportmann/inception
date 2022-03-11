@@ -75,6 +75,7 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin bg-variant($parent, $color) {
   #{$parent} {
     @include border-radius($card-border-radius-inner $card-border-radius-inner $card-border-radius-inner $card-border-radius-inner);
@@ -93,6 +94,7 @@
   border-top-color: $color;
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin switch-size($width, $height, $font-size, $handle-margin) {
   width: $width;
   height: $height;
@@ -143,6 +145,7 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin switch-outline-variant($color) {
   .switch-input:checked + .switch-slider {
     background-color: $switch-bg;
@@ -157,6 +160,7 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin switch-outline-variant-alt($color) {
   .switch-input:checked + .switch-slider {
     background-color: $switch-bg;
@@ -199,6 +203,7 @@
 //    md
 //    >> breakpoint-next(sm, $breakpoint-names: (xs sm md lg xl))
 //    md
+// noinspection SassScssResolvedByNameOnly
 @function breakpoint-next($name, $breakpoints: $grid-breakpoints, $breakpoint-names: map-keys($breakpoints)) {
   $n: index($breakpoint-names, $name);
   @return if($n != null and $n < length($breakpoint-names), nth($breakpoint-names, $n + 1), null);
@@ -208,6 +213,7 @@
 //
 //    >> breakpoint-min(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))
 //    576px
+// noinspection SassScssResolvedByNameOnly
 @function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
   $min: map-get($breakpoints, $name);
   @return if($min != 0, $min, null);
@@ -222,6 +228,7 @@
 //
 //    >> breakpoint-max(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))
 //    767.98px
+// noinspection SassScssResolvedByNameOnly
 @function breakpoint-max($name, $breakpoints: $grid-breakpoints) {
   $next: breakpoint-next($name, $breakpoints);
   @return if($next, breakpoint-min($next, $breakpoints) - .02, null);
@@ -234,12 +241,14 @@
 //    ""  (Returns a blank string)
 //    >> breakpoint-infix(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))
 //    "-sm"
+// noinspection SassScssResolvedByNameOnly
 @function breakpoint-infix($name, $breakpoints: $grid-breakpoints) {
   @return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
 }
 
 // Media of at least the minimum breakpoint width. No query for the smallest breakpoint.
 // Makes the @content apply to the given breakpoint and wider.
+// noinspection SassScssResolvedByNameOnly
 @mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
   $min: breakpoint-min($name, $breakpoints);
   @if $min {
@@ -253,6 +262,7 @@
 
 // Media of at most the maximum breakpoint width. No query for the largest breakpoint.
 // Makes the @content apply to the given breakpoint and narrower.
+// noinspection SassScssResolvedByNameOnly
 @mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
   $max: breakpoint-max($name, $breakpoints);
   @if $max {
@@ -266,6 +276,7 @@
 
 // Media that spans multiple breakpoint widths.
 // Makes the @content apply between the min and max breakpoints
+// noinspection SassScssResolvedByNameOnly
 @mixin media-breakpoint-between($lower, $upper, $breakpoints: $grid-breakpoints) {
   $min: breakpoint-min($lower, $breakpoints);
   $max: breakpoint-max($upper, $breakpoints);
@@ -288,6 +299,7 @@
 // Media between the breakpoint's minimum and maximum widths.
 // No minimum for the smallest breakpoint, and no maximum for the largest one.
 // Makes the @content apply only to the given breakpoint, not viewports any wider or narrower.
+// noinspection SassScssResolvedByNameOnly
 @mixin media-breakpoint-only($name, $breakpoints: $grid-breakpoints) {
   $min: breakpoint-min($name, $breakpoints);
   $max: breakpoint-max($name, $breakpoints);
@@ -323,7 +335,7 @@
   $return: ();
   @each $value in $radius {
     @if type-of($value) == number {
-      $return: append($return, max($value, 0));
+      $return: append($return, max(#{$value}, 0));
     } @else {
       $return: append($return, $value);
     }
@@ -331,6 +343,7 @@
   @return $return;
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin border-radius($radius: $border-radius, $fallback-border-radius: false) {
   @if $enable-rounded {
     border-radius: valid-radius($radius);
@@ -340,6 +353,7 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin border-top-radius($radius) {
   @if $enable-rounded {
     border-top-left-radius: valid-radius($radius);
@@ -347,6 +361,7 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin border-right-radius($radius) {
   @if $enable-rounded {
     border-top-right-radius: valid-radius($radius);
@@ -354,6 +369,7 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin border-bottom-radius($radius) {
   @if $enable-rounded {
     border-bottom-right-radius: valid-radius($radius);
@@ -361,6 +377,7 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin border-left-radius($radius) {
   @if $enable-rounded {
     border-top-left-radius: valid-radius($radius);
@@ -368,24 +385,28 @@
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin border-top-left-radius($radius) {
   @if $enable-rounded {
     border-top-left-radius: valid-radius($radius);
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin border-top-right-radius($radius) {
   @if $enable-rounded {
     border-top-right-radius: valid-radius($radius);
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin border-bottom-right-radius($radius) {
   @if $enable-rounded {
     border-bottom-right-radius: valid-radius($radius);
   }
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin border-bottom-left-radius($radius) {
   @if $enable-rounded {
     border-bottom-left-radius: valid-radius($radius);
@@ -395,6 +416,7 @@
 
 
 // Unstyled keeps list items block level, just removes default browser padding and list-style
+// noinspection SassScssResolvedByNameOnly
 @mixin list-unstyled() {
   padding-left: 0;
   list-style: none;
@@ -444,7 +466,7 @@
 //
 // Used only by Bootstrap to generate the correct number of grid classes given
 // any value of `$grid-columns`.
-
+// noinspection SassScssResolvedByNameOnly
 @mixin make-grid-columns($columns: $grid-columns, $gutter: $grid-gutter-width, $breakpoints: $grid-breakpoints) {
   // Common properties for all breakpoints
   %grid-column {
@@ -530,6 +552,7 @@
 //
 // Generate semantic grid columns with these mixins.
 
+// noinspection SassScssResolvedByNameOnly
 @mixin make-container($gutter: $grid-gutter-width) {
   width: 100%;
   padding-right: $gutter * .5;
@@ -538,6 +561,7 @@
   margin-left: auto;
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin make-row($gutter: $grid-gutter-width) {
   display: flex;
   flex-wrap: wrap;
@@ -546,15 +570,16 @@
 }
 
 // For each breakpoint, define the maximum width of the container in a media query
+// noinspection SassScssResolvedByNameOnly
 @mixin make-container-max-widths($max-widths: $container-max-widths, $breakpoints: $grid-breakpoints) {
   @each $breakpoint, $container-max-width in $max-widths {
     @include media-breakpoint-up($breakpoint, $breakpoints) {
       max-width: $container-max-width;
     }
   }
-  @include deprecate("The `make-container-max-widths` mixin", "v4.5.2", "v5");
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin make-col-ready($gutter: $grid-gutter-width) {
   position: relative;
   // Prevent columns from becoming too narrow when at smaller grid tiers by
@@ -565,6 +590,7 @@
   padding-left: $gutter * .5;
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin make-col($size, $columns: $grid-columns) {
   flex: 0 0 percentage(divide($size, $columns));
   // Add a `max-width` to ensure content within each column does not blow out
@@ -579,6 +605,7 @@
   max-width: 100%; // Reset earlier grid tiers
 }
 
+// noinspection SassScssResolvedByNameOnly
 @mixin make-col-offset($size, $columns: $grid-columns) {
   $num: divide($size, $columns);
   margin-left: if($num == 0, 0, percentage($num));
@@ -589,6 +616,7 @@
 // Specify on a parent element(e.g., .row) to force immediate children into NN
 // numberof columns. Supports wrapping to new lines, but does not do a Masonry
 // style grid.
+// noinspection SassScssResolvedByNameOnly
 @mixin row-cols($count) {
   > * {
     flex: 0 0 divide(100%, $count);
