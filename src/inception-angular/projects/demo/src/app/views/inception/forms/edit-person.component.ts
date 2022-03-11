@@ -25,14 +25,14 @@ import {first} from 'rxjs/operators';
 import {PersonComponent} from './person.component';
 
 /**
- * The PersonFormComponent class implements the person form component.
+ * The EditPersonComponent class.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'person-form.component.html'
+  templateUrl: 'edit-person.component.html'
 })
-export class PersonFormComponent implements OnInit, OnDestroy {
+export class EditPersonComponent implements OnInit, OnDestroy {
 
   personForm: FormGroup;
 

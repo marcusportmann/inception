@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+export * from './src/components/title-input.component';
+export * from './src/components/party-components.module';
+
 export * from './src/services/party-services.module';
 export * from './src/services/party.service';
 export * from './src/services/party.service.errors';

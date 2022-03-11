@@ -51,6 +51,8 @@ export class PersonComponent implements OnInit, OnDestroy {
 
   surnameControl: FormControl = new FormControl('', Validators.required);
 
+  titleControl: FormControl = new FormControl('', Validators.required);
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private partyReferenceService: PartyReferenceService,
@@ -73,6 +75,7 @@ export class PersonComponent implements OnInit, OnDestroy {
       this._person.middleNames = (!!this.middleNamesControl.value) ? this.middleNamesControl.value : undefined;
       this._person.name = (!!this.nameControl.value) ? this.nameControl.value : undefined;
       this._person.surname = (!!this.surnameControl.value) ? this.surnameControl.value : undefined;
+      this._person.title = (!!this.titleControl.value) ? this.titleControl.value : undefined;
     }
 
     return this._person;
@@ -88,6 +91,7 @@ export class PersonComponent implements OnInit, OnDestroy {
       this.middleNamesControl.setValue(person.middleNames);
       this.nameControl.setValue(person.name);
       this.surnameControl.setValue(person.surname);
+      this.titleControl.setValue(person.title);
     }
 
     this._person = person;
@@ -100,7 +104,8 @@ export class PersonComponent implements OnInit, OnDestroy {
       && this.languageControl.valid
       && this.maidenNameControl.valid
       && this.middleNamesControl.valid
-      && this.surnameControl.valid;
+      && this.surnameControl.valid
+      && this.titleControl.valid;
   }
 
   deriveName(): void {

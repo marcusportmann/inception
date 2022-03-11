@@ -29,10 +29,10 @@ const routes: Routes = [{
     title: 'Components',
   }
 }, {
-  path: 'form',
-  loadChildren: () => import('./form/form.module').then(m => m.FormModule),
+  path: 'forms',
+  loadChildren: () => import('./forms/forms.module').then(m => m.FormsModule),
   data: {
-    title: 'Form',
+    title: 'Forms',
   }
 }, {
   path: 'tables',

@@ -14,35 +14,44 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Component} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {
-  EntityType, PartyReferenceService, PartyService, Person, Snapshots
-} from 'ngx-inception/party';
-import {forkJoin, Subscription} from "rxjs";
-import {first} from 'rxjs/operators';
-import {PersonComponent} from './person.component';
 
 /**
- * The PartyComponentsFormComponent class implements the party components component.
+ * The ReferenceComponentsComponent class.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'party-components-form.component.html'
+  templateUrl: 'reference-components.component.html'
 })
-export class PartyComponentsFormComponent {
+export class ReferenceComponentsComponent {
 
-  partyComponentsForm: FormGroup;
+  countriesControl: FormControl = new FormControl([], Validators.required);
+
+  countryControl: FormControl = new FormControl('', Validators.required);
+
+  languageControl: FormControl = new FormControl('', Validators.required);
+
+  referenceForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder) {
 
-    this.partyComponentsForm = this.formBuilder.group({
+    this.referenceForm = this.formBuilder.group({
       // hideRequired: false,
       // floatLabel: 'auto',
       // eslint-disable-next-line
+      countries: this.countriesControl,
+      country: this.countryControl,
+      language: this.languageControl
     });
+  }
+
+  ok(): void {
+    console.log('Countries = ', this.referenceForm.get('countries')!.value);
+    console.log('Country = ', this.referenceForm.get('country')!.value);
+    console.log('Language = ', this.referenceForm.get('language')!.value);
   }
 }

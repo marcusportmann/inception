@@ -103,12 +103,12 @@ export class AppModule extends InceptionAppModule {
           new NavigationItem('fa fa-puzzle-piece', 'Tooltips', '/inception/components/tooltips')
         ]),
 
-      new NavigationItem('fa fa-file-alt', 'Form', '/inception/form', [],
-        [new NavigationItem('fa fa-file-alt', 'Example Form', '/inception/form/example-form'),
-          new NavigationItem('fa fa-file-alt', 'Party Components Form', '/inception/form/party-components-form'),
-          new NavigationItem('fa fa-file-alt', 'Party Reference Form', '/inception/form/party-reference-form'),
-          new NavigationItem('fa fa-file-alt', 'Person Form', '/inception/form/person-form'),
-          new NavigationItem('fa fa-file-alt', 'Reference Form', '/inception/form/reference-form')
+      new NavigationItem('fa fa-file-alt', 'Forms', '/inception/forms', [],
+        [new NavigationItem('fa fa-file-alt', 'Edit Person', '/inception/forms/edit-person'),
+          new NavigationItem('fa fa-file-alt', 'Example', '/inception/forms/example'),
+          new NavigationItem('fa fa-file-alt', 'Party Components', '/inception/forms/party-components'),
+          new NavigationItem('fa fa-file-alt', 'Party Reference', '/inception/forms/party-reference'),
+          new NavigationItem('fa fa-file-alt', 'Reference Components', '/inception/forms/reference-components')
         ]),
 
       new NavigationItem('fa fa-table', 'Tables', '/inception/tables', [],

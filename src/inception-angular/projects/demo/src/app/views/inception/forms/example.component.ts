@@ -36,14 +36,14 @@ class Title {
 }
 
 /**
- * The ExampleFormComponent class implements the example form component.
+ * The ExampleComponent class.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'example-form.component.html'
+  templateUrl: 'example.component.html'
 })
-export class ExampleFormComponent implements OnInit, OnDestroy {
+export class ExampleComponent implements OnInit, OnDestroy {
 
   static readonly MAX_DATE = Date.now();
 

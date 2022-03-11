@@ -33,14 +33,14 @@ import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime, first, map, startWith} from 'rxjs/operators';
 
 /**
- * The PartyReferenceFormComponent class implements the party reference form component.
+ * The PartyReferenceComponent class.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'party-reference-form.component.html'
+  templateUrl: 'party-reference.component.html'
 })
-export class PartyReferenceFormComponent implements OnInit, OnDestroy {
+export class PartyReferenceComponent implements OnInit, OnDestroy {
 
   filteredAssociationPropertyTypes$: Subject<AssociationPropertyType[]> = new ReplaySubject<AssociationPropertyType[]>();
 

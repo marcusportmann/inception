@@ -19,6 +19,22 @@
         </mat-form-field>
       </div>
     </div>
+
+
+    <div class="row">
+      <div class="col-sm">
+        <mat-form-field>
+          <mat-label>Title</mat-label>
+          <title-input [formControl]="titleControl" required></title-input>
+          <mat-error *ngIf="titleControl.errors && !titleControl.untouched">
+            <span *ngIf="titleControl.errors?.required">A title is required.</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm">
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-sm">
         <mat-form-field>
