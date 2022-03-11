@@ -17,6 +17,7 @@
 export * from './src/components/countries-chip-list.component';
 export * from './src/components/country-input.component';
 export * from './src/components/language-input.component';
+export * from './src/components/region-input.component';
 export * from './src/components/reference-components.module';
 
 export * from './src/services/reference-services.module';

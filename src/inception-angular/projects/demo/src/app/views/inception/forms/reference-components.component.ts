@@ -36,6 +36,8 @@ export class ReferenceComponentsComponent {
 
   referenceForm: FormGroup;
 
+  regionControl: FormControl = new FormControl('', Validators.required);
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder) {
 
@@ -45,7 +47,8 @@ export class ReferenceComponentsComponent {
       // eslint-disable-next-line
       countries: this.countriesControl,
       country: this.countryControl,
-      language: this.languageControl
+      language: this.languageControl,
+      region: this.regionControl
     });
   }
 
@@ -53,5 +56,6 @@ export class ReferenceComponentsComponent {
     console.log('Countries = ', this.referenceForm.get('countries')!.value);
     console.log('Country = ', this.referenceForm.get('country')!.value);
     console.log('Language = ', this.referenceForm.get('language')!.value);
+    console.log('Region = ', this.referenceForm.get('region')!.value);
   }
 }

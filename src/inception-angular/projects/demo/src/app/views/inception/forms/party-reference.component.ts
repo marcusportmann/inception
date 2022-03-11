@@ -134,8 +134,6 @@ export class PartyReferenceComponent implements OnInit, OnDestroy {
 
   filteredTimesToContact$: Subject<TimeToContact[]> = new ReplaySubject<TimeToContact[]>();
 
-  filteredTitles$: Subject<Title[]> = new ReplaySubject<Title[]>();
-
   partyReferenceForm: FormGroup;
 
   private subscriptions: Subscription = new Subscription();
@@ -561,14 +559,6 @@ export class PartyReferenceComponent implements OnInit, OnDestroy {
   displayTimeToContact(timeToContact: TimeToContact): string {
     if (!!timeToContact) {
       return timeToContact.name;
-    } else {
-      return '';
-    }
-  }
-
-  displayTitle(title: Title): string {
-    if (!!title) {
-      return title.name;
     } else {
       return '';
     }
@@ -1805,33 +1795,6 @@ export class PartyReferenceComponent implements OnInit, OnDestroy {
           })).subscribe());
       }
     });
-
-    this.partyReferenceService.getTitles().pipe(first()).subscribe((titles: Map<string, Title>) => {
-      const titleControl = this.partyReferenceForm.get('title');
-
-      if (titleControl) {
-        this.subscriptions.add(titleControl.valueChanges.pipe(
-          startWith(''),
-          debounceTime(500),
-          map((value: string | Title) => {
-            if (typeof (value) === 'string') {
-              value = value.toLowerCase();
-            } else {
-              value = value.name.toLowerCase();
-            }
-
-            let filteredTitles: Title[] = [];
-
-            for (const title of titles.values()) {
-              if (title.name.toLowerCase().indexOf(value) === 0) {
-                filteredTitles.push(title);
-              }
-            }
-
-            this.filteredTitles$.next(filteredTitles);
-          })).subscribe());
-      }
-    });
   }
 
   ok(): void {
@@ -1880,6 +1843,5 @@ export class PartyReferenceComponent implements OnInit, OnDestroy {
     console.log('Status Type = ', this.partyReferenceForm.get('statusType')!.value);
     console.log('Tax Number Type = ', this.partyReferenceForm.get('taxNumberType')!.value);
     console.log('Time To Contact = ', this.partyReferenceForm.get('timeToContact')!.value);
-    console.log('Title = ', this.partyReferenceForm.get('title')!.value);
   }
 }

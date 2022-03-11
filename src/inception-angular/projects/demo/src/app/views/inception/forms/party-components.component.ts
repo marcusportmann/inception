@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Component} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {
-  EntityType, PartyReferenceService, PartyService, Person, Snapshots
-} from 'ngx-inception/party';
-import {forkJoin, Subscription} from "rxjs";
-import {first} from 'rxjs/operators';
-import {PersonComponent} from './person.component';
 
 /**
  * The PartyComponentsComponent class.
@@ -36,6 +30,8 @@ export class PartyComponentsComponent {
 
   partyComponentsForm: FormGroup;
 
+  titleControl: FormControl = new FormControl('', Validators.required);
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder) {
 
@@ -43,6 +39,11 @@ export class PartyComponentsComponent {
       // hideRequired: false,
       // floatLabel: 'auto',
       // eslint-disable-next-line
+      title: this.titleControl
     });
+  }
+
+  ok(): void {
+    console.log('Title = ', this.partyComponentsForm.get('title')!.value);
   }
 }

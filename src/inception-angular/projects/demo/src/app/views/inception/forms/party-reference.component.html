@@ -737,22 +737,6 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm">
-          <mat-form-field>
-            <mat-label>Title</mat-label>
-            <input type="text" matInput formControlName="title" autocompleteSelectionRequired [matAutocomplete]="titleAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #titleAutocomplete="matAutocomplete" [displayWith]="displayTitle">
-              <mat-option *ngFor="let title of filteredTitles$ | async" [value]="title">
-                {{title.name}}
-              </mat-option>
-            </mat-autocomplete>
-            <mat-error *ngIf="partyReferenceForm.controls['title'].errors && !partyReferenceForm.controls['title'].untouched">
-              <span *ngIf="partyReferenceForm.controls['title'].errors?.required">A title is required.</span>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
     </mat-card-content>
     <mat-card-actions align="end">
       <button type="button" mat-flat-button color="link">Cancel</button>

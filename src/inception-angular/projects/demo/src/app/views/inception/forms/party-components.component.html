@@ -1,6 +1,17 @@
 <form [formGroup]="partyComponentsForm" autocomplete="off" class="d-flex flex-column flex-auto" validatedForm>
   <mat-card class="d-flex flex-column flex-auto">
     <mat-card-content class="d-flex flex-column flex-auto">
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Title</mat-label>
+            <title-input [formControl]="titleControl" required></title-input>
+            <mat-error *ngIf="titleControl.errors && !titleControl.untouched">
+              <span *ngIf="titleControl.errors?.required">A title is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
 
 

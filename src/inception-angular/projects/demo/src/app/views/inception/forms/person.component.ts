@@ -82,6 +82,8 @@ export class PersonComponent implements OnInit, OnDestroy {
   }
 
   set person(person: Person | null) {
+    this._person = person;
+
     if (person != null) {
       this.countriesOfCitizenshipControl.setValue(person.countriesOfCitizenship);
       this.countryOfBirthControl.setValue(person.countryOfBirth);
@@ -93,8 +95,6 @@ export class PersonComponent implements OnInit, OnDestroy {
       this.surnameControl.setValue(person.surname);
       this.titleControl.setValue(person.title);
     }
-
-    this._person = person;
   }
 
   get valid(): boolean {

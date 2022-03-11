@@ -23,11 +23,12 @@ import {ReferenceServicesModule} from '../services/reference-services.module';
 import {CountriesChipListComponent} from './countries-chip-list.component';
 import {CountryInputComponent} from './country-input.component';
 import {LanguageInputComponent} from './language-input.component';
+import {RegionInputComponent} from './region-input.component';
 
 @NgModule({
   declarations: [
     // Components
-    CountriesChipListComponent, CountryInputComponent, LanguageInputComponent
+    CountriesChipListComponent, CountryInputComponent, LanguageInputComponent, RegionInputComponent
   ],
   imports: [
     // Angular modules
@@ -40,7 +41,7 @@ import {LanguageInputComponent} from './language-input.component';
     MatAutocompleteModule, MatChipsModule, MatInputModule
   ],
   exports: [
-    CountriesChipListComponent, CountryInputComponent, LanguageInputComponent
+    CountriesChipListComponent, CountryInputComponent, LanguageInputComponent, RegionInputComponent
   ]
 })
 export class ReferenceComponentsModule {

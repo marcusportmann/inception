@@ -79,7 +79,7 @@ $inception-typography: mat.define-typography-config(
   $caption:       mat.define-typography-level(12px, 20px, 400),
   $button:        mat.define-typography-level(1rem, 14px, 500),
     // Line-height must be unit-less fraction of the font-size.
-  $input:         mat.define-typography-level(1rem, 1.125, 400)
+  $input:         mat.define-typography-level(1rem, 1.2, 400)
 );
 
 $foreground: map-get($inception-theme, foreground);

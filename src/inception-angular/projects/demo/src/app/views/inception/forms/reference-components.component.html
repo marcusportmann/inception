@@ -34,6 +34,17 @@
           </mat-form-field>
         </div>
       </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Region</mat-label>
+            <region-input [country]="'ZA'" [formControl]="regionControl" required></region-input>
+            <mat-error *ngIf="regionControl.errors && !regionControl.untouched">
+              <span *ngIf="regionControl.errors?.required">A region is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
     </mat-card-content>
     <mat-card-actions align="end">
       <button type="button" mat-flat-button color="link">Cancel</button>
