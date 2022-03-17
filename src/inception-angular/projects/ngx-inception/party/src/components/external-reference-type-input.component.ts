@@ -25,37 +25,38 @@ import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {ExternalReferenceType} from '../services/external-reference-type';
 import {PartyReferenceService} from '../services/party-reference.service';
-import {Title} from '../services/title';
 
 /**
- * The TitleInputComponent class implements the title input component.
+ * The ExternalReferenceTypeInputComponent class implements the external reference type input component.
  *
  * @author Marcus Portmann
  */
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'title-input',
+  selector: 'external-reference-type-input',
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #titleInput
+        #externalReferenceTypeInput
         type="text"
         matInput
         autocompleteSelectionRequired
         required="required"
-        [matAutocomplete]="titleAutocomplete"
+        [matAutocomplete]="externalReferenceTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="titleInputChanged($event)"
+        (input)="externalReferenceTypeInputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
-        #titleAutocomplete="matAutocomplete"
-        [displayWith]="displayTitle"
-
-        (optionSelected)="selectTitle($event)">
-        <mat-option *ngFor="let title of filteredTitles$ | async" [value]="title">
-          {{title.name}}
+        #externalReferenceTypeAutocomplete="matAutocomplete"
+        [displayWith]="displayExternalReferenceType"
+        (optionSelected)="selectExternalReferenceType($event)">
+        <mat-option
+          *ngFor="let externalReferenceType of filteredExternalReferenceTypes$ | async"
+          [value]="externalReferenceType">
+          {{externalReferenceType.name}}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -63,11 +64,11 @@ import {Title} from '../services/title';
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: TitleInputComponent
+      useExisting: ExternalReferenceTypeInputComponent
     }
   ]
 })
-export class TitleInputComponent implements MatFormFieldControl<string>,
+export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<string>,
   ControlValueAccessor, OnInit, OnDestroy {
 
   private static _nextId: number = 0;
@@ -75,12 +76,27 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   /**
    * The name for the control type.
    */
-  controlType = 'title-input';
+  controlType = 'external-reference-type-input';
 
   /**
-   * The filtered titles for the autocomplete.
+   * The external reference type input.
    */
-  filteredTitles$: Subject<Title[]> = new ReplaySubject<Title[]>();
+  @ViewChild(MatInput, {static: true}) externalReferenceTypeInput!: MatInput;
+
+  /**
+   * The reference to the element for the external reference type input.
+   */
+  @ViewChild('externalReferenceTypeInput') externalReferenceTypeInputElementRef!: ElementRef;
+
+  /**
+   * The observable providing access to the value for the external reference type input as it changes.
+   */
+  externalReferenceTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+
+  /**
+   * The filtered external reference types for the autocomplete.
+   */
+  filteredExternalReferenceTypes$: Subject<ExternalReferenceType[]> = new ReplaySubject<ExternalReferenceType[]>();
 
   /**
    * Whether the control is focused.
@@ -90,27 +106,12 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   /**
    * The ID for the control.
    */
-  @HostBinding() id = `title-input-${TitleInputComponent._nextId++}`;
+  @HostBinding() id = `external-reference-type-input-${ExternalReferenceTypeInputComponent._nextId++}`;
 
   /**
    * The observable indicating that the state of the control has changed.
    */
   stateChanges = new Subject<void>();
-
-  /**
-   * The title input.
-   */
-  @ViewChild(MatInput, {static: true}) titleInput!: MatInput;
-
-  /**
-   * The reference to the element for the title input.
-   */
-  @ViewChild('titleInput') titleInputElementRef!: ElementRef;
-
-  /**
-   * The observable providing access to the value for the title input as it changes.
-   */
-  titleInputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * Has the control received a touch event.
@@ -148,14 +149,14 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.titleInput.disabled = true;
+      this.externalReferenceTypeInput.disabled = true;
     }
 
     this.stateChanges.next();
   }
 
   /**
-   * The placeholder for the title input.
+   * The placeholder for the external reference type input.
    * @private
    */
   private _placeholder: string = '';
@@ -187,23 +188,23 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The code for the selected title.
+   * The code for the selected external reference type.
    */
   private _value: string | null = null;
 
   /**
-   * Returns the code for the selected title.
+   * Returns the code for the selected external reference type.
    *
-   * @return the code for the selected title
+   * @return the code for the selected external reference type
    */
   public get value(): string | null {
     return this._value;
   }
 
   /**
-   * Set the code for the selected title.
+   * Set the code for the selected external reference type.
    *
-   * @param value the code for the selected title
+   * @param value the code for the selected external reference type
    */
   @Input()
   public set value(value: string | null) {
@@ -212,15 +213,15 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     }
 
     if (this._value !== value) {
-      this.partyReferenceService.getTitles().pipe(first()).subscribe((titles: Map<string, Title>) => {
+      this.partyReferenceService.getExternalReferenceTypes().pipe(first()).subscribe((externalReferenceTypes: Map<string, ExternalReferenceType>) => {
         this._value = null;
-        this.titleInput.value = '';
+        this.externalReferenceTypeInput.value = '';
 
         if (!!value) {
-          for (const title of titles.values()) {
-            if (title.code === value) {
+          for (const externalReferenceType of externalReferenceTypes.values()) {
+            if (externalReferenceType.code === value) {
               this._value = value;
-              this.titleInput.value = title.name;
+              this.externalReferenceTypeInput.value = externalReferenceType.name;
               break;
             }
           }
@@ -243,14 +244,20 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.titleInput.focused;
+    return this.focused || !this.empty || this.externalReferenceTypeInput.focused;
   }
 
-  displayTitle(title: Title): string {
-    if (!!title) {
-      return title.name;
+  displayExternalReferenceType(externalReferenceType: ExternalReferenceType): string {
+    if (!!externalReferenceType) {
+      return externalReferenceType.name;
     } else {
       return '';
+    }
+  }
+
+  externalReferenceTypeInputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.externalReferenceTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -260,28 +267,28 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.titleInput.placeholder = this._placeholder;
+    this.externalReferenceTypeInput.placeholder = this._placeholder;
 
-    this.partyReferenceService.getTitles().pipe(first()).subscribe((titles: Map<string, Title>) => {
-      this.subscriptions.add(this.titleInputValue$.pipe(
+    this.partyReferenceService.getExternalReferenceTypes().pipe(first()).subscribe((externalReferenceTypes: Map<string, ExternalReferenceType>) => {
+      this.subscriptions.add(this.externalReferenceTypeInputValue$.pipe(
         startWith(''),
         debounceTime(500),
-        map((value: string | Title) => {
+        map((value: string | ExternalReferenceType) => {
           if (typeof (value) === 'string') {
             value = value.toLowerCase();
           } else {
             value = value.name.toLowerCase();
           }
 
-          let filteredTitles: Title[] = [];
+          let filteredExternalReferenceTypes: ExternalReferenceType[] = [];
 
-          for (const title of titles.values()) {
-            if (title.name.toLowerCase().indexOf(value) === 0) {
-              filteredTitles.push(title);
+          for (const externalReferenceType of externalReferenceTypes.values()) {
+            if (externalReferenceType.name.toLowerCase().indexOf(value) === 0) {
+              filteredExternalReferenceTypes.push(externalReferenceType);
             }
           }
 
-          this.filteredTitles$.next(filteredTitles);
+          this.filteredExternalReferenceTypes$.next(filteredExternalReferenceTypes);
         })).subscribe());
     });
   }
@@ -291,7 +298,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.titleInput.focus();
+      this.externalReferenceTypeInput.focus();
     }
   }
 
@@ -303,8 +310,8 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the title input then clear the value when losing focus
-    if ((!!this._value) && (!this.titleInput.value)) {
+    // If we have cleared the externalReferenceType input then clear the value when losing focus
+    if ((!!this._value) && (!this.externalReferenceTypeInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -313,7 +320,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.titleInput.focused;
+    this.focused = this.externalReferenceTypeInput.focused;
     this.stateChanges.next();
   }
 
@@ -330,7 +337,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     this.onTouched = fn;
   }
 
-  selectTitle(event: MatAutocompleteSelectedEvent): void {
+  selectExternalReferenceType(event: MatAutocompleteSelectedEvent): void {
     this.value = event.option.value.code;
   }
 
@@ -343,13 +350,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
 
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
-    // controlElement.setAttribute('aria-describedby', ids.join(' '));
-  }
-
-  titleInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.titleInputValue$.next((event.target as HTMLInputElement).value);
-    }
+    // controlElement.setConsent('aria-describedby', ids.join(' '));
   }
 
   /**

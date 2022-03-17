@@ -19,11 +19,27 @@ import {NgModule} from '@angular/core';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
 import {PartyServicesModule} from '../services/party-services.module';
+import {AssociationPropertyTypeInputComponent} from './association-property-type-input.component';
+import {AssociationTypeInputComponent} from './association-type-input.component';
+import {AttributeTypeCategoryInputComponent} from './attribute-type-category-input.component';
+import {AttributeTypeInputComponent} from './attribute-type-input.component';
+import {ConsentTypeInputComponent} from './consent-type-input.component';
+import {ContactMechanismPurposeInputComponent} from './contact-mechanism-purpose-input.component';
+import {ContactMechanismRoleInputComponent} from './contact-mechanism-role-input.component';
+import {ContactMechanismTypeInputComponent} from './contact-mechanism-type-input.component';
+import {EmploymentStatusInputComponent} from './employment-status-input.component';
+import {EmploymentTypeInputComponent} from './employment-type-input.component';
+import {ExternalReferenceTypeInputComponent} from './external-reference-type-input.component';
 import {TitleInputComponent} from './title-input.component';
 
 @NgModule({
   declarations: [
     // Components
+    AssociationPropertyTypeInputComponent, AssociationTypeInputComponent,
+    AttributeTypeCategoryInputComponent, AttributeTypeInputComponent, ConsentTypeInputComponent,
+    ContactMechanismPurposeInputComponent, ContactMechanismRoleInputComponent,
+    ContactMechanismTypeInputComponent, EmploymentStatusInputComponent,
+    EmploymentTypeInputComponent, ExternalReferenceTypeInputComponent,
     TitleInputComponent
   ],
   imports: [
@@ -37,6 +53,11 @@ import {TitleInputComponent} from './title-input.component';
     MatAutocompleteModule, MatInputModule
   ],
   exports: [
+    AssociationPropertyTypeInputComponent, AssociationTypeInputComponent,
+    AttributeTypeCategoryInputComponent, AttributeTypeInputComponent, ConsentTypeInputComponent,
+    ContactMechanismPurposeInputComponent, ContactMechanismRoleInputComponent,
+    ContactMechanismTypeInputComponent, EmploymentStatusInputComponent,
+    EmploymentTypeInputComponent, ExternalReferenceTypeInputComponent,
     TitleInputComponent
   ]
 })

@@ -25,37 +25,40 @@ import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {ContactMechanismPurpose} from '../services/contact-mechanism-purpose';
 import {PartyReferenceService} from '../services/party-reference.service';
-import {Title} from '../services/title';
 
 /**
- * The TitleInputComponent class implements the title input component.
+ * The ContactMechanismPurposeInputComponent class implements the contact mechanism purpose input
+ * component.
  *
  * @author Marcus Portmann
  */
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'title-input',
+  selector: 'contact-mechanism-purpose-input',
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #titleInput
+        #contactMechanismPurposeInput
         type="text"
         matInput
         autocompleteSelectionRequired
         required="required"
-        [matAutocomplete]="titleAutocomplete"
+        [matAutocomplete]="contactMechanismPurposeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="titleInputChanged($event)"
+        (input)="contactMechanismPurposeInputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
-        #titleAutocomplete="matAutocomplete"
-        [displayWith]="displayTitle"
+        #contactMechanismPurposeAutocomplete="matAutocomplete"
+        [displayWith]="displayContactMechanismPurpose"
 
-        (optionSelected)="selectTitle($event)">
-        <mat-option *ngFor="let title of filteredTitles$ | async" [value]="title">
-          {{title.name}}
+        (optionSelected)="selectContactMechanismPurpose($event)">
+        <mat-option
+          *ngFor="let contactMechanismPurpose of filteredContactMechanismPurposes$ | async"
+          [value]="contactMechanismPurpose">
+          {{contactMechanismPurpose.name}}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -63,24 +66,39 @@ import {Title} from '../services/title';
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: TitleInputComponent
+      useExisting: ContactMechanismPurposeInputComponent
     }
   ]
 })
-export class TitleInputComponent implements MatFormFieldControl<string>,
+export class ContactMechanismPurposeInputComponent implements MatFormFieldControl<string>,
   ControlValueAccessor, OnInit, OnDestroy {
 
   private static _nextId: number = 0;
 
   /**
-   * The name for the control type.
+   * The contact mechanism purpose input.
    */
-  controlType = 'title-input';
+  @ViewChild(MatInput, {static: true}) contactMechanismPurposeInput!: MatInput;
 
   /**
-   * The filtered titles for the autocomplete.
+   * The reference to the element for the contact mechanism purpose input.
    */
-  filteredTitles$: Subject<Title[]> = new ReplaySubject<Title[]>();
+  @ViewChild('contactMechanismPurposeInput') contactMechanismPurposeInputElementRef!: ElementRef;
+
+  /**
+   * The observable providing access to the value for the contact mechanism purpose input as it changes.
+   */
+  contactMechanismPurposeInputValue$: Subject<string> = new ReplaySubject<string>();
+
+  /**
+   * The name for the control type.
+   */
+  controlType = 'contact-mechanism-purpose-input';
+
+  /**
+   * The filtered contact mechanism purposes for the autocomplete.
+   */
+  filteredContactMechanismPurposes$: Subject<ContactMechanismPurpose[]> = new ReplaySubject<ContactMechanismPurpose[]>();
 
   /**
    * Whether the control is focused.
@@ -90,27 +108,12 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   /**
    * The ID for the control.
    */
-  @HostBinding() id = `title-input-${TitleInputComponent._nextId++}`;
+  @HostBinding() id = `contact-mechanism-purpose-input-${ContactMechanismPurposeInputComponent._nextId++}`;
 
   /**
    * The observable indicating that the state of the control has changed.
    */
   stateChanges = new Subject<void>();
-
-  /**
-   * The title input.
-   */
-  @ViewChild(MatInput, {static: true}) titleInput!: MatInput;
-
-  /**
-   * The reference to the element for the title input.
-   */
-  @ViewChild('titleInput') titleInputElementRef!: ElementRef;
-
-  /**
-   * The observable providing access to the value for the title input as it changes.
-   */
-  titleInputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * Has the control received a touch event.
@@ -148,14 +151,14 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.titleInput.disabled = true;
+      this.contactMechanismPurposeInput.disabled = true;
     }
 
     this.stateChanges.next();
   }
 
   /**
-   * The placeholder for the title input.
+   * The placeholder for the contact mechanism purpose input.
    * @private
    */
   private _placeholder: string = '';
@@ -187,23 +190,23 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The code for the selected title.
+   * The code for the selected contact mechanism purpose.
    */
   private _value: string | null = null;
 
   /**
-   * Returns the code for the selected title.
+   * Returns the code for the selected contact mechanism purpose.
    *
-   * @return the code for the selected title
+   * @return the code for the selected contact mechanism purpose
    */
   public get value(): string | null {
     return this._value;
   }
 
   /**
-   * Set the code for the selected title.
+   * Set the code for the selected contact mechanism purpose.
    *
-   * @param value the code for the selected title
+   * @param value the code for the selected contact mechanism purpose
    */
   @Input()
   public set value(value: string | null) {
@@ -212,15 +215,15 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     }
 
     if (this._value !== value) {
-      this.partyReferenceService.getTitles().pipe(first()).subscribe((titles: Map<string, Title>) => {
+      this.partyReferenceService.getContactMechanismPurposes().pipe(first()).subscribe((contactMechanismPurposes: Map<string, ContactMechanismPurpose>) => {
         this._value = null;
-        this.titleInput.value = '';
+        this.contactMechanismPurposeInput.value = '';
 
         if (!!value) {
-          for (const title of titles.values()) {
-            if (title.code === value) {
+          for (const contactMechanismPurpose of contactMechanismPurposes.values()) {
+            if (contactMechanismPurpose.code === value) {
               this._value = value;
-              this.titleInput.value = title.name;
+              this.contactMechanismPurposeInput.value = contactMechanismPurpose.name;
               break;
             }
           }
@@ -243,12 +246,18 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.titleInput.focused;
+    return this.focused || !this.empty || this.contactMechanismPurposeInput.focused;
   }
 
-  displayTitle(title: Title): string {
-    if (!!title) {
-      return title.name;
+  contactMechanismPurposeInputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.contactMechanismPurposeInputValue$.next((event.target as HTMLInputElement).value);
+    }
+  }
+
+  displayContactMechanismPurpose(contactMechanismPurpose: ContactMechanismPurpose): string {
+    if (!!contactMechanismPurpose) {
+      return contactMechanismPurpose.name;
     } else {
       return '';
     }
@@ -260,28 +269,28 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.titleInput.placeholder = this._placeholder;
+    this.contactMechanismPurposeInput.placeholder = this._placeholder;
 
-    this.partyReferenceService.getTitles().pipe(first()).subscribe((titles: Map<string, Title>) => {
-      this.subscriptions.add(this.titleInputValue$.pipe(
+    this.partyReferenceService.getContactMechanismPurposes().pipe(first()).subscribe((contactMechanismPurposes: Map<string, ContactMechanismPurpose>) => {
+      this.subscriptions.add(this.contactMechanismPurposeInputValue$.pipe(
         startWith(''),
         debounceTime(500),
-        map((value: string | Title) => {
+        map((value: string | ContactMechanismPurpose) => {
           if (typeof (value) === 'string') {
             value = value.toLowerCase();
           } else {
             value = value.name.toLowerCase();
           }
 
-          let filteredTitles: Title[] = [];
+          let filteredContactMechanismPurposes: ContactMechanismPurpose[] = [];
 
-          for (const title of titles.values()) {
-            if (title.name.toLowerCase().indexOf(value) === 0) {
-              filteredTitles.push(title);
+          for (const contactMechanismPurpose of contactMechanismPurposes.values()) {
+            if (contactMechanismPurpose.name.toLowerCase().indexOf(value) === 0) {
+              filteredContactMechanismPurposes.push(contactMechanismPurpose);
             }
           }
 
-          this.filteredTitles$.next(filteredTitles);
+          this.filteredContactMechanismPurposes$.next(filteredContactMechanismPurposes);
         })).subscribe());
     });
   }
@@ -291,7 +300,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.titleInput.focus();
+      this.contactMechanismPurposeInput.focus();
     }
   }
 
@@ -303,8 +312,8 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the title input then clear the value when losing focus
-    if ((!!this._value) && (!this.titleInput.value)) {
+    // If we have cleared the contactMechanismPurpose input then clear the value when losing focus
+    if ((!!this._value) && (!this.contactMechanismPurposeInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -313,7 +322,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.titleInput.focused;
+    this.focused = this.contactMechanismPurposeInput.focused;
     this.stateChanges.next();
   }
 
@@ -330,7 +339,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     this.onTouched = fn;
   }
 
-  selectTitle(event: MatAutocompleteSelectedEvent): void {
+  selectContactMechanismPurpose(event: MatAutocompleteSelectedEvent): void {
     this.value = event.option.value.code;
   }
 
@@ -344,12 +353,6 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setAttribute('aria-describedby', ids.join(' '));
-  }
-
-  titleInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.titleInputValue$.next((event.target as HTMLInputElement).value);
-    }
   }
 
   /**

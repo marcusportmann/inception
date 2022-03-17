@@ -4,6 +4,131 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
+            <mat-label>Association Property Type</mat-label>
+            <association-property-type-input [formControl]="associationPropertyTypeControl" required></association-property-type-input>
+            <mat-error *ngIf="associationPropertyTypeControl.errors && !associationPropertyTypeControl.untouched">
+              <span *ngIf="associationPropertyTypeControl.errors?.required">An association property type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Association Type</mat-label>
+            <association-type-input [formControl]="associationTypeControl" required></association-type-input>
+            <mat-error *ngIf="associationTypeControl.errors && !associationTypeControl.untouched">
+              <span *ngIf="associationTypeControl.errors?.required">An association type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Attribute Type Category</mat-label>
+            <attribute-type-category-input [formControl]="attributeTypeCategoryControl" required></attribute-type-category-input>
+            <mat-error *ngIf="attributeTypeCategoryControl.errors && !attributeTypeCategoryControl.untouched">
+              <span *ngIf="attributeTypeCategoryControl.errors?.required">An attribute type category is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Attribute Type</mat-label>
+            <attribute-type-input [formControl]="attributeTypeControl" required></attribute-type-input>
+            <mat-error *ngIf="attributeTypeControl.errors && !attributeTypeControl.untouched">
+              <span *ngIf="attributeTypeControl.errors?.required">An attribute type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Consent Type</mat-label>
+            <consent-type-input [formControl]="consentTypeControl" required></consent-type-input>
+            <mat-error *ngIf="consentTypeControl.errors && !consentTypeControl.untouched">
+              <span *ngIf="consentTypeControl.errors?.required">A consent type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Contact Mechanism Purpose</mat-label>
+            <contact-mechanism-purpose-input [formControl]="contactMechanismPurposeControl" required></contact-mechanism-purpose-input>
+            <mat-error *ngIf="contactMechanismPurposeControl.errors && !contactMechanismPurposeControl.untouched">
+              <span *ngIf="contactMechanismPurposeControl.errors?.required">A contact mechanism purpose is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Contact Mechanism Role</mat-label>
+            <contact-mechanism-role-input [formControl]="contactMechanismRoleControl" required></contact-mechanism-role-input>
+            <mat-error *ngIf="contactMechanismRoleControl.errors && !contactMechanismRoleControl.untouched">
+              <span *ngIf="contactMechanismRoleControl.errors?.required">A contact mechanism role is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Contact Mechanism Type</mat-label>
+            <contact-mechanism-type-input [formControl]="contactMechanismTypeControl" required></contact-mechanism-type-input>
+            <mat-error *ngIf="contactMechanismTypeControl.errors && !contactMechanismTypeControl.untouched">
+              <span *ngIf="contactMechanismTypeControl.errors?.required">A contact mechanism type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Employment Status</mat-label>
+            <employment-status-input [formControl]="employmentStatusControl" required></employment-status-input>
+            <mat-error *ngIf="employmentStatusControl.errors && !employmentStatusControl.untouched">
+              <span *ngIf="employmentStatusControl.errors?.required">An employment status is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Employment Type</mat-label>
+            <employment-type-input [formControl]="employmentTypeControl" required></employment-type-input>
+            <mat-error *ngIf="employmentTypeControl.errors && !employmentTypeControl.untouched">
+              <span *ngIf="employmentTypeControl.errors?.required">An employment type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>External Reference Type</mat-label>
+            <external-reference-type-input [formControl]="externalReferenceTypeControl" required></external-reference-type-input>
+            <mat-error *ngIf="externalReferenceTypeControl.errors && !externalReferenceTypeControl.untouched">
+              <span *ngIf="externalReferenceTypeControl.errors?.required">An external reference type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
             <mat-label>Title</mat-label>
             <title-input [formControl]="titleControl" required></title-input>
             <mat-error *ngIf="titleControl.errors && !titleControl.untouched">
@@ -18,5 +143,9 @@
 
 
     </mat-card-content>
+    <mat-card-actions align="end">
+      <button type="button" mat-flat-button color="link">Cancel</button>
+      <button type="button" mat-flat-button color="primary" (click)="ok()">OK</button>
+    </mat-card-actions>
   </mat-card>
 </form>

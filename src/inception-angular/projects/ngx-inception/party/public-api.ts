@@ -14,6 +14,17 @@
  * limitations under the License.
  */
 
+export * from './src/components/association-property-type-input.component';
+export * from './src/components/association-type-input.component';
+export * from './src/components/attribute-type-category-input.component';
+export * from './src/components/attribute-type-input.component';
+export * from './src/components/consent-type-input.component';
+export * from './src/components/contact-mechanism-purpose-input.component';
+export * from './src/components/contact-mechanism-role-input.component';
+export * from './src/components/contact-mechanism-type-input.component';
+export * from './src/components/employment-status-input.component';
+export * from './src/components/employment-type-input.component';
+export * from './src/components/external-reference-type-input.component';
 export * from './src/components/title-input.component';
 export * from './src/components/party-components.module';
 

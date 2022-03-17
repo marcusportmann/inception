@@ -25,37 +25,39 @@ import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {AssociationType} from '../services/association-type';
 import {PartyReferenceService} from '../services/party-reference.service';
-import {Title} from '../services/title';
 
 /**
- * The TitleInputComponent class implements the title input component.
+ * The AssociationTypeInputComponent class implements the association type input component.
  *
  * @author Marcus Portmann
  */
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'title-input',
+  selector: 'association-type-input',
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #titleInput
+        #associationTypeInput
         type="text"
         matInput
         autocompleteSelectionRequired
         required="required"
-        [matAutocomplete]="titleAutocomplete"
+        [matAutocomplete]="associationTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="titleInputChanged($event)"
+        (input)="associationTypeInputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
-        #titleAutocomplete="matAutocomplete"
-        [displayWith]="displayTitle"
+        #associationTypeAutocomplete="matAutocomplete"
+        [displayWith]="displayAssociationType"
 
-        (optionSelected)="selectTitle($event)">
-        <mat-option *ngFor="let title of filteredTitles$ | async" [value]="title">
-          {{title.name}}
+        (optionSelected)="selectAssociationType($event)">
+        <mat-option
+          *ngFor="let associationType of filteredAssociationTypes$ | async"
+          [value]="associationType">
+          {{associationType.name}}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -63,24 +65,39 @@ import {Title} from '../services/title';
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: TitleInputComponent
+      useExisting: AssociationTypeInputComponent
     }
   ]
 })
-export class TitleInputComponent implements MatFormFieldControl<string>,
+export class AssociationTypeInputComponent implements MatFormFieldControl<string>,
   ControlValueAccessor, OnInit, OnDestroy {
 
   private static _nextId: number = 0;
 
   /**
-   * The name for the control type.
+   * The association type input.
    */
-  controlType = 'title-input';
+  @ViewChild(MatInput, {static: true}) associationTypeInput!: MatInput;
 
   /**
-   * The filtered titles for the autocomplete.
+   * The reference to the element for the association type input.
    */
-  filteredTitles$: Subject<Title[]> = new ReplaySubject<Title[]>();
+  @ViewChild('associationTypeInput') associationTypeInputElementRef!: ElementRef;
+
+  /**
+   * The observable providing access to the value for the association type input as it changes.
+   */
+  associationTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+
+  /**
+   * The name for the control type.
+   */
+  controlType = 'association-type-input';
+
+  /**
+   * The filtered association types for the autocomplete.
+   */
+  filteredAssociationTypes$: Subject<AssociationType[]> = new ReplaySubject<AssociationType[]>();
 
   /**
    * Whether the control is focused.
@@ -90,27 +107,12 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   /**
    * The ID for the control.
    */
-  @HostBinding() id = `title-input-${TitleInputComponent._nextId++}`;
+  @HostBinding() id = `association-type-input-${AssociationTypeInputComponent._nextId++}`;
 
   /**
    * The observable indicating that the state of the control has changed.
    */
   stateChanges = new Subject<void>();
-
-  /**
-   * The title input.
-   */
-  @ViewChild(MatInput, {static: true}) titleInput!: MatInput;
-
-  /**
-   * The reference to the element for the title input.
-   */
-  @ViewChild('titleInput') titleInputElementRef!: ElementRef;
-
-  /**
-   * The observable providing access to the value for the title input as it changes.
-   */
-  titleInputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * Has the control received a touch event.
@@ -148,14 +150,14 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.titleInput.disabled = true;
+      this.associationTypeInput.disabled = true;
     }
 
     this.stateChanges.next();
   }
 
   /**
-   * The placeholder for the title input.
+   * The placeholder for the association type input.
    * @private
    */
   private _placeholder: string = '';
@@ -187,23 +189,23 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The code for the selected title.
+   * The code for the selected association type.
    */
   private _value: string | null = null;
 
   /**
-   * Returns the code for the selected title.
+   * Returns the code for the selected association type.
    *
-   * @return the code for the selected title
+   * @return the code for the selected association type
    */
   public get value(): string | null {
     return this._value;
   }
 
   /**
-   * Set the code for the selected title.
+   * Set the code for the selected association type.
    *
-   * @param value the code for the selected title
+   * @param value the code for the selected association type
    */
   @Input()
   public set value(value: string | null) {
@@ -212,15 +214,15 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     }
 
     if (this._value !== value) {
-      this.partyReferenceService.getTitles().pipe(first()).subscribe((titles: Map<string, Title>) => {
+      this.partyReferenceService.getAssociationTypes().pipe(first()).subscribe((associationTypes: Map<string, AssociationType>) => {
         this._value = null;
-        this.titleInput.value = '';
+        this.associationTypeInput.value = '';
 
         if (!!value) {
-          for (const title of titles.values()) {
-            if (title.code === value) {
+          for (const associationType of associationTypes.values()) {
+            if (associationType.code === value) {
               this._value = value;
-              this.titleInput.value = title.name;
+              this.associationTypeInput.value = associationType.name;
               break;
             }
           }
@@ -243,12 +245,18 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.titleInput.focused;
+    return this.focused || !this.empty || this.associationTypeInput.focused;
   }
 
-  displayTitle(title: Title): string {
-    if (!!title) {
-      return title.name;
+  associationTypeInputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.associationTypeInputValue$.next((event.target as HTMLInputElement).value);
+    }
+  }
+
+  displayAssociationType(associationType: AssociationType): string {
+    if (!!associationType) {
+      return associationType.name;
     } else {
       return '';
     }
@@ -260,28 +268,28 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.titleInput.placeholder = this._placeholder;
+    this.associationTypeInput.placeholder = this._placeholder;
 
-    this.partyReferenceService.getTitles().pipe(first()).subscribe((titles: Map<string, Title>) => {
-      this.subscriptions.add(this.titleInputValue$.pipe(
+    this.partyReferenceService.getAssociationTypes().pipe(first()).subscribe((associationTypes: Map<string, AssociationType>) => {
+      this.subscriptions.add(this.associationTypeInputValue$.pipe(
         startWith(''),
         debounceTime(500),
-        map((value: string | Title) => {
+        map((value: string | AssociationType) => {
           if (typeof (value) === 'string') {
             value = value.toLowerCase();
           } else {
             value = value.name.toLowerCase();
           }
 
-          let filteredTitles: Title[] = [];
+          let filteredAssociationTypes: AssociationType[] = [];
 
-          for (const title of titles.values()) {
-            if (title.name.toLowerCase().indexOf(value) === 0) {
-              filteredTitles.push(title);
+          for (const associationType of associationTypes.values()) {
+            if (associationType.name.toLowerCase().indexOf(value) === 0) {
+              filteredAssociationTypes.push(associationType);
             }
           }
 
-          this.filteredTitles$.next(filteredTitles);
+          this.filteredAssociationTypes$.next(filteredAssociationTypes);
         })).subscribe());
     });
   }
@@ -291,7 +299,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.titleInput.focus();
+      this.associationTypeInput.focus();
     }
   }
 
@@ -303,8 +311,8 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the title input then clear the value when losing focus
-    if ((!!this._value) && (!this.titleInput.value)) {
+    // If we have cleared the associationType input then clear the value when losing focus
+    if ((!!this._value) && (!this.associationTypeInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -313,7 +321,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.titleInput.focused;
+    this.focused = this.associationTypeInput.focused;
     this.stateChanges.next();
   }
 
@@ -330,7 +338,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     this.onTouched = fn;
   }
 
-  selectTitle(event: MatAutocompleteSelectedEvent): void {
+  selectAssociationType(event: MatAutocompleteSelectedEvent): void {
     this.value = event.option.value.code;
   }
 
@@ -344,12 +352,6 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setAttribute('aria-describedby', ids.join(' '));
-  }
-
-  titleInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.titleInputValue$.next((event.target as HTMLInputElement).value);
-    }
   }
 
   /**
