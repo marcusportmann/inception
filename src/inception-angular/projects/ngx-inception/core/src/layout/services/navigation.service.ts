@@ -16,7 +16,6 @@
 
 import {Injectable} from '@angular/core';
 import {ReplaySubject, Subject} from 'rxjs';
-import {map} from 'rxjs/operators';
 import {Session} from '../../session/services/session';
 import {SessionService} from '../../session/services/session.service';
 import {NavigationItem} from './navigation-item';
@@ -43,9 +42,9 @@ export class NavigationService {
   constructor(private sessionService: SessionService) {
     console.log('Initializing the Navigation Service');
 
-    this.sessionService.session$.pipe(map((session: Session | null) => {
+    this.sessionService.session$.subscribe((session: Session | null) => {
       this.userNavigation$.next(Object.assign([], this.filterNavigationItems(this.navigation, session)));
-    })).subscribe();
+    });
   }
 
   /**

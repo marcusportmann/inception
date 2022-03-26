@@ -16,11 +16,14 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -34,7 +37,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>AttributeTypeCategory</b> class holds the information for an attribute type category.
@@ -43,12 +48,20 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A collection of related attribute types")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "tenantId", "name", "description"})
+@JsonPropertyOrder({
+  "code",
+  "localeId",
+  "sortIndex",
+  "tenantId",
+  "name",
+  "description",
+  "partyTypes"
+})
 @XmlRootElement(name = "AttributeTypeCategory", namespace = "http://inception.digital/party")
 @XmlType(
     name = "AttributeTypeCategory",
     namespace = "http://inception.digital/party",
-    propOrder = {"code", "localeId", "sortIndex", "tenantId", "name", "description"})
+    propOrder = {"code", "localeId", "sortIndex", "tenantId", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "attribute_type_categories")
@@ -96,6 +109,16 @@ public class AttributeTypeCategory implements Serializable {
   @Size(min = 1, max = 50)
   @Column(name = "name", length = 50, nullable = false)
   private String name;
+
+  /**
+   * The comma-delimited codes for the party types the attribute type category is associated with.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @NotNull
+  @Size(min = 1, max = 310)
+  @Column(name = "party_types", length = 310, nullable = false)
+  private String partyTypes;
 
   /** The sort index for the attribute type category. */
   @Schema(description = "The sort index for the attribute type category", required = true)
@@ -177,6 +200,20 @@ public class AttributeTypeCategory implements Serializable {
   }
 
   /**
+   * Returns the codes for the party types the attribute type category is associated with.
+   *
+   * @return the codes for the party types the attribute type category is associated with
+   */
+  @Schema(
+      description = "The codes for the party types the attribute type category is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "PartyTypes", required = true)
+  public String[] getPartyTypes() {
+    return StringUtils.commaDelimitedListToStringArray(partyTypes);
+  }
+
+  /**
    * Returns the sort index for the attribute type category.
    *
    * @return the sort index for the attribute type category
@@ -202,6 +239,22 @@ public class AttributeTypeCategory implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
+  }
+
+  /**
+   * Returns whether the attribute type category is valid for the party type.
+   *
+   * @param partyTypeCode the code for the party type
+   * @return <b>true</b> if the attribute type category is valid for the party type or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidForPartyType(String partyTypeCode) {
+    if (!StringUtils.hasText(partyTypeCode)) {
+      return false;
+    }
+
+    return Arrays.stream(getPartyTypes())
+        .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }
 
   /**
@@ -238,6 +291,25 @@ public class AttributeTypeCategory implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the codes for the party types the attribute type category is associated with.
+   *
+   * @param partyTypes the codes for the party types the attribute type category is associated with
+   */
+  public void setPartyTypes(String[] partyTypes) {
+    this.partyTypes = StringUtils.arrayToCommaDelimitedString(partyTypes);
+  }
+
+  /**
+   * Set the codes for the party types the attribute type category is associated with.
+   *
+   * @param partyTypes the codes for the party types the attribute type category is associated with
+   */
+  @JsonIgnore
+  public void setPartyTypes(Collection<String> partyTypes) {
+    this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
   }
 
   /**

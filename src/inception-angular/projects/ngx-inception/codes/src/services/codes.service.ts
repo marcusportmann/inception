@@ -322,7 +322,7 @@ export class CodesService {
    *
    * @param codeCategoryId The ID for the code category.
    *
-   * @return the codes for the code category
+   * @return The codes for the code category.
    */
   getCodesForCodeCategory(codeCategoryId: string): Observable<Code[]> {
     return this.httpClient.get<Code[]>(

@@ -28,6 +28,7 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Attribute Type Category"/>
       <column name="description" value="Test Attribute Type Category"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
     <insert schemaName="party" tableName="attribute_type_categories">
@@ -36,6 +37,7 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Attribute Type Category"/>
       <column name="description" value="Test Attribute Type Category"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
     
     <insert schemaName="party" tableName="attribute_types">
@@ -640,6 +642,7 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Preference Type Category"/>
       <column name="description" value="Test Preference Type Category"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
     <insert schemaName="party" tableName="preference_type_categories">
@@ -648,6 +651,7 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Preference Type Category"/>
       <column name="description" value="Test Preference Type Category"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
 
@@ -1532,6 +1536,7 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Status Type Category"/>
       <column name="description" value="Test Status Type Category"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
     <insert schemaName="party" tableName="status_type_categories">
@@ -1540,6 +1545,7 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Status Type Category"/>
       <column name="description" value="Test Status Type Category"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
 

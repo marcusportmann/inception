@@ -231,7 +231,7 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
   /**
    * Returns the ISO 3166-1 alpha-2 codes for the selected countries.
    *
-   * @return the ISO 3166-1 alpha-2 codes for the selected countries
+   * @return The ISO 3166-1 alpha-2 codes for the selected countries.
    */
   public get value(): string[] | null {
     return this._value;
@@ -319,10 +319,9 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
     this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
       this._subscriptions.add(this.addCountryInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string) => {
-          this.filteredCountries$.next(this._filterCountries(Array.from(countries.values()), value));
-        })).subscribe());
+        debounceTime(500)).subscribe((value: string) => {
+        this.filteredCountries$.next(this._filterCountries(Array.from(countries.values()), value));
+      }));
     });
   }
 

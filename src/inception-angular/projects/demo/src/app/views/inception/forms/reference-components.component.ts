@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -26,13 +26,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 @Component({
   templateUrl: 'reference-components.component.html'
 })
-export class ReferenceComponentsComponent {
+export class ReferenceComponentsComponent implements OnInit {
 
   countriesControl: FormControl = new FormControl([], Validators.required);
 
   countryControl: FormControl = new FormControl('', Validators.required);
 
-  languageControl: FormControl = new FormControl('', Validators.required);
+  languageControl: FormControl = new FormControl('EN', Validators.required);
 
   referenceForm: FormGroup;
 
@@ -50,6 +50,13 @@ export class ReferenceComponentsComponent {
       language: this.languageControl,
       region: this.regionControl
     });
+  }
+
+  ngOnInit(): void {
+      console.log('[ReferenceComponentsComponent][ngOnInit] HERE');
+
+      this.countryControl.setValue('ZA');
+      this.regionControl.setValue('ZA-GP');
   }
 
   ok(): void {

@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {AssociationPropertyType} from '../services/association-property-type';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -120,7 +120,11 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
    */
   touched: boolean = false;
 
-  //@Input('aria-describedby') userAriaDescribedBy?: string;
+  /**
+   * The association property types.
+   * @private
+   */
+  private _associationPropertyTypes: AssociationPropertyType[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
@@ -134,6 +138,26 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
        */
       this.ngControl.valueAccessor = this;
     }
+  }
+
+  //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The code for the association type the association property type is associated with.
+   */
+  private _associationType: string | null = null;
+
+  /**
+   * The code for the association type the association property type is associated with.
+   */
+  @Input() get associationType(): string | null {
+    return this._associationType;
+  }
+
+  set associationType(associationType: string | null) {
+    this._associationType = associationType;
+
+    this.loadAssociationPropertyTypes();
   }
 
   /**
@@ -197,7 +221,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   /**
    * Returns the code for the selected association property type.
    *
-   * @return the code for the selected association property type
+   * @return The code for the selected association property type.
    */
   public get value(): string | null {
     return this._value;
@@ -215,24 +239,22 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
     }
 
     if (this._value !== value) {
-      this.partyReferenceService.getAssociationPropertyTypes().pipe(first()).subscribe((associationPropertyTypes: Map<string, AssociationPropertyType>) => {
-        this._value = null;
-        this.associationPropertyTypeInput.value = '';
+      this._value = null;
+      this.associationPropertyTypeInput.value = '';
 
-        if (!!value) {
-          for (const associationPropertyType of associationPropertyTypes.values()) {
-            if (associationPropertyType.code === value) {
-              this._value = value;
-              this.associationPropertyTypeInput.value = associationPropertyType.name;
-              break;
-            }
+      if (!!value) {
+        for (const associationPropertyType of this._associationPropertyTypes) {
+          if (associationPropertyType.code === value) {
+            this._value = value;
+            this.associationPropertyTypeInput.value = associationPropertyType.name;
+            break;
           }
         }
+      }
 
-        this.onChange(this._value);
-        this.changeDetectorRef.detectChanges();
-        this.stateChanges.next();
-      });
+      this.onChange(this._value);
+      this.changeDetectorRef.detectChanges();
+      this.stateChanges.next();
     }
   }
 
@@ -271,28 +293,25 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   ngOnInit(): void {
     this.associationPropertyTypeInput.placeholder = this._placeholder;
 
-    this.partyReferenceService.getAssociationPropertyTypes().pipe(first()).subscribe((associationPropertyTypes: Map<string, AssociationPropertyType>) => {
-      this.subscriptions.add(this.associationPropertyTypeInputValue$.pipe(
-        startWith(''),
-        debounceTime(500),
-        map((value: string | AssociationPropertyType) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.name.toLowerCase();
-          }
+    this.subscriptions.add(this.associationPropertyTypeInputValue$.pipe(
+      startWith(''),
+      debounceTime(500)).subscribe((value: string | AssociationPropertyType) => {
+      if (typeof (value) === 'string') {
+        value = value.toLowerCase();
+      } else {
+        value = value.name.toLowerCase();
+      }
 
-          let filteredAssociationPropertyTypes: AssociationPropertyType[] = [];
+      let filteredAssociationPropertyTypes: AssociationPropertyType[] = [];
 
-          for (const associationPropertyType of associationPropertyTypes.values()) {
-            if (associationPropertyType.name.toLowerCase().indexOf(value) === 0) {
-              filteredAssociationPropertyTypes.push(associationPropertyType);
-            }
-          }
+      for (const associationPropertyType of this._associationPropertyTypes) {
+        if (associationPropertyType.name.toLowerCase().indexOf(value) === 0) {
+          filteredAssociationPropertyTypes.push(associationPropertyType);
+        }
+      }
 
-          this.filteredAssociationPropertyTypes$.next(filteredAssociationPropertyTypes);
-        })).subscribe());
-    });
+      this.filteredAssociationPropertyTypes$.next(filteredAssociationPropertyTypes);
+    }));
   }
 
   onChange: any = (_: any) => {
@@ -312,12 +331,11 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the associationPropertyType input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.associationPropertyTypeInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;
@@ -368,5 +386,15 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
     if (typeof value === 'string') {
       this.value = value as string;
     }
+  }
+
+  private loadAssociationPropertyTypes(): void {
+    this.partyReferenceService.getAssociationPropertyTypes().pipe(first()).subscribe((associationPropertyTypes: Map<string, AssociationPropertyType>) => {
+      this._associationPropertyTypes = [];
+
+      for (const associationPropertyType of associationPropertyTypes.values()) {
+        this._associationPropertyTypes.push(associationPropertyType);
+      }
+    });
   }
 }

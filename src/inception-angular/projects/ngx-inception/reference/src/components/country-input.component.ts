@@ -54,7 +54,7 @@ import {ReferenceService} from '../services/reference.service';
         [displayWith]="displayCountry"
 
         (optionSelected)="selectCountry($event)">
-        <mat-option *ngFor="let country of filteredCountrys$ | async" [value]="country">
+        <mat-option *ngFor="let country of filteredCountries$ | async" [value]="country">
           {{country.shortName}}
         </mat-option>
       </mat-autocomplete>
@@ -78,21 +78,6 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   controlType = 'country-input';
 
   /**
-   * The filtered countrys for the autocomplete.
-   */
-  filteredCountrys$: Subject<Country[]> = new ReplaySubject<Country[]>();
-
-  /**
-   * Whether the control is focused.
-   */
-  focused = false;
-
-  /**
-   * The ID for the control.
-   */
-  @HostBinding() id = `country-input-${CountryInputComponent._nextId++}`;
-
-  /**
    * The country input.
    */
   @ViewChild(MatInput, {static: true}) countryInput!: MatInput;
@@ -106,6 +91,21 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
    * The observable providing access to the value for the country input as it changes.
    */
   countryInputValue$: Subject<string> = new ReplaySubject<string>();
+
+  /**
+   * The filtered countries for the autocomplete.
+   */
+  filteredCountries$: Subject<Country[]> = new ReplaySubject<Country[]>();
+
+  /**
+   * Whether the control is focused.
+   */
+  focused = false;
+
+  /**
+   * The ID for the control.
+   */
+  @HostBinding() id = `country-input-${CountryInputComponent._nextId++}`;
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -194,7 +194,7 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   /**
    * Returns the ISO 639-1 alpha-2 code for the selected country.
    *
-   * @return the ISO 639-1 alpha-2 code for the selected country
+   * @return The ISO 639-1 alpha-2 code for the selected country.
    */
   public get value(): string | null {
     return this._value;
@@ -246,17 +246,17 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.countryInput.focused;
   }
 
+  countryInputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.countryInputValue$.next((event.target as HTMLInputElement).value);
+    }
+  }
+
   displayCountry(country: Country): string {
     if (!!country) {
       return country.name;
     } else {
       return '';
-    }
-  }
-
-  countryInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.countryInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -271,24 +271,23 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
     this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
       this.subscriptions.add(this.countryInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | Country) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.shortName.toLowerCase();
+        debounceTime(500)).subscribe((value: string | Country) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.shortName.toLowerCase();
+        }
+
+        let filteredCountries: Country[] = [];
+
+        for (const country of countries.values()) {
+          if (country.shortName.toLowerCase().indexOf(value) === 0) {
+            filteredCountries.push(country);
           }
+        }
 
-          let filteredCountrys: Country[] = [];
-
-          for (const country of countries.values()) {
-            if (country.shortName.toLowerCase().indexOf(value) === 0) {
-              filteredCountrys.push(country);
-            }
-          }
-
-          this.filteredCountrys$.next(filteredCountrys);
-        })).subscribe());
+        this.filteredCountries$.next(filteredCountries);
+      }));
     });
   }
 
@@ -309,12 +308,11 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the country input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.countryInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {ContactMechanismPurpose} from '../services/contact-mechanism-purpose';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -197,7 +197,7 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
   /**
    * Returns the code for the selected contact mechanism purpose.
    *
-   * @return the code for the selected contact mechanism purpose
+   * @return The code for the selected contact mechanism purpose.
    */
   public get value(): string | null {
     return this._value;
@@ -274,24 +274,23 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
     this.partyReferenceService.getContactMechanismPurposes().pipe(first()).subscribe((contactMechanismPurposes: Map<string, ContactMechanismPurpose>) => {
       this.subscriptions.add(this.contactMechanismPurposeInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | ContactMechanismPurpose) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.name.toLowerCase();
+        debounceTime(500)).subscribe((value: string | ContactMechanismPurpose) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.name.toLowerCase();
+        }
+
+        let filteredContactMechanismPurposes: ContactMechanismPurpose[] = [];
+
+        for (const contactMechanismPurpose of contactMechanismPurposes.values()) {
+          if (contactMechanismPurpose.name.toLowerCase().indexOf(value) === 0) {
+            filteredContactMechanismPurposes.push(contactMechanismPurpose);
           }
+        }
 
-          let filteredContactMechanismPurposes: ContactMechanismPurpose[] = [];
-
-          for (const contactMechanismPurpose of contactMechanismPurposes.values()) {
-            if (contactMechanismPurpose.name.toLowerCase().indexOf(value) === 0) {
-              filteredContactMechanismPurposes.push(contactMechanismPurpose);
-            }
-          }
-
-          this.filteredContactMechanismPurposes$.next(filteredContactMechanismPurposes);
-        })).subscribe());
+        this.filteredContactMechanismPurposes$.next(filteredContactMechanismPurposes);
+      }));
     });
   }
 
@@ -312,12 +311,11 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the contactMechanismPurpose input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.contactMechanismPurposeInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

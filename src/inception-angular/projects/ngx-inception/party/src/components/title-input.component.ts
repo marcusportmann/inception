@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {PartyReferenceService} from '../services/party-reference.service';
 import {Title} from '../services/title';
 
@@ -265,24 +265,23 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getTitles().pipe(first()).subscribe((titles: Map<string, Title>) => {
       this.subscriptions.add(this.titleInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | Title) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.name.toLowerCase();
+        debounceTime(500)).subscribe((value: string | Title) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.name.toLowerCase();
+        }
+
+        let filteredTitles: Title[] = [];
+
+        for (const title of titles.values()) {
+          if (title.name.toLowerCase().indexOf(value) === 0) {
+            filteredTitles.push(title);
           }
+        }
 
-          let filteredTitles: Title[] = [];
-
-          for (const title of titles.values()) {
-            if (title.name.toLowerCase().indexOf(value) === 0) {
-              filteredTitles.push(title);
-            }
-          }
-
-          this.filteredTitles$.next(filteredTitles);
-        })).subscribe());
+        this.filteredTitles$.next(filteredTitles);
+      }));
     });
   }
 
@@ -303,12 +302,11 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the title input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.titleInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

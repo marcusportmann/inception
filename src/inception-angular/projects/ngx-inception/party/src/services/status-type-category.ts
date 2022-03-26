@@ -42,6 +42,11 @@ export class StatusTypeCategory {
   name: string;
 
   /**
+   * The codes for the party types the status type category is associated with.
+   */
+  partyTypes: string[];
+
+  /**
    * The sort index for the status type category.
    */
   sortIndex: number;
@@ -59,15 +64,17 @@ export class StatusTypeCategory {
    * @param sortIndex   The sort index for the status type category.
    * @param name        The name of the status type category.
    * @param description The description for the status type category.
+   * @param partyTypes  The codes for the party types the status type category is associated with.
    * @param tenantId    The ID for the tenant the status type category is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
-              tenantId?: string) {
+              partyTypes: string[], tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
+    this.partyTypes = partyTypes;
     this.tenantId = tenantId;
   }
 }

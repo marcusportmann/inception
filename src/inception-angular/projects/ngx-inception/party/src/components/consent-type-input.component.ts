@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {ConsentType} from '../services/consent-type';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -195,7 +195,7 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
   /**
    * Returns the code for the selected consent type.
    *
-   * @return the code for the selected consent type
+   * @return The code for the selected consent type.
    */
   public get value(): string | null {
     return this._value;
@@ -272,24 +272,23 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getConsentTypes().pipe(first()).subscribe((consentTypes: Map<string, ConsentType>) => {
       this.subscriptions.add(this.consentTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | ConsentType) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.name.toLowerCase();
+        debounceTime(500)).subscribe((value: string | ConsentType) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.name.toLowerCase();
+        }
+
+        let filteredConsentTypes: ConsentType[] = [];
+
+        for (const consentType of consentTypes.values()) {
+          if (consentType.name.toLowerCase().indexOf(value) === 0) {
+            filteredConsentTypes.push(consentType);
           }
+        }
 
-          let filteredConsentTypes: ConsentType[] = [];
-
-          for (const consentType of consentTypes.values()) {
-            if (consentType.name.toLowerCase().indexOf(value) === 0) {
-              filteredConsentTypes.push(consentType);
-            }
-          }
-
-          this.filteredConsentTypes$.next(filteredConsentTypes);
-        })).subscribe());
+        this.filteredConsentTypes$.next(filteredConsentTypes);
+      }));
     });
   }
 
@@ -310,12 +309,11 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the consentType input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.consentTypeInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

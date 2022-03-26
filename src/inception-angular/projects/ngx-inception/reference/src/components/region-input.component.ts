@@ -23,10 +23,11 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {ReplaySubject, Subject, Subscription} from 'rxjs';
+import {BehaviorSubject, pipe, ReplaySubject, Subject, Subscription, throttleTime} from 'rxjs';
 import {debounceTime, first, map, startWith} from 'rxjs/operators';
-import {Region} from '../services/region';
 import {ReferenceService} from '../services/reference.service';
+import {Region} from '../services/region';
+import {combineLatest} from 'rxjs';
 
 /**
  * The RegionInputComponent class implements the region input component.
@@ -119,6 +120,16 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
+  /**
+   * The regions for the country.
+   */
+  private _regions: Region[] = [];
+
+  /**
+   * The ISO 3166-1 alpha-2 code for the country to retrieve the regions for.
+   */
+  private country$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private referenceService: ReferenceService,
@@ -189,15 +200,18 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   /**
    * The ISO 639-1 alpha-2 code for the selected region.
    */
-  private _value: string | null = null;
+  //private _value: string | null = null;
+
+
+  private value$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   /**
    * Returns the ISO 639-1 alpha-2 code for the selected region.
    *
-   * @return the ISO 639-1 alpha-2 code for the selected region
+   * @return The ISO 639-1 alpha-2 code for the selected region.
    */
   public get value(): string | null {
-    return this._value;
+    return this.value$.value;
   }
 
   /**
@@ -207,11 +221,25 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
    */
   @Input()
   public set value(value: string | null) {
+    console.log('[RegionInputComponent][value] this.value$.value = (' + this.value$.value + '), value = (' + value + ')');
+
     if (value == undefined) {
       value = null;
     }
 
+    if (this.value$.value !== value) {
+      this.value$.next(value);
+    }
+
+
+    /*
     if (this._value !== value) {
+
+
+
+
+      this._value = null;
+
       if (!!value) {
         for (const region of this._regions.values()) {
           if (region.code === value) {
@@ -226,14 +254,35 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
       this.changeDetectorRef.detectChanges();
       this.stateChanges.next();
     }
+    */
+
+  }
+
+  /**
+   * The ISO 3166-1 alpha-2 code for the country to retrieve the regions for.
+   */
+  @Input() get country(): string | null {
+    return this.country$.value;
+  }
+
+  set country(country: string | null) {
+    console.log('[RegionInputComponent][country] this.country$.value = (' + this.country$.value + '), country = (' + country + ')');
+
+    if (country == undefined) {
+      country = null;
+    }
+
+    if (country !== this.country$.value) {
+      this.country$.next(country);
+    }
   }
 
   get empty(): boolean {
-    return ((this._value == null) || (this._value.length == 0));
+    return ((this.value$.value == null) || (this.value$.value.length == 0));
   }
 
   get errorState(): boolean {
-    return this.required && ((this._value == null) || (this._value.length == 0)) && this.touched;
+    return this.required && ((this.value$.value == null) || (this.value$.value.length == 0)) && this.touched;
   }
 
   @HostBinding('class.floating')
@@ -249,54 +298,61 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
     }
   }
 
-  regionInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.regionInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
     this.stateChanges.complete();
   }
 
-  /**
-   * The ISO 3166-1 alpha-2 code for the country to retrieve the regions for.
-   */
-  private _country: string | null = null;
-
-
-  /**
-   * The person.
-   */
-  @Input() get country(): string | null {
-    return this._country;
-  }
-
-  set country(country: string | null) {
-    this._country = country;
-
-    if (country != null) {
-      this.referenceService.getRegions(country).pipe(first()).subscribe((regions: Map<string, Region>) => {
-        this._regions = [];
-
-        for (const region of regions.values()) {
-          this._regions.push(region);
-        }
-      });
-    } else {
-      this._regions = [];
-    }
-  }
-
-  /**
-   * The regions for the country.
-   */
-  private _regions: Region[] = [];
-
   ngOnInit(): void {
+    console.log('[RegionInputComponent][ngOnInit] HERE');
+
     this.regionInput.placeholder = this._placeholder;
 
+    this.subscriptions.add(combineLatest([this.country$]).pipe(throttleTime(250), map(values => ({
+      country: this.country$.value
+    }))).subscribe(parameters => {
+      console.log('parameters = ', parameters);
+
+      this._regions = [];
+
+      this.referenceService.getRegions().pipe(first()).subscribe((regions: Map<string, Region>) => {
+        for (const region of regions.values()) {
+          if ((!!parameters.country) && (region.country === parameters.country)) {
+            this._regions.push(region);
+          } else {
+            this._regions.push(region);
+          }
+        }
+      });
+
+      console.log('After loading regions, this.value$.value = ', this.value$.value);
+
+      /*
+      if (!!this._value) {
+        console.log('Looking for region with code = ', this._value);
+
+        for (const region of this._regions.values()) {
+          if (region.code === this._value) {
+            this.regionInput.value = region.name;
+            return;
+          }
+        }
+
+        console.log('Resetting value!!!!');
+
+        this.value = null;
+      }*/
+
+
+    }));
+
+    this.subscriptions.add(this.value$.subscribe((value: string | null) => {
+      this.onChange(value);
+      this.changeDetectorRef.detectChanges();
+      this.stateChanges.next();
+    }));
+
+/*
     this.subscriptions.add(this.regionInputValue$.pipe(
       startWith(''),
       debounceTime(500),
@@ -317,6 +373,28 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
         this.filteredRegions$.next(filteredRegions);
       })).subscribe());
+    */
+
+    this.subscriptions.add(this.regionInputValue$.pipe(
+      startWith(''),
+      debounceTime(500)).subscribe((value: string | Region) => {
+      if (typeof (value) === 'string') {
+        value = value.toLowerCase();
+      } else {
+        value = value.name.toLowerCase();
+      }
+
+      let filteredRegions: Region[] = [];
+
+      for (const region of this._regions) {
+        if (region.name.toLowerCase().indexOf(value) === 0) {
+          filteredRegions.push(region);
+        }
+      }
+
+      this.filteredRegions$.next(filteredRegions);
+    }));
+
   }
 
   onChange: any = (_: any) => {
@@ -337,11 +415,8 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the region input then clear the value when losing focus
-    if ((!!this._value) && (!this.regionInput.value)) {
-      this._value = null;
-      this.onChange(this._value);
-      this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
+    if ((!!this.value$.value) && (!this.regionInput.value)) {
+      this.value$.next(null);
     }
 
     this.touched = true;
@@ -352,6 +427,12 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
   onTouched: any = () => {
   };
+
+  regionInputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.regionInputValue$.next((event.target as HTMLInputElement).value);
+    }
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {

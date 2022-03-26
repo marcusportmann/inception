@@ -194,7 +194,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   /**
    * Returns the ISO 639-1 alpha-2 code for the selected language.
    *
-   * @return the ISO 639-1 alpha-2 code for the selected language
+   * @return The ISO 639-1 alpha-2 code for the selected language.
    */
   public get value(): string | null {
     return this._value;
@@ -271,24 +271,23 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
     this.referenceService.getLanguages().pipe(first()).subscribe((languages: Map<string, Language>) => {
       this.subscriptions.add(this.languageInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | Language) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.shortName.toLowerCase();
+        debounceTime(500)).subscribe((value: string | Language) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.shortName.toLowerCase();
+        }
+
+        let filteredLanguages: Language[] = [];
+
+        for (const language of languages.values()) {
+          if (language.shortName.toLowerCase().indexOf(value) === 0) {
+            filteredLanguages.push(language);
           }
+        }
 
-          let filteredLanguages: Language[] = [];
-
-          for (const language of languages.values()) {
-            if (language.shortName.toLowerCase().indexOf(value) === 0) {
-              filteredLanguages.push(language);
-            }
-          }
-
-          this.filteredLanguages$.next(filteredLanguages);
-        })).subscribe());
+        this.filteredLanguages$.next(filteredLanguages);
+      }));
     });
   }
 
@@ -309,12 +308,11 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the language input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.languageInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

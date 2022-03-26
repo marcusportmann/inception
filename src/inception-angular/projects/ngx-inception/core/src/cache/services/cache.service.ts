@@ -39,9 +39,9 @@ export class CacheService {
   constructor(private sessionService: SessionService) {
     console.log('Initializing the Cache Service');
 
-    this.sessionService.session$.pipe(map((session: Session | null) => {
+    this.sessionService.session$.subscribe((session: Session | null) => {
       this.clear();
-    })).subscribe();
+    });
   }
 
   /**

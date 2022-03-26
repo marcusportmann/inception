@@ -86,9 +86,9 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
     .subscribe((state) => {
       if (state.tenants) {
         this.subscriptions.add(this.tenantFormControl.valueChanges.pipe(startWith(''),
-          debounceTime(500), map((value) => {
-            this.filteredTenants$.next(this.filterTenants(state.tenants, value));
-          })).subscribe());
+          debounceTime(500)).subscribe((value) => {
+          this.filteredTenants$.next(this.filterTenants(state.tenants, value));
+        }));
       } else {
         console.log('No tenants found, invalidating session and redirecting to the application root');
 

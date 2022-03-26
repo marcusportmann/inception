@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {ContactMechanismRole} from '../services/contact-mechanism-role';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -197,7 +197,7 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   /**
    * Returns the code for the selected contact mechanism role.
    *
-   * @return the code for the selected contact mechanism role
+   * @return The code for the selected contact mechanism role.
    */
   public get value(): string | null {
     return this._value;
@@ -274,24 +274,23 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
     this.partyReferenceService.getContactMechanismRoles().pipe(first()).subscribe((contactMechanismRoles: Map<string, ContactMechanismRole>) => {
       this.subscriptions.add(this.contactMechanismRoleInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | ContactMechanismRole) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.name.toLowerCase();
+        debounceTime(500)).subscribe((value: string | ContactMechanismRole) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.name.toLowerCase();
+        }
+
+        let filteredContactMechanismRoles: ContactMechanismRole[] = [];
+
+        for (const contactMechanismRole of contactMechanismRoles.values()) {
+          if (contactMechanismRole.name.toLowerCase().indexOf(value) === 0) {
+            filteredContactMechanismRoles.push(contactMechanismRole);
           }
+        }
 
-          let filteredContactMechanismRoles: ContactMechanismRole[] = [];
-
-          for (const contactMechanismRole of contactMechanismRoles.values()) {
-            if (contactMechanismRole.name.toLowerCase().indexOf(value) === 0) {
-              filteredContactMechanismRoles.push(contactMechanismRole);
-            }
-          }
-
-          this.filteredContactMechanismRoles$.next(filteredContactMechanismRoles);
-        })).subscribe());
+        this.filteredContactMechanismRoles$.next(filteredContactMechanismRoles);
+      }));
     });
   }
 
@@ -312,12 +311,11 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the contactMechanismRole input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.contactMechanismRoleInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

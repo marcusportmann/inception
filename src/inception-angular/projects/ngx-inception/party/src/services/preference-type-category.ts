@@ -42,6 +42,11 @@ export class PreferenceTypeCategory {
   name: string;
 
   /**
+   * The codes for the party types the preference type category is associated with.
+   */
+  partyTypes: string[];
+
+  /**
    * The sort index for the preference type category.
    */
   sortIndex: number;
@@ -59,15 +64,17 @@ export class PreferenceTypeCategory {
    * @param sortIndex   The sort index for the preference type category.
    * @param name        The name of the preference type category.
    * @param description The description for the preference type category.
+   * @param partyTypes  The codes for the party types the attribute type category is associated with.
    * @param tenantId    The ID for the tenant the preference type category is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
-              tenantId?: string) {
+              partyTypes: string[], tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
+    this.partyTypes = partyTypes;
     this.tenantId = tenantId;
   }
 }

@@ -15,6 +15,8 @@
  */
 
 import {Component} from '@angular/core';
+import {combineLatest, debounce, interval, timer} from 'rxjs';
+import {debounceTime, map} from 'rxjs/operators';
 
 /**
  * The Menu1Component class implements the menu 1 component.
@@ -25,7 +27,7 @@ import {Component} from '@angular/core';
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content>
-        Menu 1
+        <button (click)="clickMe()" mat-flat-button>Click Me!</button>
       </mat-card-content>
     </mat-card>
   `
@@ -33,5 +35,31 @@ import {Component} from '@angular/core';
 export class Menu1Component {
 
   constructor() {
+  }
+
+  clickMe(): void {
+
+    let emptyArray: string[] = [];
+
+    console.log('emptyArray = ', emptyArray);
+    console.log('!emptyArray = ', (!emptyArray));
+    console.log('!!emptyArray = ', (!!emptyArray));
+
+
+    const timer1$ = timer(0, 1500);
+
+    const timer2$ = timer(1000, 5000);
+
+
+
+    // combineLatest([timer1$, timer2$]).pipe(debounceTime(1000), map(values => ({
+    //   value1: values[0],
+    //   value2: values[1]
+    // }))).subscribe(timerValues => {
+    //   console.log('timerValues.value1 = ', timerValues.value1);
+    // });
+
+
+
   }
 }

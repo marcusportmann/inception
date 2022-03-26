@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {ExternalReferenceType} from '../services/external-reference-type';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -195,7 +195,7 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
   /**
    * Returns the code for the selected external reference type.
    *
-   * @return the code for the selected external reference type
+   * @return The code for the selected external reference type.
    */
   public get value(): string | null {
     return this._value;
@@ -272,24 +272,23 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
     this.partyReferenceService.getExternalReferenceTypes().pipe(first()).subscribe((externalReferenceTypes: Map<string, ExternalReferenceType>) => {
       this.subscriptions.add(this.externalReferenceTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | ExternalReferenceType) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.name.toLowerCase();
+        debounceTime(500)).subscribe((value: string | ExternalReferenceType) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.name.toLowerCase();
+        }
+
+        let filteredExternalReferenceTypes: ExternalReferenceType[] = [];
+
+        for (const externalReferenceType of externalReferenceTypes.values()) {
+          if (externalReferenceType.name.toLowerCase().indexOf(value) === 0) {
+            filteredExternalReferenceTypes.push(externalReferenceType);
           }
+        }
 
-          let filteredExternalReferenceTypes: ExternalReferenceType[] = [];
-
-          for (const externalReferenceType of externalReferenceTypes.values()) {
-            if (externalReferenceType.name.toLowerCase().indexOf(value) === 0) {
-              filteredExternalReferenceTypes.push(externalReferenceType);
-            }
-          }
-
-          this.filteredExternalReferenceTypes$.next(filteredExternalReferenceTypes);
-        })).subscribe());
+        this.filteredExternalReferenceTypes$.next(filteredExternalReferenceTypes);
+      }));
     });
   }
 
@@ -310,12 +309,11 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the externalReferenceType input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.externalReferenceTypeInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

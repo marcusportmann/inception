@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {EmploymentStatus} from '../services/employment-status';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -74,6 +74,11 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
   private static _nextId: number = 0;
 
   /**
+   * The name for the control type.
+   */
+  controlType = 'employment-status-input';
+
+  /**
    * The employment status input.
    */
   @ViewChild(MatInput, {static: true}) employmentStatusInput!: MatInput;
@@ -87,11 +92,6 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
    * The observable providing access to the value for the employment status input as it changes.
    */
   employmentStatusInputValue$: Subject<string> = new ReplaySubject<string>();
-
-  /**
-   * The name for the control type.
-   */
-  controlType = 'employment-status-input';
 
   /**
    * The filtered employment statuses for the autocomplete.
@@ -195,7 +195,7 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
   /**
    * Returns the code for the selected employment status.
    *
-   * @return the code for the selected employment status
+   * @return The code for the selected employment status.
    */
   public get value(): string | null {
     return this._value;
@@ -247,17 +247,17 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
     return this.focused || !this.empty || this.employmentStatusInput.focused;
   }
 
-  employmentStatusInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.employmentStatusInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
   displayEmploymentStatus(employmentStatus: EmploymentStatus): string {
     if (!!employmentStatus) {
       return employmentStatus.name;
     } else {
       return '';
+    }
+  }
+
+  employmentStatusInputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.employmentStatusInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -272,24 +272,23 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
     this.partyReferenceService.getEmploymentStatuses().pipe(first()).subscribe((employmentStatuses: Map<string, EmploymentStatus>) => {
       this.subscriptions.add(this.employmentStatusInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | EmploymentStatus) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.name.toLowerCase();
+        debounceTime(500)).subscribe((value: string | EmploymentStatus) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.name.toLowerCase();
+        }
+
+        let filteredEmploymentStatuses: EmploymentStatus[] = [];
+
+        for (const employmentStatus of employmentStatuses.values()) {
+          if (employmentStatus.name.toLowerCase().indexOf(value) === 0) {
+            filteredEmploymentStatuses.push(employmentStatus);
           }
+        }
 
-          let filteredEmploymentStatuses: EmploymentStatus[] = [];
-
-          for (const employmentStatus of employmentStatuses.values()) {
-            if (employmentStatus.name.toLowerCase().indexOf(value) === 0) {
-              filteredEmploymentStatuses.push(employmentStatus);
-            }
-          }
-
-          this.filteredEmploymentStatuses$.next(filteredEmploymentStatuses);
-        })).subscribe());
+        this.filteredEmploymentStatuses$.next(filteredEmploymentStatuses);
+      }));
     });
   }
 
@@ -310,12 +309,11 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the employmentStatus input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.employmentStatusInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

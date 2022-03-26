@@ -19,7 +19,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Country, ReferenceService} from 'ngx-inception/reference';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 
 /**
  * The Title class holds title information for the example form component.
@@ -99,24 +99,23 @@ export class ExampleComponent implements OnInit, OnDestroy {
       if (favoriteCountryControl) {
         this.subscriptions.add(favoriteCountryControl.valueChanges.pipe(
           startWith(''),
-          debounceTime(500),
-          map((value: string | Country) => {
-            if (typeof (value) === 'string') {
-              value = value.toLowerCase();
-            } else {
-              value = value.shortName.toLowerCase();
+          debounceTime(500)).subscribe((value: string | Country) => {
+          if (typeof (value) === 'string') {
+            value = value.toLowerCase();
+          } else {
+            value = value.shortName.toLowerCase();
+          }
+
+          let filteredCountries: Country[] = [];
+
+          for (const country of countries.values()) {
+            if (country.shortName.toLowerCase().indexOf(value) === 0) {
+              filteredCountries.push(country);
             }
+          }
 
-            let filteredCountries: Country[] = [];
-
-            for (const country of countries.values()) {
-              if (country.shortName.toLowerCase().indexOf(value) === 0) {
-                filteredCountries.push(country);
-              }
-            }
-
-            this.filteredCountries$.next(filteredCountries);
-          })).subscribe());
+          this.filteredCountries$.next(filteredCountries);
+        }));
       }
     });
   }

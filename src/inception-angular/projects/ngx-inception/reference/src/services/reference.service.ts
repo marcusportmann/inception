@@ -130,40 +130,30 @@ export class ReferenceService {
   /**
    * Retrieve the regions.
    *
-   * @param country The ISO 3166-1 alpha-2 code for the country to retrieve the regions for.
-   *
    * @return The regions.
    */
-  getRegions(country: string): Observable<Map<string, Region>> {
-    let cachedRegionsForCountries: Map<string, Map<string, Region>> = this.cacheService.get('regionsForCountries');
+  getRegions(): Observable<Map<string, Region>> {
+    let cachedRegions: Map<string, Region> = this.cacheService.get('regions');
 
-    if (cachedRegionsForCountries === undefined) {
-      cachedRegionsForCountries = new Map<string, Map<string, Region>>();
-      this.cacheService.set('regionsForCountries', cachedRegionsForCountries);
-    }
-
-    let cachedRegionsForCountry: Map<string, Region> | undefined = cachedRegionsForCountries.get(country);
-
-    if (!!cachedRegionsForCountry) {
-      return of(cachedRegionsForCountry);
+    if (cachedRegions !== undefined) {
+      return of(cachedRegions);
     } else {
       let params = new HttpParams();
 
       params = params.append('localeId', this.localeId);
-      params = params.append('country', country);
 
       return this.httpClient.get<Region[]>(this.config.referenceApiUrlPrefix + '/regions',
         {params, reportProgress: true})
       .pipe(map((regions: Region[]) => {
-        cachedRegionsForCountry = new Map<string, Region>();
+        cachedRegions = new Map<string, Region>();
 
         for (const region of regions) {
-          cachedRegionsForCountry.set(region.code, region);
+          cachedRegions.set(region.code, region);
         }
 
-        cachedRegionsForCountries.set(country, cachedRegionsForCountry);
+        this.cacheService.set('regions', cachedRegions);
 
-        return cachedRegionsForCountry;
+        return cachedRegions;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
           return throwError(() => new AccessDeniedError(httpErrorResponse));

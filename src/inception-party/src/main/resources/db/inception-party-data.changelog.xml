@@ -20,12 +20,14 @@
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Anthropometric Measurements"/>
       <column name="description" value="Anthropometric Measurements"/>
+      <column name="party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="attribute_type_categories">
       <column name="code" value="business_operations"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Business Operations"/>
       <column name="description" value="Business Operations"/>
+      <column name="party_types" value="organization"/>
     </insert>
 
     <insert schemaName="party" tableName="attribute_types">
@@ -2292,6 +2294,7 @@
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Correspondence"/>
       <column name="description" value="Correspondence"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
     <insert schemaName="party" tableName="preference_types">
@@ -3281,12 +3284,14 @@
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Fraud"/>
       <column name="description" value="Fraud"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="status_type_categories">
       <column name="code" value="kyc"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="KYC"/>
       <column name="description" value="Know Your Customer"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
     <insert schemaName="party" tableName="status_types">
@@ -3921,12 +3926,14 @@
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Anthropometric Measurements"/>
       <column name="description" value="Anthropometric Measurements"/>
+      <column name="party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="attribute_type_categories">
       <column name="code" value="business_operations"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Business Operations"/>
       <column name="description" value="Business Operations"/>
+      <column name="party_types" value="organization"/>
     </insert>
 
     <insert schemaName="party" tableName="attribute_types">
@@ -6194,6 +6201,7 @@
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Correspondence"/>
       <column name="description" value="Correspondence"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
     <insert schemaName="party" tableName="preference_types">
@@ -7185,12 +7193,14 @@
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Fraud"/>
       <column name="description" value="Fraud"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
     <insert schemaName="party" tableName="status_type_categories">
       <column name="code" value="kyc"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="KYC"/>
       <column name="description" value="Know Your Customer"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
     <insert schemaName="party" tableName="status_types">

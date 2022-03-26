@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {EmploymentType} from '../services/employment-type';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -74,6 +74,11 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
   private static _nextId: number = 0;
 
   /**
+   * The name for the control type.
+   */
+  controlType = 'employment-type-input';
+
+  /**
    * The employment type input.
    */
   @ViewChild(MatInput, {static: true}) employmentTypeInput!: MatInput;
@@ -87,11 +92,6 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
    * The observable providing access to the value for the employment type input as it changes.
    */
   employmentTypeInputValue$: Subject<string> = new ReplaySubject<string>();
-
-  /**
-   * The name for the control type.
-   */
-  controlType = 'employment-type-input';
 
   /**
    * The filtered employment types for the autocomplete.
@@ -195,7 +195,7 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
   /**
    * Returns the code for the selected employment type.
    *
-   * @return the code for the selected employment type
+   * @return The code for the selected employment type.
    */
   public get value(): string | null {
     return this._value;
@@ -247,17 +247,17 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
     return this.focused || !this.empty || this.employmentTypeInput.focused;
   }
 
-  employmentTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.employmentTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
   displayEmploymentType(employmentType: EmploymentType): string {
     if (!!employmentType) {
       return employmentType.name;
     } else {
       return '';
+    }
+  }
+
+  employmentTypeInputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.employmentTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -272,24 +272,23 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
     this.partyReferenceService.getEmploymentTypes().pipe(first()).subscribe((employmentTypes: Map<string, EmploymentType>) => {
       this.subscriptions.add(this.employmentTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | EmploymentType) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.name.toLowerCase();
+        debounceTime(500)).subscribe((value: string | EmploymentType) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.name.toLowerCase();
+        }
+
+        let filteredEmploymentTypes: EmploymentType[] = [];
+
+        for (const employmentType of employmentTypes.values()) {
+          if (employmentType.name.toLowerCase().indexOf(value) === 0) {
+            filteredEmploymentTypes.push(employmentType);
           }
+        }
 
-          let filteredEmploymentTypes: EmploymentType[] = [];
-
-          for (const employmentType of employmentTypes.values()) {
-            if (employmentType.name.toLowerCase().indexOf(value) === 0) {
-              filteredEmploymentTypes.push(employmentType);
-            }
-          }
-
-          this.filteredEmploymentTypes$.next(filteredEmploymentTypes);
-        })).subscribe());
+        this.filteredEmploymentTypes$.next(filteredEmploymentTypes);
+      }));
     });
   }
 
@@ -310,12 +309,11 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the employmentType input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.employmentTypeInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

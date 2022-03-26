@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {AssociationType} from '../services/association-type';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -196,7 +196,7 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
   /**
    * Returns the code for the selected association type.
    *
-   * @return the code for the selected association type
+   * @return The code for the selected association type.
    */
   public get value(): string | null {
     return this._value;
@@ -273,24 +273,23 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
     this.partyReferenceService.getAssociationTypes().pipe(first()).subscribe((associationTypes: Map<string, AssociationType>) => {
       this.subscriptions.add(this.associationTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | AssociationType) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.name.toLowerCase();
+        debounceTime(500)).subscribe((value: string | AssociationType) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.name.toLowerCase();
+        }
+
+        let filteredAssociationTypes: AssociationType[] = [];
+
+        for (const associationType of associationTypes.values()) {
+          if (associationType.name.toLowerCase().indexOf(value) === 0) {
+            filteredAssociationTypes.push(associationType);
           }
+        }
 
-          let filteredAssociationTypes: AssociationType[] = [];
-
-          for (const associationType of associationTypes.values()) {
-            if (associationType.name.toLowerCase().indexOf(value) === 0) {
-              filteredAssociationTypes.push(associationType);
-            }
-          }
-
-          this.filteredAssociationTypes$.next(filteredAssociationTypes);
-        })).subscribe());
+        this.filteredAssociationTypes$.next(filteredAssociationTypes);
+      }));
     });
   }
 
@@ -311,12 +310,11 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the associationType input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.associationTypeInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

@@ -25,7 +25,7 @@ import {
   TableFilterComponent
 } from 'ngx-inception/core';
 import {merge, Subscription} from 'rxjs';
-import {finalize, first, tap} from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 import {GroupMember} from '../services/group-member';
 import {GroupMemberType} from '../services/group-member-type';
 import {GroupMemberDatasource} from '../services/group-member.datasource';
@@ -157,9 +157,9 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
     }));
 
     this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-    .pipe(tap(() => {
+    .subscribe(() => {
       this.loadGroupMembers();
-    })).subscribe());
+    }));
 
     this.loadGroupMembers();
   }

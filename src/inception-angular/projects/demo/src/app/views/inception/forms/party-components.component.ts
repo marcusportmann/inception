@@ -28,8 +28,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class PartyComponentsComponent {
 
-  partyComponentsForm: FormGroup;
-
   associationPropertyTypeControl: FormControl = new FormControl('', Validators.required);
 
   associationTypeControl: FormControl = new FormControl('', Validators.required);
@@ -52,6 +50,74 @@ export class PartyComponentsComponent {
 
   externalReferenceTypeControl: FormControl = new FormControl('', Validators.required);
 
+  fieldOfStudyControl: FormControl = new FormControl('', Validators.required);
+
+  genderControl: FormControl = new FormControl('', Validators.required);
+
+  identityDocumentTypeControl: FormControl = new FormControl('', Validators.required);
+
+  industryClassificationCategoryControl: FormControl = new FormControl('', Validators.required);
+
+  industryClassificationControl: FormControl = new FormControl('', Validators.required);
+
+  industryClassificationSystemControl: FormControl = new FormControl('', Validators.required);
+
+  lockTypeCategoryControl: FormControl = new FormControl('', Validators.required);
+
+  lockTypeControl: FormControl = new FormControl('', Validators.required);
+
+  maritalStatusControl: FormControl = new FormControl('', Validators.required);
+
+  marriageTypeControl: FormControl = new FormControl('', Validators.required);
+
+  nextOfKinTypeControl: FormControl = new FormControl('', Validators.required);
+
+  occupationControl: FormControl = new FormControl('', Validators.required);
+
+  partyComponentsForm: FormGroup;
+
+  physicalAddressPurposeControl: FormControl = new FormControl('', Validators.required);
+
+  physicalAddressRoleControl: FormControl = new FormControl('', Validators.required);
+
+  physicalAddressTypeControl: FormControl = new FormControl('', Validators.required);
+
+  preferenceTypeCategoryControl: FormControl = new FormControl('', Validators.required);
+
+  preferenceTypeControl: FormControl = new FormControl('', Validators.required);
+
+  qualificationTypeControl: FormControl = new FormControl('', Validators.required);
+
+  raceControl: FormControl = new FormControl('', Validators.required);
+
+  residencePermitTypeControl: FormControl = new FormControl('', Validators.required);
+
+  residencyStatusControl: FormControl = new FormControl('', Validators.required);
+
+  residentialTypeControl: FormControl = new FormControl('', Validators.required);
+
+  rolePurposeControl: FormControl = new FormControl('', Validators.required);
+
+  roleTypeControl: FormControl = new FormControl('', Validators.required);
+
+  segmentControl: FormControl = new FormControl('', Validators.required);
+
+  segmentationTypeControl: FormControl = new FormControl('', Validators.required);
+
+  skillTypeControl: FormControl = new FormControl('', Validators.required);
+
+  sourceOfFundsTypeControl: FormControl = new FormControl('', Validators.required);
+
+  sourceOfWealthTypeControl: FormControl = new FormControl('', Validators.required);
+
+  statusTypeCategoryControl: FormControl = new FormControl('', Validators.required);
+
+  statusTypeControl: FormControl = new FormControl('', Validators.required);
+
+  taxNumberTypeControl: FormControl = new FormControl('', Validators.required);
+
+  timeToContactControl: FormControl = new FormControl('', Validators.required);
+
   titleControl: FormControl = new FormControl('', Validators.required);
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
@@ -72,6 +138,39 @@ export class PartyComponentsComponent {
       employmentStatus: this.employmentStatusControl,
       employmentType: this.employmentTypeControl,
       externalReferenceType: this.externalReferenceTypeControl,
+      fieldOfStudy: this.fieldOfStudyControl,
+      gender: this.genderControl,
+      identityDocumentType: this.identityDocumentTypeControl,
+      industryClassificationCategory: this.industryClassificationCategoryControl,
+      industryClassification: this.industryClassificationControl,
+      industryClassificationSystem: this.industryClassificationSystemControl,
+      lockTypeCategory: this.lockTypeCategoryControl,
+      lockType: this.lockTypeControl,
+      maritalStatus: this.maritalStatusControl,
+      marriageType: this.marriageTypeControl,
+      nextOfKinType: this.nextOfKinTypeControl,
+      occupation: this.occupationControl,
+      physicalAddressPurpose: this.physicalAddressPurposeControl,
+      physicalAddressRole: this.physicalAddressRoleControl,
+      physicalAddressType: this.physicalAddressTypeControl,
+      preferenceTypeCategory: this.preferenceTypeCategoryControl,
+      preferenceType: this.preferenceTypeControl,
+      qualificationType: this.qualificationTypeControl,
+      race: this.raceControl,
+      residencePermitType: this.residencePermitTypeControl,
+      residencyStatus: this.residencyStatusControl,
+      residentialType: this.residentialTypeControl,
+      rolePurpose: this.rolePurposeControl,
+      roleType: this.roleTypeControl,
+      segment: this.segmentControl,
+      segmentationType: this.segmentationTypeControl,
+      skillType: this.skillTypeControl,
+      sourceOfFundsType: this.sourceOfFundsTypeControl,
+      sourceOfWealthType: this.sourceOfWealthTypeControl,
+      statusTypeCategory: this.statusTypeCategoryControl,
+      statusType: this.statusTypeControl,
+      taxNumberType: this.taxNumberTypeControl,
+      timeToContact: this.timeToContactControl,
       title: this.titleControl
     });
   }
@@ -88,6 +187,39 @@ export class PartyComponentsComponent {
     console.log('Employment Status = ', this.partyComponentsForm.get('employmentStatus')!.value);
     console.log('Employment Type = ', this.partyComponentsForm.get('employmentType')!.value);
     console.log('External Reference Type = ', this.partyComponentsForm.get('employmentReferenceType')!.value);
+    console.log('Field Of Study  = ', this.partyComponentsForm.get('fieldOfStudy')!.value);
+    console.log('Gender = ', this.partyComponentsForm.get('gender')!.value);
+    console.log('Identity Document Type = ', this.partyComponentsForm.get('identityDocumentType')!.value);
+    console.log('Industry Classification Category = ', this.partyComponentsForm.get('industryClassificationCategory')!.value);
+    console.log('Industry Classification = ', this.partyComponentsForm.get('industryClassification')!.value);
+    console.log('Industry Classification System = ', this.partyComponentsForm.get('industryClassificationSystem')!.value);
+    console.log('Lock Type Category = ', this.partyComponentsForm.get('lockTypeCategory')!.value);
+    console.log('Lock Type = ', this.partyComponentsForm.get('lockType')!.value);
+    console.log('Marital Status = ', this.partyComponentsForm.get('maritalStatus')!.value);
+    console.log('Marriage Type = ', this.partyComponentsForm.get('marriageType')!.value);
+    console.log('Next Of Kin Type = ', this.partyComponentsForm.get('nextOfKinType')!.value);
+    console.log('Occupation = ', this.partyComponentsForm.get('occupation')!.value);
+    console.log('Physical Address Purpose = ', this.partyComponentsForm.get('physicalAddressPurpose')!.value);
+    console.log('Physical Address Role = ', this.partyComponentsForm.get('physicalAddressRole')!.value);
+    console.log('Physical Address Type = ', this.partyComponentsForm.get('physicalAddressType')!.value);
+    console.log('Preference Type Category = ', this.partyComponentsForm.get('preferenceTypeCategory')!.value);
+    console.log('Preference Type = ', this.partyComponentsForm.get('preferenceType')!.value);
+    console.log('Qualification Type = ', this.partyComponentsForm.get('qualificationType')!.value);
+    console.log('Race = ', this.partyComponentsForm.get('race')!.value);
+    console.log('Residence Permit Type = ', this.partyComponentsForm.get('residencePermitType')!.value);
+    console.log('Residency Status = ', this.partyComponentsForm.get('residencyStatus')!.value);
+    console.log('ResidentialType = ', this.partyComponentsForm.get('residentialType')!.value);
+    console.log('Role Purpose = ', this.partyComponentsForm.get('rolePurpose')!.value);
+    console.log('Role Type = ', this.partyComponentsForm.get('roleType')!.value);
+    console.log('Segment = ', this.partyComponentsForm.get('segment')!.value);
+    console.log('Segmentation Type = ', this.partyComponentsForm.get('segmentationType')!.value);
+    console.log('Skill Type = ', this.partyComponentsForm.get('skillType')!.value);
+    console.log('Source Of Funds Type = ', this.partyComponentsForm.get('sourceOfFundsType')!.value);
+    console.log('Source Of Wealth Type = ', this.partyComponentsForm.get('sourceOfWealthType')!.value);
+    console.log('Status Type Category = ', this.partyComponentsForm.get('statusTypeCategory')!.value);
+    console.log('Status Type = ', this.partyComponentsForm.get('statusType')!.value);
+    console.log('Tax Number Type = ', this.partyComponentsForm.get('taxNumberType')!.value);
+    console.log('Time To Contact = ', this.partyComponentsForm.get('timeToContact')!.value);
     console.log('Title = ', this.partyComponentsForm.get('title')!.value);
   }
 }

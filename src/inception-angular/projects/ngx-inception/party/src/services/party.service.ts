@@ -36,10 +36,9 @@ import {Parties} from "./parties";
 import {Party} from "./party";
 import {PartySortBy} from "./party-sorty-by";
 import {
-  AssociationNotFoundError,
-  DuplicateAssociationError, DuplicateMandateError, DuplicateOrganizationError,
-  DuplicatePersonError, MandateNotFoundError,
-  OrganizationNotFoundError, PartyNotFoundError, PersonNotFoundError
+  AssociationNotFoundError, DuplicateAssociationError, DuplicateMandateError,
+  DuplicateOrganizationError, DuplicatePersonError, MandateNotFoundError, OrganizationNotFoundError,
+  PartyNotFoundError, PersonNotFoundError
 } from "./party.service.errors";
 import {Person} from "./person";
 import {PersonSortBy} from "./person-sorty-by";
@@ -329,7 +328,7 @@ export class PartyService {
    * @return The associations for the party.
    */
   getAssociationsForParty(partyId: string, sortBy?: AssociationSortBy, sortDirection?: SortDirection,
-             pageIndex?: number, pageSize?: number): Observable<AssociationsForParty> {
+                          pageIndex?: number, pageSize?: number): Observable<AssociationsForParty> {
 
     let params = new HttpParams();
 
@@ -410,7 +409,7 @@ export class PartyService {
    * @return The mandates for the party.
    */
   getMandatesForParty(partyId: string, sortBy?: MandateSortBy, sortDirection?: SortDirection,
-                          pageIndex?: number, pageSize?: number): Observable<MandatesForParty> {
+                      pageIndex?: number, pageSize?: number): Observable<MandatesForParty> {
 
     let params = new HttpParams();
 
@@ -491,7 +490,7 @@ export class PartyService {
    * @return The users.
    */
   getOrganizations(filter?: string, sortBy?: OrganizationSortBy, sortDirection?: SortDirection,
-           pageIndex?: number, pageSize?: number): Observable<Organizations> {
+                   pageIndex?: number, pageSize?: number): Observable<Organizations> {
 
     let params = new HttpParams();
 
@@ -655,7 +654,7 @@ export class PartyService {
    * @return The persons.
    */
   getPersons(filter?: string, sortBy?: PersonSortBy, sortDirection?: SortDirection,
-                   pageIndex?: number, pageSize?: number): Observable<Persons> {
+             pageIndex?: number, pageSize?: number): Observable<Persons> {
 
     let params = new HttpParams();
 

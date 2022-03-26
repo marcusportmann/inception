@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {ContactMechanismType} from '../services/contact-mechanism-type';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -197,7 +197,7 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
   /**
    * Returns the code for the selected contact mechanism type.
    *
-   * @return the code for the selected contact mechanism type
+   * @return The code for the selected contact mechanism type.
    */
   public get value(): string | null {
     return this._value;
@@ -274,24 +274,23 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
     this.partyReferenceService.getContactMechanismTypes().pipe(first()).subscribe((contactMechanismTypes: Map<string, ContactMechanismType>) => {
       this.subscriptions.add(this.contactMechanismTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | ContactMechanismType) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.name.toLowerCase();
+        debounceTime(500)).subscribe((value: string | ContactMechanismType) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.name.toLowerCase();
+        }
+
+        let filteredContactMechanismTypes: ContactMechanismType[] = [];
+
+        for (const contactMechanismType of contactMechanismTypes.values()) {
+          if (contactMechanismType.name.toLowerCase().indexOf(value) === 0) {
+            filteredContactMechanismTypes.push(contactMechanismType);
           }
+        }
 
-          let filteredContactMechanismTypes: ContactMechanismType[] = [];
-
-          for (const contactMechanismType of contactMechanismTypes.values()) {
-            if (contactMechanismType.name.toLowerCase().indexOf(value) === 0) {
-              filteredContactMechanismTypes.push(contactMechanismType);
-            }
-          }
-
-          this.filteredContactMechanismTypes$.next(filteredContactMechanismTypes);
-        })).subscribe());
+        this.filteredContactMechanismTypes$.next(filteredContactMechanismTypes);
+      }));
     });
   }
 
@@ -312,12 +311,11 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the contactMechanismType input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.contactMechanismTypeInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

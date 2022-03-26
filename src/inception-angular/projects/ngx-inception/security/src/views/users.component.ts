@@ -26,7 +26,7 @@ import {
   SpinnerService, TableFilterComponent
 } from 'ngx-inception/core';
 import {BehaviorSubject, merge, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {finalize, first, map, tap} from 'rxjs/operators';
+import {finalize, first, map} from 'rxjs/operators';
 import {SecurityService} from '../services/security.service';
 import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
 import {UserDirectorySummary} from '../services/user-directory-summary';
@@ -234,9 +234,9 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
     }));
 
     this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-    .pipe(tap(() => {
+    .subscribe(() => {
       this.loadUsers();
-    })).subscribe());
+    }));
 
     this.sessionService.session$.pipe(first()).subscribe((session: Session | null) => {
       if (session && session.tenantId) {

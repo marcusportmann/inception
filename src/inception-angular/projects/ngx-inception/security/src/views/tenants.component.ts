@@ -24,7 +24,7 @@ import {
   InvalidArgumentError, ServiceUnavailableError, SortDirection, SpinnerService, TableFilterComponent
 } from 'ngx-inception/core';
 import {merge, Subscription} from 'rxjs';
-import {finalize, first, tap} from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 import {SecurityService} from '../services/security.service';
 import {TenantDatasource} from '../services/tenant.datasource';
 
@@ -148,9 +148,9 @@ export class TenantsComponent extends AdminContainerView implements AfterViewIni
     }));
 
     this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-    .pipe(tap(() => {
+    .subscribe(() => {
       this.loadTenants();
-    })).subscribe());
+    }));
 
     this.loadTenants();
   }

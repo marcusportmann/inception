@@ -46,6 +46,9 @@
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the attribute type category">
         <constraints nullable="false"/>
       </column>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the attribute type category is associated with">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
     <createIndex indexName="attribute_type_categories_locale_id_ix" schemaName="party" tableName="attribute_type_categories">
       <column name="locale_id"/>
@@ -660,6 +663,9 @@
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the preference type category">
         <constraints nullable="false"/>
       </column>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the preference type category is associated with">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
     <createIndex indexName="preference_type_categories_locale_id_ix" schemaName="party" tableName="preference_type_categories">
       <column name="locale_id"/>
@@ -1013,6 +1019,9 @@
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the status type category">
+        <constraints nullable="false"/>
+      </column>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the status type category is associated with">
         <constraints nullable="false"/>
       </column>
     </createTable>

@@ -25,7 +25,7 @@ import {
   Error, InvalidArgumentError, ServiceUnavailableError, SpinnerService
 } from 'ngx-inception/core';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, finalize, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, finalize, first, startWith} from 'rxjs/operators';
 import {SecurityService} from '../services/security.service';
 import {UserDirectorySummaries} from '../services/user-directory-summaries';
 import {UserDirectorySummary} from '../services/user-directory-summary';
@@ -144,9 +144,9 @@ export class TenantUserDirectoriesComponent extends AdminContainerView implement
         this.allUserDirectories, this.dataSource.data);
 
       this.subscriptions.add(this.newUserDirectoryFormControl.valueChanges.pipe(startWith(''),
-        debounceTime(500), map((value) => {
-          this.filteredUserDirectories$.next(this.filterUserDirectories(availableUserDirectories, value));
-        })).subscribe());
+        debounceTime(500)).subscribe((value) => {
+        this.filteredUserDirectories$.next(this.filterUserDirectories(availableUserDirectories, value));
+      }));
 
       this.availableUserDirectories$.next(availableUserDirectories);
     }, (error: Error) => {

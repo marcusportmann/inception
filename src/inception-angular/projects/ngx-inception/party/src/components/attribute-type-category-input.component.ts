@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {AttributeTypeCategory} from '../services/attribute-type-category';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -197,7 +197,7 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
   /**
    * Returns the code for the selected attribute type category.
    *
-   * @return the code for the selected attribute type category
+   * @return The code for the selected attribute type category.
    */
   public get value(): string | null {
     return this._value;
@@ -274,24 +274,23 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
     this.partyReferenceService.getAttributeTypeCategories().pipe(first()).subscribe((attributeTypeCategories: Map<string, AttributeTypeCategory>) => {
       this.subscriptions.add(this.attributeTypeCategoryInputValue$.pipe(
         startWith(''),
-        debounceTime(500),
-        map((value: string | AttributeTypeCategory) => {
-          if (typeof (value) === 'string') {
-            value = value.toLowerCase();
-          } else {
-            value = value.name.toLowerCase();
+        debounceTime(500)).subscribe((value: string | AttributeTypeCategory) => {
+        if (typeof (value) === 'string') {
+          value = value.toLowerCase();
+        } else {
+          value = value.name.toLowerCase();
+        }
+
+        let filteredAttributeTypeCategories: AttributeTypeCategory[] = [];
+
+        for (const attributeTypeCategory of attributeTypeCategories.values()) {
+          if (attributeTypeCategory.name.toLowerCase().indexOf(value) === 0) {
+            filteredAttributeTypeCategories.push(attributeTypeCategory);
           }
+        }
 
-          let filteredAttributeTypeCategories: AttributeTypeCategory[] = [];
-
-          for (const attributeTypeCategory of attributeTypeCategories.values()) {
-            if (attributeTypeCategory.name.toLowerCase().indexOf(value) === 0) {
-              filteredAttributeTypeCategories.push(attributeTypeCategory);
-            }
-          }
-
-          this.filteredAttributeTypeCategories$.next(filteredAttributeTypeCategories);
-        })).subscribe());
+        this.filteredAttributeTypeCategories$.next(filteredAttributeTypeCategories);
+      }));
     });
   }
 
@@ -312,12 +311,11 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the attributeTypeCategory input then clear the value when losing focus
+    // If we have cleared the input then clear the value when losing focus
     if ((!!this._value) && (!this.attributeTypeCategoryInput.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
 
     this.touched = true;

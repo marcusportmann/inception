@@ -97,11 +97,11 @@ export class TableFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.tableFilterInputSubscription = fromEvent(this.tableFilterInput.nativeElement, 'keyup')
-    .pipe(debounceTime(250), distinctUntilChanged(), tap(() => {
+    .pipe(debounceTime(250), distinctUntilChanged())
+    .subscribe(() => {
       this.filter = this.tableFilterInput.nativeElement.value;
       this.changed.emit(this.filter);
-    }))
-    .subscribe();
+    });
   }
 
   reset(emitEvent: boolean): void {

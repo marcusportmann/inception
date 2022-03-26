@@ -16,7 +16,6 @@
 
 import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {map} from 'rxjs/operators';
 import {NavigationItem} from '../services/navigation-item';
 import {NavigationService} from '../services/navigation.service';
 
@@ -58,9 +57,9 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userNavigationSubscription =
-      this.navigationService.userNavigation$.pipe(map((navigation: NavigationItem[]) => {
+      this.navigationService.userNavigation$.subscribe((navigation: NavigationItem[]) => {
         this.navItems = navigation;
-      })).subscribe();
+      });
   }
 
   @HostBinding('class.sidebar-nav') sidebarNav() {
