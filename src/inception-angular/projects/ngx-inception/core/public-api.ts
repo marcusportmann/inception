@@ -39,6 +39,7 @@ export * from './src/forms/validators/file-validator';
 export * from './src/util/base64';
 export * from './src/util/replace';
 export * from './src/util/toggle-classes';
+export * from './src/util/value-change';
 
 export * from './src/inception-app.module';
 export * from './src/inception-config';
