@@ -46,17 +46,16 @@ import {PhysicalAddressPurpose} from '../services/physical-address-purpose';
         required="required"
         [matAutocomplete]="physicalAddressPurposeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="physicalAddressPurposeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #physicalAddressPurposeAutocomplete="matAutocomplete"
-        [displayWith]="displayPhysicalAddressPurpose"
-        (optionSelected)="selectPhysicalAddressPurpose($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let physicalAddressPurpose of filteredPhysicalAddressPurposes$ | async"
           [value]="physicalAddressPurpose">
-          {{physicalAddressPurpose.name}}
+          {{ physicalAddressPurpose.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
     return this.focused || !this.empty || this.physicalAddressPurposeInput.focused;
   }
 
-  displayPhysicalAddressPurpose(physicalAddressPurpose: PhysicalAddressPurpose): string {
-    if (!!physicalAddressPurpose) {
-      return physicalAddressPurpose.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.physicalAddressPurposeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
     this.partyReferenceService.getPhysicalAddressPurposes().pipe(first()).subscribe((physicalAddressPurposes: Map<string, PhysicalAddressPurpose>) => {
       this.subscriptions.add(this.physicalAddressPurposeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | PhysicalAddressPurpose) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredPhysicalAddressPurposes: PhysicalAddressPurpose[] = [];
 
@@ -319,10 +312,8 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
   onTouched: any = () => {
   };
 
-  physicalAddressPurposeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.physicalAddressPurposeInputValue$.next((event.target as HTMLInputElement).value);
-    }
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -333,10 +324,6 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectPhysicalAddressPurpose(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

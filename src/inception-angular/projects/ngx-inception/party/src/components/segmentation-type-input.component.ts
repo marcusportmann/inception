@@ -46,17 +46,16 @@ import {SegmentationType} from '../services/segmentation-type';
         required="required"
         [matAutocomplete]="segmentationTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="segmentationTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #segmentationTypeAutocomplete="matAutocomplete"
-        [displayWith]="displaySegmentationType"
-        (optionSelected)="selectSegmentationType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let segmentationType of filteredSegmentationTypes$ | async"
           [value]="segmentationType">
-          {{segmentationType.name}}
+          {{ segmentationType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
     return this.focused || !this.empty || this.segmentationTypeInput.focused;
   }
 
-  displaySegmentationType(segmentationType: SegmentationType): string {
-    if (!!segmentationType) {
-      return segmentationType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.segmentationTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
     this.partyReferenceService.getSegmentationTypes().pipe(first()).subscribe((segmentationTypes: Map<string, SegmentationType>) => {
       this.subscriptions.add(this.segmentationTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | SegmentationType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredSegmentationTypes: SegmentationType[] = [];
 
@@ -319,6 +312,10 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,16 +324,6 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  segmentationTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.segmentationTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  selectSegmentationType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

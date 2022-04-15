@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="nextOfKinTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="nextOfKinTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #nextOfKinTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayNextOfKinType"
-        (optionSelected)="selectNextOfKinType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let nextOfKinType of filteredNextOfKinTypes$ | async"
           [value]="nextOfKinType">
-          {{nextOfKinType.name}}
+          {{ nextOfKinType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.nextOfKinTypeInput.focused;
   }
 
-  displayNextOfKinType(nextOfKinType: NextOfKinType): string {
-    if (!!nextOfKinType) {
-      return nextOfKinType.name;
-    } else {
-      return '';
-    }
-  }
-
-  nextOfKinTypeInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.nextOfKinTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getNextOfKinTypes().pipe(first()).subscribe((nextOfKinTypes: Map<string, NextOfKinType>) => {
       this.subscriptions.add(this.nextOfKinTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | NextOfKinType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredNextOfKinTypes: NextOfKinType[] = [];
 
@@ -325,6 +312,10 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectNextOfKinType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

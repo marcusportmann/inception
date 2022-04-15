@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {Country} from '../services/country';
 import {ReferenceService} from '../services/reference.service';
 
@@ -46,16 +46,15 @@ import {ReferenceService} from '../services/reference.service';
         required="required"
         [matAutocomplete]="countryAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="countryInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #countryAutocomplete="matAutocomplete"
-        [displayWith]="displayCountry"
-
-        (optionSelected)="selectCountry($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option *ngFor="let country of filteredCountries$ | async" [value]="country">
-          {{country.shortName}}
+          {{ country.shortName }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -246,17 +245,9 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.countryInput.focused;
   }
 
-  countryInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.countryInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  displayCountry(country: Country): string {
-    if (!!country) {
-      return country.name;
-    } else {
-      return '';
     }
   }
 
@@ -271,12 +262,8 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
     this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
       this.subscriptions.add(this.countryInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | Country) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.shortName.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredCountries: Country[] = [];
 
@@ -324,6 +311,10 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -332,10 +323,6 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectCountry(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

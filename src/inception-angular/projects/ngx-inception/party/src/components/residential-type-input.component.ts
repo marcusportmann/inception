@@ -46,17 +46,16 @@ import {ResidentialType} from '../services/residential-type';
         required="required"
         [matAutocomplete]="residentialTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="residentialTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #residentialTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayResidentialType"
-        (optionSelected)="selectResidentialType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let residentialType of filteredResidentialTypes$ | async"
           [value]="residentialType">
-          {{residentialType.name}}
+          {{ residentialType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
     return this.focused || !this.empty || this.residentialTypeInput.focused;
   }
 
-  displayResidentialType(residentialType: ResidentialType): string {
-    if (!!residentialType) {
-      return residentialType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.residentialTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
     this.partyReferenceService.getResidentialTypes().pipe(first()).subscribe((residentialTypes: Map<string, ResidentialType>) => {
       this.subscriptions.add(this.residentialTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | ResidentialType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredResidentialTypes: ResidentialType[] = [];
 
@@ -319,6 +312,10 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,16 +324,6 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  residentialTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.residentialTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  selectResidentialType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

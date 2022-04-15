@@ -46,17 +46,16 @@ import {Race} from '../services/race';
         required="required"
         [matAutocomplete]="raceAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="raceInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #raceAutocomplete="matAutocomplete"
-        [displayWith]="displayRace"
-        (optionSelected)="selectRace($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let race of filteredRaces$ | async"
           [value]="race">
-          {{race.name}}
+          {{ race.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.raceInput.focused;
   }
 
-  displayRace(race: Race): string {
-    if (!!race) {
-      return race.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.raceInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getRaces().pipe(first()).subscribe((races: Map<string, Race>) => {
       this.subscriptions.add(this.raceInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | Race) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredRaces: Race[] = [];
 
@@ -319,10 +312,8 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
-  raceInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.raceInputValue$.next((event.target as HTMLInputElement).value);
-    }
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -333,10 +324,6 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectRace(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="fieldOfStudyAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="fieldOfStudyInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #fieldOfStudyAutocomplete="matAutocomplete"
-        [displayWith]="displayFieldOfStudy"
-        (optionSelected)="selectFieldOfStudy($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let fieldOfStudy of filteredFieldsOfStudy$ | async"
           [value]="fieldOfStudy">
-          {{fieldOfStudy.name}}
+          {{ fieldOfStudy.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.fieldOfStudyInput.focused;
   }
 
-  displayFieldOfStudy(fieldOfStudy: FieldOfStudy): string {
-    if (!!fieldOfStudy) {
-      return fieldOfStudy.name;
-    } else {
-      return '';
-    }
-  }
-
-  fieldOfStudyInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.fieldOfStudyInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getFieldsOfStudy().pipe(first()).subscribe((fieldsOfStudy: Map<string, FieldOfStudy>) => {
       this.subscriptions.add(this.fieldOfStudyInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | FieldOfStudy) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredFieldsOfStudy: FieldOfStudy[] = [];
 
@@ -325,6 +312,10 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectFieldOfStudy(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

@@ -46,17 +46,16 @@ import {TimeToContact} from '../services/time-to-contact';
         required="required"
         [matAutocomplete]="timeToContactAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="timeToContactInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #timeToContactAutocomplete="matAutocomplete"
-        [displayWith]="displayTimeToContact"
-        (optionSelected)="selectTimeToContact($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let timeToContact of filteredTimesToContact$ | async"
           [value]="timeToContact">
-          {{timeToContact.name}}
+          {{ timeToContact.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.timeToContactInput.focused;
   }
 
-  displayTimeToContact(timeToContact: TimeToContact): string {
-    if (!!timeToContact) {
-      return timeToContact.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.timeToContactInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getTimesToContact().pipe(first()).subscribe((timesToContact: Map<string, TimeToContact>) => {
       this.subscriptions.add(this.timeToContactInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | TimeToContact) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredTimesToContact: TimeToContact[] = [];
 
@@ -319,6 +312,10 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,10 +324,6 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectTimeToContact(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {
@@ -343,12 +336,6 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setEmployment('aria-describedby', ids.join(' '));
-  }
-
-  timeToContactInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.timeToContactInputValue$.next((event.target as HTMLInputElement).value);
-    }
   }
 
   /**

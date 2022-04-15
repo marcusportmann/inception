@@ -47,18 +47,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="contactMechanismRoleAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="contactMechanismRoleInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #contactMechanismRoleAutocomplete="matAutocomplete"
-        [displayWith]="displayContactMechanismRole"
-
-        (optionSelected)="selectContactMechanismRole($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let contactMechanismRole of filteredContactMechanismRoles$ | async"
           [value]="contactMechanismRole">
-          {{contactMechanismRole.name}}
+          {{ contactMechanismRole.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -249,17 +247,9 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
     return this.focused || !this.empty || this.contactMechanismRoleInput.focused;
   }
 
-  contactMechanismRoleInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.contactMechanismRoleInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  displayContactMechanismRole(contactMechanismRole: ContactMechanismRole): string {
-    if (!!contactMechanismRole) {
-      return contactMechanismRole.name;
-    } else {
-      return '';
     }
   }
 
@@ -274,12 +264,8 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
     this.partyReferenceService.getContactMechanismRoles().pipe(first()).subscribe((contactMechanismRoles: Map<string, ContactMechanismRole>) => {
       this.subscriptions.add(this.contactMechanismRoleInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | ContactMechanismRole) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredContactMechanismRoles: ContactMechanismRole[] = [];
 
@@ -327,6 +313,10 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -335,10 +325,6 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectContactMechanismRole(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

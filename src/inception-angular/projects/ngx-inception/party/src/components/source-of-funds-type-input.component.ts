@@ -46,17 +46,16 @@ import {SourceOfFundsType} from '../services/source-of-funds-type';
         required="required"
         [matAutocomplete]="sourceOfFundsTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="sourceOfFundsTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #sourceOfFundsTypeAutocomplete="matAutocomplete"
-        [displayWith]="displaySourceOfFundsType"
-        (optionSelected)="selectSourceOfFundsType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let sourceOfFundsType of filteredSourceOfFundsTypes$ | async"
           [value]="sourceOfFundsType">
-          {{sourceOfFundsType.name}}
+          {{ sourceOfFundsType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
     return this.focused || !this.empty || this.sourceOfFundsTypeInput.focused;
   }
 
-  displaySourceOfFundsType(sourceOfFundsType: SourceOfFundsType): string {
-    if (!!sourceOfFundsType) {
-      return sourceOfFundsType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.sourceOfFundsTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
     this.partyReferenceService.getSourceOfFundsTypes().pipe(first()).subscribe((sourceOfFundsTypes: Map<string, SourceOfFundsType>) => {
       this.subscriptions.add(this.sourceOfFundsTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | SourceOfFundsType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredSourceOfFundsTypes: SourceOfFundsType[] = [];
 
@@ -319,6 +312,10 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,10 +324,6 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectSourceOfFundsType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {
@@ -343,12 +336,6 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setEmployment('aria-describedby', ids.join(' '));
-  }
-
-  sourceOfFundsTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.sourceOfFundsTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
   }
 
   /**

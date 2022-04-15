@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="industryClassificationAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="industryClassificationInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #industryClassificationAutocomplete="matAutocomplete"
-        [displayWith]="displayIndustryClassification"
-        (optionSelected)="selectIndustryClassification($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let industryClassification of filteredIndustryClassifications$ | async"
           [value]="industryClassification">
-          {{industryClassification.name}}
+          {{ industryClassification.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class IndustryClassificationInputComponent implements MatFormFieldControl
     return this.focused || !this.empty || this.industryClassificationInput.focused;
   }
 
-  displayIndustryClassification(industryClassification: IndustryClassification): string {
-    if (!!industryClassification) {
-      return industryClassification.name;
-    } else {
-      return '';
-    }
-  }
-
-  industryClassificationInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.industryClassificationInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class IndustryClassificationInputComponent implements MatFormFieldControl
     this.partyReferenceService.getIndustryClassifications().pipe(first()).subscribe((industryClassifications: Map<string, IndustryClassification>) => {
       this.subscriptions.add(this.industryClassificationInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | IndustryClassification) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredIndustryClassifications: IndustryClassification[] = [];
 
@@ -325,6 +312,10 @@ export class IndustryClassificationInputComponent implements MatFormFieldControl
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class IndustryClassificationInputComponent implements MatFormFieldControl
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectIndustryClassification(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

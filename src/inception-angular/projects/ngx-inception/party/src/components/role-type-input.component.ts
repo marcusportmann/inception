@@ -46,17 +46,16 @@ import {RoleType} from '../services/role-type';
         required="required"
         [matAutocomplete]="roleTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="roleTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #roleTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayRoleType"
-        (optionSelected)="selectRoleType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let roleType of filteredRoleTypes$ | async"
           [value]="roleType">
-          {{roleType.name}}
+          {{ roleType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.roleTypeInput.focused;
   }
 
-  displayRoleType(roleType: RoleType): string {
-    if (!!roleType) {
-      return roleType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.roleTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getRoleTypes().pipe(first()).subscribe((roleTypes: Map<string, RoleType>) => {
       this.subscriptions.add(this.roleTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | RoleType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredRoleTypes: RoleType[] = [];
 
@@ -319,6 +312,10 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,16 +324,6 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  roleTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.roleTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  selectRoleType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

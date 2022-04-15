@@ -46,17 +46,16 @@ import {PhysicalAddressType} from '../services/physical-address-type';
         required="required"
         [matAutocomplete]="physicalAddressTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="physicalAddressTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #physicalAddressTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayPhysicalAddressType"
-        (optionSelected)="selectPhysicalAddressType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let physicalAddressType of filteredPhysicalAddressTypes$ | async"
           [value]="physicalAddressType">
-          {{physicalAddressType.name}}
+          {{ physicalAddressType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class PhysicalAddressTypeInputComponent implements MatFormFieldControl<st
     return this.focused || !this.empty || this.physicalAddressTypeInput.focused;
   }
 
-  displayPhysicalAddressType(physicalAddressType: PhysicalAddressType): string {
-    if (!!physicalAddressType) {
-      return physicalAddressType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.physicalAddressTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class PhysicalAddressTypeInputComponent implements MatFormFieldControl<st
     this.partyReferenceService.getPhysicalAddressTypes().pipe(first()).subscribe((physicalAddressTypes: Map<string, PhysicalAddressType>) => {
       this.subscriptions.add(this.physicalAddressTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | PhysicalAddressType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredPhysicalAddressTypes: PhysicalAddressType[] = [];
 
@@ -319,10 +312,8 @@ export class PhysicalAddressTypeInputComponent implements MatFormFieldControl<st
   onTouched: any = () => {
   };
 
-  physicalAddressTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.physicalAddressTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -333,10 +324,6 @@ export class PhysicalAddressTypeInputComponent implements MatFormFieldControl<st
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectPhysicalAddressType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

@@ -46,18 +46,17 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="associationTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="associationTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #associationTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayAssociationType"
-
-        (optionSelected)="selectAssociationType($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let associationType of filteredAssociationTypes$ | async"
           [value]="associationType">
-          {{associationType.name}}
+          {{ associationType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -248,17 +247,9 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
     return this.focused || !this.empty || this.associationTypeInput.focused;
   }
 
-  associationTypeInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.associationTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  displayAssociationType(associationType: AssociationType): string {
-    if (!!associationType) {
-      return associationType.name;
-    } else {
-      return '';
     }
   }
 
@@ -273,12 +264,8 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
     this.partyReferenceService.getAssociationTypes().pipe(first()).subscribe((associationTypes: Map<string, AssociationType>) => {
       this.subscriptions.add(this.associationTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | AssociationType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredAssociationTypes: AssociationType[] = [];
 
@@ -326,6 +313,10 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -334,10 +325,6 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectAssociationType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

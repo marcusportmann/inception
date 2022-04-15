@@ -46,17 +46,16 @@ import {TaxNumberType} from '../services/tax-number-type';
         required="required"
         [matAutocomplete]="taxNumberTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="taxNumberTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #taxNumberTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayTaxNumberType"
-        (optionSelected)="selectTaxNumberType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let taxNumberType of filteredTaxNumberTypes$ | async"
           [value]="taxNumberType">
-          {{taxNumberType.name}}
+          {{ taxNumberType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.taxNumberTypeInput.focused;
   }
 
-  displayTaxNumberType(taxNumberType: TaxNumberType): string {
-    if (!!taxNumberType) {
-      return taxNumberType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.taxNumberTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getTaxNumberTypes().pipe(first()).subscribe((taxNumberTypes: Map<string, TaxNumberType>) => {
       this.subscriptions.add(this.taxNumberTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | TaxNumberType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredTaxNumberTypes: TaxNumberType[] = [];
 
@@ -319,6 +312,10 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,10 +324,6 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectTaxNumberType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {
@@ -343,12 +336,6 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setEmployment('aria-describedby', ids.join(' '));
-  }
-
-  taxNumberTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.taxNumberTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
   }
 
   /**

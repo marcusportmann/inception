@@ -24,7 +24,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, startWith} from 'rxjs/operators';
 import {Language} from '../services/language';
 import {ReferenceService} from '../services/reference.service';
 
@@ -46,16 +46,15 @@ import {ReferenceService} from '../services/reference.service';
         required="required"
         [matAutocomplete]="languageAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="languageInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #languageAutocomplete="matAutocomplete"
-        [displayWith]="displayLanguage"
-
-        (optionSelected)="selectLanguage($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option *ngFor="let language of filteredLanguages$ | async" [value]="language">
-          {{language.shortName}}
+          {{ language.shortName }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -246,15 +245,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.languageInput.focused;
   }
 
-  displayLanguage(language: Language): string {
-    if (!!language) {
-      return language.name;
-    } else {
-      return '';
-    }
-  }
-
-  languageInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.languageInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -271,12 +262,8 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
     this.referenceService.getLanguages().pipe(first()).subscribe((languages: Map<string, Language>) => {
       this.subscriptions.add(this.languageInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | Language) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.shortName.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredLanguages: Language[] = [];
 
@@ -324,6 +311,10 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -332,10 +323,6 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectLanguage(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

@@ -1,6 +1,6 @@
 FROM alpine:3.11.3
 
-MAINTAINER Marcus Portmann <marcus@mmp.guru>
+MAINTAINER Marcus Portmann <marcus@portmann.io>
 
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8' TZ='Africa/Johannesburg'
 

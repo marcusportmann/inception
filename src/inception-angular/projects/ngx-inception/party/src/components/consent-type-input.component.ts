@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="consentTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="consentTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #consentTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayConsentType"
-        (optionSelected)="selectConsentType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let consentType of filteredConsentTypes$ | async"
           [value]="consentType">
-          {{consentType.name}}
+          {{ consentType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,17 +246,9 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.consentTypeInput.focused;
   }
 
-  consentTypeInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.consentTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  displayConsentType(consentType: ConsentType): string {
-    if (!!consentType) {
-      return consentType.name;
-    } else {
-      return '';
     }
   }
 
@@ -272,12 +263,8 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getConsentTypes().pipe(first()).subscribe((consentTypes: Map<string, ConsentType>) => {
       this.subscriptions.add(this.consentTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | ConsentType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredConsentTypes: ConsentType[] = [];
 
@@ -325,6 +312,10 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectConsentType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

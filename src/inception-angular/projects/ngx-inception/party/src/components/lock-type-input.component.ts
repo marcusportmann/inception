@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="lockTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="lockTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #lockTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayLockType"
-        (optionSelected)="selectLockType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let lockType of filteredLockTypes$ | async"
           [value]="lockType">
-          {{lockType.name}}
+          {{ lockType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.lockTypeInput.focused;
   }
 
-  displayLockType(lockType: LockType): string {
-    if (!!lockType) {
-      return lockType.name;
-    } else {
-      return '';
-    }
-  }
-
-  lockTypeInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.lockTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getLockTypes().pipe(first()).subscribe((lockTypes: Map<string, LockType>) => {
       this.subscriptions.add(this.lockTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | LockType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredLockTypes: LockType[] = [];
 
@@ -325,6 +312,10 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectLockType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

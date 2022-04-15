@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -26,7 +26,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 @Component({
   templateUrl: 'party-components.component.html'
 })
-export class PartyComponentsComponent {
+export class PartyComponentsComponent implements OnInit {
 
   associationPropertyTypeControl: FormControl = new FormControl('', Validators.required);
 
@@ -175,6 +175,10 @@ export class PartyComponentsComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.associationPropertyTypeControl.setValue('shareholding');
+  }
+
   ok(): void {
     console.log('Association Property Type = ', this.partyComponentsForm.get('associationPropertyType')!.value);
     console.log('Association Type = ', this.partyComponentsForm.get('associationType')!.value);
@@ -186,7 +190,7 @@ export class PartyComponentsComponent {
     console.log('Contact Mechanism Type = ', this.partyComponentsForm.get('contactMechanismType')!.value);
     console.log('Employment Status = ', this.partyComponentsForm.get('employmentStatus')!.value);
     console.log('Employment Type = ', this.partyComponentsForm.get('employmentType')!.value);
-    console.log('External Reference Type = ', this.partyComponentsForm.get('employmentReferenceType')!.value);
+    console.log('External Reference Type = ', this.partyComponentsForm.get('externalReferenceType')!.value);
     console.log('Field Of Study  = ', this.partyComponentsForm.get('fieldOfStudy')!.value);
     console.log('Gender = ', this.partyComponentsForm.get('gender')!.value);
     console.log('Identity Document Type = ', this.partyComponentsForm.get('identityDocumentType')!.value);

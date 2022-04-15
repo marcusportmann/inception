@@ -47,18 +47,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="contactMechanismPurposeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="contactMechanismPurposeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #contactMechanismPurposeAutocomplete="matAutocomplete"
-        [displayWith]="displayContactMechanismPurpose"
-
-        (optionSelected)="selectContactMechanismPurpose($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let contactMechanismPurpose of filteredContactMechanismPurposes$ | async"
           [value]="contactMechanismPurpose">
-          {{contactMechanismPurpose.name}}
+          {{ contactMechanismPurpose.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -249,17 +247,9 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
     return this.focused || !this.empty || this.contactMechanismPurposeInput.focused;
   }
 
-  contactMechanismPurposeInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.contactMechanismPurposeInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  displayContactMechanismPurpose(contactMechanismPurpose: ContactMechanismPurpose): string {
-    if (!!contactMechanismPurpose) {
-      return contactMechanismPurpose.name;
-    } else {
-      return '';
     }
   }
 
@@ -274,12 +264,8 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
     this.partyReferenceService.getContactMechanismPurposes().pipe(first()).subscribe((contactMechanismPurposes: Map<string, ContactMechanismPurpose>) => {
       this.subscriptions.add(this.contactMechanismPurposeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | ContactMechanismPurpose) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredContactMechanismPurposes: ContactMechanismPurpose[] = [];
 
@@ -327,6 +313,10 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -335,10 +325,6 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectContactMechanismPurpose(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

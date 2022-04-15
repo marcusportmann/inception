@@ -46,17 +46,16 @@ import {StatusTypeCategory} from '../services/status-type-category';
         required="required"
         [matAutocomplete]="statusTypeCategoryAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="statusTypeCategoryInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #statusTypeCategoryAutocomplete="matAutocomplete"
-        [displayWith]="displayStatusTypeCategory"
-        (optionSelected)="selectStatusTypeCategory($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let statusTypeCategory of filteredStatusTypeCategories$ | async"
           [value]="statusTypeCategory">
-          {{statusTypeCategory.name}}
+          {{ statusTypeCategory.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
     return this.focused || !this.empty || this.statusTypeCategoryInput.focused;
   }
 
-  displayStatusTypeCategory(statusTypeCategory: StatusTypeCategory): string {
-    if (!!statusTypeCategory) {
-      return statusTypeCategory.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.statusTypeCategoryInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
     this.partyReferenceService.getStatusTypeCategories().pipe(first()).subscribe((statusTypeCategories: Map<string, StatusTypeCategory>) => {
       this.subscriptions.add(this.statusTypeCategoryInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | StatusTypeCategory) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredStatusTypeCategories: StatusTypeCategory[] = [];
 
@@ -319,6 +312,10 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,10 +324,6 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectStatusTypeCategory(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {
@@ -343,12 +336,6 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setEmployment('aria-describedby', ids.join(' '));
-  }
-
-  statusTypeCategoryInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.statusTypeCategoryInputValue$.next((event.target as HTMLInputElement).value);
-    }
   }
 
   /**

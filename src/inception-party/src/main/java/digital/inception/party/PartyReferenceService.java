@@ -25,8 +25,8 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -39,6 +39,9 @@ import org.springframework.util.StringUtils;
  */
 @Service
 public class PartyReferenceService implements IPartyReferenceService {
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
 
   /** The Association Property Type Repository. */
   private final AssociationPropertyTypeRepository associationPropertyTypeRepository;
@@ -194,12 +197,10 @@ public class PartyReferenceService implements IPartyReferenceService {
   /** The Title Repository. */
   private final TitleRepository titleRepository;
 
-  /** The internal reference to the Party Reference Service to enable caching. */
-  @Autowired private IPartyReferenceService self;
-
   /**
    * Constructs a new <b>PartyReferenceService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param associationPropertyTypeRepository the Association Property Type Repository
    * @param associationTypeRepository the Association Type Repository
    * @param attributeTypeCategoryRepository the Attribute Type Category Repository
@@ -255,6 +256,7 @@ public class PartyReferenceService implements IPartyReferenceService {
    * @param titleRepository the Title Repository
    */
   public PartyReferenceService(
+      ApplicationContext applicationContext,
       AssociationPropertyTypeRepository associationPropertyTypeRepository,
       AssociationTypeRepository associationTypeRepository,
       AttributeTypeCategoryRepository attributeTypeCategoryRepository,
@@ -306,6 +308,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       TaxNumberTypeRepository taxNumberTypeRepository,
       TimeToContactRepository timeToContactRepository,
       TitleRepository titleRepository) {
+    this.applicationContext = applicationContext;
     this.associationPropertyTypeRepository = associationPropertyTypeRepository;
     this.associationTypeRepository = associationTypeRepository;
     this.attributeTypeCategoryRepository = attributeTypeCategoryRepository;
@@ -367,7 +370,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return Optional.empty();
     }
 
-    return self.getAssociationPropertyTypes().stream()
+    return getPartyReferenceService().getAssociationPropertyTypes().stream()
         .filter(
             associationPropertyType ->
                 (associationPropertyType.getTenantId() == null
@@ -387,7 +390,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getAssociationPropertyTypes().stream()
+    return getPartyReferenceService().getAssociationPropertyTypes().stream()
         .filter(
             associationPropertyType ->
                 (associationPropertyType.getLocaleId() == null
@@ -410,7 +413,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<AssociationPropertyType> getAssociationPropertyTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getAssociationPropertyTypes(localeId).stream()
+    return getPartyReferenceService().getAssociationPropertyTypes(localeId).stream()
         .filter(
             associationPropertyType ->
                 (associationPropertyType.getTenantId() == null
@@ -425,7 +428,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return Optional.empty();
     }
 
-    return self.getAssociationTypes().stream()
+    return getPartyReferenceService().getAssociationTypes().stream()
         .filter(
             associationType ->
                 (associationType.getTenantId() == null
@@ -442,7 +445,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getAssociationTypes().stream()
+    return getPartyReferenceService().getAssociationTypes().stream()
         .filter(
             associationType ->
                 (associationType.getLocaleId() == null
@@ -464,7 +467,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<AssociationType> getAssociationTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getAssociationTypes(localeId).stream()
+    return getPartyReferenceService().getAssociationTypes(localeId).stream()
         .filter(
             associationType ->
                 (associationType.getTenantId() == null
@@ -476,7 +479,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   public Optional<AttributeType> getAttributeType(
       UUID tenantId, String partyTypeCode, String attributeTypeCode)
       throws ServiceUnavailableException {
-    return self.getAttributeTypes().stream()
+    return getPartyReferenceService().getAttributeTypes().stream()
         .filter(
             attributeType ->
                 (attributeType.getTenantId() == null
@@ -494,7 +497,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getAttributeTypeCategories().stream()
+    return getPartyReferenceService().getAttributeTypeCategories().stream()
         .filter(
             attributeTypeCategory ->
                 (attributeTypeCategory.getLocaleId() == null
@@ -517,7 +520,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<AttributeTypeCategory> getAttributeTypeCategories(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getAttributeTypeCategories(localeId).stream()
+    return getPartyReferenceService().getAttributeTypeCategories(localeId).stream()
         .filter(
             attributeTypeCategory ->
                 (attributeTypeCategory.getTenantId() == null
@@ -530,7 +533,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   public Optional<ValueType> getAttributeTypeValueType(String attributeTypeCode)
       throws ServiceUnavailableException {
     try {
-      return self.getAttributeTypes().stream()
+      return getPartyReferenceService().getAttributeTypes().stream()
           .filter(attributeType -> Objects.equals(attributeType.getCode(), attributeTypeCode))
           .findFirst()
           .map(AttributeType::getValueType);
@@ -549,7 +552,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getAttributeTypes().stream()
+    return getPartyReferenceService().getAttributeTypes().stream()
         .filter(
             attributeType ->
                 (attributeType.getLocaleId() == null
@@ -571,7 +574,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<AttributeType> getAttributeTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getAttributeTypes(localeId).stream()
+    return getPartyReferenceService().getAttributeTypes(localeId).stream()
         .filter(
             attributeType ->
                 (attributeType.getTenantId() == null
@@ -587,7 +590,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getConsentTypes().stream()
+    return getPartyReferenceService().getConsentTypes().stream()
         .filter(
             consentType ->
                 (consentType.getLocaleId() == null
@@ -609,7 +612,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<ConsentType> getConsentTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getConsentTypes(localeId).stream()
+    return getPartyReferenceService().getConsentTypes(localeId).stream()
         .filter(
             consentType ->
                 (consentType.getTenantId() == null
@@ -625,7 +628,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getContactMechanismPurposes().stream()
+    return getPartyReferenceService().getContactMechanismPurposes().stream()
         .filter(
             contactMechanismPurpose ->
                 (contactMechanismPurpose.getLocaleId() == null
@@ -648,7 +651,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<ContactMechanismPurpose> getContactMechanismPurposes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getContactMechanismPurposes(localeId).stream()
+    return getPartyReferenceService().getContactMechanismPurposes(localeId).stream()
         .filter(
             contactMechanismPurpose ->
                 (contactMechanismPurpose.getTenantId() == null
@@ -663,7 +666,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       String contactMechanismTypeCode,
       String contactMechanismRoleCode)
       throws ServiceUnavailableException {
-    return self.getContactMechanismRoles().stream()
+    return getPartyReferenceService().getContactMechanismRoles().stream()
         .filter(
             contactMechanismRole ->
                 (contactMechanismRole.getTenantId() == null
@@ -684,7 +687,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getContactMechanismRoles().stream()
+    return getPartyReferenceService().getContactMechanismRoles().stream()
         .filter(
             contactMechanismRole ->
                 (contactMechanismRole.getLocaleId() == null
@@ -706,7 +709,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<ContactMechanismRole> getContactMechanismRoles(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getContactMechanismRoles(localeId).stream()
+    return getPartyReferenceService().getContactMechanismRoles(localeId).stream()
         .filter(
             contactMechanismRole ->
                 (contactMechanismRole.getTenantId() == null
@@ -717,7 +720,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public Optional<ContactMechanismType> getContactMechanismType(
       UUID tenantId, String contactMechanismTypeCode) throws ServiceUnavailableException {
-    return self.getContactMechanismTypes().stream()
+    return getPartyReferenceService().getContactMechanismTypes().stream()
         .filter(
             contactMechanismType ->
                 (contactMechanismType.getTenantId() == null
@@ -734,7 +737,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getContactMechanismTypes().stream()
+    return getPartyReferenceService().getContactMechanismTypes().stream()
         .filter(
             contactMechanismType ->
                 (contactMechanismType.getLocaleId() == null
@@ -756,7 +759,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<ContactMechanismType> getContactMechanismTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getContactMechanismTypes(localeId).stream()
+    return getPartyReferenceService().getContactMechanismTypes(localeId).stream()
         .filter(
             contactMechanismType ->
                 (contactMechanismType.getTenantId() == null
@@ -772,7 +775,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getEmploymentStatuses().stream()
+    return getPartyReferenceService().getEmploymentStatuses().stream()
         .filter(
             employmentStatus ->
                 (employmentStatus.getLocaleId() == null
@@ -794,7 +797,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<EmploymentStatus> getEmploymentStatuses(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getEmploymentStatuses(localeId).stream()
+    return getPartyReferenceService().getEmploymentStatuses(localeId).stream()
         .filter(
             employmentStatus ->
                 (employmentStatus.getTenantId() == null
@@ -810,7 +813,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getEmploymentTypes().stream()
+    return getPartyReferenceService().getEmploymentTypes().stream()
         .filter(
             employmentType ->
                 (employmentType.getLocaleId() == null
@@ -832,7 +835,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<EmploymentType> getEmploymentTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getEmploymentTypes(localeId).stream()
+    return getPartyReferenceService().getEmploymentTypes(localeId).stream()
         .filter(
             employmentType ->
                 (employmentType.getTenantId() == null
@@ -848,7 +851,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getExternalReferenceTypes().stream()
+    return getPartyReferenceService().getExternalReferenceTypes().stream()
         .filter(
             externalReferenceType ->
                 (externalReferenceType.getLocaleId() == null
@@ -871,7 +874,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<ExternalReferenceType> getExternalReferenceTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getExternalReferenceTypes(localeId).stream()
+    return getPartyReferenceService().getExternalReferenceTypes(localeId).stream()
         .filter(
             externalReferenceType ->
                 (externalReferenceType.getTenantId() == null
@@ -887,7 +890,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getFieldsOfStudy().stream()
+    return getPartyReferenceService().getFieldsOfStudy().stream()
         .filter(
             fieldOfStudy ->
                 (fieldOfStudy.getLocaleId() == null
@@ -909,7 +912,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<FieldOfStudy> getFieldsOfStudy(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getFieldsOfStudy(localeId).stream()
+    return getPartyReferenceService().getFieldsOfStudy(localeId).stream()
         .filter(
             fieldOfStudy ->
                 (fieldOfStudy.getTenantId() == null
@@ -925,7 +928,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getGenders().stream()
+    return getPartyReferenceService().getGenders().stream()
         .filter(
             gender ->
                 (gender.getLocaleId() == null || localeId.equalsIgnoreCase(gender.getLocaleId())))
@@ -945,7 +948,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<Gender> getGenders(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getGenders(localeId).stream()
+    return getPartyReferenceService().getGenders(localeId).stream()
         .filter(
             gender ->
                 (gender.getTenantId() == null || (Objects.equals(gender.getTenantId(), tenantId))))
@@ -960,7 +963,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getIdentityDocumentTypes().stream()
+    return getPartyReferenceService().getIdentityDocumentTypes().stream()
         .filter(
             identityDocumentType ->
                 (identityDocumentType.getLocaleId() == null
@@ -982,7 +985,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<IdentityDocumentType> getIdentityDocumentTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getIdentityDocumentTypes(localeId).stream()
+    return getPartyReferenceService().getIdentityDocumentTypes(localeId).stream()
         .filter(
             identityDocumentType ->
                 (identityDocumentType.getTenantId() == null
@@ -997,7 +1000,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getIndustryClassificationCategories().stream()
+    return getPartyReferenceService().getIndustryClassificationCategories().stream()
         .filter(
             industryClassificationCategory ->
                 (industryClassificationCategory.getLocaleId() == null
@@ -1008,7 +1011,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<IndustryClassificationCategory> getIndustryClassificationCategories(
       UUID tenantId, String localeId) throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getIndustryClassificationCategories(localeId).stream()
+    return getPartyReferenceService().getIndustryClassificationCategories(localeId).stream()
         .filter(
             industryClassificationCategory ->
                 (industryClassificationCategory.getTenantId() == null
@@ -1034,7 +1037,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getIndustryClassificationSystems().stream()
+    return getPartyReferenceService().getIndustryClassificationSystems().stream()
         .filter(
             industryClassificationSystem ->
                 (industryClassificationSystem.getLocaleId() == null
@@ -1045,7 +1048,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<IndustryClassificationSystem> getIndustryClassificationSystems(
       UUID tenantId, String localeId) throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getIndustryClassificationSystems(localeId).stream()
+    return getPartyReferenceService().getIndustryClassificationSystems(localeId).stream()
         .filter(
             industryClassificationSystem ->
                 (industryClassificationSystem.getTenantId() == null
@@ -1071,7 +1074,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getIndustryClassifications().stream()
+    return getPartyReferenceService().getIndustryClassifications().stream()
         .filter(
             industryClassification ->
                 (industryClassification.getLocaleId() == null
@@ -1082,7 +1085,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<IndustryClassification> getIndustryClassifications(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getIndustryClassifications(localeId).stream()
+    return getPartyReferenceService().getIndustryClassifications(localeId).stream()
         .filter(
             industryClassification ->
                 (industryClassification.getTenantId() == null
@@ -1109,7 +1112,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getLinkTypes().stream()
+    return getPartyReferenceService().getLinkTypes().stream()
         .filter(
             linkType ->
                 (linkType.getLocaleId() == null
@@ -1130,7 +1133,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<LinkType> getLinkTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getLinkTypes(localeId).stream()
+    return getPartyReferenceService().getLinkTypes(localeId).stream()
         .filter(
             linkType ->
                 (linkType.getTenantId() == null
@@ -1146,7 +1149,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getLockTypeCategories().stream()
+    return getPartyReferenceService().getLockTypeCategories().stream()
         .filter(
             lockTypeCategory ->
                 (lockTypeCategory.getLocaleId() == null
@@ -1168,7 +1171,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<LockTypeCategory> getLockTypeCategories(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getLockTypeCategories(localeId).stream()
+    return getPartyReferenceService().getLockTypeCategories(localeId).stream()
         .filter(
             lockTypeCategory ->
                 (lockTypeCategory.getTenantId() == null
@@ -1184,7 +1187,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getLockTypes().stream()
+    return getPartyReferenceService().getLockTypes().stream()
         .filter(
             lockType ->
                 (lockType.getLocaleId() == null
@@ -1205,7 +1208,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<LockType> getLockTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getLockTypes(localeId).stream()
+    return getPartyReferenceService().getLockTypes(localeId).stream()
         .filter(
             lockType ->
                 (lockType.getTenantId() == null
@@ -1221,7 +1224,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getMandataryRoles().stream()
+    return getPartyReferenceService().getMandataryRoles().stream()
         .filter(
             mandataryRole ->
                 (mandataryRole.getLocaleId() == null
@@ -1243,7 +1246,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<MandataryRole> getMandataryRoles(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getMandataryRoles(localeId).stream()
+    return getPartyReferenceService().getMandataryRoles(localeId).stream()
         .filter(
             mandataryRole ->
                 (mandataryRole.getTenantId() == null
@@ -1259,7 +1262,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return Optional.empty();
     }
 
-    return self.getMandatePropertyTypes().stream()
+    return getPartyReferenceService().getMandatePropertyTypes().stream()
         .filter(
             mandatePropertyType ->
                 (mandatePropertyType.getTenantId() == null
@@ -1277,7 +1280,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getMandatePropertyTypes().stream()
+    return getPartyReferenceService().getMandatePropertyTypes().stream()
         .filter(
             mandatePropertyType ->
                 (mandatePropertyType.getLocaleId() == null
@@ -1299,7 +1302,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<MandatePropertyType> getMandatePropertyTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getMandatePropertyTypes(localeId).stream()
+    return getPartyReferenceService().getMandatePropertyTypes(localeId).stream()
         .filter(
             mandatePropertyType ->
                 (mandatePropertyType.getTenantId() == null
@@ -1315,7 +1318,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getMandateTypes().stream()
+    return getPartyReferenceService().getMandateTypes().stream()
         .filter(
             mandateType ->
                 (mandateType.getLocaleId() == null
@@ -1337,7 +1340,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<MandateType> getMandateTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getMandateTypes(localeId).stream()
+    return getPartyReferenceService().getMandateTypes(localeId).stream()
         .filter(
             mandateType ->
                 (mandateType.getTenantId() == null
@@ -1353,7 +1356,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getMaritalStatuses().stream()
+    return getPartyReferenceService().getMaritalStatuses().stream()
         .filter(
             maritalStatus ->
                 (maritalStatus.getLocaleId() == null
@@ -1375,7 +1378,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<MaritalStatus> getMaritalStatuses(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getMaritalStatuses(localeId).stream()
+    return getPartyReferenceService().getMaritalStatuses(localeId).stream()
         .filter(
             maritalStatus ->
                 (maritalStatus.getTenantId() == null
@@ -1391,7 +1394,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getMarriageTypes().stream()
+    return getPartyReferenceService().getMarriageTypes().stream()
         .filter(
             marriageType ->
                 (marriageType.getLocaleId() == null
@@ -1413,7 +1416,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<MarriageType> getMarriageTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getMarriageTypes(localeId).stream()
+    return getPartyReferenceService().getMarriageTypes(localeId).stream()
         .filter(
             marriageType ->
                 (marriageType.getTenantId() == null
@@ -1429,7 +1432,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getNextOfKinTypes().stream()
+    return getPartyReferenceService().getNextOfKinTypes().stream()
         .filter(
             nextOfKinType ->
                 (nextOfKinType.getLocaleId() == null
@@ -1451,7 +1454,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<NextOfKinType> getNextOfKinTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getNextOfKinTypes(localeId).stream()
+    return getPartyReferenceService().getNextOfKinTypes(localeId).stream()
         .filter(
             nextOfKinType ->
                 (nextOfKinType.getTenantId() == null
@@ -1467,7 +1470,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getOccupations().stream()
+    return getPartyReferenceService().getOccupations().stream()
         .filter(
             occupation ->
                 (occupation.getLocaleId() == null
@@ -1488,7 +1491,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<Occupation> getOccupations(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getOccupations(localeId).stream()
+    return getPartyReferenceService().getOccupations(localeId).stream()
         .filter(
             occupation ->
                 (occupation.getTenantId() == null
@@ -1504,7 +1507,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getPhysicalAddressPurposes().stream()
+    return getPartyReferenceService().getPhysicalAddressPurposes().stream()
         .filter(
             physicalAddressPurpose ->
                 (physicalAddressPurpose.getLocaleId() == null
@@ -1527,7 +1530,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getPhysicalAddressPurposes(localeId).stream()
+    return getPartyReferenceService().getPhysicalAddressPurposes(localeId).stream()
         .filter(
             physicalAddressPurpose ->
                 (physicalAddressPurpose.getTenantId() == null
@@ -1543,7 +1546,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getPhysicalAddressRoles().stream()
+    return getPartyReferenceService().getPhysicalAddressRoles().stream()
         .filter(
             physicalAddressRole ->
                 (physicalAddressRole.getLocaleId() == null
@@ -1565,7 +1568,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<PhysicalAddressRole> getPhysicalAddressRoles(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getPhysicalAddressRoles(localeId).stream()
+    return getPartyReferenceService().getPhysicalAddressRoles(localeId).stream()
         .filter(
             physicalAddressRole ->
                 (physicalAddressRole.getTenantId() == null
@@ -1581,7 +1584,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getPhysicalAddressTypes().stream()
+    return getPartyReferenceService().getPhysicalAddressTypes().stream()
         .filter(
             physicalAddressType ->
                 (physicalAddressType.getLocaleId() == null
@@ -1603,7 +1606,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<PhysicalAddressType> getPhysicalAddressTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getPhysicalAddressTypes(localeId).stream()
+    return getPartyReferenceService().getPhysicalAddressTypes(localeId).stream()
         .filter(
             physicalAddressType ->
                 (physicalAddressType.getTenantId() == null
@@ -1615,7 +1618,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   public Optional<PreferenceType> getPreferenceType(
       UUID tenantId, String partyTypeCode, String preferenceTypeCode)
       throws ServiceUnavailableException {
-    return self.getPreferenceTypes().stream()
+    return getPartyReferenceService().getPreferenceTypes().stream()
         .filter(
             preferenceType ->
                 (preferenceType.getTenantId() == null
@@ -1633,7 +1636,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getPreferenceTypeCategories().stream()
+    return getPartyReferenceService().getPreferenceTypeCategories().stream()
         .filter(
             preferenceTypeCategory ->
                 (preferenceTypeCategory.getLocaleId() == null
@@ -1656,7 +1659,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getPreferenceTypeCategories(localeId).stream()
+    return getPartyReferenceService().getPreferenceTypeCategories(localeId).stream()
         .filter(
             preferenceTypeCategory ->
                 (preferenceTypeCategory.getTenantId() == null
@@ -1672,7 +1675,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getPreferenceTypes().stream()
+    return getPartyReferenceService().getPreferenceTypes().stream()
         .filter(
             preferenceType ->
                 (preferenceType.getLocaleId() == null
@@ -1694,7 +1697,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<PreferenceType> getPreferenceTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getPreferenceTypes(localeId).stream()
+    return getPartyReferenceService().getPreferenceTypes(localeId).stream()
         .filter(
             preferenceType ->
                 (preferenceType.getTenantId() == null
@@ -1710,7 +1713,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getQualificationTypes().stream()
+    return getPartyReferenceService().getQualificationTypes().stream()
         .filter(
             qualificationType ->
                 (qualificationType.getLocaleId() == null
@@ -1732,7 +1735,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<QualificationType> getQualificationTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getQualificationTypes(localeId).stream()
+    return getPartyReferenceService().getQualificationTypes(localeId).stream()
         .filter(
             qualificationType ->
                 (qualificationType.getTenantId() == null
@@ -1748,7 +1751,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getRaces().stream()
+    return getPartyReferenceService().getRaces().stream()
         .filter(
             race -> (race.getLocaleId() == null || localeId.equalsIgnoreCase(race.getLocaleId())))
         .collect(Collectors.toList());
@@ -1767,7 +1770,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<Race> getRaces(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getRaces(localeId).stream()
+    return getPartyReferenceService().getRaces(localeId).stream()
         .filter(
             race -> (race.getTenantId() == null || (Objects.equals(race.getTenantId(), tenantId))))
         .collect(Collectors.toList());
@@ -1781,7 +1784,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getResidencePermitTypes().stream()
+    return getPartyReferenceService().getResidencePermitTypes().stream()
         .filter(
             residencePermitType ->
                 (residencePermitType.getLocaleId() == null
@@ -1803,7 +1806,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<ResidencePermitType> getResidencePermitTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getResidencePermitTypes(localeId).stream()
+    return getPartyReferenceService().getResidencePermitTypes(localeId).stream()
         .filter(
             residencePermitType ->
                 (residencePermitType.getTenantId() == null
@@ -1819,7 +1822,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getResidencyStatuses().stream()
+    return getPartyReferenceService().getResidencyStatuses().stream()
         .filter(
             residencyStatus ->
                 (residencyStatus.getLocaleId() == null
@@ -1841,7 +1844,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<ResidencyStatus> getResidencyStatuses(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getResidencyStatuses(localeId).stream()
+    return getPartyReferenceService().getResidencyStatuses(localeId).stream()
         .filter(
             residencyStatus ->
                 (residencyStatus.getTenantId() == null
@@ -1857,7 +1860,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getResidentialTypes().stream()
+    return getPartyReferenceService().getResidentialTypes().stream()
         .filter(
             residentialType ->
                 (residentialType.getLocaleId() == null
@@ -1879,7 +1882,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<ResidentialType> getResidentialTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getResidentialTypes(localeId).stream()
+    return getPartyReferenceService().getResidentialTypes(localeId).stream()
         .filter(
             residentialType ->
                 (residentialType.getTenantId() == null
@@ -1895,7 +1898,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getRolePurposes().stream()
+    return getPartyReferenceService().getRolePurposes().stream()
         .filter(
             rolePurpose ->
                 (rolePurpose.getLocaleId() == null
@@ -1917,7 +1920,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<RolePurpose> getRolePurposes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getRolePurposes(localeId).stream()
+    return getPartyReferenceService().getRolePurposes(localeId).stream()
         .filter(
             rolePurpose ->
                 (rolePurpose.getTenantId() == null
@@ -1995,7 +1998,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getRoleTypes().stream()
+    return getPartyReferenceService().getRoleTypes().stream()
         .filter(
             roleType ->
                 (roleType.getLocaleId() == null
@@ -2016,7 +2019,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<RoleType> getRoleTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getRoleTypes(localeId).stream()
+    return getPartyReferenceService().getRoleTypes(localeId).stream()
         .filter(
             roleType ->
                 (roleType.getTenantId() == null
@@ -2027,7 +2030,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<SegmentationType> getSegmentationTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getSegmentationTypes(localeId).stream()
+    return getPartyReferenceService().getSegmentationTypes(localeId).stream()
         .filter(
             lockType ->
                 (lockType.getTenantId() == null
@@ -2043,7 +2046,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getSegmentationTypes().stream()
+    return getPartyReferenceService().getSegmentationTypes().stream()
         .filter(
             segmentationType ->
                 (segmentationType.getLocaleId() == null
@@ -2071,7 +2074,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getSegments().stream()
+    return getPartyReferenceService().getSegments().stream()
         .filter(
             segment ->
                 (segment.getLocaleId() == null || localeId.equalsIgnoreCase(segment.getLocaleId())))
@@ -2091,7 +2094,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<Segment> getSegments(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getSegments(localeId).stream()
+    return getPartyReferenceService().getSegments(localeId).stream()
         .filter(
             segment ->
                 (segment.getTenantId() == null
@@ -2107,7 +2110,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getSkillTypes().stream()
+    return getPartyReferenceService().getSkillTypes().stream()
         .filter(
             skillType ->
                 (skillType.getLocaleId() == null
@@ -2128,7 +2131,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<SkillType> getSkillTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getSkillTypes(localeId).stream()
+    return getPartyReferenceService().getSkillTypes(localeId).stream()
         .filter(
             skillType ->
                 (skillType.getTenantId() == null
@@ -2144,7 +2147,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getSourceOfFundsTypes().stream()
+    return getPartyReferenceService().getSourceOfFundsTypes().stream()
         .filter(
             sourceOfFundsType ->
                 (sourceOfFundsType.getLocaleId() == null
@@ -2166,7 +2169,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<SourceOfFundsType> getSourceOfFundsTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getSourceOfFundsTypes(localeId).stream()
+    return getPartyReferenceService().getSourceOfFundsTypes(localeId).stream()
         .filter(
             sourceOfFundsType ->
                 (sourceOfFundsType.getTenantId() == null
@@ -2182,7 +2185,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getSourceOfWealthTypes().stream()
+    return getPartyReferenceService().getSourceOfWealthTypes().stream()
         .filter(
             sourceOfWealthType ->
                 (sourceOfWealthType.getLocaleId() == null
@@ -2204,7 +2207,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<SourceOfWealthType> getSourceOfWealthTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getSourceOfWealthTypes(localeId).stream()
+    return getPartyReferenceService().getSourceOfWealthTypes(localeId).stream()
         .filter(
             sourceOfWealthType ->
                 (sourceOfWealthType.getTenantId() == null
@@ -2220,7 +2223,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getStatusTypeCategories().stream()
+    return getPartyReferenceService().getStatusTypeCategories().stream()
         .filter(
             statusTypeCategory ->
                 (statusTypeCategory.getLocaleId() == null
@@ -2242,7 +2245,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<StatusTypeCategory> getStatusTypeCategories(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getStatusTypeCategories(localeId).stream()
+    return getPartyReferenceService().getStatusTypeCategories(localeId).stream()
         .filter(
             statusTypeCategory ->
                 (statusTypeCategory.getTenantId() == null
@@ -2258,7 +2261,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getStatusTypes().stream()
+    return getPartyReferenceService().getStatusTypes().stream()
         .filter(
             statusType ->
                 (statusType.getLocaleId() == null
@@ -2279,7 +2282,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<StatusType> getStatusTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getStatusTypes(localeId).stream()
+    return getPartyReferenceService().getStatusTypes(localeId).stream()
         .filter(
             statusType ->
                 (statusType.getTenantId() == null
@@ -2295,7 +2298,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getTaxNumberTypes().stream()
+    return getPartyReferenceService().getTaxNumberTypes().stream()
         .filter(
             taxNumberType ->
                 (taxNumberType.getLocaleId() == null
@@ -2317,7 +2320,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<TaxNumberType> getTaxNumberTypes(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getTaxNumberTypes(localeId).stream()
+    return getPartyReferenceService().getTaxNumberTypes(localeId).stream()
         .filter(
             taxNumberType ->
                 (taxNumberType.getTenantId() == null
@@ -2333,7 +2336,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getTimesToContact().stream()
+    return getPartyReferenceService().getTimesToContact().stream()
         .filter(
             timeToContact ->
                 (timeToContact.getLocaleId() == null
@@ -2355,7 +2358,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<TimeToContact> getTimesToContact(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getTimesToContact(localeId).stream()
+    return getPartyReferenceService().getTimesToContact(localeId).stream()
         .filter(
             timeToContact ->
                 (timeToContact.getTenantId() == null
@@ -2371,7 +2374,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getTitles().stream()
+    return getPartyReferenceService().getTitles().stream()
         .filter(
             title ->
                 (title.getLocaleId() == null || localeId.equalsIgnoreCase(title.getLocaleId())))
@@ -2391,7 +2394,7 @@ public class PartyReferenceService implements IPartyReferenceService {
   @Override
   public List<Title> getTitles(UUID tenantId, String localeId)
       throws InvalidArgumentException, ServiceUnavailableException {
-    return self.getTitles(localeId).stream()
+    return getPartyReferenceService().getTitles(localeId).stream()
         .filter(
             title ->
                 (title.getTenantId() == null || (Objects.equals(title.getTenantId(), tenantId))))
@@ -2406,7 +2409,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getAssociationPropertyTypes().stream()
+    return getPartyReferenceService().getAssociationPropertyTypes().stream()
         .anyMatch(
             associationPropertyType ->
                 (associationPropertyType.getTenantId() == null
@@ -2424,7 +2427,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getAssociationTypes().stream()
+    return getPartyReferenceService().getAssociationTypes().stream()
         .anyMatch(
             associationType ->
                 (associationType.getTenantId() == null
@@ -2439,7 +2442,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getAttributeTypes().stream()
+    return getPartyReferenceService().getAttributeTypes().stream()
         .anyMatch(
             attributeType ->
                 (attributeType.getTenantId() == null
@@ -2455,7 +2458,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getAttributeTypeCategories().stream()
+    return getPartyReferenceService().getAttributeTypeCategories().stream()
         .anyMatch(
             attributeTypeCategory ->
                 (attributeTypeCategory.getTenantId() == null
@@ -2470,7 +2473,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getConsentTypes().stream()
+    return getPartyReferenceService().getConsentTypes().stream()
         .anyMatch(
             consentType ->
                 (consentType.getTenantId() == null
@@ -2489,7 +2492,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getContactMechanismPurposes().stream()
+    return getPartyReferenceService().getContactMechanismPurposes().stream()
         .anyMatch(
             contactMechanismPurpose ->
                 (contactMechanismPurpose.getTenantId() == null
@@ -2516,7 +2519,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getContactMechanismRoles().stream()
+    return getPartyReferenceService().getContactMechanismRoles().stream()
         .anyMatch(
             contactMechanismRole ->
                 (contactMechanismRole.getTenantId() == null
@@ -2535,7 +2538,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getContactMechanismTypes().stream()
+    return getPartyReferenceService().getContactMechanismTypes().stream()
         .anyMatch(
             contactMechanismType ->
                 (contactMechanismType.getTenantId() == null
@@ -2550,7 +2553,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getEmploymentStatuses().stream()
+    return getPartyReferenceService().getEmploymentStatuses().stream()
         .anyMatch(
             employmentStatus ->
                 (employmentStatus.getTenantId() == null
@@ -2566,7 +2569,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getEmploymentTypes().stream()
+    return getPartyReferenceService().getEmploymentTypes().stream()
         .anyMatch(
             employmentType ->
                 (employmentType.getTenantId() == null
@@ -2582,7 +2585,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getEmploymentTypes().stream()
+    return getPartyReferenceService().getEmploymentTypes().stream()
         .anyMatch(
             employmentType ->
                 (employmentType.getTenantId() == null
@@ -2598,7 +2601,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getExternalReferenceTypes().stream()
+    return getPartyReferenceService().getExternalReferenceTypes().stream()
         .anyMatch(
             externalReferenceType -> {
               if ((externalReferenceType.getTenantId() == null
@@ -2628,7 +2631,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getExternalReferenceTypes().stream()
+    return getPartyReferenceService().getExternalReferenceTypes().stream()
         .anyMatch(
             externalReferenceType ->
                 (externalReferenceType.getTenantId() == null
@@ -2644,7 +2647,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getFieldsOfStudy().stream()
+    return getPartyReferenceService().getFieldsOfStudy().stream()
         .anyMatch(
             fieldOfStudy ->
                 (fieldOfStudy.getTenantId() == null
@@ -2659,7 +2662,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getGenders().stream()
+    return getPartyReferenceService().getGenders().stream()
         .anyMatch(
             gender ->
                 (gender.getTenantId() == null || Objects.equals(gender.getTenantId(), tenantId))
@@ -2674,7 +2677,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getIdentityDocumentTypes().stream()
+    return getPartyReferenceService().getIdentityDocumentTypes().stream()
         .anyMatch(
             identityDocumentType -> {
               if ((identityDocumentType.getTenantId() == null
@@ -2704,7 +2707,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getIdentityDocumentTypes().stream()
+    return getPartyReferenceService().getIdentityDocumentTypes().stream()
         .anyMatch(
             identityDocumentType ->
                 (identityDocumentType.getTenantId() == null
@@ -2725,7 +2728,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getIndustryClassifications().stream()
+    return getPartyReferenceService().getIndustryClassifications().stream()
         .anyMatch(
             industryClassification ->
                 (Objects.equals(
@@ -2741,7 +2744,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getLockTypes().stream()
+    return getPartyReferenceService().getLockTypes().stream()
         .anyMatch(
             lockType ->
                 (lockType.getTenantId() == null || Objects.equals(lockType.getTenantId(), tenantId))
@@ -2756,7 +2759,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getLockTypeCategories().stream()
+    return getPartyReferenceService().getLockTypeCategories().stream()
         .anyMatch(
             lockTypeCategory ->
                 (lockTypeCategory.getTenantId() == null
@@ -2771,7 +2774,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getMandateTypes().stream()
+    return getPartyReferenceService().getMandateTypes().stream()
         .anyMatch(
             mandateType ->
                 (mandateType.getTenantId() == null
@@ -2786,7 +2789,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getMaritalStatuses().stream()
+    return getPartyReferenceService().getMaritalStatuses().stream()
         .anyMatch(
             maritalStatus ->
                 (maritalStatus.getTenantId() == null
@@ -2804,7 +2807,7 @@ public class PartyReferenceService implements IPartyReferenceService {
 
     // Find marriage types for the specified marital status
     List<MarriageType> marriageTypes =
-        self.getMarriageTypes().stream()
+        getPartyReferenceService().getMarriageTypes().stream()
             .filter(
                 marriageType ->
                     ((marriageType.getTenantId() == null)
@@ -2834,7 +2837,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getAttributeTypes().stream()
+    return getPartyReferenceService().getAttributeTypes().stream()
         .anyMatch(
             attributeType ->
                 (attributeType.getTenantId() == null
@@ -2852,7 +2855,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getNextOfKinTypes().stream()
+    return getPartyReferenceService().getNextOfKinTypes().stream()
         .anyMatch(
             nextOfKinType ->
                 (nextOfKinType.getTenantId() == null
@@ -2867,7 +2870,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getOccupations().stream()
+    return getPartyReferenceService().getOccupations().stream()
         .anyMatch(
             occupation ->
                 (occupation.getTenantId() == null
@@ -2883,7 +2886,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPhysicalAddressPurposes().stream()
+    return getPartyReferenceService().getPhysicalAddressPurposes().stream()
         .anyMatch(
             physicalAddressPurpose ->
                 (physicalAddressPurpose.getTenantId() == null
@@ -2899,7 +2902,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPhysicalAddressPurposes().stream()
+    return getPartyReferenceService().getPhysicalAddressPurposes().stream()
         .anyMatch(
             physicalAddressPurpose ->
                 (physicalAddressPurpose.getTenantId() == null
@@ -2916,7 +2919,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPhysicalAddressRoles().stream()
+    return getPartyReferenceService().getPhysicalAddressRoles().stream()
         .anyMatch(
             physicalAddressRole ->
                 (physicalAddressRole.getTenantId() == null
@@ -2932,7 +2935,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPhysicalAddressRoles().stream()
+    return getPartyReferenceService().getPhysicalAddressRoles().stream()
         .anyMatch(
             physicalAddressRole ->
                 (physicalAddressRole.getTenantId() == null
@@ -2947,7 +2950,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPhysicalAddressTypes().stream()
+    return getPartyReferenceService().getPhysicalAddressTypes().stream()
         .anyMatch(
             physicalAddressType ->
                 (physicalAddressType.getTenantId() == null
@@ -2963,7 +2966,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPreferenceTypes().stream()
+    return getPartyReferenceService().getPreferenceTypes().stream()
         .anyMatch(
             preferenceType ->
                 (preferenceType.getTenantId() == null
@@ -2979,7 +2982,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getPreferenceTypeCategories().stream()
+    return getPartyReferenceService().getPreferenceTypeCategories().stream()
         .anyMatch(
             preferenceTypeCategory ->
                 (preferenceTypeCategory.getTenantId() == null
@@ -2995,7 +2998,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getQualificationTypes().stream()
+    return getPartyReferenceService().getQualificationTypes().stream()
         .anyMatch(
             qualificationType ->
                 (qualificationType.getTenantId() == null
@@ -3009,7 +3012,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getRaces().stream()
+    return getPartyReferenceService().getRaces().stream()
         .anyMatch(
             race ->
                 (race.getTenantId() == null || Objects.equals(race.getTenantId(), tenantId))
@@ -3024,7 +3027,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getResidencePermitTypes().stream()
+    return getPartyReferenceService().getResidencePermitTypes().stream()
         .anyMatch(
             residencePermitType -> {
               if ((residencePermitType.getTenantId() == null
@@ -3052,7 +3055,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getResidencePermitTypes().stream()
+    return getPartyReferenceService().getResidencePermitTypes().stream()
         .anyMatch(
             residencePermitType ->
                 (residencePermitType.getTenantId() == null
@@ -3067,7 +3070,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getResidencyStatuses().stream()
+    return getPartyReferenceService().getResidencyStatuses().stream()
         .anyMatch(
             residencyStatus ->
                 (residencyStatus.getTenantId() == null
@@ -3082,7 +3085,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getResidentialTypes().stream()
+    return getPartyReferenceService().getResidentialTypes().stream()
         .anyMatch(
             residentialType ->
                 (residentialType.getTenantId() == null
@@ -3097,7 +3100,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getRolePurposes().stream()
+    return getPartyReferenceService().getRolePurposes().stream()
         .anyMatch(
             rolePurpose ->
                 (rolePurpose.getTenantId() == null
@@ -3112,7 +3115,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getRoleTypes().stream()
+    return getPartyReferenceService().getRoleTypes().stream()
         .anyMatch(
             roleType ->
                 (roleType.getTenantId() == null || Objects.equals(roleType.getTenantId(), tenantId))
@@ -3127,7 +3130,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getSegments().stream()
+    return getPartyReferenceService().getSegments().stream()
         .anyMatch(
             segment ->
                 (segment.getTenantId() == null || Objects.equals(segment.getTenantId(), tenantId))
@@ -3141,7 +3144,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getSkillTypes().stream()
+    return getPartyReferenceService().getSkillTypes().stream()
         .anyMatch(
             skillType ->
                 (skillType.getTenantId() == null
@@ -3156,7 +3159,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getSourceOfFundsTypes().stream()
+    return getPartyReferenceService().getSourceOfFundsTypes().stream()
         .anyMatch(
             sourceOfFunds ->
                 (sourceOfFunds.getTenantId() == null
@@ -3171,7 +3174,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getSourceOfWealthTypes().stream()
+    return getPartyReferenceService().getSourceOfWealthTypes().stream()
         .anyMatch(
             sourceOfWealth ->
                 (sourceOfWealth.getTenantId() == null
@@ -3186,7 +3189,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getStatusTypes().stream()
+    return getPartyReferenceService().getStatusTypes().stream()
         .anyMatch(
             statusType ->
                 (statusType.getTenantId() == null
@@ -3202,7 +3205,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getStatusTypeCategories().stream()
+    return getPartyReferenceService().getStatusTypeCategories().stream()
         .anyMatch(
             statusTypeCategory ->
                 (statusTypeCategory.getTenantId() == null
@@ -3218,7 +3221,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getTaxNumberTypes().stream()
+    return getPartyReferenceService().getTaxNumberTypes().stream()
         .anyMatch(
             taxNumberType -> {
               if ((taxNumberType.getTenantId() == null
@@ -3247,7 +3250,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getTaxNumberTypes().stream()
+    return getPartyReferenceService().getTaxNumberTypes().stream()
         .anyMatch(
             taxNumberType ->
                 (taxNumberType.getTenantId() == null
@@ -3263,7 +3266,7 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getTimesToContact().stream()
+    return getPartyReferenceService().getTimesToContact().stream()
         .anyMatch(
             timeToContact ->
                 (timeToContact.getTenantId() == null
@@ -3277,10 +3280,19 @@ public class PartyReferenceService implements IPartyReferenceService {
       return false;
     }
 
-    return self.getTitles().stream()
+    return getPartyReferenceService().getTitles().stream()
         .anyMatch(
             title ->
                 (title.getTenantId() == null || Objects.equals(title.getTenantId(), tenantId))
                     && Objects.equals(title.getCode(), titleCode));
+  }
+
+  /**
+   * Returns the internal reference to the Party Reference Service to enable caching.
+   *
+   * @return the internal reference to the Party Reference Service to enable caching.
+   */
+  private IPartyReferenceService getPartyReferenceService() {
+    return applicationContext.getBean(IPartyReferenceService.class);
   }
 }

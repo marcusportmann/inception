@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="identityDocumentTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="identityDocumentTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #identityDocumentTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayIdentityDocumentType"
-        (optionSelected)="selectIdentityDocumentType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let identityDocumentType of filteredIdentityDocumentTypes$ | async"
           [value]="identityDocumentType">
-          {{identityDocumentType.name}}
+          {{ identityDocumentType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
     return this.focused || !this.empty || this.identityDocumentTypeInput.focused;
   }
 
-  displayIdentityDocumentType(identityDocumentType: IdentityDocumentType): string {
-    if (!!identityDocumentType) {
-      return identityDocumentType.name;
-    } else {
-      return '';
-    }
-  }
-
-  identityDocumentTypeInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.identityDocumentTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
     this.partyReferenceService.getIdentityDocumentTypes().pipe(first()).subscribe((identityDocumentTypes: Map<string, IdentityDocumentType>) => {
       this.subscriptions.add(this.identityDocumentTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | IdentityDocumentType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredIdentityDocumentTypes: IdentityDocumentType[] = [];
 
@@ -325,6 +312,10 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectIdentityDocumentType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

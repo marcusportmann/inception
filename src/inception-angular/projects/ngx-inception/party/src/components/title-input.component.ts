@@ -46,16 +46,14 @@ import {Title} from '../services/title';
         required="required"
         [matAutocomplete]="titleAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="titleInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #titleAutocomplete="matAutocomplete"
-        [displayWith]="displayTitle"
-
-        (optionSelected)="selectTitle($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option *ngFor="let title of filteredTitles$ | async" [value]="title">
-          {{title.name}}
+          {{ title.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -246,11 +244,9 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.titleInput.focused;
   }
 
-  displayTitle(title: Title): string {
-    if (!!title) {
-      return title.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.titleInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -265,12 +261,8 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getTitles().pipe(first()).subscribe((titles: Map<string, Title>) => {
       this.subscriptions.add(this.titleInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | Title) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredTitles: Title[] = [];
 
@@ -318,6 +310,10 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -326,10 +322,6 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectTitle(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {
@@ -342,12 +334,6 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setAttribute('aria-describedby', ids.join(' '));
-  }
-
-  titleInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.titleInputValue$.next((event.target as HTMLInputElement).value);
-    }
   }
 
   /**

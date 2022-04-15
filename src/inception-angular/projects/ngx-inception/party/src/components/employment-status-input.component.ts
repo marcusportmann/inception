@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="employmentStatusAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="employmentStatusInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #employmentStatusAutocomplete="matAutocomplete"
-        [displayWith]="displayEmploymentStatus"
-        (optionSelected)="selectEmploymentStatus($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let employmentStatus of filteredEmploymentStatuses$ | async"
           [value]="employmentStatus">
-          {{employmentStatus.name}}
+          {{ employmentStatus.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
     return this.focused || !this.empty || this.employmentStatusInput.focused;
   }
 
-  displayEmploymentStatus(employmentStatus: EmploymentStatus): string {
-    if (!!employmentStatus) {
-      return employmentStatus.name;
-    } else {
-      return '';
-    }
-  }
-
-  employmentStatusInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.employmentStatusInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
     this.partyReferenceService.getEmploymentStatuses().pipe(first()).subscribe((employmentStatuses: Map<string, EmploymentStatus>) => {
       this.subscriptions.add(this.employmentStatusInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | EmploymentStatus) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredEmploymentStatuses: EmploymentStatus[] = [];
 
@@ -325,6 +312,10 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectEmploymentStatus(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

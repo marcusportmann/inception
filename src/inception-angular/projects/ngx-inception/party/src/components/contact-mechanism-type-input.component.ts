@@ -47,18 +47,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="contactMechanismTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="contactMechanismTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #contactMechanismTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayContactMechanismType"
-
-        (optionSelected)="selectContactMechanismType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let contactMechanismType of filteredContactMechanismTypes$ | async"
           [value]="contactMechanismType">
-          {{contactMechanismType.name}}
+          {{ contactMechanismType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -249,17 +247,9 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
     return this.focused || !this.empty || this.contactMechanismTypeInput.focused;
   }
 
-  contactMechanismTypeInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.contactMechanismTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  displayContactMechanismType(contactMechanismType: ContactMechanismType): string {
-    if (!!contactMechanismType) {
-      return contactMechanismType.name;
-    } else {
-      return '';
     }
   }
 
@@ -274,12 +264,8 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
     this.partyReferenceService.getContactMechanismTypes().pipe(first()).subscribe((contactMechanismTypes: Map<string, ContactMechanismType>) => {
       this.subscriptions.add(this.contactMechanismTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | ContactMechanismType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredContactMechanismTypes: ContactMechanismType[] = [];
 
@@ -327,6 +313,10 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -335,10 +325,6 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectContactMechanismType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

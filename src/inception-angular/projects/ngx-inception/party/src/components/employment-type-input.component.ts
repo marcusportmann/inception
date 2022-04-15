@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="employmentTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="employmentTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #employmentTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayEmploymentType"
-        (optionSelected)="selectEmploymentType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let employmentType of filteredEmploymentTypes$ | async"
           [value]="employmentType">
-          {{employmentType.name}}
+          {{ employmentType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
     return this.focused || !this.empty || this.employmentTypeInput.focused;
   }
 
-  displayEmploymentType(employmentType: EmploymentType): string {
-    if (!!employmentType) {
-      return employmentType.name;
-    } else {
-      return '';
-    }
-  }
-
-  employmentTypeInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.employmentTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
     this.partyReferenceService.getEmploymentTypes().pipe(first()).subscribe((employmentTypes: Map<string, EmploymentType>) => {
       this.subscriptions.add(this.employmentTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | EmploymentType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredEmploymentTypes: EmploymentType[] = [];
 
@@ -325,6 +312,10 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectEmploymentType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

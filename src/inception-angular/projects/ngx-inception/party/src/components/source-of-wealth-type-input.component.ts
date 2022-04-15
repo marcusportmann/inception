@@ -46,17 +46,16 @@ import {SourceOfWealthType} from '../services/source-of-wealth-type';
         required="required"
         [matAutocomplete]="sourceOfWealthTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="sourceOfWealthTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #sourceOfWealthTypeAutocomplete="matAutocomplete"
-        [displayWith]="displaySourceOfWealthType"
-        (optionSelected)="selectSourceOfWealthType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let sourceOfWealthType of filteredSourceOfWealthTypes$ | async"
           [value]="sourceOfWealthType">
-          {{sourceOfWealthType.name}}
+          {{ sourceOfWealthType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
     return this.focused || !this.empty || this.sourceOfWealthTypeInput.focused;
   }
 
-  displaySourceOfWealthType(sourceOfWealthType: SourceOfWealthType): string {
-    if (!!sourceOfWealthType) {
-      return sourceOfWealthType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.sourceOfWealthTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
     this.partyReferenceService.getSourceOfWealthTypes().pipe(first()).subscribe((sourceOfWealthTypes: Map<string, SourceOfWealthType>) => {
       this.subscriptions.add(this.sourceOfWealthTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | SourceOfWealthType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredSourceOfWealthTypes: SourceOfWealthType[] = [];
 
@@ -319,6 +312,10 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,10 +324,6 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectSourceOfWealthType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {
@@ -343,12 +336,6 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setEmployment('aria-describedby', ids.join(' '));
-  }
-
-  sourceOfWealthTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.sourceOfWealthTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
   }
 
   /**

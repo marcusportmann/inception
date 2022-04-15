@@ -46,17 +46,16 @@ import {Segment} from '../services/segment';
         required="required"
         [matAutocomplete]="segmentAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="segmentInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #segmentAutocomplete="matAutocomplete"
-        [displayWith]="displaySegment"
-        (optionSelected)="selectSegment($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let segment of filteredSegments$ | async"
           [value]="segment">
-          {{segment.name}}
+          {{ segment.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.segmentInput.focused;
   }
 
-  displaySegment(segment: Segment): string {
-    if (!!segment) {
-      return segment.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.segmentInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getSegments().pipe(first()).subscribe((segments: Map<string, Segment>) => {
       this.subscriptions.add(this.segmentInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | Segment) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredSegments: Segment[] = [];
 
@@ -319,6 +312,10 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,16 +324,6 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  segmentInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.segmentInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  selectSegment(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

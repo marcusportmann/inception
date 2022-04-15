@@ -46,17 +46,16 @@ import {ResidencePermitType} from '../services/residence-permit-type';
         required="required"
         [matAutocomplete]="residencePermitTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="residencePermitTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #residencePermitTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayResidencePermitType"
-        (optionSelected)="selectResidencePermitType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let residencePermitType of filteredResidencePermitTypes$ | async"
           [value]="residencePermitType">
-          {{residencePermitType.name}}
+          {{ residencePermitType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
     return this.focused || !this.empty || this.residencePermitTypeInput.focused;
   }
 
-  displayResidencePermitType(residencePermitType: ResidencePermitType): string {
-    if (!!residencePermitType) {
-      return residencePermitType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.residencePermitTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
     this.partyReferenceService.getResidencePermitTypes().pipe(first()).subscribe((residencePermitTypes: Map<string, ResidencePermitType>) => {
       this.subscriptions.add(this.residencePermitTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | ResidencePermitType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredResidencePermitTypes: ResidencePermitType[] = [];
 
@@ -319,6 +312,10 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,16 +324,6 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  residencePermitTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.residencePermitTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  selectResidencePermitType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

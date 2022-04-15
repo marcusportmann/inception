@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="marriageTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="marriageTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #marriageTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayMarriageType"
-        (optionSelected)="selectMarriageType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let marriageType of filteredMarriageTypes$ | async"
           [value]="marriageType">
-          {{marriageType.name}}
+          {{ marriageType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.marriageTypeInput.focused;
   }
 
-  displayMarriageType(marriageType: MarriageType): string {
-    if (!!marriageType) {
-      return marriageType.name;
-    } else {
-      return '';
-    }
-  }
-
-  marriageTypeInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.marriageTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getMarriageTypes().pipe(first()).subscribe((marriageTypes: Map<string, MarriageType>) => {
       this.subscriptions.add(this.marriageTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | MarriageType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredMarriageTypes: MarriageType[] = [];
 
@@ -325,6 +312,10 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectMarriageType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

@@ -16,9 +16,9 @@
 
 package digital.inception.api;
 
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 
@@ -29,32 +29,22 @@ import org.springframework.security.config.annotation.method.configuration.Globa
  * @author Marcus Portmann
  */
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class ApiMethodSecurityConfiguration extends GlobalMethodSecurityConfiguration {
+public class ApiMethodSecurityConfiguration extends GlobalMethodSecurityConfiguration
+    implements ApplicationContextAware {
 
   /** The Spring application context. */
-  private final ApplicationContext applicationContext;
+  private ApplicationContext applicationContext;
 
-  /**
-   * Constructs a new <b>ApiMethodSecurityConfiguration</b>.
-   *
-   * @param applicationContext the Spring application context
-   */
-  public ApiMethodSecurityConfiguration(ApplicationContext applicationContext) {
+  /** Constructs a new <b>ApiMethodSecurityConfiguration</b>. */
+  public ApiMethodSecurityConfiguration() {}
+
+  @Override
+  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
     this.applicationContext = applicationContext;
   }
 
-  /**
-   * Returns the method security expression handler.
-   *
-   * @return the method security expression handler
-   */
-  @Bean
-  public MethodSecurityExpressionHandler expressionHandler() {
-    return new ApiMethodSecurityExpressionHandler(applicationContext);
-  }
-
   @Override
-  protected MethodSecurityExpressionHandler createExpressionHandler() {
+  protected ApiMethodSecurityExpressionHandler createExpressionHandler() {
     return new ApiMethodSecurityExpressionHandler(applicationContext);
   }
 }

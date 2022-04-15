@@ -46,17 +46,16 @@ import {RolePurpose} from '../services/role-purpose';
         required="required"
         [matAutocomplete]="rolePurposeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="rolePurposeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #rolePurposeAutocomplete="matAutocomplete"
-        [displayWith]="displayRolePurpose"
-        (optionSelected)="selectRolePurpose($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let rolePurpose of filteredRolePurposes$ | async"
           [value]="rolePurpose">
-          {{rolePurpose.name}}
+          {{ rolePurpose.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.rolePurposeInput.focused;
   }
 
-  displayRolePurpose(rolePurpose: RolePurpose): string {
-    if (!!rolePurpose) {
-      return rolePurpose.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.rolePurposeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getRolePurposes().pipe(first()).subscribe((rolePurposes: Map<string, RolePurpose>) => {
       this.subscriptions.add(this.rolePurposeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | RolePurpose) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredRolePurposes: RolePurpose[] = [];
 
@@ -319,6 +312,10 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,16 +324,6 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  rolePurposeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.rolePurposeInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  selectRolePurpose(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

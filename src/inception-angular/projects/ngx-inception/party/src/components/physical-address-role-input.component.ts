@@ -46,17 +46,16 @@ import {PhysicalAddressRole} from '../services/physical-address-role';
         required="required"
         [matAutocomplete]="physicalAddressRoleAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="physicalAddressRoleInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #physicalAddressRoleAutocomplete="matAutocomplete"
-        [displayWith]="displayPhysicalAddressRole"
-        (optionSelected)="selectPhysicalAddressRole($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let physicalAddressRole of filteredPhysicalAddressRoles$ | async"
           [value]="physicalAddressRole">
-          {{physicalAddressRole.name}}
+          {{ physicalAddressRole.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
     return this.focused || !this.empty || this.physicalAddressRoleInput.focused;
   }
 
-  displayPhysicalAddressRole(physicalAddressRole: PhysicalAddressRole): string {
-    if (!!physicalAddressRole) {
-      return physicalAddressRole.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.physicalAddressRoleInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
     this.partyReferenceService.getPhysicalAddressRoles().pipe(first()).subscribe((physicalAddressRoles: Map<string, PhysicalAddressRole>) => {
       this.subscriptions.add(this.physicalAddressRoleInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | PhysicalAddressRole) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredPhysicalAddressRoles: PhysicalAddressRole[] = [];
 
@@ -319,10 +312,8 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   onTouched: any = () => {
   };
 
-  physicalAddressRoleInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.physicalAddressRoleInputValue$.next((event.target as HTMLInputElement).value);
-    }
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -333,10 +324,6 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectPhysicalAddressRole(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

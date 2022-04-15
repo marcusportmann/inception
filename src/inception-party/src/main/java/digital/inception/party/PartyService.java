@@ -29,7 +29,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -87,9 +86,6 @@ public class PartyService implements IPartyService {
   @Value("${inception.party.max-snapshots:#{100}}")
   private int maxSnapshots;
 
-  /** The internal reference to the Party Service to enable caching. */
-  @Autowired private IPartyService self;
-
   /**
    * Constructs a new <b>PartyService</b>.
    *
@@ -97,7 +93,6 @@ public class PartyService implements IPartyService {
    * @param validator the JSR-303 validator
    */
   public PartyService(ApplicationContext applicationContext, Validator validator) {
-
     this.applicationContext = applicationContext;
     this.validator = validator;
   }
@@ -244,7 +239,9 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
-  @CacheEvict(cacheNames = {"organizations", "partyTenantIds", "partyTypes"}, key = "#organizationId")
+  @CacheEvict(
+      cacheNames = {"organizations", "partyTenantIds", "partyTypes"},
+      key = "#organizationId")
   public void deleteOrganization(UUID tenantId, UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -278,7 +275,9 @@ public class PartyService implements IPartyService {
 
   @Override
   @Transactional
-  @CacheEvict(cacheNames = {"persons", "partyTenantIds", "partyTypes"}, key = "#personId")
+  @CacheEvict(
+      cacheNames = {"persons", "partyTenantIds", "partyTypes"},
+      key = "#personId")
   public void deletePerson(UUID tenantId, UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -820,5 +819,14 @@ public class PartyService implements IPartyService {
     } else {
       return dataStore;
     }
+  }
+
+  /**
+   * Returns the internal reference to the Party Service to enable caching.
+   *
+   * @return the internal reference to the Party Service to enable caching.
+   */
+  private IPartyService getPartyService() {
+    return applicationContext.getBean(IPartyService.class);
   }
 }

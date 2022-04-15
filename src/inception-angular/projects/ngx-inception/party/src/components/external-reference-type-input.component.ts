@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="externalReferenceTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="externalReferenceTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #externalReferenceTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayExternalReferenceType"
-        (optionSelected)="selectExternalReferenceType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let externalReferenceType of filteredExternalReferenceTypes$ | async"
           [value]="externalReferenceType">
-          {{externalReferenceType.name}}
+          {{ externalReferenceType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
     return this.focused || !this.empty || this.externalReferenceTypeInput.focused;
   }
 
-  displayExternalReferenceType(externalReferenceType: ExternalReferenceType): string {
-    if (!!externalReferenceType) {
-      return externalReferenceType.name;
-    } else {
-      return '';
-    }
-  }
-
-  externalReferenceTypeInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.externalReferenceTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
     this.partyReferenceService.getExternalReferenceTypes().pipe(first()).subscribe((externalReferenceTypes: Map<string, ExternalReferenceType>) => {
       this.subscriptions.add(this.externalReferenceTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | ExternalReferenceType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredExternalReferenceTypes: ExternalReferenceType[] = [];
 
@@ -325,6 +312,10 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectExternalReferenceType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

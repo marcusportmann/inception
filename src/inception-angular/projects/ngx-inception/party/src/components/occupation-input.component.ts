@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="occupationAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="occupationInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #occupationAutocomplete="matAutocomplete"
-        [displayWith]="displayOccupation"
-        (optionSelected)="selectOccupation($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let occupation of filteredOccupations$ | async"
           [value]="occupation">
-          {{occupation.name}}
+          {{ occupation.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.occupationInput.focused;
   }
 
-  displayOccupation(occupation: Occupation): string {
-    if (!!occupation) {
-      return occupation.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.occupationInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getOccupations().pipe(first()).subscribe((occupations: Map<string, Occupation>) => {
       this.subscriptions.add(this.occupationInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | Occupation) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredOccupations: Occupation[] = [];
 
@@ -284,12 +277,6 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
         this.filteredOccupations$.next(filteredOccupations);
       }));
     });
-  }
-
-  occupationInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.occupationInputValue$.next((event.target as HTMLInputElement).value);
-    }
   }
 
   onChange: any = (_: any) => {
@@ -325,6 +312,10 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectOccupation(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

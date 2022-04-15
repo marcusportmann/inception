@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="genderAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="genderInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #genderAutocomplete="matAutocomplete"
-        [displayWith]="displayGender"
-        (optionSelected)="selectGender($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let gender of filteredGenders$ | async"
           [value]="gender">
-          {{gender.name}}
+          {{ gender.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.genderInput.focused;
   }
 
-  displayGender(gender: Gender): string {
-    if (!!gender) {
-      return gender.name;
-    } else {
-      return '';
-    }
-  }
-
-  genderInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.genderInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getGenders().pipe(first()).subscribe((genders: Map<string, Gender>) => {
       this.subscriptions.add(this.genderInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | Gender) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredGenders: Gender[] = [];
 
@@ -325,6 +312,10 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectGender(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

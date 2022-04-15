@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -36,6 +36,9 @@ import org.springframework.util.StringUtils;
  */
 @Service
 public class ReferenceService implements IReferenceService {
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
 
   /** The Country repository. */
   private final CountryRepository countryRepository;
@@ -55,12 +58,10 @@ public class ReferenceService implements IReferenceService {
   /** The Region Repository. */
   private final RegionRepository regionRepository;
 
-  /** The internal reference to the Reference Service to enable caching. */
-  @Autowired private IReferenceService self;
-
   /**
    * Constructs a new <b>ReferenceService</b>.
    *
+   * @param applicationContext the Spring application context
    * @param countryRepository the Country Repository
    * @param languageRepository the Language Repository
    * @param measurementSystemRepository the Measurement System Repository
@@ -69,12 +70,14 @@ public class ReferenceService implements IReferenceService {
    * @param regionRepository the Region Repository
    */
   public ReferenceService(
+      ApplicationContext applicationContext,
       CountryRepository countryRepository,
       LanguageRepository languageRepository,
       MeasurementSystemRepository measurementSystemRepository,
       MeasurementUnitRepository measurementUnitRepository,
       MeasurementUnitTypeRepository measurementUnitTypeRepository,
       RegionRepository regionRepository) {
+    this.applicationContext = applicationContext;
     this.countryRepository = countryRepository;
     this.languageRepository = languageRepository;
     this.measurementSystemRepository = measurementSystemRepository;
@@ -101,7 +104,7 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getCountries().stream()
+    return getReferenceService().getCountries().stream()
         .filter(
             country ->
                 (country.getLocaleId() == null || localeId.equalsIgnoreCase(country.getLocaleId())))
@@ -126,7 +129,7 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getLanguages().stream()
+    return getReferenceService().getLanguages().stream()
         .filter(
             language ->
                 (language.getLocaleId() == null
@@ -153,7 +156,7 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getMeasurementSystems().stream()
+    return getReferenceService().getMeasurementSystems().stream()
         .filter(
             measurementSystem ->
                 (measurementSystem.getLocaleId() == null
@@ -180,7 +183,7 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getMeasurementUnitTypes().stream()
+    return getReferenceService().getMeasurementUnitTypes().stream()
         .filter(
             measurementUnitType ->
                 (measurementUnitType.getLocaleId() == null
@@ -207,7 +210,7 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getMeasurementUnits().stream()
+    return getReferenceService().getMeasurementUnits().stream()
         .filter(
             measurementUnit ->
                 (measurementUnit.getLocaleId() == null
@@ -233,7 +236,7 @@ public class ReferenceService implements IReferenceService {
       throw new InvalidArgumentException("localeId");
     }
 
-    return self.getRegions().stream()
+    return getReferenceService().getRegions().stream()
         .filter(
             region ->
                 (region.getLocaleId() == null || localeId.equalsIgnoreCase(region.getLocaleId())))
@@ -249,14 +252,14 @@ public class ReferenceService implements IReferenceService {
     }
 
     if (StringUtils.hasText(country)) {
-      return self.getRegions().stream()
+      return getReferenceService().getRegions().stream()
           .filter(
               region ->
                   ((region.getLocaleId() == null || localeId.equalsIgnoreCase(region.getLocaleId()))
                       && (country.equalsIgnoreCase(region.getCountry()))))
           .collect(Collectors.toList());
     } else {
-      return self.getRegions().stream()
+      return getReferenceService().getRegions().stream()
           .filter(
               region ->
                   (region.getLocaleId() == null || localeId.equalsIgnoreCase(region.getLocaleId())))
@@ -343,7 +346,8 @@ public class ReferenceService implements IReferenceService {
       return false;
     }
 
-    return self.getCountries().stream().anyMatch(country -> country.getCode().equals(countryCode));
+    return getReferenceService().getCountries().stream()
+        .anyMatch(country -> country.getCode().equals(countryCode));
   }
 
   @Override
@@ -352,7 +356,7 @@ public class ReferenceService implements IReferenceService {
       return false;
     }
 
-    return self.getLanguages().stream()
+    return getReferenceService().getLanguages().stream()
         .anyMatch(language -> language.getCode().equals(languageCode));
   }
 
@@ -363,7 +367,7 @@ public class ReferenceService implements IReferenceService {
       return false;
     }
 
-    return self.getMeasurementSystems().stream()
+    return getReferenceService().getMeasurementSystems().stream()
         .anyMatch(measurementSystem -> measurementSystem.getCode().equals(measurementSystemCode));
   }
 
@@ -374,7 +378,7 @@ public class ReferenceService implements IReferenceService {
       return false;
     }
 
-    return self.getMeasurementUnits().stream()
+    return getReferenceService().getMeasurementUnits().stream()
         .anyMatch(measurementUnit -> measurementUnit.getCode().equals(measurementUnitCode));
   }
 
@@ -385,7 +389,7 @@ public class ReferenceService implements IReferenceService {
       return false;
     }
 
-    return self.getMeasurementUnitTypes().stream()
+    return getReferenceService().getMeasurementUnitTypes().stream()
         .anyMatch(
             measurementUnitType -> measurementUnitType.getCode().equals(measurementUnitTypeCode));
   }
@@ -396,7 +400,8 @@ public class ReferenceService implements IReferenceService {
       return false;
     }
 
-    return self.getRegions().stream().anyMatch(region -> region.getCode().equals(regionCode));
+    return getReferenceService().getRegions().stream()
+        .anyMatch(region -> region.getCode().equals(regionCode));
   }
 
   @Override
@@ -412,5 +417,14 @@ public class ReferenceService implements IReferenceService {
     } catch (Throwable ignored) {
       return false;
     }
+  }
+
+  /**
+   * Returns the internal reference to the Reference Service to enable caching.
+   *
+   * @return the internal reference to the Reference Service to enable caching.
+   */
+  private IReferenceService getReferenceService() {
+    return applicationContext.getBean(IReferenceService.class);
   }
 }

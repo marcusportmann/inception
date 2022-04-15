@@ -46,17 +46,16 @@ import {ResidencyStatus} from '../services/residency-status';
         required="required"
         [matAutocomplete]="residencyStatusAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="residencyStatusInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #residencyStatusAutocomplete="matAutocomplete"
-        [displayWith]="displayResidencyStatus"
-        (optionSelected)="selectResidencyStatus($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let residencyStatus of filteredResidencyStatuses$ | async"
           [value]="residencyStatus">
-          {{residencyStatus.name}}
+          {{ residencyStatus.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class ResidencyStatusInputComponent implements MatFormFieldControl<string
     return this.focused || !this.empty || this.residencyStatusInput.focused;
   }
 
-  displayResidencyStatus(residencyStatus: ResidencyStatus): string {
-    if (!!residencyStatus) {
-      return residencyStatus.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.residencyStatusInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class ResidencyStatusInputComponent implements MatFormFieldControl<string
     this.partyReferenceService.getResidencyStatuses().pipe(first()).subscribe((residencyStatuses: Map<string, ResidencyStatus>) => {
       this.subscriptions.add(this.residencyStatusInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | ResidencyStatus) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredResidencyStatuses: ResidencyStatus[] = [];
 
@@ -319,6 +312,10 @@ export class ResidencyStatusInputComponent implements MatFormFieldControl<string
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,16 +324,6 @@ export class ResidencyStatusInputComponent implements MatFormFieldControl<string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  residencyStatusInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.residencyStatusInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  selectResidencyStatus(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

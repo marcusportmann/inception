@@ -47,18 +47,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="attributeTypeCategoryAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="attributeTypeCategoryInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #attributeTypeCategoryAutocomplete="matAutocomplete"
-        [displayWith]="displayAttributeTypeCategory"
-
-        (optionSelected)="selectAttributeTypeCategory($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let attributeTypeCategory of filteredAttributeTypeCategories$ | async"
           [value]="attributeTypeCategory">
-          {{attributeTypeCategory.name}}
+          {{ attributeTypeCategory.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -249,17 +247,9 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
     return this.focused || !this.empty || this.attributeTypeCategoryInput.focused;
   }
 
-  attributeTypeCategoryInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.attributeTypeCategoryInputValue$.next((event.target as HTMLInputElement).value);
-    }
-  }
-
-  displayAttributeTypeCategory(attributeTypeCategory: AttributeTypeCategory): string {
-    if (!!attributeTypeCategory) {
-      return attributeTypeCategory.name;
-    } else {
-      return '';
     }
   }
 
@@ -274,12 +264,8 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
     this.partyReferenceService.getAttributeTypeCategories().pipe(first()).subscribe((attributeTypeCategories: Map<string, AttributeTypeCategory>) => {
       this.subscriptions.add(this.attributeTypeCategoryInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | AttributeTypeCategory) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredAttributeTypeCategories: AttributeTypeCategory[] = [];
 
@@ -327,6 +313,10 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -335,10 +325,6 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectAttributeTypeCategory(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

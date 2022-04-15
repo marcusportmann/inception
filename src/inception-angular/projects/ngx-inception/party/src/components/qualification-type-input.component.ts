@@ -46,17 +46,16 @@ import {QualificationType} from '../services/qualification-type';
         required="required"
         [matAutocomplete]="qualificationTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="qualificationTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #qualificationTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayQualificationType"
-        (optionSelected)="selectQualificationType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let qualificationType of filteredQualificationTypes$ | async"
           [value]="qualificationType">
-          {{qualificationType.name}}
+          {{ qualificationType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
     return this.focused || !this.empty || this.qualificationTypeInput.focused;
   }
 
-  displayQualificationType(qualificationType: QualificationType): string {
-    if (!!qualificationType) {
-      return qualificationType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.qualificationTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
     this.partyReferenceService.getQualificationTypes().pipe(first()).subscribe((qualificationTypes: Map<string, QualificationType>) => {
       this.subscriptions.add(this.qualificationTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | QualificationType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredQualificationTypes: QualificationType[] = [];
 
@@ -319,10 +312,8 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
   onTouched: any = () => {
   };
 
-  qualificationTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.qualificationTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -333,10 +324,6 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectQualificationType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

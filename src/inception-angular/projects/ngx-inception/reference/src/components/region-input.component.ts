@@ -26,7 +26,7 @@ import {MatInput} from '@angular/material/input';
 import {
   BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription, throttleTime
 } from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, map} from 'rxjs/operators';
 import {ReferenceService} from '../services/reference.service';
 import {Region} from '../services/region';
 
@@ -48,14 +48,13 @@ import {Region} from '../services/region';
         required="required"
         [matAutocomplete]="regionAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="regionInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #regionAutocomplete="matAutocomplete"
-        [displayWith]="displayRegion"
-
-        (optionSelected)="selectRegion($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option *ngFor="let region of filteredRegions$ | async" [value]="region">
           {{region.name}}
         </mat-option>
@@ -226,7 +225,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this._value = value;
 
-      // If regions have been loaded, check if the value is valid
+      // If options have been loaded, check if the value is valid
       if (!!this._value) {
         if (this._regions.length > 0) {
           for (const region of this._regions) {
@@ -284,11 +283,17 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.regionInput.focused;
   }
 
-  displayRegion(region: Region): string {
+  displayWith(region: Region): string {
     if (!!region) {
       return region.name;
     } else {
       return '';
+    }
+  }
+
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.regionInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -307,12 +312,16 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
         this._regions = [];
 
         for (const region of regions.values()) {
-          if ((!!parameters.country) && (region.country === parameters.country)) {
-            this._regions.push(region);
+          if (!!parameters.country) {
+            if (region.country === parameters.country) {
+              this._regions.push(region);
+            }
           } else {
             this._regions.push(region);
           }
         }
+
+        this.filteredRegions$.next(this._regions);
 
         if (!!this.value) {
           for (const region of this._regions) {
@@ -329,13 +338,16 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
     }));
 
     this.subscriptions.add(this.regionInputValue$.pipe(
-      startWith(''),
-      debounceTime(500)).subscribe((value: string | Region) => {
-      if (typeof (value) === 'string') {
-        value = value.toLowerCase();
-      } else {
-        value = value.name.toLowerCase();
+      debounceTime(500)).subscribe((value: string) => {
+
+      if (!!this._value) {
+        this._value = null;
+        this.onChange(this._value);
+        this.changeDetectorRef.detectChanges();
+        this.stateChanges.next();
       }
+
+      value = value.toLowerCase();
 
       let filteredRegions: Region[] = [];
 
@@ -366,9 +378,16 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the region input then clear the value when losing focus
-    if ((!!this.value) && (!this.regionInput.value)) {
-      this.value = null;
+    // If we have a valid value
+    if (!!this._value) {
+      // If we have cleared the input then clear the value
+      if (!this.regionInput.value) {
+        this.value = null;
+      }
+    }
+    // If we do not have a valid value then clear the input
+    else {
+      this.regionInput.value = '';
     }
 
     this.touched = true;
@@ -380,10 +399,8 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
-  regionInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.regionInputValue$.next((event.target as HTMLInputElement).value);
-    }
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -394,10 +411,6 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectRegion(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

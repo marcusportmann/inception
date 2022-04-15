@@ -46,17 +46,16 @@ import {PreferenceTypeCategory} from '../services/preference-type-category';
         required="required"
         [matAutocomplete]="preferenceTypeCategoryAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="preferenceTypeCategoryInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #preferenceTypeCategoryAutocomplete="matAutocomplete"
-        [displayWith]="displayPreferenceTypeCategory"
-        (optionSelected)="selectPreferenceTypeCategory($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let preferenceTypeCategory of filteredPreferenceTypeCategories$ | async"
           [value]="preferenceTypeCategory">
-          {{preferenceTypeCategory.name}}
+          {{ preferenceTypeCategory.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
     return this.focused || !this.empty || this.preferenceTypeCategoryInput.focused;
   }
 
-  displayPreferenceTypeCategory(preferenceTypeCategory: PreferenceTypeCategory): string {
-    if (!!preferenceTypeCategory) {
-      return preferenceTypeCategory.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.preferenceTypeCategoryInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
     this.partyReferenceService.getPreferenceTypeCategories().pipe(first()).subscribe((preferenceTypeCategories: Map<string, PreferenceTypeCategory>) => {
       this.subscriptions.add(this.preferenceTypeCategoryInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | PreferenceTypeCategory) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredPreferenceTypeCategories: PreferenceTypeCategory[] = [];
 
@@ -319,10 +312,8 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
   onTouched: any = () => {
   };
 
-  preferenceTypeCategoryInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.preferenceTypeCategoryInputValue$.next((event.target as HTMLInputElement).value);
-    }
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -333,10 +324,6 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectPreferenceTypeCategory(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

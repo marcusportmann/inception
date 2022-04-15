@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="maritalStatusAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="maritalStatusInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #maritalStatusAutocomplete="matAutocomplete"
-        [displayWith]="displayMaritalStatus"
-        (optionSelected)="selectMaritalStatus($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let maritalStatus of filteredMaritalStatuses$ | async"
           [value]="maritalStatus">
-          {{maritalStatus.name}}
+          {{ maritalStatus.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.maritalStatusInput.focused;
   }
 
-  displayMaritalStatus(maritalStatus: MaritalStatus): string {
-    if (!!maritalStatus) {
-      return maritalStatus.name;
-    } else {
-      return '';
-    }
-  }
-
-  maritalStatusInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.maritalStatusInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getMaritalStatuses().pipe(first()).subscribe((maritalStatuses: Map<string, MaritalStatus>) => {
       this.subscriptions.add(this.maritalStatusInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | MaritalStatus) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredMaritalStatuses: MaritalStatus[] = [];
 
@@ -325,6 +312,10 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectMaritalStatus(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

@@ -46,17 +46,16 @@ import {PreferenceType} from '../services/preference-type';
         required="required"
         [matAutocomplete]="preferenceTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="preferenceTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #preferenceTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayPreferenceType"
-        (optionSelected)="selectPreferenceType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let preferenceType of filteredPreferenceTypes$ | async"
           [value]="preferenceType">
-          {{preferenceType.name}}
+          {{ preferenceType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
     return this.focused || !this.empty || this.preferenceTypeInput.focused;
   }
 
-  displayPreferenceType(preferenceType: PreferenceType): string {
-    if (!!preferenceType) {
-      return preferenceType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.preferenceTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
     this.partyReferenceService.getPreferenceTypes().pipe(first()).subscribe((preferenceTypes: Map<string, PreferenceType>) => {
       this.subscriptions.add(this.preferenceTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | PreferenceType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredPreferenceTypes: PreferenceType[] = [];
 
@@ -319,10 +312,8 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
   onTouched: any = () => {
   };
 
-  preferenceTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.preferenceTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -333,10 +324,6 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectPreferenceType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

@@ -46,17 +46,16 @@ import {SkillType} from '../services/skill-type';
         required="required"
         [matAutocomplete]="skillTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="skillTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #skillTypeAutocomplete="matAutocomplete"
-        [displayWith]="displaySkillType"
-        (optionSelected)="selectSkillType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let skillType of filteredSkillTypes$ | async"
           [value]="skillType">
-          {{skillType.name}}
+          {{ skillType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.skillTypeInput.focused;
   }
 
-  displaySkillType(skillType: SkillType): string {
-    if (!!skillType) {
-      return skillType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.skillTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getSkillTypes().pipe(first()).subscribe((skillTypes: Map<string, SkillType>) => {
       this.subscriptions.add(this.skillTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | SkillType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredSkillTypes: SkillType[] = [];
 
@@ -319,6 +312,10 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,10 +324,6 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectSkillType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {
@@ -343,12 +336,6 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setEmployment('aria-describedby', ids.join(' '));
-  }
-
-  skillTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.skillTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
   }
 
   /**

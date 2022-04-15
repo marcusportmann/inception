@@ -46,17 +46,16 @@ import {PartyReferenceService} from '../services/party-reference.service';
         required="required"
         [matAutocomplete]="industryClassificationSystemAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="industryClassificationSystemInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #industryClassificationSystemAutocomplete="matAutocomplete"
-        [displayWith]="displayIndustryClassificationSystem"
-        (optionSelected)="selectIndustryClassificationSystem($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let industryClassificationSystem of filteredIndustryClassificationSystems$ | async"
           [value]="industryClassificationSystem">
-          {{industryClassificationSystem.name}}
+          {{ industryClassificationSystem.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,15 +246,7 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
     return this.focused || !this.empty || this.industryClassificationSystemInput.focused;
   }
 
-  displayIndustryClassificationSystem(industryClassificationSystem: IndustryClassificationSystem): string {
-    if (!!industryClassificationSystem) {
-      return industryClassificationSystem.name;
-    } else {
-      return '';
-    }
-  }
-
-  industryClassificationSystemInputChanged(event: Event) {
+  inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.industryClassificationSystemInputValue$.next((event.target as HTMLInputElement).value);
     }
@@ -272,12 +263,8 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
     this.partyReferenceService.getIndustryClassificationSystems().pipe(first()).subscribe((industryClassificationSystems: Map<string, IndustryClassificationSystem>) => {
       this.subscriptions.add(this.industryClassificationSystemInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | IndustryClassificationSystem) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredIndustryClassificationSystems: IndustryClassificationSystem[] = [];
 
@@ -325,6 +312,10 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -333,10 +324,6 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectIndustryClassificationSystem(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {

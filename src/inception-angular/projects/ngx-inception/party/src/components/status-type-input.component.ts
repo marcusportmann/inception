@@ -46,17 +46,16 @@ import {StatusType} from '../services/status-type';
         required="required"
         [matAutocomplete]="statusTypeAutocomplete"
         [matAutocompleteConnectedTo]="origin"
-        (input)="statusTypeInputChanged($event)"
+        (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #statusTypeAutocomplete="matAutocomplete"
-        [displayWith]="displayStatusType"
-        (optionSelected)="selectStatusType($event)">
+        (optionSelected)="optionSelected($event)">
         <mat-option
           *ngFor="let statusType of filteredStatusTypes$ | async"
           [value]="statusType">
-          {{statusType.name}}
+          {{ statusType.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -247,11 +246,9 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.statusTypeInput.focused;
   }
 
-  displayStatusType(statusType: StatusType): string {
-    if (!!statusType) {
-      return statusType.name;
-    } else {
-      return '';
+  inputChanged(event: Event) {
+    if (((event.target as HTMLInputElement).value) !== undefined) {
+      this.statusTypeInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -266,12 +263,8 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
     this.partyReferenceService.getStatusTypes().pipe(first()).subscribe((statusTypes: Map<string, StatusType>) => {
       this.subscriptions.add(this.statusTypeInputValue$.pipe(
         startWith(''),
-        debounceTime(500)).subscribe((value: string | StatusType) => {
-        if (typeof (value) === 'string') {
-          value = value.toLowerCase();
-        } else {
-          value = value.name.toLowerCase();
-        }
+        debounceTime(500)).subscribe((value: string) => {
+        value = value.toLowerCase();
 
         let filteredStatusTypes: StatusType[] = [];
 
@@ -319,6 +312,10 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
   onTouched: any = () => {
   };
 
+  optionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.value = event.option.value.code;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -327,10 +324,6 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
-  }
-
-  selectStatusType(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
   }
 
   setDescribedByIds(ids: string[]) {
@@ -343,12 +336,6 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setEmployment('aria-describedby', ids.join(' '));
-  }
-
-  statusTypeInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.statusTypeInputValue$.next((event.target as HTMLInputElement).value);
-    }
   }
 
   /**
