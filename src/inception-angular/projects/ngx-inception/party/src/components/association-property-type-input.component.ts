@@ -76,14 +76,9 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   private static _nextId: number = 0;
 
   /**
-   * The association property type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) associationPropertyTypeInput!: MatInput;
-
-  /**
-   * The reference to the element for the association property type input.
-   */
-  @ViewChild('associationPropertyTypeInput') associationPropertyTypeInputElementRef!: ElementRef;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
    * The observable providing access to the value for the association property type input as it changes.
@@ -161,7 +156,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.associationPropertyTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -225,14 +220,14 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
     }
 
     if (this._value !== value) {
-      console.log('Setting the value to ' + value + ', existing value = ' + this._value);
+      console.log('Setting the value to ' + value);
 
       // If options have been loaded, check if the value is valid
       if (!!this._value) {
         if (this._associationPropertyTypes.length > 0) {
           for (const associationPropertyType of this._associationPropertyTypes) {
             if (associationPropertyType.code === value) {
-              this.associationPropertyTypeInput.value = associationPropertyType.name;
+              this.input.value = associationPropertyType.name;
 
               this._value = value;
               this.onChange(this._value);
@@ -248,7 +243,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
       console.log('Resetting value to null, existing value = ' + this._value);
 
       this._value = null;
-      this.associationPropertyTypeInput.value = '';
+      this.input.value = '';
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
       this.stateChanges.next();
@@ -282,7 +277,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.associationPropertyTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(associationPropertyType: AssociationPropertyType): string {
@@ -305,7 +300,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   }
 
   ngOnInit(): void {
-    this.associationPropertyTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.subscriptions.add(combineLatest([this.associationType$]).pipe(throttleTime(250), map(values => ({
       associationType: this.associationType$.value
@@ -329,7 +324,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
           for (const associationPropertyType of this._associationPropertyTypes) {
             if (associationPropertyType.code === this.value) {
               console.log('Setting input value based on matching option = ', associationPropertyType);
-              this.associationPropertyTypeInput.value = associationPropertyType.name;
+              this.input.value = associationPropertyType.name;
               return;
             }
           }
@@ -371,7 +366,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.associationPropertyTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -383,13 +378,13 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   }
 
   onFocusOut(event: FocusEvent) {
-    console.log('Losing focus, this._value = ' + this._value + ' and this.associationPropertyTypeInput.value = ', this.associationPropertyTypeInput.value);
+    console.log('Losing focus, this._value = ' + this._value + ' and this.associationPropertyTypeInput.value = ', this.input.value);
 
     // If we have a valid value
     if (!!this._value) {
       // If we have cleared the input then clear the value
-      if (!this.associationPropertyTypeInput.value) {
-        console.log('Clearing value when input is empty and focus is lost, this.associationPropertyTypeInput.value = ', this.associationPropertyTypeInput.value);
+      if (!this.input.value) {
+        console.log('Clearing value when input is empty and focus is lost, this.associationPropertyTypeInput.value = ', this.input.value);
         this.filteredOptions$.next(this._associationPropertyTypes);
         this.value = null;
       }
@@ -403,7 +398,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.associationPropertyTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

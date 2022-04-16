@@ -97,14 +97,9 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
 
   /**
-   * The region input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) regionInput!: MatInput;
-
-  /**
-   * The reference to the element for the region input.
-   */
-  @ViewChild('regionInput') regionInputElementRef!: ElementRef;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
    * The observable providing access to the value for the region input as it changes.
@@ -162,7 +157,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.regionInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -234,14 +229,14 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
         if (this._regions.length > 0) {
           for (const region of this._regions) {
             if (region.code === value) {
-              console.log('Setting the validated value ' + value + ', existing value = ' + this._value);
-              this.regionInput.value = region.name;
+              console.log('Setting the validated value ' + value);
+              this.input.value = region.name;
               this._value = value;
               break;
             }
           }
         } else {
-          console.log('Setting the unvalidated value to ' + value + ', existing value = ' + this._value);
+          console.log('Setting the unvalidated value to ' + value);
 
           // Assume the new value is valid, it will be checked when the options are loaded
           this._value = value;
@@ -283,7 +278,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.regionInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(region: Region): string {
@@ -306,7 +301,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.regionInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.subscriptions.add(combineLatest([this.country$]).pipe(throttleTime(250), map(values => ({
       country: this.country$.value
@@ -330,7 +325,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
           for (const region of this._regions) {
             if (region.code === this.value) {
               console.log('Setting input value based on matching option = ', region);
-              this.regionInput.value = region.name;
+              this.input.value = region.name;
               return;
             }
           }
@@ -372,7 +367,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.regionInput.focus();
+      this.input.focus();
     }
   }
 
@@ -384,13 +379,13 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    console.log('Losing focus, this._value = ' + this._value + ' and this.regionInput.value = ', this.regionInput.value);
+    console.log('Losing focus, this._value = ' + this._value + ' and this.regionInput.value = ', this.input.value);
 
     // If we have a valid value
     if (!!this._value) {
       // If we have cleared the input then clear the value
-      if (!this.regionInput.value) {
-        console.log('Clearing value when input is empty and focus is lost, this.regionInput.value = ', this.regionInput.value);
+      if (!this.input.value) {
+        console.log('Clearing value when input is empty and focus is lost, this.regionInput.value = ', this.input.value);
         this.filteredOptions$.next(this._regions);
         this.value = null;
       }
@@ -406,7 +401,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.regionInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 
