@@ -51,7 +51,8 @@ import {Segment} from '../services/segment';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #segmentAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let segment of filteredSegments$ | async"
           [value]="segment">
@@ -246,6 +247,14 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.segmentInput.focused;
   }
 
+  displayWith(segment: Segment): string {
+    if (!!segment) {
+      return segment.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.segmentInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

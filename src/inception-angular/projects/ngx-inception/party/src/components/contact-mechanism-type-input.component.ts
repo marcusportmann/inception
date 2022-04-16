@@ -52,7 +52,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #contactMechanismTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let contactMechanismType of filteredContactMechanismTypes$ | async"
           [value]="contactMechanismType">
@@ -247,6 +248,14 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
     return this.focused || !this.empty || this.contactMechanismTypeInput.focused;
   }
 
+  displayWith(contactMechanismType: ContactMechanismType): string {
+    if (!!contactMechanismType) {
+      return contactMechanismType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.contactMechanismTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -353,4 +362,5 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
       this.value = value as string;
     }
   }
+
 }

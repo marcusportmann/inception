@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #lockTypeCategoryAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let lockTypeCategory of filteredLockTypeCategories$ | async"
           [value]="lockTypeCategory">
@@ -246,6 +247,14 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
     return this.focused || !this.empty || this.lockTypeCategoryInput.focused;
   }
 
+  displayWith(lockTypeCategory: LockTypeCategory): string {
+    if (!!lockTypeCategory) {
+      return lockTypeCategory.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.lockTypeCategoryInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,5 +361,6 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
       this.value = value as string;
     }
   }
+
 }
 

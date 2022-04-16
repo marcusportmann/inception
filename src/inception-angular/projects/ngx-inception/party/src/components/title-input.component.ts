@@ -51,7 +51,8 @@ import {Title} from '../services/title';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #titleAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option *ngFor="let title of filteredTitles$ | async" [value]="title">
           {{ title.name }}
         </mat-option>
@@ -244,6 +245,14 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.titleInput.focused;
   }
 
+  displayWith(title: Title): string {
+    if (!!title) {
+      return title.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.titleInputValue$.next((event.target as HTMLInputElement).value);
@@ -350,4 +359,5 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

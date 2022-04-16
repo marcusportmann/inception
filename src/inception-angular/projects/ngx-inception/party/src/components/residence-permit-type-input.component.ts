@@ -51,7 +51,8 @@ import {ResidencePermitType} from '../services/residence-permit-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #residencePermitTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let residencePermitType of filteredResidencePermitTypes$ | async"
           [value]="residencePermitType">
@@ -246,6 +247,14 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
     return this.focused || !this.empty || this.residencePermitTypeInput.focused;
   }
 
+  displayWith(residencePermitType: ResidencePermitType): string {
+    if (!!residencePermitType) {
+      return residencePermitType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.residencePermitTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
       this.value = value as string;
     }
   }
+
 }

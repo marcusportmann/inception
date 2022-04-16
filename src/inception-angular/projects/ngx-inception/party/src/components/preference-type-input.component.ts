@@ -51,7 +51,8 @@ import {PreferenceType} from '../services/preference-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #preferenceTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let preferenceType of filteredPreferenceTypes$ | async"
           [value]="preferenceType">
@@ -246,6 +247,14 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
     return this.focused || !this.empty || this.preferenceTypeInput.focused;
   }
 
+  displayWith(preferenceType: PreferenceType): string {
+    if (!!preferenceType) {
+      return preferenceType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.preferenceTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
       this.value = value as string;
     }
   }
+
 }

@@ -20,7 +20,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {
@@ -55,8 +55,10 @@ import {Region} from '../services/region';
         #regionAutocomplete="matAutocomplete"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
-        <mat-option *ngFor="let region of filteredRegions$ | async" [value]="region">
-          {{region.name}}
+        <mat-option
+          *ngFor="let region of filteredOptions$ | async"
+          [value]="region">
+          {{ region.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -79,9 +81,9 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   controlType = 'region-input';
 
   /**
-   * The filtered regions for the autocomplete.
+   * The filtered options for the autocomplete.
    */
-  filteredRegions$: Subject<Region[]> = new ReplaySubject<Region[]>();
+  filteredOptions$: BehaviorSubject<Region[]> = new BehaviorSubject<Region[]>([]);
 
   /**
    * Whether the control is focused.
@@ -92,6 +94,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
    * The ID for the control.
    */
   @HostBinding() id = `region-input-${RegionInputComponent._nextId++}`;
+
 
   /**
    * The region input.
@@ -126,7 +129,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   private _regions: Region[] = [];
 
   /**
-   * The ISO 3166-1 alpha-2 code for the country to retrieve the regions for.
+   * The ISO 639-1 alpha-2 code for the country to retrieve the regions for.
    */
   private country$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
@@ -198,23 +201,23 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The ISO 639-1 alpha-2 code for the selected region.
+   * The code for the selected region.
    */
   private _value: string | null = null;
 
   /**
-   * Returns the ISO 639-1 alpha-2 code for the selected region.
+   * Returns the code for the selected region.
    *
-   * @return The ISO 639-1 alpha-2 code for the selected region.
+   * @return The code for the selected region.
    */
   public get value(): string | null {
     return this._value;
   }
 
   /**
-   * Set the ISO 639-1 alpha-2 code for the selected region.
+   * Set the code for the selected region.
    *
-   * @param value the ISO 639-1 alpha-2 code for the selected region
+   * @param value the code for the selected region
    */
   @Input()
   public set value(value: string | null) {
@@ -223,29 +226,29 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
     }
 
     if (this._value !== value) {
-      this._value = value;
+      this._value = null;
 
-      // If options have been loaded, check if the value is valid
-      if (!!this._value) {
+      // If the new value is not null
+      if (!!value) {
+        // If options have been loaded, check if the new value is valid.
         if (this._regions.length > 0) {
           for (const region of this._regions) {
             if (region.code === value) {
+              console.log('Setting the validated value ' + value + ', existing value = ' + this._value);
               this.regionInput.value = region.name;
-
               this._value = value;
-              this.onChange(this._value);
-              this.changeDetectorRef.detectChanges();
-              this.stateChanges.next();
-
-              return;
+              break;
             }
           }
+        } else {
+          console.log('Setting the unvalidated value to ' + value + ', existing value = ' + this._value);
 
-          this._value = null;
+          // Assume the new value is valid, it will be checked when the options are loaded
+          this._value = value;
         }
       }
 
-      this.regionInput.value = '';
+      //this.regionInput.value = '';
 
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -254,7 +257,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The ISO 3166-1 alpha-2 code for the country to retrieve the regions for.
+   * The ISO 639-1 alpha-2 code for the country to retrieve the regions for.
    */
   @Input() get country(): string | null {
     return this.country$.value;
@@ -321,17 +324,19 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredRegions$.next(this._regions);
+        this.filteredOptions$.next(this._regions);
 
         if (!!this.value) {
           for (const region of this._regions) {
             if (region.code === this.value) {
+              console.log('Setting input value based on matching option = ', region);
               this.regionInput.value = region.name;
               return;
             }
           }
 
           // The value is invalid so clear it
+          console.log('Clearing invalid value that does not match a valid option');
           this.value = null;
         }
       });
@@ -339,6 +344,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
     this.subscriptions.add(this.regionInputValue$.pipe(
       debounceTime(500)).subscribe((value: string) => {
+      console.log('Input value changed to value (' + value + '), resetting this.value');
 
       if (!!this._value) {
         this._value = null;
@@ -352,12 +358,12 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
       let filteredRegions: Region[] = [];
 
       for (const region of this._regions) {
-        if (region.name.toLowerCase().indexOf(value) === 0) {
+        if (region.name.toLowerCase().indexOf(value) !== -1) {
           filteredRegions.push(region);
         }
       }
 
-      this.filteredRegions$.next(filteredRegions);
+      this.filteredOptions$.next(filteredRegions);
     }));
   }
 
@@ -378,16 +384,24 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
+    console.log('Losing focus, this._value = ' + this._value + ' and this.regionInput.value = ', this.regionInput.value);
+
     // If we have a valid value
     if (!!this._value) {
       // If we have cleared the input then clear the value
       if (!this.regionInput.value) {
+        console.log('Clearing value when input is empty and focus is lost, this.regionInput.value = ', this.regionInput.value);
+        this.filteredOptions$.next(this._regions);
         this.value = null;
       }
     }
     // If we do not have a valid value then clear the input
     else {
-      this.regionInput.value = '';
+      console.log('this.filteredRegions$.value = ', this.filteredOptions$.value)
+
+      // console.log('Clearing input when no valid value exists and focus is lost, this.value = ', this.value);
+      // this.filteredRegions$.next(this._regions);
+      // this.regionInput.value = '';
     }
 
     this.touched = true;
@@ -400,6 +414,9 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   };
 
   optionSelected(event: MatAutocompleteSelectedEvent): void {
+    console.log('optionSelected event = ', event);
+
+
     this.value = event.option.value.code;
   }
 
@@ -440,3 +457,4 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
     }
   }
 }
+

@@ -51,7 +51,8 @@ import {QualificationType} from '../services/qualification-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #qualificationTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let qualificationType of filteredQualificationTypes$ | async"
           [value]="qualificationType">
@@ -246,6 +247,14 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
     return this.focused || !this.empty || this.qualificationTypeInput.focused;
   }
 
+  displayWith(qualificationType: QualificationType): string {
+    if (!!qualificationType) {
+      return qualificationType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.qualificationTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
       this.value = value as string;
     }
   }
+
 }

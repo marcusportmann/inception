@@ -51,7 +51,8 @@ import {RolePurpose} from '../services/role-purpose';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #rolePurposeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let rolePurpose of filteredRolePurposes$ | async"
           [value]="rolePurpose">
@@ -246,6 +247,14 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.rolePurposeInput.focused;
   }
 
+  displayWith(rolePurpose: RolePurpose): string {
+    if (!!rolePurpose) {
+      return rolePurpose.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.rolePurposeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

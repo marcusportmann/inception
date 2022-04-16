@@ -51,7 +51,8 @@ import {PhysicalAddressType} from '../services/physical-address-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #physicalAddressTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let physicalAddressType of filteredPhysicalAddressTypes$ | async"
           [value]="physicalAddressType">
@@ -246,6 +247,14 @@ export class PhysicalAddressTypeInputComponent implements MatFormFieldControl<st
     return this.focused || !this.empty || this.physicalAddressTypeInput.focused;
   }
 
+  displayWith(physicalAddressType: PhysicalAddressType): string {
+    if (!!physicalAddressType) {
+      return physicalAddressType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.physicalAddressTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class PhysicalAddressTypeInputComponent implements MatFormFieldControl<st
       this.value = value as string;
     }
   }
+
 }

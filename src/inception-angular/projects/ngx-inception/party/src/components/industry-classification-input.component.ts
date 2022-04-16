@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #industryClassificationAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let industryClassification of filteredIndustryClassifications$ | async"
           [value]="industryClassification">
@@ -246,6 +247,14 @@ export class IndustryClassificationInputComponent implements MatFormFieldControl
     return this.focused || !this.empty || this.industryClassificationInput.focused;
   }
 
+  displayWith(industryClassification: IndustryClassification): string {
+    if (!!industryClassification) {
+      return industryClassification.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.industryClassificationInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class IndustryClassificationInputComponent implements MatFormFieldControl
       this.value = value as string;
     }
   }
+
 }

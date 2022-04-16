@@ -51,7 +51,8 @@ import {Race} from '../services/race';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #raceAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let race of filteredRaces$ | async"
           [value]="race">
@@ -246,6 +247,14 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.raceInput.focused;
   }
 
+  displayWith(race: Race): string {
+    if (!!race) {
+      return race.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.raceInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #maritalStatusAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let maritalStatus of filteredMaritalStatuses$ | async"
           [value]="maritalStatus">
@@ -246,6 +247,14 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.maritalStatusInput.focused;
   }
 
+  displayWith(maritalStatus: MaritalStatus): string {
+    if (!!maritalStatus) {
+      return maritalStatus.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.maritalStatusInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,5 +361,6 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }
 

@@ -26,10 +26,9 @@ import {MatInput} from '@angular/material/input';
 import {
   BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription, throttleTime
 } from 'rxjs';
-import {debounceTime, first, map, startWith} from 'rxjs/operators';
-import {AssociationType} from '../services/association-type';
-import {PartyReferenceService} from '../services/party-reference.service';
+import {debounceTime, first, map} from 'rxjs/operators';
 import {AssociationPropertyType} from '../services/association-property-type';
+import {PartyReferenceService} from '../services/party-reference.service';
 
 /**
  * The AssociationPropertyTypeInputComponent class implements the association property type input component.
@@ -56,7 +55,9 @@ import {AssociationPropertyType} from '../services/association-property-type';
         #associationPropertyTypeAutocomplete="matAutocomplete"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
-        <mat-option *ngFor="let associationPropertyType of filteredAssociationPropertyTypes$ | async" [value]="associationPropertyType">
+        <mat-option
+          *ngFor="let associationPropertyType of filteredOptions$ | async"
+          [value]="associationPropertyType">
           {{ associationPropertyType.name }}
         </mat-option>
       </mat-autocomplete>
@@ -75,26 +76,6 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   private static _nextId: number = 0;
 
   /**
-   * The name for the control type.
-   */
-  controlType = 'association-property-type-input';
-
-  /**
-   * The filtered association property types for the autocomplete.
-   */
-  filteredAssociationPropertyTypes$: BehaviorSubject<AssociationPropertyType[]> = new BehaviorSubject<AssociationPropertyType[]>([]);
-
-  /**
-   * Whether the control is focused.
-   */
-  focused = false;
-
-  /**
-   * The ID for the control.
-   */
-  @HostBinding() id = `association-property-type-input-${AssociationPropertyTypeInputComponent._nextId++}`;
-
-  /**
    * The association property type input.
    */
   @ViewChild(MatInput, {static: true}) associationPropertyTypeInput!: MatInput;
@@ -110,6 +91,26 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   associationPropertyTypeInputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
+   * The name for the control type.
+   */
+  controlType = 'association-property-type-input';
+
+  /**
+   * The filtered options for the autocomplete.
+   */
+  filteredOptions$: BehaviorSubject<AssociationPropertyType[]> = new BehaviorSubject<AssociationPropertyType[]>([]);
+
+  /**
+   * Whether the control is focused.
+   */
+  focused = false;
+
+  /**
+   * The ID for the control.
+   */
+  @HostBinding() id = `association-property-type-input-${AssociationPropertyTypeInputComponent._nextId++}`;
+
+  /**
    * The observable indicating that the state of the control has changed.
    */
   stateChanges = new Subject<void>();
@@ -122,7 +123,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
   /**
-   * The association property types for the country.
+   * The association property types for the association type.
    */
   private _associationPropertyTypes: AssociationPropertyType[] = [];
 
@@ -224,9 +225,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
     }
 
     if (this._value !== value) {
-      console.log('Setting the value to ' + value + ", existing value = " + this._value);
-
-      this._value = value;
+      console.log('Setting the value to ' + value + ', existing value = ' + this._value);
 
       // If options have been loaded, check if the value is valid
       if (!!this._value) {
@@ -243,13 +242,13 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
               return;
             }
           }
-
-          this._value = null;
         }
       }
 
-      this.associationPropertyTypeInput.value = '';
+      console.log('Resetting value to null, existing value = ' + this._value);
 
+      this._value = null;
+      this.associationPropertyTypeInput.value = '';
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
       this.stateChanges.next();
@@ -286,6 +285,14 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
     return this.focused || !this.empty || this.associationPropertyTypeInput.focused;
   }
 
+  displayWith(associationPropertyType: AssociationPropertyType): string {
+    if (!!associationPropertyType) {
+      return associationPropertyType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.associationPropertyTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -316,19 +323,19 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
           }
         }
 
-        this.filteredAssociationPropertyTypes$.next(this._associationPropertyTypes);
+        this.filteredOptions$.next(this._associationPropertyTypes);
 
         if (!!this.value) {
           for (const associationPropertyType of this._associationPropertyTypes) {
             if (associationPropertyType.code === this.value) {
-              console.log('Setting input value based on matching associationPropertyType = ', associationPropertyType);
+              console.log('Setting input value based on matching option = ', associationPropertyType);
               this.associationPropertyTypeInput.value = associationPropertyType.name;
               return;
             }
           }
 
           // The value is invalid so clear it
-          console.log('Clearing invalid value that does not match a valid association property type');
+          console.log('Clearing invalid value that does not match a valid option');
           this.value = null;
         }
       });
@@ -355,7 +362,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
         }
       }
 
-      this.filteredAssociationPropertyTypes$.next(filteredAssociationPropertyTypes);
+      this.filteredOptions$.next(filteredAssociationPropertyTypes);
     }));
   }
 
@@ -376,22 +383,22 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   }
 
   onFocusOut(event: FocusEvent) {
-    console.log('Losing focus, this._value = ' + this._value + ' and this.associationPropertyTypeInput.value = ', this.associationPropertyTypeInput.value );
+    console.log('Losing focus, this._value = ' + this._value + ' and this.associationPropertyTypeInput.value = ', this.associationPropertyTypeInput.value);
 
     // If we have a valid value
     if (!!this._value) {
       // If we have cleared the input then clear the value
       if (!this.associationPropertyTypeInput.value) {
         console.log('Clearing value when input is empty and focus is lost, this.associationPropertyTypeInput.value = ', this.associationPropertyTypeInput.value);
-        this.filteredAssociationPropertyTypes$.next(this._associationPropertyTypes);
+        this.filteredOptions$.next(this._associationPropertyTypes);
         this.value = null;
       }
     }
     // If we do not have a valid value then clear the input
     else {
-      console.log('Clearing input when no valid value exists and focus is lost, this.value = ', this.value);
-      this.filteredAssociationPropertyTypes$.next(this._associationPropertyTypes);
-      this.associationPropertyTypeInput.value = '';
+      // console.log('Clearing input when no valid value exists and focus is lost, this.value = ', this.value);
+      // this.filteredAssociationPropertyTypes$.next(this._associationPropertyTypes);
+      // this.associationPropertyTypeInput.value = '';
     }
 
     this.touched = true;
@@ -404,6 +411,8 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   };
 
   optionSelected(event: MatAutocompleteSelectedEvent): void {
+    console.log('optionSelected event = ', event);
+
     this.value = event.option.value.code;
   }
 
@@ -443,13 +452,5 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
       this.value = value as string;
     }
   }
-
-
-  displayWith(associationType: AssociationType): string {
-    if (!!associationType) {
-      return associationType.name;
-    } else {
-      return '';
-    }
-  }
 }
+

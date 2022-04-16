@@ -51,7 +51,8 @@ import {PhysicalAddressRole} from '../services/physical-address-role';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #physicalAddressRoleAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let physicalAddressRole of filteredPhysicalAddressRoles$ | async"
           [value]="physicalAddressRole">
@@ -246,6 +247,14 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
     return this.focused || !this.empty || this.physicalAddressRoleInput.focused;
   }
 
+  displayWith(physicalAddressRole: PhysicalAddressRole): string {
+    if (!!physicalAddressRole) {
+      return physicalAddressRole.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.physicalAddressRoleInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
       this.value = value as string;
     }
   }
+
 }

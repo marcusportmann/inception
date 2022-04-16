@@ -51,7 +51,8 @@ import {StatusTypeCategory} from '../services/status-type-category';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #statusTypeCategoryAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let statusTypeCategory of filteredStatusTypeCategories$ | async"
           [value]="statusTypeCategory">
@@ -246,6 +247,14 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
     return this.focused || !this.empty || this.statusTypeCategoryInput.focused;
   }
 
+  displayWith(statusTypeCategory: StatusTypeCategory): string {
+    if (!!statusTypeCategory) {
+      return statusTypeCategory.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.statusTypeCategoryInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
       this.value = value as string;
     }
   }
+
 }

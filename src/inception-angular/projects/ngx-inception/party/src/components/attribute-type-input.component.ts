@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #attributeTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let attributeType of filteredAttributeTypes$ | async"
           [value]="attributeType">
@@ -246,6 +247,14 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.attributeTypeInput.focused;
   }
 
+  displayWith(attributeType: AttributeType): string {
+    if (!!attributeType) {
+      return attributeType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.attributeTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

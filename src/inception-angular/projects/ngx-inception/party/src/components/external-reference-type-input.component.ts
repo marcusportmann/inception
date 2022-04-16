@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #externalReferenceTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let externalReferenceType of filteredExternalReferenceTypes$ | async"
           [value]="externalReferenceType">
@@ -246,6 +247,14 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
     return this.focused || !this.empty || this.externalReferenceTypeInput.focused;
   }
 
+  displayWith(externalReferenceType: ExternalReferenceType): string {
+    if (!!externalReferenceType) {
+      return externalReferenceType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.externalReferenceTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
       this.value = value as string;
     }
   }
+
 }

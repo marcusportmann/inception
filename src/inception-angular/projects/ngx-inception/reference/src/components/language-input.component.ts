@@ -245,6 +245,14 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.languageInput.focused;
   }
 
+  displayWith(language: Language): string {
+    if (!!language) {
+      return language.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.languageInputValue$.next((event.target as HTMLInputElement).value);
@@ -351,4 +359,5 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

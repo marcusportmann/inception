@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #employmentTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let employmentType of filteredEmploymentTypes$ | async"
           [value]="employmentType">
@@ -246,6 +247,14 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
     return this.focused || !this.empty || this.employmentTypeInput.focused;
   }
 
+  displayWith(employmentType: EmploymentType): string {
+    if (!!employmentType) {
+      return employmentType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.employmentTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
       this.value = value as string;
     }
   }
+
 }

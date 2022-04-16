@@ -51,7 +51,8 @@ import {TaxNumberType} from '../services/tax-number-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #taxNumberTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let taxNumberType of filteredTaxNumberTypes$ | async"
           [value]="taxNumberType">
@@ -244,6 +245,14 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
   @HostBinding('class.floating')
   get shouldLabelFloat() {
     return this.focused || !this.empty || this.taxNumberTypeInput.focused;
+  }
+
+  displayWith(taxNumberType: TaxNumberType): string {
+    if (!!taxNumberType) {
+      return taxNumberType.name;
+    } else {
+      return '';
+    }
   }
 
   inputChanged(event: Event) {

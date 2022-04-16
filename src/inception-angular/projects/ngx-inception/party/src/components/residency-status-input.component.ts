@@ -51,7 +51,8 @@ import {ResidencyStatus} from '../services/residency-status';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #residencyStatusAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let residencyStatus of filteredResidencyStatuses$ | async"
           [value]="residencyStatus">
@@ -246,6 +247,14 @@ export class ResidencyStatusInputComponent implements MatFormFieldControl<string
     return this.focused || !this.empty || this.residencyStatusInput.focused;
   }
 
+  displayWith(residencyStatus: ResidencyStatus): string {
+    if (!!residencyStatus) {
+      return residencyStatus.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.residencyStatusInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class ResidencyStatusInputComponent implements MatFormFieldControl<string
       this.value = value as string;
     }
   }
+
 }

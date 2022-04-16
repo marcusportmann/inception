@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #identityDocumentTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let identityDocumentType of filteredIdentityDocumentTypes$ | async"
           [value]="identityDocumentType">
@@ -246,6 +247,14 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
     return this.focused || !this.empty || this.identityDocumentTypeInput.focused;
   }
 
+  displayWith(identityDocumentType: IdentityDocumentType): string {
+    if (!!identityDocumentType) {
+      return identityDocumentType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.identityDocumentTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
       this.value = value as string;
     }
   }
+
 }

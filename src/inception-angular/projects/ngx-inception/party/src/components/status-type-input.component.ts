@@ -51,7 +51,8 @@ import {StatusType} from '../services/status-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #statusTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let statusType of filteredStatusTypes$ | async"
           [value]="statusType">
@@ -246,6 +247,14 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.statusTypeInput.focused;
   }
 
+  displayWith(statusType: StatusType): string {
+    if (!!statusType) {
+      return statusType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.statusTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

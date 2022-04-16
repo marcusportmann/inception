@@ -51,7 +51,8 @@ import {ResidentialType} from '../services/residential-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #residentialTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let residentialType of filteredResidentialTypes$ | async"
           [value]="residentialType">
@@ -246,6 +247,14 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
     return this.focused || !this.empty || this.residentialTypeInput.focused;
   }
 
+  displayWith(residentialType: ResidentialType): string {
+    if (!!residentialType) {
+      return residentialType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.residentialTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
       this.value = value as string;
     }
   }
+
 }

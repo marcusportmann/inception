@@ -51,7 +51,8 @@ import {SegmentationType} from '../services/segmentation-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #segmentationTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let segmentationType of filteredSegmentationTypes$ | async"
           [value]="segmentationType">
@@ -246,6 +247,14 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
     return this.focused || !this.empty || this.segmentationTypeInput.focused;
   }
 
+  displayWith(segmentationType: SegmentationType): string {
+    if (!!segmentationType) {
+      return segmentationType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.segmentationTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
       this.value = value as string;
     }
   }
+
 }

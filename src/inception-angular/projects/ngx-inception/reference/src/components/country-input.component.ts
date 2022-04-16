@@ -245,6 +245,14 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.countryInput.focused;
   }
 
+  displayWith(country: Country): string {
+    if (!!country) {
+      return country.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.countryInputValue$.next((event.target as HTMLInputElement).value);
@@ -351,4 +359,5 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

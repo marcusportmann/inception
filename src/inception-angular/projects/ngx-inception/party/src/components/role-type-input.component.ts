@@ -51,7 +51,8 @@ import {RoleType} from '../services/role-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #roleTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let roleType of filteredRoleTypes$ | async"
           [value]="roleType">
@@ -246,6 +247,14 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.roleTypeInput.focused;
   }
 
+  displayWith(roleType: RoleType): string {
+    if (!!roleType) {
+      return roleType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.roleTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

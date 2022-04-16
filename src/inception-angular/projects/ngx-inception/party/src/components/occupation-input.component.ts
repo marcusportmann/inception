@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #occupationAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let occupation of filteredOccupations$ | async"
           [value]="occupation">
@@ -246,6 +247,14 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.occupationInput.focused;
   }
 
+  displayWith(occupation: Occupation): string {
+    if (!!occupation) {
+      return occupation.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.occupationInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

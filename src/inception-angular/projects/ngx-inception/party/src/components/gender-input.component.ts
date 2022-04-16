@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #genderAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let gender of filteredGenders$ | async"
           [value]="gender">
@@ -246,6 +247,14 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.genderInput.focused;
   }
 
+  displayWith(gender: Gender): string {
+    if (!!gender) {
+      return gender.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.genderInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

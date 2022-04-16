@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #fieldOfStudyAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let fieldOfStudy of filteredFieldsOfStudy$ | async"
           [value]="fieldOfStudy">
@@ -246,6 +247,14 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.fieldOfStudyInput.focused;
   }
 
+  displayWith(fieldOfStudy: FieldOfStudy): string {
+    if (!!fieldOfStudy) {
+      return fieldOfStudy.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.fieldOfStudyInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

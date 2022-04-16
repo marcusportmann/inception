@@ -52,7 +52,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #attributeTypeCategoryAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let attributeTypeCategory of filteredAttributeTypeCategories$ | async"
           [value]="attributeTypeCategory">
@@ -247,6 +248,14 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
     return this.focused || !this.empty || this.attributeTypeCategoryInput.focused;
   }
 
+  displayWith(attributeTypeCategory: AttributeTypeCategory): string {
+    if (!!attributeTypeCategory) {
+      return attributeTypeCategory.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.attributeTypeCategoryInputValue$.next((event.target as HTMLInputElement).value);
@@ -353,4 +362,5 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
       this.value = value as string;
     }
   }
+
 }

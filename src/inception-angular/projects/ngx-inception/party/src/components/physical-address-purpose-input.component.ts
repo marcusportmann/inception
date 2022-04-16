@@ -51,7 +51,8 @@ import {PhysicalAddressPurpose} from '../services/physical-address-purpose';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #physicalAddressPurposeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let physicalAddressPurpose of filteredPhysicalAddressPurposes$ | async"
           [value]="physicalAddressPurpose">
@@ -246,6 +247,14 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
     return this.focused || !this.empty || this.physicalAddressPurposeInput.focused;
   }
 
+  displayWith(physicalAddressPurpose: PhysicalAddressPurpose): string {
+    if (!!physicalAddressPurpose) {
+      return physicalAddressPurpose.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.physicalAddressPurposeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
       this.value = value as string;
     }
   }
+
 }

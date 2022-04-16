@@ -51,7 +51,8 @@ import {SourceOfFundsType} from '../services/source-of-funds-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #sourceOfFundsTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let sourceOfFundsType of filteredSourceOfFundsTypes$ | async"
           [value]="sourceOfFundsType">
@@ -246,6 +247,14 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
     return this.focused || !this.empty || this.sourceOfFundsTypeInput.focused;
   }
 
+  displayWith(sourceOfFundsType: SourceOfFundsType): string {
+    if (!!sourceOfFundsType) {
+      return sourceOfFundsType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.sourceOfFundsTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
       this.value = value as string;
     }
   }
+
 }

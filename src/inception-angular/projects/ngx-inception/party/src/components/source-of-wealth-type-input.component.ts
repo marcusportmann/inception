@@ -51,7 +51,8 @@ import {SourceOfWealthType} from '../services/source-of-wealth-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #sourceOfWealthTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let sourceOfWealthType of filteredSourceOfWealthTypes$ | async"
           [value]="sourceOfWealthType">
@@ -246,6 +247,14 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
     return this.focused || !this.empty || this.sourceOfWealthTypeInput.focused;
   }
 
+  displayWith(sourceOfWealthType: SourceOfWealthType): string {
+    if (!!sourceOfWealthType) {
+      return sourceOfWealthType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.sourceOfWealthTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
       this.value = value as string;
     }
   }
+
 }

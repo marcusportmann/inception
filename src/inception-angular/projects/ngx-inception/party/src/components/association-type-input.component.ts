@@ -247,6 +247,14 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
     return this.focused || !this.empty || this.associationTypeInput.focused;
   }
 
+  displayWith(associationType: AssociationType): string {
+    if (!!associationType) {
+      return associationType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.associationTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -353,4 +361,6 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
       this.value = value as string;
     }
   }
+
 }
+

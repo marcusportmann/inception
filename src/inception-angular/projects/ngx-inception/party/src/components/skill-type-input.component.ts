@@ -51,7 +51,8 @@ import {SkillType} from '../services/skill-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #skillTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let skillType of filteredSkillTypes$ | async"
           [value]="skillType">
@@ -246,6 +247,14 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.skillTypeInput.focused;
   }
 
+  displayWith(skillType: SkillType): string {
+    if (!!skillType) {
+      return skillType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.skillTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #consentTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let consentType of filteredConsentTypes$ | async"
           [value]="consentType">
@@ -246,6 +247,14 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.consentTypeInput.focused;
   }
 
+  displayWith(consentType: ConsentType): string {
+    if (!!consentType) {
+      return consentType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.consentTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }

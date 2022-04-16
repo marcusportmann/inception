@@ -51,7 +51,8 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #nextOfKinTypeAutocomplete="matAutocomplete"
-        (optionSelected)="optionSelected($event)">
+        (optionSelected)="optionSelected($event)"
+        [displayWith]="displayWith">
         <mat-option
           *ngFor="let nextOfKinType of filteredNextOfKinTypes$ | async"
           [value]="nextOfKinType">
@@ -246,6 +247,14 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
     return this.focused || !this.empty || this.nextOfKinTypeInput.focused;
   }
 
+  displayWith(nextOfKinType: NextOfKinType): string {
+    if (!!nextOfKinType) {
+      return nextOfKinType.name;
+    } else {
+      return '';
+    }
+  }
+
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
       this.nextOfKinTypeInputValue$.next((event.target as HTMLInputElement).value);
@@ -352,4 +361,5 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
+
 }
