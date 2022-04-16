@@ -84,11 +84,6 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
   @ViewChild(MatInput, {static: true}) employmentStatusInput!: MatInput;
 
   /**
-   * The reference to the element for the employment status input.
-   */
-  @ViewChild('employmentStatusInput') employmentStatusInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the employment status input as it changes.
    */
   employmentStatusInputValue$: Subject<string> = new ReplaySubject<string>();

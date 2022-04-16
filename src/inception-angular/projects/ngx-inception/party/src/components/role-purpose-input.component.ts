@@ -99,11 +99,6 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) rolePurposeInput!: MatInput;
 
   /**
-   * The reference to the element for the role purpose input.
-   */
-  @ViewChild('rolePurposeInput') rolePurposeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the role purpose input as it changes.
    */
   rolePurposeInputValue$: Subject<string> = new ReplaySubject<string>();

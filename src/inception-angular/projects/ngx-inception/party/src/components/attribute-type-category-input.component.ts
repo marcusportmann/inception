@@ -80,11 +80,6 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
   @ViewChild(MatInput, {static: true}) attributeTypeCategoryInput!: MatInput;
 
   /**
-   * The reference to the element for the attribute type category input.
-   */
-  @ViewChild('attributeTypeCategoryInput') attributeTypeCategoryInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the attribute type category input as it changes.
    */
   attributeTypeCategoryInputValue$: Subject<string> = new ReplaySubject<string>();

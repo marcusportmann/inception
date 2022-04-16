@@ -99,11 +99,6 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) lockTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the lock type input.
-   */
-  @ViewChild('lockTypeInput') lockTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the lock type input as it changes.
    */
   lockTypeInputValue$: Subject<string> = new ReplaySubject<string>();

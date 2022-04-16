@@ -84,11 +84,6 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
   @ViewChild(MatInput, {static: true}) employmentTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the employment type input.
-   */
-  @ViewChild('employmentTypeInput') employmentTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the employment type input as it changes.
    */
   employmentTypeInputValue$: Subject<string> = new ReplaySubject<string>();

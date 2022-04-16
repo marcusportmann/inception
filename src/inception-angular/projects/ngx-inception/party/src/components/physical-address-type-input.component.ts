@@ -99,11 +99,6 @@ export class PhysicalAddressTypeInputComponent implements MatFormFieldControl<st
   @ViewChild(MatInput, {static: true}) physicalAddressTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the physical address type input.
-   */
-  @ViewChild('physicalAddressTypeInput') physicalAddressTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the physical address type input as it changes.
    */
   physicalAddressTypeInputValue$: Subject<string> = new ReplaySubject<string>();

@@ -97,11 +97,6 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) languageInput!: MatInput;
 
   /**
-   * The reference to the element for the language input.
-   */
-  @ViewChild('languageInput') languageInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the language input as it changes.
    */
   languageInputValue$: Subject<string> = new ReplaySubject<string>();

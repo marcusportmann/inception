@@ -79,11 +79,6 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) consentTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the consent type input.
-   */
-  @ViewChild('consentTypeInput') consentTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the consent type input as it changes.
    */
   consentTypeInputValue$: Subject<string> = new ReplaySubject<string>();

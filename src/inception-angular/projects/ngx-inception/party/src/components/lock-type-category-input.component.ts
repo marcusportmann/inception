@@ -99,11 +99,6 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
   @ViewChild(MatInput, {static: true}) lockTypeCategoryInput!: MatInput;
 
   /**
-   * The reference to the element for the lock type category input.
-   */
-  @ViewChild('lockTypeCategoryInput') lockTypeCategoryInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the lock type category input as it changes.
    */
   lockTypeCategoryInputValue$: Subject<string> = new ReplaySubject<string>();

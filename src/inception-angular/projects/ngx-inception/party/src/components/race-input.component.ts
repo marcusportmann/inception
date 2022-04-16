@@ -99,11 +99,6 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) raceInput!: MatInput;
 
   /**
-   * The reference to the element for the race input.
-   */
-  @ViewChild('raceInput') raceInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the race input as it changes.
    */
   raceInputValue$: Subject<string> = new ReplaySubject<string>();

@@ -94,11 +94,6 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) genderInput!: MatInput;
 
   /**
-   * The reference to the element for the gender input.
-   */
-  @ViewChild('genderInput') genderInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the gender input as it changes.
    */
   genderInputValue$: Subject<string> = new ReplaySubject<string>();

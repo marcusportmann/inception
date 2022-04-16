@@ -104,11 +104,6 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) taxNumberTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the tax number type input.
-   */
-  @ViewChild('taxNumberTypeInput') taxNumberTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the tax number type input as it changes.
    */
   taxNumberTypeInputValue$: Subject<string> = new ReplaySubject<string>();

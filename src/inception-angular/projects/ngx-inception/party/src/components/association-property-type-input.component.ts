@@ -41,7 +41,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #associationPropertyTypeInput
+        #input
         type="text"
         matInput
         autocompleteSelectionRequired
@@ -83,7 +83,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   /**
    * The observable providing access to the value for the association property type input as it changes.
    */
-  associationPropertyTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The name for the control type.
@@ -120,7 +120,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   /**
    * The association property types for the association type.
    */
-  private _associationPropertyTypes: AssociationPropertyType[] = [];
+  private _options: AssociationPropertyType[] = [];
 
   /**
    * The code for the association type to retrieve the association property types for.
@@ -220,30 +220,32 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
     }
 
     if (this._value !== value) {
-      console.log('Setting the value to ' + value);
+      this._value = null;
 
-      // If options have been loaded, check if the value is valid
-      if (!!this._value) {
-        if (this._associationPropertyTypes.length > 0) {
-          for (const associationPropertyType of this._associationPropertyTypes) {
-            if (associationPropertyType.code === value) {
-              this.input.value = associationPropertyType.name;
-
+      // If the new value is not null
+      if (!!value) {
+        // If options have been loaded, check if the new value is valid.
+        if (this._options.length > 0) {
+          for (const option of this._options) {
+            if (option.code === value) {
+              console.log('Setting the validated value ' + value);
+              this.input.value = option.name;
               this._value = value;
-              this.onChange(this._value);
-              this.changeDetectorRef.detectChanges();
-              this.stateChanges.next();
-
-              return;
+              break;
             }
           }
+        } else {
+          console.log('Setting the unvalidated value to ' + value);
+
+          // Assume the new value is valid, it will be checked when the options are loaded
+          this._value = value;
         }
       }
 
-      console.log('Resetting value to null, existing value = ' + this._value);
+      // if (!this._value) {
+      //   this.input.value = '';
+      // }
 
-      this._value = null;
-      this.input.value = '';
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
       this.stateChanges.next();
@@ -290,7 +292,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.associationPropertyTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -306,22 +308,22 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
       associationType: this.associationType$.value
     }))).subscribe(parameters => {
       this.partyReferenceService.getAssociationPropertyTypes().pipe(first()).subscribe((associationPropertyTypes: Map<string, AssociationPropertyType>) => {
-        this._associationPropertyTypes = [];
+        this._options = [];
 
         for (const associationPropertyType of associationPropertyTypes.values()) {
           if (!!parameters.associationType) {
             if (associationPropertyType.associationType === parameters.associationType) {
-              this._associationPropertyTypes.push(associationPropertyType);
+              this._options.push(associationPropertyType);
             }
           } else {
-            this._associationPropertyTypes.push(associationPropertyType);
+            this._options.push(associationPropertyType);
           }
         }
 
-        this.filteredOptions$.next(this._associationPropertyTypes);
+        this.filteredOptions$.next(this._options);
 
         if (!!this.value) {
-          for (const associationPropertyType of this._associationPropertyTypes) {
+          for (const associationPropertyType of this._options) {
             if (associationPropertyType.code === this.value) {
               console.log('Setting input value based on matching option = ', associationPropertyType);
               this.input.value = associationPropertyType.name;
@@ -336,7 +338,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
       });
     }));
 
-    this.subscriptions.add(this.associationPropertyTypeInputValue$.pipe(
+    this.subscriptions.add(this.inputValue$.pipe(
       debounceTime(500)).subscribe((value: string) => {
       console.log('Input value changed to value (' + value + '), resetting this.value');
 
@@ -351,7 +353,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
 
       let filteredAssociationPropertyTypes: AssociationPropertyType[] = [];
 
-      for (const associationPropertyType of this._associationPropertyTypes) {
+      for (const associationPropertyType of this._options) {
         if (associationPropertyType.name.toLowerCase().indexOf(value) === 0) {
           filteredAssociationPropertyTypes.push(associationPropertyType);
         }
@@ -378,14 +380,14 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   }
 
   onFocusOut(event: FocusEvent) {
-    console.log('Losing focus, this._value = ' + this._value + ' and this.associationPropertyTypeInput.value = ', this.input.value);
+    console.log('Losing focus, this._value = ' + this._value + ' and this.input.value = ', this.input.value);
 
     // If we have a valid value
     if (!!this._value) {
       // If we have cleared the input then clear the value
       if (!this.input.value) {
-        console.log('Clearing value when input is empty and focus is lost, this.associationPropertyTypeInput.value = ', this.input.value);
-        this.filteredOptions$.next(this._associationPropertyTypes);
+        console.log('Clearing value when input is empty and focus is lost, this.input.value = ', this.input.value);
+        this.filteredOptions$.next(this._options);
         this.value = null;
       }
     }
@@ -393,7 +395,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
     else {
       // console.log('Clearing input when no valid value exists and focus is lost, this.value = ', this.value);
       // this.filteredAssociationPropertyTypes$.next(this._associationPropertyTypes);
-      // this.associationPropertyTypeInput.value = '';
+      // this.input.value = '';
     }
 
     this.touched = true;

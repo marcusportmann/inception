@@ -99,11 +99,6 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
   @ViewChild(MatInput, {static: true}) preferenceTypeCategoryInput!: MatInput;
 
   /**
-   * The reference to the element for the preference type category input.
-   */
-  @ViewChild('preferenceTypeCategoryInput') preferenceTypeCategoryInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the preference type category input as it changes.
    */
   preferenceTypeCategoryInputValue$: Subject<string> = new ReplaySubject<string>();

@@ -99,11 +99,6 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
   @ViewChild(MatInput, {static: true}) qualificationTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the qualification type input.
-   */
-  @ViewChild('qualificationTypeInput') qualificationTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the qualification type input as it changes.
    */
   qualificationTypeInputValue$: Subject<string> = new ReplaySubject<string>();

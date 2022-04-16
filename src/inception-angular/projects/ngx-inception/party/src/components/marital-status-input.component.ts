@@ -99,11 +99,6 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) maritalStatusInput!: MatInput;
 
   /**
-   * The reference to the element for the marital status input.
-   */
-  @ViewChild('maritalStatusInput') maritalStatusInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the marital status input as it changes.
    */
   maritalStatusInputValue$: Subject<string> = new ReplaySubject<string>();

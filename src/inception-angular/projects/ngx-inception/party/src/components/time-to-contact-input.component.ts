@@ -104,11 +104,6 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) timeToContactInput!: MatInput;
 
   /**
-   * The reference to the element for the time to contact input.
-   */
-  @ViewChild('timeToContactInput') timeToContactInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the time to contact input as it changes.
    */
   timeToContactInputValue$: Subject<string> = new ReplaySubject<string>();

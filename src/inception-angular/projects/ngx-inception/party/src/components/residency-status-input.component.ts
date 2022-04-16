@@ -99,11 +99,6 @@ export class ResidencyStatusInputComponent implements MatFormFieldControl<string
   @ViewChild(MatInput, {static: true}) residencyStatusInput!: MatInput;
 
   /**
-   * The reference to the element for the residency status input.
-   */
-  @ViewChild('residencyStatusInput') residencyStatusInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the residency status input as it changes.
    */
   residencyStatusInputValue$: Subject<string> = new ReplaySubject<string>();

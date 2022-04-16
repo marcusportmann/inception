@@ -99,11 +99,6 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
   @ViewChild(MatInput, {static: true}) identityDocumentTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the identity document type input.
-   */
-  @ViewChild('identityDocumentTypeInput') identityDocumentTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the identity document type input as it changes.
    */
   identityDocumentTypeInputValue$: Subject<string> = new ReplaySubject<string>();

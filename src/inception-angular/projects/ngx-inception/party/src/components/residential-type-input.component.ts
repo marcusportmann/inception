@@ -99,11 +99,6 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
   @ViewChild(MatInput, {static: true}) residentialTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the residential type input.
-   */
-  @ViewChild('residentialTypeInput') residentialTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the residential type input as it changes.
    */
   residentialTypeInputValue$: Subject<string> = new ReplaySubject<string>();

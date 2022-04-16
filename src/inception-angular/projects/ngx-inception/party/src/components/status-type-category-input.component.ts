@@ -104,11 +104,6 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   @ViewChild(MatInput, {static: true}) statusTypeCategoryInput!: MatInput;
 
   /**
-   * The reference to the element for the status type category input.
-   */
-  @ViewChild('statusTypeCategoryInput') statusTypeCategoryInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the status type category input as it changes.
    */
   statusTypeCategoryInputValue$: Subject<string> = new ReplaySubject<string>();

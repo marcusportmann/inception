@@ -99,11 +99,6 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   @ViewChild(MatInput, {static: true}) physicalAddressRoleInput!: MatInput;
 
   /**
-   * The reference to the element for the physical address role input.
-   */
-  @ViewChild('physicalAddressRoleInput') physicalAddressRoleInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the physical address role input as it changes.
    */
   physicalAddressRoleInputValue$: Subject<string> = new ReplaySubject<string>();

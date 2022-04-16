@@ -99,11 +99,6 @@ export class IndustryClassificationInputComponent implements MatFormFieldControl
   @ViewChild(MatInput, {static: true}) industryClassificationInput!: MatInput;
 
   /**
-   * The reference to the element for the industry classification input.
-   */
-  @ViewChild('industryClassificationInput') industryClassificationInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the industry classification input as it changes.
    */
   industryClassificationInputValue$: Subject<string> = new ReplaySubject<string>();

@@ -102,11 +102,6 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) titleInput!: MatInput;
 
   /**
-   * The reference to the element for the title input.
-   */
-  @ViewChild('titleInput') titleInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the title input as it changes.
    */
   titleInputValue$: Subject<string> = new ReplaySubject<string>();

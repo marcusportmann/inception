@@ -84,11 +84,6 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
   @ViewChild(MatInput, {static: true}) externalReferenceTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the external reference type input.
-   */
-  @ViewChild('externalReferenceTypeInput') externalReferenceTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the external reference type input as it changes.
    */
   externalReferenceTypeInputValue$: Subject<string> = new ReplaySubject<string>();

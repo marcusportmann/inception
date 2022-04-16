@@ -99,11 +99,6 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
   @ViewChild(MatInput, {static: true}) segmentationTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the segmentation type input.
-   */
-  @ViewChild('segmentationTypeInput') segmentationTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the segmentation type input as it changes.
    */
   segmentationTypeInputValue$: Subject<string> = new ReplaySubject<string>();

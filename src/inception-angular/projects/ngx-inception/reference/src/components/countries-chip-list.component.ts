@@ -98,7 +98,7 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
   /**
    * The reference to the element for the add country input.
    */
-  @ViewChild('addCountryInput') addCountryInputElementRef!: ElementRef;
+  @ViewChild('addCountryInput') inputElementRef!: ElementRef;
 
   /**
    * The name for the control type.
@@ -432,8 +432,8 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
   private _resetAddCountry(): void {
     this.addCountryInput.value = '';
     this.addCountryInputValue$.next('');
-    if (!!this.addCountryInputElementRef) {
-      this.addCountryInputElementRef.nativeElement.blur();
+    if (!!this.inputElementRef) {
+      this.inputElementRef.nativeElement.blur();
     }
   }
 

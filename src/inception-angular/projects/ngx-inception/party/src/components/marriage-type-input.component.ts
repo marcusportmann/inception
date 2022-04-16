@@ -99,11 +99,6 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) marriageTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the marriage type input.
-   */
-  @ViewChild('marriageTypeInput') marriageTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the marriage type input as it changes.
    */
   marriageTypeInputValue$: Subject<string> = new ReplaySubject<string>();

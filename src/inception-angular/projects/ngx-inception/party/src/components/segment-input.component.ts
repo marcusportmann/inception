@@ -99,11 +99,6 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) segmentInput!: MatInput;
 
   /**
-   * The reference to the element for the segment input.
-   */
-  @ViewChild('segmentInput') segmentInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the segment input as it changes.
    */
   segmentInputValue$: Subject<string> = new ReplaySubject<string>();

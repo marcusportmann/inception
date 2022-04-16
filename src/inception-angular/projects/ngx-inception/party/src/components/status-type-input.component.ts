@@ -104,11 +104,6 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) statusTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the status type input.
-   */
-  @ViewChild('statusTypeInput') statusTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the status type input as it changes.
    */
   statusTypeInputValue$: Subject<string> = new ReplaySubject<string>();

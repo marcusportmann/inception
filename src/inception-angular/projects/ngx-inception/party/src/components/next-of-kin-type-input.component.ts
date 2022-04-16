@@ -99,11 +99,6 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) nextOfKinTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the next of kin type input.
-   */
-  @ViewChild('nextOfKinTypeInput') nextOfKinTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the next of kin type input as it changes.
    */
   nextOfKinTypeInputValue$: Subject<string> = new ReplaySubject<string>();

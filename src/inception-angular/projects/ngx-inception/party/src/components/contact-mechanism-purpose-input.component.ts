@@ -80,11 +80,6 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
   @ViewChild(MatInput, {static: true}) contactMechanismPurposeInput!: MatInput;
 
   /**
-   * The reference to the element for the contact mechanism purpose input.
-   */
-  @ViewChild('contactMechanismPurposeInput') contactMechanismPurposeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the contact mechanism purpose input as it changes.
    */
   contactMechanismPurposeInputValue$: Subject<string> = new ReplaySubject<string>();

@@ -99,11 +99,6 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
   @ViewChild(MatInput, {static: true}) sourceOfWealthTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the source of wealth type input.
-   */
-  @ViewChild('sourceOfWealthTypeInput') sourceOfWealthTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the source of wealth type input as it changes.
    */
   sourceOfWealthTypeInputValue$: Subject<string> = new ReplaySubject<string>();

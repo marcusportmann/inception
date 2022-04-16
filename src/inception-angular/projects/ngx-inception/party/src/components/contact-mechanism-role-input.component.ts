@@ -80,11 +80,6 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   @ViewChild(MatInput, {static: true}) contactMechanismRoleInput!: MatInput;
 
   /**
-   * The reference to the element for the contact mechanism role input.
-   */
-  @ViewChild('contactMechanismRoleInput') contactMechanismRoleInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the contact mechanism role input as it changes.
    */
   contactMechanismRoleInputValue$: Subject<string> = new ReplaySubject<string>();

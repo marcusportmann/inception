@@ -99,11 +99,6 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
   @ViewChild(MatInput, {static: true}) sourceOfFundsTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the source of funds type input.
-   */
-  @ViewChild('sourceOfFundsTypeInput') sourceOfFundsTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the source of funds type input as it changes.
    */
   sourceOfFundsTypeInputValue$: Subject<string> = new ReplaySubject<string>();

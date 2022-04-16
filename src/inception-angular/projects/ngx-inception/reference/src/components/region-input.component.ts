@@ -41,7 +41,7 @@ import {Region} from '../services/region';
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #regionInput
+        #input
         type="text"
         matInput
         autocompleteSelectionRequired
@@ -95,7 +95,6 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
    */
   @HostBinding() id = `region-input-${RegionInputComponent._nextId++}`;
 
-
   /**
    * The input.
    */
@@ -104,7 +103,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   /**
    * The observable providing access to the value for the region input as it changes.
    */
-  regionInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -121,7 +120,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   /**
    * The regions for the country.
    */
-  private _regions: Region[] = [];
+  private _options: Region[] = [];
 
   /**
    * The ISO 639-1 alpha-2 code for the country to retrieve the regions for.
@@ -226,11 +225,11 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
       // If the new value is not null
       if (!!value) {
         // If options have been loaded, check if the new value is valid.
-        if (this._regions.length > 0) {
-          for (const region of this._regions) {
-            if (region.code === value) {
+        if (this._options.length > 0) {
+          for (const option of this._options) {
+            if (option.code === value) {
               console.log('Setting the validated value ' + value);
-              this.input.value = region.name;
+              this.input.value = option.name;
               this._value = value;
               break;
             }
@@ -243,7 +242,9 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
         }
       }
 
-      //this.regionInput.value = '';
+      // if (!this._value) {
+      //   this.input.value = '';
+      // }
 
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -291,7 +292,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.regionInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -307,22 +308,22 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
       country: this.country$.value
     }))).subscribe(parameters => {
       this.referenceService.getRegions().pipe(first()).subscribe((regions: Map<string, Region>) => {
-        this._regions = [];
+        this._options = [];
 
         for (const region of regions.values()) {
           if (!!parameters.country) {
             if (region.country === parameters.country) {
-              this._regions.push(region);
+              this._options.push(region);
             }
           } else {
-            this._regions.push(region);
+            this._options.push(region);
           }
         }
 
-        this.filteredOptions$.next(this._regions);
+        this.filteredOptions$.next(this._options);
 
         if (!!this.value) {
-          for (const region of this._regions) {
+          for (const region of this._options) {
             if (region.code === this.value) {
               console.log('Setting input value based on matching option = ', region);
               this.input.value = region.name;
@@ -337,7 +338,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
       });
     }));
 
-    this.subscriptions.add(this.regionInputValue$.pipe(
+    this.subscriptions.add(this.inputValue$.pipe(
       debounceTime(500)).subscribe((value: string) => {
       console.log('Input value changed to value (' + value + '), resetting this.value');
 
@@ -352,7 +353,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
       let filteredRegions: Region[] = [];
 
-      for (const region of this._regions) {
+      for (const region of this._options) {
         if (region.name.toLowerCase().indexOf(value) !== -1) {
           filteredRegions.push(region);
         }
@@ -379,24 +380,24 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    console.log('Losing focus, this._value = ' + this._value + ' and this.regionInput.value = ', this.input.value);
+    console.log('Lost focus, this._value = ' + this._value + ' and this.input.value = ', this.input.value);
 
     // If we have a valid value
     if (!!this._value) {
       // If we have cleared the input then clear the value
       if (!this.input.value) {
-        console.log('Clearing value when input is empty and focus is lost, this.regionInput.value = ', this.input.value);
-        this.filteredOptions$.next(this._regions);
+        console.log('Clearing value when input is empty and focus is lost, this.input.value = ', this.input.value);
+        this.filteredOptions$.next(this._options);
         this.value = null;
       }
     }
     // If we do not have a valid value then clear the input
     else {
-      console.log('this.filteredRegions$.value = ', this.filteredOptions$.value)
+      console.log('Lost focus, this.filteredOptions$.value = ', this.filteredOptions$.value)
 
       // console.log('Clearing input when no valid value exists and focus is lost, this.value = ', this.value);
-      // this.filteredRegions$.next(this._regions);
-      // this.regionInput.value = '';
+      // this.filteredOptions$.next(this._regions);
+      // this.input.value = '';
     }
 
     this.touched = true;

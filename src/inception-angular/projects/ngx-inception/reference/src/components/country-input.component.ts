@@ -82,11 +82,6 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) countryInput!: MatInput;
 
   /**
-   * The reference to the element for the country input.
-   */
-  @ViewChild('countryInput') countryInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the country input as it changes.
    */
   countryInputValue$: Subject<string> = new ReplaySubject<string>();

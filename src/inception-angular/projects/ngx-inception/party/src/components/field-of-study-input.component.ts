@@ -84,11 +84,6 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) fieldOfStudyInput!: MatInput;
 
   /**
-   * The reference to the element for the field of study input.
-   */
-  @ViewChild('fieldOfStudyInput') fieldOfStudyInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the field of study input as it changes.
    */
   fieldOfStudyInputValue$: Subject<string> = new ReplaySubject<string>();

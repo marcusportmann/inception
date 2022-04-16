@@ -79,11 +79,6 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
   @ViewChild(MatInput, {static: true}) associationTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the association type input.
-   */
-  @ViewChild('associationTypeInput') associationTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the association type input as it changes.
    */
   associationTypeInputValue$: Subject<string> = new ReplaySubject<string>();

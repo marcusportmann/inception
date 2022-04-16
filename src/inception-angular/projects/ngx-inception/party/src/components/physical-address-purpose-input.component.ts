@@ -99,11 +99,6 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
   @ViewChild(MatInput, {static: true}) physicalAddressPurposeInput!: MatInput;
 
   /**
-   * The reference to the element for the physical address purpose input.
-   */
-  @ViewChild('physicalAddressPurposeInput') physicalAddressPurposeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the physical address purpose input as it changes.
    */
   physicalAddressPurposeInputValue$: Subject<string> = new ReplaySubject<string>();

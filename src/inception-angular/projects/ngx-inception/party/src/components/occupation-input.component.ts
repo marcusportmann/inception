@@ -99,11 +99,6 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) occupationInput!: MatInput;
 
   /**
-   * The reference to the element for the occupation input.
-   */
-  @ViewChild('occupationInput') occupationInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the occupation input as it changes.
    */
   occupationInputValue$: Subject<string> = new ReplaySubject<string>();

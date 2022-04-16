@@ -99,11 +99,6 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
   @ViewChild(MatInput, {static: true}) residencePermitTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the residence permit type input.
-   */
-  @ViewChild('residencePermitTypeInput') residencePermitTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the residence permit type input as it changes.
    */
   residencePermitTypeInputValue$: Subject<string> = new ReplaySubject<string>();

@@ -99,11 +99,6 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
   @ViewChild(MatInput, {static: true}) skillTypeInput!: MatInput;
 
   /**
-   * The reference to the element for the skill type input.
-   */
-  @ViewChild('skillTypeInput') skillTypeInputElementRef!: ElementRef;
-
-  /**
    * The observable providing access to the value for the skill type input as it changes.
    */
   skillTypeInputValue$: Subject<string> = new ReplaySubject<string>();
