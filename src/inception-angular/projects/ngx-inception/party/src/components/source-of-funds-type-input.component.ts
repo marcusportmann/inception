@@ -94,14 +94,14 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
   @HostBinding() id = `source-of-funds-type-input-${SourceOfFundsTypeInputComponent._nextId++}`;
 
   /**
-   * The source of funds type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) sourceOfFundsTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the source of funds type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  sourceOfFundsTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.sourceOfFundsTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
     if (this._value !== value) {
       this.partyReferenceService.getSourceOfFundsTypes().pipe(first()).subscribe((sourceOfFundsTypes: Map<string, SourceOfFundsType>) => {
         this._value = null;
-        this.sourceOfFundsTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const sourceOfFundsType of sourceOfFundsTypes.values()) {
             if (sourceOfFundsType.code === value) {
               this._value = value;
-              this.sourceOfFundsTypeInput.value = sourceOfFundsType.name;
+              this.input.value = sourceOfFundsType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.sourceOfFundsTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(sourceOfFundsType: SourceOfFundsType): string {
@@ -252,7 +252,7 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.sourceOfFundsTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
   }
 
   ngOnInit(): void {
-    this.sourceOfFundsTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getSourceOfFundsTypes().pipe(first()).subscribe((sourceOfFundsTypes: Map<string, SourceOfFundsType>) => {
-      this.subscriptions.add(this.sourceOfFundsTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.sourceOfFundsTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.sourceOfFundsTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.sourceOfFundsTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

@@ -94,14 +94,14 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
   @HostBinding() id = `physical-address-purpose-input-${PhysicalAddressPurposeInputComponent._nextId++}`;
 
   /**
-   * The physical address purpose input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) physicalAddressPurposeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the physical address purpose input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  physicalAddressPurposeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.physicalAddressPurposeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
     if (this._value !== value) {
       this.partyReferenceService.getPhysicalAddressPurposes().pipe(first()).subscribe((physicalAddressPurposes: Map<string, PhysicalAddressPurpose>) => {
         this._value = null;
-        this.physicalAddressPurposeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const physicalAddressPurpose of physicalAddressPurposes.values()) {
             if (physicalAddressPurpose.code === value) {
               this._value = value;
-              this.physicalAddressPurposeInput.value = physicalAddressPurpose.name;
+              this.input.value = physicalAddressPurpose.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.physicalAddressPurposeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(physicalAddressPurpose: PhysicalAddressPurpose): string {
@@ -252,7 +252,7 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.physicalAddressPurposeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
   }
 
   ngOnInit(): void {
-    this.physicalAddressPurposeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getPhysicalAddressPurposes().pipe(first()).subscribe((physicalAddressPurposes: Map<string, PhysicalAddressPurpose>) => {
-      this.subscriptions.add(this.physicalAddressPurposeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.physicalAddressPurposeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.physicalAddressPurposeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.physicalAddressPurposeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

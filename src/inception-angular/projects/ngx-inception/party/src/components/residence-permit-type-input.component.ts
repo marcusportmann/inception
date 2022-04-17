@@ -94,14 +94,14 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
   @HostBinding() id = `residence-permit-type-input-${ResidencePermitTypeInputComponent._nextId++}`;
 
   /**
-   * The residence permit type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) residencePermitTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the residence permit type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  residencePermitTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.residencePermitTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
     if (this._value !== value) {
       this.partyReferenceService.getResidencePermitTypes().pipe(first()).subscribe((residencePermitTypes: Map<string, ResidencePermitType>) => {
         this._value = null;
-        this.residencePermitTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const residencePermitType of residencePermitTypes.values()) {
             if (residencePermitType.code === value) {
               this._value = value;
-              this.residencePermitTypeInput.value = residencePermitType.name;
+              this.input.value = residencePermitType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.residencePermitTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(residencePermitType: ResidencePermitType): string {
@@ -252,7 +252,7 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.residencePermitTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
   }
 
   ngOnInit(): void {
-    this.residencePermitTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getResidencePermitTypes().pipe(first()).subscribe((residencePermitTypes: Map<string, ResidencePermitType>) => {
-      this.subscriptions.add(this.residencePermitTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.residencePermitTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.residencePermitTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.residencePermitTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

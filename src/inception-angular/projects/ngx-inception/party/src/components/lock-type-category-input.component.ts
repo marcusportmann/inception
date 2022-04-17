@@ -94,14 +94,14 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
   @HostBinding() id = `lock-type-category-input-${LockTypeCategoryInputComponent._nextId++}`;
 
   /**
-   * The lock type category input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) lockTypeCategoryInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the lock type category input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  lockTypeCategoryInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.lockTypeCategoryInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
     if (this._value !== value) {
       this.partyReferenceService.getLockTypeCategories().pipe(first()).subscribe((lockTypeCategories: Map<string, LockTypeCategory>) => {
         this._value = null;
-        this.lockTypeCategoryInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const lockTypeCategory of lockTypeCategories.values()) {
             if (lockTypeCategory.code === value) {
               this._value = value;
-              this.lockTypeCategoryInput.value = lockTypeCategory.name;
+              this.input.value = lockTypeCategory.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.lockTypeCategoryInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(lockTypeCategory: LockTypeCategory): string {
@@ -252,7 +252,7 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.lockTypeCategoryInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
   }
 
   ngOnInit(): void {
-    this.lockTypeCategoryInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getLockTypeCategories().pipe(first()).subscribe((lockTypeCategories: Map<string, LockTypeCategory>) => {
-      this.subscriptions.add(this.lockTypeCategoryInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.lockTypeCategoryInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.lockTypeCategoryInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.lockTypeCategoryInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

@@ -94,14 +94,14 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
   @HostBinding() id = `identity-document-type-input-${IdentityDocumentTypeInputComponent._nextId++}`;
 
   /**
-   * The identity document type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) identityDocumentTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the identity document type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  identityDocumentTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.identityDocumentTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
     if (this._value !== value) {
       this.partyReferenceService.getIdentityDocumentTypes().pipe(first()).subscribe((identityDocumentTypes: Map<string, IdentityDocumentType>) => {
         this._value = null;
-        this.identityDocumentTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const identityDocumentType of identityDocumentTypes.values()) {
             if (identityDocumentType.code === value) {
               this._value = value;
-              this.identityDocumentTypeInput.value = identityDocumentType.name;
+              this.input.value = identityDocumentType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.identityDocumentTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(identityDocumentType: IdentityDocumentType): string {
@@ -252,7 +252,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.identityDocumentTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
   }
 
   ngOnInit(): void {
-    this.identityDocumentTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getIdentityDocumentTypes().pipe(first()).subscribe((identityDocumentTypes: Map<string, IdentityDocumentType>) => {
-      this.subscriptions.add(this.identityDocumentTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.identityDocumentTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.identityDocumentTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.identityDocumentTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

@@ -94,14 +94,14 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
   @HostBinding() id = `preference-type-input-${PreferenceTypeInputComponent._nextId++}`;
 
   /**
-   * The preference type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) preferenceTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the preference type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  preferenceTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.preferenceTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
     if (this._value !== value) {
       this.partyReferenceService.getPreferenceTypes().pipe(first()).subscribe((preferenceTypes: Map<string, PreferenceType>) => {
         this._value = null;
-        this.preferenceTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const preferenceType of preferenceTypes.values()) {
             if (preferenceType.code === value) {
               this._value = value;
-              this.preferenceTypeInput.value = preferenceType.name;
+              this.input.value = preferenceType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.preferenceTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(preferenceType: PreferenceType): string {
@@ -252,7 +252,7 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.preferenceTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
   }
 
   ngOnInit(): void {
-    this.preferenceTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getPreferenceTypes().pipe(first()).subscribe((preferenceTypes: Map<string, PreferenceType>) => {
-      this.subscriptions.add(this.preferenceTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.preferenceTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.preferenceTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.preferenceTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

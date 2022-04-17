@@ -94,14 +94,14 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `skill-type-input-${SkillTypeInputComponent._nextId++}`;
 
   /**
-   * The skill type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) skillTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the skill type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  skillTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.skillTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getSkillTypes().pipe(first()).subscribe((skillTypes: Map<string, SkillType>) => {
         this._value = null;
-        this.skillTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const skillType of skillTypes.values()) {
             if (skillType.code === value) {
               this._value = value;
-              this.skillTypeInput.value = skillType.name;
+              this.input.value = skillType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.skillTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(skillType: SkillType): string {
@@ -252,7 +252,7 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.skillTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.skillTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getSkillTypes().pipe(first()).subscribe((skillTypes: Map<string, SkillType>) => {
-      this.subscriptions.add(this.skillTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.skillTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.skillTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.skillTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

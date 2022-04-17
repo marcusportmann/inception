@@ -94,14 +94,14 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `marriage-type-input-${MarriageTypeInputComponent._nextId++}`;
 
   /**
-   * The marriage type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) marriageTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the marriage type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  marriageTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.marriageTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getMarriageTypes().pipe(first()).subscribe((marriageTypes: Map<string, MarriageType>) => {
         this._value = null;
-        this.marriageTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const marriageType of marriageTypes.values()) {
             if (marriageType.code === value) {
               this._value = value;
-              this.marriageTypeInput.value = marriageType.name;
+              this.input.value = marriageType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.marriageTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(marriageType: MarriageType): string {
@@ -252,7 +252,7 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.marriageTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.marriageTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getMarriageTypes().pipe(first()).subscribe((marriageTypes: Map<string, MarriageType>) => {
-      this.subscriptions.add(this.marriageTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.marriageTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.marriageTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.marriageTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

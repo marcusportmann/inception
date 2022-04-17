@@ -94,14 +94,14 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
   @HostBinding() id = `segmentation-type-input-${SegmentationTypeInputComponent._nextId++}`;
 
   /**
-   * The segmentation type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) segmentationTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the segmentation type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  segmentationTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.segmentationTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
     if (this._value !== value) {
       this.partyReferenceService.getSegmentationTypes().pipe(first()).subscribe((segmentationTypes: Map<string, SegmentationType>) => {
         this._value = null;
-        this.segmentationTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const segmentationType of segmentationTypes.values()) {
             if (segmentationType.code === value) {
               this._value = value;
-              this.segmentationTypeInput.value = segmentationType.name;
+              this.input.value = segmentationType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.segmentationTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(segmentationType: SegmentationType): string {
@@ -252,7 +252,7 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.segmentationTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
   }
 
   ngOnInit(): void {
-    this.segmentationTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getSegmentationTypes().pipe(first()).subscribe((segmentationTypes: Map<string, SegmentationType>) => {
-      this.subscriptions.add(this.segmentationTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.segmentationTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.segmentationTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.segmentationTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

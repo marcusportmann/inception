@@ -75,14 +75,14 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
   private static _nextId: number = 0;
 
   /**
-   * The contact mechanism purpose input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) contactMechanismPurposeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the contact mechanism purpose input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  contactMechanismPurposeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The name for the control type.
@@ -145,7 +145,7 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.contactMechanismPurposeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -211,13 +211,13 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
     if (this._value !== value) {
       this.partyReferenceService.getContactMechanismPurposes().pipe(first()).subscribe((contactMechanismPurposes: Map<string, ContactMechanismPurpose>) => {
         this._value = null;
-        this.contactMechanismPurposeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const contactMechanismPurpose of contactMechanismPurposes.values()) {
             if (contactMechanismPurpose.code === value) {
               this._value = value;
-              this.contactMechanismPurposeInput.value = contactMechanismPurpose.name;
+              this.input.value = contactMechanismPurpose.name;
               break;
             }
           }
@@ -240,7 +240,7 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.contactMechanismPurposeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(contactMechanismPurpose: ContactMechanismPurpose): string {
@@ -253,7 +253,7 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.contactMechanismPurposeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -263,10 +263,10 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
   }
 
   ngOnInit(): void {
-    this.contactMechanismPurposeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getContactMechanismPurposes().pipe(first()).subscribe((contactMechanismPurposes: Map<string, ContactMechanismPurpose>) => {
-      this.subscriptions.add(this.contactMechanismPurposeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -289,7 +289,7 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.contactMechanismPurposeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -302,7 +302,7 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.contactMechanismPurposeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -310,7 +310,7 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.contactMechanismPurposeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

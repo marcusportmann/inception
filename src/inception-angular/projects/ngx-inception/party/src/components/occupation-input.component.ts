@@ -94,14 +94,14 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `occupation-input-${OccupationInputComponent._nextId++}`;
 
   /**
-   * The occupation input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) occupationInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the occupation input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  occupationInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.occupationInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getOccupations().pipe(first()).subscribe((occupations: Map<string, Occupation>) => {
         this._value = null;
-        this.occupationInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const occupation of occupations.values()) {
             if (occupation.code === value) {
               this._value = value;
-              this.occupationInput.value = occupation.name;
+              this.input.value = occupation.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.occupationInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(occupation: Occupation): string {
@@ -252,7 +252,7 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.occupationInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.occupationInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getOccupations().pipe(first()).subscribe((occupations: Map<string, Occupation>) => {
-      this.subscriptions.add(this.occupationInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.occupationInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.occupationInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.occupationInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

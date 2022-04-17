@@ -99,14 +99,14 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   stateChanges = new Subject<void>();
 
   /**
-   * The status type category input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) statusTypeCategoryInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the status type category input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  statusTypeCategoryInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * Has the control received a touch event.
@@ -144,7 +144,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.statusTypeCategoryInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
     if (this._value !== value) {
       this.partyReferenceService.getStatusTypeCategories().pipe(first()).subscribe((statusTypeCategories: Map<string, StatusTypeCategory>) => {
         this._value = null;
-        this.statusTypeCategoryInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const statusTypeCategory of statusTypeCategories.values()) {
             if (statusTypeCategory.code === value) {
               this._value = value;
-              this.statusTypeCategoryInput.value = statusTypeCategory.name;
+              this.input.value = statusTypeCategory.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.statusTypeCategoryInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(statusTypeCategory: StatusTypeCategory): string {
@@ -252,7 +252,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.statusTypeCategoryInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   }
 
   ngOnInit(): void {
-    this.statusTypeCategoryInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getStatusTypeCategories().pipe(first()).subscribe((statusTypeCategories: Map<string, StatusTypeCategory>) => {
-      this.subscriptions.add(this.statusTypeCategoryInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.statusTypeCategoryInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.statusTypeCategoryInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.statusTypeCategoryInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

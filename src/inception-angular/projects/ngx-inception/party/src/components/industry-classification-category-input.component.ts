@@ -94,14 +94,14 @@ export class IndustryClassificationCategoryInputComponent implements MatFormFiel
   @HostBinding() id = `industry-classification-category-input-${IndustryClassificationCategoryInputComponent._nextId++}`;
 
   /**
-   * The industry classification category input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) industryClassificationCategoryInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the industry classification category input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  industryClassificationCategoryInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class IndustryClassificationCategoryInputComponent implements MatFormFiel
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.industryClassificationCategoryInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class IndustryClassificationCategoryInputComponent implements MatFormFiel
     if (this._value !== value) {
       this.partyReferenceService.getIndustryClassificationCategories().pipe(first()).subscribe((industryClassificationCategories: Map<string, IndustryClassificationCategory>) => {
         this._value = null;
-        this.industryClassificationCategoryInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const industryClassificationCategory of industryClassificationCategories.values()) {
             if (industryClassificationCategory.code === value) {
               this._value = value;
-              this.industryClassificationCategoryInput.value = industryClassificationCategory.name;
+              this.input.value = industryClassificationCategory.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class IndustryClassificationCategoryInputComponent implements MatFormFiel
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.industryClassificationCategoryInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(industryClassificationCategory: IndustryClassificationCategory): string {
@@ -252,7 +252,7 @@ export class IndustryClassificationCategoryInputComponent implements MatFormFiel
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.industryClassificationCategoryInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class IndustryClassificationCategoryInputComponent implements MatFormFiel
   }
 
   ngOnInit(): void {
-    this.industryClassificationCategoryInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getIndustryClassificationCategories().pipe(first()).subscribe((industryClassificationCategories: Map<string, IndustryClassificationCategory>) => {
-      this.subscriptions.add(this.industryClassificationCategoryInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class IndustryClassificationCategoryInputComponent implements MatFormFiel
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.industryClassificationCategoryInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class IndustryClassificationCategoryInputComponent implements MatFormFiel
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.industryClassificationCategoryInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class IndustryClassificationCategoryInputComponent implements MatFormFiel
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.industryClassificationCategoryInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

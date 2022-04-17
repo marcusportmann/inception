@@ -94,14 +94,14 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
   @HostBinding() id = `industry-classification-system-input-${IndustryClassificationSystemInputComponent._nextId++}`;
 
   /**
-   * The industry classification system input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) industryClassificationSystemInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the industry classification system input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  industryClassificationSystemInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.industryClassificationSystemInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
     if (this._value !== value) {
       this.partyReferenceService.getIndustryClassificationSystems().pipe(first()).subscribe((industryClassificationSystems: Map<string, IndustryClassificationSystem>) => {
         this._value = null;
-        this.industryClassificationSystemInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const industryClassificationSystem of industryClassificationSystems.values()) {
             if (industryClassificationSystem.code === value) {
               this._value = value;
-              this.industryClassificationSystemInput.value = industryClassificationSystem.name;
+              this.input.value = industryClassificationSystem.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.industryClassificationSystemInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(industryClassificationSystem: IndustryClassificationSystem): string {
@@ -252,7 +252,7 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.industryClassificationSystemInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
   }
 
   ngOnInit(): void {
-    this.industryClassificationSystemInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getIndustryClassificationSystems().pipe(first()).subscribe((industryClassificationSystems: Map<string, IndustryClassificationSystem>) => {
-      this.subscriptions.add(this.industryClassificationSystemInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.industryClassificationSystemInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.industryClassificationSystemInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.industryClassificationSystemInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

@@ -75,14 +75,14 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   private static _nextId: number = 0;
 
   /**
-   * The contact mechanism role input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) contactMechanismRoleInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the contact mechanism role input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  contactMechanismRoleInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The name for the control type.
@@ -145,7 +145,7 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.contactMechanismRoleInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -211,13 +211,13 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
     if (this._value !== value) {
       this.partyReferenceService.getContactMechanismRoles().pipe(first()).subscribe((contactMechanismRoles: Map<string, ContactMechanismRole>) => {
         this._value = null;
-        this.contactMechanismRoleInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const contactMechanismRole of contactMechanismRoles.values()) {
             if (contactMechanismRole.code === value) {
               this._value = value;
-              this.contactMechanismRoleInput.value = contactMechanismRole.name;
+              this.input.value = contactMechanismRole.name;
               break;
             }
           }
@@ -240,7 +240,7 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.contactMechanismRoleInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(contactMechanismRole: ContactMechanismRole): string {
@@ -253,7 +253,7 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.contactMechanismRoleInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -263,10 +263,10 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   }
 
   ngOnInit(): void {
-    this.contactMechanismRoleInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getContactMechanismRoles().pipe(first()).subscribe((contactMechanismRoles: Map<string, ContactMechanismRole>) => {
-      this.subscriptions.add(this.contactMechanismRoleInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -289,7 +289,7 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.contactMechanismRoleInput.focus();
+      this.input.focus();
     }
   }
 
@@ -302,7 +302,7 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.contactMechanismRoleInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -310,7 +310,7 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.contactMechanismRoleInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

@@ -94,14 +94,14 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
   @HostBinding() id = `source-of-wealth-type-input-${SourceOfWealthTypeInputComponent._nextId++}`;
 
   /**
-   * The source of wealth type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) sourceOfWealthTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the source of wealth type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  sourceOfWealthTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.sourceOfWealthTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
     if (this._value !== value) {
       this.partyReferenceService.getSourceOfWealthTypes().pipe(first()).subscribe((sourceOfWealthTypes: Map<string, SourceOfWealthType>) => {
         this._value = null;
-        this.sourceOfWealthTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const sourceOfWealthType of sourceOfWealthTypes.values()) {
             if (sourceOfWealthType.code === value) {
               this._value = value;
-              this.sourceOfWealthTypeInput.value = sourceOfWealthType.name;
+              this.input.value = sourceOfWealthType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.sourceOfWealthTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(sourceOfWealthType: SourceOfWealthType): string {
@@ -252,7 +252,7 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.sourceOfWealthTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
   }
 
   ngOnInit(): void {
-    this.sourceOfWealthTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getSourceOfWealthTypes().pipe(first()).subscribe((sourceOfWealthTypes: Map<string, SourceOfWealthType>) => {
-      this.subscriptions.add(this.sourceOfWealthTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.sourceOfWealthTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.sourceOfWealthTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.sourceOfWealthTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

@@ -94,14 +94,14 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `lock-type-input-${LockTypeInputComponent._nextId++}`;
 
   /**
-   * The lock type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) lockTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the lock type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  lockTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.lockTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getLockTypes().pipe(first()).subscribe((lockTypes: Map<string, LockType>) => {
         this._value = null;
-        this.lockTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const lockType of lockTypes.values()) {
             if (lockType.code === value) {
               this._value = value;
-              this.lockTypeInput.value = lockType.name;
+              this.input.value = lockType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.lockTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(lockType: LockType): string {
@@ -252,7 +252,7 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.lockTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.lockTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getLockTypes().pipe(first()).subscribe((lockTypes: Map<string, LockType>) => {
-      this.subscriptions.add(this.lockTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.lockTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.lockTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.lockTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

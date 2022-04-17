@@ -94,14 +94,14 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
   @HostBinding() id = `residential-type-input-${ResidentialTypeInputComponent._nextId++}`;
 
   /**
-   * The residential type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) residentialTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the residential type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  residentialTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.residentialTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
     if (this._value !== value) {
       this.partyReferenceService.getResidentialTypes().pipe(first()).subscribe((residentialTypes: Map<string, ResidentialType>) => {
         this._value = null;
-        this.residentialTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const residentialType of residentialTypes.values()) {
             if (residentialType.code === value) {
               this._value = value;
-              this.residentialTypeInput.value = residentialType.name;
+              this.input.value = residentialType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.residentialTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(residentialType: ResidentialType): string {
@@ -252,7 +252,7 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.residentialTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
   }
 
   ngOnInit(): void {
-    this.residentialTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getResidentialTypes().pipe(first()).subscribe((residentialTypes: Map<string, ResidentialType>) => {
-      this.subscriptions.add(this.residentialTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.residentialTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.residentialTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.residentialTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

@@ -79,14 +79,14 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
   controlType = 'external-reference-type-input';
 
   /**
-   * The external reference type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) externalReferenceTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the external reference type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  externalReferenceTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The filtered external reference types for the autocomplete.
@@ -144,7 +144,7 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.externalReferenceTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
     if (this._value !== value) {
       this.partyReferenceService.getExternalReferenceTypes().pipe(first()).subscribe((externalReferenceTypes: Map<string, ExternalReferenceType>) => {
         this._value = null;
-        this.externalReferenceTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const externalReferenceType of externalReferenceTypes.values()) {
             if (externalReferenceType.code === value) {
               this._value = value;
-              this.externalReferenceTypeInput.value = externalReferenceType.name;
+              this.input.value = externalReferenceType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.externalReferenceTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(externalReferenceType: ExternalReferenceType): string {
@@ -252,7 +252,7 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.externalReferenceTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
   }
 
   ngOnInit(): void {
-    this.externalReferenceTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getExternalReferenceTypes().pipe(first()).subscribe((externalReferenceTypes: Map<string, ExternalReferenceType>) => {
-      this.subscriptions.add(this.externalReferenceTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.externalReferenceTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.externalReferenceTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.externalReferenceTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

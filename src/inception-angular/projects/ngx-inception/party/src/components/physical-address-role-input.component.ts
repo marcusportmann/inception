@@ -94,14 +94,14 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   @HostBinding() id = `physical-address-role-input-${PhysicalAddressRoleInputComponent._nextId++}`;
 
   /**
-   * The physical address role input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) physicalAddressRoleInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the physical address role input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  physicalAddressRoleInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.physicalAddressRoleInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
     if (this._value !== value) {
       this.partyReferenceService.getPhysicalAddressRoles().pipe(first()).subscribe((physicalAddressRoles: Map<string, PhysicalAddressRole>) => {
         this._value = null;
-        this.physicalAddressRoleInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const physicalAddressRole of physicalAddressRoles.values()) {
             if (physicalAddressRole.code === value) {
               this._value = value;
-              this.physicalAddressRoleInput.value = physicalAddressRole.name;
+              this.input.value = physicalAddressRole.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.physicalAddressRoleInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(physicalAddressRole: PhysicalAddressRole): string {
@@ -252,7 +252,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.physicalAddressRoleInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   }
 
   ngOnInit(): void {
-    this.physicalAddressRoleInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getPhysicalAddressRoles().pipe(first()).subscribe((physicalAddressRoles: Map<string, PhysicalAddressRole>) => {
-      this.subscriptions.add(this.physicalAddressRoleInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.physicalAddressRoleInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.physicalAddressRoleInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.physicalAddressRoleInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

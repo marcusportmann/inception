@@ -94,14 +94,14 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `role-purpose-input-${RolePurposeInputComponent._nextId++}`;
 
   /**
-   * The role purpose input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) rolePurposeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the role purpose input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  rolePurposeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.rolePurposeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getRolePurposes().pipe(first()).subscribe((rolePurposes: Map<string, RolePurpose>) => {
         this._value = null;
-        this.rolePurposeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const rolePurpose of rolePurposes.values()) {
             if (rolePurpose.code === value) {
               this._value = value;
-              this.rolePurposeInput.value = rolePurpose.name;
+              this.input.value = rolePurpose.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.rolePurposeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(rolePurpose: RolePurpose): string {
@@ -252,7 +252,7 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.rolePurposeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.rolePurposeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getRolePurposes().pipe(first()).subscribe((rolePurposes: Map<string, RolePurpose>) => {
-      this.subscriptions.add(this.rolePurposeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.rolePurposeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.rolePurposeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.rolePurposeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

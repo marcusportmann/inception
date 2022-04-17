@@ -94,14 +94,14 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `role-type-input-${RoleTypeInputComponent._nextId++}`;
 
   /**
-   * The role type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) roleTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the role type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  roleTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.roleTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getRoleTypes().pipe(first()).subscribe((roleTypes: Map<string, RoleType>) => {
         this._value = null;
-        this.roleTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const roleType of roleTypes.values()) {
             if (roleType.code === value) {
               this._value = value;
-              this.roleTypeInput.value = roleType.name;
+              this.input.value = roleType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.roleTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(roleType: RoleType): string {
@@ -252,7 +252,7 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.roleTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.roleTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getRoleTypes().pipe(first()).subscribe((roleTypes: Map<string, RoleType>) => {
-      this.subscriptions.add(this.roleTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.roleTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.roleTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.roleTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

@@ -79,14 +79,14 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
   controlType = 'employment-status-input';
 
   /**
-   * The employment status input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) employmentStatusInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the employment status input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  employmentStatusInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The filtered employment statuses for the autocomplete.
@@ -144,7 +144,7 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.employmentStatusInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
     if (this._value !== value) {
       this.partyReferenceService.getEmploymentStatuses().pipe(first()).subscribe((employmentStatuses: Map<string, EmploymentStatus>) => {
         this._value = null;
-        this.employmentStatusInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const employmentStatus of employmentStatuses.values()) {
             if (employmentStatus.code === value) {
               this._value = value;
-              this.employmentStatusInput.value = employmentStatus.name;
+              this.input.value = employmentStatus.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.employmentStatusInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(employmentStatus: EmploymentStatus): string {
@@ -252,7 +252,7 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.employmentStatusInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
   }
 
   ngOnInit(): void {
-    this.employmentStatusInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getEmploymentStatuses().pipe(first()).subscribe((employmentStatuses: Map<string, EmploymentStatus>) => {
-      this.subscriptions.add(this.employmentStatusInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.employmentStatusInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.employmentStatusInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.employmentStatusInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

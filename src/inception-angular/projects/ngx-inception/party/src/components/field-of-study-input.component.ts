@@ -79,14 +79,14 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
   controlType = 'field-of-study-input';
 
   /**
-   * The field of study input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) fieldOfStudyInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the field of study input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  fieldOfStudyInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The filtered fields of study for the autocomplete.
@@ -144,7 +144,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.fieldOfStudyInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getFieldsOfStudy().pipe(first()).subscribe((fieldsOfStudy: Map<string, FieldOfStudy>) => {
         this._value = null;
-        this.fieldOfStudyInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const fieldOfStudy of fieldsOfStudy.values()) {
             if (fieldOfStudy.code === value) {
               this._value = value;
-              this.fieldOfStudyInput.value = fieldOfStudy.name;
+              this.input.value = fieldOfStudy.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.fieldOfStudyInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(fieldOfStudy: FieldOfStudy): string {
@@ -252,7 +252,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.fieldOfStudyInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.fieldOfStudyInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getFieldsOfStudy().pipe(first()).subscribe((fieldsOfStudy: Map<string, FieldOfStudy>) => {
-      this.subscriptions.add(this.fieldOfStudyInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.fieldOfStudyInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.fieldOfStudyInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.fieldOfStudyInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

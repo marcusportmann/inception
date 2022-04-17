@@ -94,14 +94,14 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `segment-input-${SegmentInputComponent._nextId++}`;
 
   /**
-   * The segment input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) segmentInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the segment input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  segmentInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.segmentInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getSegments().pipe(first()).subscribe((segments: Map<string, Segment>) => {
         this._value = null;
-        this.segmentInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const segment of segments.values()) {
             if (segment.code === value) {
               this._value = value;
-              this.segmentInput.value = segment.name;
+              this.input.value = segment.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.segmentInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(segment: Segment): string {
@@ -252,7 +252,7 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.segmentInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.segmentInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getSegments().pipe(first()).subscribe((segments: Map<string, Segment>) => {
-      this.subscriptions.add(this.segmentInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.segmentInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.segmentInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.segmentInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

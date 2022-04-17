@@ -94,14 +94,14 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `next-of-kin-type-input-${NextOfKinTypeInputComponent._nextId++}`;
 
   /**
-   * The next of kin type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) nextOfKinTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the next of kin type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  nextOfKinTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.nextOfKinTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getNextOfKinTypes().pipe(first()).subscribe((nextOfKinTypes: Map<string, NextOfKinType>) => {
         this._value = null;
-        this.nextOfKinTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const nextOfKinType of nextOfKinTypes.values()) {
             if (nextOfKinType.code === value) {
               this._value = value;
-              this.nextOfKinTypeInput.value = nextOfKinType.name;
+              this.input.value = nextOfKinType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.nextOfKinTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(nextOfKinType: NextOfKinType): string {
@@ -252,7 +252,7 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.nextOfKinTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.nextOfKinTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getNextOfKinTypes().pipe(first()).subscribe((nextOfKinTypes: Map<string, NextOfKinType>) => {
-      this.subscriptions.add(this.nextOfKinTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.nextOfKinTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.nextOfKinTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.nextOfKinTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

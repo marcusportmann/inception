@@ -99,14 +99,14 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
   stateChanges = new Subject<void>();
 
   /**
-   * The time to contact input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) timeToContactInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the time to contact input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  timeToContactInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * Has the control received a touch event.
@@ -144,7 +144,7 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.timeToContactInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getTimesToContact().pipe(first()).subscribe((timesToContact: Map<string, TimeToContact>) => {
         this._value = null;
-        this.timeToContactInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const timeToContact of timesToContact.values()) {
             if (timeToContact.code === value) {
               this._value = value;
-              this.timeToContactInput.value = timeToContact.name;
+              this.input.value = timeToContact.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.timeToContactInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(timeToContact: TimeToContact): string {
@@ -252,7 +252,7 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.timeToContactInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.timeToContactInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getTimesToContact().pipe(first()).subscribe((timesToContact: Map<string, TimeToContact>) => {
-      this.subscriptions.add(this.timeToContactInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.timeToContactInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.timeToContactInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.timeToContactInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

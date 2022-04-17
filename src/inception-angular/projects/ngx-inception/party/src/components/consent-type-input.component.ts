@@ -74,14 +74,14 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
   private static _nextId: number = 0;
 
   /**
-   * The consent type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) consentTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the consent type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  consentTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The name for the control type.
@@ -144,7 +144,7 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.consentTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getConsentTypes().pipe(first()).subscribe((consentTypes: Map<string, ConsentType>) => {
         this._value = null;
-        this.consentTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const consentType of consentTypes.values()) {
             if (consentType.code === value) {
               this._value = value;
-              this.consentTypeInput.value = consentType.name;
+              this.input.value = consentType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.consentTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(consentType: ConsentType): string {
@@ -252,7 +252,7 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.consentTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.consentTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getConsentTypes().pipe(first()).subscribe((consentTypes: Map<string, ConsentType>) => {
-      this.subscriptions.add(this.consentTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.consentTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.consentTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.consentTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

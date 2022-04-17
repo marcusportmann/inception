@@ -94,14 +94,14 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
   @HostBinding() id = `qualification-type-input-${QualificationTypeInputComponent._nextId++}`;
 
   /**
-   * The qualification type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) qualificationTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the qualification type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  qualificationTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.qualificationTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
     if (this._value !== value) {
       this.partyReferenceService.getQualificationTypes().pipe(first()).subscribe((qualificationTypes: Map<string, QualificationType>) => {
         this._value = null;
-        this.qualificationTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const qualificationType of qualificationTypes.values()) {
             if (qualificationType.code === value) {
               this._value = value;
-              this.qualificationTypeInput.value = qualificationType.name;
+              this.input.value = qualificationType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.qualificationTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(qualificationType: QualificationType): string {
@@ -252,7 +252,7 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.qualificationTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
   }
 
   ngOnInit(): void {
-    this.qualificationTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getQualificationTypes().pipe(first()).subscribe((qualificationTypes: Map<string, QualificationType>) => {
-      this.subscriptions.add(this.qualificationTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.qualificationTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.qualificationTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.qualificationTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

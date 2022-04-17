@@ -81,7 +81,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the association property type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
   inputValue$: Subject<string> = new ReplaySubject<string>();
 

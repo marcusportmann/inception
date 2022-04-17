@@ -99,14 +99,14 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
   stateChanges = new Subject<void>();
 
   /**
-   * The tax number type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) taxNumberTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the tax number type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  taxNumberTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * Has the control received a touch event.
@@ -144,7 +144,7 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.taxNumberTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getTaxNumberTypes().pipe(first()).subscribe((taxNumberTypes: Map<string, TaxNumberType>) => {
         this._value = null;
-        this.taxNumberTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const taxNumberType of taxNumberTypes.values()) {
             if (taxNumberType.code === value) {
               this._value = value;
-              this.taxNumberTypeInput.value = taxNumberType.name;
+              this.input.value = taxNumberType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.taxNumberTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(taxNumberType: TaxNumberType): string {
@@ -252,7 +252,7 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.taxNumberTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.taxNumberTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getTaxNumberTypes().pipe(first()).subscribe((taxNumberTypes: Map<string, TaxNumberType>) => {
-      this.subscriptions.add(this.taxNumberTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.taxNumberTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.taxNumberTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.taxNumberTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

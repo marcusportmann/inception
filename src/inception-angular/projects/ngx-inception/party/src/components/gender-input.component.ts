@@ -89,14 +89,14 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
   focused = false;
 
   /**
-   * The gender input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) genderInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the gender input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  genderInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The ID for the control.
@@ -144,7 +144,7 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.genderInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getGenders().pipe(first()).subscribe((genders: Map<string, Gender>) => {
         this._value = null;
-        this.genderInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const gender of genders.values()) {
             if (gender.code === value) {
               this._value = value;
-              this.genderInput.value = gender.name;
+              this.input.value = gender.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.genderInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(gender: Gender): string {
@@ -252,7 +252,7 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.genderInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.genderInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getGenders().pipe(first()).subscribe((genders: Map<string, Gender>) => {
-      this.subscriptions.add(this.genderInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.genderInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.genderInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.genderInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

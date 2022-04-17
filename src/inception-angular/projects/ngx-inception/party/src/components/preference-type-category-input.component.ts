@@ -94,14 +94,14 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
   @HostBinding() id = `preference-type-category-input-${PreferenceTypeCategoryInputComponent._nextId++}`;
 
   /**
-   * The preference type category input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) preferenceTypeCategoryInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the preference type category input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  preferenceTypeCategoryInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.preferenceTypeCategoryInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
     if (this._value !== value) {
       this.partyReferenceService.getPreferenceTypeCategories().pipe(first()).subscribe((preferenceTypeCategories: Map<string, PreferenceTypeCategory>) => {
         this._value = null;
-        this.preferenceTypeCategoryInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const preferenceTypeCategory of preferenceTypeCategories.values()) {
             if (preferenceTypeCategory.code === value) {
               this._value = value;
-              this.preferenceTypeCategoryInput.value = preferenceTypeCategory.name;
+              this.input.value = preferenceTypeCategory.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.preferenceTypeCategoryInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(preferenceTypeCategory: PreferenceTypeCategory): string {
@@ -252,7 +252,7 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.preferenceTypeCategoryInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
   }
 
   ngOnInit(): void {
-    this.preferenceTypeCategoryInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getPreferenceTypeCategories().pipe(first()).subscribe((preferenceTypeCategories: Map<string, PreferenceTypeCategory>) => {
-      this.subscriptions.add(this.preferenceTypeCategoryInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.preferenceTypeCategoryInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.preferenceTypeCategoryInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.preferenceTypeCategoryInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

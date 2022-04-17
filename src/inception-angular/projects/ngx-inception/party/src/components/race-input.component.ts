@@ -94,14 +94,14 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `race-input-${RaceInputComponent._nextId++}`;
 
   /**
-   * The race input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) raceInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the race input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  raceInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -144,7 +144,7 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.raceInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getRaces().pipe(first()).subscribe((races: Map<string, Race>) => {
         this._value = null;
-        this.raceInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const race of races.values()) {
             if (race.code === value) {
               this._value = value;
-              this.raceInput.value = race.name;
+              this.input.value = race.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.raceInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(race: Race): string {
@@ -252,7 +252,7 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.raceInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.raceInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getRaces().pipe(first()).subscribe((races: Map<string, Race>) => {
-      this.subscriptions.add(this.raceInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.raceInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.raceInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.raceInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

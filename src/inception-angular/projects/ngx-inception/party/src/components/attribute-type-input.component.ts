@@ -74,14 +74,14 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
   private static _nextId: number = 0;
 
   /**
-   * The attribute type input.
+   * The input.
    */
-  @ViewChild(MatInput, {static: true}) attributeTypeInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the attribute type input as it changes.
+   * The observable providing access to the value for the input as it changes.
    */
-  attributeTypeInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The name for the control type.
@@ -144,7 +144,7 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.attributeTypeInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -210,13 +210,13 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.partyReferenceService.getAttributeTypes().pipe(first()).subscribe((attributeTypeCategories: Map<string, AttributeType>) => {
         this._value = null;
-        this.attributeTypeInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const attributeType of attributeTypeCategories.values()) {
             if (attributeType.code === value) {
               this._value = value;
-              this.attributeTypeInput.value = attributeType.name;
+              this.input.value = attributeType.name;
               break;
             }
           }
@@ -239,7 +239,7 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.attributeTypeInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(attributeType: AttributeType): string {
@@ -252,7 +252,7 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.attributeTypeInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -262,10 +262,10 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.attributeTypeInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.partyReferenceService.getAttributeTypes().pipe(first()).subscribe((attributeTypeCategories: Map<string, AttributeType>) => {
-      this.subscriptions.add(this.attributeTypeInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -288,7 +288,7 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.attributeTypeInput.focus();
+      this.input.focus();
     }
   }
 
@@ -301,7 +301,7 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
 
   onFocusOut(event: FocusEvent) {
     // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.attributeTypeInput.value)) {
+    if ((!!this._value) && (!this.input.value)) {
       this._value = null;
       this.onChange(this._value);
       this.changeDetectorRef.detectChanges();
@@ -309,7 +309,7 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.attributeTypeInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 
