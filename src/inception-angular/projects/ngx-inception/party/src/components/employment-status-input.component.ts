@@ -89,7 +89,7 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
   inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
-   * The filtered employment statuses for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredEmploymentStatuses$: Subject<EmploymentStatus[]> = new ReplaySubject<EmploymentStatus[]>();
 

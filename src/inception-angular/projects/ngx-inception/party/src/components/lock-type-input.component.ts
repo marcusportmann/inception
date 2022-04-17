@@ -79,7 +79,7 @@ export class LockTypeInputComponent implements MatFormFieldControl<string>,
   controlType = 'lock-type-input';
 
   /**
-   * The filtered lock types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredLockTypes$: Subject<LockType[]> = new ReplaySubject<LockType[]>();
 

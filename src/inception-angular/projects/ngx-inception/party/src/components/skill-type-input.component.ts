@@ -79,7 +79,7 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
   controlType = 'skill-type-input';
 
   /**
-   * The filtered skill types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredSkillTypes$: Subject<SkillType[]> = new ReplaySubject<SkillType[]>();
 

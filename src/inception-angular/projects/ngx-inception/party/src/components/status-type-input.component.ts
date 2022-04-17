@@ -79,7 +79,7 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
   controlType = 'status-type-input';
 
   /**
-   * The filtered status types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredStatusTypes$: Subject<StatusType[]> = new ReplaySubject<StatusType[]>();
 

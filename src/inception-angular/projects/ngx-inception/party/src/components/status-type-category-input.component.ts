@@ -79,7 +79,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   controlType = 'status-type-category-input';
 
   /**
-   * The filtered status type categories for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredStatusTypeCategories$: Subject<StatusTypeCategory[]> = new ReplaySubject<StatusTypeCategory[]>();
 

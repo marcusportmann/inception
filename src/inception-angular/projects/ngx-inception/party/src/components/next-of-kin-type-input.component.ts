@@ -79,7 +79,7 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
   controlType = 'next-of-kin-type-input';
 
   /**
-   * The filtered next of kin types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredNextOfKinTypes$: Subject<NextOfKinType[]> = new ReplaySubject<NextOfKinType[]>();
 

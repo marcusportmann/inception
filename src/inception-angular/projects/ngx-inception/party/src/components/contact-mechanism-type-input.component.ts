@@ -90,7 +90,7 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
   controlType = 'contact-mechanism-type-input';
 
   /**
-   * The filtered contact mechanism types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredContactMechanismTypes$: Subject<ContactMechanismType[]> = new ReplaySubject<ContactMechanismType[]>();
 

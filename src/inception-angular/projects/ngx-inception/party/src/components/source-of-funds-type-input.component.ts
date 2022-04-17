@@ -79,7 +79,7 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
   controlType = 'source-of-funds-type-input';
 
   /**
-   * The filtered source of funds types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredSourceOfFundsTypes$: Subject<SourceOfFundsType[]> = new ReplaySubject<SourceOfFundsType[]>();
 

@@ -79,7 +79,7 @@ export class IndustryClassificationCategoryInputComponent implements MatFormFiel
   controlType = 'industry-classification-category-input';
 
   /**
-   * The filtered industry classification categories for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredIndustryClassificationCategories$: Subject<IndustryClassificationCategory[]> = new ReplaySubject<IndustryClassificationCategory[]>();
 

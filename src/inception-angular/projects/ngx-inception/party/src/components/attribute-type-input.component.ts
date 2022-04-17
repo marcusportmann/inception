@@ -89,7 +89,7 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
   controlType = 'attribute-type-input';
 
   /**
-   * The filtered attribute types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredAttributeTypes$: Subject<AttributeType[]> = new ReplaySubject<AttributeType[]>();
 

@@ -79,7 +79,7 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
   controlType = 'preference-type-category-input';
 
   /**
-   * The filtered preference type categories for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredPreferenceTypeCategories$: Subject<PreferenceTypeCategory[]> = new ReplaySubject<PreferenceTypeCategory[]>();
 

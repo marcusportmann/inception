@@ -79,7 +79,7 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
   controlType = 'marriage-type-input';
 
   /**
-   * The filtered marriage types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredMarriageTypes$: Subject<MarriageType[]> = new ReplaySubject<MarriageType[]>();
 

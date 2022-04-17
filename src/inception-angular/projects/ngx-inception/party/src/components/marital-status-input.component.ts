@@ -79,7 +79,7 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
   controlType = 'marital-status-input';
 
   /**
-   * The filtered marital statuses for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredMaritalStatuses$: Subject<MaritalStatus[]> = new ReplaySubject<MaritalStatus[]>();
 

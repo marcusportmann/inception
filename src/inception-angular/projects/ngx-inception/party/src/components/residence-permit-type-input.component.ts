@@ -79,7 +79,7 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
   controlType = 'residence-permit-type-input';
 
   /**
-   * The filtered residence permit types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredResidencePermitTypes$: Subject<ResidencePermitType[]> = new ReplaySubject<ResidencePermitType[]>();
 

@@ -77,7 +77,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   controlType = 'language-input';
 
   /**
-   * The filtered languages for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredLanguages$: Subject<Language[]> = new ReplaySubject<Language[]>();
 

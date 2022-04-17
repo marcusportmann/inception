@@ -79,7 +79,7 @@ export class ResidencyStatusInputComponent implements MatFormFieldControl<string
   controlType = 'residency-status-input';
 
   /**
-   * The filtered residency statuses for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredResidencyStatuses$: Subject<ResidencyStatus[]> = new ReplaySubject<ResidencyStatus[]>();
 

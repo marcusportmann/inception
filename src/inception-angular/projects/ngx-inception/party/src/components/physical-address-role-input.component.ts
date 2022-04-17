@@ -79,7 +79,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   controlType = 'physical-address-role-input';
 
   /**
-   * The filtered physical address roles for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredPhysicalAddressRoles$: Subject<PhysicalAddressRole[]> = new ReplaySubject<PhysicalAddressRole[]>();
 

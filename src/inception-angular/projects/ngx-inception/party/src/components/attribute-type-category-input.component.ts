@@ -90,7 +90,7 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
   controlType = 'attribute-type-category-input';
 
   /**
-   * The filtered attribute type categories for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredAttributeTypeCategories$: Subject<AttributeTypeCategory[]> = new ReplaySubject<AttributeTypeCategory[]>();
 

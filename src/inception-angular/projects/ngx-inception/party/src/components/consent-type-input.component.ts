@@ -89,7 +89,7 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
   controlType = 'consent-type-input';
 
   /**
-   * The filtered consent types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredConsentTypes$: Subject<ConsentType[]> = new ReplaySubject<ConsentType[]>();
 

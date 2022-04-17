@@ -90,7 +90,7 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
   controlType = 'contact-mechanism-purpose-input';
 
   /**
-   * The filtered contact mechanism purposes for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredContactMechanismPurposes$: Subject<ContactMechanismPurpose[]> = new ReplaySubject<ContactMechanismPurpose[]>();
 

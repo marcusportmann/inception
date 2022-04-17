@@ -79,7 +79,7 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
   controlType = 'segment-input';
 
   /**
-   * The filtered segments for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredSegments$: Subject<Segment[]> = new ReplaySubject<Segment[]>();
 

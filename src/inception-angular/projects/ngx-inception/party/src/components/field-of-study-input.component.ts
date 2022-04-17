@@ -89,7 +89,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
   inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
-   * The filtered fields of study for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredFieldsOfStudy$: Subject<FieldOfStudy[]> = new ReplaySubject<FieldOfStudy[]>();
 

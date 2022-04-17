@@ -79,7 +79,7 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
   controlType = 'time-to-contact-input';
 
   /**
-   * The filtered times to contact for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredTimesToContact$: Subject<TimeToContact[]> = new ReplaySubject<TimeToContact[]>();
 

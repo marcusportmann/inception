@@ -79,7 +79,7 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
   controlType = 'source-of-wealth-type-input';
 
   /**
-   * The filtered source of wealth types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredSourceOfWealthTypes$: Subject<SourceOfWealthType[]> = new ReplaySubject<SourceOfWealthType[]>();
 

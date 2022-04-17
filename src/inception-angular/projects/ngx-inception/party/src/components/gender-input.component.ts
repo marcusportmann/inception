@@ -79,7 +79,7 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
   controlType = 'gender-input';
 
   /**
-   * The filtered genders for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredGenders$: Subject<Gender[]> = new ReplaySubject<Gender[]>();
 

@@ -79,7 +79,7 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
   controlType = 'role-purpose-input';
 
   /**
-   * The filtered role purposes for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredRolePurposes$: Subject<RolePurpose[]> = new ReplaySubject<RolePurpose[]>();
 

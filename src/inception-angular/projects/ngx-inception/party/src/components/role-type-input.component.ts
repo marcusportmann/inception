@@ -79,7 +79,7 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
   controlType = 'role-type-input';
 
   /**
-   * The filtered role types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredRoleTypes$: Subject<RoleType[]> = new ReplaySubject<RoleType[]>();
 

@@ -79,7 +79,7 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
   controlType = 'residential-type-input';
 
   /**
-   * The filtered residential types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredResidentialTypes$: Subject<ResidentialType[]> = new ReplaySubject<ResidentialType[]>();
 

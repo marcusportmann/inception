@@ -79,7 +79,7 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
   controlType = 'occupation-input';
 
   /**
-   * The filtered occupations for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredOccupations$: Subject<Occupation[]> = new ReplaySubject<Occupation[]>();
 

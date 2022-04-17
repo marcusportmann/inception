@@ -79,7 +79,7 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
   controlType = 'segmentation-type-input';
 
   /**
-   * The filtered segmentation types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredSegmentationTypes$: Subject<SegmentationType[]> = new ReplaySubject<SegmentationType[]>();
 

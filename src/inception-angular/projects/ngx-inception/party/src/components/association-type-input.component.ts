@@ -54,7 +54,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let associationType of filteredAssociationTypes$ | async"
+          *ngFor="let associationType of filteredOptions$ | async"
           [value]="associationType">
           {{ associationType.name }}
         </mat-option>
@@ -89,9 +89,9 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
   controlType = 'association-type-input';
 
   /**
-   * The filtered association types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
-  filteredAssociationTypes$: Subject<AssociationType[]> = new ReplaySubject<AssociationType[]>();
+  filteredOptions$: Subject<AssociationType[]> = new ReplaySubject<AssociationType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +278,7 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
           }
         }
 
-        this.filteredAssociationTypes$.next(filteredAssociationTypes);
+        this.filteredOptions$.next(filteredAssociationTypes);
       }));
     });
   }

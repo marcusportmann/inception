@@ -79,7 +79,7 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
   controlType = 'tax-number-type-input';
 
   /**
-   * The filtered tax number types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredTaxNumberTypes$: Subject<TaxNumberType[]> = new ReplaySubject<TaxNumberType[]>();
 

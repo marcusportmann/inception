@@ -89,7 +89,7 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
   inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
-   * The filtered external reference types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredExternalReferenceTypes$: Subject<ExternalReferenceType[]> = new ReplaySubject<ExternalReferenceType[]>();
 

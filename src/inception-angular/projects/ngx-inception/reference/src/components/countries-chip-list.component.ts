@@ -111,7 +111,7 @@ export class CountriesChipListComponent implements MatFormFieldControl<string[]>
   @ViewChild('countriesChipList', {static: true}) countriesChipList!: MatChipList;
 
   /**
-   * The filtered countries for the autocomplete for the add country input.
+   * The filtered options for the autocomplete for the add country input.
    */
   filteredCountries$: Subject<Country[]> = new ReplaySubject<Country[]>();
 

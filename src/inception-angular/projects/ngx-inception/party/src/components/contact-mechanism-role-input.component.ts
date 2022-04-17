@@ -90,7 +90,7 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   controlType = 'contact-mechanism-role-input';
 
   /**
-   * The filtered contact mechanism roles for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredContactMechanismRoles$: Subject<ContactMechanismRole[]> = new ReplaySubject<ContactMechanismRole[]>();
 

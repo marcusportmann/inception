@@ -87,7 +87,7 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   countryInputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
-   * The filtered countries for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredCountries$: Subject<Country[]> = new ReplaySubject<Country[]>();
 

@@ -79,7 +79,7 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
   controlType = 'qualification-type-input';
 
   /**
-   * The filtered qualification types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredQualificationTypes$: Subject<QualificationType[]> = new ReplaySubject<QualificationType[]>();
 

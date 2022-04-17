@@ -79,7 +79,7 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
   controlType = 'race-input';
 
   /**
-   * The filtered races for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredRaces$: Subject<Race[]> = new ReplaySubject<Race[]>();
 

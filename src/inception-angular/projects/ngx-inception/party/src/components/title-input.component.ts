@@ -77,7 +77,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   controlType = 'title-input';
 
   /**
-   * The filtered titles for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredTitles$: Subject<Title[]> = new ReplaySubject<Title[]>();
 

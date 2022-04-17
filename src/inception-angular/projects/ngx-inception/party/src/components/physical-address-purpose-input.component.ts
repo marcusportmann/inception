@@ -79,7 +79,7 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
   controlType = 'physical-address-purpose-input';
 
   /**
-   * The filtered physical address purposes for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredPhysicalAddressPurposes$: Subject<PhysicalAddressPurpose[]> = new ReplaySubject<PhysicalAddressPurpose[]>();
 

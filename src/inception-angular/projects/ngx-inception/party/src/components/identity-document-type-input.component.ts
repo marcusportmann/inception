@@ -79,7 +79,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
   controlType = 'identity-document-type-input';
 
   /**
-   * The filtered identity document types for the autocomplete.
+   * The filtered options for the autocomplete.
    */
   filteredIdentityDocumentTypes$: Subject<IdentityDocumentType[]> = new ReplaySubject<IdentityDocumentType[]>();
 
