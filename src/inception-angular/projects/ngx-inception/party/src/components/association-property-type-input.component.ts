@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -76,16 +75,6 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   private static _nextId: number = 0;
 
   /**
-   * The input.
-   */
-  @ViewChild(MatInput, {static: true}) input!: MatInput;
-
-  /**
-   * The observable providing access to the value for the input as it changes.
-   */
-  inputValue$: Subject<string> = new ReplaySubject<string>();
-
-  /**
    * The name for the control type.
    */
   controlType = 'association-property-type-input';
@@ -104,6 +93,16 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
    * The ID for the control.
    */
   @HostBinding() id = `association-property-type-input-${AssociationPropertyTypeInputComponent._nextId++}`;
+
+  /**
+   * The input.
+   */
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
+
+  /**
+   * The observable providing access to the value for the input as it changes.
+   */
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -391,11 +390,11 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
         this.value = null;
       }
     }
-    // If we do not have a valid value then clear the input
-    else {
-      // console.log('Clearing input when no valid value exists and focus is lost, this.value = ', this.value);
-      // this.filteredAssociationPropertyTypes$.next(this._associationPropertyTypes);
-      // this.input.value = '';
+    // If we do not have a valid value, and there are no filtered options, then clear the input
+    else if (this.filteredOptions$.value.length == 0) {
+      console.log('Clearing input when no valid value exists, there are no filtered options, and focus is lost, this.value = ', this.value);
+      this.filteredOptions$.next(this._options);
+      this.input.value = '';
     }
 
     this.touched = true;

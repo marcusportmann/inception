@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let occupation of filteredOccupations$ | async"
+          *ngFor="let occupation of filteredOptions$ | async"
           [value]="occupation">
           {{ occupation.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredOccupations$: Subject<Occupation[]> = new ReplaySubject<Occupation[]>();
+  filteredOptions$: Subject<Occupation[]> = new ReplaySubject<Occupation[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredOccupations$.next(filteredOccupations);
+        this.filteredOptions$.next(filteredOccupations);
       }));
     });
   }

@@ -53,7 +53,7 @@ import {ReferenceService} from '../services/reference.service';
         #languageAutocomplete="matAutocomplete"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
-        <mat-option *ngFor="let language of filteredLanguages$ | async" [value]="language">
+        <mat-option *ngFor="let language of filteredOptions$ | async" [value]="language">
           {{ language.shortName }}
         </mat-option>
       </mat-autocomplete>
@@ -79,7 +79,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredLanguages$: Subject<Language[]> = new ReplaySubject<Language[]>();
+  filteredOptions$: Subject<Language[]> = new ReplaySubject<Language[]>();
 
   /**
    * Whether the control is focused.
@@ -276,7 +276,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredLanguages$.next(filteredLanguages);
+        this.filteredOptions$.next(filteredLanguages);
       }));
     });
   }

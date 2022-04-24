@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://test.process.inception.digital" exporter="Camunda Modeler" exporterVersion="4.9.0">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://test.process.inception.digital" exporter="Camunda Modeler" exporterVersion="5.0.0">
   <process id="Inception.Test" name="Test" isExecutable="true" camunda:versionTag="2.0.0">
     <startEvent id="StartEvent" name="Start" camunda:async="true" />
     <endEvent id="EndEvent" name="End" />
@@ -11,7 +11,9 @@
       </extensionElements>
       <script>println "Test Script Task"
 println "TestVariable = " + TestVariable
-println "TestVariable = " + execution.getVariable("TestVariable")</script>
+println "TestVariable = " + execution.getVariable("TestVariable")
+execution.setVariable("TestVariable", TestVariable + " Updated")
+println "Updated TestVariable = " + execution.getVariable("TestVariable")</script>
     </scriptTask>
     <userTask id="TestUserTask" name="Test User Task" camunda:formKey="TestForm" camunda:candidateGroups="Administrators">
       <extensionElements>

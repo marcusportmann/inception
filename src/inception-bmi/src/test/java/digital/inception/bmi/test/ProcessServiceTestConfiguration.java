@@ -78,16 +78,17 @@ public class ProcessServiceTestConfiguration {
           ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
       processEngineConfiguration.setDatabaseTablePrefix("CAMUNDA.");
       processEngineConfiguration.setDataSource(dataSource);
-      processEngineConfiguration.setTransactionManager(transactionManager);
       processEngineConfiguration.setJobExecutorActivate(false);
+      processEngineConfiguration.setTransactionManager(transactionManager);
+      processEngineConfiguration.setProcessEngineName(processEngineName);
 
-      // Disable specific capabilities
+      // Enable and disable specific capabilities
       processEngineConfiguration.setAuthorizationEnabled(false);
-      processEngineConfiguration.setCmmnEnabled(false);
-      processEngineConfiguration.setDbHistoryUsed(false);
+      processEngineConfiguration.setCmmnEnabled(true);
+      processEngineConfiguration.setDbHistoryUsed(true);
       processEngineConfiguration.setDbIdentityUsed(false);
-      processEngineConfiguration.setDmnEnabled(false);
-      processEngineConfiguration.setHistory(ProcessEngineConfiguration.HISTORY_NONE);
+      processEngineConfiguration.setDmnEnabled(true);
+      processEngineConfiguration.setHistory(ProcessEngineConfiguration.HISTORY_FULL);
 
       return processEngineConfiguration.buildProcessEngine();
     } catch (Throwable e) {

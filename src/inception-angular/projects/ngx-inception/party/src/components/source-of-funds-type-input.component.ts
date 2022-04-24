@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {SourceOfFundsType} from '../services/source-of-funds-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let sourceOfFundsType of filteredSourceOfFundsTypes$ | async"
+          *ngFor="let sourceOfFundsType of filteredOptions$ | async"
           [value]="sourceOfFundsType">
           {{ sourceOfFundsType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
   /**
    * The filtered options for the autocomplete.
    */
-  filteredSourceOfFundsTypes$: Subject<SourceOfFundsType[]> = new ReplaySubject<SourceOfFundsType[]>();
+  filteredOptions$: Subject<SourceOfFundsType[]> = new ReplaySubject<SourceOfFundsType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
           }
         }
 
-        this.filteredSourceOfFundsTypes$.next(filteredSourceOfFundsTypes);
+        this.filteredOptions$.next(filteredSourceOfFundsTypes);
       }));
     });
   }

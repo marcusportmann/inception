@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {ResidencyStatus} from '../services/residency-status';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let residencyStatus of filteredResidencyStatuses$ | async"
+          *ngFor="let residencyStatus of filteredOptions$ | async"
           [value]="residencyStatus">
           {{ residencyStatus.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class ResidencyStatusInputComponent implements MatFormFieldControl<string
   /**
    * The filtered options for the autocomplete.
    */
-  filteredResidencyStatuses$: Subject<ResidencyStatus[]> = new ReplaySubject<ResidencyStatus[]>();
+  filteredOptions$: Subject<ResidencyStatus[]> = new ReplaySubject<ResidencyStatus[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class ResidencyStatusInputComponent implements MatFormFieldControl<string
           }
         }
 
-        this.filteredResidencyStatuses$.next(filteredResidencyStatuses);
+        this.filteredOptions$.next(filteredResidencyStatuses);
       }));
     });
   }

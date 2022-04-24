@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {SegmentationType} from '../services/segmentation-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let segmentationType of filteredSegmentationTypes$ | async"
+          *ngFor="let segmentationType of filteredOptions$ | async"
           [value]="segmentationType">
           {{ segmentationType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
   /**
    * The filtered options for the autocomplete.
    */
-  filteredSegmentationTypes$: Subject<SegmentationType[]> = new ReplaySubject<SegmentationType[]>();
+  filteredOptions$: Subject<SegmentationType[]> = new ReplaySubject<SegmentationType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
           }
         }
 
-        this.filteredSegmentationTypes$.next(filteredSegmentationTypes);
+        this.filteredOptions$.next(filteredSegmentationTypes);
       }));
     });
   }

@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PreferenceType} from '../services/preference-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let preferenceType of filteredPreferenceTypes$ | async"
+          *ngFor="let preferenceType of filteredOptions$ | async"
           [value]="preferenceType">
           {{ preferenceType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
   /**
    * The filtered options for the autocomplete.
    */
-  filteredPreferenceTypes$: Subject<PreferenceType[]> = new ReplaySubject<PreferenceType[]>();
+  filteredOptions$: Subject<PreferenceType[]> = new ReplaySubject<PreferenceType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
           }
         }
 
-        this.filteredPreferenceTypes$.next(filteredPreferenceTypes);
+        this.filteredOptions$.next(filteredPreferenceTypes);
       }));
     });
   }

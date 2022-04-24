@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {SkillType} from '../services/skill-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let skillType of filteredSkillTypes$ | async"
+          *ngFor="let skillType of filteredOptions$ | async"
           [value]="skillType">
           {{ skillType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredSkillTypes$: Subject<SkillType[]> = new ReplaySubject<SkillType[]>();
+  filteredOptions$: Subject<SkillType[]> = new ReplaySubject<SkillType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredSkillTypes$.next(filteredSkillTypes);
+        this.filteredOptions$.next(filteredSkillTypes);
       }));
     });
   }

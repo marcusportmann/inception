@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {RolePurpose} from '../services/role-purpose';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let rolePurpose of filteredRolePurposes$ | async"
+          *ngFor="let rolePurpose of filteredOptions$ | async"
           [value]="rolePurpose">
           {{ rolePurpose.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredRolePurposes$: Subject<RolePurpose[]> = new ReplaySubject<RolePurpose[]>();
+  filteredOptions$: Subject<RolePurpose[]> = new ReplaySubject<RolePurpose[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class RolePurposeInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredRolePurposes$.next(filteredRolePurposes);
+        this.filteredOptions$.next(filteredRolePurposes);
       }));
     });
   }

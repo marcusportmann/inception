@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let lockTypeCategory of filteredLockTypeCategories$ | async"
+          *ngFor="let lockTypeCategory of filteredOptions$ | async"
           [value]="lockTypeCategory">
           {{ lockTypeCategory.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
   /**
    * The filtered options for the autocomplete.
    */
-  filteredLockTypeCategories$: Subject<LockTypeCategory[]> = new ReplaySubject<LockTypeCategory[]>();
+  filteredOptions$: Subject<LockTypeCategory[]> = new ReplaySubject<LockTypeCategory[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
           }
         }
 
-        this.filteredLockTypeCategories$.next(filteredLockTypeCategories);
+        this.filteredOptions$.next(filteredLockTypeCategories);
       }));
     });
   }

@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {QualificationType} from '../services/qualification-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let qualificationType of filteredQualificationTypes$ | async"
+          *ngFor="let qualificationType of filteredOptions$ | async"
           [value]="qualificationType">
           {{ qualificationType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
   /**
    * The filtered options for the autocomplete.
    */
-  filteredQualificationTypes$: Subject<QualificationType[]> = new ReplaySubject<QualificationType[]>();
+  filteredOptions$: Subject<QualificationType[]> = new ReplaySubject<QualificationType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
           }
         }
 
-        this.filteredQualificationTypes$.next(filteredQualificationTypes);
+        this.filteredOptions$.next(filteredQualificationTypes);
       }));
     });
   }

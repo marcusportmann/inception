@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {ResidentialType} from '../services/residential-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let residentialType of filteredResidentialTypes$ | async"
+          *ngFor="let residentialType of filteredOptions$ | async"
           [value]="residentialType">
           {{ residentialType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
   /**
    * The filtered options for the autocomplete.
    */
-  filteredResidentialTypes$: Subject<ResidentialType[]> = new ReplaySubject<ResidentialType[]>();
+  filteredOptions$: Subject<ResidentialType[]> = new ReplaySubject<ResidentialType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
           }
         }
 
-        this.filteredResidentialTypes$.next(filteredResidentialTypes);
+        this.filteredOptions$.next(filteredResidentialTypes);
       }));
     });
   }

@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -53,7 +52,7 @@ import {Title} from '../services/title';
         #titleAutocomplete="matAutocomplete"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
-        <mat-option *ngFor="let title of filteredTitles$ | async" [value]="title">
+        <mat-option *ngFor="let title of filteredOptions$ | async" [value]="title">
           {{ title.name }}
         </mat-option>
       </mat-autocomplete>
@@ -79,7 +78,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredTitles$: Subject<Title[]> = new ReplaySubject<Title[]>();
+  filteredOptions$: Subject<Title[]> = new ReplaySubject<Title[]>();
 
   /**
    * Whether the control is focused.
@@ -92,11 +91,6 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `title-input-${TitleInputComponent._nextId++}`;
 
   /**
-   * The observable indicating that the state of the control has changed.
-   */
-  stateChanges = new Subject<void>();
-
-  /**
    * The input.
    */
   @ViewChild(MatInput, {static: true}) input!: MatInput;
@@ -105,6 +99,11 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
    * The observable providing access to the value for the input as it changes.
    */
   inputValue$: Subject<string> = new ReplaySubject<string>();
+
+  /**
+   * The observable indicating that the state of the control has changed.
+   */
+  stateChanges = new Subject<void>();
 
   /**
    * Has the control received a touch event.
@@ -276,7 +275,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredTitles$.next(filteredTitles);
+        this.filteredOptions$.next(filteredTitles);
       }));
     });
   }

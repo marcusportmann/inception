@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PhysicalAddressRole} from '../services/physical-address-role';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let physicalAddressRole of filteredPhysicalAddressRoles$ | async"
+          *ngFor="let physicalAddressRole of filteredOptions$ | async"
           [value]="physicalAddressRole">
           {{ physicalAddressRole.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   /**
    * The filtered options for the autocomplete.
    */
-  filteredPhysicalAddressRoles$: Subject<PhysicalAddressRole[]> = new ReplaySubject<PhysicalAddressRole[]>();
+  filteredOptions$: Subject<PhysicalAddressRole[]> = new ReplaySubject<PhysicalAddressRole[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
           }
         }
 
-        this.filteredPhysicalAddressRoles$.next(filteredPhysicalAddressRoles);
+        this.filteredOptions$.next(filteredPhysicalAddressRoles);
       }));
     });
   }

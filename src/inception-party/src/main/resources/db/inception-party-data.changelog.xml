@@ -3735,14 +3735,6 @@
       <column name="description" value="Shareholding"/>
       <column name="value_type" value="decimal"/>
     </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="company_shareholder"/>
-      <column name="code" value="blah"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="name" value="Blah"/>
-      <column name="description" value="Blah"/>
-      <column name="value_type" value="decimal"/>
-    </insert>
 
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="general_power_of_attorney"/>
@@ -7650,15 +7642,6 @@
       <column name="description" value="Shareholding"/>
       <column name="value_type" value="decimal"/>
     </insert>
-    <insert schemaName="party" tableName="association_property_types">
-      <column name="association_type" value="company_shareholder"/>
-      <column name="code" value="blah"/>
-      <column name="locale_id" value="en-ZA"/>
-      <column name="name" value="Blah"/>
-      <column name="description" value="Blah"/>
-      <column name="value_type" value="decimal"/>
-    </insert>
-
 
     <insert schemaName="party" tableName="mandate_types">
       <column name="code" value="general_power_of_attorney"/>

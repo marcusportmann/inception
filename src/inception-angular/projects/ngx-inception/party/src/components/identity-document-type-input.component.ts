@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let identityDocumentType of filteredIdentityDocumentTypes$ | async"
+          *ngFor="let identityDocumentType of filteredOptions$ | async"
           [value]="identityDocumentType">
           {{ identityDocumentType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
   /**
    * The filtered options for the autocomplete.
    */
-  filteredIdentityDocumentTypes$: Subject<IdentityDocumentType[]> = new ReplaySubject<IdentityDocumentType[]>();
+  filteredOptions$: Subject<IdentityDocumentType[]> = new ReplaySubject<IdentityDocumentType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
           }
         }
 
-        this.filteredIdentityDocumentTypes$.next(filteredIdentityDocumentTypes);
+        this.filteredOptions$.next(filteredIdentityDocumentTypes);
       }));
     });
   }

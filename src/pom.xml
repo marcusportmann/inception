@@ -100,7 +100,7 @@
 
     <agroal-pool.version>1.16</agroal-pool.version>
     <avro.version>1.11.0</avro.version>
-    <camunda.version>7.15.0</camunda.version>
+    <camunda.version>7.17.0</camunda.version>
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
     <commons-io.version>2.11.0</commons-io.version>
     <cxf.version>3.4.7</cxf.version>

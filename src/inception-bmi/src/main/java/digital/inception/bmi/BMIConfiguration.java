@@ -62,6 +62,7 @@ public class BMIConfiguration {
    * @param dataSource the data source used to provide connections to the application database
    * @param transactionManager the Spring platform transaction manager
    */
+  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   public BMIConfiguration(
       ApplicationContext applicationContext,
       @Qualifier("applicationDataSource") DataSource dataSource,
@@ -78,6 +79,7 @@ public class BMIConfiguration {
    * @param platformTransactionManager the platform transaction manager
    * @return the bmi entity manager factory bean associated with the application data source
    */
+  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Bean
   public LocalContainerEntityManagerFactoryBean bmiEntityManagerFactory(
       @Qualifier("applicationDataSource") DataSource dataSource,
@@ -104,14 +106,15 @@ public class BMIConfiguration {
       processEngineConfiguration.setDataSource(dataSource);
       processEngineConfiguration.setJobExecutorActivate(true);
       processEngineConfiguration.setTransactionManager(transactionManager);
+      processEngineConfiguration.setProcessEngineName(processEngineName);
 
-      // Disable specific capabilities
+      // Enable and disable specific capabilities
       processEngineConfiguration.setAuthorizationEnabled(false);
-      processEngineConfiguration.setCmmnEnabled(false);
-      processEngineConfiguration.setDbHistoryUsed(false);
+      processEngineConfiguration.setCmmnEnabled(true);
+      processEngineConfiguration.setDbHistoryUsed(true);
       processEngineConfiguration.setDbIdentityUsed(false);
-      processEngineConfiguration.setDmnEnabled(false);
-      processEngineConfiguration.setHistory(ProcessEngineConfiguration.HISTORY_NONE);
+      processEngineConfiguration.setDmnEnabled(true);
+      processEngineConfiguration.setHistory(ProcessEngineConfiguration.HISTORY_DEFAULT);
 
       return processEngineConfiguration.buildProcessEngine();
     } catch (Throwable e) {

@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let marriageType of filteredMarriageTypes$ | async"
+          *ngFor="let marriageType of filteredOptions$ | async"
           [value]="marriageType">
           {{ marriageType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredMarriageTypes$: Subject<MarriageType[]> = new ReplaySubject<MarriageType[]>();
+  filteredOptions$: Subject<MarriageType[]> = new ReplaySubject<MarriageType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredMarriageTypes$.next(filteredMarriageTypes);
+        this.filteredOptions$.next(filteredMarriageTypes);
       }));
     });
   }

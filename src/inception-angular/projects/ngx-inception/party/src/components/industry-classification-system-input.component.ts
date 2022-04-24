@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let industryClassificationSystem of filteredIndustryClassificationSystems$ | async"
+          *ngFor="let industryClassificationSystem of filteredOptions$ | async"
           [value]="industryClassificationSystem">
           {{ industryClassificationSystem.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
   /**
    * The filtered options for the autocomplete.
    */
-  filteredIndustryClassificationSystems$: Subject<IndustryClassificationSystem[]> = new ReplaySubject<IndustryClassificationSystem[]>();
+  filteredOptions$: Subject<IndustryClassificationSystem[]> = new ReplaySubject<IndustryClassificationSystem[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
           }
         }
 
-        this.filteredIndustryClassificationSystems$.next(filteredIndustryClassificationSystems);
+        this.filteredOptions$.next(filteredIndustryClassificationSystems);
       }));
     });
   }

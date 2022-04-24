@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {Segment} from '../services/segment';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let segment of filteredSegments$ | async"
+          *ngFor="let segment of filteredOptions$ | async"
           [value]="segment">
           {{ segment.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredSegments$: Subject<Segment[]> = new ReplaySubject<Segment[]>();
+  filteredOptions$: Subject<Segment[]> = new ReplaySubject<Segment[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class SegmentInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredSegments$.next(filteredSegments);
+        this.filteredOptions$.next(filteredSegments);
       }));
     });
   }

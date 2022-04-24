@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let nextOfKinType of filteredNextOfKinTypes$ | async"
+          *ngFor="let nextOfKinType of filteredOptions$ | async"
           [value]="nextOfKinType">
           {{ nextOfKinType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredNextOfKinTypes$: Subject<NextOfKinType[]> = new ReplaySubject<NextOfKinType[]>();
+  filteredOptions$: Subject<NextOfKinType[]> = new ReplaySubject<NextOfKinType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredNextOfKinTypes$.next(filteredNextOfKinTypes);
+        this.filteredOptions$.next(filteredNextOfKinTypes);
       }));
     });
   }

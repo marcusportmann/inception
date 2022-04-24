@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {TaxNumberType} from '../services/tax-number-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let taxNumberType of filteredTaxNumberTypes$ | async"
+          *ngFor="let taxNumberType of filteredOptions$ | async"
           [value]="taxNumberType">
           {{ taxNumberType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredTaxNumberTypes$: Subject<TaxNumberType[]> = new ReplaySubject<TaxNumberType[]>();
+  filteredOptions$: Subject<TaxNumberType[]> = new ReplaySubject<TaxNumberType[]>();
 
   /**
    * Whether the control is focused.
@@ -94,11 +93,6 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `tax-number-type-input-${TaxNumberTypeInputComponent._nextId++}`;
 
   /**
-   * The observable indicating that the state of the control has changed.
-   */
-  stateChanges = new Subject<void>();
-
-  /**
    * The input.
    */
   @ViewChild(MatInput, {static: true}) input!: MatInput;
@@ -107,6 +101,11 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
    * The observable providing access to the value for the input as it changes.
    */
   inputValue$: Subject<string> = new ReplaySubject<string>();
+
+  /**
+   * The observable indicating that the state of the control has changed.
+   */
+  stateChanges = new Subject<void>();
 
   /**
    * Has the control received a touch event.
@@ -278,7 +277,7 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredTaxNumberTypes$.next(filteredTaxNumberTypes);
+        this.filteredOptions$.next(filteredTaxNumberTypes);
       }));
     });
   }

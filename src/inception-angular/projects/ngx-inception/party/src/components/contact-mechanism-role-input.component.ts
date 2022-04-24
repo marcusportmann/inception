@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -55,7 +54,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let contactMechanismRole of filteredContactMechanismRoles$ | async"
+          *ngFor="let contactMechanismRole of filteredOptions$ | async"
           [value]="contactMechanismRole">
           {{ contactMechanismRole.name }}
         </mat-option>
@@ -75,16 +74,6 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   private static _nextId: number = 0;
 
   /**
-   * The input.
-   */
-  @ViewChild(MatInput, {static: true}) input!: MatInput;
-
-  /**
-   * The observable providing access to the value for the input as it changes.
-   */
-  inputValue$: Subject<string> = new ReplaySubject<string>();
-
-  /**
    * The name for the control type.
    */
   controlType = 'contact-mechanism-role-input';
@@ -92,7 +81,7 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   /**
    * The filtered options for the autocomplete.
    */
-  filteredContactMechanismRoles$: Subject<ContactMechanismRole[]> = new ReplaySubject<ContactMechanismRole[]>();
+  filteredOptions$: Subject<ContactMechanismRole[]> = new ReplaySubject<ContactMechanismRole[]>();
 
   /**
    * Whether the control is focused.
@@ -103,6 +92,16 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
    * The ID for the control.
    */
   @HostBinding() id = `contact-mechanism-role-input-${ContactMechanismRoleInputComponent._nextId++}`;
+
+  /**
+   * The input.
+   */
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
+
+  /**
+   * The observable providing access to the value for the input as it changes.
+   */
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -279,7 +278,7 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
           }
         }
 
-        this.filteredContactMechanismRoles$.next(filteredContactMechanismRoles);
+        this.filteredOptions$.next(filteredContactMechanismRoles);
       }));
     });
   }

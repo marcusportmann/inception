@@ -53,7 +53,7 @@ import {ReferenceService} from '../services/reference.service';
         #countryAutocomplete="matAutocomplete"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
-        <mat-option *ngFor="let country of filteredCountries$ | async" [value]="country">
+        <mat-option *ngFor="let country of filteredOptions$ | async" [value]="country">
           {{ country.shortName }}
         </mat-option>
       </mat-autocomplete>
@@ -89,7 +89,7 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredCountries$: Subject<Country[]> = new ReplaySubject<Country[]>();
+  filteredOptions$: Subject<Country[]> = new ReplaySubject<Country[]>();
 
   /**
    * Whether the control is focused.
@@ -276,7 +276,7 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredCountries$.next(filteredCountries);
+        this.filteredOptions$.next(filteredCountries);
       }));
     });
   }

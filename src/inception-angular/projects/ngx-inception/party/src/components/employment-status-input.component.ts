@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let employmentStatus of filteredEmploymentStatuses$ | async"
+          *ngFor="let employmentStatus of filteredOptions$ | async"
           [value]="employmentStatus">
           {{ employmentStatus.name }}
         </mat-option>
@@ -79,19 +78,9 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
   controlType = 'employment-status-input';
 
   /**
-   * The input.
-   */
-  @ViewChild(MatInput, {static: true}) input!: MatInput;
-
-  /**
-   * The observable providing access to the value for the input as it changes.
-   */
-  inputValue$: Subject<string> = new ReplaySubject<string>();
-
-  /**
    * The filtered options for the autocomplete.
    */
-  filteredEmploymentStatuses$: Subject<EmploymentStatus[]> = new ReplaySubject<EmploymentStatus[]>();
+  filteredOptions$: Subject<EmploymentStatus[]> = new ReplaySubject<EmploymentStatus[]>();
 
   /**
    * Whether the control is focused.
@@ -102,6 +91,16 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
    * The ID for the control.
    */
   @HostBinding() id = `employment-status-input-${EmploymentStatusInputComponent._nextId++}`;
+
+  /**
+   * The input.
+   */
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
+
+  /**
+   * The observable providing access to the value for the input as it changes.
+   */
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -278,7 +277,7 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
           }
         }
 
-        this.filteredEmploymentStatuses$.next(filteredEmploymentStatuses);
+        this.filteredOptions$.next(filteredEmploymentStatuses);
       }));
     });
   }

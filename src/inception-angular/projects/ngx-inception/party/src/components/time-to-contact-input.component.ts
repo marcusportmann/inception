@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {TimeToContact} from '../services/time-to-contact';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let timeToContact of filteredTimesToContact$ | async"
+          *ngFor="let timeToContact of filteredOptions$ | async"
           [value]="timeToContact">
           {{ timeToContact.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredTimesToContact$: Subject<TimeToContact[]> = new ReplaySubject<TimeToContact[]>();
+  filteredOptions$: Subject<TimeToContact[]> = new ReplaySubject<TimeToContact[]>();
 
   /**
    * Whether the control is focused.
@@ -94,11 +93,6 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `time-to-contact-input-${TimeToContactInputComponent._nextId++}`;
 
   /**
-   * The observable indicating that the state of the control has changed.
-   */
-  stateChanges = new Subject<void>();
-
-  /**
    * The input.
    */
   @ViewChild(MatInput, {static: true}) input!: MatInput;
@@ -107,6 +101,11 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
    * The observable providing access to the value for the input as it changes.
    */
   inputValue$: Subject<string> = new ReplaySubject<string>();
+
+  /**
+   * The observable indicating that the state of the control has changed.
+   */
+  stateChanges = new Subject<void>();
 
   /**
    * Has the control received a touch event.
@@ -278,7 +277,7 @@ export class TimeToContactInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredTimesToContact$.next(filteredTimesToContact);
+        this.filteredOptions$.next(filteredTimesToContact);
       }));
     });
   }

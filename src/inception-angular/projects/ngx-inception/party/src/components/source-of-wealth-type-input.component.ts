@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {SourceOfWealthType} from '../services/source-of-wealth-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let sourceOfWealthType of filteredSourceOfWealthTypes$ | async"
+          *ngFor="let sourceOfWealthType of filteredOptions$ | async"
           [value]="sourceOfWealthType">
           {{ sourceOfWealthType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
   /**
    * The filtered options for the autocomplete.
    */
-  filteredSourceOfWealthTypes$: Subject<SourceOfWealthType[]> = new ReplaySubject<SourceOfWealthType[]>();
+  filteredOptions$: Subject<SourceOfWealthType[]> = new ReplaySubject<SourceOfWealthType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
           }
         }
 
-        this.filteredSourceOfWealthTypes$.next(filteredSourceOfWealthTypes);
+        this.filteredOptions$.next(filteredSourceOfWealthTypes);
       }));
     });
   }

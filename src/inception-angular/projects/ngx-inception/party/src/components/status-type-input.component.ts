@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {StatusType} from '../services/status-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let statusType of filteredStatusTypes$ | async"
+          *ngFor="let statusType of filteredOptions$ | async"
           [value]="statusType">
           {{ statusType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredStatusTypes$: Subject<StatusType[]> = new ReplaySubject<StatusType[]>();
+  filteredOptions$: Subject<StatusType[]> = new ReplaySubject<StatusType[]>();
 
   /**
    * Whether the control is focused.
@@ -94,11 +93,6 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `status-type-input-${StatusTypeInputComponent._nextId++}`;
 
   /**
-   * The observable indicating that the state of the control has changed.
-   */
-  stateChanges = new Subject<void>();
-
-  /**
    * The input.
    */
   @ViewChild(MatInput, {static: true}) input!: MatInput;
@@ -107,6 +101,11 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
    * The observable providing access to the value for the input as it changes.
    */
   inputValue$: Subject<string> = new ReplaySubject<string>();
+
+  /**
+   * The observable indicating that the state of the control has changed.
+   */
+  stateChanges = new Subject<void>();
 
   /**
    * Has the control received a touch event.
@@ -278,7 +277,7 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredStatusTypes$.next(filteredStatusTypes);
+        this.filteredOptions$.next(filteredStatusTypes);
       }));
     });
   }

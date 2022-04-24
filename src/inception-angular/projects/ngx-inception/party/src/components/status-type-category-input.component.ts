@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {StatusTypeCategory} from '../services/status-type-category';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let statusTypeCategory of filteredStatusTypeCategories$ | async"
+          *ngFor="let statusTypeCategory of filteredOptions$ | async"
           [value]="statusTypeCategory">
           {{ statusTypeCategory.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   /**
    * The filtered options for the autocomplete.
    */
-  filteredStatusTypeCategories$: Subject<StatusTypeCategory[]> = new ReplaySubject<StatusTypeCategory[]>();
+  filteredOptions$: Subject<StatusTypeCategory[]> = new ReplaySubject<StatusTypeCategory[]>();
 
   /**
    * Whether the control is focused.
@@ -94,11 +93,6 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   @HostBinding() id = `status-type-category-input-${StatusTypeCategoryInputComponent._nextId++}`;
 
   /**
-   * The observable indicating that the state of the control has changed.
-   */
-  stateChanges = new Subject<void>();
-
-  /**
    * The input.
    */
   @ViewChild(MatInput, {static: true}) input!: MatInput;
@@ -107,6 +101,11 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
    * The observable providing access to the value for the input as it changes.
    */
   inputValue$: Subject<string> = new ReplaySubject<string>();
+
+  /**
+   * The observable indicating that the state of the control has changed.
+   */
+  stateChanges = new Subject<void>();
 
   /**
    * Has the control received a touch event.
@@ -278,7 +277,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
           }
         }
 
-        this.filteredStatusTypeCategories$.next(filteredStatusTypeCategories);
+        this.filteredOptions$.next(filteredStatusTypeCategories);
       }));
     });
   }

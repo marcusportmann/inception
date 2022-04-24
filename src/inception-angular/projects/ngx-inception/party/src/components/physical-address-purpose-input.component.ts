@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PhysicalAddressPurpose} from '../services/physical-address-purpose';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let physicalAddressPurpose of filteredPhysicalAddressPurposes$ | async"
+          *ngFor="let physicalAddressPurpose of filteredOptions$ | async"
           [value]="physicalAddressPurpose">
           {{ physicalAddressPurpose.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
   /**
    * The filtered options for the autocomplete.
    */
-  filteredPhysicalAddressPurposes$: Subject<PhysicalAddressPurpose[]> = new ReplaySubject<PhysicalAddressPurpose[]>();
+  filteredOptions$: Subject<PhysicalAddressPurpose[]> = new ReplaySubject<PhysicalAddressPurpose[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
           }
         }
 
-        this.filteredPhysicalAddressPurposes$.next(filteredPhysicalAddressPurposes);
+        this.filteredOptions$.next(filteredPhysicalAddressPurposes);
       }));
     });
   }

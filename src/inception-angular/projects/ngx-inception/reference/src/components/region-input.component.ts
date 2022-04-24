@@ -391,13 +391,11 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
         this.value = null;
       }
     }
-    // If we do not have a valid value then clear the input
-    else {
-      console.log('Lost focus, this.filteredOptions$.value = ', this.filteredOptions$.value)
-
-      // console.log('Clearing input when no valid value exists and focus is lost, this.value = ', this.value);
-      // this.filteredOptions$.next(this._regions);
-      // this.input.value = '';
+    // If we do not have a valid value, and there are no filtered options, then clear the input
+    else if (this.filteredOptions$.value.length == 0) {
+      console.log('Clearing input when no valid value exists, there are no filtered options, and focus is lost, this.value = ', this.value);
+      this.filteredOptions$.next(this._options);
+      this.input.value = '';
     }
 
     this.touched = true;

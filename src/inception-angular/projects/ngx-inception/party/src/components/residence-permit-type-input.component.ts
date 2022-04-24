@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {ResidencePermitType} from '../services/residence-permit-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let residencePermitType of filteredResidencePermitTypes$ | async"
+          *ngFor="let residencePermitType of filteredOptions$ | async"
           [value]="residencePermitType">
           {{ residencePermitType.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
   /**
    * The filtered options for the autocomplete.
    */
-  filteredResidencePermitTypes$: Subject<ResidencePermitType[]> = new ReplaySubject<ResidencePermitType[]>();
+  filteredOptions$: Subject<ResidencePermitType[]> = new ReplaySubject<ResidencePermitType[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
           }
         }
 
-        this.filteredResidencePermitTypes$.next(filteredResidencePermitTypes);
+        this.filteredOptions$.next(filteredResidencePermitTypes);
       }));
     });
   }

@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {Race} from '../services/race';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let race of filteredRaces$ | async"
+          *ngFor="let race of filteredOptions$ | async"
           [value]="race">
           {{ race.name }}
         </mat-option>
@@ -81,7 +80,7 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredRaces$: Subject<Race[]> = new ReplaySubject<Race[]>();
+  filteredOptions$: Subject<Race[]> = new ReplaySubject<Race[]>();
 
   /**
    * Whether the control is focused.
@@ -278,7 +277,7 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredRaces$.next(filteredRaces);
+        this.filteredOptions$.next(filteredRaces);
       }));
     });
   }

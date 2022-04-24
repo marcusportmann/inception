@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let fieldOfStudy of filteredFieldsOfStudy$ | async"
+          *ngFor="let fieldOfStudy of filteredOptions$ | async"
           [value]="fieldOfStudy">
           {{ fieldOfStudy.name }}
         </mat-option>
@@ -79,19 +78,9 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
   controlType = 'field-of-study-input';
 
   /**
-   * The input.
-   */
-  @ViewChild(MatInput, {static: true}) input!: MatInput;
-
-  /**
-   * The observable providing access to the value for the input as it changes.
-   */
-  inputValue$: Subject<string> = new ReplaySubject<string>();
-
-  /**
    * The filtered options for the autocomplete.
    */
-  filteredFieldsOfStudy$: Subject<FieldOfStudy[]> = new ReplaySubject<FieldOfStudy[]>();
+  filteredOptions$: Subject<FieldOfStudy[]> = new ReplaySubject<FieldOfStudy[]>();
 
   /**
    * Whether the control is focused.
@@ -102,6 +91,16 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
    * The ID for the control.
    */
   @HostBinding() id = `field-of-study-input-${FieldOfStudyInputComponent._nextId++}`;
+
+  /**
+   * The input.
+   */
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
+
+  /**
+   * The observable providing access to the value for the input as it changes.
+   */
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -278,7 +277,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredFieldsOfStudy$.next(filteredFieldsOfStudy);
+        this.filteredOptions$.next(filteredFieldsOfStudy);
       }));
     });
   }

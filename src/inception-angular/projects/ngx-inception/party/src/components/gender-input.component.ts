@@ -16,8 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -54,7 +53,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let gender of filteredGenders$ | async"
+          *ngFor="let gender of filteredOptions$ | async"
           [value]="gender">
           {{ gender.name }}
         </mat-option>
@@ -81,12 +80,17 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredGenders$: Subject<Gender[]> = new ReplaySubject<Gender[]>();
+  filteredOptions$: Subject<Gender[]> = new ReplaySubject<Gender[]>();
 
   /**
    * Whether the control is focused.
    */
   focused = false;
+
+  /**
+   * The ID for the control.
+   */
+  @HostBinding() id = `gender-input-${GenderInputComponent._nextId++}`;
 
   /**
    * The input.
@@ -97,11 +101,6 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
    * The observable providing access to the value for the input as it changes.
    */
   inputValue$: Subject<string> = new ReplaySubject<string>();
-
-  /**
-   * The ID for the control.
-   */
-  @HostBinding() id = `gender-input-${GenderInputComponent._nextId++}`;
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -278,7 +277,7 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
           }
         }
 
-        this.filteredGenders$.next(filteredGenders);
+        this.filteredOptions$.next(filteredGenders);
       }));
     });
   }
