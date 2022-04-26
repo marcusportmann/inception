@@ -228,14 +228,14 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
         if (this._options.length > 0) {
           for (const option of this._options) {
             if (option.code === value) {
-              console.log('Setting the validated value ' + value);
+              //console.log('Setting the validated value ' + value);
               this.input.value = option.name;
               this._value = value;
               break;
             }
           }
         } else {
-          console.log('Setting the unvalidated value to ' + value);
+          //console.log('Setting the unvalidated value to ' + value);
 
           // Assume the new value is valid, it will be checked when the options are loaded
           this._value = value;
@@ -325,14 +325,14 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
         if (!!this.value) {
           for (const region of this._options) {
             if (region.code === this.value) {
-              console.log('Setting input value based on matching option = ', region);
+              //console.log('Setting input value based on matching option = ', region);
               this.input.value = region.name;
               return;
             }
           }
 
           // The value is invalid so clear it
-          console.log('Clearing invalid value that does not match a valid option');
+          //console.log('Clearing invalid value that does not match a valid option');
           this.value = null;
         }
       });
@@ -340,7 +340,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
 
     this.subscriptions.add(this.inputValue$.pipe(
       debounceTime(500)).subscribe((value: string) => {
-      console.log('Input value changed to value (' + value + '), resetting this.value');
+      //console.log('Input value changed to value (' + value + '), resetting this.value');
 
       if (!!this._value) {
         this._value = null;
@@ -380,20 +380,20 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    console.log('Lost focus, this._value = ' + this._value + ' and this.input.value = ', this.input.value);
+    //console.log('Lost focus, this._value = ' + this._value + ' and this.input.value = ', this.input.value);
 
     // If we have a valid value
     if (!!this._value) {
       // If we have cleared the input then clear the value
       if (!this.input.value) {
-        console.log('Clearing value when input is empty and focus is lost, this.input.value = ', this.input.value);
+        //console.log('Clearing value when input is empty and focus is lost, this.input.value = ', this.input.value);
         this.filteredOptions$.next(this._options);
         this.value = null;
       }
     }
     // If we do not have a valid value, and there are no filtered options, then clear the input
     else if (this.filteredOptions$.value.length == 0) {
-      console.log('Clearing input when no valid value exists, there are no filtered options, and focus is lost, this.value = ', this.value);
+      //console.log('Clearing input when no valid value exists, there are no filtered options, and focus is lost, this.value = ', this.value);
       this.filteredOptions$.next(this._options);
       this.input.value = '';
     }
@@ -408,9 +408,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   };
 
   optionSelected(event: MatAutocompleteSelectedEvent): void {
-    console.log('optionSelected event = ', event);
-
-
+    //console.log('optionSelected event = ', event);
     this.value = event.option.value.code;
   }
 

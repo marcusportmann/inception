@@ -23,7 +23,7 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {ReplaySubject, Subject, Subscription} from 'rxjs';
+import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime, first, startWith} from 'rxjs/operators';
 import {Language} from '../services/language';
 import {ReferenceService} from '../services/reference.service';
@@ -79,7 +79,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredOptions$: Subject<Language[]> = new ReplaySubject<Language[]>();
+  filteredOptions$: BehaviorSubject<Language[]> = new BehaviorSubject<Language[]>([]);
 
   /**
    * Whether the control is focused.
@@ -94,12 +94,12 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   /**
    * The language input.
    */
-  @ViewChild(MatInput, {static: true}) languageInput!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
    * The observable providing access to the value for the language input as it changes.
    */
-  languageInputValue$: Subject<string> = new ReplaySubject<string>();
+  inputValue$: Subject<string> = new ReplaySubject<string>();
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -142,7 +142,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
     this._disabled = coerceBooleanProperty(value);
 
     if (this._disabled) {
-      this.languageInput.disabled = true;
+      this.input.disabled = true;
     }
 
     this.stateChanges.next();
@@ -208,13 +208,13 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
     if (this._value !== value) {
       this.referenceService.getLanguages().pipe(first()).subscribe((languages: Map<string, Language>) => {
         this._value = null;
-        this.languageInput.value = '';
+        this.input.value = '';
 
         if (!!value) {
           for (const language of languages.values()) {
             if (language.code === value) {
               this._value = value;
-              this.languageInput.value = language.shortName;
+              this.input.value = language.shortName;
               break;
             }
           }
@@ -237,7 +237,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    return this.focused || !this.empty || this.languageInput.focused;
+    return this.focused || !this.empty || this.input.focused;
   }
 
   displayWith(language: Language): string {
@@ -250,7 +250,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
 
   inputChanged(event: Event) {
     if (((event.target as HTMLInputElement).value) !== undefined) {
-      this.languageInputValue$.next((event.target as HTMLInputElement).value);
+      this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
 
@@ -260,10 +260,10 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   }
 
   ngOnInit(): void {
-    this.languageInput.placeholder = this._placeholder;
+    this.input.placeholder = this._placeholder;
 
     this.referenceService.getLanguages().pipe(first()).subscribe((languages: Map<string, Language>) => {
-      this.subscriptions.add(this.languageInputValue$.pipe(
+      this.subscriptions.add(this.inputValue$.pipe(
         startWith(''),
         debounceTime(500)).subscribe((value: string) => {
         value = value.toLowerCase();
@@ -286,7 +286,7 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.languageInput.focus();
+      this.input.focus();
     }
   }
 
@@ -298,16 +298,24 @@ export class LanguageInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.languageInput.value)) {
-      this._value = null;
-      this.onChange(this._value);
-      this.changeDetectorRef.detectChanges();
+    // If we have a valid value
+    if (!!this._value) {
+      // If we have cleared the input then clear the value
+      if (!this.input.value) {
+        this.value = null;
+      }
+    }
+    // If we do not have a valid value, and there are no filtered options, then clear the input
+    else if (this.filteredOptions$.value.length == 0) {
+      this.input.value = '';
+
+      // Indicate the input value has been cleared to trigger resetting the filtered options
+      this.inputValue$.next('');
     }
 
     this.touched = true;
     this.onTouched();
-    this.focused = this.languageInput.focused;
+    this.focused = this.input.focused;
     this.stateChanges.next();
   }
 

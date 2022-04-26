@@ -22,7 +22,7 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {ReplaySubject, Subject, Subscription} from 'rxjs';
+import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime, first, startWith} from 'rxjs/operators';
 import {PartyReferenceService} from '../services/party-reference.service';
 import {StatusTypeCategory} from '../services/status-type-category';
@@ -80,7 +80,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   /**
    * The filtered options for the autocomplete.
    */
-  filteredOptions$: Subject<StatusTypeCategory[]> = new ReplaySubject<StatusTypeCategory[]>();
+  filteredOptions$: BehaviorSubject<StatusTypeCategory[]> = new BehaviorSubject<StatusTypeCategory[]>([]);
 
   /**
    * Whether the control is focused.
@@ -299,11 +299,19 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have cleared the input then clear the value when losing focus
-    if ((!!this._value) && (!this.input.value)) {
-      this._value = null;
-      this.onChange(this._value);
-      this.changeDetectorRef.detectChanges();
+    // If we have a valid value
+    if (!!this._value) {
+      // If we have cleared the input then clear the value
+      if (!this.input.value) {
+        this.value = null;
+      }
+    }
+    // If we do not have a valid value, and there are no filtered options, then clear the input
+    else if (this.filteredOptions$.value.length == 0) {
+      this.input.value = '';
+
+      // Indicate the input value has been cleared to trigger resetting the filtered options
+      this.inputValue$.next('');
     }
 
     this.touched = true;
