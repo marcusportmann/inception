@@ -53,9 +53,9 @@ import {QualificationType} from '../services/qualification-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let qualificationType of filteredOptions$ | async"
-          [value]="qualificationType">
-          {{ qualificationType.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

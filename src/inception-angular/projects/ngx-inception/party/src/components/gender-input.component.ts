@@ -53,9 +53,9 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let gender of filteredOptions$ | async"
-          [value]="gender">
-          {{ gender.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

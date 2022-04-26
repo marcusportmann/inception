@@ -53,9 +53,9 @@ import {PhysicalAddressRole} from '../services/physical-address-role';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let physicalAddressRole of filteredOptions$ | async"
-          [value]="physicalAddressRole">
-          {{ physicalAddressRole.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

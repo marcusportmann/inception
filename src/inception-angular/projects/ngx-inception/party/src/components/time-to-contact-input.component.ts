@@ -53,9 +53,9 @@ import {TimeToContact} from '../services/time-to-contact';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let timeToContact of filteredOptions$ | async"
-          [value]="timeToContact">
-          {{ timeToContact.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

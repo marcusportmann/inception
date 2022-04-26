@@ -53,9 +53,9 @@ import {SkillType} from '../services/skill-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let skillType of filteredOptions$ | async"
-          [value]="skillType">
-          {{ skillType.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

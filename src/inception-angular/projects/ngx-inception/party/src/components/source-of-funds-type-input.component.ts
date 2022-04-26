@@ -53,9 +53,9 @@ import {SourceOfFundsType} from '../services/source-of-funds-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let sourceOfFundsType of filteredOptions$ | async"
-          [value]="sourceOfFundsType">
-          {{ sourceOfFundsType.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

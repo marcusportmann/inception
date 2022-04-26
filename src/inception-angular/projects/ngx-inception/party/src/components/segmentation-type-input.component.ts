@@ -53,9 +53,9 @@ import {SegmentationType} from '../services/segmentation-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let segmentationType of filteredOptions$ | async"
-          [value]="segmentationType">
-          {{ segmentationType.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

@@ -53,9 +53,9 @@ import {PhysicalAddressType} from '../services/physical-address-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let physicalAddressType of filteredOptions$ | async"
-          [value]="physicalAddressType">
-          {{ physicalAddressType.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

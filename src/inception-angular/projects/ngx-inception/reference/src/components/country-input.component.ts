@@ -53,8 +53,10 @@ import {ReferenceService} from '../services/reference.service';
         #countryAutocomplete="matAutocomplete"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
-        <mat-option *ngFor="let country of filteredOptions$ | async" [value]="country">
-          {{ country.shortName }}
+        <mat-option
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.shortName }}
         </mat-option>
       </mat-autocomplete>
     </div>

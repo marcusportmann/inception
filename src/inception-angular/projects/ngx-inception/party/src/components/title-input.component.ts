@@ -52,8 +52,10 @@ import {Title} from '../services/title';
         #titleAutocomplete="matAutocomplete"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
-        <mat-option *ngFor="let title of filteredOptions$ | async" [value]="title">
-          {{ title.name }}
+        <mat-option
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

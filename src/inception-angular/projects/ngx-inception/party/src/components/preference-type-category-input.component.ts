@@ -53,9 +53,9 @@ import {PreferenceTypeCategory} from '../services/preference-type-category';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let preferenceTypeCategory of filteredOptions$ | async"
-          [value]="preferenceTypeCategory">
-          {{ preferenceTypeCategory.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

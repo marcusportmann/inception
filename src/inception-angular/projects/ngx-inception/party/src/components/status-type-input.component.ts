@@ -53,9 +53,9 @@ import {StatusType} from '../services/status-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let statusType of filteredOptions$ | async"
-          [value]="statusType">
-          {{ statusType.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

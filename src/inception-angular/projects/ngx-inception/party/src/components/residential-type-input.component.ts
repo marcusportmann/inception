@@ -53,9 +53,9 @@ import {ResidentialType} from '../services/residential-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let residentialType of filteredOptions$ | async"
-          [value]="residentialType">
-          {{ residentialType.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

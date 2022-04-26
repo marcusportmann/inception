@@ -53,9 +53,9 @@ import {ResidencyStatus} from '../services/residency-status';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let residencyStatus of filteredOptions$ | async"
-          [value]="residencyStatus">
-          {{ residencyStatus.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

@@ -53,9 +53,9 @@ import {ResidencePermitType} from '../services/residence-permit-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let residencePermitType of filteredOptions$ | async"
-          [value]="residencePermitType">
-          {{ residencePermitType.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

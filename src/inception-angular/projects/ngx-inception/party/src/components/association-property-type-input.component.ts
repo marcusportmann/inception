@@ -55,9 +55,9 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let associationPropertyType of filteredOptions$ | async"
-          [value]="associationPropertyType">
-          {{ associationPropertyType.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
@@ -117,7 +117,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
   /**
-   * The association property types for the association type.
+   * The association property types.
    */
   private _options: AssociationPropertyType[] = [];
 

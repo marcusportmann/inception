@@ -53,9 +53,9 @@ import {RoleType} from '../services/role-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let roleType of filteredOptions$ | async"
-          [value]="roleType">
-          {{ roleType.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

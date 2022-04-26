@@ -53,9 +53,9 @@ import {Segment} from '../services/segment';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let segment of filteredOptions$ | async"
-          [value]="segment">
-          {{ segment.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>

@@ -53,9 +53,9 @@ import {TaxNumberType} from '../services/tax-number-type';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
-          *ngFor="let taxNumberType of filteredOptions$ | async"
-          [value]="taxNumberType">
-          {{ taxNumberType.name }}
+          *ngFor="let filteredOption of filteredOptions$ | async"
+          [value]="filteredOption">
+          {{ filteredOption.name }}
         </mat-option>
       </mat-autocomplete>
     </div>
