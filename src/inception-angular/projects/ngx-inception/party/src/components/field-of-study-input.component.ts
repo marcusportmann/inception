@@ -150,7 +150,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the field of study input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

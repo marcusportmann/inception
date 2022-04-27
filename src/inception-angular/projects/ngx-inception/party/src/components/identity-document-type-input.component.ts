@@ -150,7 +150,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
   }
 
   /**
-   * The placeholder for the identity document type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

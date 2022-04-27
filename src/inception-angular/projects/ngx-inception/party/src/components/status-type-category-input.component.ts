@@ -150,7 +150,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   }
 
   /**
-   * The placeholder for the status type category input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

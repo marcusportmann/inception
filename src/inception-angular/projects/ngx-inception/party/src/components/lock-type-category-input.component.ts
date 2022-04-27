@@ -150,7 +150,7 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
   }
 
   /**
-   * The placeholder for the lock type category input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

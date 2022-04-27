@@ -150,7 +150,7 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
   }
 
   /**
-   * The placeholder for the employment type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

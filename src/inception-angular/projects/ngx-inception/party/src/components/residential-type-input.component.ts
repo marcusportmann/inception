@@ -150,7 +150,7 @@ export class ResidentialTypeInputComponent implements MatFormFieldControl<string
   }
 
   /**
-   * The placeholder for the residential type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

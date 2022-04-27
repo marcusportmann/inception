@@ -151,7 +151,7 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   }
 
   /**
-   * The placeholder for the contact mechanism role input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

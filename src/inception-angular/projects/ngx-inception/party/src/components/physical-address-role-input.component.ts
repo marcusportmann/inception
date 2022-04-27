@@ -150,7 +150,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   }
 
   /**
-   * The placeholder for the physical address role input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

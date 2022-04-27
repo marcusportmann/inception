@@ -150,7 +150,7 @@ export class ResidencyStatusInputComponent implements MatFormFieldControl<string
   }
 
   /**
-   * The placeholder for the residency status input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

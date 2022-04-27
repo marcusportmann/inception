@@ -150,7 +150,7 @@ export class GenderInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the gender input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

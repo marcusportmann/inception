@@ -150,7 +150,7 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
   }
 
   /**
-   * The placeholder for the industry classification system input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

@@ -150,7 +150,7 @@ export class EmploymentStatusInputComponent implements MatFormFieldControl<strin
   }
 
   /**
-   * The placeholder for the employment status input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

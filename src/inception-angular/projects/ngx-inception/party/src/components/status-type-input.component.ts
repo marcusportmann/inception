@@ -150,7 +150,7 @@ export class StatusTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the status type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

@@ -39,7 +39,13 @@ export class Menu1Component {
 
   clickMe(): void {
 
+    let nullArray: string[] | null = null;
+
     let emptyArray: string[] = [];
+
+    console.log('nullArray = ', nullArray);
+    console.log('!nullArray = ', (!nullArray));
+    console.log('!!nullArray = ', (!!nullArray));
 
     console.log('emptyArray = ', emptyArray);
     console.log('!emptyArray = ', (!emptyArray));

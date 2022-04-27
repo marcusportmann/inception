@@ -117,7 +117,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
   /**
-   * The association property types.
+   * The association property type options.
    */
   private _options: AssociationPropertyType[] = [];
 
@@ -162,7 +162,7 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
   }
 
   /**
-   * The placeholder for the association property type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';
@@ -315,9 +315,9 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
         this.filteredOptions$.next(this._options);
 
         if (!!this.value) {
-          for (const associationPropertyType of this._options) {
-            if (associationPropertyType.code === this.value) {
-              this.input.value = associationPropertyType.name;
+          for (const option of this._options) {
+            if (option.code === this.value) {
+              this.input.value = option.name;
               return;
             }
           }
@@ -341,9 +341,9 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
 
       let filteredAssociationPropertyTypes: AssociationPropertyType[] = [];
 
-      for (const associationPropertyType of this._options) {
-        if (associationPropertyType.name.toLowerCase().indexOf(value) === 0) {
-          filteredAssociationPropertyTypes.push(associationPropertyType);
+      for (const option of this._options) {
+        if (option.name.toLowerCase().indexOf(value) === 0) {
+          filteredAssociationPropertyTypes.push(option);
         }
       }
 

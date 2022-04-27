@@ -150,7 +150,7 @@ export class TaxNumberTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the tax number type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

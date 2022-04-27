@@ -150,7 +150,7 @@ export class IndustryClassificationCategoryInputComponent implements MatFormFiel
   }
 
   /**
-   * The placeholder for the industry classification category input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

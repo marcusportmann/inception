@@ -22,8 +22,10 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
+import {
+  BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription, throttleTime
+} from 'rxjs';
+import {debounceTime, first, map} from 'rxjs/operators';
 import {PartyReferenceService} from '../services/party-reference.service';
 import {PreferenceTypeCategory} from '../services/preference-type-category';
 
@@ -38,7 +40,7 @@ import {PreferenceTypeCategory} from '../services/preference-type-category';
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #preferenceTypeCategoryInput
+        #input
         type="text"
         matInput
         autocompleteSelectionRequired
@@ -114,6 +116,16 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
+  /**
+   * The preference type category options.
+   */
+  private _options: PreferenceTypeCategory[] = [];
+
+  /**
+   * The code for the party type to retrieve the preference type categories for.
+   */
+  private partyType$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private partyReferenceService: PartyReferenceService,
@@ -150,7 +162,7 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
   }
 
   /**
-   * The placeholder for the preference type category input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';
@@ -207,24 +219,28 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
     }
 
     if (this._value !== value) {
-      this.partyReferenceService.getPreferenceTypeCategories().pipe(first()).subscribe((preferenceTypeCategories: Map<string, PreferenceTypeCategory>) => {
-        this._value = null;
-        this.input.value = '';
+      this._value = null;
 
-        if (!!value) {
-          for (const preferenceTypeCategory of preferenceTypeCategories.values()) {
-            if (preferenceTypeCategory.code === value) {
+      // If the new value is not null
+      if (!!value) {
+        // If options have been loaded, check if the new value is valid.
+        if (this._options.length > 0) {
+          for (const option of this._options) {
+            if (option.code === value) {
+              this.input.value = option.name;
               this._value = value;
-              this.input.value = preferenceTypeCategory.name;
               break;
             }
           }
+        } else {
+          // Assume the new value is valid, it will be checked when the options are loaded
+          this._value = value;
         }
+      }
 
-        this.onChange(this._value);
-        this.changeDetectorRef.detectChanges();
-        this.stateChanges.next();
-      });
+      this.onChange(this._value);
+      this.changeDetectorRef.detectChanges();
+      this.stateChanges.next();
     }
   }
 
@@ -233,7 +249,24 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
   }
 
   get errorState(): boolean {
-    return this.required && ((this._value == null) || (this._value.length == 0)) && this.touched;
+    return this.required && this.empty && this.touched;
+  }
+
+  /**
+   * The code for the party type to retrieve the preference type categories for.
+   */
+  @Input() get partyType(): string | null {
+    return this.partyType$.value;
+  }
+
+  set partyType(partyType: string | null) {
+    if (partyType == undefined) {
+      partyType = null;
+    }
+
+    if (partyType !== this.partyType$.value) {
+      this.partyType$.next(partyType);
+    }
   }
 
   @HostBinding('class.floating')
@@ -263,23 +296,55 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.partyReferenceService.getPreferenceTypeCategories().pipe(first()).subscribe((preferenceTypeCategories: Map<string, PreferenceTypeCategory>) => {
-      this.subscriptions.add(this.inputValue$.pipe(
-        startWith(''),
-        debounceTime(500)).subscribe((value: string) => {
-        value = value.toLowerCase();
-
-        let filteredPreferenceTypeCategories: PreferenceTypeCategory[] = [];
+    this.subscriptions.add(combineLatest([this.partyType$]).pipe(throttleTime(250), map(values => ({
+      partyType: this.partyType$.value
+    }))).subscribe(parameters => {
+      this.partyReferenceService.getPreferenceTypeCategories().pipe(first()).subscribe((preferenceTypeCategories: Map<string, PreferenceTypeCategory>) => {
+        this._options = [];
 
         for (const preferenceTypeCategory of preferenceTypeCategories.values()) {
-          if (preferenceTypeCategory.name.toLowerCase().indexOf(value) === 0) {
-            filteredPreferenceTypeCategories.push(preferenceTypeCategory);
+          if ((!parameters.partyType) || ((!!preferenceTypeCategory.partyTypes) && (preferenceTypeCategory.partyTypes.indexOf(parameters.partyType) !== -1))) {
+            this._options.push(preferenceTypeCategory);
           }
         }
 
-        this.filteredOptions$.next(filteredPreferenceTypeCategories);
-      }));
-    });
+        this.filteredOptions$.next(this._options);
+
+        if (!!this.value) {
+          for (const option of this._options) {
+            if (option.code === this.value) {
+              this.input.value = option.name;
+              return;
+            }
+          }
+
+          // The value is invalid so clear it
+          this.value = null;
+        }
+      });
+    }));
+
+    this.subscriptions.add(this.inputValue$.pipe(
+      debounceTime(500)).subscribe((value: string) => {
+      if (!!this._value) {
+        this._value = null;
+        this.onChange(this._value);
+        this.changeDetectorRef.detectChanges();
+        this.stateChanges.next();
+      }
+
+      value = value.toLowerCase();
+
+      let filteredPreferenceTypeCategorys: PreferenceTypeCategory[] = [];
+
+      for (const preferenceTypeCategory of this._options) {
+        if (preferenceTypeCategory.name.toLowerCase().indexOf(value) === 0) {
+          filteredPreferenceTypeCategorys.push(preferenceTypeCategory);
+        }
+      }
+
+      this.filteredOptions$.next(filteredPreferenceTypeCategorys);
+    }));
   }
 
   onChange: any = (_: any) => {
@@ -303,15 +368,14 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
     if (!!this._value) {
       // If we have cleared the input then clear the value
       if (!this.input.value) {
+        this.filteredOptions$.next(this._options);
         this.value = null;
       }
     }
     // If we do not have a valid value, and there are no filtered options, then clear the input
     else if (this.filteredOptions$.value.length == 0) {
+      this.filteredOptions$.next(this._options);
       this.input.value = '';
-
-      // Indicate the input value has been cleared to trigger resetting the filtered options
-      this.inputValue$.next('');
     }
 
     this.touched = true;
@@ -346,7 +410,7 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
 
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
-    // controlElement.setEmployment('aria-describedby', ids.join(' '));
+    // controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
   /**
@@ -363,5 +427,5 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
       this.value = value as string;
     }
   }
-
 }
+

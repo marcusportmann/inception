@@ -150,7 +150,7 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the marital status input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

@@ -150,7 +150,7 @@ export class QualificationTypeInputComponent implements MatFormFieldControl<stri
   }
 
   /**
-   * The placeholder for the qualification type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

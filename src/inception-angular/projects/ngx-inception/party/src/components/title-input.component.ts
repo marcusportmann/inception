@@ -150,7 +150,7 @@ export class TitleInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the title input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

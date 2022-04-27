@@ -150,7 +150,7 @@ export class SegmentationTypeInputComponent implements MatFormFieldControl<strin
   }
 
   /**
-   * The placeholder for the segmentation type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

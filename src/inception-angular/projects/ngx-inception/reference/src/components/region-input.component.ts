@@ -118,7 +118,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
   /**
-   * The regions for the country.
+   * The region options.
    */
   private _options: Region[] = [];
 

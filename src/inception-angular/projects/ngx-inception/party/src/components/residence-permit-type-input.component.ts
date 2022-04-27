@@ -150,7 +150,7 @@ export class ResidencePermitTypeInputComponent implements MatFormFieldControl<st
   }
 
   /**
-   * The placeholder for the residence permit type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

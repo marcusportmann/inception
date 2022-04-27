@@ -22,14 +22,15 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
+import {
+  BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription, throttleTime
+} from 'rxjs';
+import {debounceTime, first, map} from 'rxjs/operators';
 import {AttributeTypeCategory} from '../services/attribute-type-category';
 import {PartyReferenceService} from '../services/party-reference.service';
 
 /**
- * The AttributeTypeCategoryInputComponent class implements the attribute type category input
- * component.
+ * The AttributeTypeCategoryInputComponent class implements the attribute type category input component.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +40,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #attributeTypeCategoryInput
+        #input
         type="text"
         matInput
         autocompleteSelectionRequired
@@ -115,6 +116,16 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
+  /**
+   * The attribute type category options.
+   */
+  private _options: AttributeTypeCategory[] = [];
+
+  /**
+   * The code for the party type to retrieve the attribute type categories for.
+   */
+  private partyType$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private partyReferenceService: PartyReferenceService,
@@ -151,7 +162,7 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
   }
 
   /**
-   * The placeholder for the attribute type category input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';
@@ -208,24 +219,45 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
     }
 
     if (this._value !== value) {
-      this.partyReferenceService.getAttributeTypeCategories().pipe(first()).subscribe((attributeTypeCategories: Map<string, AttributeTypeCategory>) => {
-        this._value = null;
-        this.input.value = '';
+      this._value = null;
 
-        if (!!value) {
-          for (const attributeTypeCategory of attributeTypeCategories.values()) {
-            if (attributeTypeCategory.code === value) {
+      // If the new value is not null
+      if (!!value) {
+        // If options have been loaded, check if the new value is valid.
+        if (this._options.length > 0) {
+          for (const option of this._options) {
+            if (option.code === value) {
+              this.input.value = option.name;
               this._value = value;
-              this.input.value = attributeTypeCategory.name;
               break;
             }
           }
+        } else {
+          // Assume the new value is valid, it will be checked when the options are loaded
+          this._value = value;
         }
+      }
 
-        this.onChange(this._value);
-        this.changeDetectorRef.detectChanges();
-        this.stateChanges.next();
-      });
+      this.onChange(this._value);
+      this.changeDetectorRef.detectChanges();
+      this.stateChanges.next();
+    }
+  }
+
+  /**
+   * The code for the party type to retrieve the attribute type categories for.
+   */
+  @Input() get partyType(): string | null {
+    return this.partyType$.value;
+  }
+
+  set partyType(partyType: string | null) {
+    if (partyType == undefined) {
+      partyType = null;
+    }
+
+    if (partyType !== this.partyType$.value) {
+      this.partyType$.next(partyType);
     }
   }
 
@@ -234,7 +266,7 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
   }
 
   get errorState(): boolean {
-    return this.required && ((this._value == null) || (this._value.length == 0)) && this.touched;
+    return this.required && this.empty && this.touched;
   }
 
   @HostBinding('class.floating')
@@ -264,23 +296,56 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.partyReferenceService.getAttributeTypeCategories().pipe(first()).subscribe((attributeTypeCategories: Map<string, AttributeTypeCategory>) => {
-      this.subscriptions.add(this.inputValue$.pipe(
-        startWith(''),
-        debounceTime(500)).subscribe((value: string) => {
-        value = value.toLowerCase();
-
-        let filteredAttributeTypeCategories: AttributeTypeCategory[] = [];
+    this.subscriptions.add(combineLatest([this.partyType$]).pipe(throttleTime(250), map(values => ({
+      partyType: this.partyType$.value
+    }))).subscribe(parameters => {
+      this.partyReferenceService.getAttributeTypeCategories().pipe(first()).subscribe((attributeTypeCategories: Map<string, AttributeTypeCategory>) => {
+        this._options = [];
 
         for (const attributeTypeCategory of attributeTypeCategories.values()) {
-          if (attributeTypeCategory.name.toLowerCase().indexOf(value) === 0) {
-            filteredAttributeTypeCategories.push(attributeTypeCategory);
+          if ((!parameters.partyType) || ((!!attributeTypeCategory.partyTypes) && (attributeTypeCategory.partyTypes.indexOf(parameters.partyType) !== -1)))
+          {
+            this._options.push(attributeTypeCategory);
           }
         }
 
-        this.filteredOptions$.next(filteredAttributeTypeCategories);
-      }));
-    });
+        this.filteredOptions$.next(this._options);
+
+        if (!!this.value) {
+          for (const option of this._options) {
+            if (option.code === this.value) {
+              this.input.value = option.name;
+              return;
+            }
+          }
+
+          // The value is invalid so clear it
+          this.value = null;
+        }
+      });
+    }));
+
+    this.subscriptions.add(this.inputValue$.pipe(
+      debounceTime(500)).subscribe((value: string) => {
+      if (!!this._value) {
+        this._value = null;
+        this.onChange(this._value);
+        this.changeDetectorRef.detectChanges();
+        this.stateChanges.next();
+      }
+
+      value = value.toLowerCase();
+
+      let filteredAttributeTypeCategories: AttributeTypeCategory[] = [];
+
+      for (const option of this._options) {
+        if (option.name.toLowerCase().indexOf(value) === 0) {
+          filteredAttributeTypeCategories.push(option);
+        }
+      }
+
+      this.filteredOptions$.next(filteredAttributeTypeCategories);
+    }));
   }
 
   onChange: any = (_: any) => {
@@ -304,15 +369,14 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
     if (!!this._value) {
       // If we have cleared the input then clear the value
       if (!this.input.value) {
+        this.filteredOptions$.next(this._options);
         this.value = null;
       }
     }
     // If we do not have a valid value, and there are no filtered options, then clear the input
     else if (this.filteredOptions$.value.length == 0) {
+      this.filteredOptions$.next(this._options);
       this.input.value = '';
-
-      // Indicate the input value has been cleared to trigger resetting the filtered options
-      this.inputValue$.next('');
     }
 
     this.touched = true;
@@ -364,5 +428,4 @@ export class AttributeTypeCategoryInputComponent implements MatFormFieldControl<
       this.value = value as string;
     }
   }
-
 }

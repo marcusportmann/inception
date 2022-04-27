@@ -27,7 +27,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Attribute Type Category</mat-label>
-            <attribute-type-category-input [formControl]="attributeTypeCategoryControl" required></attribute-type-category-input>
+            <attribute-type-category-input [partyType]="'organization'" [formControl]="attributeTypeCategoryControl" required></attribute-type-category-input>
             <mat-error *ngIf="attributeTypeCategoryControl.errors && !attributeTypeCategoryControl.untouched">
               <span *ngIf="attributeTypeCategoryControl.errors?.required">An attribute type category is required.</span>
             </mat-error>
@@ -293,7 +293,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Preference Type Category</mat-label>
-            <preference-type-category-input [formControl]="preferenceTypeCategoryControl" required></preference-type-category-input>
+            <preference-type-category-input [partyType]="'organization'" [formControl]="preferenceTypeCategoryControl" required></preference-type-category-input>
             <mat-error *ngIf="preferenceTypeCategoryControl.errors && !preferenceTypeCategoryControl.untouched">
               <span *ngIf="preferenceTypeCategoryControl.errors?.required">A preference type category is required.</span>
             </mat-error>

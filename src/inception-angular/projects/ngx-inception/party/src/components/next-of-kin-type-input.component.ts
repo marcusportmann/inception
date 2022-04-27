@@ -150,7 +150,7 @@ export class NextOfKinTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the next of kin type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

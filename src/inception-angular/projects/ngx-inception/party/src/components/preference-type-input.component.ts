@@ -150,7 +150,7 @@ export class PreferenceTypeInputComponent implements MatFormFieldControl<string>
   }
 
   /**
-   * The placeholder for the preference type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

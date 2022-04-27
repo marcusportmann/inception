@@ -150,7 +150,7 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the attribute type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

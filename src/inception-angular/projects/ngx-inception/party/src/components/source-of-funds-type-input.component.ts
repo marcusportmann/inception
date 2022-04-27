@@ -150,7 +150,7 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
   }
 
   /**
-   * The placeholder for the source of funds type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

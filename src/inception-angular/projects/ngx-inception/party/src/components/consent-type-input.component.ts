@@ -150,7 +150,7 @@ export class ConsentTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the consent type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

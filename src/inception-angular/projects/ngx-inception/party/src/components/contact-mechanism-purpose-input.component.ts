@@ -151,7 +151,7 @@ export class ContactMechanismPurposeInputComponent implements MatFormFieldContro
   }
 
   /**
-   * The placeholder for the contact mechanism purpose input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

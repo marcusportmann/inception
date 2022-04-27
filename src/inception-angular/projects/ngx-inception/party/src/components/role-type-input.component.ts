@@ -150,7 +150,7 @@ export class RoleTypeInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the role type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

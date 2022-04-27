@@ -150,7 +150,7 @@ export class ExternalReferenceTypeInputComponent implements MatFormFieldControl<
   }
 
   /**
-   * The placeholder for the external reference type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

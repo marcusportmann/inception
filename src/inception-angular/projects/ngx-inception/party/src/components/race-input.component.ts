@@ -150,7 +150,7 @@ export class RaceInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the race input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

@@ -150,7 +150,7 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
   }
 
   /**
-   * The placeholder for the source of wealth type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

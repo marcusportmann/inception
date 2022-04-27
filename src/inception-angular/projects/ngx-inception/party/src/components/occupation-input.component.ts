@@ -150,7 +150,7 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
   }
 
   /**
-   * The placeholder for the occupation input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

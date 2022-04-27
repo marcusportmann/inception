@@ -150,7 +150,7 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
   }
 
   /**
-   * The placeholder for the association type input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';

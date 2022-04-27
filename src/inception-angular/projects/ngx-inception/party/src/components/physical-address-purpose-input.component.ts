@@ -150,7 +150,7 @@ export class PhysicalAddressPurposeInputComponent implements MatFormFieldControl
   }
 
   /**
-   * The placeholder for the physical address purpose input.
+   * The placeholder for the input.
    * @private
    */
   private _placeholder: string = '';
