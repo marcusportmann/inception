@@ -23,7 +23,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
+import {debounceTime, first} from 'rxjs/operators';
 import {MaritalStatus} from '../services/marital-status';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -114,6 +114,11 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
   touched: boolean = false;
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The options for the autocomplete.
+   */
+  private _options: MaritalStatus[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
@@ -272,8 +277,8 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
-      this._options = Array.from(countries.values());
+    this.partyReferenceService.getMaritalStatuses().pipe(first()).subscribe((maritalStatuses: Map<string, MaritalStatus>) => {
+      this._options = Array.from(maritalStatuses.values());
 
       this.filteredOptions$.next(this._options);
 
@@ -308,7 +313,7 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
 
       value = value.toLowerCase();
 
-      let filteredOptions: Country[] = [];
+      let filteredOptions: MaritalStatus[] = [];
 
       for (const option of this._options) {
         if (option.name.toLowerCase().indexOf(value) !== -1) {
@@ -411,6 +416,5 @@ export class MaritalStatusInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
-
 }
 

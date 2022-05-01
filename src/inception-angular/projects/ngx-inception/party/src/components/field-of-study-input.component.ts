@@ -23,7 +23,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
+import {debounceTime, first} from 'rxjs/operators';
 import {FieldOfStudy} from '../services/field-of-study';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -114,6 +114,11 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
   touched: boolean = false;
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The options for the autocomplete.
+   */
+  private _options: FieldOfStudy[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
@@ -272,7 +277,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
+    this.partyReferenceService.getFieldsOfStudy().pipe(first()).subscribe((countries: Map<string, FieldOfStudy>) => {
       this._options = Array.from(countries.values());
 
       this.filteredOptions$.next(this._options);
@@ -308,7 +313,7 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
 
       value = value.toLowerCase();
 
-      let filteredOptions: Country[] = [];
+      let filteredOptions: FieldOfStudy[] = [];
 
       for (const option of this._options) {
         if (option.name.toLowerCase().indexOf(value) !== -1) {
@@ -411,5 +416,4 @@ export class FieldOfStudyInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
-
 }

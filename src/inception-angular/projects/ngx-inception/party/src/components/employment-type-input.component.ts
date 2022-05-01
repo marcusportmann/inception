@@ -23,7 +23,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
+import {debounceTime, first} from 'rxjs/operators';
 import {EmploymentType} from '../services/employment-type';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -114,6 +114,11 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
   touched: boolean = false;
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The options for the autocomplete.
+   */
+  private _options: EmploymentType[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
@@ -272,8 +277,8 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
-      this._options = Array.from(countries.values());
+    this.partyReferenceService.getEmploymentTypes().pipe(first()).subscribe((employmentTypes: Map<string, EmploymentType>) => {
+      this._options = Array.from(employmentTypes.values());
 
       this.filteredOptions$.next(this._options);
 
@@ -308,7 +313,7 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
 
       value = value.toLowerCase();
 
-      let filteredOptions: Country[] = [];
+      let filteredOptions: EmploymentType[] = [];
 
       for (const option of this._options) {
         if (option.name.toLowerCase().indexOf(value) !== -1) {
@@ -328,6 +333,24 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
 
       this.filteredOptions$.next(filteredOptions);
     }));
+  }
+
+  onChange: any = (_: any) => {
+  };
+
+  onClosed(): void {
+    /*
+     * If the user entered text in the input to filter the options, but they did not select an
+     * option, then the selected value will be null but the input value will be valid, i.e. not null
+     * or blank. We then need to reset the input value and the filtered options so that if the
+     * control is activated again all options are available.
+     */
+    if (!this._value) {
+      if (!!this.input.value) {
+        this.input.value = '';
+        this.filteredOptions$.next(this._options);
+      }
+    }
   }
 
   onContainerClick(event: MouseEvent) {
@@ -391,22 +414,6 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
   writeValue(value: any): void {
     if (typeof value === 'string') {
       this.value = value as string;
-    }
-  }
-
-
-  onClosed(): void {
-    /*
-     * If the user entered text in the input to filter the options, but they did not select an
-     * option, then the selected value will be null but the input value will be valid, i.e. not null
-     * or blank. We then need to reset the input value and the filtered options so that if the
-     * control is activated again all options are available.
-     */
-    if (!this._value) {
-      if (!!this.input.value) {
-        this.input.value = '';
-        this.filteredOptions$.next(this._options);
-      }
     }
   }
 }

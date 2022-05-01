@@ -23,7 +23,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
+import {debounceTime, first} from 'rxjs/operators';
 import {IndustryClassificationSystem} from '../services/industry-classification-system';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -114,6 +114,11 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
   touched: boolean = false;
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The options for the autocomplete.
+   */
+  private _options: IndustryClassificationSystem[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
@@ -272,8 +277,8 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
-      this._options = Array.from(countries.values());
+    this.partyReferenceService.getIndustryClassificationSystems().pipe(first()).subscribe((industryClassificationSystems: Map<string, IndustryClassificationSystem>) => {
+      this._options = Array.from(industryClassificationSystems.values());
 
       this.filteredOptions$.next(this._options);
 
@@ -308,7 +313,7 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
 
       value = value.toLowerCase();
 
-      let filteredOptions: Country[] = [];
+      let filteredOptions: IndustryClassificationSystem[] = [];
 
       for (const option of this._options) {
         if (option.name.toLowerCase().indexOf(value) !== -1) {
@@ -411,6 +416,5 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
       this.value = value as string;
     }
   }
-
 }
 

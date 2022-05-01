@@ -26,8 +26,8 @@ import {
   BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription, throttleTime
 } from 'rxjs';
 import {debounceTime, first, map} from 'rxjs/operators';
-import {PhysicalAddressRole} from '../services/physical-address-role';
 import {PartyReferenceService} from '../services/party-reference.service';
+import {PhysicalAddressRole} from '../services/physical-address-role';
 
 /**
  * The PhysicalAddressRoleInputComponent class implements the physical address role input component.
@@ -249,6 +249,14 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
     }
   }
 
+  get empty(): boolean {
+    return ((this._value == null) || (this._value.length == 0));
+  }
+
+  get errorState(): boolean {
+    return this.required && this.empty && this.touched;
+  }
+
   /**
    * The code for the aaa bbb to retrieve the physical address roles for.
    */
@@ -264,14 +272,6 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
     if (partyType !== this.partyType$.value) {
       this.partyType$.next(partyType);
     }
-  }
-
-  get empty(): boolean {
-    return ((this._value == null) || (this._value.length == 0));
-  }
-
-  get errorState(): boolean {
-    return this.required && this.empty && this.touched;
   }
 
   @HostBinding('class.floating')
@@ -308,8 +308,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
         this._options = [];
 
         for (const physicalAddressRole of physicalAddressRoles.values()) {
-          if ((!parameters.partyType) || ((!!physicalAddressRole.partyTypes) && (physicalAddressRole.partyTypes.indexOf(parameters.partyType) !== -1)))
-          {
+          if ((!parameters.partyType) || ((!!physicalAddressRole.partyTypes) && (physicalAddressRole.partyTypes.indexOf(parameters.partyType) !== -1))) {
             this._options.push(physicalAddressRole);
           }
         }
@@ -331,25 +330,37 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
     }));
 
     this.subscriptions.add(this.inputValue$.pipe(
-      debounceTime(500)).subscribe((value: string) => {
+      debounceTime(250)).subscribe((value: string) => {
       if (!!this._value) {
         this._value = null;
         this.onChange(this._value);
+        // Flag the control as touched to trigger validation
+        this.touched = true;
         this.changeDetectorRef.detectChanges();
         this.stateChanges.next();
       }
 
       value = value.toLowerCase();
 
-      let filteredPhysicalAddressRoles: PhysicalAddressRole[] = [];
+      let filteredOptions: PhysicalAddressRole[] = [];
 
-      for (const physicalAddressRole of this._options) {
-        if (physicalAddressRole.name.toLowerCase().indexOf(value) === 0) {
-          filteredPhysicalAddressRoles.push(physicalAddressRole);
+      for (const option of this._options) {
+        if (option.name.toLowerCase().indexOf(value) !== -1) {
+          filteredOptions.push(option);
         }
       }
 
-      this.filteredOptions$.next(filteredPhysicalAddressRoles);
+      /*
+       * If there are no filtered options, as a result of there being no options at all or no
+       * options matching the filter specified by the user, then reset the input value and the
+       * filtered options. This has the effect of forcing the user to enter a valid filter.
+       */
+      if (filteredOptions.length === 0) {
+        this.input.value = '';
+        filteredOptions = this._options;
+      }
+
+      this.filteredOptions$.next(filteredOptions);
     }));
   }
 

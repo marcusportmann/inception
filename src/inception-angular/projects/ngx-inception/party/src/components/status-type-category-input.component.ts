@@ -23,7 +23,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
+import {debounceTime, first} from 'rxjs/operators';
 import {PartyReferenceService} from '../services/party-reference.service';
 import {StatusTypeCategory} from '../services/status-type-category';
 
@@ -114,6 +114,11 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   touched: boolean = false;
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The options for the autocomplete.
+   */
+  private _options: StatusTypeCategory[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
@@ -272,8 +277,8 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
-      this._options = Array.from(countries.values());
+    this.partyReferenceService.getStatusTypeCategories().pipe(first()).subscribe((statusTypeCategories: Map<string, StatusTypeCategory>) => {
+      this._options = Array.from(statusTypeCategories.values());
 
       this.filteredOptions$.next(this._options);
 
@@ -308,7 +313,7 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
 
       value = value.toLowerCase();
 
-      let filteredOptions: Country[] = [];
+      let filteredOptions: StatusTypeCategory[] = [];
 
       for (const option of this._options) {
         if (option.name.toLowerCase().indexOf(value) !== -1) {
@@ -411,5 +416,4 @@ export class StatusTypeCategoryInputComponent implements MatFormFieldControl<str
       this.value = value as string;
     }
   }
-
 }

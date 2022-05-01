@@ -23,7 +23,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
+import {debounceTime, first} from 'rxjs/operators';
 import {ContactMechanismType} from '../services/contact-mechanism-type';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -115,6 +115,11 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
   touched: boolean = false;
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The options for the autocomplete.
+   */
+  private _options: ContactMechanismType[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
@@ -273,8 +278,8 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
-      this._options = Array.from(countries.values());
+    this.partyReferenceService.getContactMechanismTypes().pipe(first()).subscribe((contactMechanismTypes: Map<string, ContactMechanismType>) => {
+      this._options = Array.from(contactMechanismTypes.values());
 
       this.filteredOptions$.next(this._options);
 
@@ -309,7 +314,7 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
 
       value = value.toLowerCase();
 
-      let filteredOptions: Country[] = [];
+      let filteredOptions: ContactMechanismType[] = [];
 
       for (const option of this._options) {
         if (option.name.toLowerCase().indexOf(value) !== -1) {
@@ -412,5 +417,4 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
       this.value = value as string;
     }
   }
-
 }

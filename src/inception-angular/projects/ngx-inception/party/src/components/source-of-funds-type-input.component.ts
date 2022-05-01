@@ -23,7 +23,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
+import {debounceTime, first} from 'rxjs/operators';
 import {PartyReferenceService} from '../services/party-reference.service';
 import {SourceOfFundsType} from '../services/source-of-funds-type';
 
@@ -114,6 +114,11 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
   touched: boolean = false;
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The options for the autocomplete.
+   */
+  private _options: SourceOfFundsType[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
@@ -272,8 +277,8 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
-      this._options = Array.from(countries.values());
+    this.partyReferenceService.getSourceOfFundsTypes().pipe(first()).subscribe((sourceOfFundsTypes: Map<string, SourceOfFundsType>) => {
+      this._options = Array.from(sourceOfFundsTypes.values());
 
       this.filteredOptions$.next(this._options);
 
@@ -308,7 +313,7 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
 
       value = value.toLowerCase();
 
-      let filteredOptions: Country[] = [];
+      let filteredOptions: SourceOfFundsType[] = [];
 
       for (const option of this._options) {
         if (option.name.toLowerCase().indexOf(value) !== -1) {
@@ -411,5 +416,6 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
       this.value = value as string;
     }
   }
+
 
 }

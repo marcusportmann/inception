@@ -23,7 +23,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
+import {debounceTime, first} from 'rxjs/operators';
 import {AssociationType} from '../services/association-type';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -114,6 +114,11 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
   touched: boolean = false;
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The options for the autocomplete.
+   */
+  private _options: AssociationType[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
@@ -272,7 +277,7 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.referenceService.getAssociationTypes().pipe(first()).subscribe((associationTypes: Map<string, AssociationType>) => {
+    this.partyReferenceService.getAssociationTypes().pipe(first()).subscribe((associationTypes: Map<string, AssociationType>) => {
       this._options = Array.from(associationTypes.values());
 
       this.filteredOptions$.next(this._options);
@@ -411,6 +416,5 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
       this.value = value as string;
     }
   }
-
 }
 

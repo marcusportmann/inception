@@ -338,7 +338,6 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
       });
     }));
 
-    // TODO: REPLACE THIS PART OF THE METHOD
     this.subscriptions.add(this.inputValue$.pipe(
       debounceTime(250)).subscribe((value: string) => {
       if (!!this._value) {

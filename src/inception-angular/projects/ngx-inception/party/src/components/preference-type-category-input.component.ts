@@ -330,25 +330,37 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
     }));
 
     this.subscriptions.add(this.inputValue$.pipe(
-      debounceTime(500)).subscribe((value: string) => {
+      debounceTime(250)).subscribe((value: string) => {
       if (!!this._value) {
         this._value = null;
         this.onChange(this._value);
+        // Flag the control as touched to trigger validation
+        this.touched = true;
         this.changeDetectorRef.detectChanges();
         this.stateChanges.next();
       }
 
       value = value.toLowerCase();
 
-      let filteredPreferenceTypeCategorys: PreferenceTypeCategory[] = [];
+      let filteredOptions: PreferenceTypeCategory[] = [];
 
-      for (const preferenceTypeCategory of this._options) {
-        if (preferenceTypeCategory.name.toLowerCase().indexOf(value) === 0) {
-          filteredPreferenceTypeCategorys.push(preferenceTypeCategory);
+      for (const option of this._options) {
+        if (option.name.toLowerCase().indexOf(value) !== -1) {
+          filteredOptions.push(option);
         }
       }
 
-      this.filteredOptions$.next(filteredPreferenceTypeCategorys);
+      /*
+       * If there are no filtered options, as a result of there being no options at all or no
+       * options matching the filter specified by the user, then reset the input value and the
+       * filtered options. This has the effect of forcing the user to enter a valid filter.
+       */
+      if (filteredOptions.length === 0) {
+        this.input.value = '';
+        filteredOptions = this._options;
+      }
+
+      this.filteredOptions$.next(filteredOptions);
     }));
   }
 
