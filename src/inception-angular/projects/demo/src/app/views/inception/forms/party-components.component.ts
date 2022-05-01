@@ -176,7 +176,6 @@ export class PartyComponentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.associationPropertyTypeControl.setValue('shareholding');
   }
 
   ok(): void {

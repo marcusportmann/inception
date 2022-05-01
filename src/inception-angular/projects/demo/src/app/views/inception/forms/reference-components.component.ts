@@ -53,8 +53,8 @@ export class ReferenceComponentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.countryControl.setValue('ZA');
-    this.regionControl.setValue('ZA-GP');
+    //this.countryControl.setValue('ZA');
+    //this.regionControl.setValue('ZA-GP');
   }
 
   ok(): void {

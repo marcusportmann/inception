@@ -22,10 +22,12 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
-import {PartyReferenceService} from '../services/party-reference.service';
+import {
+  BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription, throttleTime
+} from 'rxjs';
+import {debounceTime, first, map} from 'rxjs/operators';
 import {PhysicalAddressRole} from '../services/physical-address-role';
+import {PartyReferenceService} from '../services/party-reference.service';
 
 /**
  * The PhysicalAddressRoleInputComponent class implements the physical address role input component.
@@ -38,7 +40,7 @@ import {PhysicalAddressRole} from '../services/physical-address-role';
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #physicalAddressRoleInput
+        #input
         type="text"
         matInput
         autocompleteSelectionRequired
@@ -113,6 +115,16 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   touched: boolean = false;
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The physical address role options.
+   */
+  private _options: PhysicalAddressRole[] = [];
+
+  /**
+   * The code for the aaa bbb to retrieve the physical address roles for.
+   */
+  private partyType$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   private subscriptions: Subscription = new Subscription();
 
@@ -207,24 +219,49 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
     }
 
     if (this._value !== value) {
-      this.partyReferenceService.getPhysicalAddressRoles().pipe(first()).subscribe((physicalAddressRoles: Map<string, PhysicalAddressRole>) => {
-        this._value = null;
-        this.input.value = '';
+      this._value = null;
 
-        if (!!value) {
-          for (const physicalAddressRole of physicalAddressRoles.values()) {
-            if (physicalAddressRole.code === value) {
+      // If the new value is not null
+      if (!!value) {
+        /*
+         * If the options have been loaded, check if the new value is valid by confirming that
+         * there is a corresponding option. If the new value is valid, then set the value and set
+         * the input value using the name for the option.
+         */
+        if (this._options.length > 0) {
+          for (const option of this._options) {
+            if (option.code === value) {
+              this.input.value = option.name;
               this._value = value;
-              this.input.value = physicalAddressRole.name;
               break;
             }
           }
+        } else {
+          // Assume the new value is valid, it will be checked when the options are loaded
+          this._value = value;
         }
+      }
 
-        this.onChange(this._value);
-        this.changeDetectorRef.detectChanges();
-        this.stateChanges.next();
-      });
+      this.onChange(this._value);
+      this.changeDetectorRef.detectChanges();
+      this.stateChanges.next();
+    }
+  }
+
+  /**
+   * The code for the aaa bbb to retrieve the physical address roles for.
+   */
+  @Input() get partyType(): string | null {
+    return this.partyType$.value;
+  }
+
+  set partyType(partyType: string | null) {
+    if (partyType == undefined) {
+      partyType = null;
+    }
+
+    if (partyType !== this.partyType$.value) {
+      this.partyType$.next(partyType);
     }
   }
 
@@ -233,7 +270,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   }
 
   get errorState(): boolean {
-    return this.required && ((this._value == null) || (this._value.length == 0)) && this.touched;
+    return this.required && this.empty && this.touched;
   }
 
   @HostBinding('class.floating')
@@ -263,27 +300,75 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.partyReferenceService.getPhysicalAddressRoles().pipe(first()).subscribe((physicalAddressRoles: Map<string, PhysicalAddressRole>) => {
-      this.subscriptions.add(this.inputValue$.pipe(
-        startWith(''),
-        debounceTime(500)).subscribe((value: string) => {
-        value = value.toLowerCase();
-
-        let filteredPhysicalAddressRoles: PhysicalAddressRole[] = [];
+    this.subscriptions.add(combineLatest([this.partyType$]).pipe(throttleTime(250), map(values => ({
+      partyType: this.partyType$.value
+    }))).subscribe(parameters => {
+      this.partyReferenceService.getPhysicalAddressRoles().pipe(first()).subscribe((physicalAddressRoles: Map<string, PhysicalAddressRole>) => {
+        this._options = [];
 
         for (const physicalAddressRole of physicalAddressRoles.values()) {
-          if (physicalAddressRole.name.toLowerCase().indexOf(value) === 0) {
-            filteredPhysicalAddressRoles.push(physicalAddressRole);
+          if ((!parameters.partyType) || ((!!physicalAddressRole.partyTypes) && (physicalAddressRole.partyTypes.indexOf(parameters.partyType) !== -1)))
+          {
+            this._options.push(physicalAddressRole);
           }
         }
 
-        this.filteredOptions$.next(filteredPhysicalAddressRoles);
-      }));
-    });
+        this.filteredOptions$.next(this._options);
+
+        if (!!this.value) {
+          for (const option of this._options) {
+            if (option.code === this.value) {
+              this.input.value = option.name;
+              return;
+            }
+          }
+
+          // The value is invalid so clear it
+          this.value = null;
+        }
+      });
+    }));
+
+    this.subscriptions.add(this.inputValue$.pipe(
+      debounceTime(500)).subscribe((value: string) => {
+      if (!!this._value) {
+        this._value = null;
+        this.onChange(this._value);
+        this.changeDetectorRef.detectChanges();
+        this.stateChanges.next();
+      }
+
+      value = value.toLowerCase();
+
+      let filteredPhysicalAddressRoles: PhysicalAddressRole[] = [];
+
+      for (const physicalAddressRole of this._options) {
+        if (physicalAddressRole.name.toLowerCase().indexOf(value) === 0) {
+          filteredPhysicalAddressRoles.push(physicalAddressRole);
+        }
+      }
+
+      this.filteredOptions$.next(filteredPhysicalAddressRoles);
+    }));
   }
 
   onChange: any = (_: any) => {
   };
+
+  onClosed(): void {
+    /*
+     * If the user entered text in the input to filter the options, but they did not select an
+     * option, then the selected value will be null but the input value will be valid, i.e. not null
+     * or blank. We then need to reset the input value and the filtered options so that if the
+     * control is activated again all options are available.
+     */
+    if (!this._value) {
+      if (!!this.input.value) {
+        this.input.value = '';
+        this.filteredOptions$.next(this._options);
+      }
+    }
+  }
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
@@ -299,24 +384,9 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have a valid value
-    if (!!this._value) {
-      // If we have cleared the input then clear the value
-      if (!this.input.value) {
-        this.value = null;
-      }
-    }
-    // If we do not have a valid value, and there are no filtered options, then clear the input
-    else if (this.filteredOptions$.value.length == 0) {
-      this.input.value = '';
-
-      // Indicate the input value has been cleared to trigger resetting the filtered options
-      this.inputValue$.next('');
-    }
-
     this.touched = true;
     this.onTouched();
-    this.focused = this.input.focused;
+    this.focused = false;
     this.stateChanges.next();
   }
 
@@ -346,7 +416,7 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
 
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
-    // controlElement.setEmployment('aria-describedby', ids.join(' '));
+    // controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
   /**
@@ -363,5 +433,5 @@ export class PhysicalAddressRoleInputComponent implements MatFormFieldControl<st
       this.value = value as string;
     }
   }
-
 }
+

@@ -150,7 +150,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Identity Document Type</mat-label>
-            <identity-document-type-input [formControl]="identityDocumentTypeControl" required></identity-document-type-input>
+            <identity-document-type-input [partyType]="'organization'" [formControl]="identityDocumentTypeControl" required></identity-document-type-input>
             <mat-error *ngIf="identityDocumentTypeControl.errors && !identityDocumentTypeControl.untouched">
               <span *ngIf="identityDocumentTypeControl.errors?.required">An identity document type is required.</span>
             </mat-error>
@@ -260,7 +260,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Physical Address Purpose</mat-label>
-            <physical-address-purpose-input [formControl]="physicalAddressPurposeControl" required></physical-address-purpose-input>
+            <physical-address-purpose-input [partyType]="'organization'" [formControl]="physicalAddressPurposeControl" required></physical-address-purpose-input>
             <mat-error *ngIf="physicalAddressPurposeControl.errors && !physicalAddressPurposeControl.untouched">
               <span *ngIf="physicalAddressPurposeControl.errors?.required">A physical address purpose is required.</span>
             </mat-error>
@@ -271,7 +271,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Physical Address Role</mat-label>
-            <physical-address-role-input [formControl]="physicalAddressRoleControl" required></physical-address-role-input>
+            <physical-address-role-input [partyType]="'organization'" [formControl]="physicalAddressRoleControl" required></physical-address-role-input>
             <mat-error *ngIf="physicalAddressRoleControl.errors && !physicalAddressRoleControl.untouched">
               <span *ngIf="physicalAddressRoleControl.errors?.required">A physical address role is required.</span>
             </mat-error>
@@ -381,7 +381,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Role Type</mat-label>
-            <role-type-input [formControl]="roleTypeControl" required></role-type-input>
+            <role-type-input [partyType]="'organization'" [formControl]="roleTypeControl" required></role-type-input>
             <mat-error *ngIf="roleTypeControl.errors && !roleTypeControl.untouched">
               <span *ngIf="roleTypeControl.errors?.required">A role type is required.</span>
             </mat-error>

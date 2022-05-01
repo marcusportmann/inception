@@ -16,15 +16,14 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
+import {debounceTime, first} from 'rxjs/operators';
 import {Country} from '../services/country';
 import {ReferenceService} from '../services/reference.service';
 
@@ -51,6 +50,7 @@ import {ReferenceService} from '../services/reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #countryAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
@@ -79,16 +79,6 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   controlType = 'country-input';
 
   /**
-   * The country input.
-   */
-  @ViewChild(MatInput, {static: true}) input!: MatInput;
-
-  /**
-   * The observable providing access to the value for the country input as it changes.
-   */
-  inputValue$: Subject<string> = new ReplaySubject<string>();
-
-  /**
    * The filtered options for the autocomplete.
    */
   filteredOptions$: BehaviorSubject<Country[]> = new BehaviorSubject<Country[]>([]);
@@ -104,6 +94,16 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   @HostBinding() id = `country-input-${CountryInputComponent._nextId++}`;
 
   /**
+   * The country input.
+   */
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
+
+  /**
+   * The observable providing access to the value for the country input as it changes.
+   */
+  inputValue$: Subject<string> = new ReplaySubject<string>();
+
+  /**
    * The observable indicating that the state of the control has changed.
    */
   stateChanges = new Subject<void>();
@@ -114,6 +114,11 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   touched: boolean = false;
 
   //@Input('aria-describedby') userAriaDescribedBy?: string;
+
+  /**
+   * The options for the autocomplete.
+   */
+  private _options: Country[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
@@ -208,24 +213,32 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
     }
 
     if (this._value !== value) {
-      this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
-        this._value = null;
-        this.input.value = '';
+      this._value = null;
 
-        if (!!value) {
-          for (const country of countries.values()) {
-            if (country.code === value) {
+      // If the new value is not null
+      if (!!value) {
+        /*
+         * If the options have been loaded, check if the new value is valid by confirming that
+         * there is a corresponding option. If the new value is valid, then set the value and set
+         * the input value using the name for the option.
+         */
+        if (this._options.length > 0) {
+          for (const option of this._options) {
+            if (option.code === value) {
+              this.input.value = option.name;
               this._value = value;
-              this.input.value = country.shortName;
               break;
             }
           }
+        } else {
+          // Assume the new value is valid, it will be checked when the options are loaded
+          this._value = value;
         }
+      }
 
-        this.onChange(this._value);
-        this.changeDetectorRef.detectChanges();
-        this.stateChanges.next();
-      });
+      this.onChange(this._value);
+      this.changeDetectorRef.detectChanges();
+      this.stateChanges.next();
     }
   }
 
@@ -265,26 +278,80 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
     this.input.placeholder = this._placeholder;
 
     this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
-      this.subscriptions.add(this.inputValue$.pipe(
-        startWith(''),
-        debounceTime(500)).subscribe((value: string) => {
-        value = value.toLowerCase();
+      this._options = Array.from(countries.values());
 
-        let filteredCountries: Country[] = [];
+      this.filteredOptions$.next(this._options);
 
-        for (const country of countries.values()) {
-          if (country.shortName.toLowerCase().indexOf(value) === 0) {
-            filteredCountries.push(country);
+      /*
+       * If a value has already been set, attempt to confirm it is valid by finding the
+       * corresponding option. If a match is found, use the option's name as the input's value.
+       * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
+       */
+      if (!!this.value) {
+        for (const option of this._options) {
+          if (option.code === this.value) {
+            this.input.value = option.name;
+            return;
           }
         }
 
-        this.filteredOptions$.next(filteredCountries);
-      }));
+        // The value is invalid so clear it
+        this.value = null;
+      }
     });
+
+    this.subscriptions.add(this.inputValue$.pipe(
+      debounceTime(250)).subscribe((value: string) => {
+      if (!!this._value) {
+        this._value = null;
+        this.onChange(this._value);
+        // Flag the control as touched to trigger validation
+        this.touched = true;
+        this.changeDetectorRef.detectChanges();
+        this.stateChanges.next();
+      }
+
+      value = value.toLowerCase();
+
+      let filteredOptions: Country[] = [];
+
+      for (const option of this._options) {
+        if (option.name.toLowerCase().indexOf(value) !== -1) {
+          filteredOptions.push(option);
+        }
+      }
+
+      /*
+       * If there are no filtered options, as a result of there being no options at all or no
+       * options matching the filter specified by the user, then reset the input value and the
+       * filtered options. This has the effect of forcing the user to enter a valid filter.
+       */
+      if (filteredOptions.length === 0) {
+        this.input.value = '';
+        filteredOptions = this._options;
+      }
+
+      this.filteredOptions$.next(filteredOptions);
+    }));
   }
 
   onChange: any = (_: any) => {
   };
+
+  onClosed(): void {
+    /*
+     * If the user entered text in the input to filter the options, but they did not select an
+     * option, then the selected value will be null but the input value will be valid, i.e. not null
+     * or blank. We then need to reset the input value and the filtered options so that if the
+     * control is activated again all options are available.
+     */
+    if (!this._value) {
+      if (!!this.input.value) {
+        this.input.value = '';
+        this.filteredOptions$.next(this._options);
+      }
+    }
+  }
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
@@ -300,24 +367,9 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have a valid value
-    if (!!this._value) {
-      // If we have cleared the input then clear the value
-      if (!this.input.value) {
-        this.value = null;
-      }
-    }
-    // If we do not have a valid value, and there are no filtered options, then clear the input
-    else if (this.filteredOptions$.value.length == 0) {
-      this.input.value = '';
-
-      // Indicate the input value has been cleared to trigger resetting the filtered options
-      this.inputValue$.next('');
-    }
-
     this.touched = true;
     this.onTouched();
-    this.focused = this.input.focused;
+    this.focused = false;
     this.stateChanges.next();
   }
 
@@ -364,5 +416,4 @@ export class CountryInputComponent implements MatFormFieldControl<string>,
       this.value = value as string;
     }
   }
-
 }

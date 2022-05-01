@@ -207,24 +207,32 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
     }
 
     if (this._value !== value) {
-      this.partyReferenceService.getOccupations().pipe(first()).subscribe((occupations: Map<string, Occupation>) => {
-        this._value = null;
-        this.input.value = '';
+      this._value = null;
 
-        if (!!value) {
-          for (const occupation of occupations.values()) {
-            if (occupation.code === value) {
+      // If the new value is not null
+      if (!!value) {
+        /*
+         * If the options have been loaded, check if the new value is valid by confirming that
+         * there is a corresponding option. If the new value is valid, then set the value and set
+         * the input value using the name for the option.
+         */
+        if (this._options.length > 0) {
+          for (const option of this._options) {
+            if (option.code === value) {
+              this.input.value = option.name;
               this._value = value;
-              this.input.value = occupation.name;
               break;
             }
           }
+        } else {
+          // Assume the new value is valid, it will be checked when the options are loaded
+          this._value = value;
         }
+      }
 
-        this.onChange(this._value);
-        this.changeDetectorRef.detectChanges();
-        this.stateChanges.next();
-      });
+      this.onChange(this._value);
+      this.changeDetectorRef.detectChanges();
+      this.stateChanges.next();
     }
   }
 
@@ -263,27 +271,81 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.partyReferenceService.getOccupations().pipe(first()).subscribe((occupations: Map<string, Occupation>) => {
-      this.subscriptions.add(this.inputValue$.pipe(
-        startWith(''),
-        debounceTime(500)).subscribe((value: string) => {
-        value = value.toLowerCase();
+    this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
+      this._options = Array.from(countries.values());
 
-        let filteredOccupations: Occupation[] = [];
+      this.filteredOptions$.next(this._options);
 
-        for (const occupation of occupations.values()) {
-          if (occupation.name.toLowerCase().indexOf(value) === 0) {
-            filteredOccupations.push(occupation);
+      /*
+       * If a value has already been set, attempt to confirm it is valid by finding the
+       * corresponding option. If a match is found, use the option's name as the input's value.
+       * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
+       */
+      if (!!this.value) {
+        for (const option of this._options) {
+          if (option.code === this.value) {
+            this.input.value = option.name;
+            return;
           }
         }
 
-        this.filteredOptions$.next(filteredOccupations);
-      }));
+        // The value is invalid so clear it
+        this.value = null;
+      }
     });
+
+    this.subscriptions.add(this.inputValue$.pipe(
+      debounceTime(250)).subscribe((value: string) => {
+      if (!!this._value) {
+        this._value = null;
+        this.onChange(this._value);
+        // Flag the control as touched to trigger validation
+        this.touched = true;
+        this.changeDetectorRef.detectChanges();
+        this.stateChanges.next();
+      }
+
+      value = value.toLowerCase();
+
+      let filteredOptions: Country[] = [];
+
+      for (const option of this._options) {
+        if (option.name.toLowerCase().indexOf(value) !== -1) {
+          filteredOptions.push(option);
+        }
+      }
+
+      /*
+       * If there are no filtered options, as a result of there being no options at all or no
+       * options matching the filter specified by the user, then reset the input value and the
+       * filtered options. This has the effect of forcing the user to enter a valid filter.
+       */
+      if (filteredOptions.length === 0) {
+        this.input.value = '';
+        filteredOptions = this._options;
+      }
+
+      this.filteredOptions$.next(filteredOptions);
+    }));
   }
 
   onChange: any = (_: any) => {
   };
+
+  onClosed(): void {
+    /*
+     * If the user entered text in the input to filter the options, but they did not select an
+     * option, then the selected value will be null but the input value will be valid, i.e. not null
+     * or blank. We then need to reset the input value and the filtered options so that if the
+     * control is activated again all options are available.
+     */
+    if (!this._value) {
+      if (!!this.input.value) {
+        this.input.value = '';
+        this.filteredOptions$.next(this._options);
+      }
+    }
+  }
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
@@ -299,24 +361,9 @@ export class OccupationInputComponent implements MatFormFieldControl<string>,
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have a valid value
-    if (!!this._value) {
-      // If we have cleared the input then clear the value
-      if (!this.input.value) {
-        this.value = null;
-      }
-    }
-    // If we do not have a valid value, and there are no filtered options, then clear the input
-    else if (this.filteredOptions$.value.length == 0) {
-      this.input.value = '';
-
-      // Indicate the input value has been cleared to trigger resetting the filtered options
-      this.inputValue$.next('');
-    }
-
     this.touched = true;
     this.onTouched();
-    this.focused = this.input.focused;
+    this.focused = false;
     this.stateChanges.next();
   }
 

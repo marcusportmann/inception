@@ -223,7 +223,11 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
 
       // If the new value is not null
       if (!!value) {
-        // If options have been loaded, check if the new value is valid.
+        /*
+         * If the options have been loaded, check if the new value is valid by confirming that
+         * there is a corresponding option. If the new value is valid, then set the value and set
+         * the input value using the name for the option.
+         */
         if (this._options.length > 0) {
           for (const option of this._options) {
             if (option.code === value) {
@@ -350,6 +354,21 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
   onChange: any = (_: any) => {
   };
 
+  onClosed(): void {
+    /*
+     * If the user entered text in the input to filter the options, but they did not select an
+     * option, then the selected value will be null but the input value will be valid, i.e. not null
+     * or blank. We then need to reset the input value and the filtered options so that if the
+     * control is activated again all options are available.
+     */
+    if (!this._value) {
+      if (!!this.input.value) {
+        this.input.value = '';
+        this.filteredOptions$.next(this._options);
+      }
+    }
+  }
+
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
       this.input.focus();
@@ -364,23 +383,9 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
   }
 
   onFocusOut(event: FocusEvent) {
-    // If we have a valid value
-    if (!!this._value) {
-      // If we have cleared the input then clear the value
-      if (!this.input.value) {
-        this.filteredOptions$.next(this._options);
-        this.value = null;
-      }
-    }
-    // If we do not have a valid value, and there are no filtered options, then clear the input
-    else if (this.filteredOptions$.value.length == 0) {
-      this.filteredOptions$.next(this._options);
-      this.input.value = '';
-    }
-
     this.touched = true;
     this.onTouched();
-    this.focused = this.input.focused;
+    this.focused = false;
     this.stateChanges.next();
   }
 
