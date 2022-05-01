@@ -50,6 +50,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #employmentTypeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
@@ -393,4 +394,19 @@ export class EmploymentTypeInputComponent implements MatFormFieldControl<string>
     }
   }
 
+
+  onClosed(): void {
+    /*
+     * If the user entered text in the input to filter the options, but they did not select an
+     * option, then the selected value will be null but the input value will be valid, i.e. not null
+     * or blank. We then need to reset the input value and the filtered options so that if the
+     * control is activated again all options are available.
+     */
+    if (!this._value) {
+      if (!!this.input.value) {
+        this.input.value = '';
+        this.filteredOptions$.next(this._options);
+      }
+    }
+  }
 }

@@ -50,6 +50,7 @@ import {RolePurpose} from '../services/role-purpose';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #rolePurposeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

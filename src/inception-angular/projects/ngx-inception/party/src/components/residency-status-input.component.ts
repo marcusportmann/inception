@@ -50,6 +50,7 @@ import {ResidencyStatus} from '../services/residency-status';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #residencyStatusAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

@@ -50,6 +50,7 @@ import {Title} from '../services/title';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #titleAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

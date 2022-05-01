@@ -50,6 +50,7 @@ import {SkillType} from '../services/skill-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #skillTypeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

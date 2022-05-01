@@ -50,6 +50,7 @@ import {SourceOfWealthType} from '../services/source-of-wealth-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #sourceOfWealthTypeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

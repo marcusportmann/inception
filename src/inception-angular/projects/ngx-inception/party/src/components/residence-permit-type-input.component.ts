@@ -50,6 +50,7 @@ import {ResidencePermitType} from '../services/residence-permit-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #residencePermitTypeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

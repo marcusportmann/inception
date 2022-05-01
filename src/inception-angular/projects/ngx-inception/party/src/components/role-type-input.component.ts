@@ -52,6 +52,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #roleTypeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

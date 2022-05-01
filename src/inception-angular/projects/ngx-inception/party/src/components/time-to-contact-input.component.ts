@@ -50,6 +50,7 @@ import {TimeToContact} from '../services/time-to-contact';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #timeToContactAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

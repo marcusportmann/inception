@@ -52,6 +52,7 @@ import {PreferenceTypeCategory} from '../services/preference-type-category';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #preferenceTypeCategoryAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

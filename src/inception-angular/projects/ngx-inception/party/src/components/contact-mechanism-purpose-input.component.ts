@@ -51,6 +51,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #contactMechanismPurposeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

@@ -50,6 +50,7 @@ import {Segment} from '../services/segment';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #segmentAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

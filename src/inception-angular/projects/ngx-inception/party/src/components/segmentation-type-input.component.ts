@@ -50,6 +50,7 @@ import {SegmentationType} from '../services/segmentation-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #segmentationTypeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

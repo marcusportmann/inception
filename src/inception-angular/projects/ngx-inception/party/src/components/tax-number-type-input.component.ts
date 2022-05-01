@@ -50,6 +50,7 @@ import {TaxNumberType} from '../services/tax-number-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #taxNumberTypeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

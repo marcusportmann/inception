@@ -50,6 +50,7 @@ import {StatusType} from '../services/status-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #statusTypeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

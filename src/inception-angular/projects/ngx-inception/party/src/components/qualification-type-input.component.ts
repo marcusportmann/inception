@@ -50,6 +50,7 @@ import {QualificationType} from '../services/qualification-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #qualificationTypeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

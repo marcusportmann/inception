@@ -50,6 +50,7 @@ import {Race} from '../services/race';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #raceAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

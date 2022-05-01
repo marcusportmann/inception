@@ -50,6 +50,7 @@ import {ResidentialType} from '../services/residential-type';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #residentialTypeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option

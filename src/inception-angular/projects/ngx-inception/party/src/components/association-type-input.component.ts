@@ -50,6 +50,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #associationTypeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
@@ -271,8 +272,8 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.referenceService.getCountries().pipe(first()).subscribe((countries: Map<string, Country>) => {
-      this._options = Array.from(countries.values());
+    this.referenceService.getAssociationTypes().pipe(first()).subscribe((associationTypes: Map<string, AssociationType>) => {
+      this._options = Array.from(associationTypes.values());
 
       this.filteredOptions$.next(this._options);
 
@@ -307,7 +308,7 @@ export class AssociationTypeInputComponent implements MatFormFieldControl<string
 
       value = value.toLowerCase();
 
-      let filteredOptions: Country[] = [];
+      let filteredOptions: AssociationType[] = [];
 
       for (const option of this._options) {
         if (option.name.toLowerCase().indexOf(value) !== -1) {

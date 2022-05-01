@@ -52,6 +52,7 @@ import {PhysicalAddressPurpose} from '../services/physical-address-purpose';
         (focusout)="onFocusOut($event)">
       <mat-autocomplete
         #physicalAddressPurposeAutocomplete="matAutocomplete"
+        (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         <mat-option
