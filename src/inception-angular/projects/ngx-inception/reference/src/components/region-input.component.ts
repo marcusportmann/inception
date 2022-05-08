@@ -308,11 +308,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
         this._options = [];
 
         for (const region of regions.values()) {
-          if (!!parameters.country) {
-            if (region.country === parameters.country) {
-              this._options.push(region);
-            }
-          } else {
+          if ((!parameters.country) || (region.country === parameters.country)) {
             this._options.push(region);
           }
         }

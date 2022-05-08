@@ -417,4 +417,3 @@ export class LockTypeCategoryInputComponent implements MatFormFieldControl<strin
     }
   }
 }
-

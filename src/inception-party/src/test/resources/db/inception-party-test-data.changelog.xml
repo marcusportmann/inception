@@ -1421,6 +1421,7 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Segmentation Segment"/>
       <column name="description" value="Test Segmentation Segment"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
     <insert schemaName="party" tableName="segmentation_types">
@@ -1429,6 +1430,7 @@
       <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Test Segmentation Segment"/>
       <column name="description" value="Test Segmentation Segment"/>
+      <column name="party_types" value="organization,person"/>
     </insert>
 
 

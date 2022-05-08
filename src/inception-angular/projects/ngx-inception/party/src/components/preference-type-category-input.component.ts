@@ -315,6 +315,11 @@ export class PreferenceTypeCategoryInputComponent implements MatFormFieldControl
 
         this.filteredOptions$.next(this._options);
 
+        /*
+         * If a value has already been set, attempt to confirm it is valid by finding the
+         * corresponding option. If a match is found, use the option's name as the input's value.
+         * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
+         */
         if (!!this.value) {
           for (const option of this._options) {
             if (option.code === this.value) {

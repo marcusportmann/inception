@@ -308,17 +308,18 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
         this._options = [];
 
         for (const associationPropertyType of associationPropertyTypes.values()) {
-          if (!!parameters.associationType) {
-            if (associationPropertyType.associationType === parameters.associationType) {
-              this._options.push(associationPropertyType);
-            }
-          } else {
+          if ((!parameters.associationType) || (associationPropertyType.associationType === parameters.associationType)) {
             this._options.push(associationPropertyType);
           }
         }
 
         this.filteredOptions$.next(this._options);
 
+        /*
+         * If a value has already been set, attempt to confirm it is valid by finding the
+         * corresponding option. If a match is found, use the option's name as the input's value.
+         * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
+         */
         if (!!this.value) {
           for (const option of this._options) {
             if (option.code === this.value) {
@@ -450,4 +451,3 @@ export class AssociationPropertyTypeInputComponent implements MatFormFieldContro
     }
   }
 }
-

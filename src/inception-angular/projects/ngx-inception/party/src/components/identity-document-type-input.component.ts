@@ -123,7 +123,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
   private _options: IdentityDocumentType[] = [];
 
   /**
-   * The code for the aaa bbb to retrieve the identity document types for.
+   * The code for the party type to retrieve the identity document types for.
    */
   private partyType$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
@@ -258,7 +258,7 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
   }
 
   /**
-   * The code for the aaa bbb to retrieve the identity document types for.
+   * The code for the party type to retrieve the identity document types for.
    */
   @Input() get partyType(): string | null {
     return this.partyType$.value;
@@ -315,6 +315,11 @@ export class IdentityDocumentTypeInputComponent implements MatFormFieldControl<s
 
         this.filteredOptions$.next(this._options);
 
+        /*
+         * If a value has already been set, attempt to confirm it is valid by finding the
+         * corresponding option. If a match is found, use the option's name as the input's value.
+         * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
+         */
         if (!!this.value) {
           for (const option of this._options) {
             if (option.code === this.value) {

@@ -2890,12 +2890,14 @@
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Income"/>
       <column name="description" value="Income"/>
+      <column name="party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="segmentation_types">
       <column name="code" value="small_medium_enterprise"/>
       <column name="locale_id" value="en-US"/>
       <column name="name" value="Small Medium Enterprise"/>
       <column name="description" value="Small Medium Enterprise"/>
+      <column name="party_types" value="organization"/>
     </insert>
 
     <insert schemaName="party" tableName="segments">
@@ -3364,7 +3366,7 @@
       <column name="name" value="VAT Tax Number"/>
       <column name="description" value="South African VAT Tax Number"/>
       <column name="country_of_issue" value="ZA"/>
-      <column name="party_types" value="organization,person"/>
+      <column name="party_types" value="organization"/>
       <column name="pattern" value="((19|20)[\d]{2}/[\d]{6}/[\d]{2})"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">
@@ -6799,12 +6801,14 @@
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Income"/>
       <column name="description" value="Income"/>
+      <column name="party_types" value="person"/>
     </insert>
     <insert schemaName="party" tableName="segmentation_types">
       <column name="code" value="small_medium_enterprise"/>
       <column name="locale_id" value="en-ZA"/>
       <column name="name" value="Small Medium Enterprise"/>
       <column name="description" value="Small Medium Enterprise"/>
+      <column name="party_types" value="organization"/>
     </insert>
 
     <insert schemaName="party" tableName="segments">
@@ -7273,7 +7277,7 @@
       <column name="name" value="VAT Tax Number"/>
       <column name="description" value="South African VAT Tax Number"/>
       <column name="country_of_issue" value="ZA"/>
-      <column name="party_types" value="organization,person"/>
+      <column name="party_types" value="organization"/>
       <column name="pattern" value="((19|20)[\d]{2}/[\d]{6}/[\d]{2})"/>
     </insert>
     <insert schemaName="party" tableName="tax_number_types">

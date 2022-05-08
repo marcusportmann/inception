@@ -42,6 +42,11 @@ export class SegmentationType {
   name: string;
 
   /**
+   * The codes for the party types the segmentation type is associated with.
+   */
+  partyTypes: string[];
+
+  /**
    * The sort index for the segmentation type.
    */
   sortIndex: number;
@@ -59,15 +64,17 @@ export class SegmentationType {
    * @param sortIndex   The sort index for the segmentation type.
    * @param name        The name of the segmentation type.
    * @param description The description for the segmentation type.
+   * @param partyTypes  The codes for the party types the segmentation type is associated with.
    * @param tenantId    The ID for the tenant the segmentation type is specific to.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
-              tenantId?: string) {
+              partyTypes: string[], tenantId?: string) {
     this.code = code;
     this.localeId = localeId;
     this.sortIndex = sortIndex;
     this.name = name;
     this.description = description;
+    this.partyTypes = partyTypes;
     this.tenantId = tenantId;
   }
 }

@@ -126,6 +126,3 @@ import {TitleInputComponent} from './title-input.component';
 })
 export class PartyComponentsModule {
 }
-
-
-

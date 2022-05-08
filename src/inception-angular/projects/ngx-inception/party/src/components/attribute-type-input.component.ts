@@ -22,8 +22,10 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first} from 'rxjs/operators';
+import {
+  BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription, throttleTime
+} from 'rxjs';
+import {debounceTime, first, map} from 'rxjs/operators';
 import {AttributeType} from '../services/attribute-type';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -38,7 +40,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #attributeTypeInput
+        #input
         type="text"
         matInput
         autocompleteSelectionRequired
@@ -116,9 +118,19 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
   /**
-   * The options for the autocomplete.
+   * The attribute type options.
    */
   private _options: AttributeType[] = [];
+
+  /**
+   * The code for the attribute type category to retrieve the attribute types for.
+   */
+  private category$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
+  /**
+   * The code for the party type to retrieve the attribute types for.
+   */
+  private partyType$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   private subscriptions: Subscription = new Subscription();
 
@@ -242,12 +254,46 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
     }
   }
 
+  /**
+   * The code for the attribute type category to retrieve the attribute types for.
+   */
+  @Input() get category(): string | null {
+    return this.category$.value;
+  }
+
+  set category(category: string | null) {
+    if (category == undefined) {
+      category = null;
+    }
+
+    if (category !== this.category$.value) {
+      this.category$.next(category);
+    }
+  }
+
   get empty(): boolean {
     return ((this._value == null) || (this._value.length == 0));
   }
 
   get errorState(): boolean {
-    return this.required && ((this._value == null) || (this._value.length == 0)) && this.touched;
+    return this.required && this.empty && this.touched;
+  }
+
+  /**
+   * The code for the party type to retrieve the attribute types for.
+   */
+  @Input() get partyType(): string | null {
+    return this.partyType$.value;
+  }
+
+  set partyType(partyType: string | null) {
+    if (partyType == undefined) {
+      partyType = null;
+    }
+
+    if (partyType !== this.partyType$.value) {
+      this.partyType$.next(partyType);
+    }
   }
 
   @HostBinding('class.floating')
@@ -277,28 +323,40 @@ export class AttributeTypeInputComponent implements MatFormFieldControl<string>,
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.partyReferenceService.getAttributeTypes().pipe(first()).subscribe((attributeTypes: Map<string, AttributeType>) => {
-      this._options = Array.from(attributeTypes.values());
+    this.subscriptions.add(combineLatest([this.category$, this.partyType$]).pipe(throttleTime(250), map(values => ({
+      category: this.category$.value,
+      partyType: this.partyType$.value
+    }))).subscribe(parameters => {
+      this.partyReferenceService.getAttributeTypes().pipe(first()).subscribe((attributeTypes: Map<string, AttributeType>) => {
+        this._options = [];
 
-      this.filteredOptions$.next(this._options);
-
-      /*
-       * If a value has already been set, attempt to confirm it is valid by finding the
-       * corresponding option. If a match is found, use the option's name as the input's value.
-       * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
-       */
-      if (!!this.value) {
-        for (const option of this._options) {
-          if (option.code === this.value) {
-            this.input.value = option.name;
-            return;
+        for (const attributeType of attributeTypes.values()) {
+          if (((!parameters.category) || (attributeType.category === parameters.category)) &&
+            ((!parameters.partyType) || ((!!attributeType.partyTypes) && (attributeType.partyTypes.indexOf(parameters.partyType) !== -1)))) {
+            this._options.push(attributeType);
           }
         }
 
-        // The value is invalid so clear it
-        this.value = null;
-      }
-    });
+        this.filteredOptions$.next(this._options);
+
+        /*
+         * If a value has already been set, attempt to confirm it is valid by finding the
+         * corresponding option. If a match is found, use the option's name as the input's value.
+         * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
+         */
+        if (!!this.value) {
+          for (const option of this._options) {
+            if (option.code === this.value) {
+              this.input.value = option.name;
+              return;
+            }
+          }
+
+          // The value is invalid so clear it
+          this.value = null;
+        }
+      });
+    }));
 
     this.subscriptions.add(this.inputValue$.pipe(
       debounceTime(250)).subscribe((value: string) => {

@@ -16,7 +16,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Association Type</mat-label>
-            <association-type-input [formControl]="associationTypeControl" required></association-type-input>
+            <association-type-input [firstPartyType]="'organization'" [secondPartyType]="'person'" [formControl]="associationTypeControl" required></association-type-input>
             <mat-error *ngIf="associationTypeControl.errors && !associationTypeControl.untouched">
               <span *ngIf="associationTypeControl.errors?.required">An association type is required.</span>
             </mat-error>
@@ -38,7 +38,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Attribute Type</mat-label>
-            <attribute-type-input [formControl]="attributeTypeControl" required></attribute-type-input>
+            <attribute-type-input [category]="'anthropometric_measurements'" [partyType]="'person'" [formControl]="attributeTypeControl" required></attribute-type-input>
             <mat-error *ngIf="attributeTypeControl.errors && !attributeTypeControl.untouched">
               <span *ngIf="attributeTypeControl.errors?.required">An attribute type is required.</span>
             </mat-error>
@@ -60,7 +60,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Contact Mechanism Purpose</mat-label>
-            <contact-mechanism-purpose-input [formControl]="contactMechanismPurposeControl" required></contact-mechanism-purpose-input>
+            <contact-mechanism-purpose-input [contactMechanismType]="'mobile_number'" [partyType]="'person'" [formControl]="contactMechanismPurposeControl" required></contact-mechanism-purpose-input>
             <mat-error *ngIf="contactMechanismPurposeControl.errors && !contactMechanismPurposeControl.untouched">
               <span *ngIf="contactMechanismPurposeControl.errors?.required">A contact mechanism purpose is required.</span>
             </mat-error>
@@ -71,7 +71,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Contact Mechanism Role</mat-label>
-            <contact-mechanism-role-input [formControl]="contactMechanismRoleControl" required></contact-mechanism-role-input>
+            <contact-mechanism-role-input [contactMechanismType]="'phone_number'" [partyType]="'person'" [formControl]="contactMechanismRoleControl" required></contact-mechanism-role-input>
             <mat-error *ngIf="contactMechanismRoleControl.errors && !contactMechanismRoleControl.untouched">
               <span *ngIf="contactMechanismRoleControl.errors?.required">A contact mechanism role is required.</span>
             </mat-error>
@@ -104,7 +104,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Employment Type</mat-label>
-            <employment-type-input [formControl]="employmentTypeControl" required></employment-type-input>
+            <employment-type-input [employmentStatus]="'other'" [formControl]="employmentTypeControl" required></employment-type-input>
             <mat-error *ngIf="employmentTypeControl.errors && !employmentTypeControl.untouched">
               <span *ngIf="employmentTypeControl.errors?.required">An employment type is required.</span>
             </mat-error>
@@ -115,15 +115,13 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>External Reference Type</mat-label>
-            <external-reference-type-input [formControl]="externalReferenceTypeControl" required></external-reference-type-input>
+            <external-reference-type-input [partyType]="'person'" [formControl]="externalReferenceTypeControl" required></external-reference-type-input>
             <mat-error *ngIf="externalReferenceTypeControl.errors && !externalReferenceTypeControl.untouched">
               <span *ngIf="externalReferenceTypeControl.errors?.required">An external reference type is required.</span>
             </mat-error>
           </mat-form-field>
         </div>
       </div>
-
-
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
@@ -161,7 +159,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Industry Classification Category</mat-label>
-            <industry-classification-category-input [formControl]="industryClassificationCategoryControl" required></industry-classification-category-input>
+            <industry-classification-category-input [system]="'sars_sic'" [formControl]="industryClassificationCategoryControl" required></industry-classification-category-input>
             <mat-error *ngIf="industryClassificationCategoryControl.errors && !industryClassificationCategoryControl.untouched">
               <span *ngIf="industryClassificationCategoryControl.errors?.required">An industry classification category is required.</span>
             </mat-error>
@@ -172,7 +170,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Industry Classification</mat-label>
-            <industry-classification-input [formControl]="industryClassificationControl" required></industry-classification-input>
+            <industry-classification-input [category]="'B'" [system]="'sars_sic'" [formControl]="industryClassificationControl" required></industry-classification-input>
             <mat-error *ngIf="industryClassificationControl.errors && !industryClassificationControl.untouched">
               <span *ngIf="industryClassificationControl.errors?.required">An industry classification is required.</span>
             </mat-error>
@@ -205,7 +203,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Lock Type</mat-label>
-            <lock-type-input [formControl]="lockTypeControl" required></lock-type-input>
+            <lock-type-input [category]="'fraud'" [partyType]="'person'" [formControl]="lockTypeControl" required></lock-type-input>
             <mat-error *ngIf="lockTypeControl.errors && !lockTypeControl.untouched">
               <span *ngIf="lockTypeControl.errors?.required">A lock type is required.</span>
             </mat-error>
@@ -227,7 +225,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Marriage Type</mat-label>
-            <marriage-type-input [formControl]="marriageTypeControl" required></marriage-type-input>
+            <marriage-type-input [maritalStatus]="'married'" [formControl]="marriageTypeControl" required></marriage-type-input>
             <mat-error *ngIf="marriageTypeControl.errors && !marriageTypeControl.untouched">
               <span *ngIf="marriageTypeControl.errors?.required">A marriage type is required.</span>
             </mat-error>
@@ -304,7 +302,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Preference Type</mat-label>
-            <preference-type-input [formControl]="preferenceTypeControl" required></preference-type-input>
+            <preference-type-input [category]="'correspondence'" [partyType]="'organization'" [formControl]="preferenceTypeControl" required></preference-type-input>
             <mat-error *ngIf="preferenceTypeControl.errors && !preferenceTypeControl.untouched">
               <span *ngIf="preferenceTypeControl.errors?.required">A preference type is required.</span>
             </mat-error>
@@ -337,7 +335,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Residence Permit Type</mat-label>
-            <residence-permit-type-input [formControl]="residencePermitTypeControl" required></residence-permit-type-input>
+            <residence-permit-type-input [countryOfIssue]="'ZA'" [formControl]="residencePermitTypeControl" required></residence-permit-type-input>
             <mat-error *ngIf="residencePermitTypeControl.errors && !residencePermitTypeControl.untouched">
               <span *ngIf="residencePermitTypeControl.errors?.required">A residence permit type is required.</span>
             </mat-error>
@@ -392,7 +390,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Segment</mat-label>
-            <segment-input [formControl]="segmentControl" required></segment-input>
+            <segment-input [partyType]="'person'" [type]="'income'" [formControl]="segmentControl" required></segment-input>
             <mat-error *ngIf="segmentControl.errors && !segmentControl.untouched">
               <span *ngIf="segmentControl.errors?.required">A segment is required.</span>
             </mat-error>
@@ -403,7 +401,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Segmentation Type</mat-label>
-            <segmentation-type-input [formControl]="segmentationTypeControl" required></segmentation-type-input>
+            <segmentation-type-input [partyType]="'person'" [formControl]="segmentationTypeControl" required></segmentation-type-input>
             <mat-error *ngIf="segmentationTypeControl.errors && !segmentationTypeControl.untouched">
               <span *ngIf="segmentationTypeControl.errors?.required">A segmentation type is required.</span>
             </mat-error>
@@ -414,7 +412,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Skill Type</mat-label>
-            <skill-type-input [formControl]="skillTypeControl" required></skill-type-input>
+            <skill-type-input [parent]="'communication'" [formControl]="skillTypeControl" required></skill-type-input>
             <mat-error *ngIf="skillTypeControl.errors && !skillTypeControl.untouched">
               <span *ngIf="skillTypeControl.errors?.required">A skill type is required.</span>
             </mat-error>
@@ -447,7 +445,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Status Type Category</mat-label>
-            <status-type-category-input [formControl]="statusTypeCategoryControl" required></status-type-category-input>
+            <status-type-category-input [partyType]="'person'" [formControl]="statusTypeCategoryControl" required></status-type-category-input>
             <mat-error *ngIf="statusTypeCategoryControl.errors && !statusTypeCategoryControl.untouched">
               <span *ngIf="statusTypeCategoryControl.errors?.required">A status type category is required.</span>
             </mat-error>
@@ -458,7 +456,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Status Type</mat-label>
-            <status-type-input [formControl]="statusTypeControl" required></status-type-input>
+            <status-type-input [category]="'fraud'" [partyType]="'person'" [formControl]="statusTypeControl" required></status-type-input>
             <mat-error *ngIf="statusTypeControl.errors && !statusTypeControl.untouched">
               <span *ngIf="statusTypeControl.errors?.required">A status type is required.</span>
             </mat-error>
@@ -469,7 +467,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Tax Number Type</mat-label>
-            <tax-number-type-input [formControl]="taxNumberTypeControl" required></tax-number-type-input>
+            <tax-number-type-input [countryOfIssue]="'ZA'" [partyType]="'person'" [formControl]="taxNumberTypeControl" required></tax-number-type-input>
             <mat-error *ngIf="taxNumberTypeControl.errors && !taxNumberTypeControl.untouched">
               <span *ngIf="taxNumberTypeControl.errors?.required">A tax number type is required.</span>
             </mat-error>

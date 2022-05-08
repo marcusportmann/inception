@@ -42,7 +42,7 @@ export class Segment {
   name: string;
 
   /**
-   * The comma-delimited codes for the party types the segment is associated with.
+   * The codes for the party types the segment is associated with.
    */
   partyTypes: string[];
 
@@ -70,7 +70,7 @@ export class Segment {
    * @param sortIndex   The sort index for the segment.
    * @param name        The name of the segment.
    * @param description The description for the segment.
-   * @param partyTypes  The comma-delimited codes for the party types the segment is associated with.
+   * @param partyTypes  The codes for the party types the segment is associated with.
    * @param tenantId    The ID for the tenant the segment is specific to.
    */
   constructor(code: string, type: string, localeId: string, sortIndex: number, name: string,

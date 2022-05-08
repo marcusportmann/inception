@@ -22,8 +22,10 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first} from 'rxjs/operators';
+import {
+  BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription, throttleTime
+} from 'rxjs';
+import {debounceTime, first, map} from 'rxjs/operators';
 import {MarriageType} from '../services/marriage-type';
 import {PartyReferenceService} from '../services/party-reference.service';
 
@@ -38,7 +40,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #marriageTypeInput
+        #input
         type="text"
         matInput
         autocompleteSelectionRequired
@@ -116,9 +118,14 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
   /**
-   * The options for the autocomplete.
+   * The marriage type options.
    */
   private _options: MarriageType[] = [];
+
+  /**
+   * The code for the marital status to retrieve the marriage types for.
+   */
+  private maritalStatus$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   private subscriptions: Subscription = new Subscription();
 
@@ -242,12 +249,29 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
     }
   }
 
+  /**
+   * The code for the marital status to retrieve the marriage types for.
+   */
+  @Input() get maritalStatus(): string | null {
+    return this.maritalStatus$.value;
+  }
+
+  set maritalStatus(maritalStatus: string | null) {
+    if (maritalStatus == undefined) {
+      maritalStatus = null;
+    }
+
+    if (maritalStatus !== this.maritalStatus$.value) {
+      this.maritalStatus$.next(maritalStatus);
+    }
+  }
+
   get empty(): boolean {
     return ((this._value == null) || (this._value.length == 0));
   }
 
   get errorState(): boolean {
-    return this.required && ((this._value == null) || (this._value.length == 0)) && this.touched;
+    return this.required && this.empty && this.touched;
   }
 
   @HostBinding('class.floating')
@@ -277,28 +301,38 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.partyReferenceService.getMarriageTypes().pipe(first()).subscribe((marriageTypes: Map<string, MarriageType>) => {
-      this._options = Array.from(marriageTypes.values());
+    this.subscriptions.add(combineLatest([this.maritalStatus$]).pipe(throttleTime(250), map(values => ({
+      maritalStatus: this.maritalStatus$.value
+    }))).subscribe(parameters => {
+      this.partyReferenceService.getMarriageTypes().pipe(first()).subscribe((marriageTypes: Map<string, MarriageType>) => {
+        this._options = [];
 
-      this.filteredOptions$.next(this._options);
-
-      /*
-       * If a value has already been set, attempt to confirm it is valid by finding the
-       * corresponding option. If a match is found, use the option's name as the input's value.
-       * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
-       */
-      if (!!this.value) {
-        for (const option of this._options) {
-          if (option.code === this.value) {
-            this.input.value = option.name;
-            return;
+        for (const marriageType of marriageTypes.values()) {
+          if ((!parameters.maritalStatus) || (marriageType.maritalStatus === parameters.maritalStatus)) {
+            this._options.push(marriageType);
           }
         }
 
-        // The value is invalid so clear it
-        this.value = null;
-      }
-    });
+        this.filteredOptions$.next(this._options);
+
+        /*
+         * If a value has already been set, attempt to confirm it is valid by finding the
+         * corresponding option. If a match is found, use the option's name as the input's value.
+         * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
+         */
+        if (!!this.value) {
+          for (const option of this._options) {
+            if (option.code === this.value) {
+              this.input.value = option.name;
+              return;
+            }
+          }
+
+          // The value is invalid so clear it
+          this.value = null;
+        }
+      });
+    }));
 
     this.subscriptions.add(this.inputValue$.pipe(
       debounceTime(250)).subscribe((value: string) => {
@@ -399,7 +433,7 @@ export class MarriageTypeInputComponent implements MatFormFieldControl<string>,
 
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
-    // controlElement.setEmployment('aria-describedby', ids.join(' '));
+    // controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
   /**

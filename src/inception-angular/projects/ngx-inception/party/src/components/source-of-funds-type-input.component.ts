@@ -416,6 +416,4 @@ export class SourceOfFundsTypeInputComponent implements MatFormFieldControl<stri
       this.value = value as string;
     }
   }
-
-
 }

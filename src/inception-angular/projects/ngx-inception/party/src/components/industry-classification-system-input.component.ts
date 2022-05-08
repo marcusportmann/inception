@@ -417,4 +417,3 @@ export class IndustryClassificationSystemInputComponent implements MatFormFieldC
     }
   }
 }
-

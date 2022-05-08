@@ -417,3 +417,4 @@ export class SourceOfWealthTypeInputComponent implements MatFormFieldControl<str
     }
   }
 }
+

@@ -418,3 +418,4 @@ export class ContactMechanismTypeInputComponent implements MatFormFieldControl<s
     }
   }
 }
+

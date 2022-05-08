@@ -22,10 +22,12 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first} from 'rxjs/operators';
-import {PartyReferenceService} from '../services/party-reference.service';
+import {
+  BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription, throttleTime
+} from 'rxjs';
+import {debounceTime, first, map} from 'rxjs/operators';
 import {SkillType} from '../services/skill-type';
+import {PartyReferenceService} from '../services/party-reference.service';
 
 /**
  * The SkillTypeInputComponent class implements the skill type input component.
@@ -38,7 +40,7 @@ import {SkillType} from '../services/skill-type';
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #skillTypeInput
+        #input
         type="text"
         matInput
         autocompleteSelectionRequired
@@ -116,9 +118,14 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
   /**
-   * The options for the autocomplete.
+   * The skill type options.
    */
   private _options: SkillType[] = [];
+
+  /**
+   * The code for the parent to retrieve the skill types for.
+   */
+  private parent$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   private subscriptions: Subscription = new Subscription();
 
@@ -242,12 +249,29 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
     }
   }
 
+  /**
+   * The code for the parent to retrieve the skill types for.
+   */
+  @Input() get parent(): string | null {
+    return this.parent$.value;
+  }
+
+  set parent(parent: string | null) {
+    if (parent == undefined) {
+      parent = null;
+    }
+
+    if (parent !== this.parent$.value) {
+      this.parent$.next(parent);
+    }
+  }
+
   get empty(): boolean {
     return ((this._value == null) || (this._value.length == 0));
   }
 
   get errorState(): boolean {
-    return this.required && ((this._value == null) || (this._value.length == 0)) && this.touched;
+    return this.required && this.empty && this.touched;
   }
 
   @HostBinding('class.floating')
@@ -277,28 +301,38 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.partyReferenceService.getSkillTypes().pipe(first()).subscribe((skillTypes: Map<string, SkillType>) => {
-      this._options = Array.from(skillTypes.values());
+    this.subscriptions.add(combineLatest([this.parent$]).pipe(throttleTime(250), map(values => ({
+      parent: this.parent$.value
+    }))).subscribe(parameters => {
+      this.partyReferenceService.getSkillTypes().pipe(first()).subscribe((skillTypes: Map<string, SkillType>) => {
+        this._options = [];
 
-      this.filteredOptions$.next(this._options);
-
-      /*
-       * If a value has already been set, attempt to confirm it is valid by finding the
-       * corresponding option. If a match is found, use the option's name as the input's value.
-       * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
-       */
-      if (!!this.value) {
-        for (const option of this._options) {
-          if (option.code === this.value) {
-            this.input.value = option.name;
-            return;
+        for (const skillType of skillTypes.values()) {
+          if ((!parameters.parent) || (skillType.parent === parameters.parent)) {
+            this._options.push(skillType);
           }
         }
 
-        // The value is invalid so clear it
-        this.value = null;
-      }
-    });
+        this.filteredOptions$.next(this._options);
+
+        /*
+         * If a value has already been set, attempt to confirm it is valid by finding the
+         * corresponding option. If a match is found, use the option's name as the input's value.
+         * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
+         */
+        if (!!this.value) {
+          for (const option of this._options) {
+            if (option.code === this.value) {
+              this.input.value = option.name;
+              return;
+            }
+          }
+
+          // The value is invalid so clear it
+          this.value = null;
+        }
+      });
+    }));
 
     this.subscriptions.add(this.inputValue$.pipe(
       debounceTime(250)).subscribe((value: string) => {
@@ -399,7 +433,7 @@ export class SkillTypeInputComponent implements MatFormFieldControl<string>,
 
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
-    // controlElement.setEmployment('aria-describedby', ids.join(' '));
+    // controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
   /**

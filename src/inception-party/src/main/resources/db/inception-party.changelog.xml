@@ -902,6 +902,9 @@
       <column name="description" type="nvarchar(200)" defaultValue="" remarks="The description for the segmentation type">
         <constraints nullable="false"/>
       </column>
+      <column name="party_types" type="nvarchar(310)" remarks="The comma-delimited list of codes for the party types the segmentation type is associated with">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
     <createIndex indexName="segmentation_types_locale_id_ix" schemaName="party" tableName="segmentation_types">
       <column name="locale_id"/>

@@ -22,14 +22,15 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first} from 'rxjs/operators';
+import {
+  BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription, throttleTime
+} from 'rxjs';
+import {debounceTime, first, map} from 'rxjs/operators';
 import {ContactMechanismRole} from '../services/contact-mechanism-role';
 import {PartyReferenceService} from '../services/party-reference.service';
 
 /**
- * The ContactMechanismRoleInputComponent class implements the contact mechanism role input
- * component.
+ * The ContactMechanismRoleInputComponent class implements the contact mechanism role input component.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +40,7 @@ import {PartyReferenceService} from '../services/party-reference.service';
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
-        #contactMechanismRoleInput
+        #input
         type="text"
         matInput
         autocompleteSelectionRequired
@@ -117,9 +118,19 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   //@Input('aria-describedby') userAriaDescribedBy?: string;
 
   /**
-   * The options for the autocomplete.
+   * The contact mechanism role options.
    */
   private _options: ContactMechanismRole[] = [];
+
+  /**
+   * The code for the contact mechanism type to retrieve the contact mechanism roles for.
+   */
+  private contactMechanismType$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
+  /**
+   * The code for the party type to retrieve the contact mechanism roles for.
+   */
+  private partyType$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   private subscriptions: Subscription = new Subscription();
 
@@ -243,12 +254,46 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
     }
   }
 
+  /**
+   * The code for the contact mechanism type to retrieve the contact mechanism roles for.
+   */
+  @Input() get contactMechanismType(): string | null {
+    return this.contactMechanismType$.value;
+  }
+
+  set contactMechanismType(contactMechanismType: string | null) {
+    if (contactMechanismType == undefined) {
+      contactMechanismType = null;
+    }
+
+    if (contactMechanismType !== this.contactMechanismType$.value) {
+      this.contactMechanismType$.next(contactMechanismType);
+    }
+  }
+
   get empty(): boolean {
     return ((this._value == null) || (this._value.length == 0));
   }
 
   get errorState(): boolean {
-    return this.required && ((this._value == null) || (this._value.length == 0)) && this.touched;
+    return this.required && this.empty && this.touched;
+  }
+
+  /**
+   * The code for the party type to retrieve the contact mechanism roles for.
+   */
+  @Input() get partyType(): string | null {
+    return this.partyType$.value;
+  }
+
+  set partyType(partyType: string | null) {
+    if (partyType == undefined) {
+      partyType = null;
+    }
+
+    if (partyType !== this.partyType$.value) {
+      this.partyType$.next(partyType);
+    }
   }
 
   @HostBinding('class.floating')
@@ -278,28 +323,40 @@ export class ContactMechanismRoleInputComponent implements MatFormFieldControl<s
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.partyReferenceService.getContactMechanismRoles().pipe(first()).subscribe((countries: Map<string, ContactMechanismRole>) => {
-      this._options = Array.from(countries.values());
+    this.subscriptions.add(combineLatest([this.contactMechanismType$, this.partyType$]).pipe(throttleTime(250), map(values => ({
+      contactMechanismType: this.contactMechanismType$.value,
+      partyType: this.partyType$.value
+    }))).subscribe(parameters => {
+      this.partyReferenceService.getContactMechanismRoles().pipe(first()).subscribe((contactMechanismRoles: Map<string, ContactMechanismRole>) => {
+        this._options = [];
 
-      this.filteredOptions$.next(this._options);
-
-      /*
-       * If a value has already been set, attempt to confirm it is valid by finding the
-       * corresponding option. If a match is found, use the option's name as the input's value.
-       * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
-       */
-      if (!!this.value) {
-        for (const option of this._options) {
-          if (option.code === this.value) {
-            this.input.value = option.name;
-            return;
+        for (const contactMechanismRole of contactMechanismRoles.values()) {
+          if (((!parameters.contactMechanismType) || (contactMechanismRole.contactMechanismType === parameters.contactMechanismType)) &&
+            ((!parameters.partyType) || ((!!contactMechanismRole.partyTypes) && (contactMechanismRole.partyTypes.indexOf(parameters.partyType) !== -1)))) {
+            this._options.push(contactMechanismRole);
           }
         }
 
-        // The value is invalid so clear it
-        this.value = null;
-      }
-    });
+        this.filteredOptions$.next(this._options);
+
+        /*
+         * If a value has already been set, attempt to confirm it is valid by finding the
+         * corresponding option. If a match is found, use the option's name as the input's value.
+         * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
+         */
+        if (!!this.value) {
+          for (const option of this._options) {
+            if (option.code === this.value) {
+              this.input.value = option.name;
+              return;
+            }
+          }
+
+          // The value is invalid so clear it
+          this.value = null;
+        }
+      });
+    }));
 
     this.subscriptions.add(this.inputValue$.pipe(
       debounceTime(250)).subscribe((value: string) => {
