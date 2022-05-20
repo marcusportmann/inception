@@ -21,7 +21,7 @@ Complete the following steps to setup a development environment on MacOS.
    ```
 3. Install OpenJDK 17 by executing the following commands in a Terminal window.
    ```
-   brew install openjdk
+   brew install openjdk@17
    ```
 4. Install Apache Maven by executing the following command in a Terminal window.
    ```
