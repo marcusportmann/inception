@@ -31,3 +31,5 @@ gradlew.bat
 *.log
 
 ObjectStore
+
+encrypted-dummy.pdf
