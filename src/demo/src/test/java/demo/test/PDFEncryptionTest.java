@@ -13,39 +13,29 @@ public class PDFEncryptionTest {
 
       PDDocument document = PDDocument.load(pdfBytes);
 
-      int keyLength = 128;
-
+      // Enable the access permissions: CanExtractContent, CanModify and CanPrint
       AccessPermission accessPermission = new AccessPermission();
+      accessPermission.setCanExtractContent(true);
+      accessPermission.setCanModify(true);
+      accessPermission.setCanPrint(true);
 
-      // Disable printing, everything else is allowed
-      //accessPermission.setCanAssembleDocument(true);
-      //accessPermission.setCanExtractContent(true);
-      //accessPermission.setCanExtractForAccessibility(true);
-      //accessPermission.setCanFillInForm(true);
-      //accessPermission.s
-
-
-      //accessPermission.setCanPrint(false);
-
-
-
-      // Owner password (to open the file with all permissions) is "12345"
-      // User password (to open the file but with restricted permissions, is empty here)
-      StandardProtectionPolicy standardProtectionPolicy = new StandardProtectionPolicy("owner", "user", accessPermission);
-      standardProtectionPolicy.setEncryptionKeyLength(keyLength);
+      // Use the same password for the owner and user
+      // The owner password is required to change or remove security
+      StandardProtectionPolicy standardProtectionPolicy =
+          new StandardProtectionPolicy("Password1", "Password1", accessPermission);
+      standardProtectionPolicy.setEncryptionKeyLength(256);
       standardProtectionPolicy.setPermissions(accessPermission);
       document.protect(standardProtectionPolicy);
 
-      String encryptedFilePath = System.getProperty("user.dir") + File.separator + "encrypted-dummy.pdf";
+      String encryptedFilePath =
+          System.getProperty("user.dir") + File.separator + "encrypted-dummy.pdf";
 
       System.out.println("Writing encrypted PDF file: " + encryptedFilePath);
-
-
 
       document.save(encryptedFilePath);
       document.close();
 
-          } catch (Throwable e) {
+    } catch (Throwable e) {
       System.err.println("[ERROR] " + e.getMessage());
       e.printStackTrace(System.err);
     }
