@@ -93,7 +93,7 @@ public class MandateProperty implements Serializable {
   private Boolean booleanValue;
 
   /** The date value for the mandate property. */
-  @Schema(description = "The date value for the mandate property")
+  @Schema(description = "The ISO 8601 format date value for the mandate property")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateValue")

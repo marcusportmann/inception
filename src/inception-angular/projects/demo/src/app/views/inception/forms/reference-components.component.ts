@@ -38,6 +38,8 @@ export class ReferenceComponentsComponent implements OnInit {
 
   regionControl: FormControl = new FormControl('', Validators.required);
 
+  timeZoneControl: FormControl = new FormControl('', Validators.required);
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder) {
 
@@ -48,7 +50,8 @@ export class ReferenceComponentsComponent implements OnInit {
       countries: this.countriesControl,
       country: this.countryControl,
       language: this.languageControl,
-      region: this.regionControl
+      region: this.regionControl,
+      timeZone: this.timeZoneControl
     });
   }
 
@@ -62,5 +65,6 @@ export class ReferenceComponentsComponent implements OnInit {
     console.log('Country = ', this.referenceForm.get('country')!.value);
     console.log('Language = ', this.referenceForm.get('language')!.value);
     console.log('Region = ', this.referenceForm.get('region')!.value);
+    console.log('Time Zone = ', this.referenceForm.get('timeZone')!.value);
   }
 }

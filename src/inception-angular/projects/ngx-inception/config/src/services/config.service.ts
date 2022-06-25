@@ -54,7 +54,7 @@ export class ConfigService {
    */
   deleteConfig(key: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.configApiUrlPrefix + '/configs/' + encodeURIComponent(key), {observe: 'response'})
+      this.config.apiUrlPrefix + '/config/configs/' + encodeURIComponent(key), {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -81,7 +81,7 @@ export class ConfigService {
    */
   getConfig(key: string): Observable<Config> {
     return this.httpClient.get<Config>(
-      this.config.configApiUrlPrefix + '/configs/' + encodeURIComponent(key), {reportProgress: true})
+      this.config.apiUrlPrefix + '/config/configs/' + encodeURIComponent(key), {reportProgress: true})
     .pipe(map((config: Config) => {
       return config;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -108,7 +108,7 @@ export class ConfigService {
    */
   getConfigValue(key: string): Observable<string> {
     return this.httpClient.get<string>(
-      this.config.configApiUrlPrefix + '/configs/' + encodeURIComponent(key) + '/value', {
+      this.config.apiUrlPrefix + '/config/configs/' + encodeURIComponent(key) + '/value', {
         reportProgress: true
       }).pipe(map((value: string) => {
       return value;
@@ -133,7 +133,7 @@ export class ConfigService {
    * @return The configs.
    */
   getConfigs(): Observable<Config[]> {
-    return this.httpClient.get<Config[]>(this.config.configApiUrlPrefix + '/configs',
+    return this.httpClient.get<Config[]>(this.config.apiUrlPrefix + '/config/configs',
       {reportProgress: true})
     .pipe(map((configs: Config[]) => {
       return configs;
@@ -156,7 +156,7 @@ export class ConfigService {
    * @return True if the config was saved successfully or false otherwise.
    */
   saveConfig(config: Config): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.config.configApiUrlPrefix + '/configs', config,
+    return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/config/configs', config,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;

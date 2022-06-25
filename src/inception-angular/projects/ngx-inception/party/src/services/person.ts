@@ -81,12 +81,12 @@ export class Person {
   /**
    * The date of birth for the person.
    */
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
 
   /**
    * The date of death for the person.
    */
-  dateOfDeath?: Date;
+  dateOfDeath?: string;
 
   /**
    * The educations for the person.
@@ -171,7 +171,7 @@ export class Person {
   /**
    * The date for the marital status for the person.
    */
-  maritalStatusDate?: Date;
+  maritalStatusDate?: string;
 
   /**
    * The code for the marriage type for the person if the person is married.

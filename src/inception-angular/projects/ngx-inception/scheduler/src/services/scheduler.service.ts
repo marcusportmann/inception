@@ -18,7 +18,7 @@ import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http'
 import {Inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  ProblemDetails, ServiceUnavailableError
+  ProblemDetails, ResponseConverter, ServiceUnavailableError
 } from 'ngx-inception/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
@@ -80,7 +80,7 @@ export class SchedulerService {
    * @return True if the job was created successfully or false otherwise.
    */
   createJob(job: Job): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.config.schedulerApiUrlPrefix + '/jobs', job, {observe: 'response'})
+    return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/scheduler/jobs', job, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -106,7 +106,7 @@ export class SchedulerService {
    * @return True if the job was deleted or false otherwise.
    */
   deleteJob(jobId: string): Observable<boolean> {
-    return this.httpClient.delete<boolean>(this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(jobId),
+    return this.httpClient.delete<boolean>(this.config.apiUrlPrefix + '/scheduler/jobs/' + encodeURIComponent(jobId),
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -132,8 +132,9 @@ export class SchedulerService {
    *
    * @return The job.
    */
+  @ResponseConverter
   getJob(jobId: string): Observable<Job> {
-    return this.httpClient.get<Job>(this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(jobId),
+    return this.httpClient.get<Job>(this.config.apiUrlPrefix + '/scheduler/jobs/' + encodeURIComponent(jobId),
       {reportProgress: true})
     .pipe(map((job: Job) => {
       return job;
@@ -161,7 +162,7 @@ export class SchedulerService {
    */
   getJobName(jobId: string): Observable<string> {
     return this.httpClient.get<string>(
-      this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(jobId) + '/name', {
+      this.config.apiUrlPrefix + '/scheduler/jobs/' + encodeURIComponent(jobId) + '/name', {
         reportProgress: true,
       }).pipe(map((jobName: string) => {
       return jobName;
@@ -185,8 +186,9 @@ export class SchedulerService {
    *
    * @return The jobs.
    */
+  @ResponseConverter
   getJobs(): Observable<Job[]> {
-    return this.httpClient.get<Job[]>(this.config.schedulerApiUrlPrefix + '/jobs', {reportProgress: true})
+    return this.httpClient.get<Job[]>(this.config.apiUrlPrefix + '/scheduler/jobs', {reportProgress: true})
     .pipe(map((jobs: Job[]) => {
       return jobs;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -208,7 +210,7 @@ export class SchedulerService {
    * @return True if the job was updated successfully or false otherwise.
    */
   updateJob(job: Job): Observable<boolean> {
-    return this.httpClient.put<boolean>(this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(job.id), job,
+    return this.httpClient.put<boolean>(this.config.apiUrlPrefix + '/scheduler/jobs/' + encodeURIComponent(job.id), job,
       {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {

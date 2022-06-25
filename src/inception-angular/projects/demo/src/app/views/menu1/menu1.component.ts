@@ -16,7 +16,9 @@
 
 import {Component} from '@angular/core';
 import {combineLatest, debounce, interval, timer} from 'rxjs';
-import {debounceTime, map} from 'rxjs/operators';
+import {debounceTime, first, map} from 'rxjs/operators';
+import {Data} from '../../services/data';
+import {DataService} from '../../services/data.service';
 
 /**
  * The Menu1Component class implements the menu 1 component.
@@ -34,27 +36,34 @@ import {debounceTime, map} from 'rxjs/operators';
 })
 export class Menu1Component {
 
-  constructor() {
+  constructor(private dataService: DataService) {
   }
 
   clickMe(): void {
 
-    let nullArray: string[] | null = null;
+    this.dataService.getData().pipe(first()).subscribe((data: Data) => {
+      console.log('data = ', data);
 
-    let emptyArray: string[] = [];
-
-    console.log('nullArray = ', nullArray);
-    console.log('!nullArray = ', (!nullArray));
-    console.log('!!nullArray = ', (!!nullArray));
-
-    console.log('emptyArray = ', emptyArray);
-    console.log('!emptyArray = ', (!emptyArray));
-    console.log('!!emptyArray = ', (!!emptyArray));
+      this.dataService.validateData(data).pipe(first()).subscribe();
+    });
 
 
-    const timer1$ = timer(0, 1500);
-
-    const timer2$ = timer(1000, 5000);
+    // let nullArray: string[] | null = null;
+    //
+    // let emptyArray: string[] = [];
+    //
+    // console.log('nullArray = ', nullArray);
+    // console.log('!nullArray = ', (!nullArray));
+    // console.log('!!nullArray = ', (!!nullArray));
+    //
+    // console.log('emptyArray = ', emptyArray);
+    // console.log('!emptyArray = ', (!emptyArray));
+    // console.log('!!emptyArray = ', (!!emptyArray));
+    //
+    //
+    // const timer1$ = timer(0, 1500);
+    //
+    // const timer2$ = timer(1000, 5000);
 
 
 

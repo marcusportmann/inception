@@ -67,7 +67,7 @@ public class Lock implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The date the lock is effective from. */
-  @Schema(description = "The date the lock is effective from")
+  @Schema(description = "The ISO 8601 format date the lock is effective from")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveFrom")
@@ -77,7 +77,7 @@ public class Lock implements Serializable {
   private LocalDate effectiveFrom;
 
   /** The date the lock is effective to. */
-  @Schema(description = "The date the lock is effective to")
+  @Schema(description = "The ISO 8601 format date the lock is effective to")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveTo")

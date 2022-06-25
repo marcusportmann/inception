@@ -18,7 +18,7 @@ import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http'
 import {Inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  ProblemDetails, ServiceUnavailableError
+  ProblemDetails, ResponseConverter, ServiceUnavailableError
 } from 'ngx-inception/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
@@ -58,7 +58,7 @@ export class CodesService {
    */
   createCode(code: Code): Observable<boolean> {
     return this.httpClient.post<boolean>(
-      this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(code.codeCategoryId) + '/codes', code,
+      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(code.codeCategoryId) + '/codes', code,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -87,7 +87,7 @@ export class CodesService {
    * @return True if the code category was created successfully or false otherwise.
    */
   createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.config.codesApiUrlPrefix + '/code-categories', codeCategory,
+    return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/codes/code-categories', codeCategory,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -116,7 +116,7 @@ export class CodesService {
    */
   deleteCode(codeCategoryId: string, codeId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId) + '/codes/' +
+      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(codeCategoryId) + '/codes/' +
       encodeURIComponent(codeId), {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -144,7 +144,7 @@ export class CodesService {
    */
   deleteCodeCategory(codeCategoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId), {observe: 'response'})
+      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(codeCategoryId), {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -172,7 +172,7 @@ export class CodesService {
    */
   getCode(codeCategoryId: string, codeId: string): Observable<Code> {
     return this.httpClient.get<Code>(
-      this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId) + '/codes/' +
+      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(codeCategoryId) + '/codes/' +
       encodeURIComponent(codeId), {reportProgress: true}).pipe(map((code: Code) => {
       return code;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -195,8 +195,9 @@ export class CodesService {
    *
    * @return The code categories.
    */
+  @ResponseConverter
   getCodeCategories(): Observable<CodeCategory[]> {
-    return this.httpClient.get<CodeCategory[]>(this.config.codesApiUrlPrefix + '/code-categories',
+    return this.httpClient.get<CodeCategory[]>(this.config.apiUrlPrefix + '/codes/code-categories',
       {reportProgress: true})
     .pipe(map((codeCategories: CodeCategory[]) => {
       return codeCategories;
@@ -218,9 +219,10 @@ export class CodesService {
    *
    * @return The code category.
    */
+  @ResponseConverter
   getCodeCategory(codeCategoryId: string): Observable<CodeCategory> {
     return this.httpClient.get<CodeCategory>(
-      this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId), {reportProgress: true})
+      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(codeCategoryId), {reportProgress: true})
     .pipe(map((codeCategory: CodeCategory) => {
       return codeCategory;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -247,7 +249,7 @@ export class CodesService {
    */
   getCodeCategoryName(codeCategoryId: string): Observable<string> {
     return this.httpClient.get<string>(
-      this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId) + '/name', {
+      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(codeCategoryId) + '/name', {
         reportProgress: true,
       }).pipe(map((codeCategoryName: string) => {
       return codeCategoryName;
@@ -271,8 +273,9 @@ export class CodesService {
    *
    * @return The code category summaries.
    */
+  @ResponseConverter
   getCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
-    return this.httpClient.get<CodeCategorySummary[]>(this.config.codesApiUrlPrefix + '/code-category-summaries',
+    return this.httpClient.get<CodeCategorySummary[]>(this.config.apiUrlPrefix + '/codes/code-category-summaries',
       {reportProgress: true})
     .pipe(map((codeCategorySummaries: CodeCategorySummary[]) => {
       return codeCategorySummaries;
@@ -297,7 +300,7 @@ export class CodesService {
    */
   getCodeName(codeCategoryId: string, codeId: string): Observable<string> {
     return this.httpClient.get<string>(
-      this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId) + '/codes/' +
+      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(codeCategoryId) + '/codes/' +
       encodeURIComponent(codeId) + '/name', {
         reportProgress: true
       }).pipe(map((codeName: string) => {
@@ -326,7 +329,7 @@ export class CodesService {
    */
   getCodesForCodeCategory(codeCategoryId: string): Observable<Code[]> {
     return this.httpClient.get<Code[]>(
-      this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId) + '/codes',
+      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(codeCategoryId) + '/codes',
       {reportProgress: true}).pipe(map((codes: Code[]) => {
       return codes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -353,7 +356,7 @@ export class CodesService {
    */
   updateCode(code: Code): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(code.codeCategoryId) + '/codes/' +
+      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(code.codeCategoryId) + '/codes/' +
       encodeURIComponent(code.id), code, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -380,7 +383,7 @@ export class CodesService {
    */
   updateCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategory.id), codeCategory,
+      this.config.apiUrlPrefix + '/codes/code-categories/' + encodeURIComponent(codeCategory.id), codeCategory,
       {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {

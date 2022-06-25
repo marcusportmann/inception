@@ -254,7 +254,7 @@ public class Employment implements Serializable {
   private String employerPhoneNumber;
 
   /** The end date for the employment. */
-  @Schema(description = "The end date for the employment")
+  @Schema(description = "The ISO 8601 format end date for the employment")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EndDate")
@@ -289,7 +289,7 @@ public class Employment implements Serializable {
   private Person person;
 
   /** The start date for the employment. */
-  @Schema(description = "The start date for the employment", required = true)
+  @Schema(description = "The ISO 8601 format start date for the employment", required = true)
   @JsonProperty(required = true)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "StartDate", required = true)

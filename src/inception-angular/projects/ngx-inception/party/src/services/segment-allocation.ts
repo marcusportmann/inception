@@ -23,14 +23,14 @@
 export class SegmentAllocation {
 
   /**
-   * The date the segment allocation is effective from.
+   * The ISO 8601 format date the segment allocation is effective from.
    */
-  effectiveFrom?: Date;
+  effectiveFrom?: string;
 
   /**
-   * The date the segment allocation is effective to.
+   * The ISO 8601 format date the segment allocation is effective to.
    */
-  effectiveTo?: Date;
+  effectiveTo?: string;
 
   /**
    * The code for the segment.
@@ -41,10 +41,10 @@ export class SegmentAllocation {
    * Constructs a new SegmentAllocation.
    *
    * @param segment       The code for the segment.
-   * @param effectiveFrom The date the segment allocation is effective from.
-   * @param effectiveTo   The date the segment allocation is effective to.
+   * @param effectiveFrom The ISO 8601 format date the segment allocation is effective from.
+   * @param effectiveTo   The ISO 8601 format date the segment allocation is effective to.
    */
-  constructor(segment: string, effectiveFrom?: Date, effectiveTo?: Date) {
+  constructor(segment: string, effectiveFrom?: string, effectiveTo?: string) {
     this.segment = segment;
     this.effectiveFrom = effectiveFrom;
     this.effectiveTo = effectiveTo;

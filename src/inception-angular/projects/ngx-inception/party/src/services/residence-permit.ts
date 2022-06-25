@@ -27,14 +27,14 @@ export class ResidencePermit {
   countryOfIssue: string;
 
   /**
-   * The date of expiry for the residence permit.
+   * The ISO 8601 format date of expiry for the residence permit.
    */
-  dateOfExpiry?: Date;
+  dateOfExpiry?: string;
 
   /**
-   * The date of issue for the residence permit.
+   * The ISO 8601 format date of issue for the residence permit.
    */
-  dateOfIssue: Date;
+  dateOfIssue: string;
 
   /**
    * The ID for the residence permit.
@@ -58,12 +58,12 @@ export class ResidencePermit {
    * @param type           The code for the residence permit type.
    * @param countryOfIssue The ISO 3166-1 alpha-2 code for the country of issue for the residence
    *                       permit.
-   * @param dateOfIssue    The date of issue for the residence permit.
+   * @param dateOfIssue    The ISO 8601 format date of issue for the residence permit.
    * @param number         The number for the residence permit.
-   * @param dateOfExpiry   The date of expiry for the residence permit.
+   * @param dateOfExpiry   The ISO 8601 format date of expiry for the residence permit.
    */
-  constructor(id: string, type: string, countryOfIssue: string, dateOfIssue: Date, number: string,
-              dateOfExpiry?: Date) {
+  constructor(id: string, type: string, countryOfIssue: string, dateOfIssue: string, number: string,
+              dateOfExpiry?: string) {
     this.id = id;
     this.type = type;
     this.countryOfIssue = countryOfIssue;

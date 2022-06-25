@@ -45,6 +45,18 @@
           </mat-form-field>
         </div>
       </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Time Zone</mat-label>
+            <time-zone-input [formControl]="timeZoneControl" required></time-zone-input>
+            <mat-error *ngIf="timeZoneControl.errors && !timeZoneControl.untouched">
+              <span *ngIf="timeZoneControl.errors?.required">A time zone is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
     </mat-card-content>
     <mat-card-actions align="end">
       <button type="button" mat-flat-button color="link">Cancel</button>

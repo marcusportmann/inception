@@ -27,14 +27,14 @@ export class SourceOfFunds {
   description?: string;
 
   /**
-   * The date the source of funds is effective from.
+   * The ISO 8601 format date the source of funds is effective from.
    */
-  effectiveFrom?: Date;
+  effectiveFrom?: string;
 
   /**
-   * The date the source of funds is effective to.
+   * The ISO 8601 format date the source of funds is effective to.
    */
-  effectiveTo?: Date;
+  effectiveTo?: string;
 
   /**
    * The percentage of the total of all sources of funds attributed to the source of funds.
@@ -53,11 +53,11 @@ export class SourceOfFunds {
    * @param percentage    The percentage of the total of all sources of funds attributed to the
    *                      source of funds.
    * @param description   The description for the source of funds.
-   * @param effectiveFrom The date the source of funds is effective from.
-   * @param effectiveTo   The date the source of funds is effective to.
+   * @param effectiveFrom The ISO 8601 format date the source of funds is effective from.
+   * @param effectiveTo   The ISO 8601 format date the source of funds is effective to.
    */
-  constructor(type: string, percentage?: number, description?: string, effectiveFrom?: Date,
-              effectiveTo?: Date) {
+  constructor(type: string, percentage?: number, description?: string, effectiveFrom?: string,
+              effectiveTo?: string) {
     this.type = type;
     this.percentage = percentage;
     this.description = description;

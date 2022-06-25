@@ -22,6 +22,7 @@ import digital.inception.core.service.InvalidArgumentException;
 import digital.inception.core.service.ServiceUnavailableException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import javax.jws.WebMethod;
@@ -75,7 +76,14 @@ public class DataWebService {
   public Data getData() throws ServiceUnavailableException {
     long id = System.currentTimeMillis();
 
-    Data data = new Data(id, 777, "Test Value " + id, LocalDate.now(), LocalDateTime.now());
+    Data data =
+        new Data(
+            id,
+            777,
+            "Test Value " + id,
+            LocalDate.now(),
+            LocalDateTime.now(),
+            ZonedDateTime.now(ZoneId.of("America/Chicago")));
 
     dataService.createData(data);
 

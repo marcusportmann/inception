@@ -27,14 +27,14 @@ export class SourceOfWealth {
   description?: string;
 
   /**
-   * The date the source of wealth is effective from.
+   * The ISO 8601 format date the source of wealth is effective from.
    */
-  effectiveFrom?: Date;
+  effectiveFrom?: string;
 
   /**
-   * The date the source of wealth is effective to.
+   * The ISO 8601 format date the source of wealth is effective to.
    */
-  effectiveTo?: Date;
+  effectiveTo?: string;
 
   /**
    * The code for the source of wealth type.
@@ -46,10 +46,10 @@ export class SourceOfWealth {
    *
    * @param type          The code for the source of wealth type.
    * @param description   The description for the source of wealth.
-   * @param effectiveFrom The date the source of wealth is effective from.
-   * @param effectiveTo   The date the source of wealth is effective to.
+   * @param effectiveFrom The ISO 8601 format date the source of wealth is effective from.
+   * @param effectiveTo   The ISO 8601 format date the source of wealth is effective to.
    */
-  constructor(type: string, description?: string, effectiveFrom?: Date, effectiveTo?: Date) {
+  constructor(type: string, description?: string, effectiveFrom?: string, effectiveTo?: string) {
     this.type = type;
     this.description = description;
     this.effectiveFrom = effectiveFrom;

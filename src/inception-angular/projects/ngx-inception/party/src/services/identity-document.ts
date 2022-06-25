@@ -28,19 +28,19 @@ export class IdentityDocument {
   countryOfIssue: string;
 
   /**
-   * The date of expiry for the identity document.
+   * The ISO 8601 format date of expiry for the identity document.
    */
-  dateOfExpiry?: Date;
+  dateOfExpiry?: string;
 
   /**
-   * The date of issue for the identity document.
+   * The ISO 8601 format date of issue for the identity document.
    */
-  dateOfIssue: Date;
+  dateOfIssue: string;
 
   /**
-   * The date the identity document was provided.
+   * The ISO 8601 format date the identity document was provided.
    */
-  dateProvided?: Date;
+  dateProvided?: string;
 
   /**
    * The ID for the identity document.
@@ -64,12 +64,12 @@ export class IdentityDocument {
    * @param type           The code for the identity document type.
    * @param countryOfIssue The ISO 3166-1 alpha-2 code for the country of issue for the identity
    *                       document.
-   * @param dateOfIssue    The date of issue for the identity document.
+   * @param dateOfIssue    The ISO 8601 format date of issue for the identity document.
    * @param number         The number for the identity document.
-   * @param dateOfExpiry   The date of expiry for the identity document.
+   * @param dateOfExpiry   The ISO 8601 format date of expiry for the identity document.
    */
-  constructor(id: string, type: string, countryOfIssue: string, dateOfIssue: Date, number: string,
-              dateOfExpiry?: Date) {
+  constructor(id: string, type: string, countryOfIssue: string, dateOfIssue: string, number: string,
+              dateOfExpiry?: string) {
     this.id = id;
     this.type = type;
     this.countryOfIssue = countryOfIssue;

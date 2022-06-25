@@ -24,14 +24,14 @@ import {AssociationProperty} from "./association-property";
 export class Association {
 
   /**
-   * The date the association is effective from.
+   * The ISO 8601 format date the association is effective from.
    */
-  effectiveFrom?: Date;
+  effectiveFrom?: string;
 
   /**
-   * The date the association is effective to.
+   * The ISO 8601 format date the association is effective to.
    */
-  effectiveTo?: Date;
+  effectiveTo?: string;
 
   /**
    * The ID for the first party in the association.
@@ -72,12 +72,12 @@ export class Association {
    * @param firstPartyId  The ID for the first party in the association.
    * @param secondPartyId The ID for the second party in the association.
    * @param properties    The properties for the association.
-   * @param effectiveFrom The date the association is effective from.
-   * @param effectiveTo   The date the association is effective to.
+   * @param effectiveFrom The ISO 8601 format date the association is effective from.
+   * @param effectiveTo   The ISO 8601 format date the association is effective to.
    */
   constructor(id: string, tenantId: string, type: string, firstPartyId: string,
-              secondPartyId: string, properties?: AssociationProperty[], effectiveFrom?: Date,
-              effectiveTo?: Date) {
+              secondPartyId: string, properties?: AssociationProperty[], effectiveFrom?: string,
+              effectiveTo?: string) {
     this.id = id;
     this.tenantId = tenantId;
     this.type = type;

@@ -105,7 +105,7 @@ public class Association implements Serializable {
   private final Set<AssociationProperty> properties = new HashSet<>();
 
   /** The date the association is effective from. */
-  @Schema(description = "The date the association is effective from")
+  @Schema(description = "The ISO 8601 format date the association is effective from")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveFrom")
@@ -115,7 +115,7 @@ public class Association implements Serializable {
   private LocalDate effectiveFrom;
 
   /** The date the association is effective to. */
-  @Schema(description = "The date the association is effective to")
+  @Schema(description = "The ISO 8601 format date the association is effective to")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveTo")

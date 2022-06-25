@@ -19,19 +19,24 @@
         </mat-form-field>
       </div>
     </div>
-
-
     <div class="row">
       <div class="col-sm">
         <mat-form-field>
           <mat-label>Title</mat-label>
-          <title-input [formControl]="titleControl" required></title-input>
+          <title-input [formControl]="titleControl" [required]="titleRequired"></title-input>
           <mat-error *ngIf="titleControl.errors && !titleControl.untouched">
             <span *ngIf="titleControl.errors?.required">A title is required.</span>
           </mat-error>
         </mat-form-field>
       </div>
       <div class="col-sm">
+        <mat-form-field>
+          <mat-label>Preferred Name</mat-label>
+          <input type="text" matInput [formControl]="preferredNameControl">
+          <mat-error *ngIf="preferredNameControl.errors && !preferredNameControl.untouched">
+            <span *ngIf="preferredNameControl.errors?.required">A preferred name is required.</span>
+          </mat-error>
+        </mat-form-field>
       </div>
     </div>
 
@@ -73,6 +78,32 @@
         </mat-form-field>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-sm">
+        <mat-form-field>
+          <mat-label>Country of Birth</mat-label>
+          <country-input [formControl]="countryOfBirthControl" required></country-input>
+          <mat-error *ngIf="countryOfBirthControl.errors && !countryOfBirthControl.untouched">
+            <span *ngIf="countryOfBirthControl.errors?.required">A country of birth is required.</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm">
+        <mat-form-field>
+          <mat-label>Country of Residence</mat-label>
+          <country-input [formControl]="countryOfResidenceControl" required></country-input>
+          <mat-error *ngIf="countryOfResidenceControl.errors && !countryOfResidenceControl.untouched">
+            <span *ngIf="countryOfResidenceControl.errors?.required">A country of residence is required.</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+
+
+
     <div class="row">
       <div class="col">
         <mat-form-field>
@@ -103,20 +134,6 @@
     </div>
 
 
-    <div class="row">
-      <div class="col-sm">
-        <mat-form-field>
-          <mat-label>Country of Birth</mat-label>
-          <country-input [formControl]="countryOfBirthControl" required></country-input>
-          <mat-error *ngIf="countryOfBirthControl.errors && !countryOfBirthControl.untouched">
-            <span *ngIf="countryOfBirthControl.errors?.required">A country of birth is required.</span>
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div class="col-sm">
-
-      </div>
-    </div>
 
 
     <mat-action-row>

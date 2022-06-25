@@ -68,7 +68,7 @@ public class Consent implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The date the consent is effective from. */
-  @Schema(description = "The date the consent is effective from")
+  @Schema(description = "The ISO 8601 format date the consent is effective from")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveFrom")
@@ -78,7 +78,7 @@ public class Consent implements Serializable {
   private LocalDate effectiveFrom;
 
   /** The date the consent is effective to. */
-  @Schema(description = "The date the consent is effective to")
+  @Schema(description = "The ISO 8601 format date the consent is effective to")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveTo")

@@ -19,6 +19,7 @@ export * from './src/components/country-input.component';
 export * from './src/components/language-input.component';
 export * from './src/components/region-input.component';
 export * from './src/components/reference-components.module';
+export * from './src/components/time-zone-input.component';
 
 export * from './src/services/reference-services.module';
 export * from './src/services/reference.service';
@@ -26,3 +27,4 @@ export * from './src/services/reference.service';
 export * from './src/services/country';
 export * from './src/services/language';
 export * from './src/services/region';
+export * from './src/services/time-zone';

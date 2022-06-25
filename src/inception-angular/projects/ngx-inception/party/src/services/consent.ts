@@ -23,14 +23,14 @@
 export class Consent {
 
   /**
-   * The date the consent is effective from.
+   * The ISO 8601 format date the consent is effective from.
    */
-  effectiveFrom?: Date;
+  effectiveFrom?: string;
 
   /**
-   * The date the consent is effective to.
+   * The ISO 8601 format date the consent is effective to.
    */
-  effectiveTo?: Date;
+  effectiveTo?: string;
 
   /**
    * The code for the consent type.
@@ -41,10 +41,10 @@ export class Consent {
    * Constructs a new Consent.
    *
    * @param type          The code for the consent type.
-   * @param effectiveFrom The date the consent is effective from.
-   * @param effectiveTo   The date the consent is effective to.
+   * @param effectiveFrom The ISO 8601 format date the consent is effective from.
+   * @param effectiveTo   The ISO 8601 format date the consent is effective to.
    */
-  constructor(type: string, effectiveFrom?: Date, effectiveTo?: Date) {
+  constructor(type: string, effectiveFrom?: string, effectiveTo?: string) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
     this.effectiveTo = effectiveTo;

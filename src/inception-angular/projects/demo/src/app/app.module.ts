@@ -37,16 +37,7 @@ const ngxInceptionConfig: InceptionConfig = {
   logoutRedirectUri: '/',
 
   // Inception API URLs
-  codesApiUrlPrefix: 'http://localhost:8080/api/codes',
-  configApiUrlPrefix: 'http://localhost:8080/api/config',
-  errorApiUrlPrefix: 'http://localhost:8080/api/error',
-  mailApiUrlPrefix: 'http://localhost:8080/api/mail',
-  partyApiUrlPrefix: 'http://localhost:8080/api/party',
-  partyReferenceApiUrlPrefix: 'http://localhost:8080/api/party/reference',
-  referenceApiUrlPrefix: 'http://localhost:8080/api/reference',
-  reportingApiUrlPrefix: 'http://localhost:8080/api/reporting',
-  schedulerApiUrlPrefix: 'http://localhost:8080/api/scheduler',
-  securityApiUrlPrefix: 'http://localhost:8080/api/security',
+  apiUrlPrefix: 'http://localhost:8080/api',
 
   // Flags
   forgottenPasswordEnabled: true,

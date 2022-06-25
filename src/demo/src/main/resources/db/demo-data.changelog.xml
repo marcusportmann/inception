@@ -1042,15 +1042,221 @@
       <column name="attribute_type_qualifier" value="marketing"/>
       <column name="type" value="required"/>
     </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="contact_mechanism"/>
+      <column name="attribute_type_qualifier" value="mobile_number"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="contact_mechanisms"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="countries_of_citizenship"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="countries_of_tax_residence"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="country_of_birth"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="country_of_residence"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="date_of_birth"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="educations"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="employment_status"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="employment_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="employments"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="external_reference"/>
+      <column name="attribute_type_qualifier" value="legacy_customer_code"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="gender"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="given_name"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="highest_qualification_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="identity_document"/>
+      <column name="attribute_type_qualifier" value="za_id_card"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="identity_documents"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="initials"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="language"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="language_proficiencies"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="marital_status"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="marital_status_date"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="marriage_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="measurement_system"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="next_of_kin"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="occupation"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="physical_addresses"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="physical_address"/>
+      <column name="attribute_type_qualifier" value="home"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="preferred_name"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="race"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="residence_permits"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="residency_status"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="residential_type"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="segment_allocations"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="sources_of_funds"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="sources_of_wealth"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="surname"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="tax_numbers"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="time_zone"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="title"/>
+      <column name="type" value="required"/>
+    </insert>
+    <insert schemaName="party" tableName="role_type_attribute_type_constraints">
+      <column name="role_type" value="individual_customer"/>
+      <column name="attribute_type" value="weight"/>
+      <column name="type" value="required"/>
+    </insert>
 
     <insert schemaName="party" tableName="role_type_preference_type_constraints">
       <column name="role_type" value="individual_customer"/>
       <column name="preference_type" value="correspondence_language"/>
       <column name="type" value="required"/>
     </insert>
-
-
-
 
 
 

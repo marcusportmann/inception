@@ -70,7 +70,7 @@ public class Role implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The date the role is effective from. */
-  @Schema(description = "The date the role is effective from")
+  @Schema(description = "The ISO 8601 format date the role is effective from")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveFrom")
@@ -80,7 +80,7 @@ public class Role implements Serializable {
   private LocalDate effectiveFrom;
 
   /** The date the role is effective to. */
-  @Schema(description = "The date the role is effective to")
+  @Schema(description = "The ISO 8601 format date the role is effective to")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveTo")

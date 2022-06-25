@@ -24,11 +24,13 @@ import {CountriesChipListComponent} from './countries-chip-list.component';
 import {CountryInputComponent} from './country-input.component';
 import {LanguageInputComponent} from './language-input.component';
 import {RegionInputComponent} from './region-input.component';
+import {TimeZoneInputComponent} from './time-zone-input.component';
 
 @NgModule({
   declarations: [
     // Components
-    CountriesChipListComponent, CountryInputComponent, LanguageInputComponent, RegionInputComponent
+    CountriesChipListComponent, CountryInputComponent, LanguageInputComponent, RegionInputComponent,
+    TimeZoneInputComponent
   ],
   imports: [
     // Angular modules
@@ -41,7 +43,8 @@ import {RegionInputComponent} from './region-input.component';
     MatAutocompleteModule, MatChipsModule, MatInputModule
   ],
   exports: [
-    CountriesChipListComponent, CountryInputComponent, LanguageInputComponent, RegionInputComponent
+    CountriesChipListComponent, CountryInputComponent, LanguageInputComponent, RegionInputComponent,
+    TimeZoneInputComponent
   ]
 })
 export class ReferenceComponentsModule {

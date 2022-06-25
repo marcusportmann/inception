@@ -17,47 +17,65 @@
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
 import {
-  AccessDeniedError, CommunicationError, Error, INCEPTION_CONFIG, InceptionConfig,
-  InvalidArgumentError, ServiceUnavailableError
+  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
+  ResponseConverter, ServiceUnavailableError
 } from 'ngx-inception/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {v4 as uuid} from 'uuid';
-import {ErrorReport} from './error-report';
+import {Data} from './data';
 
 /**
- * The Error Service implementation that provides the capability to capture and process application
- * and back-end errors and submit error reports.
+ * The Data Service implementation.
  *
  * @author Marcus Portmann
  */
 @Injectable({
   providedIn: 'root'
 })
-export class ErrorService {
+export class DataService {
 
   /**
-   * Constructs a new ErrorService.
+   * Constructs a new DataService.
    *
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
-    console.log('Initializing the Error Service');
+    console.log('Initializing the Data Service');
   }
 
   /**
-   * Send the error report for the error.
+   * Retrieve the data.
    *
-   * @param error    The error.
-   * @param email    The optional e-mail address of the user submitting the error report.
-   * @param feedback The optional feedback from the user submitting the error report.
+   * @return The data.
    */
-  sendErrorReport(error: Error, email?: string, feedback?: string): Observable<boolean> {
-    const errorReport: ErrorReport = new ErrorReport(uuid(), this.config.applicationId, this.config.applicationVersion,
-      error.message, error.cause ? JSON.stringify(error.cause) : '', error.timestamp, email, feedback);
+  @ResponseConverter
+  getData(): Observable<Data> {
+    return this.httpClient.get<Data>(this.config.apiUrlPrefix + '/data/data',
+      {reportProgress: true})
+    .pipe(map((data: Data) => {
+      return data;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(() => new AccessDeniedError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(() => new CommunicationError(httpErrorResponse));
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+        return throwError(() => new InvalidArgumentError(httpErrorResponse));
+      }
 
-    return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/error/error-reports', errorReport,
+      return throwError(() => new ServiceUnavailableError('Failed to retrieve the data.', httpErrorResponse));
+    }));
+  }
+
+  /**
+   * Validate the data.
+   *
+   * @param code The data to validate
+   */
+  validateData(data: Data): Observable<boolean> {
+    return this.httpClient.post<boolean>(
+      this.config.apiUrlPrefix + '/data/validate', data,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -70,7 +88,7 @@ export class ErrorService {
         return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(() => new ServiceUnavailableError('Failed to send the error report.', httpErrorResponse));
+      return throwError(() => new ServiceUnavailableError('Failed to validate the data.', httpErrorResponse));
     }));
   }
 }

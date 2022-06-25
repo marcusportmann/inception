@@ -25,6 +25,7 @@ import {catchError, map} from 'rxjs/operators';
 import {Country} from './country';
 import {Language} from './language';
 import {Region} from './region';
+import {TimeZone} from './time-zone';
 
 /**
  * The Reference Service implementation.
@@ -64,7 +65,7 @@ export class ReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<Country[]>(this.config.referenceApiUrlPrefix + '/countries',
+      return this.httpClient.get<Country[]>(this.config.apiUrlPrefix + '/reference/countries',
         {params, reportProgress: true})
       .pipe(map((countries: Country[]) => {
         cachedCountries = new Map<string, Country>();
@@ -103,7 +104,7 @@ export class ReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<Language[]>(this.config.referenceApiUrlPrefix + '/languages',
+      return this.httpClient.get<Language[]>(this.config.apiUrlPrefix + '/reference/languages',
         {params, reportProgress: true})
       .pipe(map((languages: Language[]) => {
         cachedLanguages = new Map<string, Language>();
@@ -142,7 +143,7 @@ export class ReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<Region[]>(this.config.referenceApiUrlPrefix + '/regions',
+      return this.httpClient.get<Region[]>(this.config.apiUrlPrefix + '/reference/regions',
         {params, reportProgress: true})
       .pipe(map((regions: Region[]) => {
         cachedRegions = new Map<string, Region>();
@@ -162,6 +163,45 @@ export class ReferenceService {
         }
 
         return throwError(() => new ServiceUnavailableError('Failed to retrieve the regions.', httpErrorResponse));
+      }));
+    }
+  }
+
+  /**
+   * Retrieve the time zones.
+   *
+   * @return The time zones.
+   */
+  getTimeZones(): Observable<Map<string, TimeZone>> {
+    let cachedTimeZones: Map<string, TimeZone> = this.cacheService.get('timeZones');
+
+    if (cachedTimeZones !== undefined) {
+      return of(cachedTimeZones);
+    } else {
+      let params = new HttpParams();
+
+      params = params.append('localeId', this.localeId);
+
+      return this.httpClient.get<TimeZone[]>(this.config.apiUrlPrefix + '/reference/time-zones',
+        {params, reportProgress: true})
+      .pipe(map((timeZones: TimeZone[]) => {
+        cachedTimeZones = new Map<string, TimeZone>();
+
+        for (const timeZone of timeZones) {
+          cachedTimeZones.set(timeZone.id, timeZone);
+        }
+
+        this.cacheService.set('timeZones', cachedTimeZones);
+
+        return cachedTimeZones;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        }
+
+        return throwError(() => new ServiceUnavailableError('Failed to retrieve the time zones.', httpErrorResponse));
       }));
     }
   }

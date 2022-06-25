@@ -35,19 +35,9 @@ export interface InceptionConfig {
   applicationVersion: string;
 
   /**
-   * The Codes API URL prefix.
+   * The API URL prefix.
    */
-  codesApiUrlPrefix?: string;
-
-  /**
-   * The Config API URL prefix.
-   */
-  configApiUrlPrefix?: string;
-
-  /**
-   * The Error API URL prefix.
-   */
-  errorApiUrlPrefix?: string;
+  apiUrlPrefix?: string;
 
   /**
    * Is the forgotten password functionality enabled.
@@ -60,24 +50,9 @@ export interface InceptionConfig {
   logoutRedirectUri: string;
 
   /**
-   * The Mail API URL prefix.
-   */
-  mailApiUrlPrefix?: string;
-
-  /**
    * The OAuth Token URL e.g. http://localhost:8080/oauth/token.
    */
   oauthTokenUrl: string;
-
-  /**
-   * The Party API URL prefix.
-   */
-  partyApiUrlPrefix?: string;
-
-  /**
-   * The Party Reference API URL prefix.
-   */
-  partyReferenceApiUrlPrefix?: string;
 
   /**
    * The password to prepopulate the password form control on the login component with for testing
@@ -90,26 +65,6 @@ export interface InceptionConfig {
    * purposes.
    */
   prepopulatedLoginUsername?: string;
-
-  /**
-   * The Reference API URL prefix.
-   */
-  referenceApiUrlPrefix?: string;
-
-  /**
-   * The Reporting API URL prefix.
-   */
-  reportingApiUrlPrefix?: string;
-
-  /**
-   * The Scheduler API URL prefix.
-   */
-  schedulerApiUrlPrefix?: string;
-
-  /**
-   * The Security API URL prefix.
-   */
-  securityApiUrlPrefix?: string;
 
   /**
    * Is the user profile functionality enabled.

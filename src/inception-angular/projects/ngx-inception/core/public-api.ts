@@ -37,8 +37,10 @@ export * from './src/errors/validation-error';
 export * from './src/sorting/sort-direction';
 export * from './src/forms/validators/file-validator';
 export * from './src/util/base64';
+export * from './src/util/iso-8601-util';
 export * from './src/util/replace';
 export * from './src/util/toggle-classes';
+export * from './src/util/response-converter';
 export * from './src/util/value-change';
 
 export * from './src/inception-app.module';

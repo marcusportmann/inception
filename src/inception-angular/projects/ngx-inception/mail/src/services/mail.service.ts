@@ -68,7 +68,7 @@ export class MailService {
    * @return True if the mail template was created successfully or false otherwise.
    */
   createMailTemplate(mailTemplate: MailTemplate): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.config.mailApiUrlPrefix + '/mail-templates', mailTemplate,
+    return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/mail/mail-templates', mailTemplate,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -96,7 +96,7 @@ export class MailService {
    */
   deleteMailTemplate(mailTemplateId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.mailApiUrlPrefix + '/mail-templates/' + encodeURIComponent(mailTemplateId), {observe: 'response'})
+      this.config.apiUrlPrefix + '/mail/mail-templates/' + encodeURIComponent(mailTemplateId), {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -123,7 +123,7 @@ export class MailService {
    */
   getMailTemplate(mailTemplateId: string): Observable<MailTemplate> {
     return this.httpClient.get<MailTemplate>(
-      this.config.mailApiUrlPrefix + '/mail-templates/' + encodeURIComponent(mailTemplateId), {reportProgress: true})
+      this.config.apiUrlPrefix + '/mail/mail-templates/' + encodeURIComponent(mailTemplateId), {reportProgress: true})
     .pipe(map((mailTemplate: MailTemplate) => {
       return mailTemplate;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -150,7 +150,7 @@ export class MailService {
    */
   getMailTemplateName(mailTemplateId: string): Observable<string> {
     return this.httpClient.get<string>(
-      this.config.mailApiUrlPrefix + '/mail-templates/' + encodeURIComponent(mailTemplateId) + '/name', {
+      this.config.apiUrlPrefix + '/mail/mail-templates/' + encodeURIComponent(mailTemplateId) + '/name', {
         reportProgress: true,
       }).pipe(map((mailTemplateName: string) => {
       return mailTemplateName;
@@ -175,7 +175,7 @@ export class MailService {
    * @return The summaries for all the mail templates.
    */
   getMailTemplateSummaries(): Observable<MailTemplateSummary[]> {
-    return this.httpClient.get<MailTemplateSummary[]>(this.config.mailApiUrlPrefix + '/mail-template-summaries',
+    return this.httpClient.get<MailTemplateSummary[]>(this.config.apiUrlPrefix + '/mail/mail-template-summaries',
       {reportProgress: true})
     .pipe(map((mailTemplateSummaries: MailTemplateSummary[]) => {
       return mailTemplateSummaries;
@@ -196,7 +196,7 @@ export class MailService {
    * @return The mail templates.
    */
   getMailTemplates(): Observable<MailTemplate[]> {
-    return this.httpClient.get<MailTemplate[]>(this.config.mailApiUrlPrefix + '/mail-templates', {reportProgress: true})
+    return this.httpClient.get<MailTemplate[]>(this.config.apiUrlPrefix + '/mail/mail-templates', {reportProgress: true})
     .pipe(map((mailTemplates: MailTemplate[]) => {
       return mailTemplates;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -219,7 +219,7 @@ export class MailService {
    */
   updateMailTemplate(mailTemplate: MailTemplate): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      this.config.mailApiUrlPrefix + '/mail-templates/' + encodeURIComponent(mailTemplate.id), mailTemplate,
+      this.config.apiUrlPrefix + '/mail/mail-templates/' + encodeURIComponent(mailTemplate.id), mailTemplate,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;

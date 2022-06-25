@@ -28,14 +28,14 @@ import {RequiredMandataries} from "./required-mandataries";
 export class Mandate {
 
   /**
-   * The date the mandate is effective from.
+   * The ISO 8601 format date the mandate is effective from.
    */
-  effectiveFrom?: Date;
+  effectiveFrom?: string;
 
   /**
-   * The date the mandate is effective to.
+   * The ISO 8601 format date the mandate is effective to.
    */
-  effectiveTo?: Date;
+  effectiveTo?: string;
 
   /**
    * The ID for the mandate.
@@ -82,12 +82,13 @@ export class Mandate {
    * @param mandataries         The mandataries for the mandate.
    * @param properties          The properties for the mandate.
    * @param requiredMandataries The number of mandataries required to execute the mandate.
-   * @param effectiveFrom       The date the mandate is effective from.
-   * @param effectiveTo         The date the mandate is effective to.
+   * @param effectiveFrom       The ISO 8601 format date the mandate is effective from.
+   * @param effectiveTo         The ISO 8601 format date the mandate is effective to.
    */
   constructor(id: string, tenantId: string, type: string, links: MandateLink[],
               mandataries: Mandatary[], properties: MandateProperty[],
-              requiredMandataries?: RequiredMandataries, effectiveFrom?: Date, effectiveTo?: Date) {
+              requiredMandataries?: RequiredMandataries, effectiveFrom?: string,
+              effectiveTo?: string) {
     this.id = id;
     this.tenantId = tenantId;
     this.type = type;

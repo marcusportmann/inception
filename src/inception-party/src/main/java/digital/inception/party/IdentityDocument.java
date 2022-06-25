@@ -106,7 +106,7 @@ public class IdentityDocument implements Serializable {
   private String countryOfIssue;
 
   /** The date of expiry for the identity document. */
-  @Schema(description = "The date of expiry for the identity document")
+  @Schema(description = "The ISO 8601 format date of expiry for the identity document")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfExpiry")
@@ -116,7 +116,7 @@ public class IdentityDocument implements Serializable {
   private LocalDate dateOfExpiry;
 
   /** The date of issue for the identity document. */
-  @Schema(description = "The date of issue for the identity document", required = true)
+  @Schema(description = "The ISO 8601 format date of issue for the identity document", required = true)
   @JsonProperty(required = true)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfIssue", required = true)
@@ -127,7 +127,7 @@ public class IdentityDocument implements Serializable {
   private LocalDate dateOfIssue;
 
   /** The date the identity document was provided. */
-  @Schema(description = "The date the identity document was provided")
+  @Schema(description = "The ISO 8601 format date the identity document was provided")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateProvided")

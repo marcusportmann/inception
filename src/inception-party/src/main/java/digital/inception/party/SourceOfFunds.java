@@ -74,7 +74,7 @@ public class SourceOfFunds implements Serializable {
   private String description;
 
   /** The date the source of funds is effective from. */
-  @Schema(description = "The date the source of funds is effective from")
+  @Schema(description = "The ISO 8601 format date the source of funds is effective from")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveFrom")
@@ -84,7 +84,7 @@ public class SourceOfFunds implements Serializable {
   private LocalDate effectiveFrom;
 
   /** The date the source of funds is effective to. */
-  @Schema(description = "The date the source of funds is effective to")
+  @Schema(description = "The ISO 8601 format date the source of funds is effective to")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveTo")

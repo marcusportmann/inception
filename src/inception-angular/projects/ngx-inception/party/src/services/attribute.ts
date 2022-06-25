@@ -29,9 +29,9 @@ export class Attribute {
   booleanValue?: boolean;
 
   /**
-   * The date value for the attribute.
+   * The ISO 8601 format date value for the attribute.
    */
-  dateValue?: Date;
+  dateValue?: string;
 
   /**
    * The decimal value for the attribute.

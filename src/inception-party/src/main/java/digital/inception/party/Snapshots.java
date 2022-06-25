@@ -93,7 +93,7 @@ public class Snapshots implements Serializable {
   private EntityType entityType;
 
   /** The optional date to retrieve the snapshots from. */
-  @Schema(description = "The optional date to retrieve the snapshots from")
+  @Schema(description = "The optional ISO 8601 format date to retrieve the snapshots from")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "From")
@@ -133,7 +133,7 @@ public class Snapshots implements Serializable {
   private UUID tenantId;
 
   /** The optional date to retrieve the snapshots to. */
-  @Schema(description = "The optional date to retrieve the snapshots to")
+  @Schema(description = "The optional ISO 8601 format date to retrieve the snapshots to")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "To")

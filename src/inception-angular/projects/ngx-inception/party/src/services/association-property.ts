@@ -28,9 +28,9 @@ export class AssociationProperty {
   booleanValue?: boolean;
 
   /**
-   * The date value for the association property.
+   * The ISO 8601 format date value for the association property.
    */
-  dateValue?: Date;
+  dateValue?: string;
 
   /**
    * The decimal value for the association property.

@@ -84,7 +84,7 @@ public class ResidencePermit implements Serializable {
   private String countryOfIssue;
 
   /** The date of expiry for the residence permit. */
-  @Schema(description = "The date of expiry for the residence permit")
+  @Schema(description = "The ISO 8601 format date of expiry for the residence permit")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfExpiry")
@@ -94,7 +94,7 @@ public class ResidencePermit implements Serializable {
   private LocalDate dateOfExpiry;
 
   /** The date of issue for the residence permit. */
-  @Schema(description = "The date of issue for the residence permit")
+  @Schema(description = "The ISO 8601 format date of issue for the residence permit")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateOfIssue")

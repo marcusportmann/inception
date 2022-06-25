@@ -87,9 +87,9 @@ export class Employment {
   employerPhoneNumber?: string;
 
   /**
-   * The end date for the employment.
+   * The ISO 8601 format end date for the employment.
    */
-  endDate?: Date;
+  endDate?: string;
 
   /**
    * The ID for the employment.
@@ -102,9 +102,9 @@ export class Employment {
   occupation?: string;
 
   /**
-   * The start date for the employment.
+   * The ISO 8601 format start date for the employment.
    */
-  startDate?: Date;
+  startDate?: string;
 
   /**
    * The code for the employment type for the employment.
@@ -128,8 +128,8 @@ export class Employment {
    * @param employerAddressRegion     The employer address region.
    * @param employerAddressCountry    The employer address country.
    * @param employerAddressPostalCode The employer address postal code.
-   * @param startDate                 The start date for the employment.
-   * @param endDate                   The end date for the employment.
+   * @param startDate                 The ISO 8601 format start date for the employment.
+   * @param endDate                   The ISO 8601 format end date for the employment.
    * @param type                      The code for the employment type for the employment.
    * @param occupation                The code for the occupation for the employment.
    */
@@ -139,8 +139,8 @@ export class Employment {
               employerAddressLine3?: string, employerAddressLine4?: string,
               employerAddressSuburb?: string, employerAddressCity?: string,
               employerAddressRegion?: string, employerAddressCountry?: string,
-              employerAddressPostalCode?: string, startDate?: Date, endDate?: Date, type?: string,
-              occupation?: string) {
+              employerAddressPostalCode?: string, startDate?: string, endDate?: string,
+              type?: string, occupation?: string) {
     this.id = id;
     this.employerName = employerName;
     this.employerPhoneNumber = employerPhoneNumber;

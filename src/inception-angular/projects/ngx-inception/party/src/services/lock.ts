@@ -22,14 +22,14 @@
 export class Lock {
 
   /**
-   * The date the lock is effective from.
+   * The ISO 8601 format date the lock is effective from.
    */
-  effectiveFrom?: Date;
+  effectiveFrom?: string;
 
   /**
-   * The date the lock is effective to.
+   * The ISO 8601 format date the lock is effective to.
    */
-  effectiveTo?: Date;
+  effectiveTo?: string;
 
   /**
    * The code for the lock type.
@@ -40,10 +40,10 @@ export class Lock {
    * Constructs a new Lock.
    *
    * @param type          The code for the lock type.
-   * @param effectiveFrom The date the lock is effective from.
-   * @param effectiveTo   The date the lock is effective to.
+   * @param effectiveFrom The ISO 8601 format date the lock is effective from.
+   * @param effectiveTo   The ISO 8601 format date the lock is effective to.
    */
-  constructor(type: string, effectiveFrom?: Date, effectiveTo?: Date) {
+  constructor(type: string, effectiveFrom?: string, effectiveTo?: string) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
     this.effectiveTo = effectiveTo;

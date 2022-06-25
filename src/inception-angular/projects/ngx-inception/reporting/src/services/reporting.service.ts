@@ -58,7 +58,7 @@ export class ReportingService {
    * @return True if the report definition was created successfully or false otherwise.
    */
   createReportDefinition(reportDefinition: ReportDefinition): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.config.reportingApiUrlPrefix + '/report-definitions', reportDefinition,
+    return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/reporting/report-definitions', reportDefinition,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -86,7 +86,7 @@ export class ReportingService {
    */
   deleteReportDefinition(reportDefinitionId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.reportingApiUrlPrefix + '/report-definitions/' + encodeURIComponent(reportDefinitionId),
+      this.config.apiUrlPrefix + '/reporting/report-definitions/' + encodeURIComponent(reportDefinitionId),
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -114,7 +114,7 @@ export class ReportingService {
    */
   getReportDefinition(reportDefinitionId: string): Observable<ReportDefinition> {
     return this.httpClient.get<ReportDefinition>(
-      this.config.reportingApiUrlPrefix + '/report-definitions/' + encodeURIComponent(reportDefinitionId),
+      this.config.apiUrlPrefix + '/reporting/report-definitions/' + encodeURIComponent(reportDefinitionId),
       {reportProgress: true})
     .pipe(map((reportDefinition: ReportDefinition) => {
       return reportDefinition;
@@ -142,7 +142,7 @@ export class ReportingService {
    */
   getReportDefinitionName(reportDefinitionId: string): Observable<string> {
     return this.httpClient.get<string>(
-      this.config.reportingApiUrlPrefix + '/report-definitions/' + encodeURIComponent(reportDefinitionId) + '/name', {
+      this.config.apiUrlPrefix + '/reporting/report-definitions/' + encodeURIComponent(reportDefinitionId) + '/name', {
         reportProgress: true,
       }).pipe(map((reportDefinitionName: string) => {
       return reportDefinitionName;
@@ -167,7 +167,7 @@ export class ReportingService {
    * @return The summaries for all the report definitions.
    */
   getReportDefinitionSummaries(): Observable<ReportDefinitionSummary[]> {
-    return this.httpClient.get<ReportDefinitionSummary[]>(this.config.reportingApiUrlPrefix + '/report-definitions',
+    return this.httpClient.get<ReportDefinitionSummary[]>(this.config.apiUrlPrefix + '/reporting/report-definitions',
       {reportProgress: true})
     .pipe(map((reportDefinitionSummaries: ReportDefinitionSummary[]) => {
       return reportDefinitionSummaries;
@@ -188,7 +188,7 @@ export class ReportingService {
    * @return The report definitions.
    */
   getReportDefinitions(): Observable<ReportDefinition[]> {
-    return this.httpClient.get<ReportDefinition[]>(this.config.reportingApiUrlPrefix + '/report-definitions',
+    return this.httpClient.get<ReportDefinition[]>(this.config.apiUrlPrefix + '/reporting/report-definitions',
       {reportProgress: true})
     .pipe(map((reportDefinitions: ReportDefinition[]) => {
       return reportDefinitions;
@@ -212,7 +212,7 @@ export class ReportingService {
    */
   updateReportDefinition(reportDefinition: ReportDefinition): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      this.config.reportingApiUrlPrefix + '/report-definitions/' + encodeURIComponent(reportDefinition.id),
+      this.config.apiUrlPrefix + '/reporting/report-definitions/' + encodeURIComponent(reportDefinition.id),
       reportDefinition, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;

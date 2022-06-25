@@ -27,9 +27,9 @@ export class MandateProperty {
   booleanValue?: boolean;
 
   /**
-   * The date value for the mandate property.
+   * The ISO 8601 format date value for the mandate property.
    */
-  dateValue?: Date;
+  dateValue?: string;
 
   /**
    * The decimal value for the mandate property.

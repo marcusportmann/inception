@@ -111,7 +111,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<AssociationPropertyType[]>(this.config.partyReferenceApiUrlPrefix + '/association-property-types',
+      return this.httpClient.get<AssociationPropertyType[]>(this.config.apiUrlPrefix + '/party/reference/association-property-types',
         {params, reportProgress: true})
       .pipe(map((associationPropertyTypes: AssociationPropertyType[]) => {
         cachedAssociationPropertyTypes = new Map<string, AssociationPropertyType>();
@@ -149,7 +149,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<AssociationType[]>(this.config.partyReferenceApiUrlPrefix + '/association-types',
+      return this.httpClient.get<AssociationType[]>(this.config.apiUrlPrefix + '/party/reference/association-types',
         {params, reportProgress: true})
       .pipe(map((associationTypes: AssociationType[]) => {
         cachedAssociationTypes = new Map<string, AssociationType>();
@@ -187,7 +187,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<AttributeTypeCategory[]>(this.config.partyReferenceApiUrlPrefix + '/attribute-type-categories',
+      return this.httpClient.get<AttributeTypeCategory[]>(this.config.apiUrlPrefix + '/party/reference/attribute-type-categories',
         {params, reportProgress: true})
       .pipe(map((attributeTypeCategories: AttributeTypeCategory[]) => {
         cachedAttributeTypeCategories = new Map<string, AttributeTypeCategory>();
@@ -225,7 +225,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<AttributeType[]>(this.config.partyReferenceApiUrlPrefix + '/attribute-types',
+      return this.httpClient.get<AttributeType[]>(this.config.apiUrlPrefix + '/party/reference/attribute-types',
         {params, reportProgress: true})
       .pipe(map((attributeTypes: AttributeType[]) => {
         cachedAttributeTypes = new Map<string, AttributeType>();
@@ -263,7 +263,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<ConsentType[]>(this.config.partyReferenceApiUrlPrefix + '/consent-types',
+      return this.httpClient.get<ConsentType[]>(this.config.apiUrlPrefix + '/party/reference/consent-types',
         {params, reportProgress: true})
       .pipe(map((consentTypes: ConsentType[]) => {
         cachedConsentTypes = new Map<string, ConsentType>();
@@ -301,7 +301,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<ContactMechanismPurpose[]>(this.config.partyReferenceApiUrlPrefix + '/contact-mechanism-purposes',
+      return this.httpClient.get<ContactMechanismPurpose[]>(this.config.apiUrlPrefix + '/party/reference/contact-mechanism-purposes',
         {params, reportProgress: true})
       .pipe(map((contactMechanismPurposes: ContactMechanismPurpose[]) => {
         cachedContactMechanismPurposes = new Map<string, ContactMechanismPurpose>();
@@ -339,7 +339,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<ContactMechanismRole[]>(this.config.partyReferenceApiUrlPrefix + '/contact-mechanism-roles',
+      return this.httpClient.get<ContactMechanismRole[]>(this.config.apiUrlPrefix + '/party/reference/contact-mechanism-roles',
         {params, reportProgress: true})
       .pipe(map((contactMechanismRoles: ContactMechanismRole[]) => {
         cachedContactMechanismRoles = new Map<string, ContactMechanismRole>();
@@ -377,7 +377,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<ContactMechanismType[]>(this.config.partyReferenceApiUrlPrefix + '/contact-mechanism-types',
+      return this.httpClient.get<ContactMechanismType[]>(this.config.apiUrlPrefix + '/party/reference/contact-mechanism-types',
         {params, reportProgress: true})
       .pipe(map((contactMechanismTypes: ContactMechanismType[]) => {
         cachedContactMechanismTypes = new Map<string, ContactMechanismType>();
@@ -415,7 +415,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<EmploymentStatus[]>(this.config.partyReferenceApiUrlPrefix + '/employment-statuses',
+      return this.httpClient.get<EmploymentStatus[]>(this.config.apiUrlPrefix + '/party/reference/employment-statuses',
         {params, reportProgress: true})
       .pipe(map((employmentStatuses: EmploymentStatus[]) => {
         cachedEmploymentStatuses = new Map<string, EmploymentStatus>();
@@ -453,7 +453,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<EmploymentType[]>(this.config.partyReferenceApiUrlPrefix + '/employment-types',
+      return this.httpClient.get<EmploymentType[]>(this.config.apiUrlPrefix + '/party/reference/employment-types',
         {params, reportProgress: true})
       .pipe(map((employmentTypes: EmploymentType[]) => {
         cachedEmploymentTypes = new Map<string, EmploymentType>();
@@ -491,7 +491,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<ExternalReferenceType[]>(this.config.partyReferenceApiUrlPrefix + '/external-reference-types',
+      return this.httpClient.get<ExternalReferenceType[]>(this.config.apiUrlPrefix + '/party/reference/external-reference-types',
         {params, reportProgress: true})
       .pipe(map((externalReferenceTypes: ExternalReferenceType[]) => {
         cachedExternalReferenceTypes = new Map<string, ExternalReferenceType>();
@@ -529,7 +529,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<FieldOfStudy[]>(this.config.partyReferenceApiUrlPrefix + '/fields-of-study',
+      return this.httpClient.get<FieldOfStudy[]>(this.config.apiUrlPrefix + '/party/reference/fields-of-study',
         {params, reportProgress: true})
       .pipe(map((fieldsOfStudy: FieldOfStudy[]) => {
         cachedFieldsOfStudy = new Map<string, FieldOfStudy>();
@@ -567,7 +567,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<Gender[]>(this.config.partyReferenceApiUrlPrefix + '/genders',
+      return this.httpClient.get<Gender[]>(this.config.apiUrlPrefix + '/party/reference/genders',
         {params, reportProgress: true})
       .pipe(map((genders: Gender[]) => {
         cachedGenders = new Map<string, Gender>();
@@ -605,7 +605,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<IdentityDocumentType[]>(this.config.partyReferenceApiUrlPrefix + '/identity-document-types',
+      return this.httpClient.get<IdentityDocumentType[]>(this.config.apiUrlPrefix + '/party/reference/identity-document-types',
         {params, reportProgress: true})
       .pipe(map((identityDocumentTypes: IdentityDocumentType[]) => {
         cachedIdentityDocumentTypes = new Map<string, IdentityDocumentType>();
@@ -643,7 +643,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<IndustryClassificationCategory[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classification-categories',
+      return this.httpClient.get<IndustryClassificationCategory[]>(this.config.apiUrlPrefix + '/party/reference/industry-classification-categories',
         {params, reportProgress: true})
       .pipe(map((industryClassificationCategories: IndustryClassificationCategory[]) => {
         cachedIndustryClassificationCategories = new Map<string, IndustryClassificationCategory>();
@@ -681,7 +681,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<IndustryClassificationSystem[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classification-systems',
+      return this.httpClient.get<IndustryClassificationSystem[]>(this.config.apiUrlPrefix + '/party/reference/industry-classification-systems',
         {params, reportProgress: true})
       .pipe(map((industryClassificationSystems: IndustryClassificationSystem[]) => {
         cachedIndustryClassificationSystems = new Map<string, IndustryClassificationSystem>();
@@ -719,7 +719,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<IndustryClassification[]>(this.config.partyReferenceApiUrlPrefix + '/industry-classifications',
+      return this.httpClient.get<IndustryClassification[]>(this.config.apiUrlPrefix + '/party/reference/industry-classifications',
         {params, reportProgress: true})
       .pipe(map((industryClassifications: IndustryClassification[]) => {
         cachedIndustryClassifications = new Map<string, IndustryClassification>();
@@ -757,7 +757,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<LockTypeCategory[]>(this.config.partyReferenceApiUrlPrefix + '/lock-type-categories',
+      return this.httpClient.get<LockTypeCategory[]>(this.config.apiUrlPrefix + '/party/reference/lock-type-categories',
         {params, reportProgress: true})
       .pipe(map((lockTypeCategories: LockTypeCategory[]) => {
         cachedLockTypeCategories = new Map<string, LockTypeCategory>();
@@ -795,7 +795,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<LockType[]>(this.config.partyReferenceApiUrlPrefix + '/lock-types',
+      return this.httpClient.get<LockType[]>(this.config.apiUrlPrefix + '/party/reference/lock-types',
         {params, reportProgress: true})
       .pipe(map((lockTypes: LockType[]) => {
         cachedLockTypes = new Map<string, LockType>();
@@ -833,7 +833,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<MandataryRole[]>(this.config.partyReferenceApiUrlPrefix + '/mandatary-types',
+      return this.httpClient.get<MandataryRole[]>(this.config.apiUrlPrefix + '/party/reference/mandatary-types',
         {params, reportProgress: true})
       .pipe(map((mandataryRoles: MandataryRole[]) => {
         cachedMandataryRoles = new Map<string, MandataryRole>();
@@ -871,7 +871,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<MandatePropertyType[]>(this.config.partyReferenceApiUrlPrefix + '/mandate-property-types',
+      return this.httpClient.get<MandatePropertyType[]>(this.config.apiUrlPrefix + '/party/reference/mandate-property-types',
         {params, reportProgress: true})
       .pipe(map((mandatePropertyTypes: MandatePropertyType[]) => {
         cachedMandatePropertyTypes = new Map<string, MandatePropertyType>();
@@ -909,7 +909,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<MandateType[]>(this.config.partyReferenceApiUrlPrefix + '/mandate-types',
+      return this.httpClient.get<MandateType[]>(this.config.apiUrlPrefix + '/party/reference/mandate-types',
         {params, reportProgress: true})
       .pipe(map((mandateTypes: MandateType[]) => {
         cachedMandateTypes = new Map<string, MandateType>();
@@ -947,7 +947,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<MaritalStatus[]>(this.config.partyReferenceApiUrlPrefix + '/marital-statuses',
+      return this.httpClient.get<MaritalStatus[]>(this.config.apiUrlPrefix + '/party/reference/marital-statuses',
         {params, reportProgress: true})
       .pipe(map((maritalStatuses: MaritalStatus[]) => {
         cachedMaritalStatuses = new Map<string, MaritalStatus>();
@@ -985,7 +985,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<MarriageType[]>(this.config.partyReferenceApiUrlPrefix + '/marriage-types',
+      return this.httpClient.get<MarriageType[]>(this.config.apiUrlPrefix + '/party/reference/marriage-types',
         {params, reportProgress: true})
       .pipe(map((marriageTypes: MarriageType[]) => {
         cachedMarriageTypes = new Map<string, MarriageType>();
@@ -1023,7 +1023,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<NextOfKinType[]>(this.config.partyReferenceApiUrlPrefix + '/next-of-kin-types',
+      return this.httpClient.get<NextOfKinType[]>(this.config.apiUrlPrefix + '/party/reference/next-of-kin-types',
         {params, reportProgress: true})
       .pipe(map((nextOfKinTypes: NextOfKinType[]) => {
         cachedNextOfKinTypes = new Map<string, NextOfKinType>();
@@ -1061,7 +1061,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<Occupation[]>(this.config.partyReferenceApiUrlPrefix + '/occupations',
+      return this.httpClient.get<Occupation[]>(this.config.apiUrlPrefix + '/party/reference/occupations',
         {params, reportProgress: true})
       .pipe(map((occupations: Occupation[]) => {
         cachedOccupations = new Map<string, Occupation>();
@@ -1099,7 +1099,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<PhysicalAddressPurpose[]>(this.config.partyReferenceApiUrlPrefix + '/physical-address-purposes',
+      return this.httpClient.get<PhysicalAddressPurpose[]>(this.config.apiUrlPrefix + '/party/reference/physical-address-purposes',
         {params, reportProgress: true})
       .pipe(map((physicalAddressPurposes: PhysicalAddressPurpose[]) => {
         cachedPhysicalAddressPurposes = new Map<string, PhysicalAddressPurpose>();
@@ -1137,7 +1137,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<PhysicalAddressRole[]>(this.config.partyReferenceApiUrlPrefix + '/physical-address-roles',
+      return this.httpClient.get<PhysicalAddressRole[]>(this.config.apiUrlPrefix + '/party/reference/physical-address-roles',
         {params, reportProgress: true})
       .pipe(map((physicalAddressRoles: PhysicalAddressRole[]) => {
         cachedPhysicalAddressRoles = new Map<string, PhysicalAddressRole>();
@@ -1175,7 +1175,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<PhysicalAddressRole[]>(this.config.partyReferenceApiUrlPrefix + '/physical-address-types',
+      return this.httpClient.get<PhysicalAddressRole[]>(this.config.apiUrlPrefix + '/party/reference/physical-address-types',
         {params, reportProgress: true})
       .pipe(map((physicalAddressTypes: PhysicalAddressType[]) => {
         cachedPhysicalAddressTypes = new Map<string, PhysicalAddressType>();
@@ -1213,7 +1213,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<PhysicalAddressRole[]>(this.config.partyReferenceApiUrlPrefix + '/preference-type-categories',
+      return this.httpClient.get<PhysicalAddressRole[]>(this.config.apiUrlPrefix + '/party/reference/preference-type-categories',
         {params, reportProgress: true})
       .pipe(map((preferenceTypeCategories: PreferenceTypeCategory[]) => {
         cachedPreferenceTypeCategories = new Map<string, PreferenceTypeCategory>();
@@ -1251,7 +1251,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<PreferenceType[]>(this.config.partyReferenceApiUrlPrefix + '/preference-types',
+      return this.httpClient.get<PreferenceType[]>(this.config.apiUrlPrefix + '/party/reference/preference-types',
         {params, reportProgress: true})
       .pipe(map((preferenceTypes: PreferenceType[]) => {
         cachedPreferenceTypes = new Map<string, PreferenceType>();
@@ -1289,7 +1289,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<QualificationType[]>(this.config.partyReferenceApiUrlPrefix + '/qualification-types',
+      return this.httpClient.get<QualificationType[]>(this.config.apiUrlPrefix + '/party/reference/qualification-types',
         {params, reportProgress: true})
       .pipe(map((qualificationTypes: QualificationType[]) => {
         cachedQualificationTypes = new Map<string, QualificationType>();
@@ -1327,7 +1327,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<Race[]>(this.config.partyReferenceApiUrlPrefix + '/races',
+      return this.httpClient.get<Race[]>(this.config.apiUrlPrefix + '/party/reference/races',
         {params, reportProgress: true})
       .pipe(map((races: Race[]) => {
         cachedRaces = new Map<string, Race>();
@@ -1365,7 +1365,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<ResidencePermitType[]>(this.config.partyReferenceApiUrlPrefix + '/residence-permit-types',
+      return this.httpClient.get<ResidencePermitType[]>(this.config.apiUrlPrefix + '/party/reference/residence-permit-types',
         {params, reportProgress: true})
       .pipe(map((residencePermitTypes: ResidencePermitType[]) => {
         cachedResidencePermitTypes = new Map<string, ResidencePermitType>();
@@ -1403,7 +1403,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<ResidencyStatus[]>(this.config.partyReferenceApiUrlPrefix + '/residency-statuses',
+      return this.httpClient.get<ResidencyStatus[]>(this.config.apiUrlPrefix + '/party/reference/residency-statuses',
         {params, reportProgress: true})
       .pipe(map((residencyStatuses: ResidencyStatus[]) => {
         cachedResidencyStatuses = new Map<string, ResidencePermitType>();
@@ -1441,7 +1441,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<ResidentialType[]>(this.config.partyReferenceApiUrlPrefix + '/residential-types',
+      return this.httpClient.get<ResidentialType[]>(this.config.apiUrlPrefix + '/party/reference/residential-types',
         {params, reportProgress: true})
       .pipe(map((residentialTypes: ResidentialType[]) => {
         cachedResidentialTypes = new Map<string, ResidentialType>();
@@ -1479,7 +1479,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<ResidentialType[]>(this.config.partyReferenceApiUrlPrefix + '/role-purposes',
+      return this.httpClient.get<ResidentialType[]>(this.config.apiUrlPrefix + '/party/reference/role-purposes',
         {params, reportProgress: true})
       .pipe(map((rolePurposes: RolePurpose[]) => {
         cachedRolePurposes = new Map<string, RolePurpose>();
@@ -1531,7 +1531,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<RoleTypeAttributeTypeConstraint[]>(this.config.partyReferenceApiUrlPrefix + '/role-type-attribute-type-constraints',
+      return this.httpClient.get<RoleTypeAttributeTypeConstraint[]>(this.config.apiUrlPrefix + '/party/reference/role-type-attribute-type-constraints',
         {params, reportProgress: true})
       .pipe(map((roleTypeAttributeTypeConstraints: RoleTypeAttributeTypeConstraint[]) => {
         this.cacheService.set('roleTypeAttributeTypeConstraints', roleTypeAttributeTypeConstraints);
@@ -1594,7 +1594,7 @@ export class PartyReferenceService {
         params = params.append('roleType', roleType);
       }
 
-      return this.httpClient.get<RoleTypePreferenceTypeConstraint[]>(this.config.partyReferenceApiUrlPrefix + '/role-type-preference-type-constraints',
+      return this.httpClient.get<RoleTypePreferenceTypeConstraint[]>(this.config.apiUrlPrefix + '/party/reference/role-type-preference-type-constraints',
         {params, reportProgress: true})
       .pipe(map((roleTypePreferenceTypeConstraints: RoleTypePreferenceTypeConstraint[]) => {
         this.cacheService.set('roleTypePreferenceTypeConstraints', roleTypePreferenceTypeConstraints);
@@ -1639,7 +1639,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<RoleType[]>(this.config.partyReferenceApiUrlPrefix + '/role-types',
+      return this.httpClient.get<RoleType[]>(this.config.apiUrlPrefix + '/party/reference/role-types',
         {params, reportProgress: true})
       .pipe(map((roleTypes: RoleType[]) => {
         cachedRoleTypes = new Map<string, RoleType>();
@@ -1677,7 +1677,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<SegmentationType[]>(this.config.partyReferenceApiUrlPrefix + '/segmentation-types',
+      return this.httpClient.get<SegmentationType[]>(this.config.apiUrlPrefix + '/party/reference/segmentation-types',
         {params, reportProgress: true})
       .pipe(map((segmentationTypes: SegmentationType[]) => {
         cachedSegmentationTypes = new Map<string, SegmentationType>();
@@ -1715,7 +1715,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<Segment[]>(this.config.partyReferenceApiUrlPrefix + '/segments',
+      return this.httpClient.get<Segment[]>(this.config.apiUrlPrefix + '/party/reference/segments',
         {params, reportProgress: true})
       .pipe(map((segments: Segment[]) => {
         cachedSegments = new Map<string, Segment>();
@@ -1753,7 +1753,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<SkillType[]>(this.config.partyReferenceApiUrlPrefix + '/skill-types',
+      return this.httpClient.get<SkillType[]>(this.config.apiUrlPrefix + '/party/reference/skill-types',
         {params, reportProgress: true})
       .pipe(map((skillTypes: SkillType[]) => {
         cachedSkillTypes = new Map<string, SkillType>();
@@ -1791,7 +1791,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<SourceOfFundsType[]>(this.config.partyReferenceApiUrlPrefix + '/source-of-funds-types',
+      return this.httpClient.get<SourceOfFundsType[]>(this.config.apiUrlPrefix + '/party/reference/source-of-funds-types',
         {params, reportProgress: true})
       .pipe(map((sourceOfFundsTypes: SourceOfFundsType[]) => {
         cachedSourceOfFundsTypes = new Map<string, SkillType>();
@@ -1829,7 +1829,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<SourceOfWealthType[]>(this.config.partyReferenceApiUrlPrefix + '/source-of-wealth-types',
+      return this.httpClient.get<SourceOfWealthType[]>(this.config.apiUrlPrefix + '/party/reference/source-of-wealth-types',
         {params, reportProgress: true})
       .pipe(map((sourceOfWealthTypes: SourceOfWealthType[]) => {
         cachedSourceOfWealthTypes = new Map<string, SourceOfWealthType>();
@@ -1867,7 +1867,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<StatusTypeCategory[]>(this.config.partyReferenceApiUrlPrefix + '/status-type-categories',
+      return this.httpClient.get<StatusTypeCategory[]>(this.config.apiUrlPrefix + '/party/reference/status-type-categories',
         {params, reportProgress: true})
       .pipe(map((statusTypeCategories: StatusTypeCategory[]) => {
         cachedStatusTypeCategories = new Map<string, StatusTypeCategory>();
@@ -1905,7 +1905,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<StatusType[]>(this.config.partyReferenceApiUrlPrefix + '/status-types',
+      return this.httpClient.get<StatusType[]>(this.config.apiUrlPrefix + '/party/reference/status-types',
         {params, reportProgress: true})
       .pipe(map((statusTypes: StatusType[]) => {
         cachedStatusTypes = new Map<string, StatusType>();
@@ -1943,7 +1943,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<TaxNumberType[]>(this.config.partyReferenceApiUrlPrefix + '/tax-number-types',
+      return this.httpClient.get<TaxNumberType[]>(this.config.apiUrlPrefix + '/party/reference/tax-number-types',
         {params, reportProgress: true})
       .pipe(map((taxNumberTypes: TaxNumberType[]) => {
         cachedTaxNumberTypes = new Map<string, TaxNumberType>();
@@ -1981,7 +1981,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<TimeToContact[]>(this.config.partyReferenceApiUrlPrefix + '/times-to-contact',
+      return this.httpClient.get<TimeToContact[]>(this.config.apiUrlPrefix + '/party/reference/times-to-contact',
         {params, reportProgress: true})
       .pipe(map((timesToContact: TimeToContact[]) => {
         cachedTimesToContact = new Map<string, TimeToContact>();
@@ -2019,7 +2019,7 @@ export class PartyReferenceService {
 
       params = params.append('localeId', this.localeId);
 
-      return this.httpClient.get<Title[]>(this.config.partyReferenceApiUrlPrefix + '/titles',
+      return this.httpClient.get<Title[]>(this.config.apiUrlPrefix + '/party/reference/titles',
         {params, reportProgress: true})
       .pipe(map((titles: Title[]) => {
         cachedTitles = new Map<string, Title>();

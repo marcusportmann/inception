@@ -23,14 +23,14 @@
 export class Role {
 
   /**
-   * The date the role is effective from.
+   * The ISO 8601 format date the role is effective from.
    */
-  effectiveFrom?: Date;
+  effectiveFrom?: string;
 
   /**
-   * The date the role is effective to.
+   * The ISO 8601 format date the role is effective to.
    */
-  effectiveTo?: Date;
+  effectiveTo?: string;
 
   /**
    * The code for the role purpose.
@@ -47,10 +47,10 @@ export class Role {
    *
    * @param type          The code for the role type.
    * @param purpose       The code for the role purpose.
-   * @param effectiveFrom The date the role is effective from.
-   * @param effectiveTo   The date the role is effective to.
+   * @param effectiveFrom The ISO 8601 format date the role is effective from.
+   * @param effectiveTo   The ISO 8601 format date the role is effective to.
    */
-  constructor(type: string, purpose?: string, effectiveFrom?: Date, effectiveTo?: Date) {
+  constructor(type: string, purpose?: string, effectiveFrom?: string, effectiveTo?: string) {
     this.type = type;
     this.purpose = purpose;
     this.effectiveFrom = effectiveFrom;

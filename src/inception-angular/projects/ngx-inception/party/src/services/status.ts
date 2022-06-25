@@ -22,14 +22,14 @@
 export class Status {
 
   /**
-   * The date the status is effective from.
+   * The ISO 8601 format date the status is effective from.
    */
-  effectiveFrom?: Date;
+  effectiveFrom?: string;
 
   /**
-   * The date the status is effective to.
+   * The ISO 8601 format date the status is effective to.
    */
-  effectiveTo?: Date;
+  effectiveTo?: string;
 
   /**
    * The code for the status type.
@@ -40,10 +40,10 @@ export class Status {
    * Constructs a new Status.
    *
    * @param type          The code for the status type.
-   * @param effectiveFrom The date the status is effective from.
-   * @param effectiveTo   The date the status is effective to.
+   * @param effectiveFrom The ISO 8601 format date the status is effective from.
+   * @param effectiveTo   The ISO 8601 format date the status is effective to.
    */
-  constructor(type: string, effectiveFrom?: Date, effectiveTo?: Date) {
+  constructor(type: string, effectiveFrom?: string, effectiveTo?: string) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
     this.effectiveTo = effectiveTo;

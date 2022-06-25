@@ -172,7 +172,7 @@ public class Attribute implements Serializable {
   private Boolean booleanValue;
 
   /** The date value for the attribute. */
-  @Schema(description = "The date value for the attribute")
+  @Schema(description = "The ISO 8601 format date value for the attribute")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateValue")

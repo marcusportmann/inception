@@ -18,7 +18,7 @@ import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/
 import {Inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  ProblemDetails, ServiceUnavailableError, SortDirection
+  ProblemDetails, ServiceUnavailableError, SortDirection, ResponseConverter
 } from 'ngx-inception/core';
 import {Observable, throwError} from "rxjs";
 import {catchError, map} from "rxjs/operators";
@@ -74,7 +74,7 @@ export class PartyService {
    */
   createAssociation(association: Association): Observable<boolean> {
     return this.httpClient.post<boolean>(
-      this.config.partyApiUrlPrefix + '/associations', association, {
+      this.config.apiUrlPrefix + '/party/associations', association, {
         observe: 'response'
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -104,7 +104,7 @@ export class PartyService {
    */
   createMandate(mandate: Mandate): Observable<boolean> {
     return this.httpClient.post<boolean>(
-      this.config.partyApiUrlPrefix + '/mandates', mandate, {
+      this.config.apiUrlPrefix + '/party/mandates', mandate, {
         observe: 'response'
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -134,7 +134,7 @@ export class PartyService {
    */
   createOrganization(organization: Organization): Observable<boolean> {
     return this.httpClient.post<boolean>(
-      this.config.partyApiUrlPrefix + '/organizations', organization, {
+      this.config.apiUrlPrefix + '/party/organizations', organization, {
         observe: 'response'
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -162,7 +162,7 @@ export class PartyService {
    */
   createPerson(person: Person): Observable<boolean> {
     return this.httpClient.post<boolean>(
-      this.config.partyApiUrlPrefix + '/persons', person, {
+      this.config.apiUrlPrefix + '/party/persons', person, {
         observe: 'response'
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -190,7 +190,7 @@ export class PartyService {
    */
   deleteAssociation(associationId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.partyApiUrlPrefix + '/associations/' + associationId, {observe: 'response'})
+      this.config.apiUrlPrefix + '/party/associations/' + associationId, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -217,7 +217,7 @@ export class PartyService {
    */
   deleteMandate(mandateId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.partyApiUrlPrefix + '/mandates/' + mandateId, {observe: 'response'})
+      this.config.apiUrlPrefix + '/party/mandates/' + mandateId, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -244,7 +244,7 @@ export class PartyService {
    */
   deleteOrganization(organizationId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.partyApiUrlPrefix + '/organizations/' + organizationId, {observe: 'response'})
+      this.config.apiUrlPrefix + '/party/organizations/' + organizationId, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -271,7 +271,7 @@ export class PartyService {
    */
   deletePerson(personId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.partyApiUrlPrefix + '/persons/' + personId, {observe: 'response'})
+      this.config.apiUrlPrefix + '/party/persons/' + personId, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -297,7 +297,7 @@ export class PartyService {
    * @return The association.
    */
   getAssociation(associationId: string): Observable<Association> {
-    return this.httpClient.get<Association>(this.config.partyApiUrlPrefix + '/associations/' + associationId,
+    return this.httpClient.get<Association>(this.config.apiUrlPrefix + '/party/associations/' + associationId,
       {reportProgress: true})
     .pipe(map((association: Association) => {
       return association;
@@ -349,7 +349,7 @@ export class PartyService {
     }
 
     return this.httpClient.get<AssociationsForParty>(
-      this.config.partyApiUrlPrefix + '/parties/' + partyId + '/associations', {
+      this.config.apiUrlPrefix + '/party/parties/' + partyId + '/associations', {
         params,
         reportProgress: true,
       }).pipe(map((associations: AssociationsForParty) => {
@@ -378,7 +378,7 @@ export class PartyService {
    * @return The mandate.
    */
   getMandate(mandateId: string): Observable<Mandate> {
-    return this.httpClient.get<Mandate>(this.config.partyApiUrlPrefix + '/mandates/' + mandateId,
+    return this.httpClient.get<Mandate>(this.config.apiUrlPrefix + '/party/mandates/' + mandateId,
       {reportProgress: true})
     .pipe(map((mandate: Mandate) => {
       return mandate;
@@ -430,7 +430,7 @@ export class PartyService {
     }
 
     return this.httpClient.get<MandatesForParty>(
-      this.config.partyApiUrlPrefix + '/parties/' + partyId + '/mandates', {
+      this.config.apiUrlPrefix + '/party/parties/' + partyId + '/mandates', {
         params,
         reportProgress: true,
       }).pipe(map((mandates: MandatesForParty) => {
@@ -459,7 +459,7 @@ export class PartyService {
    * @return The organization.
    */
   getOrganization(organizationId: string): Observable<Organization> {
-    return this.httpClient.get<Organization>(this.config.partyApiUrlPrefix + '/organizations/' + organizationId,
+    return this.httpClient.get<Organization>(this.config.apiUrlPrefix + '/party/organizations/' + organizationId,
       {reportProgress: true})
     .pipe(map((organization: Organization) => {
       return organization;
@@ -515,7 +515,7 @@ export class PartyService {
     }
 
     return this.httpClient.get<Organizations>(
-      this.config.partyApiUrlPrefix + '/organizations', {
+      this.config.apiUrlPrefix + '/party/organizations', {
         params,
         reportProgress: true,
       }).pipe(map((organizations: Organizations) => {
@@ -570,7 +570,7 @@ export class PartyService {
     }
 
     return this.httpClient.get<Parties>(
-      this.config.partyApiUrlPrefix + '/parties', {
+      this.config.apiUrlPrefix + '/party/parties', {
         params,
         reportProgress: true,
       }).pipe(map((parties: Parties) => {
@@ -596,7 +596,7 @@ export class PartyService {
    * @return The party.
    */
   getParty(partyId: string): Observable<Party> {
-    return this.httpClient.get<Party>(this.config.partyApiUrlPrefix + '/parties/' + partyId,
+    return this.httpClient.get<Party>(this.config.apiUrlPrefix + '/party/parties/' + partyId,
       {reportProgress: true})
     .pipe(map((party: Party) => {
       return party;
@@ -622,10 +622,21 @@ export class PartyService {
    *
    * @return The person.
    */
+  @ResponseConverter
   getPerson(personId: string): Observable<Person> {
-    return this.httpClient.get<Person>(this.config.partyApiUrlPrefix + '/persons/' + personId,
+    return this.httpClient.get<Person>(this.config.apiUrlPrefix + '/party/persons/' + personId,
       {reportProgress: true})
     .pipe(map((person: Person) => {
+      for (const role of person.roles) {
+        // if ((!!role.effectiveFrom) && (typeof(role.effectiveFrom) === 'string')) {
+        //   role.effectiveFrom = new Date(role.effectiveFrom);
+        // }
+
+        // if ((!!role.effectiveTo) && (typeof(role.effectiveTo) === 'string')) {
+        //   role.effectiveTo = new Date(role.effectiveTo);
+        // }
+      }
+
       return person;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ProblemDetails.isProblemDetails(httpErrorResponse, PersonNotFoundError.TYPE)) {
@@ -679,7 +690,7 @@ export class PartyService {
     }
 
     return this.httpClient.get<Persons>(
-      this.config.partyApiUrlPrefix + '/persons', {
+      this.config.apiUrlPrefix + '/party/persons', {
         params,
         reportProgress: true,
       }).pipe(map((persons: Persons) => {
@@ -732,7 +743,7 @@ export class PartyService {
     }
 
     return this.httpClient.get<Snapshots>(
-      this.config.partyApiUrlPrefix + '/snapshots', {
+      this.config.apiUrlPrefix + '/party/snapshots', {
         params,
         reportProgress: true,
       }).pipe(map((snapshots: Snapshots) => {
@@ -758,7 +769,7 @@ export class PartyService {
    * @return True if the association was updated successfully or false otherwise.
    */
   updateAssociation(association: Association): Observable<boolean> {
-    return this.httpClient.put<boolean>(this.config.partyApiUrlPrefix + '/associations/' + association.id,
+    return this.httpClient.put<boolean>(this.config.apiUrlPrefix + '/party/associations/' + association.id,
       association, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -787,7 +798,7 @@ export class PartyService {
    * @return True if the mandate was updated successfully or false otherwise.
    */
   updateMandate(mandate: Mandate): Observable<boolean> {
-    return this.httpClient.put<boolean>(this.config.partyApiUrlPrefix + '/mandates/' + mandate.id,
+    return this.httpClient.put<boolean>(this.config.apiUrlPrefix + '/party/mandates/' + mandate.id,
       mandate, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -816,7 +827,7 @@ export class PartyService {
    * @return True if the organization was updated successfully or false otherwise.
    */
   updateOrganization(organization: Organization): Observable<boolean> {
-    return this.httpClient.put<boolean>(this.config.partyApiUrlPrefix + '/organizations/' + organization.id,
+    return this.httpClient.put<boolean>(this.config.apiUrlPrefix + '/party/organizations/' + organization.id,
       organization, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -843,7 +854,7 @@ export class PartyService {
    * @return True if the person was updated successfully or false otherwise.
    */
   updatePerson(person: Person): Observable<boolean> {
-    return this.httpClient.put<boolean>(this.config.partyApiUrlPrefix + '/persons/' + person.id,
+    return this.httpClient.put<boolean>(this.config.apiUrlPrefix + '/party/persons/' + person.id,
       person, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;

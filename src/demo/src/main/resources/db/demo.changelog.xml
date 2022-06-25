@@ -35,6 +35,7 @@
       <column name="string_value" type="nvarchar(4000)" remarks="The string value for the data"/>
       <column name="date_value" type="date" remarks="The date value for the data"/>
       <column name="timestamp_value" type="timestamp" remarks="The timestamp value for the data"/>
+      <column name="zoned_timestamp_value" type="timestamp with time zone" remarks="The zoned timestamp value for the data"/>
     </createTable>
 
     <createTable schemaName="demo" tableName="vehicles" remarks="Vehicles">

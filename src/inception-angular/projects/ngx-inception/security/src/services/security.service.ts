@@ -18,7 +18,7 @@ import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/
 import {Inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  ProblemDetails, ServiceUnavailableError, SessionService, SortDirection
+  ProblemDetails, ResponseConverter, ServiceUnavailableError, SessionService, SortDirection
 } from 'ngx-inception/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
@@ -87,7 +87,7 @@ export class SecurityService {
     const groupMember = new GroupMember(userDirectoryId, groupName, memberType, memberName);
 
     return this.httpClient.post<boolean>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/members', groupMember, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -123,7 +123,7 @@ export class SecurityService {
     const groupRole = new GroupRole(userDirectoryId, groupName, roleCode);
 
     return this.httpClient.post<boolean>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/roles', groupRole, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -159,7 +159,7 @@ export class SecurityService {
     const tenantUserDirectory = new TenantUserDirectory(tenantId, userDirectoryId);
 
     return this.httpClient.post<boolean>(
-      this.config.securityApiUrlPrefix + '/tenants/' + tenantId + '/user-directories',
+      this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/user-directories',
       tenantUserDirectory, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -198,7 +198,7 @@ export class SecurityService {
       expirePassword, lockUser, resetPasswordHistory);
 
     return this.httpClient.put<boolean>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' +
       encodeURIComponent(username) + '/password', passwordChange, {
         observe: 'response'
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
@@ -233,7 +233,7 @@ export class SecurityService {
     const passwordChange = new PasswordChange(PasswordChangeReason.User, newPassword, password);
 
     return this.httpClient.put<boolean>(
-      this.config.securityApiUrlPrefix + '/users/' + encodeURIComponent(username) + '/password', passwordChange, {
+      this.config.apiUrlPrefix + '/security/users/' + encodeURIComponent(username) + '/password', passwordChange, {
         observe: 'response'
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -265,7 +265,7 @@ export class SecurityService {
    */
   createGroup(group: Group): Observable<boolean> {
     return this.httpClient.post<boolean>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + group.userDirectoryId + '/groups', group, {
+      this.config.apiUrlPrefix + '/security/user-directories/' + group.userDirectoryId + '/groups', group, {
         observe: 'response'
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -300,7 +300,7 @@ export class SecurityService {
     httpParams = httpParams.append('createUserDirectory',
       createUserDirectory === undefined ? 'false' : (createUserDirectory ? 'true' : 'false'));
 
-    return this.httpClient.post<boolean>(this.config.securityApiUrlPrefix + '/tenants', tenant, {
+    return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/security/tenants', tenant, {
       params: httpParams,
       observe: 'response'
     }).pipe(map((httpResponse: HttpResponse<boolean>) => {
@@ -336,7 +336,7 @@ export class SecurityService {
     httpParams = httpParams.append('userLocked', userLocked === undefined ? 'false' : (userLocked ? 'true' : 'false'));
 
     return this.httpClient.post<boolean>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + user.userDirectoryId + '/users', user, {
+      this.config.apiUrlPrefix + '/security/user-directories/' + user.userDirectoryId + '/users', user, {
         params: httpParams,
         observe: 'response'
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
@@ -366,7 +366,7 @@ export class SecurityService {
    * @return True if the user directory was created successfully or false otherwise.
    */
   createUserDirectory(userDirectory: UserDirectory): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.config.securityApiUrlPrefix + '/user-directories', userDirectory,
+    return this.httpClient.post<boolean>(this.config.apiUrlPrefix + '/security/user-directories', userDirectory,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -395,7 +395,7 @@ export class SecurityService {
    */
   deleteGroup(userDirectoryId: string, groupName: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName), {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -426,7 +426,7 @@ export class SecurityService {
    * @return True if the tenant was deleted or false otherwise.
    */
   deleteTenant(tenantId: string): Observable<boolean> {
-    return this.httpClient.delete<boolean>(this.config.securityApiUrlPrefix + '/tenants/' + tenantId,
+    return this.httpClient.delete<boolean>(this.config.apiUrlPrefix + '/security/tenants/' + tenantId,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -455,7 +455,7 @@ export class SecurityService {
    */
   deleteUser(userDirectoryId: string, username: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' +
       encodeURIComponent(username), {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -484,7 +484,7 @@ export class SecurityService {
    * @return True if the user directory was deleted or false otherwise.
    */
   deleteUserDirectory(userDirectoryId: string): Observable<boolean> {
-    return this.httpClient.delete<boolean>(this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId,
+    return this.httpClient.delete<boolean>(this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -513,7 +513,7 @@ export class SecurityService {
    */
   getGroup(userDirectoryId: string, groupName: string): Observable<Group> {
     return this.httpClient.get<Group>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName), {reportProgress: true}).pipe(map((group: Group) => {
       return group;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -542,7 +542,7 @@ export class SecurityService {
    */
   getGroupNames(userDirectoryId: string): Observable<string[]> {
     return this.httpClient.get<string[]>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/group-names', {
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/group-names', {
         reportProgress: true,
       }).pipe(map((groupNames: string[]) => {
       return groupNames;
@@ -571,7 +571,7 @@ export class SecurityService {
    */
   getGroupNamesForUser(userDirectoryId: string, username: string): Observable<string[]> {
     return this.httpClient.get<string[]>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' +
       encodeURIComponent(username) + '/group-names', {reportProgress: true})
     .pipe(map((groupNames: string[]) => {
       return groupNames;
@@ -625,7 +625,7 @@ export class SecurityService {
     }
 
     return this.httpClient.get<Groups>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups', {
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups', {
         params,
         reportProgress: true,
       }).pipe(map((groups: Groups) => {
@@ -679,7 +679,7 @@ export class SecurityService {
     }
 
     return this.httpClient.get<GroupMembers>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/members', {
         params,
         reportProgress: true,
@@ -712,7 +712,7 @@ export class SecurityService {
    */
   getRoleCodesForGroup(userDirectoryId: string, groupName: string): Observable<string[]> {
     return this.httpClient.get<string[]>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/role-codes', {
         reportProgress: true,
       }).pipe(map((roleCodes: string[]) => {
@@ -740,7 +740,7 @@ export class SecurityService {
    * @return The roles.
    */
   getRoles(): Observable<Role[]> {
-    return this.httpClient.get<Role[]>(this.config.securityApiUrlPrefix + '/roles', {
+    return this.httpClient.get<Role[]>(this.config.apiUrlPrefix + '/security/roles', {
       reportProgress: true,
     }).pipe(map((roles: Role[]) => {
       return roles;
@@ -767,7 +767,7 @@ export class SecurityService {
    */
   getRolesForGroup(userDirectoryId: string, groupName: string): Observable<GroupRole[]> {
     return this.httpClient.get<GroupRole[]>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/roles', {
         reportProgress: true,
       }).pipe(map((groupRoles: GroupRole[]) => {
@@ -797,7 +797,7 @@ export class SecurityService {
    * @return The tenant.
    */
   getTenant(tenantId: string): Observable<Tenant> {
-    return this.httpClient.get<Tenant>(this.config.securityApiUrlPrefix + '/tenants/' + tenantId,
+    return this.httpClient.get<Tenant>(this.config.apiUrlPrefix + '/security/tenants/' + tenantId,
       {reportProgress: true})
     .pipe(map((tenant: Tenant) => {
       return tenant;
@@ -824,7 +824,7 @@ export class SecurityService {
    * @return The name of the tenant.
    */
   getTenantName(tenantId: string): Observable<string> {
-    return this.httpClient.get<string>(this.config.securityApiUrlPrefix + '/tenants/' + tenantId + '/name',
+    return this.httpClient.get<string>(this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/name',
       {reportProgress: true}).pipe(map((tenantName: string) => {
       return tenantName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -873,7 +873,7 @@ export class SecurityService {
       params = params.append('pageSize', String(pageSize));
     }
 
-    return this.httpClient.get<Tenants>(this.config.securityApiUrlPrefix + '/tenants', {
+    return this.httpClient.get<Tenants>(this.config.apiUrlPrefix + '/security/tenants', {
       params,
       reportProgress: true,
     }).pipe(map((tenants: Tenants) => {
@@ -900,7 +900,7 @@ export class SecurityService {
    */
   getTenantsForUserDirectory(userDirectoryId: string): Observable<Tenant[]> {
     return this.httpClient.get<Tenant[]>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/tenants',
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/tenants',
       {reportProgress: true})
     .pipe(map((tenants: Tenant[]) => {
       return tenants;
@@ -927,9 +927,10 @@ export class SecurityService {
    *
    * @return The user.
    */
+  @ResponseConverter
   getUser(userDirectoryId: string, username: string): Observable<User> {
     return this.httpClient.get<User>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' +
       encodeURIComponent(username), {reportProgress: true}).pipe(map((user: User) => {
       return user;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -957,7 +958,7 @@ export class SecurityService {
    * @return The user directory.
    */
   getUserDirectory(userDirectoryId: string): Observable<UserDirectory> {
-    return this.httpClient.get<UserDirectory>(this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId,
+    return this.httpClient.get<UserDirectory>(this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId,
       {reportProgress: true})
     .pipe(map((userDirectory: UserDirectory) => {
       return userDirectory;
@@ -985,7 +986,7 @@ export class SecurityService {
    */
   getUserDirectoryCapabilities(userDirectoryId: string): Observable<UserDirectoryCapabilities> {
     return this.httpClient.get<UserDirectoryCapabilities>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/capabilities',
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/capabilities',
       {reportProgress: true})
     .pipe(map((capabilities: UserDirectoryCapabilities) => {
       return capabilities;
@@ -1013,7 +1014,7 @@ export class SecurityService {
    */
   getUserDirectoryName(userDirectoryId: string): Observable<string> {
     return this.httpClient.get<string>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/name', {reportProgress: true})
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/name', {reportProgress: true})
     .pipe(map((userDirectoryName: string) => {
       return userDirectoryName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -1062,7 +1063,7 @@ export class SecurityService {
       params = params.append('pageSize', String(pageSize));
     }
 
-    return this.httpClient.get<UserDirectorySummaries>(this.config.securityApiUrlPrefix + '/user-directory-summaries', {
+    return this.httpClient.get<UserDirectorySummaries>(this.config.apiUrlPrefix + '/security/user-directory-summaries', {
       params,
       reportProgress: true,
     }).pipe(map((userDirectorySummaries: UserDirectorySummaries) => {
@@ -1089,7 +1090,7 @@ export class SecurityService {
    */
   getUserDirectorySummariesForTenant(tenantId: string): Observable<UserDirectorySummary[]> {
     return this.httpClient.get<UserDirectorySummary[]>(
-      this.config.securityApiUrlPrefix + '/tenants/' + tenantId + '/user-directory-summaries',
+      this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/user-directory-summaries',
       {reportProgress: true})
     .pipe(map((codeCategories: UserDirectorySummary[]) => {
       return codeCategories;
@@ -1117,7 +1118,7 @@ export class SecurityService {
    */
   getUserDirectoryTypeForUserDirectory(userDirectoryId: string): Observable<UserDirectoryType> {
     return this.httpClient.get<UserDirectoryType>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/user-directory-type',
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/user-directory-type',
       {reportProgress: true})
     .pipe(map((userDirectoryType: UserDirectoryType) => {
       return userDirectoryType;
@@ -1142,7 +1143,7 @@ export class SecurityService {
    * @return The user directory types.
    */
   getUserDirectoryTypes(): Observable<UserDirectoryType[]> {
-    return this.httpClient.get<UserDirectoryType[]>(this.config.securityApiUrlPrefix + '/user-directory-types',
+    return this.httpClient.get<UserDirectoryType[]>(this.config.apiUrlPrefix + '/security/user-directory-types',
       {reportProgress: true})
     .pipe(map((userDirectoryTypes: UserDirectoryType[]) => {
       return userDirectoryTypes;
@@ -1169,7 +1170,7 @@ export class SecurityService {
    */
   getUserName(userDirectoryId: string, username: string): Observable<string> {
     return this.httpClient.get<string>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' +
       encodeURIComponent(username) + '/name', {reportProgress: true})
     .pipe(map((userName: string) => {
       return userName;
@@ -1202,6 +1203,7 @@ export class SecurityService {
    *
    * @return The users.
    */
+  @ResponseConverter
   getUsers(userDirectoryId: string, filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection,
            pageIndex?: number, pageSize?: number): Observable<Users> {
 
@@ -1228,7 +1230,7 @@ export class SecurityService {
     }
 
     return this.httpClient.get<Users>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/users', {
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users', {
         params,
         reportProgress: true,
       }).pipe(map((users: Users) => {
@@ -1261,7 +1263,7 @@ export class SecurityService {
     params = params.append('resetPasswordUrl', resetPasswordUrl);
 
     return this.httpClient.post<boolean>(
-      this.config.securityApiUrlPrefix + '/users/' + encodeURIComponent(username) + '/reset-password', null, {
+      this.config.apiUrlPrefix + '/security/users/' + encodeURIComponent(username) + '/reset-password', null, {
         observe: 'response',
         params,
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
@@ -1292,7 +1294,7 @@ export class SecurityService {
   removeMemberFromGroup(userDirectoryId: string, groupName: string, memberType: GroupMemberType,
                         memberName: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/members/' + memberType + '/' + encodeURIComponent(memberName),
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
@@ -1327,7 +1329,7 @@ export class SecurityService {
    */
   removeRoleFromGroup(userDirectoryId: string, groupName: string, roleCode: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/roles/' + roleCode, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -1361,7 +1363,7 @@ export class SecurityService {
    */
   removeUserDirectoryFromTenant(tenantId: string, userDirectoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.securityApiUrlPrefix + '/tenants/' + tenantId + '/user-directories/' + userDirectoryId,
+      this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/user-directories/' + userDirectoryId,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -1395,7 +1397,7 @@ export class SecurityService {
     const passwordChange = new PasswordChange(PasswordChangeReason.Reset, newPassword, undefined, securityCode);
 
     return this.httpClient.put<boolean>(
-      this.config.securityApiUrlPrefix + '/users/' + encodeURIComponent(username) + '/password', passwordChange, {
+      this.config.apiUrlPrefix + '/security/users/' + encodeURIComponent(username) + '/password', passwordChange, {
         observe: 'response'
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -1423,7 +1425,7 @@ export class SecurityService {
    */
   updateGroup(group: Group): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + group.userDirectoryId + '/groups/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + group.userDirectoryId + '/groups/' +
       encodeURIComponent(group.name), group, {
         observe: 'response'
       }).pipe(map((httpResponse: HttpResponse<boolean>) => {
@@ -1453,7 +1455,7 @@ export class SecurityService {
    * @return True if the tenant was updated successfully or false otherwise.
    */
   updateTenant(tenant: Tenant): Observable<boolean> {
-    return this.httpClient.put<boolean>(this.config.securityApiUrlPrefix + '/tenants/' + tenant.id,
+    return this.httpClient.put<boolean>(this.config.apiUrlPrefix + '/security/tenants/' + tenant.id,
       tenant, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -1488,7 +1490,7 @@ export class SecurityService {
     httpParams = httpParams.append('lockUser', lockUser === undefined ? 'false' : (lockUser ? 'true' : 'false'));
 
     return this.httpClient.put<boolean>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + user.userDirectoryId + '/users/' +
+      this.config.apiUrlPrefix + '/security/user-directories/' + user.userDirectoryId + '/users/' +
       encodeURIComponent(user.username), user, {
         params: httpParams,
         observe: 'response'
@@ -1519,7 +1521,7 @@ export class SecurityService {
    * @return True if the user directory was updated successfully or false otherwise.
    */
   updateUserDirectory(userDirectory: UserDirectory): Observable<boolean> {
-    return this.httpClient.put<boolean>(this.config.securityApiUrlPrefix + '/user-directories/' + userDirectory.id,
+    return this.httpClient.put<boolean>(this.config.apiUrlPrefix + '/security/user-directories/' + userDirectory.id,
       userDirectory, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;

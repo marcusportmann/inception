@@ -36,9 +36,9 @@ export class Snapshots {
   entityType: EntityType;
 
   /**
-   * The optional date to retrieve the snapshots from.
+   * The optional ISO 8601 format date to retrieve the snapshots from.
    */
-  from?: Date;
+  from?: string;
 
   /**
    * The optional page index.
@@ -66,9 +66,9 @@ export class Snapshots {
   tenantId: string;
 
   /**
-   * The optional date to retrieve the snapshots to.
+   * The optional ISO 8601 format date to retrieve the snapshots to.
    */
-  to?: Date;
+  to?: string;
 
   /**
    * The total number of snapshots.
@@ -83,14 +83,14 @@ export class Snapshots {
    * @param entityType    The type of entity.
    * @param entityId      The ID for the entity.
    * @param total         The total number of snapshots.
-   * @param from          The optional date to retrieve the snapshots from.
-   * @param to            The optional date to retrieve the snapshots to.
+   * @param from          The optional ISO 8601 format date to retrieve the snapshots from.
+   * @param to            The optional ISO 8601 format date to retrieve the snapshots to.
    * @param sortDirection The optional sort direction that was applied to the snapshots.
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
    */
   constructor(tenantId: string, snapshots: Snapshot[], total: number, entityType: EntityType,
-              entityId: string, from?: Date, to?: Date, sortDirection?: SortDirection,
+              entityId: string, from?: string, to?: string, sortDirection?: SortDirection,
               pageIndex?: number, pageSize?: number) {
     this.tenantId = tenantId;
     this.snapshots = snapshots;

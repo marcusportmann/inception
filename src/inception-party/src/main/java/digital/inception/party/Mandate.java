@@ -137,7 +137,7 @@ public class Mandate implements Serializable {
   private final Set<MandateProperty> properties = new HashSet<>();
 
   /** The date the mandate is effective from. */
-  @Schema(description = "The date the mandate is effective from")
+  @Schema(description = "The ISO 8601 format date the mandate is effective from")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveFrom")
@@ -147,7 +147,7 @@ public class Mandate implements Serializable {
   private LocalDate effectiveFrom;
 
   /** The date the mandate is effective to. */
-  @Schema(description = "The date the mandate is effective to")
+  @Schema(description = "The ISO 8601 format date the mandate is effective to")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "EffectiveTo")

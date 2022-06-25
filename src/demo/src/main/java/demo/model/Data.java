@@ -22,10 +22,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.core.xml.LocalDateTimeAdapter;
+import digital.inception.core.xml.ZonedDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,12 +50,26 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @Schema(description = "Data")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "stringValue", "integerValue", "dateValue", "timestampValue"})
+@JsonPropertyOrder({
+  "id",
+  "stringValue",
+  "integerValue",
+  "dateValue",
+  "timestampValue",
+  "zonedTimestampValue"
+})
 @XmlRootElement(name = "Data", namespace = "http://demo")
 @XmlType(
     name = "Data",
     namespace = "http://demo",
-    propOrder = {"id", "stringValue", "integerValue", "dateValue", "timestampValue"})
+    propOrder = {
+      "id",
+      "stringValue",
+      "integerValue",
+      "dateValue",
+      "timestampValue",
+      "zonedTimestampValue"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "demo", name = "data")
@@ -62,18 +78,8 @@ public class Data implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The timestamp value for the data. */
-  @Schema(description = "The timestamp value for the data", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TimestampValue", required = true)
-  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @NotNull
-  @Column(name = "timestamp_value")
-  public LocalDateTime timestampValue;
-
   /** The date value for the data. */
-  @Schema(description = "The date value for the data", required = true)
+  @Schema(description = "The ISO 8601 format date value for the data", required = true)
   @JsonProperty(required = true)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateValue", required = true)
@@ -109,6 +115,26 @@ public class Data implements Serializable {
   @Column(name = "string_value")
   private String stringValue;
 
+  /** The timestamp value for the data. */
+  @Schema(description = "The timestamp value for the data", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TimestampValue", required = true)
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @NotNull
+  @Column(name = "timestamp_value")
+  private LocalDateTime timestampValue;
+
+  /** The zoned timestamp value for the data. */
+  @Schema(description = "The zoned timestamp value for the data", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ZonedTimestampValue", required = true)
+  @XmlJavaTypeAdapter(ZonedDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @NotNull
+  @Column(name = "zoned_timestamp_value")
+  private ZonedDateTime zonedTimestampValue;
+
   /** Constructs a new <b>Data</b>. */
   public Data() {}
 
@@ -120,18 +146,21 @@ public class Data implements Serializable {
    * @param stringValue the string value for the data
    * @param dateValue the date value for the data
    * @param timestampValue the timestamp value for the data
+   * @param zonedTimestampValue the zoned timestamp value for the data
    */
   public Data(
       long id,
       Integer integerValue,
       String stringValue,
       LocalDate dateValue,
-      LocalDateTime timestampValue) {
+      LocalDateTime timestampValue,
+      ZonedDateTime zonedTimestampValue) {
     this.id = id;
     this.integerValue = integerValue;
     this.stringValue = stringValue;
     this.dateValue = dateValue;
     this.timestampValue = timestampValue;
+    this.zonedTimestampValue = zonedTimestampValue;
   }
 
   /**
@@ -205,6 +234,15 @@ public class Data implements Serializable {
   }
 
   /**
+   * Returns the zoned timestamp value for the data.
+   *
+   * @return the zoned timestamp value for the data
+   */
+  public ZonedDateTime getZonedTimestampValue() {
+    return zonedTimestampValue;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -260,6 +298,15 @@ public class Data implements Serializable {
   }
 
   /**
+   * Set the zoned timestamp value for the data.
+   *
+   * @param zonedTimestampValue the zoned timestamp value for the data
+   */
+  public void setZonedTimestampValue(ZonedDateTime zonedTimestampValue) {
+    this.zonedTimestampValue = zonedTimestampValue;
+  }
+
+  /**
    * Returns a string representation of the data.
    *
    * @return a string representation of the data
@@ -276,6 +323,8 @@ public class Data implements Serializable {
         + dateValue
         + "\", timestampValue=\""
         + timestampValue
+        + "\", zonedTimestampValue=\""
+        + zonedTimestampValue
         + "\"}";
   }
 }
