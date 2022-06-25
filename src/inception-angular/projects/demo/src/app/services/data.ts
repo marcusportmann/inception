@@ -47,20 +47,27 @@ export class Data {
   timestampValue: Date;
 
   /**
+   * The zoned timestamp value for the data.
+   */
+  zonedTimestampValue: Date;
+
+  /**
    * Constructs a new Data.
    *
-   * @param id             The ID for the data
-   * @param integerValue   The integer value
-   * @param stringValue    The string value for the data
-   * @param dateValue      The ISO 8601 format date value for the data
-   * @param timestampValue The timestamp value for the data
+   * @param id                  The ID for the data.
+   * @param integerValue        The integer value.
+   * @param stringValue         The string value for the data.
+   * @param dateValue           The ISO 8601 format date value for the data.
+   * @param timestampValue      The timestamp value for the data.
+   * @param zonedTimestampValue The zoned timestamp value for the data.
    */
   constructor(id: number, integerValue: number, stringValue: string, dateValue: string,
-              timestampValue: Date) {
+              timestampValue: Date, zonedTimestampValue: Date) {
     this.id = id;
     this.integerValue = integerValue;
     this.stringValue = stringValue;
     this.dateValue = dateValue;
     this.timestampValue = timestampValue;
+    this.zonedTimestampValue = zonedTimestampValue;
   }
 }
