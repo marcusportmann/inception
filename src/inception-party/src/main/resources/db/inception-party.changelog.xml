@@ -412,8 +412,8 @@
       baseTableName="industry_classifications" baseColumnNames="system,locale_id" referencedTableSchemaName="party"
       referencedTableName="industry_classification_systems" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
     <addForeignKeyConstraint constraintName="industry_classifications_category_fk" baseTableSchemaName="party"
-      baseTableName="industry_classifications" baseColumnNames="category,locale_id" referencedTableSchemaName="party"
-      referencedTableName="industry_classification_categories" referencedColumnNames="code,locale_id" onDelete="CASCADE"/>
+      baseTableName="industry_classifications" baseColumnNames="system,category,locale_id" referencedTableSchemaName="party"
+      referencedTableName="industry_classification_categories" referencedColumnNames="system,code,locale_id" onDelete="CASCADE"/>
     <createIndex indexName="industry_classifications_locale_id_ix" schemaName="party" tableName="industry_classifications">
       <column name="locale_id"/>
     </createIndex>

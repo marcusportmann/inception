@@ -97,6 +97,8 @@ public class JpaUtil {
         jpaPropertyMap.put("hibernate.transaction.jta.platform", "JBossTS");
       }
 
+      jpaPropertyMap.put("hibernate.globally_quoted_identifiers", "true");
+
       return entityManagerFactoryBean;
     } catch (Throwable e) {
       throw new FatalBeanException(

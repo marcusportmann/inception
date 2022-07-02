@@ -408,7 +408,7 @@ public class Person extends PartyBase implements Serializable {
   @JsonIgnore
   @XmlTransient
   @Size(max = 50)
-  @Column(table = "persons", name = "countries_of_citizenship", length = 50)
+  @Column(name = "countries_of_citizenship", length = 50)
   private String countriesOfCitizenship;
 
   /**
@@ -417,40 +417,40 @@ public class Person extends PartyBase implements Serializable {
   @JsonIgnore
   @XmlTransient
   @Size(max = 50)
-  @Column(table = "persons", name = "countries_of_tax_residence", length = 50)
+  @Column(name = "countries_of_tax_residence", length = 50)
   private String countriesOfTaxResidence;
 
   /** The ISO 3166-1 alpha-2 code for the country of birth for the person. */
   @Size(min = 2, max = 2)
-  @Column(table = "persons", name = "country_of_birth", length = 2)
+  @Column(name = "country_of_birth", length = 2)
   private String countryOfBirth;
 
   /** The ISO 3166-1 alpha-2 code for the country of residence for the person. */
   @Size(min = 2, max = 2)
-  @Column(table = "persons", name = "country_of_residence", length = 2)
+  @Column(name = "country_of_residence", length = 2)
   private String countryOfResidence;
 
   /** The date of birth for the person. */
-  @Column(table = "persons", name = "date_of_birth")
+  @Column(name = "date_of_birth")
   private LocalDate dateOfBirth;
 
   /** The date of death for the person. */
-  @Column(table = "persons", name = "date_of_death")
+  @Column(name = "date_of_death")
   private LocalDate dateOfDeath;
 
   /** The code for the employment status for the person. */
   @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "employment_status", length = 30)
+  @Column(name = "employment_status", length = 30)
   private String employmentStatus;
 
   /** The code for the employment type for the person. */
   @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "employment_type", length = 30)
+  @Column(name = "employment_type", length = 30)
   private String employmentType;
 
   /** The code for the gender for the person. */
   @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "gender", length = 30)
+  @Column(name = "gender", length = 30)
   private String gender;
 
   /** The given name, firstname, forename, or Christian name for the person. */
@@ -458,55 +458,55 @@ public class Person extends PartyBase implements Serializable {
   @Pattern(
       message = "{digital.inception.party.Person.GivenName.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
-  @Column(table = "persons", name = "given_name", length = 100)
+  @Column(name = "given_name", length = 100)
   private String givenName;
 
   /** The code for the highest qualification type for the person. */
   @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "highest_qualification_type", length = 30)
+  @Column(name = "highest_qualification_type", length = 30)
   private String highestQualificationType;
 
   /** The initials for the person. */
   @Size(min = 1, max = 20)
-  @Column(table = "persons", name = "initials", length = 20)
+  @Column(name = "initials", length = 20)
   private String initials;
 
   /** The ISO 639-1 alpha-2 code for the language for the person. */
   @Size(min = 2, max = 2)
-  @Column(table = "persons", name = "language", length = 2)
+  @Column(name = "language", length = 2)
   private String language;
 
   /** The maiden name for the person. */
   @Size(min = 1, max = 100)
-  @Column(table = "persons", name = "maiden_name", length = 100)
+  @Column(name = "maiden_name", length = 100)
   private String maidenName;
 
   /** The code for the marital status for the person. */
   @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "marital_status", length = 30)
+  @Column(name = "marital_status", length = 30)
   private String maritalStatus;
 
   /** The date for the marital status for the person. */
-  @Column(table = "persons", name = "marital_status_date")
+  @Column(name = "marital_status_date")
   private LocalDate maritalStatusDate;
 
   /** The code for the marriage type for the person if the person is married. */
   @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "marriage_type", length = 30)
+  @Column(name = "marriage_type", length = 30)
   private String marriageType;
 
   /** The measurement system for the person. */
-  @Column(table = "persons", name = "measurement_system", length = 30)
+  @Column(name = "measurement_system", length = 30)
   private MeasurementSystem measurementSystem;
 
   /** The middle names for the person. */
   @Size(min = 1, max = 100)
-  @Column(table = "persons", name = "middle_names", length = 100)
+  @Column(name = "middle_names", length = 100)
   private String middleNames;
 
   /** The code for the occupation for the person. */
   @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "occupation", length = 30)
+  @Column(name = "occupation", length = 30)
   private String occupation;
 
   /**
@@ -516,22 +516,22 @@ public class Person extends PartyBase implements Serializable {
    * forename, or Christian name.
    */
   @Size(min = 1, max = 100)
-  @Column(table = "persons", name = "preferred_name", length = 100)
+  @Column(name = "preferred_name", length = 100)
   private String preferredName;
 
   /** The code for the race for the person. */
   @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "race", length = 30)
+  @Column(name = "race", length = 30)
   private String race;
 
   /** The code for the residency status for the person. */
   @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "residency_status", length = 30)
+  @Column(name = "residency_status", length = 30)
   private String residencyStatus;
 
   /** The code for the residential type for the person. */
   @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "residential_type", length = 30)
+  @Column(name = "residential_type", length = 30)
   private String residentialType;
 
   /** The surname, last name, or family name for the person. */
@@ -539,17 +539,17 @@ public class Person extends PartyBase implements Serializable {
   @Pattern(
       message = "{digital.inception.party.Person.Surname.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
-  @Column(table = "persons", name = "surname", length = 100)
+  @Column(name = "surname", length = 100)
   private String surname;
 
   /** The time zone ID for the person. */
   @Size(min = 1, max = 50)
-  @Column(table = "persons", name = "time_zone", length = 50)
+  @Column(name = "time_zone", length = 50)
   private String timeZone;
 
   /** The code for the title for the person. */
   @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "title", length = 30)
+  @Column(name = "title", length = 30)
   private String title;
 
   /** Constructs a new <b>Person</b>. */

@@ -254,7 +254,7 @@ public class Organization extends PartyBase implements Serializable {
   @JsonIgnore
   @XmlTransient
   @Size(max = 30)
-  @Column(table = "organizations", name = "countries_of_tax_residence", length = 30)
+  @Column(name = "countries_of_tax_residence", length = 30)
   private String countriesOfTaxResidence;
 
   /** Constructs a new <b>Organization</b>. */

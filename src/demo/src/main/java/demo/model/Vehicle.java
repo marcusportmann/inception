@@ -73,7 +73,7 @@ public class Vehicle implements Serializable {
   @XmlElement(name = "Id", required = true)
   @NotNull
   @Id
-  @Column(table = "vehicles", name = "id", nullable = false)
+  @Column(name = "id", nullable = false)
   private UUID id;
 
   /** The name of the vehicle. */
@@ -82,7 +82,7 @@ public class Vehicle implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(table = "vehicles", name = "name", length = 100, nullable = false)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The vehicle type. */
@@ -90,7 +90,7 @@ public class Vehicle implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(table = "vehicles", name = "type", length = 30, nullable = false)
+  @Column(name = "type", length = 30, nullable = false)
   private VehicleType type;
 
   /** Constructs a new <b>Vehicle</b>. */

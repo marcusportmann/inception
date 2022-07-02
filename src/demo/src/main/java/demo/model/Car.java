@@ -60,7 +60,7 @@ public class Car extends VehicleBase implements Serializable {
 
   /** The number of doors for the car. */
   @NotNull
-  @Column(table = "cars", name = "number_of_doors", nullable = false)
+  @Column(name = "number_of_doors", nullable = false)
   private int numberOfDoors;
 
   /** Constructs a new <b>Car</b>. */

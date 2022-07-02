@@ -42,12 +42,12 @@ Complete the following steps to setup a development environment on MacOS.
    ```
    Intel Mac:
    jenv add /usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
-   jenv global 17
+   jenv global 17.0
    sudo ln -s /usr/local/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk
    
    M1 Mac:
    jenv add /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
-   jenv global 17
+   jenv global 17.0
    sudo ln -s /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk
    ```
 8. Install the maven plugin for jenv by executing the following command in a Terminal

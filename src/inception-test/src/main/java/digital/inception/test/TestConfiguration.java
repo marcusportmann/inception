@@ -25,6 +25,8 @@ import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplie
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +141,7 @@ public class TestConfiguration {
               AgroalPropertiesReader.JDBC_URL,
               "jdbc:h2:mem:"
                   + Thread.currentThread().getName()
-                  + ";AUTOCOMMIT=OFF;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE");
+                  + ";AUTOCOMMIT=OFF;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=FALSE;CASE_INSENSITIVE_IDENTIFIERS=TRUE");
 
           agroalProperties.setProperty(
               AgroalPropertiesReader.PROVIDER_CLASS_NAME, "org.h2.jdbcx.JdbcDataSource");
@@ -192,6 +194,16 @@ public class TestConfiguration {
                     new Liquibase(changelogFile, new ClassLoaderResourceAccessor(), database);
 
                 liquibase.update(new Contexts(), new LabelExpression());
+              }
+            }
+
+            DatabaseMetaData databaseMetaData = connection.getMetaData();
+
+            try (ResultSet catalogsResultSet = databaseMetaData.getCatalogs()) {
+              while (catalogsResultSet.next()) {
+                String catalogName = catalogsResultSet.getString(1);
+
+
               }
             }
           }

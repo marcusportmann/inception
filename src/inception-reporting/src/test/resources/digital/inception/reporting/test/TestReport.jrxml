@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
-		<![CDATA[SELECT TD.NAME AS DATA_NAME, TD.VALUE AS DATA_VALUE FROM TEST.TEST_DATA TD ORDER BY TD.NAME]]>
+		<![CDATA[SELECT td.name AS data_name, td."value" AS data_value FROM test.test_data td ORDER BY td.name]]>
 	</queryString>
 	<field name="data_name" class="java.lang.String"/>
 	<field name="data_value" class="java.lang.String"/>
