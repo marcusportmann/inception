@@ -25,7 +25,7 @@
     "@angular/router": "~13.2.3",
     "@auth0/angular-jwt": "~5.0.2",
     "@fortawesome/fontawesome-free": "~5.15.4",
-    "moment": "~2.29.1",
+    "moment": "~2.29.4",
     "ngx-perfect-scrollbar": "~10.1.1",
     "rxjs": "~7.5.0",
     "es6-template-string": "~1.2.0",
