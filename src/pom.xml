@@ -116,7 +116,7 @@
     <liquibase-slf4j.version>4.1.0</liquibase-slf4j.version>
     <mssql-jdbc.version>9.4.1.jre16</mssql-jdbc.version>
     <narayana.version>5.12.7.Final</narayana.version>
-    <postgresql.version>42.4.0</postgresql.version>
+    <postgresql.version>42.4.1</postgresql.version>
     <spring-boot.version>2.7.1</spring-boot.version>
     <spring-shell.version>2.0.1.RELEASE</spring-shell.version>
     <springdoc-openapi-ui.version>1.6.9</springdoc-openapi-ui.version>
